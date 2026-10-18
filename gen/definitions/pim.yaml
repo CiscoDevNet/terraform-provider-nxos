@@ -459,7 +459,7 @@ child_classes:
                         example: true
                   - class_name: pimRPGrpRange
                     doc_path: Layer%203/pim:RPGrpRange/
-                    rn: range-[%s]
+                    rn: range-%s
                     type: list
                     tf_name: group_ranges
                     description: 'List of PIM Static RP group range configurations.'
@@ -803,7 +803,6 @@ child_classes:
                 doc_path: Layer%203/pim:BSRFuncP/
                 rn: bsrfunc
                 type: single
-                delete_when_empty: true
                 tf_name: bsr_candidate
                 description: 'PIM BSR candidate configuration.'
                 attributes:
@@ -847,7 +846,6 @@ child_classes:
                 doc_path: Layer%203/pim:RPFuncP/
                 rn: rpfunc
                 type: single
-                delete_when_empty: true
                 tf_name: bsr_rp_candidate
                 description: 'PIM BSR RP candidate configuration.'
                 attributes:
@@ -903,7 +901,7 @@ child_classes:
                 child_classes:
                   - class_name: pimRPGrpRange
                     doc_path: Layer%203/pim:RPGrpRange/
-                    rn: range-[%s]
+                    rn: range-%s
                     type: list
                     tf_name: bsr_rp_candidate_group_ranges
                     description: 'List of PIM RP candidate group range configurations.'
@@ -1037,7 +1035,6 @@ child_classes:
                 doc_path: Layer%203/pim:MAFuncP/
                 rn: mafunc
                 type: single
-                delete_when_empty: true
                 tf_name: auto_rp_mapping_agent
                 description: 'PIM Auto-RP mapping agent configuration.'
                 attributes:
@@ -1072,7 +1069,6 @@ child_classes:
                 doc_path: Layer%203/pim:RPFuncP/
                 rn: rpfunc
                 type: single
-                delete_when_empty: true
                 tf_name: auto_rp_rp_candidate
                 description: 'PIM Auto-RP RP candidate configuration.'
                 attributes:
@@ -1127,7 +1123,7 @@ child_classes:
                 child_classes:
                   - class_name: pimRPGrpRange
                     doc_path: Layer%203/pim:RPGrpRange/
-                    rn: range-[%s]
+                    rn: range-%s
                     type: list
                     tf_name: auto_rp_rp_candidate_group_ranges
                     description: 'List of PIM RP candidate group range configurations.'

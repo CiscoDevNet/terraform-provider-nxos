@@ -159,7 +159,8 @@ func (d *SubinterfaceDataSource) Read(ctx context.Context, req datasource.ReadRe
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"l3EncRtdIf", "nwRtVrfMbr"}, SubinterfaceSubtreeClassMinVersions)
+
+	res, err := getSubinterfaceTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

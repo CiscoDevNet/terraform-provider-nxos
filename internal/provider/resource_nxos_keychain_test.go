@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosKeychain(t *testing.T) {
+// TestAccKeychainResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccKeychainResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.cryptographic_algorithm", "AES"))
@@ -50,39 +54,76 @@ func TestAccNxosKeychain(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.start_time", "00:00:00"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.start_year", "2025"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_psk_no_show", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.cryptographic_algorithm", "AES"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.cryptographic_algorithm", "AES_256_CMAC"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_day", "31"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_month", "Dec"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_time", "23:59:59"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_year", "2035"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.local", "local"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.start_day", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.start_month", "Jan"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.start_time", "00:00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.start_year", "2025"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_psk_no_show", "enabled"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
+	steps := []resource.TestStep{
+		{
+			Config: testAccKeychainResourcePrerequisitesConfig + testAccKeychainResourceConfig_minimum(),
+		},
+		{
+			Config: testAccKeychainResourcePrerequisitesConfig + testAccKeychainResourceConfig_all(includeWriteOnly) + testAccKeychainResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_keychain.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccKeychainResourceImportStateIdFunc("nxos_keychain.test"),
+		},
+		{
+			ResourceName:       "nxos_keychain.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccKeychainResourcePrerequisitesConfig + testAccKeychainResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccKeychainResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccKeychainResourceConfig_all(includeWriteOnly), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_keychain.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccKeychainResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccKeychainResourcePrerequisitesConfig + testAccKeychainResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosKeychainPrerequisitesConfig + testAccNxosKeychainConfig_all(includeWriteOnly),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_keychain.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosKeychainImportStateIdFunc("nxos_keychain.test"),
-			},
-			{
-				ResourceName:       "nxos_keychain.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosKeychainImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccKeychainResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -92,7 +133,7 @@ func nxosKeychainImportStateIdFunc(resourceName string) resource.ImportStateIdFu
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosKeychainPrerequisitesConfig = `
+const testAccKeychainResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/macsec"
   class_name = "fmMacsec"
@@ -107,7 +148,7 @@ resource "nxos_dme" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosKeychainConfig_minimum() string {
+func testAccKeychainResourceConfig_minimum() string {
 	config := `resource "nxos_keychain" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
@@ -117,7 +158,7 @@ func testAccNxosKeychainConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosKeychainConfig_all(includeWriteOnly bool) string {
+func testAccKeychainResourceConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_keychain" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	keychains = {` + "\n"
@@ -165,6 +206,14 @@ func testAccNxosKeychainConfig_all(includeWriteOnly bool) string {
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccKeychainResourceConfig_dataSource() string {
+	return `
+data "nxos_keychain" "test" {
+	depends_on = [nxos_keychain.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

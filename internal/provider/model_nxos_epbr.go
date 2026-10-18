@@ -263,6 +263,14 @@ var EPBRSubtreeClassMinVersions = map[string]string{}
 // EPBRMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var EPBRMinVersions = map[string]helpers.MinVersion{}
 
+// EPBRListClasses holds the list child classes of the resource.
+var EPBRListClasses = map[string]bool{"epbrService": true, "epbrSvcEndPoint": true, "epbrSvcEndPointL2": true, "epbrSvcEndPointDpu": true, "epbrFailoverGroup": true, "epbrFailoverServiceChain": true, "epbrServiceChain": true, "epbrEpbrMatchSeq": true, "epbrPolicyMap": true, "epbrEpbrMatch": true, "epbrDom": true, "epbrInfraVlan": true, "epbrEpbrIntf": true}
+
+// getEPBRTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getEPBRTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"epbrInst", "epbrService", "epbrProbe", "epbrSvcEndPoint", "epbrProbe", "epbrSvcEndPointReverse", "epbrProbe", "epbrSvcEndPointL2", "epbrProbe", "epbrSvcEndPointReverse", "epbrProbe", "epbrSvcEndPointDpu", "epbrFailoverGroup", "epbrFailoverServiceChain", "epbrServiceChain", "epbrEpbrMatchSeq", "epbrPolicyMap", "epbrEpbrMatch", "epbrEpbrMatchSeq", "epbrDom", "epbrInfraVlan", "epbrEpbrIntf"}, EPBRSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -2536,7 +2544,833 @@ func (data EPBR) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data EPBR) toBodyWithDeletes(ctx context.Context, state EPBR, config EPBR, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data EPBR) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(len(data.Services) == 0 && len(data.FailoverGroups) == 0 && len(data.ServiceChains) == 0 && len(data.Policies) == 0 && len(data.Vrfs) == 0 && len(data.InfraVlans) == 0 && len(data.Interfaces) == 0) {
+		epbrInstDn := dn + "/" + "inst"
+		dns[epbrInstDn] = true
+		for key, child := range data.Services {
+			epbrServiceDn := epbrInstDn + "/" + child.getRn(key)
+			dns[epbrServiceDn] = true
+			if !(child.ProbeControl.IsNull() && child.ProbeDnsHost.IsNull() && child.ProbeFrequency.IsNull() && child.ProbeHttpGet.IsNull() && child.ProbeHttpVersion.IsNull() && child.ProbePort.IsNull() && child.ProbeIp.IsNull() && child.ProbeProtocol.IsNull() && child.ProbeRetryDownCount.IsNull() && child.ProbeRetryUpCount.IsNull() && child.ProbeReverseSourceInterface.IsNull() && child.ProbeSourceInterface.IsNull() && child.ProbeTimeout.IsNull() && child.ProbeTrackId.IsNull()) {
+				epbrProbeDn_ := epbrServiceDn + "/" + "probe"
+				dns[epbrProbeDn_] = true
+			}
+			for key_, child_ := range child.Endpoints {
+				epbrSvcEndPointDn_ := epbrServiceDn + "/" + child_.getRn(key_)
+				dns[epbrSvcEndPointDn_] = true
+				if !(child_.ProbeControl.IsNull() && child_.ProbeDnsHost.IsNull() && child_.ProbeFrequency.IsNull() && child_.ProbeHttpGet.IsNull() && child_.ProbeHttpVersion.IsNull() && child_.ProbePort.IsNull() && child_.ProbeIp.IsNull() && child_.ProbeProtocol.IsNull() && child_.ProbeRetryDownCount.IsNull() && child_.ProbeRetryUpCount.IsNull() && child_.ProbeReverseSourceInterface.IsNull() && child_.ProbeSourceInterface.IsNull() && child_.ProbeTimeout.IsNull() && child_.ProbeTrackId.IsNull()) {
+					epbrProbeDn__ := epbrSvcEndPointDn_ + "/" + "probe"
+					dns[epbrProbeDn__] = true
+				}
+				if !(child_.ReverseAdminState.IsNull() && child_.ReverseHoldDownThresholdCount.IsNull() && child_.ReverseHoldDownThresholdTime.IsNull() && child_.ReverseIp.IsNull() && child_.ReverseServiceInterface.IsNull() && (child_.ReverseProbeControl.IsNull() && child_.ReverseProbeDnsHost.IsNull() && child_.ReverseProbeFrequency.IsNull() && child_.ReverseProbeHttpGet.IsNull() && child_.ReverseProbeHttpVersion.IsNull() && child_.ReverseProbePort.IsNull() && child_.ReverseProbeIp.IsNull() && child_.ReverseProbeProtocol.IsNull() && child_.ReverseProbeRetryDownCount.IsNull() && child_.ReverseProbeRetryUpCount.IsNull() && child_.ReverseProbeReverseSourceInterface.IsNull() && child_.ReverseProbeSourceInterface.IsNull() && child_.ReverseProbeTimeout.IsNull() && child_.ReverseProbeTrackId.IsNull())) {
+					epbrSvcEndPointReverseDn__ := epbrSvcEndPointDn_ + "/" + "epreverse"
+					dns[epbrSvcEndPointReverseDn__] = true
+					if !(child_.ReverseProbeControl.IsNull() && child_.ReverseProbeDnsHost.IsNull() && child_.ReverseProbeFrequency.IsNull() && child_.ReverseProbeHttpGet.IsNull() && child_.ReverseProbeHttpVersion.IsNull() && child_.ReverseProbePort.IsNull() && child_.ReverseProbeIp.IsNull() && child_.ReverseProbeProtocol.IsNull() && child_.ReverseProbeRetryDownCount.IsNull() && child_.ReverseProbeRetryUpCount.IsNull() && child_.ReverseProbeReverseSourceInterface.IsNull() && child_.ReverseProbeSourceInterface.IsNull() && child_.ReverseProbeTimeout.IsNull() && child_.ReverseProbeTrackId.IsNull()) {
+						epbrProbeDn__ := epbrSvcEndPointReverseDn__ + "/" + "probe"
+						dns[epbrProbeDn__] = true
+					}
+				}
+			}
+			for key_, child_ := range child.L2Endpoints {
+				epbrSvcEndPointL2Dn_ := epbrServiceDn + "/" + child_.getRn(key_)
+				dns[epbrSvcEndPointL2Dn_] = true
+				if !(child_.ProbeControl.IsNull() && child_.ProbeDnsHost.IsNull() && child_.ProbeFrequency.IsNull() && child_.ProbeHttpGet.IsNull() && child_.ProbeHttpVersion.IsNull() && child_.ProbePort.IsNull() && child_.ProbeIp.IsNull() && child_.ProbeProtocol.IsNull() && child_.ProbeRetryDownCount.IsNull() && child_.ProbeRetryUpCount.IsNull() && child_.ProbeReverseSourceInterface.IsNull() && child_.ProbeSourceInterface.IsNull() && child_.ProbeTimeout.IsNull() && child_.ProbeTrackId.IsNull()) {
+					epbrProbeDn__ := epbrSvcEndPointL2Dn_ + "/" + "probe"
+					dns[epbrProbeDn__] = true
+				}
+				if !(child_.ReverseAdminState.IsNull() && child_.ReverseHoldDownThresholdCount.IsNull() && child_.ReverseHoldDownThresholdTime.IsNull() && child_.ReverseIp.IsNull() && child_.ReverseServiceInterface.IsNull() && (child_.ReverseProbeControl.IsNull() && child_.ReverseProbeDnsHost.IsNull() && child_.ReverseProbeFrequency.IsNull() && child_.ReverseProbeHttpGet.IsNull() && child_.ReverseProbeHttpVersion.IsNull() && child_.ReverseProbePort.IsNull() && child_.ReverseProbeIp.IsNull() && child_.ReverseProbeProtocol.IsNull() && child_.ReverseProbeRetryDownCount.IsNull() && child_.ReverseProbeRetryUpCount.IsNull() && child_.ReverseProbeReverseSourceInterface.IsNull() && child_.ReverseProbeSourceInterface.IsNull() && child_.ReverseProbeTimeout.IsNull() && child_.ReverseProbeTrackId.IsNull())) {
+					epbrSvcEndPointReverseDn__ := epbrSvcEndPointL2Dn_ + "/" + "epreverse"
+					dns[epbrSvcEndPointReverseDn__] = true
+					if !(child_.ReverseProbeControl.IsNull() && child_.ReverseProbeDnsHost.IsNull() && child_.ReverseProbeFrequency.IsNull() && child_.ReverseProbeHttpGet.IsNull() && child_.ReverseProbeHttpVersion.IsNull() && child_.ReverseProbePort.IsNull() && child_.ReverseProbeIp.IsNull() && child_.ReverseProbeProtocol.IsNull() && child_.ReverseProbeRetryDownCount.IsNull() && child_.ReverseProbeRetryUpCount.IsNull() && child_.ReverseProbeReverseSourceInterface.IsNull() && child_.ReverseProbeSourceInterface.IsNull() && child_.ReverseProbeTimeout.IsNull() && child_.ReverseProbeTrackId.IsNull()) {
+						epbrProbeDn__ := epbrSvcEndPointReverseDn__ + "/" + "probe"
+						dns[epbrProbeDn__] = true
+					}
+				}
+			}
+			for key_, child_ := range child.DpuEndpoints {
+				epbrSvcEndPointDpuDn_ := epbrServiceDn + "/" + child_.getRn(key_)
+				dns[epbrSvcEndPointDpuDn_] = true
+			}
+		}
+		for key, child := range data.FailoverGroups {
+			epbrFailoverGroupDn := epbrInstDn + "/" + child.getRn(key)
+			dns[epbrFailoverGroupDn] = true
+			for key_, child_ := range child.ServiceChains {
+				epbrFailoverServiceChainDn_ := epbrFailoverGroupDn + "/" + child_.getRn(key_)
+				dns[epbrFailoverServiceChainDn_] = true
+			}
+		}
+		for key, child := range data.ServiceChains {
+			epbrServiceChainDn := epbrInstDn + "/" + child.getRn(key)
+			dns[epbrServiceChainDn] = true
+			for key_, child_ := range child.Sequences {
+				epbrEpbrMatchSeqDn_ := epbrServiceChainDn + "/" + child_.getRn(key_)
+				dns[epbrEpbrMatchSeqDn_] = true
+			}
+		}
+		for key, child := range data.Policies {
+			epbrPolicyMapDn := epbrInstDn + "/" + child.getRn(key)
+			dns[epbrPolicyMapDn] = true
+			for key_, child_ := range child.Matches {
+				epbrEpbrMatchDn_ := epbrPolicyMapDn + "/" + child_.getRn(key_)
+				dns[epbrEpbrMatchDn_] = true
+				for key__, child__ := range child_.Sequences {
+					epbrEpbrMatchSeqDn__ := epbrEpbrMatchDn_ + "/" + child__.getRn(key__)
+					dns[epbrEpbrMatchSeqDn__] = true
+				}
+			}
+		}
+		for key, child := range data.Vrfs {
+			epbrDomDn := epbrInstDn + "/" + child.getRn(key)
+			dns[epbrDomDn] = true
+		}
+		for key, child := range data.InfraVlans {
+			epbrInfraVlanDn := epbrInstDn + "/" + child.getRn(key)
+			dns[epbrInfraVlanDn] = true
+		}
+		for key, child := range data.Interfaces {
+			keyParts := strings.SplitN(key, ";", 3)
+			_ = keyParts
+			epbrEpbrIntfDn := epbrInstDn + "/" + child.getRn(key)
+			dns[epbrEpbrIntfDn] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data EPBR) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	if !existed(dn) {
+		return data.toDeleteBody()
+	}
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "epbrEntity.attributes", map[string]interface{}{})
+	}
+	if !(len(data.Services) == 0 && len(data.FailoverGroups) == 0 && len(data.ServiceChains) == 0 && len(data.Policies) == 0 && len(data.Vrfs) == 0 && len(data.InfraVlans) == 0 && len(data.Interfaces) == 0) {
+		epbrInstRn := "inst"
+		epbrInstDn := dn + "/" + epbrInstRn
+		_ = epbrInstDn
+		if !existed(epbrInstDn) {
+			body, _ = sjson.Set(body, "epbrEntity.children.-1.epbrInst.attributes", map[string]interface{}{"rn": epbrInstRn, "status": "deleted"})
+		} else {
+			epbrInstBody := ""
+			for key, child := range data.Services {
+				_ = child
+				epbrServiceRn := child.getRn(key)
+				epbrServiceDn := epbrInstDn + "/" + epbrServiceRn
+				_ = epbrServiceDn
+				if !existed(epbrServiceDn) {
+					epbrInstBody, _ = sjson.Set(epbrInstBody, "epbrInst.children.-1.epbrService.attributes", map[string]interface{}{"rn": epbrServiceRn, "status": "deleted"})
+					continue
+				}
+				epbrServiceBody := ""
+				epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.attributes.rn", epbrServiceRn)
+				if !child.AdminState.IsNull() {
+					epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.attributes.adminState", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ConnectionMode.IsNull() {
+					epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.attributes.connMode", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.HoldDownThresholdCount.IsNull() {
+					epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.attributes.holdDownThreshCount", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.HoldDownThresholdTime.IsNull() {
+					epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.attributes.holdDownThreshTime", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ReverseSecurityGroup.IsNull() {
+					epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.attributes.reverseSecGroup", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SecurityGroup.IsNull() {
+					epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.attributes.secGroup", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ServiceInterface.IsNull() {
+					epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.attributes.svcIntf", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ThresholdHigh.IsNull() {
+					epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.attributes.thresholdHigh", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ThresholdLow.IsNull() {
+					epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.attributes.thresholdLow", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ThresholdUp.IsNull() {
+					epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.attributes.thresholdUp", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Type.IsNull() {
+					epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.attributes.type", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Vrf.IsNull() {
+					epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.attributes.vrf", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !(child.ProbeControl.IsNull() && child.ProbeDnsHost.IsNull() && child.ProbeFrequency.IsNull() && child.ProbeHttpGet.IsNull() && child.ProbeHttpVersion.IsNull() && child.ProbePort.IsNull() && child.ProbeIp.IsNull() && child.ProbeProtocol.IsNull() && child.ProbeRetryDownCount.IsNull() && child.ProbeRetryUpCount.IsNull() && child.ProbeReverseSourceInterface.IsNull() && child.ProbeSourceInterface.IsNull() && child.ProbeTimeout.IsNull() && child.ProbeTrackId.IsNull()) {
+					epbrProbeRn_ := "probe"
+					epbrProbeDn_ := epbrServiceDn + "/" + epbrProbeRn_
+					_ = epbrProbeDn_
+					if !existed(epbrProbeDn_) {
+						epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.children.-1.epbrProbe.attributes", map[string]interface{}{"rn": epbrProbeRn_, "status": "deleted"})
+					} else {
+						epbrProbeBody_ := ""
+						if !child.ProbeControl.IsNull() {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.ProbeDnsHost.IsNull() {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.dnshost", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.ProbeFrequency.IsNull() {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.frequency", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.ProbeHttpGet.IsNull() {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.httpGetStr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.ProbeHttpVersion.IsNull() {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.httpVersion", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.ProbePort.IsNull() {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.port", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.ProbeIp.IsNull() {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.probeIp", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.ProbeProtocol.IsNull() {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.protocol", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.ProbeRetryDownCount.IsNull() {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.retryDownCount", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.ProbeRetryUpCount.IsNull() {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.retryUpCount", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.ProbeReverseSourceInterface.IsNull() {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.ProbeSourceInterface.IsNull() {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.sourceIntf", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.ProbeTimeout.IsNull() {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.timeout", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.ProbeTrackId.IsNull() {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.trackID", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if epbrProbeBody_ != "" {
+							epbrProbeBody_, _ = sjson.Set(epbrProbeBody_, "epbrProbe.attributes.rn", epbrProbeRn_)
+							epbrServiceBody, _ = sjson.SetRaw(epbrServiceBody, "epbrService.children.-1", epbrProbeBody_)
+						}
+					}
+				}
+				for key_, child_ := range child.Endpoints {
+					_ = child_
+					epbrSvcEndPointRn_ := child_.getRn(key_)
+					epbrSvcEndPointDn_ := epbrServiceDn + "/" + epbrSvcEndPointRn_
+					_ = epbrSvcEndPointDn_
+					if !existed(epbrSvcEndPointDn_) {
+						epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.children.-1.epbrSvcEndPoint.attributes", map[string]interface{}{"rn": epbrSvcEndPointRn_, "status": "deleted"})
+						continue
+					}
+					epbrSvcEndPointBody_ := ""
+					epbrSvcEndPointBody_, _ = sjson.Set(epbrSvcEndPointBody_, "epbrSvcEndPoint.attributes.rn", epbrSvcEndPointRn_)
+					if !child_.AdminState.IsNull() {
+						epbrSvcEndPointBody_, _ = sjson.Set(epbrSvcEndPointBody_, "epbrSvcEndPoint.attributes.adminState", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.HoldDownThresholdCount.IsNull() {
+						epbrSvcEndPointBody_, _ = sjson.Set(epbrSvcEndPointBody_, "epbrSvcEndPoint.attributes.holdDownThreshCount", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.HoldDownThresholdTime.IsNull() {
+						epbrSvcEndPointBody_, _ = sjson.Set(epbrSvcEndPointBody_, "epbrSvcEndPoint.attributes.holdDownThreshTime", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Mode.IsNull() {
+						epbrSvcEndPointBody_, _ = sjson.Set(epbrSvcEndPointBody_, "epbrSvcEndPoint.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.ServiceInterface.IsNull() {
+						epbrSvcEndPointBody_, _ = sjson.Set(epbrSvcEndPointBody_, "epbrSvcEndPoint.attributes.svcIntf", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Weight.IsNull() {
+						epbrSvcEndPointBody_, _ = sjson.Set(epbrSvcEndPointBody_, "epbrSvcEndPoint.attributes.weight", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !(child_.ProbeControl.IsNull() && child_.ProbeDnsHost.IsNull() && child_.ProbeFrequency.IsNull() && child_.ProbeHttpGet.IsNull() && child_.ProbeHttpVersion.IsNull() && child_.ProbePort.IsNull() && child_.ProbeIp.IsNull() && child_.ProbeProtocol.IsNull() && child_.ProbeRetryDownCount.IsNull() && child_.ProbeRetryUpCount.IsNull() && child_.ProbeReverseSourceInterface.IsNull() && child_.ProbeSourceInterface.IsNull() && child_.ProbeTimeout.IsNull() && child_.ProbeTrackId.IsNull()) {
+						epbrProbeRn__ := "probe"
+						epbrProbeDn__ := epbrSvcEndPointDn_ + "/" + epbrProbeRn__
+						_ = epbrProbeDn__
+						if !existed(epbrProbeDn__) {
+							epbrSvcEndPointBody_, _ = sjson.Set(epbrSvcEndPointBody_, "epbrSvcEndPoint.children.-1.epbrProbe.attributes", map[string]interface{}{"rn": epbrProbeRn__, "status": "deleted"})
+						} else {
+							epbrProbeBody__ := ""
+							if !child_.ProbeControl.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeDnsHost.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.dnshost", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeFrequency.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.frequency", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeHttpGet.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.httpGetStr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeHttpVersion.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.httpVersion", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbePort.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.port", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeIp.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.probeIp", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeProtocol.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.protocol", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeRetryDownCount.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.retryDownCount", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeRetryUpCount.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.retryUpCount", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeReverseSourceInterface.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeSourceInterface.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.sourceIntf", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeTimeout.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.timeout", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeTrackId.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.trackID", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if epbrProbeBody__ != "" {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.rn", epbrProbeRn__)
+								epbrSvcEndPointBody_, _ = sjson.SetRaw(epbrSvcEndPointBody_, "epbrSvcEndPoint.children.-1", epbrProbeBody__)
+							}
+						}
+					}
+					if !(child_.ReverseAdminState.IsNull() && child_.ReverseHoldDownThresholdCount.IsNull() && child_.ReverseHoldDownThresholdTime.IsNull() && child_.ReverseIp.IsNull() && child_.ReverseServiceInterface.IsNull() && (child_.ReverseProbeControl.IsNull() && child_.ReverseProbeDnsHost.IsNull() && child_.ReverseProbeFrequency.IsNull() && child_.ReverseProbeHttpGet.IsNull() && child_.ReverseProbeHttpVersion.IsNull() && child_.ReverseProbePort.IsNull() && child_.ReverseProbeIp.IsNull() && child_.ReverseProbeProtocol.IsNull() && child_.ReverseProbeRetryDownCount.IsNull() && child_.ReverseProbeRetryUpCount.IsNull() && child_.ReverseProbeReverseSourceInterface.IsNull() && child_.ReverseProbeSourceInterface.IsNull() && child_.ReverseProbeTimeout.IsNull() && child_.ReverseProbeTrackId.IsNull())) {
+						epbrSvcEndPointReverseRn__ := "epreverse"
+						epbrSvcEndPointReverseDn__ := epbrSvcEndPointDn_ + "/" + epbrSvcEndPointReverseRn__
+						_ = epbrSvcEndPointReverseDn__
+						if !existed(epbrSvcEndPointReverseDn__) {
+							epbrSvcEndPointBody_, _ = sjson.Set(epbrSvcEndPointBody_, "epbrSvcEndPoint.children.-1.epbrSvcEndPointReverse.attributes", map[string]interface{}{"rn": epbrSvcEndPointReverseRn__, "status": "deleted"})
+						} else {
+							epbrSvcEndPointReverseBody__ := ""
+							if !child_.ReverseAdminState.IsNull() {
+								epbrSvcEndPointReverseBody__, _ = sjson.Set(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.attributes.adminState", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ReverseHoldDownThresholdCount.IsNull() {
+								epbrSvcEndPointReverseBody__, _ = sjson.Set(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.attributes.holdDownThreshCount", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ReverseHoldDownThresholdTime.IsNull() {
+								epbrSvcEndPointReverseBody__, _ = sjson.Set(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.attributes.holdDownThreshTime", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ReverseIp.IsNull() {
+								epbrSvcEndPointReverseBody__, _ = sjson.Set(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.attributes.ip", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ReverseServiceInterface.IsNull() {
+								epbrSvcEndPointReverseBody__, _ = sjson.Set(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.attributes.svcIntf", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !(child_.ReverseProbeControl.IsNull() && child_.ReverseProbeDnsHost.IsNull() && child_.ReverseProbeFrequency.IsNull() && child_.ReverseProbeHttpGet.IsNull() && child_.ReverseProbeHttpVersion.IsNull() && child_.ReverseProbePort.IsNull() && child_.ReverseProbeIp.IsNull() && child_.ReverseProbeProtocol.IsNull() && child_.ReverseProbeRetryDownCount.IsNull() && child_.ReverseProbeRetryUpCount.IsNull() && child_.ReverseProbeReverseSourceInterface.IsNull() && child_.ReverseProbeSourceInterface.IsNull() && child_.ReverseProbeTimeout.IsNull() && child_.ReverseProbeTrackId.IsNull()) {
+								epbrProbeRn__ := "probe"
+								epbrProbeDn__ := epbrSvcEndPointReverseDn__ + "/" + epbrProbeRn__
+								_ = epbrProbeDn__
+								if !existed(epbrProbeDn__) {
+									epbrSvcEndPointReverseBody__, _ = sjson.Set(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.children.-1.epbrProbe.attributes", map[string]interface{}{"rn": epbrProbeRn__, "status": "deleted"})
+								} else {
+									epbrProbeBody__ := ""
+									if !child_.ReverseProbeControl.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeDnsHost.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.dnshost", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeFrequency.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.frequency", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeHttpGet.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.httpGetStr", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeHttpVersion.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.httpVersion", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbePort.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.port", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeIp.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.probeIp", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeProtocol.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.protocol", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeRetryDownCount.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.retryDownCount", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeRetryUpCount.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.retryUpCount", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeReverseSourceInterface.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeSourceInterface.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.sourceIntf", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeTimeout.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.timeout", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeTrackId.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.trackID", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if epbrProbeBody__ != "" {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.rn", epbrProbeRn__)
+										epbrSvcEndPointReverseBody__, _ = sjson.SetRaw(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.children.-1", epbrProbeBody__)
+									}
+								}
+							}
+							if epbrSvcEndPointReverseBody__ != "" {
+								epbrSvcEndPointReverseBody__, _ = sjson.Set(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.attributes.rn", epbrSvcEndPointReverseRn__)
+								epbrSvcEndPointBody_, _ = sjson.SetRaw(epbrSvcEndPointBody_, "epbrSvcEndPoint.children.-1", epbrSvcEndPointReverseBody__)
+							}
+						}
+					}
+					epbrServiceBody, _ = sjson.SetRaw(epbrServiceBody, "epbrService.children.-1", epbrSvcEndPointBody_)
+				}
+				for key_, child_ := range child.L2Endpoints {
+					_ = child_
+					epbrSvcEndPointL2Rn_ := child_.getRn(key_)
+					epbrSvcEndPointL2Dn_ := epbrServiceDn + "/" + epbrSvcEndPointL2Rn_
+					_ = epbrSvcEndPointL2Dn_
+					if !existed(epbrSvcEndPointL2Dn_) {
+						epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.children.-1.epbrSvcEndPointL2.attributes", map[string]interface{}{"rn": epbrSvcEndPointL2Rn_, "status": "deleted"})
+						continue
+					}
+					epbrSvcEndPointL2Body_ := ""
+					epbrSvcEndPointL2Body_, _ = sjson.Set(epbrSvcEndPointL2Body_, "epbrSvcEndPointL2.attributes.rn", epbrSvcEndPointL2Rn_)
+					if !child_.AdminState.IsNull() {
+						epbrSvcEndPointL2Body_, _ = sjson.Set(epbrSvcEndPointL2Body_, "epbrSvcEndPointL2.attributes.adminState", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.HoldDownThresholdCount.IsNull() {
+						epbrSvcEndPointL2Body_, _ = sjson.Set(epbrSvcEndPointL2Body_, "epbrSvcEndPointL2.attributes.holdDownThreshCount", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.HoldDownThresholdTime.IsNull() {
+						epbrSvcEndPointL2Body_, _ = sjson.Set(epbrSvcEndPointL2Body_, "epbrSvcEndPointL2.attributes.holdDownThreshTime", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Ip.IsNull() {
+						epbrSvcEndPointL2Body_, _ = sjson.Set(epbrSvcEndPointL2Body_, "epbrSvcEndPointL2.attributes.ip", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !(child_.ProbeControl.IsNull() && child_.ProbeDnsHost.IsNull() && child_.ProbeFrequency.IsNull() && child_.ProbeHttpGet.IsNull() && child_.ProbeHttpVersion.IsNull() && child_.ProbePort.IsNull() && child_.ProbeIp.IsNull() && child_.ProbeProtocol.IsNull() && child_.ProbeRetryDownCount.IsNull() && child_.ProbeRetryUpCount.IsNull() && child_.ProbeReverseSourceInterface.IsNull() && child_.ProbeSourceInterface.IsNull() && child_.ProbeTimeout.IsNull() && child_.ProbeTrackId.IsNull()) {
+						epbrProbeRn__ := "probe"
+						epbrProbeDn__ := epbrSvcEndPointL2Dn_ + "/" + epbrProbeRn__
+						_ = epbrProbeDn__
+						if !existed(epbrProbeDn__) {
+							epbrSvcEndPointL2Body_, _ = sjson.Set(epbrSvcEndPointL2Body_, "epbrSvcEndPointL2.children.-1.epbrProbe.attributes", map[string]interface{}{"rn": epbrProbeRn__, "status": "deleted"})
+						} else {
+							epbrProbeBody__ := ""
+							if !child_.ProbeControl.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeDnsHost.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.dnshost", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeFrequency.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.frequency", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeHttpGet.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.httpGetStr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeHttpVersion.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.httpVersion", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbePort.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.port", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeIp.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.probeIp", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeProtocol.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.protocol", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeRetryDownCount.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.retryDownCount", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeRetryUpCount.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.retryUpCount", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeReverseSourceInterface.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeSourceInterface.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.sourceIntf", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeTimeout.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.timeout", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProbeTrackId.IsNull() {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.trackID", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if epbrProbeBody__ != "" {
+								epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.rn", epbrProbeRn__)
+								epbrSvcEndPointL2Body_, _ = sjson.SetRaw(epbrSvcEndPointL2Body_, "epbrSvcEndPointL2.children.-1", epbrProbeBody__)
+							}
+						}
+					}
+					if !(child_.ReverseAdminState.IsNull() && child_.ReverseHoldDownThresholdCount.IsNull() && child_.ReverseHoldDownThresholdTime.IsNull() && child_.ReverseIp.IsNull() && child_.ReverseServiceInterface.IsNull() && (child_.ReverseProbeControl.IsNull() && child_.ReverseProbeDnsHost.IsNull() && child_.ReverseProbeFrequency.IsNull() && child_.ReverseProbeHttpGet.IsNull() && child_.ReverseProbeHttpVersion.IsNull() && child_.ReverseProbePort.IsNull() && child_.ReverseProbeIp.IsNull() && child_.ReverseProbeProtocol.IsNull() && child_.ReverseProbeRetryDownCount.IsNull() && child_.ReverseProbeRetryUpCount.IsNull() && child_.ReverseProbeReverseSourceInterface.IsNull() && child_.ReverseProbeSourceInterface.IsNull() && child_.ReverseProbeTimeout.IsNull() && child_.ReverseProbeTrackId.IsNull())) {
+						epbrSvcEndPointReverseRn__ := "epreverse"
+						epbrSvcEndPointReverseDn__ := epbrSvcEndPointL2Dn_ + "/" + epbrSvcEndPointReverseRn__
+						_ = epbrSvcEndPointReverseDn__
+						if !existed(epbrSvcEndPointReverseDn__) {
+							epbrSvcEndPointL2Body_, _ = sjson.Set(epbrSvcEndPointL2Body_, "epbrSvcEndPointL2.children.-1.epbrSvcEndPointReverse.attributes", map[string]interface{}{"rn": epbrSvcEndPointReverseRn__, "status": "deleted"})
+						} else {
+							epbrSvcEndPointReverseBody__ := ""
+							if !child_.ReverseAdminState.IsNull() {
+								epbrSvcEndPointReverseBody__, _ = sjson.Set(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.attributes.adminState", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ReverseHoldDownThresholdCount.IsNull() {
+								epbrSvcEndPointReverseBody__, _ = sjson.Set(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.attributes.holdDownThreshCount", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ReverseHoldDownThresholdTime.IsNull() {
+								epbrSvcEndPointReverseBody__, _ = sjson.Set(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.attributes.holdDownThreshTime", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ReverseIp.IsNull() {
+								epbrSvcEndPointReverseBody__, _ = sjson.Set(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.attributes.ip", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ReverseServiceInterface.IsNull() {
+								epbrSvcEndPointReverseBody__, _ = sjson.Set(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.attributes.svcIntf", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !(child_.ReverseProbeControl.IsNull() && child_.ReverseProbeDnsHost.IsNull() && child_.ReverseProbeFrequency.IsNull() && child_.ReverseProbeHttpGet.IsNull() && child_.ReverseProbeHttpVersion.IsNull() && child_.ReverseProbePort.IsNull() && child_.ReverseProbeIp.IsNull() && child_.ReverseProbeProtocol.IsNull() && child_.ReverseProbeRetryDownCount.IsNull() && child_.ReverseProbeRetryUpCount.IsNull() && child_.ReverseProbeReverseSourceInterface.IsNull() && child_.ReverseProbeSourceInterface.IsNull() && child_.ReverseProbeTimeout.IsNull() && child_.ReverseProbeTrackId.IsNull()) {
+								epbrProbeRn__ := "probe"
+								epbrProbeDn__ := epbrSvcEndPointReverseDn__ + "/" + epbrProbeRn__
+								_ = epbrProbeDn__
+								if !existed(epbrProbeDn__) {
+									epbrSvcEndPointReverseBody__, _ = sjson.Set(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.children.-1.epbrProbe.attributes", map[string]interface{}{"rn": epbrProbeRn__, "status": "deleted"})
+								} else {
+									epbrProbeBody__ := ""
+									if !child_.ReverseProbeControl.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeDnsHost.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.dnshost", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeFrequency.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.frequency", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeHttpGet.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.httpGetStr", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeHttpVersion.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.httpVersion", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbePort.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.port", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeIp.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.probeIp", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeProtocol.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.protocol", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeRetryDownCount.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.retryDownCount", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeRetryUpCount.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.retryUpCount", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeReverseSourceInterface.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeSourceInterface.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.sourceIntf", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeTimeout.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.timeout", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !child_.ReverseProbeTrackId.IsNull() {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.trackID", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if epbrProbeBody__ != "" {
+										epbrProbeBody__, _ = sjson.Set(epbrProbeBody__, "epbrProbe.attributes.rn", epbrProbeRn__)
+										epbrSvcEndPointReverseBody__, _ = sjson.SetRaw(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.children.-1", epbrProbeBody__)
+									}
+								}
+							}
+							if epbrSvcEndPointReverseBody__ != "" {
+								epbrSvcEndPointReverseBody__, _ = sjson.Set(epbrSvcEndPointReverseBody__, "epbrSvcEndPointReverse.attributes.rn", epbrSvcEndPointReverseRn__)
+								epbrSvcEndPointL2Body_, _ = sjson.SetRaw(epbrSvcEndPointL2Body_, "epbrSvcEndPointL2.children.-1", epbrSvcEndPointReverseBody__)
+							}
+						}
+					}
+					epbrServiceBody, _ = sjson.SetRaw(epbrServiceBody, "epbrService.children.-1", epbrSvcEndPointL2Body_)
+				}
+				for key_, child_ := range child.DpuEndpoints {
+					_ = child_
+					epbrSvcEndPointDpuRn_ := child_.getRn(key_)
+					epbrSvcEndPointDpuDn_ := epbrServiceDn + "/" + epbrSvcEndPointDpuRn_
+					_ = epbrSvcEndPointDpuDn_
+					if !existed(epbrSvcEndPointDpuDn_) {
+						epbrServiceBody, _ = sjson.Set(epbrServiceBody, "epbrService.children.-1.epbrSvcEndPointDpu.attributes", map[string]interface{}{"rn": epbrSvcEndPointDpuRn_, "status": "deleted"})
+						continue
+					}
+					epbrSvcEndPointDpuBody_ := ""
+					epbrSvcEndPointDpuBody_, _ = sjson.Set(epbrSvcEndPointDpuBody_, "epbrSvcEndPointDpu.attributes.rn", epbrSvcEndPointDpuRn_)
+					if !child_.AdminState.IsNull() {
+						epbrSvcEndPointDpuBody_, _ = sjson.Set(epbrSvcEndPointDpuBody_, "epbrSvcEndPointDpu.attributes.adminState", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.HoldDownThresholdCount.IsNull() {
+						epbrSvcEndPointDpuBody_, _ = sjson.Set(epbrSvcEndPointDpuBody_, "epbrSvcEndPointDpu.attributes.holdDownThreshCount", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.HoldDownThresholdTime.IsNull() {
+						epbrSvcEndPointDpuBody_, _ = sjson.Set(epbrSvcEndPointDpuBody_, "epbrSvcEndPointDpu.attributes.holdDownThreshTime", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Ip.IsNull() {
+						epbrSvcEndPointDpuBody_, _ = sjson.Set(epbrSvcEndPointDpuBody_, "epbrSvcEndPointDpu.attributes.ip", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.ServiceInterface.IsNull() {
+						epbrSvcEndPointDpuBody_, _ = sjson.Set(epbrSvcEndPointDpuBody_, "epbrSvcEndPointDpu.attributes.svcIntf", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Vlan.IsNull() {
+						epbrSvcEndPointDpuBody_, _ = sjson.Set(epbrSvcEndPointDpuBody_, "epbrSvcEndPointDpu.attributes.vlan", "DME_UNSET_PROPERTY_MARKER")
+					}
+					epbrServiceBody, _ = sjson.SetRaw(epbrServiceBody, "epbrService.children.-1", epbrSvcEndPointDpuBody_)
+				}
+				epbrInstBody, _ = sjson.SetRaw(epbrInstBody, "epbrInst.children.-1", epbrServiceBody)
+			}
+			for key, child := range data.FailoverGroups {
+				_ = child
+				epbrFailoverGroupRn := child.getRn(key)
+				epbrFailoverGroupDn := epbrInstDn + "/" + epbrFailoverGroupRn
+				_ = epbrFailoverGroupDn
+				if !existed(epbrFailoverGroupDn) {
+					epbrInstBody, _ = sjson.Set(epbrInstBody, "epbrInst.children.-1.epbrFailoverGroup.attributes", map[string]interface{}{"rn": epbrFailoverGroupRn, "status": "deleted"})
+					continue
+				}
+				epbrFailoverGroupBody := ""
+				epbrFailoverGroupBody, _ = sjson.Set(epbrFailoverGroupBody, "epbrFailoverGroup.attributes.rn", epbrFailoverGroupRn)
+				for key_, child_ := range child.ServiceChains {
+					_ = child_
+					epbrFailoverServiceChainRn_ := child_.getRn(key_)
+					epbrFailoverServiceChainDn_ := epbrFailoverGroupDn + "/" + epbrFailoverServiceChainRn_
+					_ = epbrFailoverServiceChainDn_
+					if !existed(epbrFailoverServiceChainDn_) {
+						epbrFailoverGroupBody, _ = sjson.Set(epbrFailoverGroupBody, "epbrFailoverGroup.children.-1.epbrFailoverServiceChain.attributes", map[string]interface{}{"rn": epbrFailoverServiceChainRn_, "status": "deleted"})
+						continue
+					}
+					epbrFailoverServiceChainBody_ := ""
+					epbrFailoverServiceChainBody_, _ = sjson.Set(epbrFailoverServiceChainBody_, "epbrFailoverServiceChain.attributes.rn", epbrFailoverServiceChainRn_)
+					if !child_.Preference.IsNull() {
+						epbrFailoverServiceChainBody_, _ = sjson.Set(epbrFailoverServiceChainBody_, "epbrFailoverServiceChain.attributes.preference", "DME_UNSET_PROPERTY_MARKER")
+					}
+					epbrFailoverGroupBody, _ = sjson.SetRaw(epbrFailoverGroupBody, "epbrFailoverGroup.children.-1", epbrFailoverServiceChainBody_)
+				}
+				epbrInstBody, _ = sjson.SetRaw(epbrInstBody, "epbrInst.children.-1", epbrFailoverGroupBody)
+			}
+			for key, child := range data.ServiceChains {
+				_ = child
+				epbrServiceChainRn := child.getRn(key)
+				epbrServiceChainDn := epbrInstDn + "/" + epbrServiceChainRn
+				_ = epbrServiceChainDn
+				if !existed(epbrServiceChainDn) {
+					epbrInstBody, _ = sjson.Set(epbrInstBody, "epbrInst.children.-1.epbrServiceChain.attributes", map[string]interface{}{"rn": epbrServiceChainRn, "status": "deleted"})
+					continue
+				}
+				epbrServiceChainBody := ""
+				epbrServiceChainBody, _ = sjson.Set(epbrServiceChainBody, "epbrServiceChain.attributes.rn", epbrServiceChainRn)
+				if !child.FailoverGroup.IsNull() {
+					epbrServiceChainBody, _ = sjson.Set(epbrServiceChainBody, "epbrServiceChain.attributes.failoverGroup", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.LoadBalanceMethod.IsNull() {
+					epbrServiceChainBody, _ = sjson.Set(epbrServiceChainBody, "epbrServiceChain.attributes.lbMethod", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Mode.IsNull() {
+					epbrServiceChainBody, _ = sjson.Set(epbrServiceChainBody, "epbrServiceChain.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.Sequences {
+					_ = child_
+					epbrEpbrMatchSeqRn_ := child_.getRn(key_)
+					epbrEpbrMatchSeqDn_ := epbrServiceChainDn + "/" + epbrEpbrMatchSeqRn_
+					_ = epbrEpbrMatchSeqDn_
+					if !existed(epbrEpbrMatchSeqDn_) {
+						epbrServiceChainBody, _ = sjson.Set(epbrServiceChainBody, "epbrServiceChain.children.-1.epbrEpbrMatchSeq.attributes", map[string]interface{}{"rn": epbrEpbrMatchSeqRn_, "status": "deleted"})
+						continue
+					}
+					epbrEpbrMatchSeqBody_ := ""
+					epbrEpbrMatchSeqBody_, _ = sjson.Set(epbrEpbrMatchSeqBody_, "epbrEpbrMatchSeq.attributes.rn", epbrEpbrMatchSeqRn_)
+					if !child_.Service.IsNull() {
+						epbrEpbrMatchSeqBody_, _ = sjson.Set(epbrEpbrMatchSeqBody_, "epbrEpbrMatchSeq.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Action.IsNull() {
+						epbrEpbrMatchSeqBody_, _ = sjson.Set(epbrEpbrMatchSeqBody_, "epbrEpbrMatchSeq.attributes.action", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.FailAction.IsNull() {
+						epbrEpbrMatchSeqBody_, _ = sjson.Set(epbrEpbrMatchSeqBody_, "epbrEpbrMatchSeq.attributes.failaction", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.LoadBalanceMethod.IsNull() {
+						epbrEpbrMatchSeqBody_, _ = sjson.Set(epbrEpbrMatchSeqBody_, "epbrEpbrMatchSeq.attributes.lbMethod", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.ReverseAction.IsNull() {
+						epbrEpbrMatchSeqBody_, _ = sjson.Set(epbrEpbrMatchSeqBody_, "epbrEpbrMatchSeq.attributes.revAction", "DME_UNSET_PROPERTY_MARKER")
+					}
+					epbrServiceChainBody, _ = sjson.SetRaw(epbrServiceChainBody, "epbrServiceChain.children.-1", epbrEpbrMatchSeqBody_)
+				}
+				epbrInstBody, _ = sjson.SetRaw(epbrInstBody, "epbrInst.children.-1", epbrServiceChainBody)
+			}
+			for key, child := range data.Policies {
+				_ = child
+				epbrPolicyMapRn := child.getRn(key)
+				epbrPolicyMapDn := epbrInstDn + "/" + epbrPolicyMapRn
+				_ = epbrPolicyMapDn
+				if !existed(epbrPolicyMapDn) {
+					epbrInstBody, _ = sjson.Set(epbrInstBody, "epbrInst.children.-1.epbrPolicyMap.attributes", map[string]interface{}{"rn": epbrPolicyMapRn, "status": "deleted"})
+					continue
+				}
+				epbrPolicyMapBody := ""
+				epbrPolicyMapBody, _ = sjson.Set(epbrPolicyMapBody, "epbrPolicyMap.attributes.rn", epbrPolicyMapRn)
+				if !child.DefaultTrafficAction.IsNull() {
+					epbrPolicyMapBody, _ = sjson.Set(epbrPolicyMapBody, "epbrPolicyMap.attributes.defaultTrafficAction", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.DestinationVrf.IsNull() {
+					epbrPolicyMapBody, _ = sjson.Set(epbrPolicyMapBody, "epbrPolicyMap.attributes.destinationVrf", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SourceVrf.IsNull() {
+					epbrPolicyMapBody, _ = sjson.Set(epbrPolicyMapBody, "epbrPolicyMap.attributes.sourceVrf", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Statistics.IsNull() {
+					epbrPolicyMapBody, _ = sjson.Set(epbrPolicyMapBody, "epbrPolicyMap.attributes.statistics", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.Matches {
+					_ = child_
+					epbrEpbrMatchRn_ := child_.getRn(key_)
+					epbrEpbrMatchDn_ := epbrPolicyMapDn + "/" + epbrEpbrMatchRn_
+					_ = epbrEpbrMatchDn_
+					if !existed(epbrEpbrMatchDn_) {
+						epbrPolicyMapBody, _ = sjson.Set(epbrPolicyMapBody, "epbrPolicyMap.children.-1.epbrEpbrMatch.attributes", map[string]interface{}{"rn": epbrEpbrMatchRn_, "status": "deleted"})
+						continue
+					}
+					epbrEpbrMatchBody_ := ""
+					epbrEpbrMatchBody_, _ = sjson.Set(epbrEpbrMatchBody_, "epbrEpbrMatch.attributes.rn", epbrEpbrMatchRn_)
+					if !child_.AccessListType.IsNull() {
+						epbrEpbrMatchBody_, _ = sjson.Set(epbrEpbrMatchBody_, "epbrEpbrMatch.attributes.aclType", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Buckets.IsNull() {
+						epbrEpbrMatchBody_, _ = sjson.Set(epbrEpbrMatchBody_, "epbrEpbrMatch.attributes.bucket", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationVrf.IsNull() {
+						epbrEpbrMatchBody_, _ = sjson.Set(epbrEpbrMatchBody_, "epbrEpbrMatch.attributes.destinationVrf", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Ipv6.IsNull() {
+						epbrEpbrMatchBody_, _ = sjson.Set(epbrEpbrMatchBody_, "epbrEpbrMatch.attributes.isIPv6", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.LoadBalanceMethod.IsNull() {
+						epbrEpbrMatchBody_, _ = sjson.Set(epbrEpbrMatchBody_, "epbrEpbrMatch.attributes.lbMethod", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.MaskPosition.IsNull() {
+						epbrEpbrMatchBody_, _ = sjson.Set(epbrEpbrMatchBody_, "epbrEpbrMatch.attributes.maskPosition", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourceVrf.IsNull() {
+						epbrEpbrMatchBody_, _ = sjson.Set(epbrEpbrMatchBody_, "epbrEpbrMatch.attributes.sourceVrf", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.TrafficAction.IsNull() {
+						epbrEpbrMatchBody_, _ = sjson.Set(epbrEpbrMatchBody_, "epbrEpbrMatch.attributes.trafficAction", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Vlans.IsNull() {
+						epbrEpbrMatchBody_, _ = sjson.Set(epbrEpbrMatchBody_, "epbrEpbrMatch.attributes.vlans", "DME_UNSET_PROPERTY_MARKER")
+					}
+					for key__, child__ := range child_.Sequences {
+						_ = child__
+						epbrEpbrMatchSeqRn__ := child__.getRn(key__)
+						epbrEpbrMatchSeqDn__ := epbrEpbrMatchDn_ + "/" + epbrEpbrMatchSeqRn__
+						_ = epbrEpbrMatchSeqDn__
+						if !existed(epbrEpbrMatchSeqDn__) {
+							epbrEpbrMatchBody_, _ = sjson.Set(epbrEpbrMatchBody_, "epbrEpbrMatch.children.-1.epbrEpbrMatchSeq.attributes", map[string]interface{}{"rn": epbrEpbrMatchSeqRn__, "status": "deleted"})
+							continue
+						}
+						epbrEpbrMatchSeqBody__ := ""
+						epbrEpbrMatchSeqBody__, _ = sjson.Set(epbrEpbrMatchSeqBody__, "epbrEpbrMatchSeq.attributes.rn", epbrEpbrMatchSeqRn__)
+						if !child__.Service.IsNull() {
+							epbrEpbrMatchSeqBody__, _ = sjson.Set(epbrEpbrMatchSeqBody__, "epbrEpbrMatchSeq.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Action.IsNull() {
+							epbrEpbrMatchSeqBody__, _ = sjson.Set(epbrEpbrMatchSeqBody__, "epbrEpbrMatchSeq.attributes.action", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.FailAction.IsNull() {
+							epbrEpbrMatchSeqBody__, _ = sjson.Set(epbrEpbrMatchSeqBody__, "epbrEpbrMatchSeq.attributes.failaction", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.LoadBalanceMethod.IsNull() {
+							epbrEpbrMatchSeqBody__, _ = sjson.Set(epbrEpbrMatchSeqBody__, "epbrEpbrMatchSeq.attributes.lbMethod", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.ReverseAction.IsNull() {
+							epbrEpbrMatchSeqBody__, _ = sjson.Set(epbrEpbrMatchSeqBody__, "epbrEpbrMatchSeq.attributes.revAction", "DME_UNSET_PROPERTY_MARKER")
+						}
+						epbrEpbrMatchBody_, _ = sjson.SetRaw(epbrEpbrMatchBody_, "epbrEpbrMatch.children.-1", epbrEpbrMatchSeqBody__)
+					}
+					epbrPolicyMapBody, _ = sjson.SetRaw(epbrPolicyMapBody, "epbrPolicyMap.children.-1", epbrEpbrMatchBody_)
+				}
+				epbrInstBody, _ = sjson.SetRaw(epbrInstBody, "epbrInst.children.-1", epbrPolicyMapBody)
+			}
+			for key, child := range data.Vrfs {
+				_ = child
+				epbrDomRn := child.getRn(key)
+				epbrDomDn := epbrInstDn + "/" + epbrDomRn
+				_ = epbrDomDn
+				if !existed(epbrDomDn) {
+					epbrInstBody, _ = sjson.Set(epbrInstBody, "epbrInst.children.-1.epbrDom.attributes", map[string]interface{}{"rn": epbrDomRn, "status": "deleted"})
+					continue
+				}
+				epbrDomBody := ""
+				epbrDomBody, _ = sjson.Set(epbrDomBody, "epbrDom.attributes.rn", epbrDomRn)
+				if !child.Policy.IsNull() {
+					epbrDomBody, _ = sjson.Set(epbrDomBody, "epbrDom.attributes.policy", "DME_UNSET_PROPERTY_MARKER")
+				}
+				epbrInstBody, _ = sjson.SetRaw(epbrInstBody, "epbrInst.children.-1", epbrDomBody)
+			}
+			for key, child := range data.InfraVlans {
+				_ = child
+				epbrInfraVlanRn := child.getRn(key)
+				epbrInfraVlanDn := epbrInstDn + "/" + epbrInfraVlanRn
+				_ = epbrInfraVlanDn
+				if !existed(epbrInfraVlanDn) {
+					epbrInstBody, _ = sjson.Set(epbrInstBody, "epbrInst.children.-1.epbrInfraVlan.attributes", map[string]interface{}{"rn": epbrInfraVlanRn, "status": "deleted"})
+					continue
+				}
+				epbrInfraVlanBody := ""
+				epbrInfraVlanBody, _ = sjson.Set(epbrInfraVlanBody, "epbrInfraVlan.attributes.rn", epbrInfraVlanRn)
+				epbrInstBody, _ = sjson.SetRaw(epbrInstBody, "epbrInst.children.-1", epbrInfraVlanBody)
+			}
+			for key, child := range data.Interfaces {
+				_ = child
+				keyParts := strings.SplitN(key, ";", 3)
+				_ = keyParts
+				epbrEpbrIntfRn := child.getRn(key)
+				epbrEpbrIntfDn := epbrInstDn + "/" + epbrEpbrIntfRn
+				_ = epbrEpbrIntfDn
+				if !existed(epbrEpbrIntfDn) {
+					epbrInstBody, _ = sjson.Set(epbrInstBody, "epbrInst.children.-1.epbrEpbrIntf.attributes", map[string]interface{}{"rn": epbrEpbrIntfRn, "status": "deleted"})
+					continue
+				}
+				epbrEpbrIntfBody := ""
+				epbrEpbrIntfBody, _ = sjson.Set(epbrEpbrIntfBody, "epbrEpbrIntf.attributes.rn", epbrEpbrIntfRn)
+				if !child.EgressInterface.IsNull() {
+					epbrEpbrIntfBody, _ = sjson.Set(epbrEpbrIntfBody, "epbrEpbrIntf.attributes.egressIntf", "DME_UNSET_PROPERTY_MARKER")
+				}
+				epbrInstBody, _ = sjson.SetRaw(epbrInstBody, "epbrInst.children.-1", epbrEpbrIntfBody)
+			}
+			if epbrInstBody != "" {
+				epbrInstBody, _ = sjson.Set(epbrInstBody, "epbrInst.attributes.rn", epbrInstRn)
+				body, _ = sjson.SetRaw(body, "epbrEntity.children.-1", epbrInstBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data EPBR) toBodyWithDeletes(ctx context.Context, state EPBR, config EPBR, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -2799,6 +3633,8 @@ func (data EPBR) toBodyWithDeletes(ctx context.Context, state EPBR, config EPBR,
 				stateChild := state.Services[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/inst" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "epbrInst")+".children").Array() {
 					if mv.Get("epbrService.attributes.name").String() == key {
 						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
@@ -2849,67 +3685,75 @@ func (data EPBR) toBodyWithDeletes(ctx context.Context, state EPBR, config EPBR,
 						}
 					}
 					if listChildPath != "" {
-						if !stateChild.ProbeControl.IsNull() && configChild.ProbeControl.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ProbeDnsHost.IsNull() && configChild.ProbeDnsHost.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dnshost", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ProbeFrequency.IsNull() && configChild.ProbeFrequency.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"frequency", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ProbeHttpGet.IsNull() && configChild.ProbeHttpGet.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpGetStr", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ProbeHttpVersion.IsNull() && configChild.ProbeHttpVersion.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpVersion", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ProbePort.IsNull() && configChild.ProbePort.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"port", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ProbeIp.IsNull() && configChild.ProbeIp.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"probeIp", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ProbeProtocol.IsNull() && configChild.ProbeProtocol.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"protocol", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ProbeRetryDownCount.IsNull() && configChild.ProbeRetryDownCount.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryDownCount", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ProbeRetryUpCount.IsNull() && configChild.ProbeRetryUpCount.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryUpCount", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ProbeReverseSourceInterface.IsNull() && configChild.ProbeReverseSourceInterface.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ProbeSourceInterface.IsNull() && configChild.ProbeSourceInterface.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceIntf", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ProbeTimeout.IsNull() && configChild.ProbeTimeout.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ProbeTrackId.IsNull() && configChild.ProbeTrackId.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"trackID", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.ProbeControl.IsNull() && stateChild.ProbeDnsHost.IsNull() && stateChild.ProbeFrequency.IsNull() && stateChild.ProbeHttpGet.IsNull() && stateChild.ProbeHttpVersion.IsNull() && stateChild.ProbePort.IsNull() && stateChild.ProbeIp.IsNull() && stateChild.ProbeProtocol.IsNull() && stateChild.ProbeRetryDownCount.IsNull() && stateChild.ProbeRetryUpCount.IsNull() && stateChild.ProbeReverseSourceInterface.IsNull() && stateChild.ProbeSourceInterface.IsNull() && stateChild.ProbeTimeout.IsNull() && stateChild.ProbeTrackId.IsNull()) && (configChild.ProbeControl.IsNull() && configChild.ProbeDnsHost.IsNull() && configChild.ProbeFrequency.IsNull() && configChild.ProbeHttpGet.IsNull() && configChild.ProbeHttpVersion.IsNull() && configChild.ProbePort.IsNull() && configChild.ProbeIp.IsNull() && configChild.ProbeProtocol.IsNull() && configChild.ProbeRetryDownCount.IsNull() && configChild.ProbeRetryUpCount.IsNull() && configChild.ProbeReverseSourceInterface.IsNull() && configChild.ProbeSourceInterface.IsNull() && configChild.ProbeTimeout.IsNull() && configChild.ProbeTrackId.IsNull()) && deleteEmptied(listChildDn+"/probe") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.ProbeControl.IsNull() && configChild.ProbeControl.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ProbeDnsHost.IsNull() && configChild.ProbeDnsHost.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dnshost", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ProbeFrequency.IsNull() && configChild.ProbeFrequency.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"frequency", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ProbeHttpGet.IsNull() && configChild.ProbeHttpGet.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpGetStr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ProbeHttpVersion.IsNull() && configChild.ProbeHttpVersion.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpVersion", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ProbePort.IsNull() && configChild.ProbePort.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"port", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ProbeIp.IsNull() && configChild.ProbeIp.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"probeIp", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ProbeProtocol.IsNull() && configChild.ProbeProtocol.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"protocol", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ProbeRetryDownCount.IsNull() && configChild.ProbeRetryDownCount.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryDownCount", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ProbeRetryUpCount.IsNull() && configChild.ProbeRetryUpCount.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryUpCount", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ProbeReverseSourceInterface.IsNull() && configChild.ProbeReverseSourceInterface.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ProbeSourceInterface.IsNull() && configChild.ProbeSourceInterface.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceIntf", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ProbeTimeout.IsNull() && configChild.ProbeTimeout.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ProbeTrackId.IsNull() && configChild.ProbeTrackId.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "epbrProbe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"trackID", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 						for key := range stateChild.Endpoints {
 							if configChild, ok := configChild.Endpoints[key]; ok {
 								stateChild := stateChild.Endpoints[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("epbrSvcEndPoint.attributes.ip").String() == key {
 										if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
@@ -2942,137 +3786,155 @@ func (data EPBR) toBodyWithDeletes(ctx context.Context, state EPBR, config EPBR,
 										}
 									}
 									if listChildPath_ != "" {
-										if !stateChild.ProbeControl.IsNull() && configChild.ProbeControl.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.ProbeControl.IsNull() && stateChild.ProbeDnsHost.IsNull() && stateChild.ProbeFrequency.IsNull() && stateChild.ProbeHttpGet.IsNull() && stateChild.ProbeHttpVersion.IsNull() && stateChild.ProbePort.IsNull() && stateChild.ProbeIp.IsNull() && stateChild.ProbeProtocol.IsNull() && stateChild.ProbeRetryDownCount.IsNull() && stateChild.ProbeRetryUpCount.IsNull() && stateChild.ProbeReverseSourceInterface.IsNull() && stateChild.ProbeSourceInterface.IsNull() && stateChild.ProbeTimeout.IsNull() && stateChild.ProbeTrackId.IsNull()) && (configChild.ProbeControl.IsNull() && configChild.ProbeDnsHost.IsNull() && configChild.ProbeFrequency.IsNull() && configChild.ProbeHttpGet.IsNull() && configChild.ProbeHttpVersion.IsNull() && configChild.ProbePort.IsNull() && configChild.ProbeIp.IsNull() && configChild.ProbeProtocol.IsNull() && configChild.ProbeRetryDownCount.IsNull() && configChild.ProbeRetryUpCount.IsNull() && configChild.ProbeReverseSourceInterface.IsNull() && configChild.ProbeSourceInterface.IsNull() && configChild.ProbeTimeout.IsNull() && configChild.ProbeTrackId.IsNull()) && deleteEmptied(listChildDn_+"/probe") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.ProbeControl.IsNull() && configChild.ProbeControl.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeDnsHost.IsNull() && configChild.ProbeDnsHost.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dnshost", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeFrequency.IsNull() && configChild.ProbeFrequency.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"frequency", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeHttpGet.IsNull() && configChild.ProbeHttpGet.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpGetStr", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeHttpVersion.IsNull() && configChild.ProbeHttpVersion.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpVersion", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbePort.IsNull() && configChild.ProbePort.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"port", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeIp.IsNull() && configChild.ProbeIp.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"probeIp", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeProtocol.IsNull() && configChild.ProbeProtocol.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"protocol", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeRetryDownCount.IsNull() && configChild.ProbeRetryDownCount.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryDownCount", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeRetryUpCount.IsNull() && configChild.ProbeRetryUpCount.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryUpCount", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeReverseSourceInterface.IsNull() && configChild.ProbeReverseSourceInterface.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeSourceInterface.IsNull() && configChild.ProbeSourceInterface.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceIntf", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeTimeout.IsNull() && configChild.ProbeTimeout.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeTrackId.IsNull() && configChild.ProbeTrackId.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"trackID", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.ProbeDnsHost.IsNull() && configChild.ProbeDnsHost.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dnshost", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeFrequency.IsNull() && configChild.ProbeFrequency.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"frequency", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeHttpGet.IsNull() && configChild.ProbeHttpGet.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpGetStr", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeHttpVersion.IsNull() && configChild.ProbeHttpVersion.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpVersion", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbePort.IsNull() && configChild.ProbePort.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"port", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeIp.IsNull() && configChild.ProbeIp.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"probeIp", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeProtocol.IsNull() && configChild.ProbeProtocol.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"protocol", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeRetryDownCount.IsNull() && configChild.ProbeRetryDownCount.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryDownCount", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeRetryUpCount.IsNull() && configChild.ProbeRetryUpCount.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryUpCount", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeReverseSourceInterface.IsNull() && configChild.ProbeReverseSourceInterface.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeSourceInterface.IsNull() && configChild.ProbeSourceInterface.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceIntf", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeTimeout.IsNull() && configChild.ProbeTimeout.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeTrackId.IsNull() && configChild.ProbeTrackId.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"trackID", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseAdminState.IsNull() && configChild.ReverseAdminState.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseHoldDownThresholdCount.IsNull() && configChild.ReverseHoldDownThresholdCount.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"holdDownThreshCount", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseHoldDownThresholdTime.IsNull() && configChild.ReverseHoldDownThresholdTime.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"holdDownThreshTime", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseIp.IsNull() && configChild.ReverseIp.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ip", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseServiceInterface.IsNull() && configChild.ReverseServiceInterface.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"svcIntf", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeControl.IsNull() && configChild.ReverseProbeControl.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeDnsHost.IsNull() && configChild.ReverseProbeDnsHost.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dnshost", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeFrequency.IsNull() && configChild.ReverseProbeFrequency.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"frequency", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeHttpGet.IsNull() && configChild.ReverseProbeHttpGet.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpGetStr", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeHttpVersion.IsNull() && configChild.ReverseProbeHttpVersion.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpVersion", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbePort.IsNull() && configChild.ReverseProbePort.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"port", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeIp.IsNull() && configChild.ReverseProbeIp.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"probeIp", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeProtocol.IsNull() && configChild.ReverseProbeProtocol.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"protocol", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeRetryDownCount.IsNull() && configChild.ReverseProbeRetryDownCount.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryDownCount", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeRetryUpCount.IsNull() && configChild.ReverseProbeRetryUpCount.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryUpCount", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeReverseSourceInterface.IsNull() && configChild.ReverseProbeReverseSourceInterface.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeSourceInterface.IsNull() && configChild.ReverseProbeSourceInterface.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceIntf", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeTimeout.IsNull() && configChild.ReverseProbeTimeout.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeTrackId.IsNull() && configChild.ReverseProbeTrackId.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"trackID", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.ReverseAdminState.IsNull() && stateChild.ReverseHoldDownThresholdCount.IsNull() && stateChild.ReverseHoldDownThresholdTime.IsNull() && stateChild.ReverseIp.IsNull() && stateChild.ReverseServiceInterface.IsNull() && (stateChild.ReverseProbeControl.IsNull() && stateChild.ReverseProbeDnsHost.IsNull() && stateChild.ReverseProbeFrequency.IsNull() && stateChild.ReverseProbeHttpGet.IsNull() && stateChild.ReverseProbeHttpVersion.IsNull() && stateChild.ReverseProbePort.IsNull() && stateChild.ReverseProbeIp.IsNull() && stateChild.ReverseProbeProtocol.IsNull() && stateChild.ReverseProbeRetryDownCount.IsNull() && stateChild.ReverseProbeRetryUpCount.IsNull() && stateChild.ReverseProbeReverseSourceInterface.IsNull() && stateChild.ReverseProbeSourceInterface.IsNull() && stateChild.ReverseProbeTimeout.IsNull() && stateChild.ReverseProbeTrackId.IsNull())) && (configChild.ReverseAdminState.IsNull() && configChild.ReverseHoldDownThresholdCount.IsNull() && configChild.ReverseHoldDownThresholdTime.IsNull() && configChild.ReverseIp.IsNull() && configChild.ReverseServiceInterface.IsNull() && (configChild.ReverseProbeControl.IsNull() && configChild.ReverseProbeDnsHost.IsNull() && configChild.ReverseProbeFrequency.IsNull() && configChild.ReverseProbeHttpGet.IsNull() && configChild.ReverseProbeHttpVersion.IsNull() && configChild.ReverseProbePort.IsNull() && configChild.ReverseProbeIp.IsNull() && configChild.ReverseProbeProtocol.IsNull() && configChild.ReverseProbeRetryDownCount.IsNull() && configChild.ReverseProbeRetryUpCount.IsNull() && configChild.ReverseProbeReverseSourceInterface.IsNull() && configChild.ReverseProbeSourceInterface.IsNull() && configChild.ReverseProbeTimeout.IsNull() && configChild.ReverseProbeTrackId.IsNull())) && deleteEmptied(listChildDn_+"/epreverse") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.ReverseAdminState.IsNull() && configChild.ReverseAdminState.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ReverseHoldDownThresholdCount.IsNull() && configChild.ReverseHoldDownThresholdCount.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"holdDownThreshCount", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ReverseHoldDownThresholdTime.IsNull() && configChild.ReverseHoldDownThresholdTime.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"holdDownThreshTime", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ReverseIp.IsNull() && configChild.ReverseIp.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ip", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ReverseServiceInterface.IsNull() && configChild.ReverseServiceInterface.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"svcIntf", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if deleteEmptied != nil && !(stateChild.ReverseProbeControl.IsNull() && stateChild.ReverseProbeDnsHost.IsNull() && stateChild.ReverseProbeFrequency.IsNull() && stateChild.ReverseProbeHttpGet.IsNull() && stateChild.ReverseProbeHttpVersion.IsNull() && stateChild.ReverseProbePort.IsNull() && stateChild.ReverseProbeIp.IsNull() && stateChild.ReverseProbeProtocol.IsNull() && stateChild.ReverseProbeRetryDownCount.IsNull() && stateChild.ReverseProbeRetryUpCount.IsNull() && stateChild.ReverseProbeReverseSourceInterface.IsNull() && stateChild.ReverseProbeSourceInterface.IsNull() && stateChild.ReverseProbeTimeout.IsNull() && stateChild.ReverseProbeTrackId.IsNull()) && (configChild.ReverseProbeControl.IsNull() && configChild.ReverseProbeDnsHost.IsNull() && configChild.ReverseProbeFrequency.IsNull() && configChild.ReverseProbeHttpGet.IsNull() && configChild.ReverseProbeHttpVersion.IsNull() && configChild.ReverseProbePort.IsNull() && configChild.ReverseProbeIp.IsNull() && configChild.ReverseProbeProtocol.IsNull() && configChild.ReverseProbeRetryDownCount.IsNull() && configChild.ReverseProbeRetryUpCount.IsNull() && configChild.ReverseProbeReverseSourceInterface.IsNull() && configChild.ReverseProbeSourceInterface.IsNull() && configChild.ReverseProbeTimeout.IsNull() && configChild.ReverseProbeTrackId.IsNull()) && deleteEmptied(listChildDn_+"/epreverse"+"/probe") {
+												deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+												body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+												body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+											} else {
+												if !stateChild.ReverseProbeControl.IsNull() && configChild.ReverseProbeControl.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeDnsHost.IsNull() && configChild.ReverseProbeDnsHost.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dnshost", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeFrequency.IsNull() && configChild.ReverseProbeFrequency.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"frequency", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeHttpGet.IsNull() && configChild.ReverseProbeHttpGet.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpGetStr", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeHttpVersion.IsNull() && configChild.ReverseProbeHttpVersion.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpVersion", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbePort.IsNull() && configChild.ReverseProbePort.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"port", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeIp.IsNull() && configChild.ReverseProbeIp.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"probeIp", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeProtocol.IsNull() && configChild.ReverseProbeProtocol.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"protocol", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeRetryDownCount.IsNull() && configChild.ReverseProbeRetryDownCount.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryDownCount", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeRetryUpCount.IsNull() && configChild.ReverseProbeRetryUpCount.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryUpCount", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeReverseSourceInterface.IsNull() && configChild.ReverseProbeReverseSourceInterface.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeSourceInterface.IsNull() && configChild.ReverseProbeSourceInterface.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceIntf", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeTimeout.IsNull() && configChild.ReverseProbeTimeout.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeTrackId.IsNull() && configChild.ReverseProbeTrackId.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"trackID", "DME_UNSET_PROPERTY_MARKER")
+												}
+											}
 										}
 									}
 								}
@@ -3083,6 +3945,8 @@ func (data EPBR) toBodyWithDeletes(ctx context.Context, state EPBR, config EPBR,
 								stateChild := stateChild.L2Endpoints[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("epbrSvcEndPointL2.attributes.svcIntf").String() == key {
 										if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
@@ -3109,137 +3973,155 @@ func (data EPBR) toBodyWithDeletes(ctx context.Context, state EPBR, config EPBR,
 										}
 									}
 									if listChildPath_ != "" {
-										if !stateChild.ProbeControl.IsNull() && configChild.ProbeControl.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.ProbeControl.IsNull() && stateChild.ProbeDnsHost.IsNull() && stateChild.ProbeFrequency.IsNull() && stateChild.ProbeHttpGet.IsNull() && stateChild.ProbeHttpVersion.IsNull() && stateChild.ProbePort.IsNull() && stateChild.ProbeIp.IsNull() && stateChild.ProbeProtocol.IsNull() && stateChild.ProbeRetryDownCount.IsNull() && stateChild.ProbeRetryUpCount.IsNull() && stateChild.ProbeReverseSourceInterface.IsNull() && stateChild.ProbeSourceInterface.IsNull() && stateChild.ProbeTimeout.IsNull() && stateChild.ProbeTrackId.IsNull()) && (configChild.ProbeControl.IsNull() && configChild.ProbeDnsHost.IsNull() && configChild.ProbeFrequency.IsNull() && configChild.ProbeHttpGet.IsNull() && configChild.ProbeHttpVersion.IsNull() && configChild.ProbePort.IsNull() && configChild.ProbeIp.IsNull() && configChild.ProbeProtocol.IsNull() && configChild.ProbeRetryDownCount.IsNull() && configChild.ProbeRetryUpCount.IsNull() && configChild.ProbeReverseSourceInterface.IsNull() && configChild.ProbeSourceInterface.IsNull() && configChild.ProbeTimeout.IsNull() && configChild.ProbeTrackId.IsNull()) && deleteEmptied(listChildDn_+"/probe") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.ProbeControl.IsNull() && configChild.ProbeControl.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeDnsHost.IsNull() && configChild.ProbeDnsHost.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dnshost", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeFrequency.IsNull() && configChild.ProbeFrequency.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"frequency", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeHttpGet.IsNull() && configChild.ProbeHttpGet.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpGetStr", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeHttpVersion.IsNull() && configChild.ProbeHttpVersion.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpVersion", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbePort.IsNull() && configChild.ProbePort.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"port", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeIp.IsNull() && configChild.ProbeIp.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"probeIp", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeProtocol.IsNull() && configChild.ProbeProtocol.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"protocol", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeRetryDownCount.IsNull() && configChild.ProbeRetryDownCount.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryDownCount", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeRetryUpCount.IsNull() && configChild.ProbeRetryUpCount.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryUpCount", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeReverseSourceInterface.IsNull() && configChild.ProbeReverseSourceInterface.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeSourceInterface.IsNull() && configChild.ProbeSourceInterface.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceIntf", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeTimeout.IsNull() && configChild.ProbeTimeout.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ProbeTrackId.IsNull() && configChild.ProbeTrackId.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"trackID", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.ProbeDnsHost.IsNull() && configChild.ProbeDnsHost.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dnshost", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeFrequency.IsNull() && configChild.ProbeFrequency.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"frequency", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeHttpGet.IsNull() && configChild.ProbeHttpGet.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpGetStr", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeHttpVersion.IsNull() && configChild.ProbeHttpVersion.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpVersion", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbePort.IsNull() && configChild.ProbePort.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"port", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeIp.IsNull() && configChild.ProbeIp.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"probeIp", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeProtocol.IsNull() && configChild.ProbeProtocol.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"protocol", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeRetryDownCount.IsNull() && configChild.ProbeRetryDownCount.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryDownCount", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeRetryUpCount.IsNull() && configChild.ProbeRetryUpCount.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryUpCount", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeReverseSourceInterface.IsNull() && configChild.ProbeReverseSourceInterface.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeSourceInterface.IsNull() && configChild.ProbeSourceInterface.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceIntf", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeTimeout.IsNull() && configChild.ProbeTimeout.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ProbeTrackId.IsNull() && configChild.ProbeTrackId.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"trackID", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseAdminState.IsNull() && configChild.ReverseAdminState.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseHoldDownThresholdCount.IsNull() && configChild.ReverseHoldDownThresholdCount.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"holdDownThreshCount", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseHoldDownThresholdTime.IsNull() && configChild.ReverseHoldDownThresholdTime.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"holdDownThreshTime", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseIp.IsNull() && configChild.ReverseIp.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ip", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseServiceInterface.IsNull() && configChild.ReverseServiceInterface.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"svcIntf", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeControl.IsNull() && configChild.ReverseProbeControl.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeDnsHost.IsNull() && configChild.ReverseProbeDnsHost.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dnshost", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeFrequency.IsNull() && configChild.ReverseProbeFrequency.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"frequency", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeHttpGet.IsNull() && configChild.ReverseProbeHttpGet.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpGetStr", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeHttpVersion.IsNull() && configChild.ReverseProbeHttpVersion.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpVersion", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbePort.IsNull() && configChild.ReverseProbePort.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"port", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeIp.IsNull() && configChild.ReverseProbeIp.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"probeIp", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeProtocol.IsNull() && configChild.ReverseProbeProtocol.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"protocol", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeRetryDownCount.IsNull() && configChild.ReverseProbeRetryDownCount.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryDownCount", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeRetryUpCount.IsNull() && configChild.ReverseProbeRetryUpCount.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryUpCount", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeReverseSourceInterface.IsNull() && configChild.ReverseProbeReverseSourceInterface.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeSourceInterface.IsNull() && configChild.ReverseProbeSourceInterface.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceIntf", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeTimeout.IsNull() && configChild.ReverseProbeTimeout.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.ReverseProbeTrackId.IsNull() && configChild.ReverseProbeTrackId.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"trackID", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.ReverseAdminState.IsNull() && stateChild.ReverseHoldDownThresholdCount.IsNull() && stateChild.ReverseHoldDownThresholdTime.IsNull() && stateChild.ReverseIp.IsNull() && stateChild.ReverseServiceInterface.IsNull() && (stateChild.ReverseProbeControl.IsNull() && stateChild.ReverseProbeDnsHost.IsNull() && stateChild.ReverseProbeFrequency.IsNull() && stateChild.ReverseProbeHttpGet.IsNull() && stateChild.ReverseProbeHttpVersion.IsNull() && stateChild.ReverseProbePort.IsNull() && stateChild.ReverseProbeIp.IsNull() && stateChild.ReverseProbeProtocol.IsNull() && stateChild.ReverseProbeRetryDownCount.IsNull() && stateChild.ReverseProbeRetryUpCount.IsNull() && stateChild.ReverseProbeReverseSourceInterface.IsNull() && stateChild.ReverseProbeSourceInterface.IsNull() && stateChild.ReverseProbeTimeout.IsNull() && stateChild.ReverseProbeTrackId.IsNull())) && (configChild.ReverseAdminState.IsNull() && configChild.ReverseHoldDownThresholdCount.IsNull() && configChild.ReverseHoldDownThresholdTime.IsNull() && configChild.ReverseIp.IsNull() && configChild.ReverseServiceInterface.IsNull() && (configChild.ReverseProbeControl.IsNull() && configChild.ReverseProbeDnsHost.IsNull() && configChild.ReverseProbeFrequency.IsNull() && configChild.ReverseProbeHttpGet.IsNull() && configChild.ReverseProbeHttpVersion.IsNull() && configChild.ReverseProbePort.IsNull() && configChild.ReverseProbeIp.IsNull() && configChild.ReverseProbeProtocol.IsNull() && configChild.ReverseProbeRetryDownCount.IsNull() && configChild.ReverseProbeRetryUpCount.IsNull() && configChild.ReverseProbeReverseSourceInterface.IsNull() && configChild.ReverseProbeSourceInterface.IsNull() && configChild.ReverseProbeTimeout.IsNull() && configChild.ReverseProbeTrackId.IsNull())) && deleteEmptied(listChildDn_+"/epreverse") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.ReverseAdminState.IsNull() && configChild.ReverseAdminState.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminState", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ReverseHoldDownThresholdCount.IsNull() && configChild.ReverseHoldDownThresholdCount.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"holdDownThreshCount", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ReverseHoldDownThresholdTime.IsNull() && configChild.ReverseHoldDownThresholdTime.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"holdDownThreshTime", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ReverseIp.IsNull() && configChild.ReverseIp.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ip", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.ReverseServiceInterface.IsNull() && configChild.ReverseServiceInterface.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"svcIntf", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if deleteEmptied != nil && !(stateChild.ReverseProbeControl.IsNull() && stateChild.ReverseProbeDnsHost.IsNull() && stateChild.ReverseProbeFrequency.IsNull() && stateChild.ReverseProbeHttpGet.IsNull() && stateChild.ReverseProbeHttpVersion.IsNull() && stateChild.ReverseProbePort.IsNull() && stateChild.ReverseProbeIp.IsNull() && stateChild.ReverseProbeProtocol.IsNull() && stateChild.ReverseProbeRetryDownCount.IsNull() && stateChild.ReverseProbeRetryUpCount.IsNull() && stateChild.ReverseProbeReverseSourceInterface.IsNull() && stateChild.ReverseProbeSourceInterface.IsNull() && stateChild.ReverseProbeTimeout.IsNull() && stateChild.ReverseProbeTrackId.IsNull()) && (configChild.ReverseProbeControl.IsNull() && configChild.ReverseProbeDnsHost.IsNull() && configChild.ReverseProbeFrequency.IsNull() && configChild.ReverseProbeHttpGet.IsNull() && configChild.ReverseProbeHttpVersion.IsNull() && configChild.ReverseProbePort.IsNull() && configChild.ReverseProbeIp.IsNull() && configChild.ReverseProbeProtocol.IsNull() && configChild.ReverseProbeRetryDownCount.IsNull() && configChild.ReverseProbeRetryUpCount.IsNull() && configChild.ReverseProbeReverseSourceInterface.IsNull() && configChild.ReverseProbeSourceInterface.IsNull() && configChild.ReverseProbeTimeout.IsNull() && configChild.ReverseProbeTrackId.IsNull()) && deleteEmptied(listChildDn_+"/epreverse"+"/probe") {
+												deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+												body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+												body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+											} else {
+												if !stateChild.ReverseProbeControl.IsNull() && configChild.ReverseProbeControl.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrlStatusEnable", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeDnsHost.IsNull() && configChild.ReverseProbeDnsHost.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dnshost", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeFrequency.IsNull() && configChild.ReverseProbeFrequency.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"frequency", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeHttpGet.IsNull() && configChild.ReverseProbeHttpGet.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpGetStr", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeHttpVersion.IsNull() && configChild.ReverseProbeHttpVersion.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"httpVersion", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbePort.IsNull() && configChild.ReverseProbePort.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"port", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeIp.IsNull() && configChild.ReverseProbeIp.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"probeIp", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeProtocol.IsNull() && configChild.ReverseProbeProtocol.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"protocol", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeRetryDownCount.IsNull() && configChild.ReverseProbeRetryDownCount.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryDownCount", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeRetryUpCount.IsNull() && configChild.ReverseProbeRetryUpCount.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retryUpCount", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeReverseSourceInterface.IsNull() && configChild.ReverseProbeReverseSourceInterface.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"revSourceIntf", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeSourceInterface.IsNull() && configChild.ReverseProbeSourceInterface.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceIntf", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeTimeout.IsNull() && configChild.ReverseProbeTimeout.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
+												}
+												if !stateChild.ReverseProbeTrackId.IsNull() && configChild.ReverseProbeTrackId.IsNull() {
+													unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath_, "epbrSvcEndPointReverse")+".children", "epbrProbe")
+													body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"trackID", "DME_UNSET_PROPERTY_MARKER")
+												}
+											}
 										}
 									}
 								}
@@ -3284,6 +4166,8 @@ func (data EPBR) toBodyWithDeletes(ctx context.Context, state EPBR, config EPBR,
 				stateChild := state.FailoverGroups[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/inst" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "epbrInst")+".children").Array() {
@@ -3317,6 +4201,8 @@ func (data EPBR) toBodyWithDeletes(ctx context.Context, state EPBR, config EPBR,
 				stateChild := state.ServiceChains[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/inst" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "epbrInst")+".children").Array() {
 					if mv.Get("epbrServiceChain.attributes.name").String() == key {
 						if !stateChild.FailoverGroup.IsNull() && configChild.FailoverGroup.IsNull() {
@@ -3376,6 +4262,8 @@ func (data EPBR) toBodyWithDeletes(ctx context.Context, state EPBR, config EPBR,
 				stateChild := state.Policies[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/inst" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "epbrInst")+".children").Array() {
 					if mv.Get("epbrPolicyMap.attributes.name").String() == key {
 						if !stateChild.DefaultTrafficAction.IsNull() && configChild.DefaultTrafficAction.IsNull() {
@@ -3407,6 +4295,8 @@ func (data EPBR) toBodyWithDeletes(ctx context.Context, state EPBR, config EPBR,
 								stateChild := stateChild.Matches[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("epbrEpbrMatch.attributes.name").String() == key {
 										if !stateChild.AccessListType.IsNull() && configChild.AccessListType.IsNull() {

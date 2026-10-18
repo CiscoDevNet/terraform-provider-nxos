@@ -166,7 +166,8 @@ var {{camelCase .Name}}MinVersions = map[string]helpers.MinVersion{
 {{- if hasSeparateRequest .}}
 
 // {{camelCase .Name}}SeparateRequest lists the classes and attributes that are sent in a second request after the rest of the body,
-// together with the values that reset the attributes before their object is deleted.
+// together with the values that reset the attributes when they are removed or before their object is deleted, and the
+// attributes identifying the objects of each class.
 var {{camelCase .Name}}SeparateRequest = helpers.SeparateRequest{
 	{{- if separateRequestClasses .ChildClasses}}
 	Classes: []string{ {{- range $i, $c := separateRequestClasses .ChildClasses}}{{if $i}}, {{end}}"{{$c}}"{{end -}} },
@@ -181,9 +182,27 @@ var {{camelCase .Name}}SeparateRequest = helpers.SeparateRequest{
 		},
 		{{- end}}
 	},
+	Keys: map[string][]string{
+		{{- range keyAttributes .}}
+		"{{.ClassName}}": { {{- range $i, $n := .Names}}{{if $i}}, {{end}}"{{$n}}"{{end -}} },
+		{{- end}}
+	},
 	{{- end}}
 }
 {{- end}}
+
+
+// {{camelCase .Name}}ListClasses holds the list child classes of the resource.
+var {{camelCase .Name}}ListClasses = map[string]bool{ {{- range $i, $c := allListClassNames .ChildClasses}}{{if $i}}, {{end}}"{{$c}}": true{{end -}} }
+
+// get{{camelCase .Name}}Tree reads the object together with the subtree of all classes managed by the resource and the data source.
+func get{{camelCase .Name}}Tree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	{{- if .ChildClasses}}
+	return device.GetSubtree(ctx, dn, []string{ {{- range $i, $c := allChildClassNames .ChildClasses}}{{if $i}}, {{end}}"{{$c}}"{{end -}} }, {{camelCase .Name}}SubtreeClassMinVersions)
+	{{- else}}
+	return device.Client.GetDn(dn, nxos.Query("rsp-subtree", "no"))
+	{{- end}}
+}
 
 // End of section. //template:end types
 
@@ -1212,6 +1231,185 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
+{{- /* ==================== managedDnsTemplate ====================
+       Recursively collects the DNs of the managed child objects: single child objects with configured
+       attributes or children, and all list entries.
+       Context: map with:
+         "Children" ([]YamlConfigChildClass)
+         "DataVar" (string) - Go expression holding the data of the parent (e.g. "data", "child_")
+         "ParentDn" (string) - Go variable holding the DN of the parent object
+         "RnArgs" (string) - pre-computed fmt.Sprintf args for dynamic RN segments
+         "Level" (string) - Suffix that keeps local variable names unique across nesting levels
+       ========================================================= */}}
+{{- define "managedDnsTemplate"}}
+{{- $dataVar := .DataVar}}
+{{- $parentDn := .ParentDn}}
+{{- $rnArgs := .RnArgs}}
+{{- $level := .Level}}
+{{- range .Children}}
+{{- $childClassName := .ClassName}}
+{{- if eq .Type "single"}}
+	if !{{singleEmptyExpr $dataVar .}} {
+		{{$childClassName}}Dn{{$level}} := {{$parentDn}} + "/" + {{if rnHasDynamicSegment .Rn}}fmt.Sprintf("{{.Rn}}", {{$rnArgs}}){{else}}"{{.Rn}}"{{end}}
+		dns[{{$childClassName}}Dn{{$level}}] = true
+		{{- if .ChildClasses}}
+		{{- template "managedDnsTemplate" (makeMap "Children" .ChildClasses "DataVar" $dataVar "ParentDn" (printf "%sDn%s" $childClassName $level) "RnArgs" $rnArgs "Level" $level)}}
+		{{- end}}
+	}
+{{- else if eq .Type "list"}}
+	for key{{$level}}, child{{$level}} := range {{$dataVar}}.{{toGoName .TfName}} {
+		{{- if gt (idCount .Attributes) 1}}
+		{{mapKeyParse (printf "key%s" $level) .Attributes}}
+		_ = keyParts
+		{{- end}}
+		{{$childClassName}}Dn{{$level}} := {{$parentDn}} + "/" + child{{$level}}.getRn(key{{$level}})
+		dns[{{$childClassName}}Dn{{$level}}] = true
+		{{- if .ChildClasses}}
+		{{- template "managedDnsTemplate" (makeMap "Children" .ChildClasses "DataVar" (printf "child%s" $level) "ParentDn" (printf "%sDn%s" $childClassName $level) "RnArgs" (mapKeyRnFormatArgs (printf "key%s" $level) .Attributes) "Level" (printf "%s_" $level))}}
+		{{- end}}
+	}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end managedDnsTemplate ==================== */}}
+
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data {{camelCase .Name}}) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	{{- if .ChildClasses}}
+	{{- template "managedDnsTemplate" (makeMap "Children" .ChildClasses "DataVar" "data" "ParentDn" "dn" "RnArgs" (rnFormatArgs "data" .Attributes) "Level" "")}}
+	{{- end}}
+	return dns
+}
+
+{{- /* ==================== resetChildrenTemplate ====================
+       Recursively generates the body entries of the `reset` deletion policy for child classes. Managed
+       child objects that already existed before the resource managed them get their configured attributes
+       reset and are descended into, while the ones created by the resource are deleted.
+         - KeepOnDestroy children: skipped, they stay on the device unchanged
+         - Single children without configured attributes or children: skipped
+         - NoDelete children: never deleted, always reset
+       Context: map with:
+         "Children" ([]YamlConfigChildClass)
+         "DataVar" (string) - Go expression holding the data of the parent (e.g. "data", "child_")
+         "ParentDn" (string) - Go variable holding the DN of the parent object
+         "BodyVar" (string) - Go variable holding the body of the parent object
+         "ChildrenPath" (string) - sjson path to the children array within the parent body
+         "RnArgs" (string) - pre-computed fmt.Sprintf args for dynamic RN segments
+         "Level" (string) - Suffix that keeps local variable names unique across nesting levels
+       ========================================================= */}}
+{{- define "resetChildrenTemplate"}}
+{{- $dataVar := .DataVar}}
+{{- $parentDn := .ParentDn}}
+{{- $bodyVar := .BodyVar}}
+{{- $childrenPath := .ChildrenPath}}
+{{- $rnArgs := .RnArgs}}
+{{- $level := .Level}}
+{{- range .Children}}
+{{- $childClassName := .ClassName}}
+{{- $rnVar := printf "%sRn%s" $childClassName $level}}
+{{- $dnVar := printf "%sDn%s" $childClassName $level}}
+{{- $childBodyVar := printf "%sBody%s" $childClassName $level}}
+{{- if .KeepOnDestroy}}
+{{- else if eq .Type "single"}}
+	if !{{singleEmptyExpr $dataVar .}} {
+		{{$rnVar}} := {{if rnHasDynamicSegment .Rn}}fmt.Sprintf("{{.Rn}}", {{$rnArgs}}){{else}}"{{.Rn}}"{{end}}
+		{{$dnVar}} := {{$parentDn}} + "/" + {{$rnVar}}
+		_ = {{$dnVar}}
+		{{- if not .NoDelete}}
+		if !existed({{$dnVar}}) {
+			{{$bodyVar}}, _ = sjson.Set({{$bodyVar}}, "{{$childrenPath}}.-1.{{$childClassName}}.attributes", map[string]interface{}{"rn": {{$rnVar}}, "status": "deleted"})
+		} else {
+		{{- else}}
+		{
+		{{- end}}
+			{{$childBodyVar}} := ""
+			{{- range .Attributes}}
+			{{- if and (not .Id) (eq .Value "") (not .Mandatory) (not .RequiresReplace)}}
+			if !{{$dataVar}}.{{toGoName .TfName}}.IsNull() {
+				{{$childBodyVar}}, _ = sjson.Set({{$childBodyVar}}, "{{$childClassName}}.attributes.{{.NxosName}}", {{deleteValue .}})
+			}
+			{{- end}}
+			{{- end}}
+			{{- if .ChildClasses}}
+			{{- template "resetChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" $dataVar "ParentDn" $dnVar "BodyVar" $childBodyVar "ChildrenPath" (printf "%s.children" $childClassName) "RnArgs" $rnArgs "Level" $level)}}
+			{{- end}}
+			if {{$childBodyVar}} != "" {
+				{{$childBodyVar}}, _ = sjson.Set({{$childBodyVar}}, "{{$childClassName}}.attributes.rn", {{$rnVar}})
+				{{$bodyVar}}, _ = sjson.SetRaw({{$bodyVar}}, "{{$childrenPath}}.-1", {{$childBodyVar}})
+			}
+		}
+	}
+{{- else if eq .Type "list"}}
+	for key{{$level}}, child{{$level}} := range {{$dataVar}}.{{toGoName .TfName}} {
+		_ = child{{$level}}
+		{{- if gt (idCount .Attributes) 1}}
+		{{mapKeyParse (printf "key%s" $level) .Attributes}}
+		_ = keyParts
+		{{- end}}
+		{{$rnVar}} := child{{$level}}.getRn(key{{$level}})
+		{{$dnVar}} := {{$parentDn}} + "/" + {{$rnVar}}
+		_ = {{$dnVar}}
+		{{- if not .NoDelete}}
+		if !existed({{$dnVar}}) {
+			{{$bodyVar}}, _ = sjson.Set({{$bodyVar}}, "{{$childrenPath}}.-1.{{$childClassName}}.attributes", map[string]interface{}{"rn": {{$rnVar}}, "status": "deleted"})
+			continue
+		}
+		{{- end}}
+		{{$childBodyVar}} := ""
+		{{$childBodyVar}}, _ = sjson.Set({{$childBodyVar}}, "{{$childClassName}}.attributes.rn", {{$rnVar}})
+		{{- range .Attributes}}
+		{{- if and (not .Id) (eq .Value "") (not .Mandatory) (not .RequiresReplace)}}
+		if !child{{$level}}.{{toGoName .TfName}}.IsNull() {
+			{{$childBodyVar}}, _ = sjson.Set({{$childBodyVar}}, "{{$childClassName}}.attributes.{{.NxosName}}", {{deleteValue .}})
+		}
+		{{- end}}
+		{{- end}}
+		{{- if .ChildClasses}}
+		{{- template "resetChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" (printf "child%s" $level) "ParentDn" $dnVar "BodyVar" $childBodyVar "ChildrenPath" (printf "%s.children" $childClassName) "RnArgs" (mapKeyRnFormatArgs (printf "key%s" $level) .Attributes) "Level" (printf "%s_" $level))}}
+		{{- end}}
+		{{$bodyVar}}, _ = sjson.SetRaw({{$bodyVar}}, "{{$childrenPath}}.-1", {{$childBodyVar}})
+	}
+{{- end}}
+{{- end}}
+{{- end}}
+{{- /* ==================== end resetChildrenTemplate ==================== */}}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data {{camelCase .Name}}) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	{{- if not .NoDelete}}
+	if !existed(dn) {
+		return data.toDeleteBody()
+	}
+	{{- end}}
+	body := ""
+	{{- range .Attributes}}
+	{{- if and (not .Id) (eq .Value "") (not .Mandatory) (not .RequiresReplace)}}
+	if !data.{{toGoName .TfName}}.IsNull() {
+		body, _ = sjson.Set(body, "{{$.ClassName}}.attributes.{{.NxosName}}", {{deleteValue .}})
+	}
+	{{- end}}
+	{{- end}}
+	if body == "" {
+		body, _ = sjson.Set(body, "{{.ClassName}}.attributes", map[string]interface{}{})
+	}
+	{{- if .ChildClasses}}
+	{{- template "resetChildrenTemplate" (makeMap "Children" .ChildClasses "DataVar" "data" "ParentDn" "dn" "BodyVar" "body" "ChildrenPath" (printf "%s.children" .ClassName) "RnArgs" (rnFormatArgs "data" .Attributes) "Level" "")}}
+	{{- end}}
+
+	return nxos.Body{Str: body}
+}
+
 {{- /* ==================== toBodyDeletedSingleInListTemplate ====================
        Detects deleted items within single-type children of matched list-item pairs
        and appends delete entries to the body.
@@ -1405,6 +1603,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
          "Level" (string) - Suffix that keeps local variable names unique across nesting levels
        ========================================================= */}}
 {{- define "toBodyUnsetChildAttrsTemplate"}}
+{{- $parentDn := .ParentDn}}
 {{- $stateVar := .StateVar}}
 {{- $configVar := .ConfigVar}}
 {{- $bodyPathExpr := .BodyPathExpr}}
@@ -1413,8 +1612,17 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 {{- range .Children}}
 {{- $childClassName := .ClassName}}
 {{- if eq .Type "single"}}
-{{- if .DeleteWhenEmpty}}
-	if !{{singleEmptyExpr $stateVar .}} && {{singleEmptyExpr $configVar .}} {
+{{- /* With the delete policy, a single child object that had configured attributes or children and has
+       none anymore is deleted, if nothing else is configured below it on the device (deleteEmptied), it
+       can be deleted and it does not hold objects that are kept on destroy. Containers without attributes
+       of their own stay. ParentDn is empty below objects with a dynamic RN, which are never deleted. */}}
+{{- $ownAttributes := false}}
+{{- range .Attributes}}{{if eq .Value ""}}{{$ownAttributes = true}}{{end}}{{end}}
+{{- $deletable := and $parentDn $ownAttributes (not .NoDelete) (not (rnHasDynamicSegment .Rn)) (not (hasKeepOnDestroy .ChildClasses))}}
+{{- $childDn := ""}}
+{{- if and $parentDn (not (rnHasDynamicSegment .Rn))}}{{$childDn = printf "%s + \"/%s\"" $parentDn .Rn}}{{end}}
+{{- if $deletable}}
+	if deleteEmptied != nil && !{{singleEmptyExpr $stateVar .}} && {{singleEmptyExpr $configVar .}} && deleteEmptied({{$childDn}}) {
 		deletePath := helpers.EnsureChildPath(&body.Str, {{$ensurePathExpr}}, "{{$childClassName}}")
 		body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
 		body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
@@ -1429,9 +1637,9 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 {{- end}}
 {{- end}}
 {{- if .ChildClasses}}
-{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "StateVar" $stateVar "ConfigVar" $configVar "BodyPathExpr" (printf "helpers.FindChildPath(body.Str, %s, \"%s\")+\".children\"" $bodyPathExpr $childClassName) "EnsurePathExpr" (printf "helpers.EnsureChildPath(&body.Str, %s, \"%s\")+\".children\"" $ensurePathExpr $childClassName) "Level" $level)}}
+{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "ParentDn" $childDn "StateVar" $stateVar "ConfigVar" $configVar "BodyPathExpr" (printf "helpers.FindChildPath(body.Str, %s, \"%s\")+\".children\"" $bodyPathExpr $childClassName) "EnsurePathExpr" (printf "helpers.EnsureChildPath(&body.Str, %s, \"%s\")+\".children\"" $ensurePathExpr $childClassName) "Level" $level)}}
 {{- end}}
-{{- if .DeleteWhenEmpty}}
+{{- if $deletable}}
 	}
 {{- end}}
 {{- else if eq .Type "list"}}
@@ -1440,6 +1648,10 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 			stateChild := {{$stateVar}}.{{toGoName .TfName}}[key]
 			_ = stateChild
 			_ = configChild
+			{{- if and $parentDn .ChildClasses}}
+			listChildDn{{$level}} := {{$parentDn}} + "/" + stateChild.getRn(key)
+			_ = listChildDn{{$level}}
+			{{- end}}
 			{{- $hasUnsetAttrs := false}}
 			{{- range .Attributes}}{{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}{{$hasUnsetAttrs = true}}{{end}}{{end}}
 			{{- if $hasUnsetAttrs}}
@@ -1469,7 +1681,7 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 				}
 			}
 			if listChildPath{{$level}} != "" {
-				{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "StateVar" "stateChild" "ConfigVar" "configChild" "BodyPathExpr" (printf "listChildPath%s" $level) "EnsurePathExpr" (printf "listChildPath%s" $level) "Level" (printf "%s_" $level))}}
+				{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "ParentDn" (and $parentDn (printf "listChildDn%s" $level)) "StateVar" "stateChild" "ConfigVar" "configChild" "BodyPathExpr" (printf "listChildPath%s" $level) "EnsurePathExpr" (printf "listChildPath%s" $level) "Level" (printf "%s_" $level))}}
 			}
 			}
 			{{- end}}
@@ -1484,10 +1696,10 @@ func (data {{camelCase .Name}}) toDeleteBody() nxos.Body {
 // toBodyWithDeletes returns the update body. With deferEmptied set, deletes of children that would
 // leave an auto_delete_on_empty parent without children are left out and deferred is true, so the
 // caller can send them in a second request after the new children have been created.
-func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}, config {{camelCase .Name}}, importing bool, deferEmptied bool) (body nxos.Body, deferred bool) {
+func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}, config {{camelCase .Name}}, importing bool, deleteEmptied func(dn string) bool, deferEmptied bool) (body nxos.Body, deferred bool) {
 	body = data.toBody(config)
 {{- else -}}
-func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}, config {{camelCase .Name}}, importing bool) nxos.Body {
+func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}, config {{camelCase .Name}}, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 {{- end}}
 	{{- if .ChildClasses}}
@@ -1510,7 +1722,7 @@ func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{c
 
 	{{- if .ChildClasses}}
 	if !importing {
-	{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "StateVar" "state" "ConfigVar" "config" "BodyPathExpr" "bodyPath" "EnsurePathExpr" "bodyPath" "Level" "")}}
+	{{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "ParentDn" "data.getDn()" "StateVar" "state" "ConfigVar" "config" "BodyPathExpr" "bodyPath" "EnsurePathExpr" "bodyPath" "Level" "")}}
 	}
 	{{- end}}
 

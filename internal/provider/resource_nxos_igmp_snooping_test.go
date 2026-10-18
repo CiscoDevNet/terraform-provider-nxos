@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosIGMPSnooping(t *testing.T) {
+// TestAccIGMPSnoopingResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccIGMPSnoopingResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_igmp_snooping.test", "instance_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_igmp_snooping.test", "instance_control", "stateful-ha"))
@@ -75,38 +79,102 @@ func TestAccNxosIGMPSnooping(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_igmp_snooping.test", "vlans.vlan3901.report_flood_interfaces.eth1/12.description", "My description"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_igmp_snooping.test", "vlans.vlan3901.report_flood_interfaces.eth1/12.name", "report-flood"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_igmp_snooping.test", "vlans.vlan3901.report_flood_interfaces.eth1/12.report_flood", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "instance_control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "domain_control", "opt-flood"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "domain_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "global_vlan_vxlan", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "global_vlan_disable_nve_static_router_port", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "global_vlan_vxlan_umc_drop_vlan", "100-200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.report_flood_all_interfaces", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.explicit_tracking", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.igmp_snooping", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.igmp_source_ip_proxy", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.link_local_groups_suppression", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.lookup_mac", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.query_flood", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.report_suppression", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.v3_report_suppression", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.querier_address", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.querier_description", "My querier description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.last_member_query_interval", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.querier_name", "querier"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.query_interval", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.robustness_variable", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.query_max_response_time", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.startup_query_count", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.startup_query_interval", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.querier_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.version", "v3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.fast_leave", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.group_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.max_general_query_miss", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.proxy_leave_use_group_address", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.proxy_max_response_time", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.access_group_description", "My access group description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.access_group_direction", "in"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.access_group_name", "access-group"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.access_group_route_map", "RM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.static_groups.239.1.1.1.name", "group1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.report_flood_interfaces.eth1/12.description", "My description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.report_flood_interfaces.eth1/12.name", "report-flood"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp_snooping.test", "vlans.vlan3901.report_flood_interfaces.eth1/12.report_flood", "true"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccIGMPSnoopingResourcePrerequisitesConfig + testAccIGMPSnoopingResourceConfig_minimum(),
+		},
+		{
+			Config: testAccIGMPSnoopingResourcePrerequisitesConfig + testAccIGMPSnoopingResourceConfig_all() + testAccIGMPSnoopingResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_igmp_snooping.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccIGMPSnoopingResourceImportStateIdFunc("nxos_igmp_snooping.test"),
+		},
+		{
+			ResourceName:       "nxos_igmp_snooping.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccIGMPSnoopingResourcePrerequisitesConfig + testAccIGMPSnoopingResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccIGMPSnoopingResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccIGMPSnoopingResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_igmp_snooping.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccIGMPSnoopingResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccIGMPSnoopingResourcePrerequisitesConfig + testAccIGMPSnoopingResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosIGMPSnoopingPrerequisitesConfig + testAccNxosIGMPSnoopingConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_igmp_snooping.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosIGMPSnoopingImportStateIdFunc("nxos_igmp_snooping.test"),
-			},
-			{
-				ResourceName:       "nxos_igmp_snooping.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosIGMPSnoopingImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccIGMPSnoopingResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -116,7 +184,7 @@ func nxosIGMPSnoopingImportStateIdFunc(resourceName string) resource.ImportState
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosIGMPSnoopingPrerequisitesConfig = `
+const testAccIGMPSnoopingResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/bd/vlanconfig-[vlan-3901]"
   class_name = "l2VlanConfig"
@@ -130,7 +198,7 @@ resource "nxos_dme" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosIGMPSnoopingConfig_minimum() string {
+func testAccIGMPSnoopingResourceConfig_minimum() string {
 	config := `resource "nxos_igmp_snooping" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
@@ -140,7 +208,7 @@ func testAccNxosIGMPSnoopingConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosIGMPSnoopingConfig_all() string {
+func testAccIGMPSnoopingResourceConfig_all() string {
 	config := `resource "nxos_igmp_snooping" "test" {` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
 	config += `	instance_control = "stateful-ha"` + "\n"
@@ -213,6 +281,14 @@ func testAccNxosIGMPSnoopingConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccIGMPSnoopingResourceConfig_dataSource() string {
+	return `
+data "nxos_igmp_snooping" "test" {
+	depends_on = [nxos_igmp_snooping.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

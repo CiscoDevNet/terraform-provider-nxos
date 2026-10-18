@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosSpanningTree(t *testing.T) {
+// TestAccSpanningTreeResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccSpanningTreeResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "instance_admin_state", "enabled"))
@@ -63,38 +67,90 @@ func TestAccNxosSpanningTree(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "vlans.100.hello_time", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "vlans.100.max_age", "25"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "vlans.100.priority", "4096"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "bridge_assurance", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "control", "normal,stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "fcoe", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "l2_gateway_stp_domain_id", "512"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "linecard_issu", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "loopguard", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mode", "pvrst"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "pathcost_option", "long"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.bpdu_filter", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.bpdu_guard", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.cost", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.guard", "root"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.link_type", "p2p"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.mode", "edge"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.priority", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.control", "bpdu-guard"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.description", "My interface description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.linecard_issu", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.prestandard_configuration", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.simulate_pvst", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.admin_state", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.diameter", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.forward_time", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.hello_time", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.max_age", "25"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.priority", "4096"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccSpanningTreeResourcePrerequisitesConfig + testAccSpanningTreeResourceConfig_minimum(),
+		},
+		{
+			Config: testAccSpanningTreeResourcePrerequisitesConfig + testAccSpanningTreeResourceConfig_all() + testAccSpanningTreeResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_spanning_tree.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccSpanningTreeResourceImportStateIdFunc("nxos_spanning_tree.test"),
+		},
+		{
+			ResourceName:       "nxos_spanning_tree.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccSpanningTreeResourcePrerequisitesConfig + testAccSpanningTreeResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccSpanningTreeResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccSpanningTreeResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_spanning_tree.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccSpanningTreeResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccSpanningTreeResourcePrerequisitesConfig + testAccSpanningTreeResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosSpanningTreePrerequisitesConfig + testAccNxosSpanningTreeConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_spanning_tree.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosSpanningTreeImportStateIdFunc("nxos_spanning_tree.test"),
-			},
-			{
-				ResourceName:       "nxos_spanning_tree.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosSpanningTreeImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccSpanningTreeResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -104,7 +160,7 @@ func nxosSpanningTreeImportStateIdFunc(resourceName string) resource.ImportState
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosSpanningTreePrerequisitesConfig = `
+const testAccSpanningTreeResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/intf/phys-[eth1/9]"
   class_name = "l1PhysIf"
@@ -118,7 +174,7 @@ resource "nxos_dme" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosSpanningTreeConfig_minimum() string {
+func testAccSpanningTreeResourceConfig_minimum() string {
 	config := `resource "nxos_spanning_tree" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
@@ -128,7 +184,7 @@ func testAccNxosSpanningTreeConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosSpanningTreeConfig_all() string {
+func testAccSpanningTreeResourceConfig_all() string {
 	config := `resource "nxos_spanning_tree" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
@@ -169,6 +225,14 @@ func testAccNxosSpanningTreeConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccSpanningTreeResourceConfig_dataSource() string {
+	return `
+data "nxos_spanning_tree" "test" {
+	depends_on = [nxos_spanning_tree.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

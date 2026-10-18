@@ -34,7 +34,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosPlatform(t *testing.T) {
+// TestAccPlatformResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccPlatformResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "nve_interfaces.1.ipmc_index_size", "4000"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "nve_interfaces.1.infra_vlans.100.force", "Enable"))
@@ -95,38 +99,121 @@ func TestAccNxosPlatform(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "udfs.UDF1.offset_length", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "udfs.UDF1.offset_position", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "udfs.UDF1.qualify_racl", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "nve_interfaces.1.ipmc_index_size", "4000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "nve_interfaces.1.infra_vlans.100.force", "Enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "extended_dme_load_interval", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "port_channel_load_balance_concatenation", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "port_channel_load_balance_fields", "srcDstIp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "port_channel_load_balance_rotate", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "port_channel_load_balance_symmetry", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_allow_all_interfaces", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_decay_factor", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_description", "My DLB"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_dre_threshold_level_1", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_dre_threshold_level_2", "35"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_dre_threshold_level_3", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_dre_threshold_level_4", "25"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_dre_threshold_level_5", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_dre_threshold_level_6", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_dre_threshold_level_7", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_flowlet_aging", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_interfaces", "eth1/10,eth1/11"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_load_awareness", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_mac_address", "00:AA:BB:CC:DD:EE"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_mode", "PER_PACKET"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_sampling_interval", "64000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_static_pinning", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "dlb_static_pinnings.eth1/10.destination_interface", "eth1/11"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_auto_restore_multiplier", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_mode", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_fixed_restore_multiplier", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_interval", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "pfc_watchdog_shutdown_multiplier", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_burst_detect_fall_threshold_unit", "percentage"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_burst_detect_fall_threshold", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_burst_detect_rise_threshold_unit", "percentage"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_burst_detect_rise_threshold", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_classify_ns_only", "Enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_cpu_size", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_drop_pool_size", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_headroom_size", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_include_ipg", "Enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_lcpu_size", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_nodrop_dynamic_queue_limit", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_nodrop_resume_offset", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_nodrop_pool_size", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_pfc_static", "Enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_pg_headroom_reserve", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_pg_min_value", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_pg_no_min", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_pg_share", "Disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "tcam_templates.TPL1.reference_template", "l3"))
+	if os.Getenv("PLATFORM_FRETTA") != "" {
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udf_description", "My UDFs"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.mpls_stack_1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.mpls_stack_2", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.netflow_rtp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.offset_base", "outer-header-l3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.offset_length", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.offset_position", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.qualify_racl", "true"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccPlatformResourcePrerequisitesConfig + testAccPlatformResourceConfig_minimum(),
+		},
+		{
+			Config: testAccPlatformResourcePrerequisitesConfig + testAccPlatformResourceConfig_all() + testAccPlatformResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_platform.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccPlatformResourceImportStateIdFunc("nxos_platform.test"),
+		},
+		{
+			ResourceName:       "nxos_platform.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccPlatformResourcePrerequisitesConfig + testAccPlatformResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccPlatformResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccPlatformResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_platform.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccPlatformResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccPlatformResourcePrerequisitesConfig + testAccPlatformResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosPlatformPrerequisitesConfig + testAccNxosPlatformConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_platform.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosPlatformImportStateIdFunc("nxos_platform.test"),
-			},
-			{
-				ResourceName:       "nxos_platform.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosPlatformImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccPlatformResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -136,7 +223,7 @@ func nxosPlatformImportStateIdFunc(resourceName string) resource.ImportStateIdFu
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosPlatformPrerequisitesConfig = `
+const testAccPlatformResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/nvo"
   class_name = "fmNvo"
@@ -171,7 +258,7 @@ resource "nxos_dme" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosPlatformConfig_minimum() string {
+func testAccPlatformResourceConfig_minimum() string {
 	config := `resource "nxos_platform" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
@@ -181,7 +268,7 @@ func testAccNxosPlatformConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosPlatformConfig_all() string {
+func testAccPlatformResourceConfig_all() string {
 	config := `resource "nxos_platform" "test" {` + "\n"
 	config += `	nve_interfaces = {` + "\n"
 	config += `		"1" = {` + "\n"
@@ -269,6 +356,14 @@ func testAccNxosPlatformConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccPlatformResourceConfig_dataSource() string {
+	return `
+data "nxos_platform" "test" {
+	depends_on = [nxos_platform.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

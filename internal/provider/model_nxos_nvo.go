@@ -131,6 +131,14 @@ var NVOMinVersions = map[string]helpers.MinVersion{
 	"nvoEvpnEsiMultiHoming": {Version: "10.6(1)", Path: "evpn_multihoming_delay_restore_time/evpn_multihoming_df_election_mode/evpn_multihoming_df_election_time/evpn_multihoming_ead_evi_route/evpn_multihoming_system_mac/evpn_multihoming_frr_anycast_source_ip/evpn_multihoming_state"},
 }
 
+// NVOListClasses holds the list child classes of the resource.
+var NVOListClasses = map[string]bool{"nvoEvpnStormControl": true, "nvoEp": true, "nvoNw": true}
+
+// getNVOTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getNVOTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"nvoEvpnMultisiteBordergw", "nvoEvpnMulticast", "nvoEvpnEsiMultiHoming", "nvoEvpnStormControl", "nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, NVOSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -951,7 +959,315 @@ func (data NVO) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data NVO) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() && data.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() && data.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() && data.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() && data.EvpnMultisiteBorderGatewaySiteId.IsNull() && data.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() && data.EvpnMultisiteBorderGatewayState.IsNull()) {
+		nvoEvpnMultisiteBordergwDn := dn + "/" + "multisite"
+		dns[nvoEvpnMultisiteBordergwDn] = true
+	}
+	if !(data.AdvertiseEvpnMulticastState.IsNull()) {
+		nvoEvpnMulticastDn := dn + "/" + "evpnmulticast"
+		dns[nvoEvpnMulticastDn] = true
+	}
+	if !(data.EvpnMultihomingDelayRestoreTime.IsNull() && data.EvpnMultihomingDfElectionMode.IsNull() && data.EvpnMultihomingDfElectionTime.IsNull() && data.EvpnMultihomingEadEviRoute.IsNull() && data.EvpnMultihomingSystemMac.IsNull() && data.EvpnMultihomingFrrAnycastSourceIp.IsNull() && data.EvpnMultihomingState.IsNull()) {
+		nvoEvpnEsiMultiHomingDn := dn + "/" + "multihoming"
+		dns[nvoEvpnEsiMultiHomingDn] = true
+	}
+	for key, child := range data.EvpnStormControls {
+		nvoEvpnStormControlDn := dn + "/" + child.getRn(key)
+		dns[nvoEvpnStormControlDn] = true
+	}
+	for key, child := range data.NveInterfaces {
+		nvoEpDn := dn + "/" + child.getRn(key)
+		dns[nvoEpDn] = true
+		if !(len(child.Vnis) == 0) {
+			nvoNwsDn_ := nvoEpDn + "/" + "nws"
+			dns[nvoNwsDn_] = true
+			for key_, child_ := range child.Vnis {
+				nvoNwDn_ := nvoNwsDn_ + "/" + child_.getRn(key_)
+				dns[nvoNwDn_] = true
+				if !(child_.IngressReplicationProtocol.IsNull()) {
+					nvoIngReplDn__ := nvoNwDn_ + "/" + "IngRepl"
+					dns[nvoIngReplDn__] = true
+				}
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data NVO) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if !data.VxlanUdpPort.IsNull() {
+		body, _ = sjson.Set(body, "nvoEps.attributes.vxlanUDPPort", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.VxlanUdpSourcePortMode.IsNull() {
+		body, _ = sjson.Set(body, "nvoEps.attributes.vxlanUDPSrcPortMode", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "nvoEps.attributes", map[string]interface{}{})
+	}
+	if !(data.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() && data.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() && data.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() && data.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() && data.EvpnMultisiteBorderGatewaySiteId.IsNull() && data.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() && data.EvpnMultisiteBorderGatewayState.IsNull()) {
+		nvoEvpnMultisiteBordergwRn := "multisite"
+		nvoEvpnMultisiteBordergwDn := dn + "/" + nvoEvpnMultisiteBordergwRn
+		_ = nvoEvpnMultisiteBordergwDn
+		if !existed(nvoEvpnMultisiteBordergwDn) {
+			body, _ = sjson.Set(body, "nvoEps.children.-1.nvoEvpnMultisiteBordergw.attributes", map[string]interface{}{"rn": nvoEvpnMultisiteBordergwRn, "status": "deleted"})
+		} else {
+			nvoEvpnMultisiteBordergwBody := ""
+			if !data.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() {
+				nvoEvpnMultisiteBordergwBody, _ = sjson.Set(nvoEvpnMultisiteBordergwBody, "nvoEvpnMultisiteBordergw.attributes.dciAdvertisePip", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() {
+				nvoEvpnMultisiteBordergwBody, _ = sjson.Set(nvoEvpnMultisiteBordergwBody, "nvoEvpnMultisiteBordergw.attributes.delayRestoreTime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() {
+				nvoEvpnMultisiteBordergwBody, _ = sjson.Set(nvoEvpnMultisiteBordergwBody, "nvoEvpnMultisiteBordergw.attributes.dfElectionTime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() {
+				nvoEvpnMultisiteBordergwBody, _ = sjson.Set(nvoEvpnMultisiteBordergwBody, "nvoEvpnMultisiteBordergw.attributes.fabricAdvertisePip", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EvpnMultisiteBorderGatewaySiteId.IsNull() {
+				nvoEvpnMultisiteBordergwBody, _ = sjson.Set(nvoEvpnMultisiteBordergwBody, "nvoEvpnMultisiteBordergw.attributes.siteId", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() {
+				nvoEvpnMultisiteBordergwBody, _ = sjson.Set(nvoEvpnMultisiteBordergwBody, "nvoEvpnMultisiteBordergw.attributes.splitHorizonPerSite", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EvpnMultisiteBorderGatewayState.IsNull() {
+				nvoEvpnMultisiteBordergwBody, _ = sjson.Set(nvoEvpnMultisiteBordergwBody, "nvoEvpnMultisiteBordergw.attributes.state", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if nvoEvpnMultisiteBordergwBody != "" {
+				nvoEvpnMultisiteBordergwBody, _ = sjson.Set(nvoEvpnMultisiteBordergwBody, "nvoEvpnMultisiteBordergw.attributes.rn", nvoEvpnMultisiteBordergwRn)
+				body, _ = sjson.SetRaw(body, "nvoEps.children.-1", nvoEvpnMultisiteBordergwBody)
+			}
+		}
+	}
+	if !(data.AdvertiseEvpnMulticastState.IsNull()) {
+		nvoEvpnMulticastRn := "evpnmulticast"
+		nvoEvpnMulticastDn := dn + "/" + nvoEvpnMulticastRn
+		_ = nvoEvpnMulticastDn
+		if !existed(nvoEvpnMulticastDn) {
+			body, _ = sjson.Set(body, "nvoEps.children.-1.nvoEvpnMulticast.attributes", map[string]interface{}{"rn": nvoEvpnMulticastRn, "status": "deleted"})
+		} else {
+			nvoEvpnMulticastBody := ""
+			if !data.AdvertiseEvpnMulticastState.IsNull() {
+				nvoEvpnMulticastBody, _ = sjson.Set(nvoEvpnMulticastBody, "nvoEvpnMulticast.attributes.state", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if nvoEvpnMulticastBody != "" {
+				nvoEvpnMulticastBody, _ = sjson.Set(nvoEvpnMulticastBody, "nvoEvpnMulticast.attributes.rn", nvoEvpnMulticastRn)
+				body, _ = sjson.SetRaw(body, "nvoEps.children.-1", nvoEvpnMulticastBody)
+			}
+		}
+	}
+	if !(data.EvpnMultihomingDelayRestoreTime.IsNull() && data.EvpnMultihomingDfElectionMode.IsNull() && data.EvpnMultihomingDfElectionTime.IsNull() && data.EvpnMultihomingEadEviRoute.IsNull() && data.EvpnMultihomingSystemMac.IsNull() && data.EvpnMultihomingFrrAnycastSourceIp.IsNull() && data.EvpnMultihomingState.IsNull()) {
+		nvoEvpnEsiMultiHomingRn := "multihoming"
+		nvoEvpnEsiMultiHomingDn := dn + "/" + nvoEvpnEsiMultiHomingRn
+		_ = nvoEvpnEsiMultiHomingDn
+		if !existed(nvoEvpnEsiMultiHomingDn) {
+			body, _ = sjson.Set(body, "nvoEps.children.-1.nvoEvpnEsiMultiHoming.attributes", map[string]interface{}{"rn": nvoEvpnEsiMultiHomingRn, "status": "deleted"})
+		} else {
+			nvoEvpnEsiMultiHomingBody := ""
+			if !data.EvpnMultihomingDelayRestoreTime.IsNull() {
+				nvoEvpnEsiMultiHomingBody, _ = sjson.Set(nvoEvpnEsiMultiHomingBody, "nvoEvpnEsiMultiHoming.attributes.delayRestoreTime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EvpnMultihomingDfElectionMode.IsNull() {
+				nvoEvpnEsiMultiHomingBody, _ = sjson.Set(nvoEvpnEsiMultiHomingBody, "nvoEvpnEsiMultiHoming.attributes.dfElectionMode", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EvpnMultihomingDfElectionTime.IsNull() {
+				nvoEvpnEsiMultiHomingBody, _ = sjson.Set(nvoEvpnEsiMultiHomingBody, "nvoEvpnEsiMultiHoming.attributes.dfElectionTime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EvpnMultihomingEadEviRoute.IsNull() {
+				nvoEvpnEsiMultiHomingBody, _ = sjson.Set(nvoEvpnEsiMultiHomingBody, "nvoEvpnEsiMultiHoming.attributes.eadEviRoute", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EvpnMultihomingSystemMac.IsNull() {
+				nvoEvpnEsiMultiHomingBody, _ = sjson.Set(nvoEvpnEsiMultiHomingBody, "nvoEvpnEsiMultiHoming.attributes.esiSysMac", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EvpnMultihomingFrrAnycastSourceIp.IsNull() {
+				nvoEvpnEsiMultiHomingBody, _ = sjson.Set(nvoEvpnEsiMultiHomingBody, "nvoEvpnEsiMultiHoming.attributes.frrAnycastSrcIp", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EvpnMultihomingState.IsNull() {
+				nvoEvpnEsiMultiHomingBody, _ = sjson.Set(nvoEvpnEsiMultiHomingBody, "nvoEvpnEsiMultiHoming.attributes.state", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if nvoEvpnEsiMultiHomingBody != "" {
+				nvoEvpnEsiMultiHomingBody, _ = sjson.Set(nvoEvpnEsiMultiHomingBody, "nvoEvpnEsiMultiHoming.attributes.rn", nvoEvpnEsiMultiHomingRn)
+				body, _ = sjson.SetRaw(body, "nvoEps.children.-1", nvoEvpnEsiMultiHomingBody)
+			}
+		}
+	}
+	for key, child := range data.EvpnStormControls {
+		_ = child
+		nvoEvpnStormControlRn := child.getRn(key)
+		nvoEvpnStormControlDn := dn + "/" + nvoEvpnStormControlRn
+		_ = nvoEvpnStormControlDn
+		if !existed(nvoEvpnStormControlDn) {
+			body, _ = sjson.Set(body, "nvoEps.children.-1.nvoEvpnStormControl.attributes", map[string]interface{}{"rn": nvoEvpnStormControlRn, "status": "deleted"})
+			continue
+		}
+		nvoEvpnStormControlBody := ""
+		nvoEvpnStormControlBody, _ = sjson.Set(nvoEvpnStormControlBody, "nvoEvpnStormControl.attributes.rn", nvoEvpnStormControlRn)
+		if !child.Level.IsNull() {
+			nvoEvpnStormControlBody, _ = sjson.Set(nvoEvpnStormControlBody, "nvoEvpnStormControl.attributes.floatlevel", "DME_UNSET_PROPERTY_MARKER")
+		}
+		body, _ = sjson.SetRaw(body, "nvoEps.children.-1", nvoEvpnStormControlBody)
+	}
+	for key, child := range data.NveInterfaces {
+		_ = child
+		nvoEpRn := child.getRn(key)
+		nvoEpDn := dn + "/" + nvoEpRn
+		_ = nvoEpDn
+		if !existed(nvoEpDn) {
+			body, _ = sjson.Set(body, "nvoEps.children.-1.nvoEp.attributes", map[string]interface{}{"rn": nvoEpRn, "status": "deleted"})
+			continue
+		}
+		nvoEpBody := ""
+		nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.rn", nvoEpRn)
+		if !child.AdminState.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AdvertiseVirtualMac.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.advertiseVmac", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.HoldDownTime.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.holdDownTime", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.HostReachabilityProtocol.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.hostReach", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.IngressReplicationProtocolBgp.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.ingressReplProtoBGP", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MulticastGroupL2.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.mcastGroupL2", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MulticastGroupL3.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.mcastGroupL3", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MultisiteSourceInterface.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.multisiteBordergwInterface", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SourceInterface.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SuppressArp.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.suppressARP", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SuppressMacRoute.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.suppressMacRoute", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AnycastSourceInterface.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.anycastIntf", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ConfigurationSource.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.cfgSrc", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ControllerId.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.controllerId", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Description.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.EncapsulationType.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.encapType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.FabricReadyTime.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.fabricReadyTime", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MulticastRoutingSourceInterface.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.mcastRtSrcIntf", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MultisiteVirtualMac.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.multisiteVirtualMac", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SuppressNd.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.suppressND", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.VirtualMac.IsNull() {
+			nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.attributes.virtualMac", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !(len(child.Vnis) == 0) {
+			nvoNwsRn_ := "nws"
+			nvoNwsDn_ := nvoEpDn + "/" + nvoNwsRn_
+			_ = nvoNwsDn_
+			if !existed(nvoNwsDn_) {
+				nvoEpBody, _ = sjson.Set(nvoEpBody, "nvoEp.children.-1.nvoNws.attributes", map[string]interface{}{"rn": nvoNwsRn_, "status": "deleted"})
+			} else {
+				nvoNwsBody_ := ""
+				for key_, child_ := range child.Vnis {
+					_ = child_
+					nvoNwRn_ := child_.getRn(key_)
+					nvoNwDn_ := nvoNwsDn_ + "/" + nvoNwRn_
+					_ = nvoNwDn_
+					if !existed(nvoNwDn_) {
+						nvoNwsBody_, _ = sjson.Set(nvoNwsBody_, "nvoNws.children.-1.nvoNw.attributes", map[string]interface{}{"rn": nvoNwRn_, "status": "deleted"})
+						continue
+					}
+					nvoNwBody_ := ""
+					nvoNwBody_, _ = sjson.Set(nvoNwBody_, "nvoNw.attributes.rn", nvoNwRn_)
+					if !child_.AssociateVrf.IsNull() {
+						nvoNwBody_, _ = sjson.Set(nvoNwBody_, "nvoNw.attributes.associateVrfFlag", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.MulticastGroup.IsNull() {
+						nvoNwBody_, _ = sjson.Set(nvoNwBody_, "nvoNw.attributes.mcastGroup", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.MultisiteIngressReplication.IsNull() {
+						nvoNwBody_, _ = sjson.Set(nvoNwBody_, "nvoNw.attributes.multisiteIngRepl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SuppressArp.IsNull() {
+						nvoNwBody_, _ = sjson.Set(nvoNwBody_, "nvoNw.attributes.suppressARP", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.LegacyMode.IsNull() {
+						nvoNwBody_, _ = sjson.Set(nvoNwBody_, "nvoNw.attributes.isLegacyMode", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.MultisiteMulticastGroup.IsNull() {
+						nvoNwBody_, _ = sjson.Set(nvoNwBody_, "nvoNw.attributes.multisiteMcastGroup", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SpineAnycastGateway.IsNull() {
+						nvoNwBody_, _ = sjson.Set(nvoNwBody_, "nvoNw.attributes.spineAnyCastGw", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !(child_.IngressReplicationProtocol.IsNull()) {
+						nvoIngReplRn__ := "IngRepl"
+						nvoIngReplDn__ := nvoNwDn_ + "/" + nvoIngReplRn__
+						_ = nvoIngReplDn__
+						if !existed(nvoIngReplDn__) {
+							nvoNwBody_, _ = sjson.Set(nvoNwBody_, "nvoNw.children.-1.nvoIngRepl.attributes", map[string]interface{}{"rn": nvoIngReplRn__, "status": "deleted"})
+						} else {
+							nvoIngReplBody__ := ""
+							if !child_.IngressReplicationProtocol.IsNull() {
+								nvoIngReplBody__, _ = sjson.Set(nvoIngReplBody__, "nvoIngRepl.attributes.proto", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if nvoIngReplBody__ != "" {
+								nvoIngReplBody__, _ = sjson.Set(nvoIngReplBody__, "nvoIngRepl.attributes.rn", nvoIngReplRn__)
+								nvoNwBody_, _ = sjson.SetRaw(nvoNwBody_, "nvoNw.children.-1", nvoIngReplBody__)
+							}
+						}
+					}
+					nvoNwsBody_, _ = sjson.SetRaw(nvoNwsBody_, "nvoNws.children.-1", nvoNwBody_)
+				}
+				if nvoNwsBody_ != "" {
+					nvoNwsBody_, _ = sjson.Set(nvoNwsBody_, "nvoNws.attributes.rn", nvoNwsRn_)
+					nvoEpBody, _ = sjson.SetRaw(nvoEpBody, "nvoEp.children.-1", nvoNwsBody_)
+				}
+			}
+		}
+		body, _ = sjson.SetRaw(body, "nvoEps.children.-1", nvoEpBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -1029,65 +1345,83 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, im
 		}
 	}
 	if !importing {
-		if !state.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() && config.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dciAdvertisePip", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() && state.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() && state.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() && state.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() && state.EvpnMultisiteBorderGatewaySiteId.IsNull() && state.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() && state.EvpnMultisiteBorderGatewayState.IsNull()) && (config.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() && config.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() && config.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() && config.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() && config.EvpnMultisiteBorderGatewaySiteId.IsNull() && config.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() && config.EvpnMultisiteBorderGatewayState.IsNull()) && deleteEmptied(data.getDn()+"/multisite") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() && config.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dciAdvertisePip", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() && config.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delayRestoreTime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() && config.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dfElectionTime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() && config.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"fabricAdvertisePip", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.EvpnMultisiteBorderGatewaySiteId.IsNull() && config.EvpnMultisiteBorderGatewaySiteId.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"siteId", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() && config.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"splitHorizonPerSite", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.EvpnMultisiteBorderGatewayState.IsNull() && config.EvpnMultisiteBorderGatewayState.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"state", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
-		if !state.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() && config.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delayRestoreTime", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.AdvertiseEvpnMulticastState.IsNull()) && (config.AdvertiseEvpnMulticastState.IsNull()) && deleteEmptied(data.getDn()+"/evpnmulticast") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMulticast")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.AdvertiseEvpnMulticastState.IsNull() && config.AdvertiseEvpnMulticastState.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMulticast")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"state", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
-		if !state.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() && config.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dfElectionTime", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() && config.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"fabricAdvertisePip", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.EvpnMultisiteBorderGatewaySiteId.IsNull() && config.EvpnMultisiteBorderGatewaySiteId.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"siteId", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() && config.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"splitHorizonPerSite", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.EvpnMultisiteBorderGatewayState.IsNull() && config.EvpnMultisiteBorderGatewayState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMultisiteBordergw")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"state", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.AdvertiseEvpnMulticastState.IsNull() && config.AdvertiseEvpnMulticastState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnMulticast")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"state", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.EvpnMultihomingDelayRestoreTime.IsNull() && config.EvpnMultihomingDelayRestoreTime.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delayRestoreTime", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.EvpnMultihomingDfElectionMode.IsNull() && config.EvpnMultihomingDfElectionMode.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dfElectionMode", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.EvpnMultihomingDfElectionTime.IsNull() && config.EvpnMultihomingDfElectionTime.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dfElectionTime", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.EvpnMultihomingEadEviRoute.IsNull() && config.EvpnMultihomingEadEviRoute.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"eadEviRoute", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.EvpnMultihomingSystemMac.IsNull() && config.EvpnMultihomingSystemMac.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"esiSysMac", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.EvpnMultihomingFrrAnycastSourceIp.IsNull() && config.EvpnMultihomingFrrAnycastSourceIp.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"frrAnycastSrcIp", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.EvpnMultihomingState.IsNull() && config.EvpnMultihomingState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"state", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.EvpnMultihomingDelayRestoreTime.IsNull() && state.EvpnMultihomingDfElectionMode.IsNull() && state.EvpnMultihomingDfElectionTime.IsNull() && state.EvpnMultihomingEadEviRoute.IsNull() && state.EvpnMultihomingSystemMac.IsNull() && state.EvpnMultihomingFrrAnycastSourceIp.IsNull() && state.EvpnMultihomingState.IsNull()) && (config.EvpnMultihomingDelayRestoreTime.IsNull() && config.EvpnMultihomingDfElectionMode.IsNull() && config.EvpnMultihomingDfElectionTime.IsNull() && config.EvpnMultihomingEadEviRoute.IsNull() && config.EvpnMultihomingSystemMac.IsNull() && config.EvpnMultihomingFrrAnycastSourceIp.IsNull() && config.EvpnMultihomingState.IsNull()) && deleteEmptied(data.getDn()+"/multihoming") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.EvpnMultihomingDelayRestoreTime.IsNull() && config.EvpnMultihomingDelayRestoreTime.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delayRestoreTime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.EvpnMultihomingDfElectionMode.IsNull() && config.EvpnMultihomingDfElectionMode.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dfElectionMode", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.EvpnMultihomingDfElectionTime.IsNull() && config.EvpnMultihomingDfElectionTime.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dfElectionTime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.EvpnMultihomingEadEviRoute.IsNull() && config.EvpnMultihomingEadEviRoute.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"eadEviRoute", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.EvpnMultihomingSystemMac.IsNull() && config.EvpnMultihomingSystemMac.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"esiSysMac", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.EvpnMultihomingFrrAnycastSourceIp.IsNull() && config.EvpnMultihomingFrrAnycastSourceIp.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"frrAnycastSrcIp", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.EvpnMultihomingState.IsNull() && config.EvpnMultihomingState.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nvoEvpnEsiMultiHoming")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"state", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 		for key := range state.EvpnStormControls {
 			if configChild, ok := config.EvpnStormControls[key]; ok {
@@ -1109,6 +1443,8 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, im
 				stateChild := state.NveInterfaces[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("nvoEp.attributes.epId").String() == key {
 						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
@@ -1191,6 +1527,8 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, im
 								stateChild := stateChild.Vnis[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/nws" + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, listChildPath, "nvoNws")+".children").Array() {
 									if mv.Get("nvoNw.attributes.vni").String() == key {
 										if !stateChild.AssociateVrf.IsNull() && configChild.AssociateVrf.IsNull() {
@@ -1226,9 +1564,15 @@ func (data NVO) toBodyWithDeletes(ctx context.Context, state NVO, config NVO, im
 										}
 									}
 									if listChildPath_ != "" {
-										if !stateChild.IngressReplicationProtocol.IsNull() && configChild.IngressReplicationProtocol.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "nvoIngRepl")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"proto", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.IngressReplicationProtocol.IsNull()) && (configChild.IngressReplicationProtocol.IsNull()) && deleteEmptied(listChildDn_+"/IngRepl") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "nvoIngRepl")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.IngressReplicationProtocol.IsNull() && configChild.IngressReplicationProtocol.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "nvoIngRepl")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"proto", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
 									}
 								}

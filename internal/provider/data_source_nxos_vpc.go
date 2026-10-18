@@ -307,7 +307,8 @@ func (d *VPCDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"vpcInst", "vpcDom", "vpcKeepalive", "vpcPeerLink", "vpcIf", "vpcRsVpcConf", "vpcOrphanPort"}, VPCSubtreeClassMinVersions)
+
+	res, err := getVPCTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

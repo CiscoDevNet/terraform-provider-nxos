@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosBridgeDomain(t *testing.T) {
+// TestAccBridgeDomainResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccBridgeDomainResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domain.test", "svi_autostate", "disable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domain.test", "bridge_domains.vlan-10.access_encap", "unknown"))
@@ -48,38 +52,75 @@ func TestAccNxosBridgeDomain(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domain.test", "bridge_domains.vlan-10.mode", "CE"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domain.test", "bridge_domains.vlan-10.vrf_name", "default"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bridge_domain.test", "bridge_domains.vlan-10.cross_connect", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "svi_autostate", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "bridge_domains.vlan-10.access_encap", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "bridge_domains.vlan-10.name", "VLAN10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "bridge_domains.vlan-10.bridge_domain_state", "suspend"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "bridge_domains.vlan-10.admin_state", "active"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "bridge_domains.vlan-10.bridge_mode", "mac"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "bridge_domains.vlan-10.control", "untagged"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "bridge_domains.vlan-10.forwarding_control", "mdst-flood"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "bridge_domains.vlan-10.forwarding_mode", "bridge"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "bridge_domains.vlan-10.long_name", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "bridge_domains.vlan-10.mode", "CE"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "bridge_domains.vlan-10.vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bridge_domain.test", "bridge_domains.vlan-10.cross_connect", "disable"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccBridgeDomainResourceConfig_minimum(),
+		},
+		{
+			Config: testAccBridgeDomainResourceConfig_all() + testAccBridgeDomainResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_bridge_domain.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccBridgeDomainResourceImportStateIdFunc("nxos_bridge_domain.test"),
+		},
+		{
+			ResourceName:       "nxos_bridge_domain.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccBridgeDomainResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccWithDeletionPolicy(testAccBridgeDomainResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_bridge_domain.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccNoResourcesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccBridgeDomainResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosBridgeDomainConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_bridge_domain.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosBridgeDomainImportStateIdFunc("nxos_bridge_domain.test"),
-			},
-			{
-				ResourceName:       "nxos_bridge_domain.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosBridgeDomainImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccBridgeDomainResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -93,7 +134,7 @@ func nxosBridgeDomainImportStateIdFunc(resourceName string) resource.ImportState
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosBridgeDomainConfig_minimum() string {
+func testAccBridgeDomainResourceConfig_minimum() string {
 	config := `resource "nxos_bridge_domain" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
@@ -102,7 +143,7 @@ func testAccNxosBridgeDomainConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosBridgeDomainConfig_all() string {
+func testAccBridgeDomainResourceConfig_all() string {
 	config := `resource "nxos_bridge_domain" "test" {` + "\n"
 	config += `	svi_autostate = "disable"` + "\n"
 	config += `	bridge_domains = {` + "\n"
@@ -127,6 +168,14 @@ func testAccNxosBridgeDomainConfig_all() string {
 	config += `	}` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccBridgeDomainResourceConfig_dataSource() string {
+	return `
+data "nxos_bridge_domain" "test" {
+	depends_on = [nxos_bridge_domain.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

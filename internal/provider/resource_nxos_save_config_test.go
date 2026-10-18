@@ -23,19 +23,19 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccNxosSaveConfig(t *testing.T) {
+func TestAccSaveConfigResource(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosSaveConfig(),
+				Config: testAccSaveConfigResourceConfig(),
 			},
 		},
 	})
 }
 
-func testAccNxosSaveConfig() string {
+func testAccSaveConfigResourceConfig() string {
 	return `
 	resource "nxos_save_config" "test" {
 		save = false

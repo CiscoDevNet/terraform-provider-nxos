@@ -117,6 +117,14 @@ var FeatureSubtreeClassMinVersions = map[string]string{}
 // FeatureMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var FeatureMinVersions = map[string]helpers.MinVersion{}
 
+// FeatureListClasses holds the list child classes of the resource.
+var FeatureListClasses = map[string]bool{"fsetFeatureSet": true}
+
+// getFeatureTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getFeatureTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"fmEntity", "fmAnalytics", "fmBashShell", "fmBfd", "fmBgp", "fmDhcp", "fmEigrp", "fmEpbr", "fmEvpn", "fmGrpc", "fmHmm", "fmHsrp", "fmInterfaceVlan", "fmIsis", "fmLacp", "fmLldp", "fmMacsec", "fmNetflow", "fmNgmvpn", "fmNgoam", "fmNvo", "fmNxapi", "fmOspf", "fmOspfv3", "fmPbr", "fmPim", "fmPoe", "fmPtp", "fmPvlan", "fmSflow", "fmScpServer", "fmSecurityGroup", "fmServiceAcceleration", "fmSftpServer", "fmSlaResponder", "fmSlaSender", "fmSlaTwampServer", "fmSsh", "fmTacacsplus", "fmTelemetry", "fmTelnet", "fmUdld", "fmVnSegment", "fmVpc", "fmVtp", "fsetFeatureSet"}, FeatureSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -2492,7 +2500,905 @@ func (data Feature) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data Feature) toBodyWithDeletes(ctx context.Context, state Feature, config Feature, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data Feature) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !((data.Analytics.IsNull()) && (data.BashShell.IsNull()) && (data.Bfd.IsNull()) && (data.Bgp.IsNull()) && (data.Dhcp.IsNull()) && (data.Eigrp.IsNull()) && (data.Epbr.IsNull()) && (data.Evpn.IsNull()) && (data.Grpc.IsNull()) && (data.Hmm.IsNull()) && (data.Hsrp.IsNull()) && (data.InterfaceVlan.IsNull()) && (data.Isis.IsNull()) && (data.Lacp.IsNull()) && (data.Lldp.IsNull()) && (data.Macsec.IsNull()) && (data.Netflow.IsNull()) && (data.Ngmvpn.IsNull()) && (data.Ngoam.IsNull()) && (data.NvOverlay.IsNull()) && (data.Nxapi.IsNull()) && (data.Ospf.IsNull()) && (data.Ospfv3.IsNull()) && (data.Pbr.IsNull()) && (data.Pim.IsNull()) && (data.Poe.IsNull()) && (data.Ptp.IsNull()) && (data.Pvlan.IsNull()) && (data.Sflow.IsNull()) && (data.ScpServer.IsNull()) && (data.SecurityGroup.IsNull()) && (data.ServiceAcceleration.IsNull()) && (data.SftpServer.IsNull()) && (data.SlaResponder.IsNull()) && (data.SlaSender.IsNull()) && (data.SlaTwampServer.IsNull()) && (data.Ssh.IsNull()) && (data.Tacacs.IsNull()) && (data.Telemetry.IsNull()) && (data.Telnet.IsNull()) && (data.Udld.IsNull()) && (data.VnSegment.IsNull()) && (data.Vpc.IsNull()) && (data.Vtp.IsNull())) {
+		fmEntityDn := dn + "/" + "fm"
+		dns[fmEntityDn] = true
+		if !(data.Analytics.IsNull()) {
+			fmAnalyticsDn := fmEntityDn + "/" + "analytics"
+			dns[fmAnalyticsDn] = true
+		}
+		if !(data.BashShell.IsNull()) {
+			fmBashShellDn := fmEntityDn + "/" + "bashshell"
+			dns[fmBashShellDn] = true
+		}
+		if !(data.Bfd.IsNull()) {
+			fmBfdDn := fmEntityDn + "/" + "bfd"
+			dns[fmBfdDn] = true
+		}
+		if !(data.Bgp.IsNull()) {
+			fmBgpDn := fmEntityDn + "/" + "bgp"
+			dns[fmBgpDn] = true
+		}
+		if !(data.Dhcp.IsNull()) {
+			fmDhcpDn := fmEntityDn + "/" + "dhcp"
+			dns[fmDhcpDn] = true
+		}
+		if !(data.Eigrp.IsNull()) {
+			fmEigrpDn := fmEntityDn + "/" + "eigrp"
+			dns[fmEigrpDn] = true
+		}
+		if !(data.Epbr.IsNull()) {
+			fmEpbrDn := fmEntityDn + "/" + "epbr"
+			dns[fmEpbrDn] = true
+		}
+		if !(data.Evpn.IsNull()) {
+			fmEvpnDn := fmEntityDn + "/" + "evpn"
+			dns[fmEvpnDn] = true
+		}
+		if !(data.Grpc.IsNull()) {
+			fmGrpcDn := fmEntityDn + "/" + "grpc"
+			dns[fmGrpcDn] = true
+		}
+		if !(data.Hmm.IsNull()) {
+			fmHmmDn := fmEntityDn + "/" + "hmm"
+			dns[fmHmmDn] = true
+		}
+		if !(data.Hsrp.IsNull()) {
+			fmHsrpDn := fmEntityDn + "/" + "hsrp"
+			dns[fmHsrpDn] = true
+		}
+		if !(data.InterfaceVlan.IsNull()) {
+			fmInterfaceVlanDn := fmEntityDn + "/" + "ifvlan"
+			dns[fmInterfaceVlanDn] = true
+		}
+		if !(data.Isis.IsNull()) {
+			fmIsisDn := fmEntityDn + "/" + "isis"
+			dns[fmIsisDn] = true
+		}
+		if !(data.Lacp.IsNull()) {
+			fmLacpDn := fmEntityDn + "/" + "lacp"
+			dns[fmLacpDn] = true
+		}
+		if !(data.Lldp.IsNull()) {
+			fmLldpDn := fmEntityDn + "/" + "lldp"
+			dns[fmLldpDn] = true
+		}
+		if !(data.Macsec.IsNull()) {
+			fmMacsecDn := fmEntityDn + "/" + "macsec"
+			dns[fmMacsecDn] = true
+		}
+		if !(data.Netflow.IsNull()) {
+			fmNetflowDn := fmEntityDn + "/" + "netflow"
+			dns[fmNetflowDn] = true
+		}
+		if !(data.Ngmvpn.IsNull()) {
+			fmNgmvpnDn := fmEntityDn + "/" + "ngmvpn"
+			dns[fmNgmvpnDn] = true
+		}
+		if !(data.Ngoam.IsNull()) {
+			fmNgoamDn := fmEntityDn + "/" + "ngoam"
+			dns[fmNgoamDn] = true
+		}
+		if !(data.NvOverlay.IsNull()) {
+			fmNvoDn := fmEntityDn + "/" + "nvo"
+			dns[fmNvoDn] = true
+		}
+		if !(data.Nxapi.IsNull()) {
+			fmNxapiDn := fmEntityDn + "/" + "nxapi"
+			dns[fmNxapiDn] = true
+		}
+		if !(data.Ospf.IsNull()) {
+			fmOspfDn := fmEntityDn + "/" + "ospf"
+			dns[fmOspfDn] = true
+		}
+		if !(data.Ospfv3.IsNull()) {
+			fmOspfv3Dn := fmEntityDn + "/" + "ospfv3"
+			dns[fmOspfv3Dn] = true
+		}
+		if !(data.Pbr.IsNull()) {
+			fmPbrDn := fmEntityDn + "/" + "pbr"
+			dns[fmPbrDn] = true
+		}
+		if !(data.Pim.IsNull()) {
+			fmPimDn := fmEntityDn + "/" + "pim"
+			dns[fmPimDn] = true
+		}
+		if !(data.Poe.IsNull()) {
+			fmPoeDn := fmEntityDn + "/" + "poe"
+			dns[fmPoeDn] = true
+		}
+		if !(data.Ptp.IsNull()) {
+			fmPtpDn := fmEntityDn + "/" + "ptp"
+			dns[fmPtpDn] = true
+		}
+		if !(data.Pvlan.IsNull()) {
+			fmPvlanDn := fmEntityDn + "/" + "pvlan"
+			dns[fmPvlanDn] = true
+		}
+		if !(data.Sflow.IsNull()) {
+			fmSflowDn := fmEntityDn + "/" + "sflow"
+			dns[fmSflowDn] = true
+		}
+		if !(data.ScpServer.IsNull()) {
+			fmScpServerDn := fmEntityDn + "/" + "scpserver"
+			dns[fmScpServerDn] = true
+		}
+		if !(data.SecurityGroup.IsNull()) {
+			fmSecurityGroupDn := fmEntityDn + "/" + "securitygroup"
+			dns[fmSecurityGroupDn] = true
+		}
+		if !(data.ServiceAcceleration.IsNull()) {
+			fmServiceAccelerationDn := fmEntityDn + "/" + "serviceacceleration"
+			dns[fmServiceAccelerationDn] = true
+		}
+		if !(data.SftpServer.IsNull()) {
+			fmSftpServerDn := fmEntityDn + "/" + "sftpserver"
+			dns[fmSftpServerDn] = true
+		}
+		if !(data.SlaResponder.IsNull()) {
+			fmSlaResponderDn := fmEntityDn + "/" + "slaresponder"
+			dns[fmSlaResponderDn] = true
+		}
+		if !(data.SlaSender.IsNull()) {
+			fmSlaSenderDn := fmEntityDn + "/" + "slasender"
+			dns[fmSlaSenderDn] = true
+		}
+		if !(data.SlaTwampServer.IsNull()) {
+			fmSlaTwampServerDn := fmEntityDn + "/" + "slatwampserver"
+			dns[fmSlaTwampServerDn] = true
+		}
+		if !(data.Ssh.IsNull()) {
+			fmSshDn := fmEntityDn + "/" + "ssh"
+			dns[fmSshDn] = true
+		}
+		if !(data.Tacacs.IsNull()) {
+			fmTacacsplusDn := fmEntityDn + "/" + "tacacsplus"
+			dns[fmTacacsplusDn] = true
+		}
+		if !(data.Telemetry.IsNull()) {
+			fmTelemetryDn := fmEntityDn + "/" + "telemetry"
+			dns[fmTelemetryDn] = true
+		}
+		if !(data.Telnet.IsNull()) {
+			fmTelnetDn := fmEntityDn + "/" + "telnet"
+			dns[fmTelnetDn] = true
+		}
+		if !(data.Udld.IsNull()) {
+			fmUdldDn := fmEntityDn + "/" + "udld"
+			dns[fmUdldDn] = true
+		}
+		if !(data.VnSegment.IsNull()) {
+			fmVnSegmentDn := fmEntityDn + "/" + "vnsegment"
+			dns[fmVnSegmentDn] = true
+		}
+		if !(data.Vpc.IsNull()) {
+			fmVpcDn := fmEntityDn + "/" + "vpc"
+			dns[fmVpcDn] = true
+		}
+		if !(data.Vtp.IsNull()) {
+			fmVtpDn := fmEntityDn + "/" + "vtp"
+			dns[fmVtpDn] = true
+		}
+	}
+	for key, child := range data.FeatureSets {
+		fsetFeatureSetDn := dn + "/" + child.getRn(key)
+		dns[fsetFeatureSetDn] = true
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data Feature) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "topSystem.attributes", map[string]interface{}{})
+	}
+	if !((data.Analytics.IsNull()) && (data.BashShell.IsNull()) && (data.Bfd.IsNull()) && (data.Bgp.IsNull()) && (data.Dhcp.IsNull()) && (data.Eigrp.IsNull()) && (data.Epbr.IsNull()) && (data.Evpn.IsNull()) && (data.Grpc.IsNull()) && (data.Hmm.IsNull()) && (data.Hsrp.IsNull()) && (data.InterfaceVlan.IsNull()) && (data.Isis.IsNull()) && (data.Lacp.IsNull()) && (data.Lldp.IsNull()) && (data.Macsec.IsNull()) && (data.Netflow.IsNull()) && (data.Ngmvpn.IsNull()) && (data.Ngoam.IsNull()) && (data.NvOverlay.IsNull()) && (data.Nxapi.IsNull()) && (data.Ospf.IsNull()) && (data.Ospfv3.IsNull()) && (data.Pbr.IsNull()) && (data.Pim.IsNull()) && (data.Poe.IsNull()) && (data.Ptp.IsNull()) && (data.Pvlan.IsNull()) && (data.Sflow.IsNull()) && (data.ScpServer.IsNull()) && (data.SecurityGroup.IsNull()) && (data.ServiceAcceleration.IsNull()) && (data.SftpServer.IsNull()) && (data.SlaResponder.IsNull()) && (data.SlaSender.IsNull()) && (data.SlaTwampServer.IsNull()) && (data.Ssh.IsNull()) && (data.Tacacs.IsNull()) && (data.Telemetry.IsNull()) && (data.Telnet.IsNull()) && (data.Udld.IsNull()) && (data.VnSegment.IsNull()) && (data.Vpc.IsNull()) && (data.Vtp.IsNull())) {
+		fmEntityRn := "fm"
+		fmEntityDn := dn + "/" + fmEntityRn
+		_ = fmEntityDn
+		{
+			fmEntityBody := ""
+			if !(data.Analytics.IsNull()) {
+				fmAnalyticsRn := "analytics"
+				fmAnalyticsDn := fmEntityDn + "/" + fmAnalyticsRn
+				_ = fmAnalyticsDn
+				{
+					fmAnalyticsBody := ""
+					if !data.Analytics.IsNull() {
+						fmAnalyticsBody, _ = sjson.Set(fmAnalyticsBody, "fmAnalytics.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmAnalyticsBody != "" {
+						fmAnalyticsBody, _ = sjson.Set(fmAnalyticsBody, "fmAnalytics.attributes.rn", fmAnalyticsRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmAnalyticsBody)
+					}
+				}
+			}
+			if !(data.BashShell.IsNull()) {
+				fmBashShellRn := "bashshell"
+				fmBashShellDn := fmEntityDn + "/" + fmBashShellRn
+				_ = fmBashShellDn
+				{
+					fmBashShellBody := ""
+					if !data.BashShell.IsNull() {
+						fmBashShellBody, _ = sjson.Set(fmBashShellBody, "fmBashShell.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmBashShellBody != "" {
+						fmBashShellBody, _ = sjson.Set(fmBashShellBody, "fmBashShell.attributes.rn", fmBashShellRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmBashShellBody)
+					}
+				}
+			}
+			if !(data.Bfd.IsNull()) {
+				fmBfdRn := "bfd"
+				fmBfdDn := fmEntityDn + "/" + fmBfdRn
+				_ = fmBfdDn
+				{
+					fmBfdBody := ""
+					if !data.Bfd.IsNull() {
+						fmBfdBody, _ = sjson.Set(fmBfdBody, "fmBfd.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmBfdBody != "" {
+						fmBfdBody, _ = sjson.Set(fmBfdBody, "fmBfd.attributes.rn", fmBfdRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmBfdBody)
+					}
+				}
+			}
+			if !(data.Bgp.IsNull()) {
+				fmBgpRn := "bgp"
+				fmBgpDn := fmEntityDn + "/" + fmBgpRn
+				_ = fmBgpDn
+				{
+					fmBgpBody := ""
+					if !data.Bgp.IsNull() {
+						fmBgpBody, _ = sjson.Set(fmBgpBody, "fmBgp.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmBgpBody != "" {
+						fmBgpBody, _ = sjson.Set(fmBgpBody, "fmBgp.attributes.rn", fmBgpRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmBgpBody)
+					}
+				}
+			}
+			if !(data.Dhcp.IsNull()) {
+				fmDhcpRn := "dhcp"
+				fmDhcpDn := fmEntityDn + "/" + fmDhcpRn
+				_ = fmDhcpDn
+				{
+					fmDhcpBody := ""
+					if !data.Dhcp.IsNull() {
+						fmDhcpBody, _ = sjson.Set(fmDhcpBody, "fmDhcp.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmDhcpBody != "" {
+						fmDhcpBody, _ = sjson.Set(fmDhcpBody, "fmDhcp.attributes.rn", fmDhcpRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmDhcpBody)
+					}
+				}
+			}
+			if !(data.Eigrp.IsNull()) {
+				fmEigrpRn := "eigrp"
+				fmEigrpDn := fmEntityDn + "/" + fmEigrpRn
+				_ = fmEigrpDn
+				{
+					fmEigrpBody := ""
+					if !data.Eigrp.IsNull() {
+						fmEigrpBody, _ = sjson.Set(fmEigrpBody, "fmEigrp.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmEigrpBody != "" {
+						fmEigrpBody, _ = sjson.Set(fmEigrpBody, "fmEigrp.attributes.rn", fmEigrpRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmEigrpBody)
+					}
+				}
+			}
+			if !(data.Epbr.IsNull()) {
+				fmEpbrRn := "epbr"
+				fmEpbrDn := fmEntityDn + "/" + fmEpbrRn
+				_ = fmEpbrDn
+				{
+					fmEpbrBody := ""
+					if !data.Epbr.IsNull() {
+						fmEpbrBody, _ = sjson.Set(fmEpbrBody, "fmEpbr.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmEpbrBody != "" {
+						fmEpbrBody, _ = sjson.Set(fmEpbrBody, "fmEpbr.attributes.rn", fmEpbrRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmEpbrBody)
+					}
+				}
+			}
+			if !(data.Evpn.IsNull()) {
+				fmEvpnRn := "evpn"
+				fmEvpnDn := fmEntityDn + "/" + fmEvpnRn
+				_ = fmEvpnDn
+				{
+					fmEvpnBody := ""
+					if !data.Evpn.IsNull() {
+						fmEvpnBody, _ = sjson.Set(fmEvpnBody, "fmEvpn.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmEvpnBody != "" {
+						fmEvpnBody, _ = sjson.Set(fmEvpnBody, "fmEvpn.attributes.rn", fmEvpnRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmEvpnBody)
+					}
+				}
+			}
+			if !(data.Grpc.IsNull()) {
+				fmGrpcRn := "grpc"
+				fmGrpcDn := fmEntityDn + "/" + fmGrpcRn
+				_ = fmGrpcDn
+				{
+					fmGrpcBody := ""
+					if !data.Grpc.IsNull() {
+						fmGrpcBody, _ = sjson.Set(fmGrpcBody, "fmGrpc.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmGrpcBody != "" {
+						fmGrpcBody, _ = sjson.Set(fmGrpcBody, "fmGrpc.attributes.rn", fmGrpcRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmGrpcBody)
+					}
+				}
+			}
+			if !(data.Hmm.IsNull()) {
+				fmHmmRn := "hmm"
+				fmHmmDn := fmEntityDn + "/" + fmHmmRn
+				_ = fmHmmDn
+				{
+					fmHmmBody := ""
+					if !data.Hmm.IsNull() {
+						fmHmmBody, _ = sjson.Set(fmHmmBody, "fmHmm.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmHmmBody != "" {
+						fmHmmBody, _ = sjson.Set(fmHmmBody, "fmHmm.attributes.rn", fmHmmRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmHmmBody)
+					}
+				}
+			}
+			if !(data.Hsrp.IsNull()) {
+				fmHsrpRn := "hsrp"
+				fmHsrpDn := fmEntityDn + "/" + fmHsrpRn
+				_ = fmHsrpDn
+				{
+					fmHsrpBody := ""
+					if !data.Hsrp.IsNull() {
+						fmHsrpBody, _ = sjson.Set(fmHsrpBody, "fmHsrp.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmHsrpBody != "" {
+						fmHsrpBody, _ = sjson.Set(fmHsrpBody, "fmHsrp.attributes.rn", fmHsrpRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmHsrpBody)
+					}
+				}
+			}
+			if !(data.InterfaceVlan.IsNull()) {
+				fmInterfaceVlanRn := "ifvlan"
+				fmInterfaceVlanDn := fmEntityDn + "/" + fmInterfaceVlanRn
+				_ = fmInterfaceVlanDn
+				{
+					fmInterfaceVlanBody := ""
+					if !data.InterfaceVlan.IsNull() {
+						fmInterfaceVlanBody, _ = sjson.Set(fmInterfaceVlanBody, "fmInterfaceVlan.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmInterfaceVlanBody != "" {
+						fmInterfaceVlanBody, _ = sjson.Set(fmInterfaceVlanBody, "fmInterfaceVlan.attributes.rn", fmInterfaceVlanRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmInterfaceVlanBody)
+					}
+				}
+			}
+			if !(data.Isis.IsNull()) {
+				fmIsisRn := "isis"
+				fmIsisDn := fmEntityDn + "/" + fmIsisRn
+				_ = fmIsisDn
+				{
+					fmIsisBody := ""
+					if !data.Isis.IsNull() {
+						fmIsisBody, _ = sjson.Set(fmIsisBody, "fmIsis.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmIsisBody != "" {
+						fmIsisBody, _ = sjson.Set(fmIsisBody, "fmIsis.attributes.rn", fmIsisRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmIsisBody)
+					}
+				}
+			}
+			if !(data.Lacp.IsNull()) {
+				fmLacpRn := "lacp"
+				fmLacpDn := fmEntityDn + "/" + fmLacpRn
+				_ = fmLacpDn
+				{
+					fmLacpBody := ""
+					if !data.Lacp.IsNull() {
+						fmLacpBody, _ = sjson.Set(fmLacpBody, "fmLacp.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmLacpBody != "" {
+						fmLacpBody, _ = sjson.Set(fmLacpBody, "fmLacp.attributes.rn", fmLacpRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmLacpBody)
+					}
+				}
+			}
+			if !(data.Lldp.IsNull()) {
+				fmLldpRn := "lldp"
+				fmLldpDn := fmEntityDn + "/" + fmLldpRn
+				_ = fmLldpDn
+				{
+					fmLldpBody := ""
+					if !data.Lldp.IsNull() {
+						fmLldpBody, _ = sjson.Set(fmLldpBody, "fmLldp.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmLldpBody != "" {
+						fmLldpBody, _ = sjson.Set(fmLldpBody, "fmLldp.attributes.rn", fmLldpRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmLldpBody)
+					}
+				}
+			}
+			if !(data.Macsec.IsNull()) {
+				fmMacsecRn := "macsec"
+				fmMacsecDn := fmEntityDn + "/" + fmMacsecRn
+				_ = fmMacsecDn
+				{
+					fmMacsecBody := ""
+					if !data.Macsec.IsNull() {
+						fmMacsecBody, _ = sjson.Set(fmMacsecBody, "fmMacsec.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmMacsecBody != "" {
+						fmMacsecBody, _ = sjson.Set(fmMacsecBody, "fmMacsec.attributes.rn", fmMacsecRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmMacsecBody)
+					}
+				}
+			}
+			if !(data.Netflow.IsNull()) {
+				fmNetflowRn := "netflow"
+				fmNetflowDn := fmEntityDn + "/" + fmNetflowRn
+				_ = fmNetflowDn
+				{
+					fmNetflowBody := ""
+					if !data.Netflow.IsNull() {
+						fmNetflowBody, _ = sjson.Set(fmNetflowBody, "fmNetflow.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmNetflowBody != "" {
+						fmNetflowBody, _ = sjson.Set(fmNetflowBody, "fmNetflow.attributes.rn", fmNetflowRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmNetflowBody)
+					}
+				}
+			}
+			if !(data.Ngmvpn.IsNull()) {
+				fmNgmvpnRn := "ngmvpn"
+				fmNgmvpnDn := fmEntityDn + "/" + fmNgmvpnRn
+				_ = fmNgmvpnDn
+				{
+					fmNgmvpnBody := ""
+					if !data.Ngmvpn.IsNull() {
+						fmNgmvpnBody, _ = sjson.Set(fmNgmvpnBody, "fmNgmvpn.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmNgmvpnBody != "" {
+						fmNgmvpnBody, _ = sjson.Set(fmNgmvpnBody, "fmNgmvpn.attributes.rn", fmNgmvpnRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmNgmvpnBody)
+					}
+				}
+			}
+			if !(data.Ngoam.IsNull()) {
+				fmNgoamRn := "ngoam"
+				fmNgoamDn := fmEntityDn + "/" + fmNgoamRn
+				_ = fmNgoamDn
+				{
+					fmNgoamBody := ""
+					if !data.Ngoam.IsNull() {
+						fmNgoamBody, _ = sjson.Set(fmNgoamBody, "fmNgoam.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmNgoamBody != "" {
+						fmNgoamBody, _ = sjson.Set(fmNgoamBody, "fmNgoam.attributes.rn", fmNgoamRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmNgoamBody)
+					}
+				}
+			}
+			if !(data.NvOverlay.IsNull()) {
+				fmNvoRn := "nvo"
+				fmNvoDn := fmEntityDn + "/" + fmNvoRn
+				_ = fmNvoDn
+				{
+					fmNvoBody := ""
+					if !data.NvOverlay.IsNull() {
+						fmNvoBody, _ = sjson.Set(fmNvoBody, "fmNvo.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmNvoBody != "" {
+						fmNvoBody, _ = sjson.Set(fmNvoBody, "fmNvo.attributes.rn", fmNvoRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmNvoBody)
+					}
+				}
+			}
+			if !(data.Nxapi.IsNull()) {
+				fmNxapiRn := "nxapi"
+				fmNxapiDn := fmEntityDn + "/" + fmNxapiRn
+				_ = fmNxapiDn
+				{
+					fmNxapiBody := ""
+					if !data.Nxapi.IsNull() {
+						fmNxapiBody, _ = sjson.Set(fmNxapiBody, "fmNxapi.attributes.adminSt", "enabled")
+					}
+					if fmNxapiBody != "" {
+						fmNxapiBody, _ = sjson.Set(fmNxapiBody, "fmNxapi.attributes.rn", fmNxapiRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmNxapiBody)
+					}
+				}
+			}
+			if !(data.Ospf.IsNull()) {
+				fmOspfRn := "ospf"
+				fmOspfDn := fmEntityDn + "/" + fmOspfRn
+				_ = fmOspfDn
+				{
+					fmOspfBody := ""
+					if !data.Ospf.IsNull() {
+						fmOspfBody, _ = sjson.Set(fmOspfBody, "fmOspf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmOspfBody != "" {
+						fmOspfBody, _ = sjson.Set(fmOspfBody, "fmOspf.attributes.rn", fmOspfRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmOspfBody)
+					}
+				}
+			}
+			if !(data.Ospfv3.IsNull()) {
+				fmOspfv3Rn := "ospfv3"
+				fmOspfv3Dn := fmEntityDn + "/" + fmOspfv3Rn
+				_ = fmOspfv3Dn
+				{
+					fmOspfv3Body := ""
+					if !data.Ospfv3.IsNull() {
+						fmOspfv3Body, _ = sjson.Set(fmOspfv3Body, "fmOspfv3.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmOspfv3Body != "" {
+						fmOspfv3Body, _ = sjson.Set(fmOspfv3Body, "fmOspfv3.attributes.rn", fmOspfv3Rn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmOspfv3Body)
+					}
+				}
+			}
+			if !(data.Pbr.IsNull()) {
+				fmPbrRn := "pbr"
+				fmPbrDn := fmEntityDn + "/" + fmPbrRn
+				_ = fmPbrDn
+				{
+					fmPbrBody := ""
+					if !data.Pbr.IsNull() {
+						fmPbrBody, _ = sjson.Set(fmPbrBody, "fmPbr.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmPbrBody != "" {
+						fmPbrBody, _ = sjson.Set(fmPbrBody, "fmPbr.attributes.rn", fmPbrRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmPbrBody)
+					}
+				}
+			}
+			if !(data.Pim.IsNull()) {
+				fmPimRn := "pim"
+				fmPimDn := fmEntityDn + "/" + fmPimRn
+				_ = fmPimDn
+				{
+					fmPimBody := ""
+					if !data.Pim.IsNull() {
+						fmPimBody, _ = sjson.Set(fmPimBody, "fmPim.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmPimBody != "" {
+						fmPimBody, _ = sjson.Set(fmPimBody, "fmPim.attributes.rn", fmPimRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmPimBody)
+					}
+				}
+			}
+			if !(data.Poe.IsNull()) {
+				fmPoeRn := "poe"
+				fmPoeDn := fmEntityDn + "/" + fmPoeRn
+				_ = fmPoeDn
+				{
+					fmPoeBody := ""
+					if !data.Poe.IsNull() {
+						fmPoeBody, _ = sjson.Set(fmPoeBody, "fmPoe.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmPoeBody != "" {
+						fmPoeBody, _ = sjson.Set(fmPoeBody, "fmPoe.attributes.rn", fmPoeRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmPoeBody)
+					}
+				}
+			}
+			if !(data.Ptp.IsNull()) {
+				fmPtpRn := "ptp"
+				fmPtpDn := fmEntityDn + "/" + fmPtpRn
+				_ = fmPtpDn
+				{
+					fmPtpBody := ""
+					if !data.Ptp.IsNull() {
+						fmPtpBody, _ = sjson.Set(fmPtpBody, "fmPtp.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmPtpBody != "" {
+						fmPtpBody, _ = sjson.Set(fmPtpBody, "fmPtp.attributes.rn", fmPtpRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmPtpBody)
+					}
+				}
+			}
+			if !(data.Pvlan.IsNull()) {
+				fmPvlanRn := "pvlan"
+				fmPvlanDn := fmEntityDn + "/" + fmPvlanRn
+				_ = fmPvlanDn
+				{
+					fmPvlanBody := ""
+					if !data.Pvlan.IsNull() {
+						fmPvlanBody, _ = sjson.Set(fmPvlanBody, "fmPvlan.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmPvlanBody != "" {
+						fmPvlanBody, _ = sjson.Set(fmPvlanBody, "fmPvlan.attributes.rn", fmPvlanRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmPvlanBody)
+					}
+				}
+			}
+			if !(data.Sflow.IsNull()) {
+				fmSflowRn := "sflow"
+				fmSflowDn := fmEntityDn + "/" + fmSflowRn
+				_ = fmSflowDn
+				{
+					fmSflowBody := ""
+					if !data.Sflow.IsNull() {
+						fmSflowBody, _ = sjson.Set(fmSflowBody, "fmSflow.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmSflowBody != "" {
+						fmSflowBody, _ = sjson.Set(fmSflowBody, "fmSflow.attributes.rn", fmSflowRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmSflowBody)
+					}
+				}
+			}
+			if !(data.ScpServer.IsNull()) {
+				fmScpServerRn := "scpserver"
+				fmScpServerDn := fmEntityDn + "/" + fmScpServerRn
+				_ = fmScpServerDn
+				{
+					fmScpServerBody := ""
+					if !data.ScpServer.IsNull() {
+						fmScpServerBody, _ = sjson.Set(fmScpServerBody, "fmScpServer.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmScpServerBody != "" {
+						fmScpServerBody, _ = sjson.Set(fmScpServerBody, "fmScpServer.attributes.rn", fmScpServerRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmScpServerBody)
+					}
+				}
+			}
+			if !(data.SecurityGroup.IsNull()) {
+				fmSecurityGroupRn := "securitygroup"
+				fmSecurityGroupDn := fmEntityDn + "/" + fmSecurityGroupRn
+				_ = fmSecurityGroupDn
+				{
+					fmSecurityGroupBody := ""
+					if !data.SecurityGroup.IsNull() {
+						fmSecurityGroupBody, _ = sjson.Set(fmSecurityGroupBody, "fmSecurityGroup.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmSecurityGroupBody != "" {
+						fmSecurityGroupBody, _ = sjson.Set(fmSecurityGroupBody, "fmSecurityGroup.attributes.rn", fmSecurityGroupRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmSecurityGroupBody)
+					}
+				}
+			}
+			if !(data.ServiceAcceleration.IsNull()) {
+				fmServiceAccelerationRn := "serviceacceleration"
+				fmServiceAccelerationDn := fmEntityDn + "/" + fmServiceAccelerationRn
+				_ = fmServiceAccelerationDn
+				{
+					fmServiceAccelerationBody := ""
+					if !data.ServiceAcceleration.IsNull() {
+						fmServiceAccelerationBody, _ = sjson.Set(fmServiceAccelerationBody, "fmServiceAcceleration.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmServiceAccelerationBody != "" {
+						fmServiceAccelerationBody, _ = sjson.Set(fmServiceAccelerationBody, "fmServiceAcceleration.attributes.rn", fmServiceAccelerationRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmServiceAccelerationBody)
+					}
+				}
+			}
+			if !(data.SftpServer.IsNull()) {
+				fmSftpServerRn := "sftpserver"
+				fmSftpServerDn := fmEntityDn + "/" + fmSftpServerRn
+				_ = fmSftpServerDn
+				{
+					fmSftpServerBody := ""
+					if !data.SftpServer.IsNull() {
+						fmSftpServerBody, _ = sjson.Set(fmSftpServerBody, "fmSftpServer.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmSftpServerBody != "" {
+						fmSftpServerBody, _ = sjson.Set(fmSftpServerBody, "fmSftpServer.attributes.rn", fmSftpServerRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmSftpServerBody)
+					}
+				}
+			}
+			if !(data.SlaResponder.IsNull()) {
+				fmSlaResponderRn := "slaresponder"
+				fmSlaResponderDn := fmEntityDn + "/" + fmSlaResponderRn
+				_ = fmSlaResponderDn
+				{
+					fmSlaResponderBody := ""
+					if !data.SlaResponder.IsNull() {
+						fmSlaResponderBody, _ = sjson.Set(fmSlaResponderBody, "fmSlaResponder.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmSlaResponderBody != "" {
+						fmSlaResponderBody, _ = sjson.Set(fmSlaResponderBody, "fmSlaResponder.attributes.rn", fmSlaResponderRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmSlaResponderBody)
+					}
+				}
+			}
+			if !(data.SlaSender.IsNull()) {
+				fmSlaSenderRn := "slasender"
+				fmSlaSenderDn := fmEntityDn + "/" + fmSlaSenderRn
+				_ = fmSlaSenderDn
+				{
+					fmSlaSenderBody := ""
+					if !data.SlaSender.IsNull() {
+						fmSlaSenderBody, _ = sjson.Set(fmSlaSenderBody, "fmSlaSender.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmSlaSenderBody != "" {
+						fmSlaSenderBody, _ = sjson.Set(fmSlaSenderBody, "fmSlaSender.attributes.rn", fmSlaSenderRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmSlaSenderBody)
+					}
+				}
+			}
+			if !(data.SlaTwampServer.IsNull()) {
+				fmSlaTwampServerRn := "slatwampserver"
+				fmSlaTwampServerDn := fmEntityDn + "/" + fmSlaTwampServerRn
+				_ = fmSlaTwampServerDn
+				{
+					fmSlaTwampServerBody := ""
+					if !data.SlaTwampServer.IsNull() {
+						fmSlaTwampServerBody, _ = sjson.Set(fmSlaTwampServerBody, "fmSlaTwampServer.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmSlaTwampServerBody != "" {
+						fmSlaTwampServerBody, _ = sjson.Set(fmSlaTwampServerBody, "fmSlaTwampServer.attributes.rn", fmSlaTwampServerRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmSlaTwampServerBody)
+					}
+				}
+			}
+			if !(data.Ssh.IsNull()) {
+				fmSshRn := "ssh"
+				fmSshDn := fmEntityDn + "/" + fmSshRn
+				_ = fmSshDn
+				{
+					fmSshBody := ""
+					if !data.Ssh.IsNull() {
+						fmSshBody, _ = sjson.Set(fmSshBody, "fmSsh.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmSshBody != "" {
+						fmSshBody, _ = sjson.Set(fmSshBody, "fmSsh.attributes.rn", fmSshRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmSshBody)
+					}
+				}
+			}
+			if !(data.Tacacs.IsNull()) {
+				fmTacacsplusRn := "tacacsplus"
+				fmTacacsplusDn := fmEntityDn + "/" + fmTacacsplusRn
+				_ = fmTacacsplusDn
+				{
+					fmTacacsplusBody := ""
+					if !data.Tacacs.IsNull() {
+						fmTacacsplusBody, _ = sjson.Set(fmTacacsplusBody, "fmTacacsplus.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmTacacsplusBody != "" {
+						fmTacacsplusBody, _ = sjson.Set(fmTacacsplusBody, "fmTacacsplus.attributes.rn", fmTacacsplusRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmTacacsplusBody)
+					}
+				}
+			}
+			if !(data.Telemetry.IsNull()) {
+				fmTelemetryRn := "telemetry"
+				fmTelemetryDn := fmEntityDn + "/" + fmTelemetryRn
+				_ = fmTelemetryDn
+				{
+					fmTelemetryBody := ""
+					if !data.Telemetry.IsNull() {
+						fmTelemetryBody, _ = sjson.Set(fmTelemetryBody, "fmTelemetry.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmTelemetryBody != "" {
+						fmTelemetryBody, _ = sjson.Set(fmTelemetryBody, "fmTelemetry.attributes.rn", fmTelemetryRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmTelemetryBody)
+					}
+				}
+			}
+			if !(data.Telnet.IsNull()) {
+				fmTelnetRn := "telnet"
+				fmTelnetDn := fmEntityDn + "/" + fmTelnetRn
+				_ = fmTelnetDn
+				{
+					fmTelnetBody := ""
+					if !data.Telnet.IsNull() {
+						fmTelnetBody, _ = sjson.Set(fmTelnetBody, "fmTelnet.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmTelnetBody != "" {
+						fmTelnetBody, _ = sjson.Set(fmTelnetBody, "fmTelnet.attributes.rn", fmTelnetRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmTelnetBody)
+					}
+				}
+			}
+			if !(data.Udld.IsNull()) {
+				fmUdldRn := "udld"
+				fmUdldDn := fmEntityDn + "/" + fmUdldRn
+				_ = fmUdldDn
+				{
+					fmUdldBody := ""
+					if !data.Udld.IsNull() {
+						fmUdldBody, _ = sjson.Set(fmUdldBody, "fmUdld.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmUdldBody != "" {
+						fmUdldBody, _ = sjson.Set(fmUdldBody, "fmUdld.attributes.rn", fmUdldRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmUdldBody)
+					}
+				}
+			}
+			if !(data.VnSegment.IsNull()) {
+				fmVnSegmentRn := "vnsegment"
+				fmVnSegmentDn := fmEntityDn + "/" + fmVnSegmentRn
+				_ = fmVnSegmentDn
+				{
+					fmVnSegmentBody := ""
+					if !data.VnSegment.IsNull() {
+						fmVnSegmentBody, _ = sjson.Set(fmVnSegmentBody, "fmVnSegment.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmVnSegmentBody != "" {
+						fmVnSegmentBody, _ = sjson.Set(fmVnSegmentBody, "fmVnSegment.attributes.rn", fmVnSegmentRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmVnSegmentBody)
+					}
+				}
+			}
+			if !(data.Vpc.IsNull()) {
+				fmVpcRn := "vpc"
+				fmVpcDn := fmEntityDn + "/" + fmVpcRn
+				_ = fmVpcDn
+				{
+					fmVpcBody := ""
+					if !data.Vpc.IsNull() {
+						fmVpcBody, _ = sjson.Set(fmVpcBody, "fmVpc.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmVpcBody != "" {
+						fmVpcBody, _ = sjson.Set(fmVpcBody, "fmVpc.attributes.rn", fmVpcRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmVpcBody)
+					}
+				}
+			}
+			if !(data.Vtp.IsNull()) {
+				fmVtpRn := "vtp"
+				fmVtpDn := fmEntityDn + "/" + fmVtpRn
+				_ = fmVtpDn
+				{
+					fmVtpBody := ""
+					if !data.Vtp.IsNull() {
+						fmVtpBody, _ = sjson.Set(fmVtpBody, "fmVtp.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmVtpBody != "" {
+						fmVtpBody, _ = sjson.Set(fmVtpBody, "fmVtp.attributes.rn", fmVtpRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmVtpBody)
+					}
+				}
+			}
+			if fmEntityBody != "" {
+				fmEntityBody, _ = sjson.Set(fmEntityBody, "fmEntity.attributes.rn", fmEntityRn)
+				body, _ = sjson.SetRaw(body, "topSystem.children.-1", fmEntityBody)
+			}
+		}
+	}
+	for key, child := range data.FeatureSets {
+		_ = child
+		fsetFeatureSetRn := child.getRn(key)
+		fsetFeatureSetDn := dn + "/" + fsetFeatureSetRn
+		_ = fsetFeatureSetDn
+		if !existed(fsetFeatureSetDn) {
+			body, _ = sjson.Set(body, "topSystem.children.-1.fsetFeatureSet.attributes", map[string]interface{}{"rn": fsetFeatureSetRn, "status": "deleted"})
+			continue
+		}
+		fsetFeatureSetBody := ""
+		fsetFeatureSetBody, _ = sjson.Set(fsetFeatureSetBody, "fsetFeatureSet.attributes.rn", fsetFeatureSetRn)
+		if !child.AdminState.IsNull() {
+			fsetFeatureSetBody, _ = sjson.Set(fsetFeatureSetBody, "fsetFeatureSet.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		body, _ = sjson.SetRaw(body, "topSystem.children.-1", fsetFeatureSetBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data Feature) toBodyWithDeletes(ctx context.Context, state Feature, config Feature, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath

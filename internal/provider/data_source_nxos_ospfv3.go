@@ -403,7 +403,8 @@ func (d *OSPFv3DataSource) Read(ctx context.Context, req datasource.ReadRequest,
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"ospfv3Inst", "ospfv3Dom", "ospfv3Area", "ospfv3AreaAf", "ospfv3InterAreaRtSum", "ospfv3DomAf", "ospfv3InterLeakP", "ospfv3DefRtLeakP", "ospfv3SpfComp", "ospfv3ExtRtSum", "ospfv3LsaCtrl", "ospfv3Gr", "ospfv3If"}, OSPFv3SubtreeClassMinVersions)
+
+	res, err := getOSPFv3Tree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

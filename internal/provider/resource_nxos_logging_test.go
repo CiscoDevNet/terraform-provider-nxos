@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosLogging(t *testing.T) {
+// TestAccLoggingResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccLoggingResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "all", "unspecified"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "level", "information"))
@@ -62,38 +66,87 @@ func TestAccNxosLogging(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "console_severity", "warnings"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "origin_id_type", "string"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "origin_id_value", "SWITCH1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "facilities.spanning-tree.level", "information"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "file_admin_state", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "file_description", "syslog file"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "file_name", "messages"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "file_persistent_threshold", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "file_severity", "warnings"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "file_size", "4194304"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "remote_destinations.10.0.0.1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "remote_destinations.10.0.0.1.description", "remote syslog server"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "remote_destinations.10.0.0.1.name", "server1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "remote_destinations.10.0.0.1.port", "514"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "remote_destinations.10.0.0.1.transport", "udp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "remote_destinations.10.0.0.1.trustpoint_client_identity", "my-trustpoint"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "remote_destinations.10.0.0.1.vrf_name", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "remote_destinations.10.0.0.1.severity", "warnings"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "remote_destinations.10.0.0.1.forwarding_facility", "local7"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "source_interface_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "source_interface_name", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "timestamp_format", "milliseconds"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "monitor_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "monitor_severity", "warnings"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "console_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "console_severity", "warnings"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "origin_id_type", "string"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "origin_id_value", "SWITCH1"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccLoggingResourceConfig_minimum(),
+		},
+		{
+			Config: testAccLoggingResourceConfig_all() + testAccLoggingResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_logging.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccLoggingResourceImportStateIdFunc("nxos_logging.test"),
+		},
+		{
+			ResourceName:       "nxos_logging.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccLoggingResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccWithDeletionPolicy(testAccLoggingResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_logging.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccNoResourcesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccLoggingResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosLoggingConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_logging.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosLoggingImportStateIdFunc("nxos_logging.test"),
-			},
-			{
-				ResourceName:       "nxos_logging.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosLoggingImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccLoggingResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -107,7 +160,7 @@ func nxosLoggingImportStateIdFunc(resourceName string) resource.ImportStateIdFun
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosLoggingConfig_minimum() string {
+func testAccLoggingResourceConfig_minimum() string {
 	config := `resource "nxos_logging" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
@@ -116,7 +169,7 @@ func testAccNxosLoggingConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosLoggingConfig_all() string {
+func testAccLoggingResourceConfig_all() string {
 	config := `resource "nxos_logging" "test" {` + "\n"
 	config += `	all = "unspecified"` + "\n"
 	config += `	level = "information"` + "\n"
@@ -155,6 +208,14 @@ func testAccNxosLoggingConfig_all() string {
 	config += `	origin_id_value = "SWITCH1"` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccLoggingResourceConfig_dataSource() string {
+	return `
+data "nxos_logging" "test" {
+	depends_on = [nxos_logging.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

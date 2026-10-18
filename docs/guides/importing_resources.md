@@ -17,6 +17,8 @@ Because a singleton resource manages every object of its type on a device, impor
 
 This is expected and safe: Terraform simply stops tracking anything you haven't declared, and nothing is changed on the device for it. Only the objects and attributes you explicitly configure are ever modified. A warning is included in the plan output as a reminder of this, and it will not appear again once you apply.
 
+Destroying an imported resource later may still remove configuration that is not declared, depending on its `deletion_policy`. See the [Deletion Policy](deletion_policy) guide for details.
+
 ## String-Based Import
 
 An example for importing a resource using the `terraform import` command with a string-based ID is shown below. Assuming we have the following resource in our configuration:

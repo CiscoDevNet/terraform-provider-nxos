@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosICMPv6(t *testing.T) {
+// TestAccICMPv6Resource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccICMPv6Resource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv6.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv6.test", "adjacency_stale_timer", "500"))
@@ -43,38 +47,70 @@ func TestAccNxosICMPv6(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv6.test", "redirect_syslog", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv6.test", "redirect_syslog_interval", "120"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_icmpv6.test", "interfaces.vlan10.control", "unreachables"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv6.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv6.test", "adjacency_stale_timer", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv6.test", "adjacency_stale_timer_icmp", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv6.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv6.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv6.test", "redirect_syslog", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv6.test", "redirect_syslog_interval", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_icmpv6.test", "interfaces.vlan10.control", "unreachables"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccICMPv6ResourcePrerequisitesConfig + testAccICMPv6ResourceConfig_minimum(),
+		},
+		{
+			Config: testAccICMPv6ResourcePrerequisitesConfig + testAccICMPv6ResourceConfig_all() + testAccICMPv6ResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_icmpv6.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccICMPv6ResourceImportStateIdFunc("nxos_icmpv6.test"),
+		},
+		{
+			ResourceName:       "nxos_icmpv6.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccICMPv6ResourcePrerequisitesConfig + testAccICMPv6ResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccICMPv6ResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccICMPv6ResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_icmpv6.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccICMPv6ResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccICMPv6ResourcePrerequisitesConfig + testAccICMPv6ResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosICMPv6PrerequisitesConfig + testAccNxosICMPv6Config_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_icmpv6.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosICMPv6ImportStateIdFunc("nxos_icmpv6.test"),
-			},
-			{
-				ResourceName:       "nxos_icmpv6.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosICMPv6ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccICMPv6ResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -84,7 +120,7 @@ func nxosICMPv6ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosICMPv6PrerequisitesConfig = `
+const testAccICMPv6ResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/ifvlan"
   class_name = "fmInterfaceVlan"
@@ -108,7 +144,7 @@ resource "nxos_dme" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosICMPv6Config_minimum() string {
+func testAccICMPv6ResourceConfig_minimum() string {
 	config := `resource "nxos_icmpv6" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
@@ -118,7 +154,7 @@ func testAccNxosICMPv6Config_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosICMPv6Config_all() string {
+func testAccICMPv6ResourceConfig_all() string {
 	config := `resource "nxos_icmpv6" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	adjacency_stale_timer = 500` + "\n"
@@ -135,6 +171,14 @@ func testAccNxosICMPv6Config_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccICMPv6ResourceConfig_dataSource() string {
+	return `
+data "nxos_icmpv6" "test" {
+	depends_on = [nxos_icmpv6.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

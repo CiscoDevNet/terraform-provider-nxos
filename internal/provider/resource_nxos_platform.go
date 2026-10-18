@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"maps"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -56,6 +57,12 @@ type PlatformResource struct {
 	data *NxosProviderData
 }
 
+// PlatformResourceModel adds the attributes that only exist on the resource to the model shared with the data source.
+type PlatformResourceModel struct {
+	Platform
+	DeletionPolicy types.String `tfsdk:"deletion_policy"`
+}
+
 func (r *PlatformResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_platform"
 }
@@ -75,6 +82,13 @@ func (r *PlatformResource) Schema(ctx context.Context, req resource.SchemaReques
 				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"deletion_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("What happens on the device when objects managed by the resource are removed. `delete` deletes the object on destroy, including any configuration not managed by Terraform, and deletes single child objects once none of their attributes are configured anymore, unless the device holds other entries below them. `reset` deletes the objects created by the resource on destroy, resets the managed attributes of the objects that already existed and leaves configuration not managed by Terraform in place. `retain` leaves the device unchanged on destroy and only removes the resource from the state. Overrides the `deletion_policy` of the provider, which defaults to `delete`. See the [Deletion Policy](../guides/deletion_policy) guide for details.").AddStringEnumDescription("delete", "reset", "retain").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("delete", "reset", "retain"),
 				},
 			},
 			"access_list_match_inner_header": schema.StringAttribute{
@@ -2207,6 +2221,14 @@ func (r *PlatformResource) Configure(ctx context.Context, req resource.Configure
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
+// deletionPolicy returns the deletion policy of the resource, or the one of the provider if the resource does not set one.
+func (r *PlatformResource) deletionPolicy(policy types.String) string {
+	if policy.IsNull() || policy.IsUnknown() {
+		return r.data.DeletionPolicy
+	}
+	return policy.ValueString()
+}
+
 // ModifyPlan rejects configurations using objects not supported by the NX-OS version of the device,
 // so that the error surfaces during plan rather than apply. It also forces a recompute during the
 // leniency window that follows an import, so that Update always runs (and clears the `importing`
@@ -2221,10 +2243,10 @@ func (r *PlatformResource) ModifyPlan(ctx context.Context, req resource.ModifyPl
 	// The check is skipped if the plan cannot be fully evaluated yet (e.g. unknown map keys or device);
 	// Create and Update repeat it before sending the request.
 	if len(PlatformMinVersions) > 0 && r.data != nil {
-		var plan, config Platform
+		var plan, config PlatformResourceModel
 		if !req.Plan.Get(ctx, &plan).HasError() && !req.Config.Get(ctx, &config).HasError() && !plan.Device.IsUnknown() {
 			if device, ok := r.data.Devices[plan.Device.ValueString()]; ok && device.Managed {
-				resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), plan.toBody(config).Str, PlatformMinVersions)...)
+				resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), plan.toBody(config.Platform).Str, PlatformMinVersions)...)
 				if resp.Diagnostics.HasError() {
 					return
 				}
@@ -2249,7 +2271,7 @@ func (r *PlatformResource) ModifyPlan(ctx context.Context, req resource.ModifyPl
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
 func (r *PlatformResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan Platform
+	var plan PlatformResourceModel
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -2259,7 +2281,7 @@ func (r *PlatformResource) Create(ctx context.Context, req resource.CreateReques
 	}
 
 	// Read config
-	var config Platform
+	var config PlatformResourceModel
 	diags = req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
@@ -2275,13 +2297,21 @@ func (r *PlatformResource) Create(ctx context.Context, req resource.CreateReques
 	}
 
 	// Post object
+	var preexisting map[string]bool
 	if device.Managed {
-		body := plan.toBody(config)
+		body := plan.toBody(config.Platform)
 		resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), body.Str, PlatformMinVersions)...)
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := helpers.PostSeparate(device.Client, plan.getDn(), body.Str, PlatformSeparateRequest)
+		// Record which of the managed objects already exist, for the reset deletion policy
+		res, err := getPlatformTree(ctx, device, plan.getDn())
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+			return
+		}
+		preexisting = helpers.FilterExisting(plan.managedDns(), helpers.ReadTree(res, plan.getDn()).Dns())
+		_, err = helpers.PostSeparate(device.Client, plan.getDn(), body.Str, PlatformSeparateRequest)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 			return
@@ -2290,7 +2320,7 @@ func (r *PlatformResource) Create(ctx context.Context, req resource.CreateReques
 
 	plan.Dn = types.StringValue(plan.getDn())
 	var identity PlatformIdentity
-	identity.toIdentity(ctx, &plan)
+	identity.toIdentity(ctx, &plan.Platform)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
@@ -2299,6 +2329,9 @@ func (r *PlatformResource) Create(ctx context.Context, req resource.CreateReques
 	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
+	if preexisting != nil {
+		helpers.SetPreexisting(ctx, resp.Private, preexisting, &resp.Diagnostics)
+	}
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
@@ -2306,7 +2339,7 @@ func (r *PlatformResource) Create(ctx context.Context, req resource.CreateReques
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
 func (r *PlatformResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state Platform
+	var state PlatformResourceModel
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -2334,7 +2367,7 @@ func (r *PlatformResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformDlbEntity", "platformDlbStaticPinning", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
+		res, err := getPlatformTree(ctx, device, state.Dn.ValueString())
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return
@@ -2351,6 +2384,8 @@ func (r *PlatformResource) Read(ctx context.Context, req resource.ReadRequest, r
 		}
 		if imp {
 			state.fromBody(res)
+			// Everything that was imported already existed on the device
+			helpers.SetPreexisting(ctx, resp.Private, state.managedDns(), &resp.Diagnostics)
 			// Warn here rather than in ModifyPlan: Terraform reuses this same refresh for both the
 			// preview plan and the plan it recomputes right before applying, so Read only runs once
 			// per operation - unlike ModifyPlan, which runs (and would warn) twice.
@@ -2366,7 +2401,7 @@ func (r *PlatformResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 
 	var identity PlatformIdentity
-	identity.toIdentity(ctx, &state)
+	identity.toIdentity(ctx, &state.Platform)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
@@ -2380,7 +2415,7 @@ func (r *PlatformResource) Read(ctx context.Context, req resource.ReadRequest, r
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
 func (r *PlatformResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan Platform
+	var plan PlatformResourceModel
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -2390,14 +2425,14 @@ func (r *PlatformResource) Update(ctx context.Context, req resource.UpdateReques
 	}
 
 	// Read config
-	var config Platform
+	var config PlatformResourceModel
 	diags = req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	var state Platform
+	var state PlatformResourceModel
 
 	// Read state
 	diags = req.State.Get(ctx, &state)
@@ -2420,8 +2455,54 @@ func (r *PlatformResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
+	var preexisting map[string]bool
 	if device.Managed {
-		body := plan.toBodyWithDeletes(ctx, state, config, imp)
+		// Keep track of which managed objects already existed, for the reset deletion policy. State written
+		// before this was recorded has an unknown history, so all of its objects are assumed to have existed.
+		preexisting, diags = helpers.GetPreexisting(ctx, req.Private)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		stateDns := state.managedDns()
+		if preexisting == nil {
+			preexisting = maps.Clone(stateDns)
+		}
+		planDns := plan.managedDns()
+		added := map[string]bool{}
+		for dn := range planDns {
+			if !stateDns[dn] {
+				added[dn] = true
+			}
+		}
+		removed := false
+		for dn := range stateDns {
+			if !planDns[dn] {
+				removed = true
+				break
+			}
+		}
+		deletePolicy := r.deletionPolicy(plan.DeletionPolicy) == "delete"
+		var tree helpers.Tree
+		if len(added) > 0 || (deletePolicy && removed) {
+			res, err := getPlatformTree(ctx, device, plan.getDn())
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+				return
+			}
+			tree = helpers.ReadTree(res, plan.getDn())
+		}
+		for dn := range helpers.FilterExisting(added, tree.Dns()) {
+			preexisting[dn] = true
+		}
+		// Objects no longer managed are forgotten, they are deleted or reset by this update
+		preexisting = helpers.FilterExisting(preexisting, planDns)
+		// With the delete policy, single child objects without configured attributes or children are deleted,
+		// unless the device holds list entries below them that are not managed by the resource
+		var deleteEmptied func(dn string) bool
+		if deletePolicy && removed {
+			deleteEmptied = func(dn string) bool { return !tree.HasUnmanagedEntries(dn, stateDns, PlatformListClasses) }
+		}
+		body := plan.toBodyWithDeletes(ctx, state.Platform, config.Platform, imp, deleteEmptied)
 		resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), body.Str, PlatformMinVersions)...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -2435,7 +2516,7 @@ func (r *PlatformResource) Update(ctx context.Context, req resource.UpdateReques
 
 	plan.Dn = types.StringValue(plan.getDn())
 	var identity PlatformIdentity
-	identity.toIdentity(ctx, &plan)
+	identity.toIdentity(ctx, &plan.Platform)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
 
@@ -2444,6 +2525,10 @@ func (r *PlatformResource) Update(ctx context.Context, req resource.UpdateReques
 	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
+	if preexisting != nil {
+		helpers.SetPreexisting(ctx, resp.Private, preexisting, &resp.Diagnostics)
+	}
+
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
@@ -2451,7 +2536,7 @@ func (r *PlatformResource) Update(ctx context.Context, req resource.UpdateReques
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
 func (r *PlatformResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state Platform
+	var state PlatformResourceModel
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -2468,10 +2553,18 @@ func (r *PlatformResource) Delete(ctx context.Context, req resource.DeleteReques
 		return
 	}
 
-	if device.Managed {
+	deletionPolicy := r.deletionPolicy(state.DeletionPolicy)
+	if device.Managed && deletionPolicy != "retain" {
 		body := state.toDeleteBody()
+		if deletionPolicy == "reset" {
+			preexisting, diags := helpers.GetPreexisting(ctx, req.Private)
+			if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+				return
+			}
+			body = state.toResetBody(preexisting)
+		}
 		if len(body.Str) > 0 {
-			_, err := helpers.PostSeparate(device.Client, state.getDn(), body.Str, helpers.SeparateRequest{Attributes: PlatformSeparateRequest.Attributes})
+			_, err := helpers.PostSeparate(device.Client, state.getDn(), body.Str, helpers.SeparateRequest{Attributes: PlatformSeparateRequest.Attributes, Keys: PlatformSeparateRequest.Keys})
 			if err != nil {
 				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to delete object, got error: %s", err))
 				return
@@ -2516,7 +2609,7 @@ func (r *PlatformResource) ImportState(ctx context.Context, req resource.ImportS
 		}
 	}
 
-	var state Platform
+	var state PlatformResourceModel
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

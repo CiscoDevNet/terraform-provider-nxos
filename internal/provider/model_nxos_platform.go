@@ -407,7 +407,8 @@ var PlatformSubtreeClassMinVersions = map[string]string{}
 var PlatformMinVersions = map[string]helpers.MinVersion{}
 
 // PlatformSeparateRequest lists the classes and attributes that are sent in a second request after the rest of the body,
-// together with the values that reset the attributes before their object is deleted.
+// together with the values that reset the attributes when they are removed or before their object is deleted, and the
+// attributes identifying the objects of each class.
 var PlatformSeparateRequest = helpers.SeparateRequest{
 	Attributes: map[string]map[string]string{
 		"platformUdf": {
@@ -422,6 +423,22 @@ var PlatformSeparateRequest = helpers.SeparateRequest{
 			"qualifyVacl":     "DME_UNSET_PROPERTY_MARKER",
 		},
 	},
+	Keys: map[string][]string{
+		"platformNVE":              {"id"},
+		"platformInfraVlan":        {"id"},
+		"platformDlbStaticPinning": {"srcInterface"},
+		"platformTcamTemplate":     {"name"},
+		"platformUdfTcamTemplate":  {"udfTcamType", "udfName"},
+		"platformUdf":              {"name"},
+	},
+}
+
+// PlatformListClasses holds the list child classes of the resource.
+var PlatformListClasses = map[string]bool{"platformNVE": true, "platformInfraVlan": true, "platformDlbStaticPinning": true, "platformTcamTemplate": true, "platformUdfTcamTemplate": true, "platformUdf": true}
+
+// getPlatformTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getPlatformTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformDlbEntity", "platformDlbStaticPinning", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, PlatformSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -4858,7 +4875,1202 @@ func (data Platform) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, config Platform, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data Platform) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.TcamRegionArpAclSize.IsNull() && data.TcamRegionCoppSize.IsNull() && data.TcamRegionCoppSystemSize.IsNull() && data.TcamRegionEgressIpv6QosSize.IsNull() && data.TcamRegionEgressIpv6RaclSize.IsNull() && data.TcamRegionEgressMacQosSize.IsNull() && data.TcamRegionEgressQosLiteSize.IsNull() && data.TcamRegionEgressQosSize.IsNull() && data.TcamRegionEgressRaclSize.IsNull() && data.TcamRegionEgressVaclSize.IsNull() && data.TcamRegionFcoeEgressSize.IsNull() && data.TcamRegionFcoeIngressSize.IsNull() && data.TcamRegionFhsSize.IsNull() && data.TcamRegionInterfaceAclLiteSize.IsNull() && data.TcamRegionInterfaceAclSize.IsNull() && data.TcamRegionInterfaceAclUdfSize.IsNull() && data.TcamRegionIngressFlowRedirectSize.IsNull() && data.TcamRegionIngressFlowSize.IsNull() && data.TcamRegionIpsgSize.IsNull() && data.TcamRegionIpv6InterfaceAclSize.IsNull() && data.TcamRegionIpv6L3QosSize.IsNull() && data.TcamRegionIpv6PbrSize.IsNull() && data.TcamRegionIpv6QosSize.IsNull() && data.TcamRegionIpv6RaclSize.IsNull() && data.TcamRegionIpv6SpanL2Size.IsNull() && data.TcamRegionIpv6SpanSize.IsNull() && data.TcamRegionIpv6SupSize.IsNull() && data.TcamRegionIpv6VaclSize.IsNull() && data.TcamRegionIpv6VlanQosSize.IsNull() && data.TcamRegionL3QosIntraLiteSize.IsNull() && data.TcamRegionMacInterfaceAclSize.IsNull() && data.TcamRegionMacL3QosSize.IsNull() && data.TcamRegionMacQosSize.IsNull() && data.TcamRegionMacVaclSize.IsNull() && data.TcamRegionMacVlanQosSize.IsNull() && data.TcamRegionMulticastBidirSize.IsNull() && data.TcamRegionMplsDoublewide.IsNull() && data.TcamRegionMplsSize.IsNull() && data.TcamRegionMvpnSize.IsNull() && data.TcamRegionN9kArpAclSize.IsNull() && data.TcamRegionNatSize.IsNull() && data.TcamRegionOpenflowDoublewide.IsNull() && data.TcamRegionOpenflowLiteSize.IsNull() && data.TcamRegionOpenflowSize.IsNull() && data.TcamRegionPbrSize.IsNull() && data.TcamRegionQosIntraLiteSize.IsNull() && data.TcamRegionQosSize.IsNull() && data.TcamRegionQosLabelSize.IsNull() && data.TcamRegionRaclLiteSize.IsNull() && data.TcamRegionRaclSize.IsNull() && data.TcamRegionRaclUdfSize.IsNull() && data.TcamRegionSupSize.IsNull() && data.TcamRegionSviSize.IsNull() && data.TcamRegionTcpNatSize.IsNull() && data.TcamRegionVaclLiteSize.IsNull() && data.TcamRegionVaclSize.IsNull() && data.TcamRegionVpcConvergenceSize.IsNull() && data.TcamRegionVlanQosIntraLiteSize.IsNull() && data.TcamRegionVlanQosSize.IsNull() && data.TcamRegionVxlanP2pSize.IsNull() && (data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats.IsNull() && data.TcamRegionExtendedEgressInterfaceAclAllSize.IsNull() && data.TcamRegionExtendedEgressIpv6RaclPerPortStats.IsNull() && data.TcamRegionExtendedEgressRaclPerPortStats.IsNull() && data.TcamRegionExtendedEgressCoppSize.IsNull() && data.TcamRegionExtendedEgressFlowSize.IsNull() && data.TcamRegionExtendedEgressHardwareTelemetrySize.IsNull() && data.TcamRegionExtendedEgressInterfaceAclSize.IsNull() && data.TcamRegionExtendedEgressL2QosSize.IsNull() && data.TcamRegionExtendedEgressL3VlanQosSize.IsNull() && data.TcamRegionExtendedEgressRaclSize.IsNull() && data.TcamRegionExtendedEgressSupSize.IsNull() && data.TcamRegionExtendedHardwareTelemetrySize.IsNull() && data.TcamRegionExtendedInterfaceAclAllPerPortStats.IsNull() && data.TcamRegionExtendedInterfaceAclAllProfile.IsNull() && data.TcamRegionExtendedInterfaceAclAllSize.IsNull() && data.TcamRegionExtendedInterfaceAclPerPortStats.IsNull() && data.TcamRegionExtendedIngressDaclSize.IsNull() && data.TcamRegionExtendedIngressInterfaceAclSize.IsNull() && data.TcamRegionExtendedIngressInterfaceAclWideSize.IsNull() && data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize.IsNull() && data.TcamRegionExtendedIngressL2L3QosSize.IsNull() && data.TcamRegionExtendedIngressL2QosSize.IsNull() && data.TcamRegionExtendedIngressL2SpanFilterSize.IsNull() && data.TcamRegionExtendedIngressL3SpanFilterSize.IsNull() && data.TcamRegionExtendedIngressPaclSbSize.IsNull() && data.TcamRegionExtendedIngressRaclSize.IsNull() && data.TcamRegionExtendedIngressRbaclSize.IsNull() && data.TcamRegionExtendedIngressRedirectSize.IsNull() && data.TcamRegionExtendedIngressStormControlSize.IsNull() && data.TcamRegionExtendedIngressSupSize.IsNull() && data.TcamRegionExtendedIngressVaclNhSize.IsNull() && data.TcamRegionExtendedIngressVlanQosSize.IsNull() && data.TcamRegionExtendedIpv6InterfaceAclPerPortStats.IsNull() && data.TcamRegionExtendedIpv6RaclPerPortStats.IsNull() && data.TcamRegionExtendedMacInterfaceAclPerPortStats.IsNull() && data.TcamRegionExtendedMulticastNatSize.IsNull() && data.TcamRegionExtendedMulticastNbmSize.IsNull() && data.TcamRegionExtendedRaclAllPerPortStats.IsNull() && data.TcamRegionExtendedRaclAllProfile.IsNull() && data.TcamRegionExtendedRaclAllSize.IsNull() && data.TcamRegionExtendedRaclPerPortStats.IsNull() && data.TcamRegionExtendedRedirectV4Size.IsNull() && data.TcamRegionExtendedSpanSize.IsNull() && data.TcamRegionExtendedSpanTahoeSize.IsNull())) {
+		platformTcamRegionDn := dn + "/" + "tcamRegion"
+		dns[platformTcamRegionDn] = true
+		if !(data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats.IsNull() && data.TcamRegionExtendedEgressInterfaceAclAllSize.IsNull() && data.TcamRegionExtendedEgressIpv6RaclPerPortStats.IsNull() && data.TcamRegionExtendedEgressRaclPerPortStats.IsNull() && data.TcamRegionExtendedEgressCoppSize.IsNull() && data.TcamRegionExtendedEgressFlowSize.IsNull() && data.TcamRegionExtendedEgressHardwareTelemetrySize.IsNull() && data.TcamRegionExtendedEgressInterfaceAclSize.IsNull() && data.TcamRegionExtendedEgressL2QosSize.IsNull() && data.TcamRegionExtendedEgressL3VlanQosSize.IsNull() && data.TcamRegionExtendedEgressRaclSize.IsNull() && data.TcamRegionExtendedEgressSupSize.IsNull() && data.TcamRegionExtendedHardwareTelemetrySize.IsNull() && data.TcamRegionExtendedInterfaceAclAllPerPortStats.IsNull() && data.TcamRegionExtendedInterfaceAclAllProfile.IsNull() && data.TcamRegionExtendedInterfaceAclAllSize.IsNull() && data.TcamRegionExtendedInterfaceAclPerPortStats.IsNull() && data.TcamRegionExtendedIngressDaclSize.IsNull() && data.TcamRegionExtendedIngressInterfaceAclSize.IsNull() && data.TcamRegionExtendedIngressInterfaceAclWideSize.IsNull() && data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize.IsNull() && data.TcamRegionExtendedIngressL2L3QosSize.IsNull() && data.TcamRegionExtendedIngressL2QosSize.IsNull() && data.TcamRegionExtendedIngressL2SpanFilterSize.IsNull() && data.TcamRegionExtendedIngressL3SpanFilterSize.IsNull() && data.TcamRegionExtendedIngressPaclSbSize.IsNull() && data.TcamRegionExtendedIngressRaclSize.IsNull() && data.TcamRegionExtendedIngressRbaclSize.IsNull() && data.TcamRegionExtendedIngressRedirectSize.IsNull() && data.TcamRegionExtendedIngressStormControlSize.IsNull() && data.TcamRegionExtendedIngressSupSize.IsNull() && data.TcamRegionExtendedIngressVaclNhSize.IsNull() && data.TcamRegionExtendedIngressVlanQosSize.IsNull() && data.TcamRegionExtendedIpv6InterfaceAclPerPortStats.IsNull() && data.TcamRegionExtendedIpv6RaclPerPortStats.IsNull() && data.TcamRegionExtendedMacInterfaceAclPerPortStats.IsNull() && data.TcamRegionExtendedMulticastNatSize.IsNull() && data.TcamRegionExtendedMulticastNbmSize.IsNull() && data.TcamRegionExtendedRaclAllPerPortStats.IsNull() && data.TcamRegionExtendedRaclAllProfile.IsNull() && data.TcamRegionExtendedRaclAllSize.IsNull() && data.TcamRegionExtendedRaclPerPortStats.IsNull() && data.TcamRegionExtendedRedirectV4Size.IsNull() && data.TcamRegionExtendedSpanSize.IsNull() && data.TcamRegionExtendedSpanTahoeSize.IsNull()) {
+			platformTcamRegionExtendedDn := platformTcamRegionDn + "/" + "tcamregionextd"
+			dns[platformTcamRegionExtendedDn] = true
+		}
+	}
+	for key, child := range data.NveInterfaces {
+		platformNVEDn := dn + "/" + child.getRn(key)
+		dns[platformNVEDn] = true
+		for key_, child_ := range child.InfraVlans {
+			platformInfraVlanDn_ := platformNVEDn + "/" + child_.getRn(key_)
+			dns[platformInfraVlanDn_] = true
+		}
+	}
+	if !(data.ExtendedAclDisableRedirectShare.IsNull() && data.ExtendedAtomicUpdate.IsNull() && data.ExtendedAtomicUpdateStrict.IsNull() && data.ExtendedCounterManagerBfdScale.IsNull() && data.ExtendedCounterManagerEcnScale.IsNull() && data.ExtendedCounterManagerEgressAclScale.IsNull() && data.ExtendedCounterManagerFeatureBfd.IsNull() && data.ExtendedCounterManagerFeatureEcn.IsNull() && data.ExtendedCounterManagerFeatureEgressAcl.IsNull() && data.ExtendedCounterManagerFeatureIngressAcl.IsNull() && data.ExtendedCounterManagerFeatureL2vni.IsNull() && data.ExtendedCounterManagerFeatureL3vni.IsNull() && data.ExtendedCounterManagerFeatureSi.IsNull() && data.ExtendedCounterManagerFeatureSvi.IsNull() && data.ExtendedCounterManagerFeatureTunnel.IsNull() && data.ExtendedCounterManagerFeatureVlan.IsNull() && data.ExtendedCounterManagerFeatureVoq.IsNull() && data.ExtendedCounterManagerIngressAclScale.IsNull() && data.ExtendedCounterManagerL2vniScale.IsNull() && data.ExtendedCounterManagerL3vniScale.IsNull() && data.ExtendedCounterManagerSiScale.IsNull() && data.ExtendedCounterManagerSviScale.IsNull() && data.ExtendedCounterManagerTunnelScale.IsNull() && data.ExtendedCounterManagerVlanScale.IsNull() && data.ExtendedCounterManagerVoqScale.IsNull() && data.ExtendedDmeLoadInterval.IsNull() && data.ExtendedEgressL2QosIfaclLabelSize.IsNull() && data.ExtendedGpe5TimerEnable.IsNull() && data.ExtendedHardwareQosLatencyOptimized.IsNull() && data.ExtendedIngressPaclIfaclLabelSize.IsNull() && data.ExtendedIngressVrfNatBdLabelWidth.IsNull() && data.ExtendedMulticastNlbStickPortChannel.IsNull() && data.ExtendedMulticastStatsDisable.IsNull() && data.ExtendedMplsQosPipeMode.IsNull() && data.ExtendedMulticastPriority.IsNull() && data.ExtendedPbrEcmpPaths.IsNull() && data.ExtendedPbrFastConvergence.IsNull() && data.ExtendedPbrMatchDefaultRoute.IsNull() && data.ExtendedPtpCorrectionHardware.IsNull() && data.ExtendedSiFlexStats.IsNull() && data.ExtendedStatsTemplate.IsNull() && data.ExtendedStormControlPriority.IsNull() && data.ExtendedTcamDefaultResult.IsNull() && data.ExtendedUdfNetflowRtpMulticastEnabled.IsNull() && data.ExtendedVrfAwareNatEnable.IsNull()) {
+		platformEntityExtendedDn := dn + "/" + "entityextd"
+		dns[platformEntityExtendedDn] = true
+	}
+	if !(data.PortChannelLoadBalanceConcatenation.IsNull() && data.PortChannelLoadBalanceEncapsulation.IsNull() && data.PortChannelLoadBalanceFex.IsNull() && data.PortChannelLoadBalanceFields.IsNull() && data.PortChannelLoadBalanceMplsLabelIp.IsNull() && data.PortChannelLoadBalanceMplsLabelOnly.IsNull() && data.PortChannelLoadBalanceRotate.IsNull() && data.PortChannelLoadBalanceSymmetry.IsNull()) {
+		platformLoadBalanceDn := dn + "/" + "pclb"
+		dns[platformLoadBalanceDn] = true
+	}
+	if !(data.DlbAllowAllInterfaces.IsNull() && data.DlbDecayFactor.IsNull() && data.DlbDescription.IsNull() && data.DlbDreThresholdLevel1.IsNull() && data.DlbDreThresholdLevel2.IsNull() && data.DlbDreThresholdLevel3.IsNull() && data.DlbDreThresholdLevel4.IsNull() && data.DlbDreThresholdLevel5.IsNull() && data.DlbDreThresholdLevel6.IsNull() && data.DlbDreThresholdLevel7.IsNull() && data.DlbEnabled.IsNull() && data.DlbFlowletAging.IsNull() && data.DlbInterfaces.IsNull() && data.DlbLoadAwareness.IsNull() && data.DlbMacAddress.IsNull() && data.DlbMode.IsNull() && data.DlbSamplingInterval.IsNull() && data.DlbStaticPinning.IsNull() && len(data.DlbStaticPinnings) == 0) {
+		platformDlbEntityDn := dn + "/" + "dlb"
+		dns[platformDlbEntityDn] = true
+		for key, child := range data.DlbStaticPinnings {
+			platformDlbStaticPinningDn := platformDlbEntityDn + "/" + child.getRn(key)
+			dns[platformDlbStaticPinningDn] = true
+		}
+	}
+	if !(data.PfcWatchdogAutoRestoreMultiplier.IsNull() && data.PfcWatchdogMode.IsNull() && data.PfcWatchdogFixedRestoreMultiplier.IsNull() && data.PfcWatchdogForcedOn.IsNull() && data.PfcWatchdogInternalInterfaceMultiplier.IsNull() && data.PfcWatchdogInterval.IsNull() && data.PfcWatchdogShutdownMultiplier.IsNull()) {
+		platformPriorFlowCtrlWdDn := dn + "/" + "priorflowctrlwd"
+		dns[platformPriorFlowCtrlWdDn] = true
+	}
+	if !(data.QosBufferPeakMonitorCounter0Class0.IsNull() && data.QosBufferPeakMonitorCounter0Class1.IsNull() && data.QosBufferPeakMonitorCounter0Class2.IsNull() && data.QosBufferPeakMonitorCounter0Class3.IsNull() && data.QosBufferPeakMonitorCounter0Class4.IsNull() && data.QosBufferPeakMonitorCounter0Class5.IsNull() && data.QosBufferPeakMonitorCounter0Class6.IsNull() && data.QosBufferPeakMonitorCounter0Class7.IsNull() && data.QosBurstDetectFallThresholdUnit.IsNull() && data.QosBurstDetectFallThreshold.IsNull() && data.QosBurstDetectMaxRecords.IsNull() && data.QosBurstDetectRiseThresholdUnit.IsNull() && data.QosBurstDetectRiseThreshold.IsNull() && data.QosClassifyNsOnly.IsNull() && data.QosCpuSize.IsNull() && data.QosDppAgePeriod.IsNull() && data.QosDppMaxPackets.IsNull() && data.QosDropPoolSize.IsNull() && data.QosEoqStatsClass.IsNull() && data.QosEtrapAgePeriod.IsNull() && data.QosEtrapBandwidthThreshold.IsNull() && data.QosEtrapByteCount.IsNull() && data.QosHeadroomSize.IsNull() && data.QosInputBufferPeak.IsNull() && data.QosIncludeIpg.IsNull() && data.QosLcpuSize.IsNull() && data.QosMacIpg.IsNull() && data.QosMulticastQosGroup3Traffic.IsNull() && data.QosNodropDynamicQueueLimit.IsNull() && data.QosNodropResumeOffset.IsNull() && data.QosNodropPgGreenThreshold.IsNull() && data.QosNodropPgRedThreshold.IsNull() && data.QosNodropPgSize.IsNull() && data.QosNodropPgSizeFx.IsNull() && data.QosNodropPgYellowThreshold.IsNull() && data.QosNodropPoolSize.IsNull() && data.QosNodropQueueGreenThreshold.IsNull() && data.QosNodropQueueGreenThresholdFx.IsNull() && data.QosNodropQueueYellowThreshold.IsNull() && data.QosNsBufferProfile.IsNull() && data.QosOutputQueueDropsType.IsNull() && data.QosPfcMulticastDrop.IsNull() && data.QosPfcStatic.IsNull() && data.QosPgHeadroomReserve.IsNull() && data.QosPgMinValue.IsNull() && data.QosPgNoMin.IsNull() && data.QosPgShare.IsNull() && data.QosQueueNoisePercent.IsNull() && data.QosAfdProfile.IsNull() && data.QosSpanSize.IsNull()) {
+		platformQosDn := dn + "/" + "qos"
+		dns[platformQosDn] = true
+	}
+	for key, child := range data.TcamTemplates {
+		platformTcamTemplateDn := dn + "/" + child.getRn(key)
+		dns[platformTcamTemplateDn] = true
+		for key_, child_ := range child.Udfs {
+			keyParts := strings.SplitN(key_, ";", 2)
+			_ = keyParts
+			platformUdfTcamTemplateDn_ := platformTcamTemplateDn + "/" + child_.getRn(key_)
+			dns[platformUdfTcamTemplateDn_] = true
+		}
+	}
+	if !(data.UdfDescription.IsNull() && len(data.Udfs) == 0) {
+		platformUdfEntityDn := dn + "/" + "udf"
+		dns[platformUdfEntityDn] = true
+		for key, child := range data.Udfs {
+			platformUdfDn := platformUdfEntityDn + "/" + child.getRn(key)
+			dns[platformUdfDn] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data Platform) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if !data.AccessListMatchInnerHeader.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.accessListMatchInnerHeader", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.AclTapAggregation.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.aclTapAggregation", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Description.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.DisableParseError.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.disParseErr", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Dot1qTunnelTransitRange.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.dot1qTunnelTransitRange", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.GlobalTxSpan.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.globalTxSpan", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.HighMulticastPriority.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.highMulticastPriority", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.HardwareLouResourceThreshold.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.hwLouResThreshold", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.IngressBdIfaclLabelOptimization.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.iBdIfaclLblOpt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.IngressRaclSize.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.iRaclSize", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.IngressReplicationRoundRobin.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.ingRepRoundRobin", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.IpStatistics.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.ipStatistics", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Ipv6AlpmCarveValue.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.ipv6AlpmCarveValue", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Ipv6LpmMaxEntries.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.ipv6LpmMaxEntries", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.LpmMaxLimit.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.lpmMaxLimit", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MulticastDcsCheck.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.mcastDcsCheck", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MulticastFlexStats.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.mcastFlexStats", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MulticastLpmMaxEntries.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.mcastLpmMaxEntries", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MulticastNlb.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.mcastNlb", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MulticastRaclBridge.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.mcastRaclBridge", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MldSnooping.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.mldSnooping", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MplsAdjacencyStatsMode.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.mplsAdjStatsMode", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MplsEcmpMode.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.mplsCfgEcmpMode", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MroutingDisableL2Update.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.mroutingDisableL2Upd", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MroutingDisableSecondRouteUpdate.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.mroutingDisableSecRouteUpd", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MroutingPerformanceMode.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.mroutingPerfMode", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MulticastMaxLimit.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.multicastMaxLimit", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MulticastRpfCheckOptimization.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.multicastRpfCheckOptimization", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MulticastServiceReflectPort.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.multicastServiceReflectPort", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MulticastSyslogThreshold.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.multicastSyslogThreshold", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.OpenflowForwardPdu.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.openflowForwardPdu", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PbrSkipSelfIp.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.pbrSkipSelfIp", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PortChannelFastConvergence.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.pcFastConv", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PortChannelLoadBalanceAlgorithm.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.pcLbAlgo", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PortChannelLoadBalanceResilient.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.pcLbRes", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PortChannelMplsLoadBalanceLabelIp.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.pcMplsLbLabelIp", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PortChannelMplsLoadBalanceLabelOnly.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.pcMplsLbLabelOnly", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PortChannelScaleFanout.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.pcScaleFanout", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PicCoreEnable.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.picCoreEnable", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ProfileFrontPortMode.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.profileFrontPortmode", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ProfileMode.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.profileMode", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ProfileTuple.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.profileTuple", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PstatConfiguration.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.pstatCfg", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.QosMinBuffer.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.qosMinBuffer", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.RoutingMode.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.routingMode", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ServiceTemplateName.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.serviceTemplateName", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.SviAndSiFlexStats.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.sviAndSiFlexStats", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.SviFlexStats.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.sviFlexStats", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.SwitchMode.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.switchMode", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.SwitchingFabricSpeed.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.switchingFabricSpeed", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.SwitchingMode.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.switchingMode", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.SystemFabricMode.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.systemFabricMode", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.TcamSyslogThreshold.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.tcamSyslogThreshold", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.UnicastMaxLimit.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.unicastMaxLimit", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.UnicastSyslogThreshold.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.unicastSyslogThreshold", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.UnicastTrace.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.unicastTrace", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.UnknownUnicastFlood.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.unknownUnicastFlood", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.UrpfStatus.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.urpfStatus", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.WrrUnicastBandwidth.IsNull() {
+		body, _ = sjson.Set(body, "platformEntity.attributes.wrrUnicastBw", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "platformEntity.attributes", map[string]interface{}{})
+	}
+	if !(data.TcamRegionArpAclSize.IsNull() && data.TcamRegionCoppSize.IsNull() && data.TcamRegionCoppSystemSize.IsNull() && data.TcamRegionEgressIpv6QosSize.IsNull() && data.TcamRegionEgressIpv6RaclSize.IsNull() && data.TcamRegionEgressMacQosSize.IsNull() && data.TcamRegionEgressQosLiteSize.IsNull() && data.TcamRegionEgressQosSize.IsNull() && data.TcamRegionEgressRaclSize.IsNull() && data.TcamRegionEgressVaclSize.IsNull() && data.TcamRegionFcoeEgressSize.IsNull() && data.TcamRegionFcoeIngressSize.IsNull() && data.TcamRegionFhsSize.IsNull() && data.TcamRegionInterfaceAclLiteSize.IsNull() && data.TcamRegionInterfaceAclSize.IsNull() && data.TcamRegionInterfaceAclUdfSize.IsNull() && data.TcamRegionIngressFlowRedirectSize.IsNull() && data.TcamRegionIngressFlowSize.IsNull() && data.TcamRegionIpsgSize.IsNull() && data.TcamRegionIpv6InterfaceAclSize.IsNull() && data.TcamRegionIpv6L3QosSize.IsNull() && data.TcamRegionIpv6PbrSize.IsNull() && data.TcamRegionIpv6QosSize.IsNull() && data.TcamRegionIpv6RaclSize.IsNull() && data.TcamRegionIpv6SpanL2Size.IsNull() && data.TcamRegionIpv6SpanSize.IsNull() && data.TcamRegionIpv6SupSize.IsNull() && data.TcamRegionIpv6VaclSize.IsNull() && data.TcamRegionIpv6VlanQosSize.IsNull() && data.TcamRegionL3QosIntraLiteSize.IsNull() && data.TcamRegionMacInterfaceAclSize.IsNull() && data.TcamRegionMacL3QosSize.IsNull() && data.TcamRegionMacQosSize.IsNull() && data.TcamRegionMacVaclSize.IsNull() && data.TcamRegionMacVlanQosSize.IsNull() && data.TcamRegionMulticastBidirSize.IsNull() && data.TcamRegionMplsDoublewide.IsNull() && data.TcamRegionMplsSize.IsNull() && data.TcamRegionMvpnSize.IsNull() && data.TcamRegionN9kArpAclSize.IsNull() && data.TcamRegionNatSize.IsNull() && data.TcamRegionOpenflowDoublewide.IsNull() && data.TcamRegionOpenflowLiteSize.IsNull() && data.TcamRegionOpenflowSize.IsNull() && data.TcamRegionPbrSize.IsNull() && data.TcamRegionQosIntraLiteSize.IsNull() && data.TcamRegionQosSize.IsNull() && data.TcamRegionQosLabelSize.IsNull() && data.TcamRegionRaclLiteSize.IsNull() && data.TcamRegionRaclSize.IsNull() && data.TcamRegionRaclUdfSize.IsNull() && data.TcamRegionSupSize.IsNull() && data.TcamRegionSviSize.IsNull() && data.TcamRegionTcpNatSize.IsNull() && data.TcamRegionVaclLiteSize.IsNull() && data.TcamRegionVaclSize.IsNull() && data.TcamRegionVpcConvergenceSize.IsNull() && data.TcamRegionVlanQosIntraLiteSize.IsNull() && data.TcamRegionVlanQosSize.IsNull() && data.TcamRegionVxlanP2pSize.IsNull() && (data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats.IsNull() && data.TcamRegionExtendedEgressInterfaceAclAllSize.IsNull() && data.TcamRegionExtendedEgressIpv6RaclPerPortStats.IsNull() && data.TcamRegionExtendedEgressRaclPerPortStats.IsNull() && data.TcamRegionExtendedEgressCoppSize.IsNull() && data.TcamRegionExtendedEgressFlowSize.IsNull() && data.TcamRegionExtendedEgressHardwareTelemetrySize.IsNull() && data.TcamRegionExtendedEgressInterfaceAclSize.IsNull() && data.TcamRegionExtendedEgressL2QosSize.IsNull() && data.TcamRegionExtendedEgressL3VlanQosSize.IsNull() && data.TcamRegionExtendedEgressRaclSize.IsNull() && data.TcamRegionExtendedEgressSupSize.IsNull() && data.TcamRegionExtendedHardwareTelemetrySize.IsNull() && data.TcamRegionExtendedInterfaceAclAllPerPortStats.IsNull() && data.TcamRegionExtendedInterfaceAclAllProfile.IsNull() && data.TcamRegionExtendedInterfaceAclAllSize.IsNull() && data.TcamRegionExtendedInterfaceAclPerPortStats.IsNull() && data.TcamRegionExtendedIngressDaclSize.IsNull() && data.TcamRegionExtendedIngressInterfaceAclSize.IsNull() && data.TcamRegionExtendedIngressInterfaceAclWideSize.IsNull() && data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize.IsNull() && data.TcamRegionExtendedIngressL2L3QosSize.IsNull() && data.TcamRegionExtendedIngressL2QosSize.IsNull() && data.TcamRegionExtendedIngressL2SpanFilterSize.IsNull() && data.TcamRegionExtendedIngressL3SpanFilterSize.IsNull() && data.TcamRegionExtendedIngressPaclSbSize.IsNull() && data.TcamRegionExtendedIngressRaclSize.IsNull() && data.TcamRegionExtendedIngressRbaclSize.IsNull() && data.TcamRegionExtendedIngressRedirectSize.IsNull() && data.TcamRegionExtendedIngressStormControlSize.IsNull() && data.TcamRegionExtendedIngressSupSize.IsNull() && data.TcamRegionExtendedIngressVaclNhSize.IsNull() && data.TcamRegionExtendedIngressVlanQosSize.IsNull() && data.TcamRegionExtendedIpv6InterfaceAclPerPortStats.IsNull() && data.TcamRegionExtendedIpv6RaclPerPortStats.IsNull() && data.TcamRegionExtendedMacInterfaceAclPerPortStats.IsNull() && data.TcamRegionExtendedMulticastNatSize.IsNull() && data.TcamRegionExtendedMulticastNbmSize.IsNull() && data.TcamRegionExtendedRaclAllPerPortStats.IsNull() && data.TcamRegionExtendedRaclAllProfile.IsNull() && data.TcamRegionExtendedRaclAllSize.IsNull() && data.TcamRegionExtendedRaclPerPortStats.IsNull() && data.TcamRegionExtendedRedirectV4Size.IsNull() && data.TcamRegionExtendedSpanSize.IsNull() && data.TcamRegionExtendedSpanTahoeSize.IsNull())) {
+		platformTcamRegionRn := "tcamRegion"
+		platformTcamRegionDn := dn + "/" + platformTcamRegionRn
+		_ = platformTcamRegionDn
+		{
+			platformTcamRegionBody := ""
+			if !data.TcamRegionArpAclSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.arpaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionCoppSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.coppSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionCoppSystemSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.coppSystemSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionEgressIpv6QosSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.eIpv6QosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionEgressIpv6RaclSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.eIpv6RaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionEgressMacQosSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.eMacQosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionEgressQosLiteSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.eQosLiteSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionEgressQosSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.eQosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionEgressRaclSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.eRaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionEgressVaclSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.eVaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionFcoeEgressSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.fcoeEgressSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionFcoeIngressSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.fcoeIngressSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionFhsSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.fhsSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionInterfaceAclLiteSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ifaclLiteSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionInterfaceAclSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ifaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionInterfaceAclUdfSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ifaclUdfSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionIngressFlowRedirectSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ingFlowRedirectSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionIngressFlowSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ingFlowSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionIpsgSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ipsgSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionIpv6InterfaceAclSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ipv6IfaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionIpv6L3QosSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ipv6L3qosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionIpv6PbrSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ipv6PbrSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionIpv6QosSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ipv6QosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionIpv6RaclSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ipv6RaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionIpv6SpanL2Size.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ipv6SpanL2Size", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionIpv6SpanSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ipv6SpanSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionIpv6SupSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ipv6SupSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionIpv6VaclSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ipv6VaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionIpv6VlanQosSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.ipv6VqosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionL3QosIntraLiteSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.l3qosIntraLiteSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionMacInterfaceAclSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.macIfaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionMacL3QosSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.macL3qosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionMacQosSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.macQosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionMacVaclSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.macVaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionMacVlanQosSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.macVqosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionMulticastBidirSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.mcastBidirSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionMplsDoublewide.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.mplsDoublewide", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionMplsSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.mplsSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionMvpnSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.mvpnSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionN9kArpAclSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.n9kArpaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionNatSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.natSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionOpenflowDoublewide.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.openflowDoublewide", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionOpenflowLiteSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.openflowLiteSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionOpenflowSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.openflowSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionPbrSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.pbrSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionQosIntraLiteSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.qosIntraLiteSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionQosSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.qosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionQosLabelSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.qoslblSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionRaclLiteSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.raclLiteSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionRaclSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.raclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionRaclUdfSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.raclUdfSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionSupSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.supSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionSviSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.sviSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionTcpNatSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.tcpNatSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionVaclLiteSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.vaclLiteSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionVaclSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.vaclSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionVpcConvergenceSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.vpcConvergenceSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionVlanQosIntraLiteSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.vqosIntraLiteSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionVlanQosSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.vqosSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcamRegionVxlanP2pSize.IsNull() {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.vxlanp2pSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats.IsNull() && data.TcamRegionExtendedEgressInterfaceAclAllSize.IsNull() && data.TcamRegionExtendedEgressIpv6RaclPerPortStats.IsNull() && data.TcamRegionExtendedEgressRaclPerPortStats.IsNull() && data.TcamRegionExtendedEgressCoppSize.IsNull() && data.TcamRegionExtendedEgressFlowSize.IsNull() && data.TcamRegionExtendedEgressHardwareTelemetrySize.IsNull() && data.TcamRegionExtendedEgressInterfaceAclSize.IsNull() && data.TcamRegionExtendedEgressL2QosSize.IsNull() && data.TcamRegionExtendedEgressL3VlanQosSize.IsNull() && data.TcamRegionExtendedEgressRaclSize.IsNull() && data.TcamRegionExtendedEgressSupSize.IsNull() && data.TcamRegionExtendedHardwareTelemetrySize.IsNull() && data.TcamRegionExtendedInterfaceAclAllPerPortStats.IsNull() && data.TcamRegionExtendedInterfaceAclAllProfile.IsNull() && data.TcamRegionExtendedInterfaceAclAllSize.IsNull() && data.TcamRegionExtendedInterfaceAclPerPortStats.IsNull() && data.TcamRegionExtendedIngressDaclSize.IsNull() && data.TcamRegionExtendedIngressInterfaceAclSize.IsNull() && data.TcamRegionExtendedIngressInterfaceAclWideSize.IsNull() && data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize.IsNull() && data.TcamRegionExtendedIngressL2L3QosSize.IsNull() && data.TcamRegionExtendedIngressL2QosSize.IsNull() && data.TcamRegionExtendedIngressL2SpanFilterSize.IsNull() && data.TcamRegionExtendedIngressL3SpanFilterSize.IsNull() && data.TcamRegionExtendedIngressPaclSbSize.IsNull() && data.TcamRegionExtendedIngressRaclSize.IsNull() && data.TcamRegionExtendedIngressRbaclSize.IsNull() && data.TcamRegionExtendedIngressRedirectSize.IsNull() && data.TcamRegionExtendedIngressStormControlSize.IsNull() && data.TcamRegionExtendedIngressSupSize.IsNull() && data.TcamRegionExtendedIngressVaclNhSize.IsNull() && data.TcamRegionExtendedIngressVlanQosSize.IsNull() && data.TcamRegionExtendedIpv6InterfaceAclPerPortStats.IsNull() && data.TcamRegionExtendedIpv6RaclPerPortStats.IsNull() && data.TcamRegionExtendedMacInterfaceAclPerPortStats.IsNull() && data.TcamRegionExtendedMulticastNatSize.IsNull() && data.TcamRegionExtendedMulticastNbmSize.IsNull() && data.TcamRegionExtendedRaclAllPerPortStats.IsNull() && data.TcamRegionExtendedRaclAllProfile.IsNull() && data.TcamRegionExtendedRaclAllSize.IsNull() && data.TcamRegionExtendedRaclPerPortStats.IsNull() && data.TcamRegionExtendedRedirectV4Size.IsNull() && data.TcamRegionExtendedSpanSize.IsNull() && data.TcamRegionExtendedSpanTahoeSize.IsNull()) {
+				platformTcamRegionExtendedRn := "tcamregionextd"
+				platformTcamRegionExtendedDn := platformTcamRegionDn + "/" + platformTcamRegionExtendedRn
+				_ = platformTcamRegionExtendedDn
+				{
+					platformTcamRegionExtendedBody := ""
+					if !data.TcamRegionExtendedEgressInterfaceAclAllPerPortStats.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.eIfaclAllPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedEgressInterfaceAclAllSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.eIfaclAllSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedEgressIpv6RaclPerPortStats.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.eIpv6RaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedEgressRaclPerPortStats.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.eRaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedEgressCoppSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.egrCoppSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedEgressFlowSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.egrFlowSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedEgressHardwareTelemetrySize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.egrHwTelemetrySize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedEgressInterfaceAclSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.egrIfaclSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedEgressL2QosSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.egrL2QosSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedEgressL3VlanQosSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.egrL3VlanQosSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedEgressRaclSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.egrRaclSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedEgressSupSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.egrSupSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedHardwareTelemetrySize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.hwTelemetrySize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedInterfaceAclAllPerPortStats.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ifaclAllPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedInterfaceAclAllProfile.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ifaclAllProfile", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedInterfaceAclAllSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ifaclAllSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedInterfaceAclPerPortStats.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ifaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressDaclSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingDaclSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressInterfaceAclSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingIfaclSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressInterfaceAclWideSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingIfaclWideSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressIpv6InterfaceAclLiteSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingIpv6ifaclLiteSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressL2L3QosSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingL2L3QosSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressL2QosSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingL2QosSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressL2SpanFilterSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingL2SpanFilterSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressL3SpanFilterSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingL3SpanFilterSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressPaclSbSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingPaclSbSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressRaclSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingRaclSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressRbaclSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingRbaclSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressRedirectSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingRedirectSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressStormControlSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingStormControlSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressSupSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingSupSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressVaclNhSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingVaclNhSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIngressVlanQosSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ingVlanQosSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIpv6InterfaceAclPerPortStats.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ipv6IfaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedIpv6RaclPerPortStats.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.ipv6RaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedMacInterfaceAclPerPortStats.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.macIfaclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedMulticastNatSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.mcastNatSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedMulticastNbmSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.mcastNbmSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedRaclAllPerPortStats.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.raclAllPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedRaclAllProfile.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.raclAllProfile", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedRaclAllSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.raclAllSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedRaclPerPortStats.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.raclPerPortStats", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedRedirectV4Size.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.redirectV4Size", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedSpanSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.spanSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcamRegionExtendedSpanTahoeSize.IsNull() {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.spanTahSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if platformTcamRegionExtendedBody != "" {
+						platformTcamRegionExtendedBody, _ = sjson.Set(platformTcamRegionExtendedBody, "platformTcamRegionExtended.attributes.rn", platformTcamRegionExtendedRn)
+						platformTcamRegionBody, _ = sjson.SetRaw(platformTcamRegionBody, "platformTcamRegion.children.-1", platformTcamRegionExtendedBody)
+					}
+				}
+			}
+			if platformTcamRegionBody != "" {
+				platformTcamRegionBody, _ = sjson.Set(platformTcamRegionBody, "platformTcamRegion.attributes.rn", platformTcamRegionRn)
+				body, _ = sjson.SetRaw(body, "platformEntity.children.-1", platformTcamRegionBody)
+			}
+		}
+	}
+	for key, child := range data.NveInterfaces {
+		_ = child
+		platformNVERn := child.getRn(key)
+		platformNVEDn := dn + "/" + platformNVERn
+		_ = platformNVEDn
+		platformNVEBody := ""
+		platformNVEBody, _ = sjson.Set(platformNVEBody, "platformNVE.attributes.rn", platformNVERn)
+		if !child.IpmcIndexSize.IsNull() {
+			platformNVEBody, _ = sjson.Set(platformNVEBody, "platformNVE.attributes.ipmcIndexSize", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.OverlayVlanId.IsNull() {
+			platformNVEBody, _ = sjson.Set(platformNVEBody, "platformNVE.attributes.overlayVlanId", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key_, child_ := range child.InfraVlans {
+			_ = child_
+			platformInfraVlanRn_ := child_.getRn(key_)
+			platformInfraVlanDn_ := platformNVEDn + "/" + platformInfraVlanRn_
+			_ = platformInfraVlanDn_
+			if !existed(platformInfraVlanDn_) {
+				platformNVEBody, _ = sjson.Set(platformNVEBody, "platformNVE.children.-1.platformInfraVlan.attributes", map[string]interface{}{"rn": platformInfraVlanRn_, "status": "deleted"})
+				continue
+			}
+			platformInfraVlanBody_ := ""
+			platformInfraVlanBody_, _ = sjson.Set(platformInfraVlanBody_, "platformInfraVlan.attributes.rn", platformInfraVlanRn_)
+			if !child_.Force.IsNull() {
+				platformInfraVlanBody_, _ = sjson.Set(platformInfraVlanBody_, "platformInfraVlan.attributes.force", "DME_UNSET_PROPERTY_MARKER")
+			}
+			platformNVEBody, _ = sjson.SetRaw(platformNVEBody, "platformNVE.children.-1", platformInfraVlanBody_)
+		}
+		body, _ = sjson.SetRaw(body, "platformEntity.children.-1", platformNVEBody)
+	}
+	if !(data.ExtendedAclDisableRedirectShare.IsNull() && data.ExtendedAtomicUpdate.IsNull() && data.ExtendedAtomicUpdateStrict.IsNull() && data.ExtendedCounterManagerBfdScale.IsNull() && data.ExtendedCounterManagerEcnScale.IsNull() && data.ExtendedCounterManagerEgressAclScale.IsNull() && data.ExtendedCounterManagerFeatureBfd.IsNull() && data.ExtendedCounterManagerFeatureEcn.IsNull() && data.ExtendedCounterManagerFeatureEgressAcl.IsNull() && data.ExtendedCounterManagerFeatureIngressAcl.IsNull() && data.ExtendedCounterManagerFeatureL2vni.IsNull() && data.ExtendedCounterManagerFeatureL3vni.IsNull() && data.ExtendedCounterManagerFeatureSi.IsNull() && data.ExtendedCounterManagerFeatureSvi.IsNull() && data.ExtendedCounterManagerFeatureTunnel.IsNull() && data.ExtendedCounterManagerFeatureVlan.IsNull() && data.ExtendedCounterManagerFeatureVoq.IsNull() && data.ExtendedCounterManagerIngressAclScale.IsNull() && data.ExtendedCounterManagerL2vniScale.IsNull() && data.ExtendedCounterManagerL3vniScale.IsNull() && data.ExtendedCounterManagerSiScale.IsNull() && data.ExtendedCounterManagerSviScale.IsNull() && data.ExtendedCounterManagerTunnelScale.IsNull() && data.ExtendedCounterManagerVlanScale.IsNull() && data.ExtendedCounterManagerVoqScale.IsNull() && data.ExtendedDmeLoadInterval.IsNull() && data.ExtendedEgressL2QosIfaclLabelSize.IsNull() && data.ExtendedGpe5TimerEnable.IsNull() && data.ExtendedHardwareQosLatencyOptimized.IsNull() && data.ExtendedIngressPaclIfaclLabelSize.IsNull() && data.ExtendedIngressVrfNatBdLabelWidth.IsNull() && data.ExtendedMulticastNlbStickPortChannel.IsNull() && data.ExtendedMulticastStatsDisable.IsNull() && data.ExtendedMplsQosPipeMode.IsNull() && data.ExtendedMulticastPriority.IsNull() && data.ExtendedPbrEcmpPaths.IsNull() && data.ExtendedPbrFastConvergence.IsNull() && data.ExtendedPbrMatchDefaultRoute.IsNull() && data.ExtendedPtpCorrectionHardware.IsNull() && data.ExtendedSiFlexStats.IsNull() && data.ExtendedStatsTemplate.IsNull() && data.ExtendedStormControlPriority.IsNull() && data.ExtendedTcamDefaultResult.IsNull() && data.ExtendedUdfNetflowRtpMulticastEnabled.IsNull() && data.ExtendedVrfAwareNatEnable.IsNull()) {
+		platformEntityExtendedRn := "entityextd"
+		platformEntityExtendedDn := dn + "/" + platformEntityExtendedRn
+		_ = platformEntityExtendedDn
+		{
+			platformEntityExtendedBody := ""
+			if !data.ExtendedAclDisableRedirectShare.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.aclDisableRedirectShare", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedAtomicUpdate.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.atomicUpdate", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedAtomicUpdateStrict.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.atomicUpdateStrict", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerBfdScale.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrBfdScale", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerEcnScale.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrEcnScale", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerEgressAclScale.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrEgrACLScale", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerFeatureBfd.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrFeatureBfd", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerFeatureEcn.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrFeatureEcn", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerFeatureEgressAcl.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrFeatureEgrACL", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerFeatureIngressAcl.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrFeatureIngrACL", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerFeatureL2vni.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrFeatureL2VNI", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerFeatureL3vni.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrFeatureL3VNI", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerFeatureSi.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrFeatureSI", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerFeatureSvi.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrFeatureSVI", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerFeatureTunnel.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrFeatureTunnel", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerFeatureVlan.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrFeatureVlan", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerFeatureVoq.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrFeatureVoq", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerIngressAclScale.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrIngrACLScale", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerL2vniScale.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrL2VNIScale", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerL3vniScale.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrL3VNIScale", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerSiScale.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrSIScale", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerSviScale.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrSVIScale", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerTunnelScale.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrTunnelScale", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerVlanScale.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrVlanScale", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedCounterManagerVoqScale.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.counterMgrVoqScale", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedDmeLoadInterval.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.dmeLoadInterval", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedEgressL2QosIfaclLabelSize.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.egrL2QosIfaclLabelSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedGpe5TimerEnable.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.gpe5TimerEnable", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedHardwareQosLatencyOptimized.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.hwQosLatencyOptimized", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedIngressPaclIfaclLabelSize.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.iPaclIfaclLabelSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedIngressVrfNatBdLabelWidth.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.iVrfNatBdLabelWidth", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedMulticastNlbStickPortChannel.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.mcastNlbStickPc", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedMulticastStatsDisable.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.mcastStatsDisable", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedMplsQosPipeMode.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.mplsQosPipeMode", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedMulticastPriority.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.multicastPriority", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedPbrEcmpPaths.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.pbrEcmpPaths", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedPbrFastConvergence.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.pbrFastConvergence", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedPbrMatchDefaultRoute.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.pbrMatchDefaultRoute", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedPtpCorrectionHardware.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.ptpCorrHw", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedSiFlexStats.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.siFlexStats", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedStatsTemplate.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.statsTemplate", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedStormControlPriority.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.stormControlPriority", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedTcamDefaultResult.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.tcamDefaultResult", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedUdfNetflowRtpMulticastEnabled.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.udfNetflowrtpMcEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtendedVrfAwareNatEnable.IsNull() {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.vrfAwareNatEnable", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if platformEntityExtendedBody != "" {
+				platformEntityExtendedBody, _ = sjson.Set(platformEntityExtendedBody, "platformEntityExtended.attributes.rn", platformEntityExtendedRn)
+				body, _ = sjson.SetRaw(body, "platformEntity.children.-1", platformEntityExtendedBody)
+			}
+		}
+	}
+	if !(data.PortChannelLoadBalanceConcatenation.IsNull() && data.PortChannelLoadBalanceEncapsulation.IsNull() && data.PortChannelLoadBalanceFex.IsNull() && data.PortChannelLoadBalanceFields.IsNull() && data.PortChannelLoadBalanceMplsLabelIp.IsNull() && data.PortChannelLoadBalanceMplsLabelOnly.IsNull() && data.PortChannelLoadBalanceRotate.IsNull() && data.PortChannelLoadBalanceSymmetry.IsNull()) {
+		platformLoadBalanceRn := "pclb"
+		platformLoadBalanceDn := dn + "/" + platformLoadBalanceRn
+		_ = platformLoadBalanceDn
+		{
+			platformLoadBalanceBody := ""
+			if !data.PortChannelLoadBalanceConcatenation.IsNull() {
+				platformLoadBalanceBody, _ = sjson.Set(platformLoadBalanceBody, "platformLoadBalance.attributes.concatenation", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PortChannelLoadBalanceEncapsulation.IsNull() {
+				platformLoadBalanceBody, _ = sjson.Set(platformLoadBalanceBody, "platformLoadBalance.attributes.encapsulation", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PortChannelLoadBalanceFex.IsNull() {
+				platformLoadBalanceBody, _ = sjson.Set(platformLoadBalanceBody, "platformLoadBalance.attributes.fex", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PortChannelLoadBalanceFields.IsNull() {
+				platformLoadBalanceBody, _ = sjson.Set(platformLoadBalanceBody, "platformLoadBalance.attributes.loadBalanceAlgo", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PortChannelLoadBalanceMplsLabelIp.IsNull() {
+				platformLoadBalanceBody, _ = sjson.Set(platformLoadBalanceBody, "platformLoadBalance.attributes.mplsLabelIp", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PortChannelLoadBalanceMplsLabelOnly.IsNull() {
+				platformLoadBalanceBody, _ = sjson.Set(platformLoadBalanceBody, "platformLoadBalance.attributes.mplsLabelOnly", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PortChannelLoadBalanceRotate.IsNull() {
+				platformLoadBalanceBody, _ = sjson.Set(platformLoadBalanceBody, "platformLoadBalance.attributes.rotate", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PortChannelLoadBalanceSymmetry.IsNull() {
+				platformLoadBalanceBody, _ = sjson.Set(platformLoadBalanceBody, "platformLoadBalance.attributes.symmetry", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if platformLoadBalanceBody != "" {
+				platformLoadBalanceBody, _ = sjson.Set(platformLoadBalanceBody, "platformLoadBalance.attributes.rn", platformLoadBalanceRn)
+				body, _ = sjson.SetRaw(body, "platformEntity.children.-1", platformLoadBalanceBody)
+			}
+		}
+	}
+	if !(data.DlbAllowAllInterfaces.IsNull() && data.DlbDecayFactor.IsNull() && data.DlbDescription.IsNull() && data.DlbDreThresholdLevel1.IsNull() && data.DlbDreThresholdLevel2.IsNull() && data.DlbDreThresholdLevel3.IsNull() && data.DlbDreThresholdLevel4.IsNull() && data.DlbDreThresholdLevel5.IsNull() && data.DlbDreThresholdLevel6.IsNull() && data.DlbDreThresholdLevel7.IsNull() && data.DlbEnabled.IsNull() && data.DlbFlowletAging.IsNull() && data.DlbInterfaces.IsNull() && data.DlbLoadAwareness.IsNull() && data.DlbMacAddress.IsNull() && data.DlbMode.IsNull() && data.DlbSamplingInterval.IsNull() && data.DlbStaticPinning.IsNull() && len(data.DlbStaticPinnings) == 0) {
+		platformDlbEntityRn := "dlb"
+		platformDlbEntityDn := dn + "/" + platformDlbEntityRn
+		_ = platformDlbEntityDn
+		{
+			platformDlbEntityBody := ""
+			if !data.DlbAllowAllInterfaces.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.allowAllInterface", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbDecayFactor.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.decayFactor", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbDescription.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbDreThresholdLevel1.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.dreThresholdsLevel1", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbDreThresholdLevel2.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.dreThresholdsLevel2", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbDreThresholdLevel3.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.dreThresholdsLevel3", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbDreThresholdLevel4.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.dreThresholdsLevel4", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbDreThresholdLevel5.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.dreThresholdsLevel5", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbDreThresholdLevel6.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.dreThresholdsLevel6", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbDreThresholdLevel7.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.dreThresholdsLevel7", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbEnabled.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.enabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbFlowletAging.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.flowletAgingTimer", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbInterfaces.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.intfList", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbLoadAwareness.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.loadAwareness", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbMacAddress.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.macAddr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbMode.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbSamplingInterval.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.samplingInterval", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DlbStaticPinning.IsNull() {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.staticPinning", "DME_UNSET_PROPERTY_MARKER")
+			}
+			for key, child := range data.DlbStaticPinnings {
+				_ = child
+				platformDlbStaticPinningRn := child.getRn(key)
+				platformDlbStaticPinningDn := platformDlbEntityDn + "/" + platformDlbStaticPinningRn
+				_ = platformDlbStaticPinningDn
+				if !existed(platformDlbStaticPinningDn) {
+					platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.children.-1.platformDlbStaticPinning.attributes", map[string]interface{}{"rn": platformDlbStaticPinningRn, "status": "deleted"})
+					continue
+				}
+				platformDlbStaticPinningBody := ""
+				platformDlbStaticPinningBody, _ = sjson.Set(platformDlbStaticPinningBody, "platformDlbStaticPinning.attributes.rn", platformDlbStaticPinningRn)
+				if !child.DestinationInterface.IsNull() {
+					platformDlbStaticPinningBody, _ = sjson.Set(platformDlbStaticPinningBody, "platformDlbStaticPinning.attributes.dstInterface", "DME_UNSET_PROPERTY_MARKER")
+				}
+				platformDlbEntityBody, _ = sjson.SetRaw(platformDlbEntityBody, "platformDlbEntity.children.-1", platformDlbStaticPinningBody)
+			}
+			if platformDlbEntityBody != "" {
+				platformDlbEntityBody, _ = sjson.Set(platformDlbEntityBody, "platformDlbEntity.attributes.rn", platformDlbEntityRn)
+				body, _ = sjson.SetRaw(body, "platformEntity.children.-1", platformDlbEntityBody)
+			}
+		}
+	}
+	if !(data.PfcWatchdogAutoRestoreMultiplier.IsNull() && data.PfcWatchdogMode.IsNull() && data.PfcWatchdogFixedRestoreMultiplier.IsNull() && data.PfcWatchdogForcedOn.IsNull() && data.PfcWatchdogInternalInterfaceMultiplier.IsNull() && data.PfcWatchdogInterval.IsNull() && data.PfcWatchdogShutdownMultiplier.IsNull()) {
+		platformPriorFlowCtrlWdRn := "priorflowctrlwd"
+		platformPriorFlowCtrlWdDn := dn + "/" + platformPriorFlowCtrlWdRn
+		_ = platformPriorFlowCtrlWdDn
+		{
+			platformPriorFlowCtrlWdBody := ""
+			if !data.PfcWatchdogAutoRestoreMultiplier.IsNull() {
+				platformPriorFlowCtrlWdBody, _ = sjson.Set(platformPriorFlowCtrlWdBody, "platformPriorFlowCtrlWd.attributes.autoRestoreMultiplier", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PfcWatchdogMode.IsNull() {
+				platformPriorFlowCtrlWdBody, _ = sjson.Set(platformPriorFlowCtrlWdBody, "platformPriorFlowCtrlWd.attributes.cfgMode", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PfcWatchdogFixedRestoreMultiplier.IsNull() {
+				platformPriorFlowCtrlWdBody, _ = sjson.Set(platformPriorFlowCtrlWdBody, "platformPriorFlowCtrlWd.attributes.fixedRestoreMultiplier", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PfcWatchdogForcedOn.IsNull() {
+				platformPriorFlowCtrlWdBody, _ = sjson.Set(platformPriorFlowCtrlWdBody, "platformPriorFlowCtrlWd.attributes.forcedOn", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PfcWatchdogInternalInterfaceMultiplier.IsNull() {
+				platformPriorFlowCtrlWdBody, _ = sjson.Set(platformPriorFlowCtrlWdBody, "platformPriorFlowCtrlWd.attributes.internalIntfMultiplier", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PfcWatchdogInterval.IsNull() {
+				platformPriorFlowCtrlWdBody, _ = sjson.Set(platformPriorFlowCtrlWdBody, "platformPriorFlowCtrlWd.attributes.interval", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PfcWatchdogShutdownMultiplier.IsNull() {
+				platformPriorFlowCtrlWdBody, _ = sjson.Set(platformPriorFlowCtrlWdBody, "platformPriorFlowCtrlWd.attributes.shutdownMultiplier", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if platformPriorFlowCtrlWdBody != "" {
+				platformPriorFlowCtrlWdBody, _ = sjson.Set(platformPriorFlowCtrlWdBody, "platformPriorFlowCtrlWd.attributes.rn", platformPriorFlowCtrlWdRn)
+				body, _ = sjson.SetRaw(body, "platformEntity.children.-1", platformPriorFlowCtrlWdBody)
+			}
+		}
+	}
+	if !(data.QosBufferPeakMonitorCounter0Class0.IsNull() && data.QosBufferPeakMonitorCounter0Class1.IsNull() && data.QosBufferPeakMonitorCounter0Class2.IsNull() && data.QosBufferPeakMonitorCounter0Class3.IsNull() && data.QosBufferPeakMonitorCounter0Class4.IsNull() && data.QosBufferPeakMonitorCounter0Class5.IsNull() && data.QosBufferPeakMonitorCounter0Class6.IsNull() && data.QosBufferPeakMonitorCounter0Class7.IsNull() && data.QosBurstDetectFallThresholdUnit.IsNull() && data.QosBurstDetectFallThreshold.IsNull() && data.QosBurstDetectMaxRecords.IsNull() && data.QosBurstDetectRiseThresholdUnit.IsNull() && data.QosBurstDetectRiseThreshold.IsNull() && data.QosClassifyNsOnly.IsNull() && data.QosCpuSize.IsNull() && data.QosDppAgePeriod.IsNull() && data.QosDppMaxPackets.IsNull() && data.QosDropPoolSize.IsNull() && data.QosEoqStatsClass.IsNull() && data.QosEtrapAgePeriod.IsNull() && data.QosEtrapBandwidthThreshold.IsNull() && data.QosEtrapByteCount.IsNull() && data.QosHeadroomSize.IsNull() && data.QosInputBufferPeak.IsNull() && data.QosIncludeIpg.IsNull() && data.QosLcpuSize.IsNull() && data.QosMacIpg.IsNull() && data.QosMulticastQosGroup3Traffic.IsNull() && data.QosNodropDynamicQueueLimit.IsNull() && data.QosNodropResumeOffset.IsNull() && data.QosNodropPgGreenThreshold.IsNull() && data.QosNodropPgRedThreshold.IsNull() && data.QosNodropPgSize.IsNull() && data.QosNodropPgSizeFx.IsNull() && data.QosNodropPgYellowThreshold.IsNull() && data.QosNodropPoolSize.IsNull() && data.QosNodropQueueGreenThreshold.IsNull() && data.QosNodropQueueGreenThresholdFx.IsNull() && data.QosNodropQueueYellowThreshold.IsNull() && data.QosNsBufferProfile.IsNull() && data.QosOutputQueueDropsType.IsNull() && data.QosPfcMulticastDrop.IsNull() && data.QosPfcStatic.IsNull() && data.QosPgHeadroomReserve.IsNull() && data.QosPgMinValue.IsNull() && data.QosPgNoMin.IsNull() && data.QosPgShare.IsNull() && data.QosQueueNoisePercent.IsNull() && data.QosAfdProfile.IsNull() && data.QosSpanSize.IsNull()) {
+		platformQosRn := "qos"
+		platformQosDn := dn + "/" + platformQosRn
+		_ = platformQosDn
+		{
+			platformQosBody := ""
+			if !data.QosBufferPeakMonitorCounter0Class0.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.bufPeakMonitorCnt0Class0", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosBufferPeakMonitorCounter0Class1.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.bufPeakMonitorCnt0Class1", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosBufferPeakMonitorCounter0Class2.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.bufPeakMonitorCnt0Class2", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosBufferPeakMonitorCounter0Class3.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.bufPeakMonitorCnt0Class3", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosBufferPeakMonitorCounter0Class4.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.bufPeakMonitorCnt0Class4", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosBufferPeakMonitorCounter0Class5.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.bufPeakMonitorCnt0Class5", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosBufferPeakMonitorCounter0Class6.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.bufPeakMonitorCnt0Class6", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosBufferPeakMonitorCounter0Class7.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.bufPeakMonitorCnt0Class7", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosBurstDetectFallThresholdUnit.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.burstDetectFallThreshUnit", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosBurstDetectFallThreshold.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.burstDetectFallThreshold", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosBurstDetectMaxRecords.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.burstDetectMaxRecords", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosBurstDetectRiseThresholdUnit.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.burstDetectRiseThreshUnit", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosBurstDetectRiseThreshold.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.burstDetectRiseThreshold", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosClassifyNsOnly.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.classify", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosCpuSize.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.cpuSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosDppAgePeriod.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.dppAgePeriod", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosDppMaxPackets.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.dppMaxNumPkts", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosDropPoolSize.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.dropPoolSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosEoqStatsClass.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.eoqStatsClass", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosEtrapAgePeriod.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.etrapAgePeriod", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosEtrapBandwidthThreshold.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.etrapBandwidthThreshold", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosEtrapByteCount.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.etrapByteCount", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosHeadroomSize.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.headroomSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosInputBufferPeak.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.inputBufferPeak", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosIncludeIpg.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.ipg", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosLcpuSize.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.lCpuSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosMacIpg.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.macIpgVal", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosMulticastQosGroup3Traffic.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.mcQosGroup3Traffic", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosNodropDynamicQueueLimit.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.ndDynamicQlimit", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosNodropResumeOffset.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.ndResumeOffset", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosNodropPgGreenThreshold.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.nodropPgGreenThresh", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosNodropPgRedThreshold.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.nodropPgRedThresh", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosNodropPgSize.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.nodropPgSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosNodropPgSizeFx.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.nodropPgSizeFx", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosNodropPgYellowThreshold.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.nodropPgYellowThresh", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosNodropPoolSize.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.nodropPoolSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosNodropQueueGreenThreshold.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.nodropQueueGreenThresh", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosNodropQueueGreenThresholdFx.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.nodropQueueGreenThreshFx", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosNodropQueueYellowThreshold.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.nodropQueueYellowThresh", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosNsBufferProfile.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.nsBufferProfile", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosOutputQueueDropsType.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.oqDropsType", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosPfcMulticastDrop.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.pfcMcDrop", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosPfcStatic.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.pfcStatic", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosPgHeadroomReserve.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.pgHdrmReserve", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosPgMinValue.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.pgMinValue", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosPgNoMin.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.pgNoMin", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosPgShare.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.pgShare", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosQueueNoisePercent.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.qNoisePercent", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosAfdProfile.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.qosAfdNSBuffProfile", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.QosSpanSize.IsNull() {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.spanSize", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if platformQosBody != "" {
+				platformQosBody, _ = sjson.Set(platformQosBody, "platformQos.attributes.rn", platformQosRn)
+				body, _ = sjson.SetRaw(body, "platformEntity.children.-1", platformQosBody)
+			}
+		}
+	}
+	for key, child := range data.TcamTemplates {
+		_ = child
+		platformTcamTemplateRn := child.getRn(key)
+		platformTcamTemplateDn := dn + "/" + platformTcamTemplateRn
+		_ = platformTcamTemplateDn
+		if !existed(platformTcamTemplateDn) {
+			body, _ = sjson.Set(body, "platformEntity.children.-1.platformTcamTemplate.attributes", map[string]interface{}{"rn": platformTcamTemplateRn, "status": "deleted"})
+			continue
+		}
+		platformTcamTemplateBody := ""
+		platformTcamTemplateBody, _ = sjson.Set(platformTcamTemplateBody, "platformTcamTemplate.attributes.rn", platformTcamTemplateRn)
+		if !child.ReferenceTemplate.IsNull() {
+			platformTcamTemplateBody, _ = sjson.Set(platformTcamTemplateBody, "platformTcamTemplate.attributes.refTemplate", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key_, child_ := range child.Udfs {
+			_ = child_
+			keyParts := strings.SplitN(key_, ";", 2)
+			_ = keyParts
+			platformUdfTcamTemplateRn_ := child_.getRn(key_)
+			platformUdfTcamTemplateDn_ := platformTcamTemplateDn + "/" + platformUdfTcamTemplateRn_
+			_ = platformUdfTcamTemplateDn_
+			if !existed(platformUdfTcamTemplateDn_) {
+				platformTcamTemplateBody, _ = sjson.Set(platformTcamTemplateBody, "platformTcamTemplate.children.-1.platformUdfTcamTemplate.attributes", map[string]interface{}{"rn": platformUdfTcamTemplateRn_, "status": "deleted"})
+				continue
+			}
+			platformUdfTcamTemplateBody_ := ""
+			platformUdfTcamTemplateBody_, _ = sjson.Set(platformUdfTcamTemplateBody_, "platformUdfTcamTemplate.attributes.rn", platformUdfTcamTemplateRn_)
+			platformTcamTemplateBody, _ = sjson.SetRaw(platformTcamTemplateBody, "platformTcamTemplate.children.-1", platformUdfTcamTemplateBody_)
+		}
+		body, _ = sjson.SetRaw(body, "platformEntity.children.-1", platformTcamTemplateBody)
+	}
+	if !(data.UdfDescription.IsNull() && len(data.Udfs) == 0) {
+		platformUdfEntityRn := "udf"
+		platformUdfEntityDn := dn + "/" + platformUdfEntityRn
+		_ = platformUdfEntityDn
+		{
+			platformUdfEntityBody := ""
+			if !data.UdfDescription.IsNull() {
+				platformUdfEntityBody, _ = sjson.Set(platformUdfEntityBody, "platformUdfEntity.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			for key, child := range data.Udfs {
+				_ = child
+				platformUdfRn := child.getRn(key)
+				platformUdfDn := platformUdfEntityDn + "/" + platformUdfRn
+				_ = platformUdfDn
+				if !existed(platformUdfDn) {
+					platformUdfEntityBody, _ = sjson.Set(platformUdfEntityBody, "platformUdfEntity.children.-1.platformUdf.attributes", map[string]interface{}{"rn": platformUdfRn, "status": "deleted"})
+					continue
+				}
+				platformUdfBody := ""
+				platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.rn", platformUdfRn)
+				if !child.MplsStack1.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.mplsStack1", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.MplsStack2.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.mplsStack2", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.NetflowRtp.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.netflowRtp", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.OffsetBase.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.offsetBase", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.OffsetLength.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.offsetLength", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.OffsetPosition.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.offsetPosition", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.QualifyIfacl.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.qualifyIfacl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.QualifyIpv6Racl.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.qualifyIpv6Racl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.QualifyRacl.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.qualifyRacl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.QualifyRaclAll.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.qualifyRaclAll", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.QualifySpan.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.qualifySpan", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.QualifySpanAll.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.qualifySpanAll", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.QualifySpanV6.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.qualifySpanV6", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.QualifySpanV6L2.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.qualifySpanV6L2", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.QualifyVacl.IsNull() {
+					platformUdfBody, _ = sjson.Set(platformUdfBody, "platformUdf.attributes.qualifyVacl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				platformUdfEntityBody, _ = sjson.SetRaw(platformUdfEntityBody, "platformUdfEntity.children.-1", platformUdfBody)
+			}
+			if platformUdfEntityBody != "" {
+				platformUdfEntityBody, _ = sjson.Set(platformUdfEntityBody, "platformUdfEntity.attributes.rn", platformUdfEntityRn)
+				body, _ = sjson.SetRaw(body, "platformEntity.children.-1", platformUdfEntityBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, config Platform, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -5566,6 +6778,8 @@ func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, conf
 				stateChild := state.NveInterfaces[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("platformNVE.attributes.id").String() == key {
 						if !stateChild.IpmcIndexSize.IsNull() && configChild.IpmcIndexSize.IsNull() {
@@ -6137,6 +7351,8 @@ func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, conf
 				stateChild := state.TcamTemplates[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("platformTcamTemplate.attributes.name").String() == key {
 						if !stateChild.ReferenceTemplate.IsNull() && configChild.ReferenceTemplate.IsNull() {

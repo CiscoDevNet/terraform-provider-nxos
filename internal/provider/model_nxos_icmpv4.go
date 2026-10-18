@@ -80,6 +80,14 @@ var ICMPv4SubtreeClassMinVersions = map[string]string{}
 // ICMPv4MinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var ICMPv4MinVersions = map[string]helpers.MinVersion{}
 
+// ICMPv4ListClasses holds the list child classes of the resource.
+var ICMPv4ListClasses = map[string]bool{"icmpv4Dom": true, "icmpv4If": true}
+
+// getICMPv4Tree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getICMPv4Tree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"icmpv4Inst", "icmpv4Dom", "icmpv4If"}, ICMPv4SubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -306,7 +314,100 @@ func (data ICMPv4) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data ICMPv4) toBodyWithDeletes(ctx context.Context, state ICMPv4, config ICMPv4, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data ICMPv4) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.InstanceAdminState.IsNull() && data.Control.IsNull() && len(data.Vrfs) == 0) {
+		icmpv4InstDn := dn + "/" + "inst"
+		dns[icmpv4InstDn] = true
+		for key, child := range data.Vrfs {
+			icmpv4DomDn := icmpv4InstDn + "/" + child.getRn(key)
+			dns[icmpv4DomDn] = true
+			for key_, child_ := range child.Interfaces {
+				icmpv4IfDn_ := icmpv4DomDn + "/" + child_.getRn(key_)
+				dns[icmpv4IfDn_] = true
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data ICMPv4) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	if !existed(dn) {
+		return data.toDeleteBody()
+	}
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "icmpv4Entity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "icmpv4Entity.attributes", map[string]interface{}{})
+	}
+	if !(data.InstanceAdminState.IsNull() && data.Control.IsNull() && len(data.Vrfs) == 0) {
+		icmpv4InstRn := "inst"
+		icmpv4InstDn := dn + "/" + icmpv4InstRn
+		_ = icmpv4InstDn
+		if !existed(icmpv4InstDn) {
+			body, _ = sjson.Set(body, "icmpv4Entity.children.-1.icmpv4Inst.attributes", map[string]interface{}{"rn": icmpv4InstRn, "status": "deleted"})
+		} else {
+			icmpv4InstBody := ""
+			if !data.InstanceAdminState.IsNull() {
+				icmpv4InstBody, _ = sjson.Set(icmpv4InstBody, "icmpv4Inst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Control.IsNull() {
+				icmpv4InstBody, _ = sjson.Set(icmpv4InstBody, "icmpv4Inst.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			for key, child := range data.Vrfs {
+				_ = child
+				icmpv4DomRn := child.getRn(key)
+				icmpv4DomDn := icmpv4InstDn + "/" + icmpv4DomRn
+				_ = icmpv4DomDn
+				if !existed(icmpv4DomDn) {
+					icmpv4InstBody, _ = sjson.Set(icmpv4InstBody, "icmpv4Inst.children.-1.icmpv4Dom.attributes", map[string]interface{}{"rn": icmpv4DomRn, "status": "deleted"})
+					continue
+				}
+				icmpv4DomBody := ""
+				icmpv4DomBody, _ = sjson.Set(icmpv4DomBody, "icmpv4Dom.attributes.rn", icmpv4DomRn)
+				for key_, child_ := range child.Interfaces {
+					_ = child_
+					icmpv4IfRn_ := child_.getRn(key_)
+					icmpv4IfDn_ := icmpv4DomDn + "/" + icmpv4IfRn_
+					_ = icmpv4IfDn_
+					if !existed(icmpv4IfDn_) {
+						icmpv4DomBody, _ = sjson.Set(icmpv4DomBody, "icmpv4Dom.children.-1.icmpv4If.attributes", map[string]interface{}{"rn": icmpv4IfRn_, "status": "deleted"})
+						continue
+					}
+					icmpv4IfBody_ := ""
+					icmpv4IfBody_, _ = sjson.Set(icmpv4IfBody_, "icmpv4If.attributes.rn", icmpv4IfRn_)
+					if !child_.Control.IsNull() {
+						icmpv4IfBody_, _ = sjson.Set(icmpv4IfBody_, "icmpv4If.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					icmpv4DomBody, _ = sjson.SetRaw(icmpv4DomBody, "icmpv4Dom.children.-1", icmpv4IfBody_)
+				}
+				icmpv4InstBody, _ = sjson.SetRaw(icmpv4InstBody, "icmpv4Inst.children.-1", icmpv4DomBody)
+			}
+			if icmpv4InstBody != "" {
+				icmpv4InstBody, _ = sjson.Set(icmpv4InstBody, "icmpv4Inst.attributes.rn", icmpv4InstRn)
+				body, _ = sjson.SetRaw(body, "icmpv4Entity.children.-1", icmpv4InstBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data ICMPv4) toBodyWithDeletes(ctx context.Context, state ICMPv4, config ICMPv4, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -355,39 +456,47 @@ func (data ICMPv4) toBodyWithDeletes(ctx context.Context, state ICMPv4, config I
 		}
 	}
 	if !importing {
-		if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "icmpv4Inst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.Control.IsNull() && config.Control.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "icmpv4Inst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-		}
-		for key := range state.Vrfs {
-			if configChild, ok := config.Vrfs[key]; ok {
-				stateChild := state.Vrfs[key]
-				_ = stateChild
-				_ = configChild
-				{
-					listChildPath := ""
-					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "icmpv4Inst")+".children").Array() {
-						if mv.Get("icmpv4Dom.attributes.name").String() == key {
-							listChildPath = helpers.FindChildPath(body.Str, bodyPath, "icmpv4Inst") + ".children" + "." + strconv.Itoa(mi) + ".icmpv4Dom.children"
-							break
+		if deleteEmptied != nil && !(state.InstanceAdminState.IsNull() && state.Control.IsNull() && len(state.Vrfs) == 0) && (config.InstanceAdminState.IsNull() && config.Control.IsNull() && len(config.Vrfs) == 0) && deleteEmptied(data.getDn()+"/inst") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "icmpv4Inst")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "icmpv4Inst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.Control.IsNull() && config.Control.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "icmpv4Inst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			for key := range state.Vrfs {
+				if configChild, ok := config.Vrfs[key]; ok {
+					stateChild := state.Vrfs[key]
+					_ = stateChild
+					_ = configChild
+					listChildDn := data.getDn() + "/inst" + "/" + stateChild.getRn(key)
+					_ = listChildDn
+					{
+						listChildPath := ""
+						for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "icmpv4Inst")+".children").Array() {
+							if mv.Get("icmpv4Dom.attributes.name").String() == key {
+								listChildPath = helpers.FindChildPath(body.Str, bodyPath, "icmpv4Inst") + ".children" + "." + strconv.Itoa(mi) + ".icmpv4Dom.children"
+								break
+							}
 						}
-					}
-					if listChildPath != "" {
-						for key := range stateChild.Interfaces {
-							if configChild, ok := configChild.Interfaces[key]; ok {
-								stateChild := stateChild.Interfaces[key]
-								_ = stateChild
-								_ = configChild
-								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
-									if mv.Get("icmpv4If.attributes.id").String() == key {
-										if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
-											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".icmpv4If.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+						if listChildPath != "" {
+							for key := range stateChild.Interfaces {
+								if configChild, ok := configChild.Interfaces[key]; ok {
+									stateChild := stateChild.Interfaces[key]
+									_ = stateChild
+									_ = configChild
+									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+										if mv.Get("icmpv4If.attributes.id").String() == key {
+											if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".icmpv4If.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
 										}
-										break
 									}
 								}
 							}

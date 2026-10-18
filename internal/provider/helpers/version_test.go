@@ -22,13 +22,14 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"strings"
 	"testing"
 
 	"github.com/netascode/go-nxos"
 )
 
-// testVersionClient returns a client for a fake NX-API server reporting the given version.
+// testVersionClient returns a client for a fake NX-API server in the test process reporting the given version.
 // An empty version makes the version request fail.
 func testVersionClient(t *testing.T, version string) *nxos.Client {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -46,73 +47,74 @@ func testVersionClient(t *testing.T, version string) *nxos.Client {
 	return client
 }
 
-func TestSubtreeClasses(t *testing.T) {
-	classes := []string{"a", "b", "c"}
-	minVersions := map[string]string{"b": "10.6(1)", "c": "10.5(1)"}
-
-	if got, want := strings.Join(SubtreeClasses(context.Background(), testVersionClient(t, "10.5(6)"), classes, minVersions), ","), "a,c"; got != want {
-		t.Errorf("older device: got %q, want %q", got, want)
-	}
-	if got, want := strings.Join(SubtreeClasses(context.Background(), testVersionClient(t, "10.6(1)"), classes, minVersions), ","), "a,b,c"; got != want {
-		t.Errorf("newer device: got %q, want %q", got, want)
-	}
-	if got, want := strings.Join(SubtreeClasses(context.Background(), testVersionClient(t, ""), classes, minVersions), ","), "a,b,c"; got != want {
-		t.Errorf("unknown version: got %q, want %q", got, want)
-	}
-}
-
-func TestCheckMinVersion(t *testing.T) {
-	checks := map[string]MinVersion{
-		"b":      {Version: "10.6(1)", Path: "list_b"},
-		"a.attr": {Version: "10.6(1)", Path: "attr"},
-	}
-	ctx := context.Background()
-	client := testVersionClient(t, "10.5(6)")
-
-	cases := []struct {
-		name   string
-		body   string
-		errors int
-	}{
-		{"unsupported child", `{"a":{"attributes":{},"children":[{"b":{"attributes":{"id":"1"}}}]}}`, 1},
-		{"unsupported attribute", `{"a":{"attributes":{"attr":"x"}}}`, 1},
-		{"both", `{"a":{"attributes":{"attr":"x"},"children":[{"b":{"attributes":{}}}]}}`, 2},
-		{"deleted child", `{"a":{"attributes":{},"children":[{"b":{"attributes":{"status":"deleted"}}}]}}`, 0},
-		{"unset attribute", `{"a":{"attributes":{"attr":"DME_UNSET_PROPERTY_MARKER"}}}`, 0},
-		{"supported only", `{"a":{"attributes":{"other":"x"},"children":[{"c":{"attributes":{}}}]}}`, 0},
-	}
-	for _, c := range cases {
-		diags := CheckMinVersion(ctx, client, "leaf1", c.body, checks)
-		if diags.ErrorsCount() != c.errors {
-			t.Errorf("%s: got %d errors, want %d: %v", c.name, diags.ErrorsCount(), c.errors, diags)
-		}
-	}
-
-	diags := CheckMinVersion(ctx, client, "leaf1", `{"a":{"attributes":{"attr":"x"}}}`, checks)
-	if got := diags[0].Detail(); !strings.Contains(got, "`attr` requires NX-OS 10.6(1)") || !strings.Contains(got, "device 'leaf1' runs NX-OS 10.5(6)") {
-		t.Errorf("unexpected error detail: %s", got)
-	}
-
-	if diags := CheckMinVersion(ctx, testVersionClient(t, "10.6(4)"), "", `{"a":{"attributes":{"attr":"x"}}}`, checks); diags.HasError() {
-		t.Errorf("newer device: unexpected errors: %v", diags)
-	}
-	if diags := CheckMinVersion(ctx, testVersionClient(t, ""), "", `{"a":{"attributes":{"attr":"x"}}}`, checks); diags.HasError() {
-		t.Errorf("unknown version: unexpected errors: %v", diags)
-	}
-}
-
-func TestMinVersionNoRequests(t *testing.T) {
+// testNoRequestsClient returns a client for a fake NX-API server in the test process that fails the test on any request.
+func testNoRequestsClient(t *testing.T) *nxos.Client {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		t.Errorf("unexpected request: %s", r.URL.Path)
 		w.WriteHeader(http.StatusInternalServerError)
 	}))
 	t.Cleanup(server.Close)
 	client, _ := nxos.NewClient(server.URL, "usr", "pwd", true, nxos.MaxRetries(0))
+	return client
+}
 
-	if got, want := strings.Join(SubtreeClasses(context.Background(), client, []string{"a", "b"}, map[string]string{}), ","), "a,b"; got != want {
-		t.Errorf("got %q, want %q", got, want)
+func TestNxos_SubtreeClasses(t *testing.T) {
+	classes := []string{"a", "b", "c"}
+
+	cases := []struct {
+		name        string
+		client      func(t *testing.T) *nxos.Client
+		minVersions map[string]string
+		expected    []string
+	}{
+		{name: "older device", client: func(t *testing.T) *nxos.Client { return testVersionClient(t, "10.5(6)") }, minVersions: map[string]string{"b": "10.6(1)", "c": "10.5(1)"}, expected: []string{"a", "c"}},
+		{name: "newer device", client: func(t *testing.T) *nxos.Client { return testVersionClient(t, "10.6(1)") }, minVersions: map[string]string{"b": "10.6(1)", "c": "10.5(1)"}, expected: []string{"a", "b", "c"}},
+		{name: "unknown version", client: func(t *testing.T) *nxos.Client { return testVersionClient(t, "") }, minVersions: map[string]string{"b": "10.6(1)", "c": "10.5(1)"}, expected: []string{"a", "b", "c"}},
+		{name: "no minimum versions", client: testNoRequestsClient, minVersions: map[string]string{}, expected: []string{"a", "b", "c"}},
 	}
-	if diags := CheckMinVersion(context.Background(), client, "", `{"a":{"attributes":{"x":"y"}}}`, map[string]MinVersion{}); diags.HasError() {
-		t.Errorf("unexpected errors: %v", diags)
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			if out := SubtreeClasses(context.Background(), c.client(t), classes, c.minVersions); !reflect.DeepEqual(out, c.expected) {
+				t.Fatalf("Error matching output and expected: %v vs %v", out, c.expected)
+			}
+		})
+	}
+}
+
+func TestNxos_CheckMinVersion(t *testing.T) {
+	checks := map[string]MinVersion{
+		"b":      {Version: "10.6(1)", Path: "list_b"},
+		"a.attr": {Version: "10.6(1)", Path: "attr"},
+	}
+	older := func(t *testing.T) *nxos.Client { return testVersionClient(t, "10.5(6)") }
+
+	cases := []struct {
+		name   string
+		client func(t *testing.T) *nxos.Client
+		checks map[string]MinVersion
+		body   string
+		errors int
+		detail string
+	}{
+		{name: "unsupported child", client: older, checks: checks, body: `{"a":{"attributes":{},"children":[{"b":{"attributes":{"id":"1"}}}]}}`, errors: 1},
+		{name: "unsupported attribute", client: older, checks: checks, body: `{"a":{"attributes":{"attr":"x"}}}`, errors: 1, detail: "Attribute `attr` requires NX-OS 10.6(1) or later, but device 'leaf1' runs NX-OS 10.5(6)."},
+		{name: "both", client: older, checks: checks, body: `{"a":{"attributes":{"attr":"x"},"children":[{"b":{"attributes":{}}}]}}`, errors: 2},
+		{name: "deleted child", client: older, checks: checks, body: `{"a":{"attributes":{},"children":[{"b":{"attributes":{"status":"deleted"}}}]}}`, errors: 0},
+		{name: "unset attribute", client: older, checks: checks, body: `{"a":{"attributes":{"attr":"DME_UNSET_PROPERTY_MARKER"}}}`, errors: 0},
+		{name: "supported only", client: older, checks: checks, body: `{"a":{"attributes":{"other":"x"},"children":[{"c":{"attributes":{}}}]}}`, errors: 0},
+		{name: "newer device", client: func(t *testing.T) *nxos.Client { return testVersionClient(t, "10.6(4)") }, checks: checks, body: `{"a":{"attributes":{"attr":"x"}}}`, errors: 0},
+		{name: "unknown version", client: func(t *testing.T) *nxos.Client { return testVersionClient(t, "") }, checks: checks, body: `{"a":{"attributes":{"attr":"x"}}}`, errors: 0},
+		{name: "no minimum versions", client: testNoRequestsClient, checks: map[string]MinVersion{}, body: `{"a":{"attributes":{"x":"y"}}}`, errors: 0},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			diags := CheckMinVersion(context.Background(), c.client(t), "leaf1", c.body, c.checks)
+			if diags.ErrorsCount() != c.errors {
+				t.Fatalf("Error matching error count and expected: %d vs %d: %v", diags.ErrorsCount(), c.errors, diags)
+			}
+			if c.detail != "" && diags[0].Detail() != c.detail {
+				t.Fatalf("Error matching error detail and expected: %q vs %q", diags[0].Detail(), c.detail)
+			}
+		})
 	}
 }

@@ -180,6 +180,14 @@ var EIGRPSubtreeClassMinVersions = map[string]string{}
 // EIGRPMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var EIGRPMinVersions = map[string]helpers.MinVersion{}
 
+// EIGRPListClasses holds the list child classes of the resource.
+var EIGRPListClasses = map[string]bool{"eigrpInst": true, "eigrpDom": true, "eigrpDomAf": true, "eigrpInterLeakP": true, "eigrpIf": true, "eigrpIfAf": true, "eigrpRtCtrlP": true, "eigrpRtMetricAlterP": true, "eigrpRtSum": true}
+
+// getEIGRPTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getEIGRPTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"eigrpInst", "eigrpDom", "eigrpDomAf", "eigrpAuthP", "eigrpDefMetric", "eigrpGr", "eigrpMetricWt", "eigrpDefRtLeakP", "eigrpInterLeakP", "eigrpLeakCtrlP", "eigrpRibLeakP", "eigrpStubP", "eigrpIf", "eigrpIfAf", "eigrpAuthP", "eigrpRtCtrlP", "eigrpRtMetricAlterP", "eigrpRtSum"}, EIGRPSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -1638,7 +1646,580 @@ func (data EIGRP) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data EIGRP) toBodyWithDeletes(ctx context.Context, state EIGRP, config EIGRP, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data EIGRP) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.Instances {
+		eigrpInstDn := dn + "/" + child.getRn(key)
+		dns[eigrpInstDn] = true
+		for key_, child_ := range child.Vrfs {
+			eigrpDomDn_ := eigrpInstDn + "/" + child_.getRn(key_)
+			dns[eigrpDomDn_] = true
+			for key__, child__ := range child_.AddressFamilies {
+				eigrpDomAfDn__ := eigrpDomDn_ + "/" + child__.getRn(key__)
+				dns[eigrpDomAfDn__] = true
+				if !(child__.AuthenticationMode.IsNull() && child__.AuthenticationKeyChain.IsNull()) {
+					eigrpAuthPDn___ := eigrpDomAfDn__ + "/" + "auth"
+					dns[eigrpAuthPDn___] = true
+				}
+				if !(child__.DefaultMetricBandwidth.IsNull() && child__.DefaultMetricDelay.IsNull() && child__.DefaultMetricReliability.IsNull() && child__.DefaultMetricLoad.IsNull() && child__.DefaultMetricMtu.IsNull()) {
+					eigrpDefMetricDn___ := eigrpDomAfDn__ + "/" + "defmetric"
+					dns[eigrpDefMetricDn___] = true
+				}
+				if !(child__.GracefulRestart.IsNull() && child__.GracefulRestartRouteHoldInterval.IsNull() && child__.GracefulRestartConvergenceInterval.IsNull() && child__.GracefulRestartSignalInterval.IsNull() && child__.GracefulRestartAwaitRedistributionProtocolConvergence.IsNull()) {
+					eigrpGrDn___ := eigrpDomAfDn__ + "/" + "gr"
+					dns[eigrpGrDn___] = true
+				}
+				if !(child__.MetricWeightsTypeOfService.IsNull() && child__.MetricWeightsK1.IsNull() && child__.MetricWeightsK2.IsNull() && child__.MetricWeightsK3.IsNull() && child__.MetricWeightsK4.IsNull() && child__.MetricWeightsK5.IsNull() && child__.MetricWeightsK6.IsNull()) {
+					eigrpMetricWtDn___ := eigrpDomAfDn__ + "/" + "metricwt"
+					dns[eigrpMetricWtDn___] = true
+				}
+				if !(child__.DefaultInformationOriginateAlways.IsNull() && child__.DefaultInformationOriginateRouteMap.IsNull()) {
+					eigrpDefRtLeakPDn___ := eigrpDomAfDn__ + "/" + "defrtleak"
+					dns[eigrpDefRtLeakPDn___] = true
+				}
+				for key___, child___ := range child__.Redistributions {
+					keyParts := strings.SplitN(key___, ";", 3)
+					_ = keyParts
+					eigrpInterLeakPDn___ := eigrpDomAfDn__ + "/" + child___.getRn(key___)
+					dns[eigrpInterLeakPDn___] = true
+				}
+				if !(child__.RedistributeMaximumPrefixControl.IsNull() && child__.RedistributeMaximumPrefix.IsNull() && child__.RedistributeMaximumPrefixThreshold.IsNull() && child__.RedistributeMaximumPrefixRetries.IsNull() && child__.RedistributeMaximumPrefixDuration.IsNull()) {
+					eigrpLeakCtrlPDn___ := eigrpDomAfDn__ + "/" + "leakctrl"
+					dns[eigrpLeakCtrlPDn___] = true
+				}
+				if !(child__.TableMapRouteMap.IsNull() && child__.TableMapAlways.IsNull()) {
+					eigrpRibLeakPDn___ := eigrpDomAfDn__ + "/" + "ribleak"
+					dns[eigrpRibLeakPDn___] = true
+				}
+				if !(child__.StubDirect.IsNull() && child__.StubStatic.IsNull() && child__.StubSummary.IsNull() && child__.StubExternal.IsNull() && child__.StubReceiveOnly.IsNull() && child__.StubLeakMap.IsNull()) {
+					eigrpStubPDn___ := eigrpDomAfDn__ + "/" + "stub"
+					dns[eigrpStubPDn___] = true
+				}
+			}
+			for key__, child__ := range child_.Interfaces {
+				eigrpIfDn__ := eigrpDomDn_ + "/" + child__.getRn(key__)
+				dns[eigrpIfDn__] = true
+				for key___, child___ := range child__.AddressFamilies {
+					eigrpIfAfDn___ := eigrpIfDn__ + "/" + child___.getRn(key___)
+					dns[eigrpIfAfDn___] = true
+					if !(child___.AuthenticationMode.IsNull() && child___.AuthenticationKeyChain.IsNull()) {
+						eigrpAuthPDn____ := eigrpIfAfDn___ + "/" + "auth"
+						dns[eigrpAuthPDn____] = true
+					}
+					for key____, child____ := range child___.DistributeLists {
+						eigrpRtCtrlPDn____ := eigrpIfAfDn___ + "/" + child____.getRn(key____)
+						dns[eigrpRtCtrlPDn____] = true
+					}
+					for key____, child____ := range child___.OffsetLists {
+						eigrpRtMetricAlterPDn____ := eigrpIfAfDn___ + "/" + child____.getRn(key____)
+						dns[eigrpRtMetricAlterPDn____] = true
+					}
+					for key____, child____ := range child___.SummaryAddresses {
+						eigrpRtSumDn____ := eigrpIfAfDn___ + "/" + child____.getRn(key____)
+						dns[eigrpRtSumDn____] = true
+					}
+				}
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data EIGRP) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	if !existed(dn) {
+		return data.toDeleteBody()
+	}
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "eigrpEntity.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.Instances {
+		_ = child
+		eigrpInstRn := child.getRn(key)
+		eigrpInstDn := dn + "/" + eigrpInstRn
+		_ = eigrpInstDn
+		if !existed(eigrpInstDn) {
+			body, _ = sjson.Set(body, "eigrpEntity.children.-1.eigrpInst.attributes", map[string]interface{}{"rn": eigrpInstRn, "status": "deleted"})
+			continue
+		}
+		eigrpInstBody := ""
+		eigrpInstBody, _ = sjson.Set(eigrpInstBody, "eigrpInst.attributes.rn", eigrpInstRn)
+		if !child.FlushRoutes.IsNull() {
+			eigrpInstBody, _ = sjson.Set(eigrpInstBody, "eigrpInst.attributes.flushRoutes", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Isolate.IsNull() {
+			eigrpInstBody, _ = sjson.Set(eigrpInstBody, "eigrpInst.attributes.isolate", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key_, child_ := range child.Vrfs {
+			_ = child_
+			eigrpDomRn_ := child_.getRn(key_)
+			eigrpDomDn_ := eigrpInstDn + "/" + eigrpDomRn_
+			_ = eigrpDomDn_
+			if !existed(eigrpDomDn_) {
+				eigrpInstBody, _ = sjson.Set(eigrpInstBody, "eigrpInst.children.-1.eigrpDom.attributes", map[string]interface{}{"rn": eigrpDomRn_, "status": "deleted"})
+				continue
+			}
+			eigrpDomBody_ := ""
+			eigrpDomBody_, _ = sjson.Set(eigrpDomBody_, "eigrpDom.attributes.rn", eigrpDomRn_)
+			for key__, child__ := range child_.AddressFamilies {
+				_ = child__
+				eigrpDomAfRn__ := child__.getRn(key__)
+				eigrpDomAfDn__ := eigrpDomDn_ + "/" + eigrpDomAfRn__
+				_ = eigrpDomAfDn__
+				if !existed(eigrpDomAfDn__) {
+					eigrpDomBody_, _ = sjson.Set(eigrpDomBody_, "eigrpDom.children.-1.eigrpDomAf.attributes", map[string]interface{}{"rn": eigrpDomAfRn__, "status": "deleted"})
+					continue
+				}
+				eigrpDomAfBody__ := ""
+				eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.rn", eigrpDomAfRn__)
+				if !child__.AdminState.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Asn.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.asn", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.RouterId.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.rtrId", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.InternalDistance.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.intDist", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.ExternalDistance.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.extDist", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.MaximumPaths.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.maxPaths", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.ActiveIntervalState.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.actIntvlSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.ActiveInterval.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.actIntvl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.MetricStyle.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.metricStyle", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.RibScale.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.ribScale", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.MaximumHops.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.maxHops", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.LogAdjacencyChanges.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.logAdjChanges", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.LogNeighborWarningsInterval.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.logNbrWarnIntvl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.LogNeighborWarningsState.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.logNbrWarnState", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.PassiveInterfaceDefault.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.passiveIntfDefault", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.SuppressFibPending.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.suppressFibPending", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Bfd.IsNull() {
+					eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.attributes.bfd", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !(child__.AuthenticationMode.IsNull() && child__.AuthenticationKeyChain.IsNull()) {
+					eigrpAuthPRn___ := "auth"
+					eigrpAuthPDn___ := eigrpDomAfDn__ + "/" + eigrpAuthPRn___
+					_ = eigrpAuthPDn___
+					if !existed(eigrpAuthPDn___) {
+						eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.children.-1.eigrpAuthP.attributes", map[string]interface{}{"rn": eigrpAuthPRn___, "status": "deleted"})
+					} else {
+						eigrpAuthPBody___ := ""
+						if !child__.AuthenticationMode.IsNull() {
+							eigrpAuthPBody___, _ = sjson.Set(eigrpAuthPBody___, "eigrpAuthP.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.AuthenticationKeyChain.IsNull() {
+							eigrpAuthPBody___, _ = sjson.Set(eigrpAuthPBody___, "eigrpAuthP.attributes.keyChain", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if eigrpAuthPBody___ != "" {
+							eigrpAuthPBody___, _ = sjson.Set(eigrpAuthPBody___, "eigrpAuthP.attributes.rn", eigrpAuthPRn___)
+							eigrpDomAfBody__, _ = sjson.SetRaw(eigrpDomAfBody__, "eigrpDomAf.children.-1", eigrpAuthPBody___)
+						}
+					}
+				}
+				if !(child__.DefaultMetricBandwidth.IsNull() && child__.DefaultMetricDelay.IsNull() && child__.DefaultMetricReliability.IsNull() && child__.DefaultMetricLoad.IsNull() && child__.DefaultMetricMtu.IsNull()) {
+					eigrpDefMetricRn___ := "defmetric"
+					eigrpDefMetricDn___ := eigrpDomAfDn__ + "/" + eigrpDefMetricRn___
+					_ = eigrpDefMetricDn___
+					if !existed(eigrpDefMetricDn___) {
+						eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.children.-1.eigrpDefMetric.attributes", map[string]interface{}{"rn": eigrpDefMetricRn___, "status": "deleted"})
+					} else {
+						eigrpDefMetricBody___ := ""
+						if !child__.DefaultMetricBandwidth.IsNull() {
+							eigrpDefMetricBody___, _ = sjson.Set(eigrpDefMetricBody___, "eigrpDefMetric.attributes.defBw", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.DefaultMetricDelay.IsNull() {
+							eigrpDefMetricBody___, _ = sjson.Set(eigrpDefMetricBody___, "eigrpDefMetric.attributes.defDelay", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.DefaultMetricReliability.IsNull() {
+							eigrpDefMetricBody___, _ = sjson.Set(eigrpDefMetricBody___, "eigrpDefMetric.attributes.defRel", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.DefaultMetricLoad.IsNull() {
+							eigrpDefMetricBody___, _ = sjson.Set(eigrpDefMetricBody___, "eigrpDefMetric.attributes.defLoad", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.DefaultMetricMtu.IsNull() {
+							eigrpDefMetricBody___, _ = sjson.Set(eigrpDefMetricBody___, "eigrpDefMetric.attributes.defMtu", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if eigrpDefMetricBody___ != "" {
+							eigrpDefMetricBody___, _ = sjson.Set(eigrpDefMetricBody___, "eigrpDefMetric.attributes.rn", eigrpDefMetricRn___)
+							eigrpDomAfBody__, _ = sjson.SetRaw(eigrpDomAfBody__, "eigrpDomAf.children.-1", eigrpDefMetricBody___)
+						}
+					}
+				}
+				if !(child__.GracefulRestart.IsNull() && child__.GracefulRestartRouteHoldInterval.IsNull() && child__.GracefulRestartConvergenceInterval.IsNull() && child__.GracefulRestartSignalInterval.IsNull() && child__.GracefulRestartAwaitRedistributionProtocolConvergence.IsNull()) {
+					eigrpGrRn___ := "gr"
+					eigrpGrDn___ := eigrpDomAfDn__ + "/" + eigrpGrRn___
+					_ = eigrpGrDn___
+					if !existed(eigrpGrDn___) {
+						eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.children.-1.eigrpGr.attributes", map[string]interface{}{"rn": eigrpGrRn___, "status": "deleted"})
+					} else {
+						eigrpGrBody___ := ""
+						if !child__.GracefulRestart.IsNull() {
+							eigrpGrBody___, _ = sjson.Set(eigrpGrBody___, "eigrpGr.attributes.enable", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.GracefulRestartRouteHoldInterval.IsNull() {
+							eigrpGrBody___, _ = sjson.Set(eigrpGrBody___, "eigrpGr.attributes.rtHoldIntvl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.GracefulRestartConvergenceInterval.IsNull() {
+							eigrpGrBody___, _ = sjson.Set(eigrpGrBody___, "eigrpGr.attributes.convIntvl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.GracefulRestartSignalInterval.IsNull() {
+							eigrpGrBody___, _ = sjson.Set(eigrpGrBody___, "eigrpGr.attributes.signalIntvl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.GracefulRestartAwaitRedistributionProtocolConvergence.IsNull() {
+							eigrpGrBody___, _ = sjson.Set(eigrpGrBody___, "eigrpGr.attributes.awaitRedistProtoConv", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if eigrpGrBody___ != "" {
+							eigrpGrBody___, _ = sjson.Set(eigrpGrBody___, "eigrpGr.attributes.rn", eigrpGrRn___)
+							eigrpDomAfBody__, _ = sjson.SetRaw(eigrpDomAfBody__, "eigrpDomAf.children.-1", eigrpGrBody___)
+						}
+					}
+				}
+				if !(child__.MetricWeightsTypeOfService.IsNull() && child__.MetricWeightsK1.IsNull() && child__.MetricWeightsK2.IsNull() && child__.MetricWeightsK3.IsNull() && child__.MetricWeightsK4.IsNull() && child__.MetricWeightsK5.IsNull() && child__.MetricWeightsK6.IsNull()) {
+					eigrpMetricWtRn___ := "metricwt"
+					eigrpMetricWtDn___ := eigrpDomAfDn__ + "/" + eigrpMetricWtRn___
+					_ = eigrpMetricWtDn___
+					if !existed(eigrpMetricWtDn___) {
+						eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.children.-1.eigrpMetricWt.attributes", map[string]interface{}{"rn": eigrpMetricWtRn___, "status": "deleted"})
+					} else {
+						eigrpMetricWtBody___ := ""
+						if !child__.MetricWeightsTypeOfService.IsNull() {
+							eigrpMetricWtBody___, _ = sjson.Set(eigrpMetricWtBody___, "eigrpMetricWt.attributes.typeofService", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.MetricWeightsK1.IsNull() {
+							eigrpMetricWtBody___, _ = sjson.Set(eigrpMetricWtBody___, "eigrpMetricWt.attributes.k1", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.MetricWeightsK2.IsNull() {
+							eigrpMetricWtBody___, _ = sjson.Set(eigrpMetricWtBody___, "eigrpMetricWt.attributes.k2", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.MetricWeightsK3.IsNull() {
+							eigrpMetricWtBody___, _ = sjson.Set(eigrpMetricWtBody___, "eigrpMetricWt.attributes.k3", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.MetricWeightsK4.IsNull() {
+							eigrpMetricWtBody___, _ = sjson.Set(eigrpMetricWtBody___, "eigrpMetricWt.attributes.k4", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.MetricWeightsK5.IsNull() {
+							eigrpMetricWtBody___, _ = sjson.Set(eigrpMetricWtBody___, "eigrpMetricWt.attributes.k5", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.MetricWeightsK6.IsNull() {
+							eigrpMetricWtBody___, _ = sjson.Set(eigrpMetricWtBody___, "eigrpMetricWt.attributes.k6", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if eigrpMetricWtBody___ != "" {
+							eigrpMetricWtBody___, _ = sjson.Set(eigrpMetricWtBody___, "eigrpMetricWt.attributes.rn", eigrpMetricWtRn___)
+							eigrpDomAfBody__, _ = sjson.SetRaw(eigrpDomAfBody__, "eigrpDomAf.children.-1", eigrpMetricWtBody___)
+						}
+					}
+				}
+				if !(child__.DefaultInformationOriginateAlways.IsNull() && child__.DefaultInformationOriginateRouteMap.IsNull()) {
+					eigrpDefRtLeakPRn___ := "defrtleak"
+					eigrpDefRtLeakPDn___ := eigrpDomAfDn__ + "/" + eigrpDefRtLeakPRn___
+					_ = eigrpDefRtLeakPDn___
+					if !existed(eigrpDefRtLeakPDn___) {
+						eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.children.-1.eigrpDefRtLeakP.attributes", map[string]interface{}{"rn": eigrpDefRtLeakPRn___, "status": "deleted"})
+					} else {
+						eigrpDefRtLeakPBody___ := ""
+						if !child__.DefaultInformationOriginateAlways.IsNull() {
+							eigrpDefRtLeakPBody___, _ = sjson.Set(eigrpDefRtLeakPBody___, "eigrpDefRtLeakP.attributes.always", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.DefaultInformationOriginateRouteMap.IsNull() {
+							eigrpDefRtLeakPBody___, _ = sjson.Set(eigrpDefRtLeakPBody___, "eigrpDefRtLeakP.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if eigrpDefRtLeakPBody___ != "" {
+							eigrpDefRtLeakPBody___, _ = sjson.Set(eigrpDefRtLeakPBody___, "eigrpDefRtLeakP.attributes.rn", eigrpDefRtLeakPRn___)
+							eigrpDomAfBody__, _ = sjson.SetRaw(eigrpDomAfBody__, "eigrpDomAf.children.-1", eigrpDefRtLeakPBody___)
+						}
+					}
+				}
+				for key___, child___ := range child__.Redistributions {
+					_ = child___
+					keyParts := strings.SplitN(key___, ";", 3)
+					_ = keyParts
+					eigrpInterLeakPRn___ := child___.getRn(key___)
+					eigrpInterLeakPDn___ := eigrpDomAfDn__ + "/" + eigrpInterLeakPRn___
+					_ = eigrpInterLeakPDn___
+					if !existed(eigrpInterLeakPDn___) {
+						eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.children.-1.eigrpInterLeakP.attributes", map[string]interface{}{"rn": eigrpInterLeakPRn___, "status": "deleted"})
+						continue
+					}
+					eigrpInterLeakPBody___ := ""
+					eigrpInterLeakPBody___, _ = sjson.Set(eigrpInterLeakPBody___, "eigrpInterLeakP.attributes.rn", eigrpInterLeakPRn___)
+					if !child___.RouteMap.IsNull() {
+						eigrpInterLeakPBody___, _ = sjson.Set(eigrpInterLeakPBody___, "eigrpInterLeakP.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+					}
+					eigrpDomAfBody__, _ = sjson.SetRaw(eigrpDomAfBody__, "eigrpDomAf.children.-1", eigrpInterLeakPBody___)
+				}
+				if !(child__.RedistributeMaximumPrefixControl.IsNull() && child__.RedistributeMaximumPrefix.IsNull() && child__.RedistributeMaximumPrefixThreshold.IsNull() && child__.RedistributeMaximumPrefixRetries.IsNull() && child__.RedistributeMaximumPrefixDuration.IsNull()) {
+					eigrpLeakCtrlPRn___ := "leakctrl"
+					eigrpLeakCtrlPDn___ := eigrpDomAfDn__ + "/" + eigrpLeakCtrlPRn___
+					_ = eigrpLeakCtrlPDn___
+					if !existed(eigrpLeakCtrlPDn___) {
+						eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.children.-1.eigrpLeakCtrlP.attributes", map[string]interface{}{"rn": eigrpLeakCtrlPRn___, "status": "deleted"})
+					} else {
+						eigrpLeakCtrlPBody___ := ""
+						if !child__.RedistributeMaximumPrefixControl.IsNull() {
+							eigrpLeakCtrlPBody___, _ = sjson.Set(eigrpLeakCtrlPBody___, "eigrpLeakCtrlP.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.RedistributeMaximumPrefix.IsNull() {
+							eigrpLeakCtrlPBody___, _ = sjson.Set(eigrpLeakCtrlPBody___, "eigrpLeakCtrlP.attributes.max", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.RedistributeMaximumPrefixThreshold.IsNull() {
+							eigrpLeakCtrlPBody___, _ = sjson.Set(eigrpLeakCtrlPBody___, "eigrpLeakCtrlP.attributes.thresh", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.RedistributeMaximumPrefixRetries.IsNull() {
+							eigrpLeakCtrlPBody___, _ = sjson.Set(eigrpLeakCtrlPBody___, "eigrpLeakCtrlP.attributes.retries", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.RedistributeMaximumPrefixDuration.IsNull() {
+							eigrpLeakCtrlPBody___, _ = sjson.Set(eigrpLeakCtrlPBody___, "eigrpLeakCtrlP.attributes.duration", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if eigrpLeakCtrlPBody___ != "" {
+							eigrpLeakCtrlPBody___, _ = sjson.Set(eigrpLeakCtrlPBody___, "eigrpLeakCtrlP.attributes.rn", eigrpLeakCtrlPRn___)
+							eigrpDomAfBody__, _ = sjson.SetRaw(eigrpDomAfBody__, "eigrpDomAf.children.-1", eigrpLeakCtrlPBody___)
+						}
+					}
+				}
+				if !(child__.TableMapRouteMap.IsNull() && child__.TableMapAlways.IsNull()) {
+					eigrpRibLeakPRn___ := "ribleak"
+					eigrpRibLeakPDn___ := eigrpDomAfDn__ + "/" + eigrpRibLeakPRn___
+					_ = eigrpRibLeakPDn___
+					if !existed(eigrpRibLeakPDn___) {
+						eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.children.-1.eigrpRibLeakP.attributes", map[string]interface{}{"rn": eigrpRibLeakPRn___, "status": "deleted"})
+					} else {
+						eigrpRibLeakPBody___ := ""
+						if !child__.TableMapRouteMap.IsNull() {
+							eigrpRibLeakPBody___, _ = sjson.Set(eigrpRibLeakPBody___, "eigrpRibLeakP.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.TableMapAlways.IsNull() {
+							eigrpRibLeakPBody___, _ = sjson.Set(eigrpRibLeakPBody___, "eigrpRibLeakP.attributes.always", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if eigrpRibLeakPBody___ != "" {
+							eigrpRibLeakPBody___, _ = sjson.Set(eigrpRibLeakPBody___, "eigrpRibLeakP.attributes.rn", eigrpRibLeakPRn___)
+							eigrpDomAfBody__, _ = sjson.SetRaw(eigrpDomAfBody__, "eigrpDomAf.children.-1", eigrpRibLeakPBody___)
+						}
+					}
+				}
+				if !(child__.StubDirect.IsNull() && child__.StubStatic.IsNull() && child__.StubSummary.IsNull() && child__.StubExternal.IsNull() && child__.StubReceiveOnly.IsNull() && child__.StubLeakMap.IsNull()) {
+					eigrpStubPRn___ := "stub"
+					eigrpStubPDn___ := eigrpDomAfDn__ + "/" + eigrpStubPRn___
+					_ = eigrpStubPDn___
+					if !existed(eigrpStubPDn___) {
+						eigrpDomAfBody__, _ = sjson.Set(eigrpDomAfBody__, "eigrpDomAf.children.-1.eigrpStubP.attributes", map[string]interface{}{"rn": eigrpStubPRn___, "status": "deleted"})
+					} else {
+						eigrpStubPBody___ := ""
+						if !child__.StubDirect.IsNull() {
+							eigrpStubPBody___, _ = sjson.Set(eigrpStubPBody___, "eigrpStubP.attributes.direct", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.StubStatic.IsNull() {
+							eigrpStubPBody___, _ = sjson.Set(eigrpStubPBody___, "eigrpStubP.attributes.static", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.StubSummary.IsNull() {
+							eigrpStubPBody___, _ = sjson.Set(eigrpStubPBody___, "eigrpStubP.attributes.summary", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.StubExternal.IsNull() {
+							eigrpStubPBody___, _ = sjson.Set(eigrpStubPBody___, "eigrpStubP.attributes.external", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.StubReceiveOnly.IsNull() {
+							eigrpStubPBody___, _ = sjson.Set(eigrpStubPBody___, "eigrpStubP.attributes.receiveOnly", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.StubLeakMap.IsNull() {
+							eigrpStubPBody___, _ = sjson.Set(eigrpStubPBody___, "eigrpStubP.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if eigrpStubPBody___ != "" {
+							eigrpStubPBody___, _ = sjson.Set(eigrpStubPBody___, "eigrpStubP.attributes.rn", eigrpStubPRn___)
+							eigrpDomAfBody__, _ = sjson.SetRaw(eigrpDomAfBody__, "eigrpDomAf.children.-1", eigrpStubPBody___)
+						}
+					}
+				}
+				eigrpDomBody_, _ = sjson.SetRaw(eigrpDomBody_, "eigrpDom.children.-1", eigrpDomAfBody__)
+			}
+			for key__, child__ := range child_.Interfaces {
+				_ = child__
+				eigrpIfRn__ := child__.getRn(key__)
+				eigrpIfDn__ := eigrpDomDn_ + "/" + eigrpIfRn__
+				_ = eigrpIfDn__
+				if !existed(eigrpIfDn__) {
+					eigrpDomBody_, _ = sjson.Set(eigrpDomBody_, "eigrpDom.children.-1.eigrpIf.attributes", map[string]interface{}{"rn": eigrpIfRn__, "status": "deleted"})
+					continue
+				}
+				eigrpIfBody__ := ""
+				eigrpIfBody__, _ = sjson.Set(eigrpIfBody__, "eigrpIf.attributes.rn", eigrpIfRn__)
+				for key___, child___ := range child__.AddressFamilies {
+					_ = child___
+					eigrpIfAfRn___ := child___.getRn(key___)
+					eigrpIfAfDn___ := eigrpIfDn__ + "/" + eigrpIfAfRn___
+					_ = eigrpIfAfDn___
+					if !existed(eigrpIfAfDn___) {
+						eigrpIfBody__, _ = sjson.Set(eigrpIfBody__, "eigrpIf.children.-1.eigrpIfAf.attributes", map[string]interface{}{"rn": eigrpIfAfRn___, "status": "deleted"})
+						continue
+					}
+					eigrpIfAfBody___ := ""
+					eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.attributes.rn", eigrpIfAfRn___)
+					if !child___.AdminState.IsNull() {
+						eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child___.HelloInterval.IsNull() {
+						eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.attributes.helloIntvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child___.HoldTime.IsNull() {
+						eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.attributes.holdIntvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child___.Bandwidth.IsNull() {
+						eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.attributes.bw", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child___.BandwidthPercent.IsNull() {
+						eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.attributes.bwPercent", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child___.Delay.IsNull() {
+						eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.attributes.delay", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child___.DelayUnit.IsNull() {
+						eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.attributes.delayUnit", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child___.Mtu.IsNull() {
+						eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child___.Bfd.IsNull() {
+						eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.attributes.bfd", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child___.NextHopSelf.IsNull() {
+						eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.attributes.nhSelf", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child___.SplitHorizon.IsNull() {
+						eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.attributes.splitHorizon", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child___.Passive.IsNull() {
+						eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.attributes.passive", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !(child___.AuthenticationMode.IsNull() && child___.AuthenticationKeyChain.IsNull()) {
+						eigrpAuthPRn____ := "auth"
+						eigrpAuthPDn____ := eigrpIfAfDn___ + "/" + eigrpAuthPRn____
+						_ = eigrpAuthPDn____
+						if !existed(eigrpAuthPDn____) {
+							eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.children.-1.eigrpAuthP.attributes", map[string]interface{}{"rn": eigrpAuthPRn____, "status": "deleted"})
+						} else {
+							eigrpAuthPBody____ := ""
+							if !child___.AuthenticationMode.IsNull() {
+								eigrpAuthPBody____, _ = sjson.Set(eigrpAuthPBody____, "eigrpAuthP.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child___.AuthenticationKeyChain.IsNull() {
+								eigrpAuthPBody____, _ = sjson.Set(eigrpAuthPBody____, "eigrpAuthP.attributes.keyChain", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if eigrpAuthPBody____ != "" {
+								eigrpAuthPBody____, _ = sjson.Set(eigrpAuthPBody____, "eigrpAuthP.attributes.rn", eigrpAuthPRn____)
+								eigrpIfAfBody___, _ = sjson.SetRaw(eigrpIfAfBody___, "eigrpIfAf.children.-1", eigrpAuthPBody____)
+							}
+						}
+					}
+					for key____, child____ := range child___.DistributeLists {
+						_ = child____
+						eigrpRtCtrlPRn____ := child____.getRn(key____)
+						eigrpRtCtrlPDn____ := eigrpIfAfDn___ + "/" + eigrpRtCtrlPRn____
+						_ = eigrpRtCtrlPDn____
+						if !existed(eigrpRtCtrlPDn____) {
+							eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.children.-1.eigrpRtCtrlP.attributes", map[string]interface{}{"rn": eigrpRtCtrlPRn____, "status": "deleted"})
+							continue
+						}
+						eigrpRtCtrlPBody____ := ""
+						eigrpRtCtrlPBody____, _ = sjson.Set(eigrpRtCtrlPBody____, "eigrpRtCtrlP.attributes.rn", eigrpRtCtrlPRn____)
+						if !child____.RouteMap.IsNull() {
+							eigrpRtCtrlPBody____, _ = sjson.Set(eigrpRtCtrlPBody____, "eigrpRtCtrlP.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child____.PrefixList.IsNull() {
+							eigrpRtCtrlPBody____, _ = sjson.Set(eigrpRtCtrlPBody____, "eigrpRtCtrlP.attributes.pfxList", "DME_UNSET_PROPERTY_MARKER")
+						}
+						eigrpIfAfBody___, _ = sjson.SetRaw(eigrpIfAfBody___, "eigrpIfAf.children.-1", eigrpRtCtrlPBody____)
+					}
+					for key____, child____ := range child___.OffsetLists {
+						_ = child____
+						eigrpRtMetricAlterPRn____ := child____.getRn(key____)
+						eigrpRtMetricAlterPDn____ := eigrpIfAfDn___ + "/" + eigrpRtMetricAlterPRn____
+						_ = eigrpRtMetricAlterPDn____
+						if !existed(eigrpRtMetricAlterPDn____) {
+							eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.children.-1.eigrpRtMetricAlterP.attributes", map[string]interface{}{"rn": eigrpRtMetricAlterPRn____, "status": "deleted"})
+							continue
+						}
+						eigrpRtMetricAlterPBody____ := ""
+						eigrpRtMetricAlterPBody____, _ = sjson.Set(eigrpRtMetricAlterPBody____, "eigrpRtMetricAlterP.attributes.rn", eigrpRtMetricAlterPRn____)
+						if !child____.RouteMap.IsNull() {
+							eigrpRtMetricAlterPBody____, _ = sjson.Set(eigrpRtMetricAlterPBody____, "eigrpRtMetricAlterP.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child____.PrefixList.IsNull() {
+							eigrpRtMetricAlterPBody____, _ = sjson.Set(eigrpRtMetricAlterPBody____, "eigrpRtMetricAlterP.attributes.pfxList", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child____.Offset.IsNull() {
+							eigrpRtMetricAlterPBody____, _ = sjson.Set(eigrpRtMetricAlterPBody____, "eigrpRtMetricAlterP.attributes.offset", "DME_UNSET_PROPERTY_MARKER")
+						}
+						eigrpIfAfBody___, _ = sjson.SetRaw(eigrpIfAfBody___, "eigrpIfAf.children.-1", eigrpRtMetricAlterPBody____)
+					}
+					for key____, child____ := range child___.SummaryAddresses {
+						_ = child____
+						eigrpRtSumRn____ := child____.getRn(key____)
+						eigrpRtSumDn____ := eigrpIfAfDn___ + "/" + eigrpRtSumRn____
+						_ = eigrpRtSumDn____
+						if !existed(eigrpRtSumDn____) {
+							eigrpIfAfBody___, _ = sjson.Set(eigrpIfAfBody___, "eigrpIfAf.children.-1.eigrpRtSum.attributes", map[string]interface{}{"rn": eigrpRtSumRn____, "status": "deleted"})
+							continue
+						}
+						eigrpRtSumBody____ := ""
+						eigrpRtSumBody____, _ = sjson.Set(eigrpRtSumBody____, "eigrpRtSum.attributes.rn", eigrpRtSumRn____)
+						if !child____.RouteMap.IsNull() {
+							eigrpRtSumBody____, _ = sjson.Set(eigrpRtSumBody____, "eigrpRtSum.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child____.Distance.IsNull() {
+							eigrpRtSumBody____, _ = sjson.Set(eigrpRtSumBody____, "eigrpRtSum.attributes.distance", "DME_UNSET_PROPERTY_MARKER")
+						}
+						eigrpIfAfBody___, _ = sjson.SetRaw(eigrpIfAfBody___, "eigrpIfAf.children.-1", eigrpRtSumBody____)
+					}
+					eigrpIfBody__, _ = sjson.SetRaw(eigrpIfBody__, "eigrpIf.children.-1", eigrpIfAfBody___)
+				}
+				eigrpDomBody_, _ = sjson.SetRaw(eigrpDomBody_, "eigrpDom.children.-1", eigrpIfBody__)
+			}
+			eigrpInstBody, _ = sjson.SetRaw(eigrpInstBody, "eigrpInst.children.-1", eigrpDomBody_)
+		}
+		body, _ = sjson.SetRaw(body, "eigrpEntity.children.-1", eigrpInstBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data EIGRP) toBodyWithDeletes(ctx context.Context, state EIGRP, config EIGRP, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -1820,6 +2401,8 @@ func (data EIGRP) toBodyWithDeletes(ctx context.Context, state EIGRP, config EIG
 				stateChild := state.Instances[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("eigrpInst.attributes.name").String() == key {
 						if !stateChild.FlushRoutes.IsNull() && configChild.FlushRoutes.IsNull() {
@@ -1845,6 +2428,8 @@ func (data EIGRP) toBodyWithDeletes(ctx context.Context, state EIGRP, config EIG
 								stateChild := stateChild.Vrfs[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								{
 									listChildPath_ := ""
 									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
@@ -1859,6 +2444,8 @@ func (data EIGRP) toBodyWithDeletes(ctx context.Context, state EIGRP, config EIG
 												stateChild := stateChild.AddressFamilies[key]
 												_ = stateChild
 												_ = configChild
+												listChildDn__ := listChildDn_ + "/" + stateChild.getRn(key)
+												_ = listChildDn__
 												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
 													if mv.Get("eigrpDomAf.attributes.type").String() == key {
 														if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
@@ -1924,89 +2511,119 @@ func (data EIGRP) toBodyWithDeletes(ctx context.Context, state EIGRP, config EIG
 														}
 													}
 													if listChildPath__ != "" {
-														if !stateChild.AuthenticationMode.IsNull() && configChild.AuthenticationMode.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpAuthP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+														if deleteEmptied != nil && !(stateChild.AuthenticationMode.IsNull() && stateChild.AuthenticationKeyChain.IsNull()) && (configChild.AuthenticationMode.IsNull() && configChild.AuthenticationKeyChain.IsNull()) && deleteEmptied(listChildDn__+"/auth") {
+															deletePath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpAuthP")
+															body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+															body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+														} else {
+															if !stateChild.AuthenticationMode.IsNull() && configChild.AuthenticationMode.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpAuthP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.AuthenticationKeyChain.IsNull() && configChild.AuthenticationKeyChain.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpAuthP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"keyChain", "DME_UNSET_PROPERTY_MARKER")
+															}
 														}
-														if !stateChild.AuthenticationKeyChain.IsNull() && configChild.AuthenticationKeyChain.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpAuthP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"keyChain", "DME_UNSET_PROPERTY_MARKER")
+														if deleteEmptied != nil && !(stateChild.DefaultMetricBandwidth.IsNull() && stateChild.DefaultMetricDelay.IsNull() && stateChild.DefaultMetricReliability.IsNull() && stateChild.DefaultMetricLoad.IsNull() && stateChild.DefaultMetricMtu.IsNull()) && (configChild.DefaultMetricBandwidth.IsNull() && configChild.DefaultMetricDelay.IsNull() && configChild.DefaultMetricReliability.IsNull() && configChild.DefaultMetricLoad.IsNull() && configChild.DefaultMetricMtu.IsNull()) && deleteEmptied(listChildDn__+"/defmetric") {
+															deletePath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefMetric")
+															body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+															body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+														} else {
+															if !stateChild.DefaultMetricBandwidth.IsNull() && configChild.DefaultMetricBandwidth.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefMetric")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"defBw", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.DefaultMetricDelay.IsNull() && configChild.DefaultMetricDelay.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefMetric")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"defDelay", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.DefaultMetricReliability.IsNull() && configChild.DefaultMetricReliability.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefMetric")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"defRel", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.DefaultMetricLoad.IsNull() && configChild.DefaultMetricLoad.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefMetric")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"defLoad", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.DefaultMetricMtu.IsNull() && configChild.DefaultMetricMtu.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefMetric")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"defMtu", "DME_UNSET_PROPERTY_MARKER")
+															}
 														}
-														if !stateChild.DefaultMetricBandwidth.IsNull() && configChild.DefaultMetricBandwidth.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefMetric")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"defBw", "DME_UNSET_PROPERTY_MARKER")
+														if deleteEmptied != nil && !(stateChild.GracefulRestart.IsNull() && stateChild.GracefulRestartRouteHoldInterval.IsNull() && stateChild.GracefulRestartConvergenceInterval.IsNull() && stateChild.GracefulRestartSignalInterval.IsNull() && stateChild.GracefulRestartAwaitRedistributionProtocolConvergence.IsNull()) && (configChild.GracefulRestart.IsNull() && configChild.GracefulRestartRouteHoldInterval.IsNull() && configChild.GracefulRestartConvergenceInterval.IsNull() && configChild.GracefulRestartSignalInterval.IsNull() && configChild.GracefulRestartAwaitRedistributionProtocolConvergence.IsNull()) && deleteEmptied(listChildDn__+"/gr") {
+															deletePath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpGr")
+															body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+															body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+														} else {
+															if !stateChild.GracefulRestart.IsNull() && configChild.GracefulRestart.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpGr")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"enable", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.GracefulRestartRouteHoldInterval.IsNull() && configChild.GracefulRestartRouteHoldInterval.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpGr")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtHoldIntvl", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.GracefulRestartConvergenceInterval.IsNull() && configChild.GracefulRestartConvergenceInterval.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpGr")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"convIntvl", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.GracefulRestartSignalInterval.IsNull() && configChild.GracefulRestartSignalInterval.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpGr")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"signalIntvl", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.GracefulRestartAwaitRedistributionProtocolConvergence.IsNull() && configChild.GracefulRestartAwaitRedistributionProtocolConvergence.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpGr")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"awaitRedistProtoConv", "DME_UNSET_PROPERTY_MARKER")
+															}
 														}
-														if !stateChild.DefaultMetricDelay.IsNull() && configChild.DefaultMetricDelay.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefMetric")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"defDelay", "DME_UNSET_PROPERTY_MARKER")
+														if deleteEmptied != nil && !(stateChild.MetricWeightsTypeOfService.IsNull() && stateChild.MetricWeightsK1.IsNull() && stateChild.MetricWeightsK2.IsNull() && stateChild.MetricWeightsK3.IsNull() && stateChild.MetricWeightsK4.IsNull() && stateChild.MetricWeightsK5.IsNull() && stateChild.MetricWeightsK6.IsNull()) && (configChild.MetricWeightsTypeOfService.IsNull() && configChild.MetricWeightsK1.IsNull() && configChild.MetricWeightsK2.IsNull() && configChild.MetricWeightsK3.IsNull() && configChild.MetricWeightsK4.IsNull() && configChild.MetricWeightsK5.IsNull() && configChild.MetricWeightsK6.IsNull()) && deleteEmptied(listChildDn__+"/metricwt") {
+															deletePath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
+															body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+															body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+														} else {
+															if !stateChild.MetricWeightsTypeOfService.IsNull() && configChild.MetricWeightsTypeOfService.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"typeofService", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.MetricWeightsK1.IsNull() && configChild.MetricWeightsK1.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"k1", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.MetricWeightsK2.IsNull() && configChild.MetricWeightsK2.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"k2", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.MetricWeightsK3.IsNull() && configChild.MetricWeightsK3.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"k3", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.MetricWeightsK4.IsNull() && configChild.MetricWeightsK4.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"k4", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.MetricWeightsK5.IsNull() && configChild.MetricWeightsK5.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"k5", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.MetricWeightsK6.IsNull() && configChild.MetricWeightsK6.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"k6", "DME_UNSET_PROPERTY_MARKER")
+															}
 														}
-														if !stateChild.DefaultMetricReliability.IsNull() && configChild.DefaultMetricReliability.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefMetric")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"defRel", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.DefaultMetricLoad.IsNull() && configChild.DefaultMetricLoad.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefMetric")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"defLoad", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.DefaultMetricMtu.IsNull() && configChild.DefaultMetricMtu.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefMetric")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"defMtu", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.GracefulRestart.IsNull() && configChild.GracefulRestart.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpGr")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"enable", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.GracefulRestartRouteHoldInterval.IsNull() && configChild.GracefulRestartRouteHoldInterval.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpGr")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtHoldIntvl", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.GracefulRestartConvergenceInterval.IsNull() && configChild.GracefulRestartConvergenceInterval.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpGr")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"convIntvl", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.GracefulRestartSignalInterval.IsNull() && configChild.GracefulRestartSignalInterval.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpGr")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"signalIntvl", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.GracefulRestartAwaitRedistributionProtocolConvergence.IsNull() && configChild.GracefulRestartAwaitRedistributionProtocolConvergence.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpGr")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"awaitRedistProtoConv", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.MetricWeightsTypeOfService.IsNull() && configChild.MetricWeightsTypeOfService.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"typeofService", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.MetricWeightsK1.IsNull() && configChild.MetricWeightsK1.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"k1", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.MetricWeightsK2.IsNull() && configChild.MetricWeightsK2.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"k2", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.MetricWeightsK3.IsNull() && configChild.MetricWeightsK3.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"k3", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.MetricWeightsK4.IsNull() && configChild.MetricWeightsK4.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"k4", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.MetricWeightsK5.IsNull() && configChild.MetricWeightsK5.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"k5", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.MetricWeightsK6.IsNull() && configChild.MetricWeightsK6.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpMetricWt")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"k6", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.DefaultInformationOriginateAlways.IsNull() && configChild.DefaultInformationOriginateAlways.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefRtLeakP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"always", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.DefaultInformationOriginateRouteMap.IsNull() && configChild.DefaultInformationOriginateRouteMap.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefRtLeakP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+														if deleteEmptied != nil && !(stateChild.DefaultInformationOriginateAlways.IsNull() && stateChild.DefaultInformationOriginateRouteMap.IsNull()) && (configChild.DefaultInformationOriginateAlways.IsNull() && configChild.DefaultInformationOriginateRouteMap.IsNull()) && deleteEmptied(listChildDn__+"/defrtleak") {
+															deletePath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefRtLeakP")
+															body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+															body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+														} else {
+															if !stateChild.DefaultInformationOriginateAlways.IsNull() && configChild.DefaultInformationOriginateAlways.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefRtLeakP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"always", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.DefaultInformationOriginateRouteMap.IsNull() && configChild.DefaultInformationOriginateRouteMap.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpDefRtLeakP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+															}
 														}
 														for key := range stateChild.Redistributions {
 															if configChild, ok := configChild.Redistributions[key]; ok {
@@ -2026,57 +2643,75 @@ func (data EIGRP) toBodyWithDeletes(ctx context.Context, state EIGRP, config EIG
 																}
 															}
 														}
-														if !stateChild.RedistributeMaximumPrefixControl.IsNull() && configChild.RedistributeMaximumPrefixControl.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpLeakCtrlP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+														if deleteEmptied != nil && !(stateChild.RedistributeMaximumPrefixControl.IsNull() && stateChild.RedistributeMaximumPrefix.IsNull() && stateChild.RedistributeMaximumPrefixThreshold.IsNull() && stateChild.RedistributeMaximumPrefixRetries.IsNull() && stateChild.RedistributeMaximumPrefixDuration.IsNull()) && (configChild.RedistributeMaximumPrefixControl.IsNull() && configChild.RedistributeMaximumPrefix.IsNull() && configChild.RedistributeMaximumPrefixThreshold.IsNull() && configChild.RedistributeMaximumPrefixRetries.IsNull() && configChild.RedistributeMaximumPrefixDuration.IsNull()) && deleteEmptied(listChildDn__+"/leakctrl") {
+															deletePath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpLeakCtrlP")
+															body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+															body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+														} else {
+															if !stateChild.RedistributeMaximumPrefixControl.IsNull() && configChild.RedistributeMaximumPrefixControl.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpLeakCtrlP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.RedistributeMaximumPrefix.IsNull() && configChild.RedistributeMaximumPrefix.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpLeakCtrlP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"max", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.RedistributeMaximumPrefixThreshold.IsNull() && configChild.RedistributeMaximumPrefixThreshold.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpLeakCtrlP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"thresh", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.RedistributeMaximumPrefixRetries.IsNull() && configChild.RedistributeMaximumPrefixRetries.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpLeakCtrlP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retries", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.RedistributeMaximumPrefixDuration.IsNull() && configChild.RedistributeMaximumPrefixDuration.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpLeakCtrlP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"duration", "DME_UNSET_PROPERTY_MARKER")
+															}
 														}
-														if !stateChild.RedistributeMaximumPrefix.IsNull() && configChild.RedistributeMaximumPrefix.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpLeakCtrlP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"max", "DME_UNSET_PROPERTY_MARKER")
+														if deleteEmptied != nil && !(stateChild.TableMapRouteMap.IsNull() && stateChild.TableMapAlways.IsNull()) && (configChild.TableMapRouteMap.IsNull() && configChild.TableMapAlways.IsNull()) && deleteEmptied(listChildDn__+"/ribleak") {
+															deletePath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpRibLeakP")
+															body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+															body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+														} else {
+															if !stateChild.TableMapRouteMap.IsNull() && configChild.TableMapRouteMap.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpRibLeakP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.TableMapAlways.IsNull() && configChild.TableMapAlways.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpRibLeakP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"always", "DME_UNSET_PROPERTY_MARKER")
+															}
 														}
-														if !stateChild.RedistributeMaximumPrefixThreshold.IsNull() && configChild.RedistributeMaximumPrefixThreshold.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpLeakCtrlP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"thresh", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.RedistributeMaximumPrefixRetries.IsNull() && configChild.RedistributeMaximumPrefixRetries.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpLeakCtrlP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"retries", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.RedistributeMaximumPrefixDuration.IsNull() && configChild.RedistributeMaximumPrefixDuration.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpLeakCtrlP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"duration", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.TableMapRouteMap.IsNull() && configChild.TableMapRouteMap.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpRibLeakP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.TableMapAlways.IsNull() && configChild.TableMapAlways.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpRibLeakP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"always", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.StubDirect.IsNull() && configChild.StubDirect.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpStubP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"direct", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.StubStatic.IsNull() && configChild.StubStatic.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpStubP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"static", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.StubSummary.IsNull() && configChild.StubSummary.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpStubP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"summary", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.StubExternal.IsNull() && configChild.StubExternal.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpStubP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"external", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.StubReceiveOnly.IsNull() && configChild.StubReceiveOnly.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpStubP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"receiveOnly", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.StubLeakMap.IsNull() && configChild.StubLeakMap.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpStubP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+														if deleteEmptied != nil && !(stateChild.StubDirect.IsNull() && stateChild.StubStatic.IsNull() && stateChild.StubSummary.IsNull() && stateChild.StubExternal.IsNull() && stateChild.StubReceiveOnly.IsNull() && stateChild.StubLeakMap.IsNull()) && (configChild.StubDirect.IsNull() && configChild.StubStatic.IsNull() && configChild.StubSummary.IsNull() && configChild.StubExternal.IsNull() && configChild.StubReceiveOnly.IsNull() && configChild.StubLeakMap.IsNull()) && deleteEmptied(listChildDn__+"/stub") {
+															deletePath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpStubP")
+															body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+															body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+														} else {
+															if !stateChild.StubDirect.IsNull() && configChild.StubDirect.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpStubP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"direct", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.StubStatic.IsNull() && configChild.StubStatic.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpStubP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"static", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.StubSummary.IsNull() && configChild.StubSummary.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpStubP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"summary", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.StubExternal.IsNull() && configChild.StubExternal.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpStubP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"external", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.StubReceiveOnly.IsNull() && configChild.StubReceiveOnly.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpStubP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"receiveOnly", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.StubLeakMap.IsNull() && configChild.StubLeakMap.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "eigrpStubP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+															}
 														}
 													}
 												}
@@ -2087,6 +2722,8 @@ func (data EIGRP) toBodyWithDeletes(ctx context.Context, state EIGRP, config EIG
 												stateChild := stateChild.Interfaces[key]
 												_ = stateChild
 												_ = configChild
+												listChildDn__ := listChildDn_ + "/" + stateChild.getRn(key)
+												_ = listChildDn__
 												{
 													listChildPath__ := ""
 													for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
@@ -2101,6 +2738,8 @@ func (data EIGRP) toBodyWithDeletes(ctx context.Context, state EIGRP, config EIG
 																stateChild := stateChild.AddressFamilies[key]
 																_ = stateChild
 																_ = configChild
+																listChildDn___ := listChildDn__ + "/" + stateChild.getRn(key)
+																_ = listChildDn___
 																for mi, mv := range gjson.Get(body.Str, listChildPath__).Array() {
 																	if mv.Get("eigrpIfAf.attributes.type").String() == key {
 																		if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
@@ -2151,13 +2790,19 @@ func (data EIGRP) toBodyWithDeletes(ctx context.Context, state EIGRP, config EIG
 																		}
 																	}
 																	if listChildPath___ != "" {
-																		if !stateChild.AuthenticationMode.IsNull() && configChild.AuthenticationMode.IsNull() {
-																			unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath___, "eigrpAuthP")
-																			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
-																		}
-																		if !stateChild.AuthenticationKeyChain.IsNull() && configChild.AuthenticationKeyChain.IsNull() {
-																			unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath___, "eigrpAuthP")
-																			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"keyChain", "DME_UNSET_PROPERTY_MARKER")
+																		if deleteEmptied != nil && !(stateChild.AuthenticationMode.IsNull() && stateChild.AuthenticationKeyChain.IsNull()) && (configChild.AuthenticationMode.IsNull() && configChild.AuthenticationKeyChain.IsNull()) && deleteEmptied(listChildDn___+"/auth") {
+																			deletePath := helpers.EnsureChildPath(&body.Str, listChildPath___, "eigrpAuthP")
+																			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+																			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+																		} else {
+																			if !stateChild.AuthenticationMode.IsNull() && configChild.AuthenticationMode.IsNull() {
+																				unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath___, "eigrpAuthP")
+																				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+																			}
+																			if !stateChild.AuthenticationKeyChain.IsNull() && configChild.AuthenticationKeyChain.IsNull() {
+																				unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath___, "eigrpAuthP")
+																				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"keyChain", "DME_UNSET_PROPERTY_MARKER")
+																			}
 																		}
 																		for key := range stateChild.DistributeLists {
 																			if configChild, ok := configChild.DistributeLists[key]; ok {

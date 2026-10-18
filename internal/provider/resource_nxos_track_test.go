@@ -34,7 +34,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosTrack(t *testing.T) {
+// TestAccTrackResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccTrackResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_track.test", "objects.10.delay_down", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_track.test", "objects.10.delay_up", "20"))
@@ -57,38 +61,83 @@ func TestAccNxosTrack(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_track.test", "objects.10.list_weight_up", "20"))
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_track.test", "objects.10.list_members.11.weight", "20"))
 	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.delay_down", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.delay_up", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.interface_id", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.interface_protocol_type", "line-protocol"))
+	if os.Getenv("TRACK_IP_ROUTE") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.ip_route_address_family", "ipv4"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.ip_route_prefix", "10.1.1.0/24"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.ip_route_owner", "none"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.ip_route_state", "reachability"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.ip_route_vrf_name", "default"))
+	}
+	if os.Getenv("TRACK_IP_SLA") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.ip_sla_probe_id", "1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.ip_sla_probe_state", "reachability"))
+	}
+	if os.Getenv("TRACK_LIST") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.list_type", "weight"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.list_weight_down", "10"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.list_weight_up", "20"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_track.test", "objects.10.list_members.11.weight", "20"))
+	}
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccTrackResourceConfig_minimum(),
+		},
+		{
+			Config: testAccTrackResourceConfig_all() + testAccTrackResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_track.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccTrackResourceImportStateIdFunc("nxos_track.test"),
+		},
+		{
+			ResourceName:       "nxos_track.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccTrackResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccWithDeletionPolicy(testAccTrackResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_track.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccNoResourcesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccTrackResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosTrackConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_track.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosTrackImportStateIdFunc("nxos_track.test"),
-			},
-			{
-				ResourceName:       "nxos_track.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosTrackImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccTrackResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -102,7 +151,7 @@ func nxosTrackImportStateIdFunc(resourceName string) resource.ImportStateIdFunc 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosTrackConfig_minimum() string {
+func testAccTrackResourceConfig_minimum() string {
 	config := `resource "nxos_track" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
@@ -111,7 +160,7 @@ func testAccNxosTrackConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosTrackConfig_all() string {
+func testAccTrackResourceConfig_all() string {
 	config := `resource "nxos_track" "test" {` + "\n"
 	config += `	objects = {` + "\n"
 	config += `		"10" = {` + "\n"
@@ -144,6 +193,14 @@ func testAccNxosTrackConfig_all() string {
 	config += `	}` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccTrackResourceConfig_dataSource() string {
+	return `
+data "nxos_track" "test" {
+	depends_on = [nxos_track.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

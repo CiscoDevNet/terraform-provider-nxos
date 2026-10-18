@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"maps"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -56,6 +57,12 @@ type RoutePolicyResource struct {
 	data *NxosProviderData
 }
 
+// RoutePolicyResourceModel adds the attributes that only exist on the resource to the model shared with the data source.
+type RoutePolicyResourceModel struct {
+	RoutePolicy
+	DeletionPolicy types.String `tfsdk:"deletion_policy"`
+}
+
 func (r *RoutePolicyResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_route_policy"
 }
@@ -75,6 +82,13 @@ func (r *RoutePolicyResource) Schema(ctx context.Context, req resource.SchemaReq
 				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"deletion_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("What happens on the device when objects managed by the resource are removed. `delete` deletes the object on destroy, including any configuration not managed by Terraform, and deletes single child objects once none of their attributes are configured anymore, unless the device holds other entries below them. `reset` deletes the objects created by the resource on destroy, resets the managed attributes of the objects that already existed and leaves configuration not managed by Terraform in place. `retain` leaves the device unchanged on destroy and only removes the resource from the state. Overrides the `deletion_policy` of the provider, which defaults to `delete`. See the [Deletion Policy](../guides/deletion_policy) guide for details.").AddStringEnumDescription("delete", "reset", "retain").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("delete", "reset", "retain"),
 				},
 			},
 			"admin_state": schema.StringAttribute{
@@ -819,6 +833,14 @@ func (r *RoutePolicyResource) Configure(ctx context.Context, req resource.Config
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
+// deletionPolicy returns the deletion policy of the resource, or the one of the provider if the resource does not set one.
+func (r *RoutePolicyResource) deletionPolicy(policy types.String) string {
+	if policy.IsNull() || policy.IsUnknown() {
+		return r.data.DeletionPolicy
+	}
+	return policy.ValueString()
+}
+
 // ModifyPlan rejects configurations using objects not supported by the NX-OS version of the device,
 // so that the error surfaces during plan rather than apply. It also forces a recompute during the
 // leniency window that follows an import, so that Update always runs (and clears the `importing`
@@ -833,10 +855,10 @@ func (r *RoutePolicyResource) ModifyPlan(ctx context.Context, req resource.Modif
 	// The check is skipped if the plan cannot be fully evaluated yet (e.g. unknown map keys or device);
 	// Create and Update repeat it before sending the request.
 	if len(RoutePolicyMinVersions) > 0 && r.data != nil {
-		var plan, config RoutePolicy
+		var plan, config RoutePolicyResourceModel
 		if !req.Plan.Get(ctx, &plan).HasError() && !req.Config.Get(ctx, &config).HasError() && !plan.Device.IsUnknown() {
 			if device, ok := r.data.Devices[plan.Device.ValueString()]; ok && device.Managed {
-				resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), plan.toBody(config).Str, RoutePolicyMinVersions)...)
+				resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), plan.toBody(config.RoutePolicy).Str, RoutePolicyMinVersions)...)
 				if resp.Diagnostics.HasError() {
 					return
 				}
@@ -861,7 +883,7 @@ func (r *RoutePolicyResource) ModifyPlan(ctx context.Context, req resource.Modif
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
 func (r *RoutePolicyResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan RoutePolicy
+	var plan RoutePolicyResourceModel
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -871,7 +893,7 @@ func (r *RoutePolicyResource) Create(ctx context.Context, req resource.CreateReq
 	}
 
 	// Read config
-	var config RoutePolicy
+	var config RoutePolicyResourceModel
 	diags = req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
@@ -887,13 +909,21 @@ func (r *RoutePolicyResource) Create(ctx context.Context, req resource.CreateReq
 	}
 
 	// Post object
+	var preexisting map[string]bool
 	if device.Managed {
-		body := plan.toBody(config)
+		body := plan.toBody(config.RoutePolicy)
 		resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), body.Str, RoutePolicyMinVersions)...)
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := device.Client.Post(plan.getDn(), body.Str)
+		// Record which of the managed objects already exist, for the reset deletion policy
+		res, err := getRoutePolicyTree(ctx, device, plan.getDn())
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+			return
+		}
+		preexisting = helpers.FilterExisting(plan.managedDns(), helpers.ReadTree(res, plan.getDn()).Dns())
+		_, err = device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 			return
@@ -902,7 +932,7 @@ func (r *RoutePolicyResource) Create(ctx context.Context, req resource.CreateReq
 
 	plan.Dn = types.StringValue(plan.getDn())
 	var identity RoutePolicyIdentity
-	identity.toIdentity(ctx, &plan)
+	identity.toIdentity(ctx, &plan.RoutePolicy)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
@@ -911,6 +941,9 @@ func (r *RoutePolicyResource) Create(ctx context.Context, req resource.CreateReq
 	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
+	if preexisting != nil {
+		helpers.SetPreexisting(ctx, resp.Private, preexisting, &resp.Diagnostics)
+	}
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
@@ -918,7 +951,7 @@ func (r *RoutePolicyResource) Create(ctx context.Context, req resource.CreateReq
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
 func (r *RoutePolicyResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state RoutePolicy
+	var state RoutePolicyResourceModel
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -946,7 +979,7 @@ func (r *RoutePolicyResource) Read(ctx context.Context, req resource.ReadRequest
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"rtpfxRuleV4", "rtpfxEntry", "rtpfxRuleV6", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapSetPolicyTag", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapRsRtDstAccAtt", "rtmapMatchRtDstV6", "rtmapRsRtDstV6AccAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag", "rtmapSetMetric", "rtmapSetMetricType", "rtmapSetNhPeerAddr", "rtmapSetPref", "rtmapSetPathSelection", "rtmapSetEvpn", "rtmapMatchRtNh", "rtmapRsRtNhAtt", "rtmapMatchRegComm", "rtmapRsRegCommAtt", "rtmapMatchAsPathAccessList", "rtmapRsRtAsPathAccAtt", "rtmapMatchAsnAsPathAccessList", "rtmapRsRtAsnAsPathAccAtt", "rtmapSetPrepend", "rtmapSetPrependLastAs", "rtmapSetRtTag", "rtmapSetWeight", "rtmapSetOrigin", "rtmapSetRttComm", "rtextcomItem", "rtmapSetCommList", "rtmapMatchRtIf", "rtmapMatchRtType", "rtmapSetNh", "rtmapSetIntf", "rtregcomRule", "rtregcomEntry", "rtregcomItem", "rtlistRule", "rtlistEntry", "rpmInst", "rpmRpmIf", "rpmRpmv6If"}, RoutePolicySubtreeClassMinVersions)
+		res, err := getRoutePolicyTree(ctx, device, state.Dn.ValueString())
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return
@@ -963,6 +996,8 @@ func (r *RoutePolicyResource) Read(ctx context.Context, req resource.ReadRequest
 		}
 		if imp {
 			state.fromBody(res)
+			// Everything that was imported already existed on the device
+			helpers.SetPreexisting(ctx, resp.Private, state.managedDns(), &resp.Diagnostics)
 			// Warn here rather than in ModifyPlan: Terraform reuses this same refresh for both the
 			// preview plan and the plan it recomputes right before applying, so Read only runs once
 			// per operation - unlike ModifyPlan, which runs (and would warn) twice.
@@ -978,7 +1013,7 @@ func (r *RoutePolicyResource) Read(ctx context.Context, req resource.ReadRequest
 	}
 
 	var identity RoutePolicyIdentity
-	identity.toIdentity(ctx, &state)
+	identity.toIdentity(ctx, &state.RoutePolicy)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
@@ -992,7 +1027,7 @@ func (r *RoutePolicyResource) Read(ctx context.Context, req resource.ReadRequest
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
 func (r *RoutePolicyResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan RoutePolicy
+	var plan RoutePolicyResourceModel
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -1002,14 +1037,14 @@ func (r *RoutePolicyResource) Update(ctx context.Context, req resource.UpdateReq
 	}
 
 	// Read config
-	var config RoutePolicy
+	var config RoutePolicyResourceModel
 	diags = req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	var state RoutePolicy
+	var state RoutePolicyResourceModel
 
 	// Read state
 	diags = req.State.Get(ctx, &state)
@@ -1032,8 +1067,54 @@ func (r *RoutePolicyResource) Update(ctx context.Context, req resource.UpdateReq
 		return
 	}
 
+	var preexisting map[string]bool
 	if device.Managed {
-		body := plan.toBodyWithDeletes(ctx, state, config, imp)
+		// Keep track of which managed objects already existed, for the reset deletion policy. State written
+		// before this was recorded has an unknown history, so all of its objects are assumed to have existed.
+		preexisting, diags = helpers.GetPreexisting(ctx, req.Private)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		stateDns := state.managedDns()
+		if preexisting == nil {
+			preexisting = maps.Clone(stateDns)
+		}
+		planDns := plan.managedDns()
+		added := map[string]bool{}
+		for dn := range planDns {
+			if !stateDns[dn] {
+				added[dn] = true
+			}
+		}
+		removed := false
+		for dn := range stateDns {
+			if !planDns[dn] {
+				removed = true
+				break
+			}
+		}
+		deletePolicy := r.deletionPolicy(plan.DeletionPolicy) == "delete"
+		var tree helpers.Tree
+		if len(added) > 0 || (deletePolicy && removed) {
+			res, err := getRoutePolicyTree(ctx, device, plan.getDn())
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+				return
+			}
+			tree = helpers.ReadTree(res, plan.getDn())
+		}
+		for dn := range helpers.FilterExisting(added, tree.Dns()) {
+			preexisting[dn] = true
+		}
+		// Objects no longer managed are forgotten, they are deleted or reset by this update
+		preexisting = helpers.FilterExisting(preexisting, planDns)
+		// With the delete policy, single child objects without configured attributes or children are deleted,
+		// unless the device holds list entries below them that are not managed by the resource
+		var deleteEmptied func(dn string) bool
+		if deletePolicy && removed {
+			deleteEmptied = func(dn string) bool { return !tree.HasUnmanagedEntries(dn, stateDns, RoutePolicyListClasses) }
+		}
+		body := plan.toBodyWithDeletes(ctx, state.RoutePolicy, config.RoutePolicy, imp, deleteEmptied)
 		resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), body.Str, RoutePolicyMinVersions)...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -1047,7 +1128,7 @@ func (r *RoutePolicyResource) Update(ctx context.Context, req resource.UpdateReq
 
 	plan.Dn = types.StringValue(plan.getDn())
 	var identity RoutePolicyIdentity
-	identity.toIdentity(ctx, &plan)
+	identity.toIdentity(ctx, &plan.RoutePolicy)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
 
@@ -1056,6 +1137,10 @@ func (r *RoutePolicyResource) Update(ctx context.Context, req resource.UpdateReq
 	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
+	if preexisting != nil {
+		helpers.SetPreexisting(ctx, resp.Private, preexisting, &resp.Diagnostics)
+	}
+
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
@@ -1063,7 +1148,7 @@ func (r *RoutePolicyResource) Update(ctx context.Context, req resource.UpdateReq
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
 func (r *RoutePolicyResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state RoutePolicy
+	var state RoutePolicyResourceModel
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -1080,8 +1165,16 @@ func (r *RoutePolicyResource) Delete(ctx context.Context, req resource.DeleteReq
 		return
 	}
 
-	if device.Managed {
+	deletionPolicy := r.deletionPolicy(state.DeletionPolicy)
+	if device.Managed && deletionPolicy != "retain" {
 		body := state.toDeleteBody()
+		if deletionPolicy == "reset" {
+			preexisting, diags := helpers.GetPreexisting(ctx, req.Private)
+			if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+				return
+			}
+			body = state.toResetBody(preexisting)
+		}
 		if len(body.Str) > 0 {
 			_, err := device.Client.Post(state.getDn(), body.Str)
 			if err != nil {
@@ -1128,7 +1221,7 @@ func (r *RoutePolicyResource) ImportState(ctx context.Context, req resource.Impo
 		}
 	}
 
-	var state RoutePolicy
+	var state RoutePolicyResourceModel
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

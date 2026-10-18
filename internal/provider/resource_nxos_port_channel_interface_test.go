@@ -34,7 +34,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosPortChannelInterface(t *testing.T) {
+// TestAccPortChannelInterfaceResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccPortChannelInterfaceResource(t *testing.T) {
 	if os.Getenv("PORT_CHANNEL_INTERFACE") == "" {
 		t.Skip("skipping test, set environment variable PORT_CHANNEL_INTERFACE")
 	}
@@ -95,38 +99,118 @@ func TestAccNxosPortChannelInterface(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.vlan_mappings.vlan-11.rx_only", "true"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "port_channel_interfaces.po123.members.sys/intf/phys-[eth1/11].force", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.port_channel_mode", "active"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.minimum_links", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.maximum_links", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.suspend_individual", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.access_vlan", "vlan-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.admin_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.auto_negotiation", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.bandwidth", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.delay", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.duplex", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.layer", "Layer2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.link_logging", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.medium", "broadcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.mode", "trunk"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.native_vlan", "vlan-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.speed", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.trunk_vlans", "1-4094"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.equalization_delay", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.graceful_convergence", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.hash_distribution", "adaptive"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.itu_channel", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.lacp_delay_mode", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.lacp_vpc_convergence", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.load_defer", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.mdix", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.optics_loopback", "internal"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.pxe_transition_timeout", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.span_mode", "not-a-span-dest"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.squelch", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.transmission_mode", "not-a-trans-port"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.usage", "discovery"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.user_configured_flags", "admin_layer,admin_state"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.storm_control_burst_packets_per_second", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.storm_control_burst_rate", "75.000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.storm_control_rate", "50.000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.storm_control_rate_packets_per_second", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.storm_control_packet_type", "bcast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.load_interval_counter_1", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.load_interval_counter_2", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.load_interval_counter_3", "45"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.ethernet_segment_type", "native"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.ethernet_segment_identifier", "0011.2233.4455.6677.8899"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.priority_flow_control_mode", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.priority_flow_control_send_tlv", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.vlan_mapping_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.selective_qinq_all", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.selective_qinq_outer_vlan_id", "vlan-200"))
+	if os.Getenv("PORT_CHANNEL_INTERFACE_SELECTIVE_QINQ") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.selective_qinq_mappings.vlan-200.vlans", "20-25"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.vlan_mappings.vlan-11.translated_vlan_id", "vlan-10"))
+	if testAccDeviceVersionAtLeast("10.6(3)") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.vlan_mappings.vlan-11.rx_only", "true"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_port_channel_interface.test", "port_channel_interfaces.po123.members.sys/intf/phys-[eth1/11].force", "true"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccPortChannelInterfaceResourcePrerequisitesConfig + testAccPortChannelInterfaceResourceConfig_minimum(),
+		},
+		{
+			Config: testAccPortChannelInterfaceResourcePrerequisitesConfig + testAccPortChannelInterfaceResourceConfig_all() + testAccPortChannelInterfaceResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_port_channel_interface.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccPortChannelInterfaceResourceImportStateIdFunc("nxos_port_channel_interface.test"),
+		},
+		{
+			ResourceName:       "nxos_port_channel_interface.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccPortChannelInterfaceResourcePrerequisitesConfig + testAccPortChannelInterfaceResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccPortChannelInterfaceResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccPortChannelInterfaceResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_port_channel_interface.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccPortChannelInterfaceResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccPortChannelInterfaceResourcePrerequisitesConfig + testAccPortChannelInterfaceResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosPortChannelInterfacePrerequisitesConfig + testAccNxosPortChannelInterfaceConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_port_channel_interface.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosPortChannelInterfaceImportStateIdFunc("nxos_port_channel_interface.test"),
-			},
-			{
-				ResourceName:       "nxos_port_channel_interface.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosPortChannelInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccPortChannelInterfaceResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -136,7 +220,7 @@ func nxosPortChannelInterfaceImportStateIdFunc(resourceName string) resource.Imp
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosPortChannelInterfacePrerequisitesConfig = `
+const testAccPortChannelInterfaceResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/lacp"
   class_name = "fmLacp"
@@ -151,7 +235,7 @@ resource "nxos_dme" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosPortChannelInterfaceConfig_minimum() string {
+func testAccPortChannelInterfaceResourceConfig_minimum() string {
 	config := `resource "nxos_port_channel_interface" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
@@ -161,7 +245,7 @@ func testAccNxosPortChannelInterfaceConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosPortChannelInterfaceConfig_all() string {
+func testAccPortChannelInterfaceResourceConfig_all() string {
 	config := `resource "nxos_port_channel_interface" "test" {` + "\n"
 	config += `	port_channel_interfaces = {` + "\n"
 	config += `		"po123" = {` + "\n"
@@ -238,6 +322,14 @@ func testAccNxosPortChannelInterfaceConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccPortChannelInterfaceResourceConfig_dataSource() string {
+	return `
+data "nxos_port_channel_interface" "test" {
+	depends_on = [nxos_port_channel_interface.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

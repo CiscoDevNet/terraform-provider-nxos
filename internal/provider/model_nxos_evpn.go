@@ -84,6 +84,14 @@ var EVPNSubtreeClassMinVersions = map[string]string{}
 // EVPNMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var EVPNMinVersions = map[string]helpers.MinVersion{}
 
+// EVPNListClasses holds the list child classes of the resource.
+var EVPNListClasses = map[string]bool{"rtctrlBDEvi": true, "rtctrlRttP": true, "rtctrlRttEntry": true}
+
+// getEVPNTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getEVPNTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"rtctrlBDEvi", "rtctrlRttP", "rtctrlRttEntry"}, EVPNSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -323,7 +331,99 @@ func (data EVPN) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN, config EVPN, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data EVPN) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.Vnis {
+		rtctrlBDEviDn := dn + "/" + child.getRn(key)
+		dns[rtctrlBDEviDn] = true
+		for key_, child_ := range child.RouteTargetDirections {
+			rtctrlRttPDn_ := rtctrlBDEviDn + "/" + child_.getRn(key_)
+			dns[rtctrlRttPDn_] = true
+			for key__, child__ := range child_.RouteTargets {
+				rtctrlRttEntryDn__ := rtctrlRttPDn_ + "/" + child__.getRn(key__)
+				dns[rtctrlRttEntryDn__] = true
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data EVPN) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	if !existed(dn) {
+		return data.toDeleteBody()
+	}
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "rtctrlL2Evpn.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "rtctrlL2Evpn.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.Vnis {
+		_ = child
+		rtctrlBDEviRn := child.getRn(key)
+		rtctrlBDEviDn := dn + "/" + rtctrlBDEviRn
+		_ = rtctrlBDEviDn
+		if !existed(rtctrlBDEviDn) {
+			body, _ = sjson.Set(body, "rtctrlL2Evpn.children.-1.rtctrlBDEvi.attributes", map[string]interface{}{"rn": rtctrlBDEviRn, "status": "deleted"})
+			continue
+		}
+		rtctrlBDEviBody := ""
+		rtctrlBDEviBody, _ = sjson.Set(rtctrlBDEviBody, "rtctrlBDEvi.attributes.rn", rtctrlBDEviRn)
+		if !child.RouteDistinguisher.IsNull() {
+			rtctrlBDEviBody, _ = sjson.Set(rtctrlBDEviBody, "rtctrlBDEvi.attributes.rd", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.TableMap.IsNull() {
+			rtctrlBDEviBody, _ = sjson.Set(rtctrlBDEviBody, "rtctrlBDEvi.attributes.tblMap", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.TableMapFilter.IsNull() {
+			rtctrlBDEviBody, _ = sjson.Set(rtctrlBDEviBody, "rtctrlBDEvi.attributes.tblMapFltr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key_, child_ := range child.RouteTargetDirections {
+			_ = child_
+			rtctrlRttPRn_ := child_.getRn(key_)
+			rtctrlRttPDn_ := rtctrlBDEviDn + "/" + rtctrlRttPRn_
+			_ = rtctrlRttPDn_
+			if !existed(rtctrlRttPDn_) {
+				rtctrlBDEviBody, _ = sjson.Set(rtctrlBDEviBody, "rtctrlBDEvi.children.-1.rtctrlRttP.attributes", map[string]interface{}{"rn": rtctrlRttPRn_, "status": "deleted"})
+				continue
+			}
+			rtctrlRttPBody_ := ""
+			rtctrlRttPBody_, _ = sjson.Set(rtctrlRttPBody_, "rtctrlRttP.attributes.rn", rtctrlRttPRn_)
+			for key__, child__ := range child_.RouteTargets {
+				_ = child__
+				rtctrlRttEntryRn__ := child__.getRn(key__)
+				rtctrlRttEntryDn__ := rtctrlRttPDn_ + "/" + rtctrlRttEntryRn__
+				_ = rtctrlRttEntryDn__
+				if !existed(rtctrlRttEntryDn__) {
+					rtctrlRttPBody_, _ = sjson.Set(rtctrlRttPBody_, "rtctrlRttP.children.-1.rtctrlRttEntry.attributes", map[string]interface{}{"rn": rtctrlRttEntryRn__, "status": "deleted"})
+					continue
+				}
+				rtctrlRttEntryBody__ := ""
+				rtctrlRttEntryBody__, _ = sjson.Set(rtctrlRttEntryBody__, "rtctrlRttEntry.attributes.rn", rtctrlRttEntryRn__)
+				rtctrlRttPBody_, _ = sjson.SetRaw(rtctrlRttPBody_, "rtctrlRttP.children.-1", rtctrlRttEntryBody__)
+			}
+			rtctrlBDEviBody, _ = sjson.SetRaw(rtctrlBDEviBody, "rtctrlBDEvi.children.-1", rtctrlRttPBody_)
+		}
+		body, _ = sjson.SetRaw(body, "rtctrlL2Evpn.children.-1", rtctrlBDEviBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN, config EVPN, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -403,6 +503,8 @@ func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN, config EVPN,
 				stateChild := state.Vnis[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("rtctrlBDEvi.attributes.encap").String() == key {
 						if !stateChild.RouteDistinguisher.IsNull() && configChild.RouteDistinguisher.IsNull() {
@@ -431,6 +533,8 @@ func (data EVPN) toBodyWithDeletes(ctx context.Context, state EVPN, config EVPN,
 								stateChild := stateChild.RouteTargetDirections[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								{
 									listChildPath_ := ""
 									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {

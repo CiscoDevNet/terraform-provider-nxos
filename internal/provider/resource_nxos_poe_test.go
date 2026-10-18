@@ -34,7 +34,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosPoE(t *testing.T) {
+// TestAccPoEResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccPoEResource(t *testing.T) {
 	if os.Getenv("POE") == "" {
 		t.Skip("skipping test, set environment variable POE")
 	}
@@ -47,38 +51,70 @@ func TestAccNxosPoE(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_poe.test", "interfaces.eth1/10.port_mode", "static"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_poe.test", "interfaces.eth1/10.port_police", "log"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_poe.test", "interfaces.eth1/10.port_priority", "high"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_poe.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_poe.test", "instance_control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_poe.test", "logging_level", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_poe.test", "interfaces.eth1/10.max_consumption", "20000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_poe.test", "interfaces.eth1/10.port_default_consumption", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_poe.test", "interfaces.eth1/10.port_mode", "static"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_poe.test", "interfaces.eth1/10.port_police", "log"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_poe.test", "interfaces.eth1/10.port_priority", "high"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccPoEResourcePrerequisitesConfig + testAccPoEResourceConfig_minimum(),
+		},
+		{
+			Config: testAccPoEResourcePrerequisitesConfig + testAccPoEResourceConfig_all() + testAccPoEResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_poe.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccPoEResourceImportStateIdFunc("nxos_poe.test"),
+		},
+		{
+			ResourceName:       "nxos_poe.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccPoEResourcePrerequisitesConfig + testAccPoEResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccPoEResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccPoEResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_poe.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccPoEResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccPoEResourcePrerequisitesConfig + testAccPoEResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosPoEPrerequisitesConfig + testAccNxosPoEConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_poe.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosPoEImportStateIdFunc("nxos_poe.test"),
-			},
-			{
-				ResourceName:       "nxos_poe.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosPoEImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccPoEResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -88,7 +124,7 @@ func nxosPoEImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosPoEPrerequisitesConfig = `
+const testAccPoEResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/poe"
   class_name = "fmPoe"
@@ -103,7 +139,7 @@ resource "nxos_dme" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosPoEConfig_minimum() string {
+func testAccPoEResourceConfig_minimum() string {
 	config := `resource "nxos_poe" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
@@ -113,7 +149,7 @@ func testAccNxosPoEConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosPoEConfig_all() string {
+func testAccPoEResourceConfig_all() string {
 	config := `resource "nxos_poe" "test" {` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
 	config += `	instance_control = "stateful-ha"` + "\n"
@@ -130,6 +166,14 @@ func testAccNxosPoEConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccPoEResourceConfig_dataSource() string {
+	return `
+data "nxos_poe" "test" {
+	depends_on = [nxos_poe.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

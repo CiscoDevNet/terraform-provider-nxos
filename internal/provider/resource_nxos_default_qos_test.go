@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosDefaultQoS(t *testing.T) {
+// TestAccDefaultQoSResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccDefaultQoSResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "class_maps.Voice.match_type", "match-any"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_maps.PM1.match_type", "match-any"))
@@ -70,38 +74,97 @@ func TestAccNxosDefaultQoS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_interface_in.eth1/10.policy_map_statistics", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_nve_interface_in.1.policy_map_name", "PM1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_default_qos.test", "policy_nve_interface_in.1.policy_map_statistics", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "class_maps.Voice.match_type", "match-any"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_type", "match-any"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.set_qos_group_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.set_dscp_tunnel", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.set_dscp_value", "af21"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.set_cos_value", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.set_precedence_tunnel", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.set_precedence_value", "critical"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_bc_rate", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_bc_unit", "mbytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_be_rate", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_be_unit", "mbytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_cir_rate", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_cir_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_action", "set-dscp-transmit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_set_cos", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_set_dscp", "af22"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_set_precedence", "routine"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_conform_set_qos_group", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_action", "set-dscp-transmit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_set_cos", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_set_dscp", "af31"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_set_precedence", "routine"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_exceed_set_qos_group", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_pir_rate", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_pir_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_action", "set-dscp-transmit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_set_cos", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_set_dscp", "cs1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_set_precedence", "routine"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_maps.PM1.match_class_maps.Voice.police_violate_set_qos_group", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_interface_in.eth1/10.policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_interface_in.eth1/10.policy_map_statistics", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_nve_interface_in.1.policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_default_qos.test", "policy_nve_interface_in.1.policy_map_statistics", "false"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccDefaultQoSResourcePrerequisitesConfig + testAccDefaultQoSResourceConfig_minimum(),
+		},
+		{
+			Config: testAccDefaultQoSResourcePrerequisitesConfig + testAccDefaultQoSResourceConfig_all() + testAccDefaultQoSResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_default_qos.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccDefaultQoSResourceImportStateIdFunc("nxos_default_qos.test"),
+		},
+		{
+			ResourceName:       "nxos_default_qos.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccDefaultQoSResourcePrerequisitesConfig + testAccDefaultQoSResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccDefaultQoSResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccDefaultQoSResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_default_qos.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccDefaultQoSResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccDefaultQoSResourcePrerequisitesConfig + testAccDefaultQoSResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosDefaultQoSPrerequisitesConfig + testAccNxosDefaultQoSConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_default_qos.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosDefaultQoSImportStateIdFunc("nxos_default_qos.test"),
-			},
-			{
-				ResourceName:       "nxos_default_qos.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosDefaultQoSImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccDefaultQoSResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -111,7 +174,7 @@ func nxosDefaultQoSImportStateIdFunc(resourceName string) resource.ImportStateId
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosDefaultQoSPrerequisitesConfig = `
+const testAccDefaultQoSResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/acl/ipv4/name-[ACL1]"
   class_name = "ipv4aclACL"
@@ -144,7 +207,7 @@ resource "nxos_dme" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosDefaultQoSConfig_minimum() string {
+func testAccDefaultQoSResourceConfig_minimum() string {
 	config := `resource "nxos_default_qos" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
@@ -154,7 +217,7 @@ func testAccNxosDefaultQoSConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosDefaultQoSConfig_all() string {
+func testAccDefaultQoSResourceConfig_all() string {
 	config := `resource "nxos_default_qos" "test" {` + "\n"
 	config += `	class_maps = {` + "\n"
 	config += `		"Voice" = {` + "\n"
@@ -242,6 +305,14 @@ func testAccNxosDefaultQoSConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccDefaultQoSResourceConfig_dataSource() string {
+	return `
+data "nxos_default_qos" "test" {
+	depends_on = [nxos_default_qos.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

@@ -643,7 +643,8 @@ func (d *RoutePolicyDataSource) Read(ctx context.Context, req datasource.ReadReq
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"rtpfxRuleV4", "rtpfxEntry", "rtpfxRuleV6", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapSetPolicyTag", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapRsRtDstAccAtt", "rtmapMatchRtDstV6", "rtmapRsRtDstV6AccAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag", "rtmapSetMetric", "rtmapSetMetricType", "rtmapSetNhPeerAddr", "rtmapSetPref", "rtmapSetPathSelection", "rtmapSetEvpn", "rtmapMatchRtNh", "rtmapRsRtNhAtt", "rtmapMatchRegComm", "rtmapRsRegCommAtt", "rtmapMatchAsPathAccessList", "rtmapRsRtAsPathAccAtt", "rtmapMatchAsnAsPathAccessList", "rtmapRsRtAsnAsPathAccAtt", "rtmapSetPrepend", "rtmapSetPrependLastAs", "rtmapSetRtTag", "rtmapSetWeight", "rtmapSetOrigin", "rtmapSetRttComm", "rtextcomItem", "rtmapSetCommList", "rtmapMatchRtIf", "rtmapMatchRtType", "rtmapSetNh", "rtmapSetIntf", "rtregcomRule", "rtregcomEntry", "rtregcomItem", "rtlistRule", "rtlistEntry", "rpmInst", "rpmRpmIf", "rpmRpmv6If"}, RoutePolicySubtreeClassMinVersions)
+
+	res, err := getRoutePolicyTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

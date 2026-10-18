@@ -1,8 +1,9 @@
 # Terraform Provider testing workflow.
+#
+# Acceptance tests need NX-OS devices and are not run here, see CONTRIBUTING.md for how to run them.
 name: Tests
 
 # This GitHub action runs your tests for each pull request and push.
-# Optionally, you can turn it on using a schedule for regular testing.
 on:
   workflow_dispatch:
   pull_request:
@@ -17,7 +18,7 @@ permissions:
   contents: read
 
 jobs:
-  # Ensure project builds before running testing matrix
+  # Ensure the definitions are valid, the generated code is up to date and the project builds
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -39,36 +40,17 @@ jobs:
       - run: git diff --exit-code
       - run: go build -v .
 
-  # Run acceptance tests in a matrix with Terraform CLI versions
-  test:
-    name: Terraform Provider Acceptance Tests
+  # Run the unit tests, which need neither Terraform nor a device. Without TF_ACC, all acceptance tests are skipped.
+  unit:
+    name: Unit Tests
     needs: [build]
     runs-on: ubuntu-latest
-    timeout-minutes: 90
-    strategy:
-      fail-fast: true
-      max-parallel: 1
-      matrix:
-        # list whatever Terraform versions here you would like to support
-        terraform:
-          - "1.0.*"
-          - "1.5.*"
-          - "1.10.*"
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-go@v7
         with:
           go-version-file: "go.mod"
           cache: true
-      - uses: hashicorp/setup-terraform@v4
-        with:
-          terraform_version: ${{ matrix.terraform }}
-          terraform_wrapper: false
       - run: go mod download
-      # - env:
-      #     TF_ACC: "1"
-      #     NXOS_USERNAME: ${{ secrets.NXOS_USERNAME }}
-      #     NXOS_PASSWORD: ${{ secrets.NXOS_PASSWORD }}
-      #     NXOS_URL: ${{ secrets.NXOS_URL }}
-      #   run: go test -v -cover -timeout 45m ./internal/provider/
-      #   timeout-minutes: 45
+      - run: go test -v -cover ./...

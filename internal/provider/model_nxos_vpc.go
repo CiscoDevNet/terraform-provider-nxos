@@ -124,6 +124,30 @@ var VPCSubtreeClassMinVersions = map[string]string{}
 // VPCMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var VPCMinVersions = map[string]helpers.MinVersion{}
 
+// VPCSeparateRequest lists the classes and attributes that are sent in a second request after the rest of the body,
+// together with the values that reset the attributes when they are removed or before their object is deleted, and the
+// attributes identifying the objects of each class.
+var VPCSeparateRequest = helpers.SeparateRequest{
+	Attributes: map[string]map[string]string{
+		"vpcDom": {
+			"l3PeerRouter":      "DME_UNSET_PROPERTY_MARKER",
+			"peerGWExcludeVLAN": "DME_UNSET_PROPERTY_MARKER",
+		},
+	},
+	Keys: map[string][]string{
+		"vpcIf":         {"id"},
+		"vpcOrphanPort": {"id"},
+	},
+}
+
+// VPCListClasses holds the list child classes of the resource.
+var VPCListClasses = map[string]bool{"vpcIf": true, "vpcOrphanPort": true}
+
+// getVPCTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getVPCTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"vpcInst", "vpcDom", "vpcKeepalive", "vpcPeerLink", "vpcIf", "vpcRsVpcConf", "vpcOrphanPort"}, VPCSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -889,7 +913,301 @@ func (data VPC) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data VPC) toBodyWithDeletes(ctx context.Context, state VPC, config VPC, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data VPC) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.InstanceAdminState.IsNull() && data.Control.IsNull() && (data.DomainAdminState.IsNull() && data.DomainId.IsNull() && data.AutoRecovery.IsNull() && data.AutoRecoveryInterval.IsNull() && data.DelayRestoreOrphanPort.IsNull() && data.DelayRestoreSvi.IsNull() && data.DelayRestoreVpc.IsNull() && data.Dscp.IsNull() && data.FastConvergence.IsNull() && data.GracefulConsistencyCheck.IsNull() && data.L3PeerRouter.IsNull() && data.L3PeerRouterSyslog.IsNull() && data.L3PeerRouterSyslogInterval.IsNull() && data.PeerGateway.IsNull() && data.PeerIp.IsNull() && data.PeerSwitch.IsNull() && data.RolePriority.IsNull() && data.SysMac.IsNull() && data.SystemPriority.IsNull() && data.Track.IsNull() && data.VirtualIp.IsNull() && data.DelayPeerLinkBringup.IsNull() && data.ExcludeSvi.IsNull() && data.MacBpduSourceVersion2.IsNull() && data.PeerGatewayExcludeVlan.IsNull() && (data.KeepaliveDestinationIp.IsNull() && data.KeepaliveFlushTimeout.IsNull() && data.KeepaliveInterval.IsNull() && data.KeepalivePrecedenceType.IsNull() && data.KeepalivePrecedenceValue.IsNull() && data.KeepaliveSourceIp.IsNull() && data.KeepaliveTimeout.IsNull() && data.KeepaliveTypeOfServiceByte.IsNull() && data.KeepaliveTypeOfServiceConfigurationType.IsNull() && data.KeepaliveTypeOfServiceType.IsNull() && data.KeepaliveTypeOfServiceValue.IsNull() && data.KeepaliveUdpPort.IsNull() && data.KeepaliveVrf.IsNull() && (data.PeerlinkInterfaceId.IsNull() && data.PeerlinkAdminState.IsNull() && data.PeerlinkDescription.IsNull())) && len(data.Interfaces) == 0) && len(data.OrphanPorts) == 0) {
+		vpcInstDn := dn + "/" + "inst"
+		dns[vpcInstDn] = true
+		if !(data.DomainAdminState.IsNull() && data.DomainId.IsNull() && data.AutoRecovery.IsNull() && data.AutoRecoveryInterval.IsNull() && data.DelayRestoreOrphanPort.IsNull() && data.DelayRestoreSvi.IsNull() && data.DelayRestoreVpc.IsNull() && data.Dscp.IsNull() && data.FastConvergence.IsNull() && data.GracefulConsistencyCheck.IsNull() && data.L3PeerRouter.IsNull() && data.L3PeerRouterSyslog.IsNull() && data.L3PeerRouterSyslogInterval.IsNull() && data.PeerGateway.IsNull() && data.PeerIp.IsNull() && data.PeerSwitch.IsNull() && data.RolePriority.IsNull() && data.SysMac.IsNull() && data.SystemPriority.IsNull() && data.Track.IsNull() && data.VirtualIp.IsNull() && data.DelayPeerLinkBringup.IsNull() && data.ExcludeSvi.IsNull() && data.MacBpduSourceVersion2.IsNull() && data.PeerGatewayExcludeVlan.IsNull() && (data.KeepaliveDestinationIp.IsNull() && data.KeepaliveFlushTimeout.IsNull() && data.KeepaliveInterval.IsNull() && data.KeepalivePrecedenceType.IsNull() && data.KeepalivePrecedenceValue.IsNull() && data.KeepaliveSourceIp.IsNull() && data.KeepaliveTimeout.IsNull() && data.KeepaliveTypeOfServiceByte.IsNull() && data.KeepaliveTypeOfServiceConfigurationType.IsNull() && data.KeepaliveTypeOfServiceType.IsNull() && data.KeepaliveTypeOfServiceValue.IsNull() && data.KeepaliveUdpPort.IsNull() && data.KeepaliveVrf.IsNull() && (data.PeerlinkInterfaceId.IsNull() && data.PeerlinkAdminState.IsNull() && data.PeerlinkDescription.IsNull())) && len(data.Interfaces) == 0) {
+			vpcDomDn := vpcInstDn + "/" + "dom"
+			dns[vpcDomDn] = true
+			if !(data.KeepaliveDestinationIp.IsNull() && data.KeepaliveFlushTimeout.IsNull() && data.KeepaliveInterval.IsNull() && data.KeepalivePrecedenceType.IsNull() && data.KeepalivePrecedenceValue.IsNull() && data.KeepaliveSourceIp.IsNull() && data.KeepaliveTimeout.IsNull() && data.KeepaliveTypeOfServiceByte.IsNull() && data.KeepaliveTypeOfServiceConfigurationType.IsNull() && data.KeepaliveTypeOfServiceType.IsNull() && data.KeepaliveTypeOfServiceValue.IsNull() && data.KeepaliveUdpPort.IsNull() && data.KeepaliveVrf.IsNull() && (data.PeerlinkInterfaceId.IsNull() && data.PeerlinkAdminState.IsNull() && data.PeerlinkDescription.IsNull())) {
+				vpcKeepaliveDn := vpcDomDn + "/" + "keepalive"
+				dns[vpcKeepaliveDn] = true
+				if !(data.PeerlinkInterfaceId.IsNull() && data.PeerlinkAdminState.IsNull() && data.PeerlinkDescription.IsNull()) {
+					vpcPeerLinkDn := vpcKeepaliveDn + "/" + "peerlink"
+					dns[vpcPeerLinkDn] = true
+				}
+			}
+			for key, child := range data.Interfaces {
+				vpcIfDn := vpcDomDn + "/" + child.getRn(key)
+				dns[vpcIfDn] = true
+				if !(child.PortChannelInterfaceDn.IsNull()) {
+					vpcRsVpcConfDn_ := vpcIfDn + "/" + "rsvpcConf"
+					dns[vpcRsVpcConfDn_] = true
+				}
+			}
+		}
+		for key, child := range data.OrphanPorts {
+			vpcOrphanPortDn := vpcInstDn + "/" + child.getRn(key)
+			dns[vpcOrphanPortDn] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data VPC) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	if !existed(dn) {
+		return data.toDeleteBody()
+	}
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "vpcEntity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "vpcEntity.attributes", map[string]interface{}{})
+	}
+	if !(data.InstanceAdminState.IsNull() && data.Control.IsNull() && (data.DomainAdminState.IsNull() && data.DomainId.IsNull() && data.AutoRecovery.IsNull() && data.AutoRecoveryInterval.IsNull() && data.DelayRestoreOrphanPort.IsNull() && data.DelayRestoreSvi.IsNull() && data.DelayRestoreVpc.IsNull() && data.Dscp.IsNull() && data.FastConvergence.IsNull() && data.GracefulConsistencyCheck.IsNull() && data.L3PeerRouter.IsNull() && data.L3PeerRouterSyslog.IsNull() && data.L3PeerRouterSyslogInterval.IsNull() && data.PeerGateway.IsNull() && data.PeerIp.IsNull() && data.PeerSwitch.IsNull() && data.RolePriority.IsNull() && data.SysMac.IsNull() && data.SystemPriority.IsNull() && data.Track.IsNull() && data.VirtualIp.IsNull() && data.DelayPeerLinkBringup.IsNull() && data.ExcludeSvi.IsNull() && data.MacBpduSourceVersion2.IsNull() && data.PeerGatewayExcludeVlan.IsNull() && (data.KeepaliveDestinationIp.IsNull() && data.KeepaliveFlushTimeout.IsNull() && data.KeepaliveInterval.IsNull() && data.KeepalivePrecedenceType.IsNull() && data.KeepalivePrecedenceValue.IsNull() && data.KeepaliveSourceIp.IsNull() && data.KeepaliveTimeout.IsNull() && data.KeepaliveTypeOfServiceByte.IsNull() && data.KeepaliveTypeOfServiceConfigurationType.IsNull() && data.KeepaliveTypeOfServiceType.IsNull() && data.KeepaliveTypeOfServiceValue.IsNull() && data.KeepaliveUdpPort.IsNull() && data.KeepaliveVrf.IsNull() && (data.PeerlinkInterfaceId.IsNull() && data.PeerlinkAdminState.IsNull() && data.PeerlinkDescription.IsNull())) && len(data.Interfaces) == 0) && len(data.OrphanPorts) == 0) {
+		vpcInstRn := "inst"
+		vpcInstDn := dn + "/" + vpcInstRn
+		_ = vpcInstDn
+		if !existed(vpcInstDn) {
+			body, _ = sjson.Set(body, "vpcEntity.children.-1.vpcInst.attributes", map[string]interface{}{"rn": vpcInstRn, "status": "deleted"})
+		} else {
+			vpcInstBody := ""
+			if !data.InstanceAdminState.IsNull() {
+				vpcInstBody, _ = sjson.Set(vpcInstBody, "vpcInst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Control.IsNull() {
+				vpcInstBody, _ = sjson.Set(vpcInstBody, "vpcInst.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(data.DomainAdminState.IsNull() && data.DomainId.IsNull() && data.AutoRecovery.IsNull() && data.AutoRecoveryInterval.IsNull() && data.DelayRestoreOrphanPort.IsNull() && data.DelayRestoreSvi.IsNull() && data.DelayRestoreVpc.IsNull() && data.Dscp.IsNull() && data.FastConvergence.IsNull() && data.GracefulConsistencyCheck.IsNull() && data.L3PeerRouter.IsNull() && data.L3PeerRouterSyslog.IsNull() && data.L3PeerRouterSyslogInterval.IsNull() && data.PeerGateway.IsNull() && data.PeerIp.IsNull() && data.PeerSwitch.IsNull() && data.RolePriority.IsNull() && data.SysMac.IsNull() && data.SystemPriority.IsNull() && data.Track.IsNull() && data.VirtualIp.IsNull() && data.DelayPeerLinkBringup.IsNull() && data.ExcludeSvi.IsNull() && data.MacBpduSourceVersion2.IsNull() && data.PeerGatewayExcludeVlan.IsNull() && (data.KeepaliveDestinationIp.IsNull() && data.KeepaliveFlushTimeout.IsNull() && data.KeepaliveInterval.IsNull() && data.KeepalivePrecedenceType.IsNull() && data.KeepalivePrecedenceValue.IsNull() && data.KeepaliveSourceIp.IsNull() && data.KeepaliveTimeout.IsNull() && data.KeepaliveTypeOfServiceByte.IsNull() && data.KeepaliveTypeOfServiceConfigurationType.IsNull() && data.KeepaliveTypeOfServiceType.IsNull() && data.KeepaliveTypeOfServiceValue.IsNull() && data.KeepaliveUdpPort.IsNull() && data.KeepaliveVrf.IsNull() && (data.PeerlinkInterfaceId.IsNull() && data.PeerlinkAdminState.IsNull() && data.PeerlinkDescription.IsNull())) && len(data.Interfaces) == 0) {
+				vpcDomRn := "dom"
+				vpcDomDn := vpcInstDn + "/" + vpcDomRn
+				_ = vpcDomDn
+				if !existed(vpcDomDn) {
+					vpcInstBody, _ = sjson.Set(vpcInstBody, "vpcInst.children.-1.vpcDom.attributes", map[string]interface{}{"rn": vpcDomRn, "status": "deleted"})
+				} else {
+					vpcDomBody := ""
+					if !data.DomainAdminState.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.AutoRecovery.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.autoRecovery", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.AutoRecoveryInterval.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.autoRecoveryIntvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DelayRestoreOrphanPort.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.delayRestoreOrphanPort", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DelayRestoreSvi.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.delayRestoreSVI", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DelayRestoreVpc.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.delayRestoreVPC", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.Dscp.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.dscp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.FastConvergence.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.fastConvergence", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.GracefulConsistencyCheck.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.grcflCnstncyChck", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.L3PeerRouter.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.l3PeerRouter", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.L3PeerRouterSyslog.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.l3PeerRouterSyslog", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.L3PeerRouterSyslogInterval.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.l3PeerRouterSyslogInterval", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.PeerGateway.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.peerGw", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.PeerIp.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.peerIp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.PeerSwitch.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.peerSwitch", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.RolePriority.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.rolePrio", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.SysMac.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.sysMac", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.SystemPriority.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.sysPrio", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.Track.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.track", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.VirtualIp.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.virtualIp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DelayPeerLinkBringup.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.delayPeerLinkBringup", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ExcludeSvi.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.excludeSVI", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.MacBpduSourceVersion2.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.macBpduSrcVer2", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.PeerGatewayExcludeVlan.IsNull() {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.peerGWExcludeVLAN", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !(data.KeepaliveDestinationIp.IsNull() && data.KeepaliveFlushTimeout.IsNull() && data.KeepaliveInterval.IsNull() && data.KeepalivePrecedenceType.IsNull() && data.KeepalivePrecedenceValue.IsNull() && data.KeepaliveSourceIp.IsNull() && data.KeepaliveTimeout.IsNull() && data.KeepaliveTypeOfServiceByte.IsNull() && data.KeepaliveTypeOfServiceConfigurationType.IsNull() && data.KeepaliveTypeOfServiceType.IsNull() && data.KeepaliveTypeOfServiceValue.IsNull() && data.KeepaliveUdpPort.IsNull() && data.KeepaliveVrf.IsNull() && (data.PeerlinkInterfaceId.IsNull() && data.PeerlinkAdminState.IsNull() && data.PeerlinkDescription.IsNull())) {
+						vpcKeepaliveRn := "keepalive"
+						vpcKeepaliveDn := vpcDomDn + "/" + vpcKeepaliveRn
+						_ = vpcKeepaliveDn
+						if !existed(vpcKeepaliveDn) {
+							vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.children.-1.vpcKeepalive.attributes", map[string]interface{}{"rn": vpcKeepaliveRn, "status": "deleted"})
+						} else {
+							vpcKeepaliveBody := ""
+							if !data.KeepaliveDestinationIp.IsNull() {
+								vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.attributes.destIp", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !data.KeepaliveFlushTimeout.IsNull() {
+								vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.attributes.flushTout", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !data.KeepaliveInterval.IsNull() {
+								vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.attributes.interval", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !data.KeepalivePrecedenceType.IsNull() {
+								vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.attributes.precType", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !data.KeepalivePrecedenceValue.IsNull() {
+								vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.attributes.precValue", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !data.KeepaliveSourceIp.IsNull() {
+								vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.attributes.srcIp", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !data.KeepaliveTimeout.IsNull() {
+								vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.attributes.timeout", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !data.KeepaliveTypeOfServiceByte.IsNull() {
+								vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.attributes.tosByte", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !data.KeepaliveTypeOfServiceConfigurationType.IsNull() {
+								vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.attributes.tosCfgType", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !data.KeepaliveTypeOfServiceType.IsNull() {
+								vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.attributes.tosType", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !data.KeepaliveTypeOfServiceValue.IsNull() {
+								vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.attributes.tosValue", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !data.KeepaliveUdpPort.IsNull() {
+								vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.attributes.udpPort", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !data.KeepaliveVrf.IsNull() {
+								vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.attributes.vrf", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !(data.PeerlinkInterfaceId.IsNull() && data.PeerlinkAdminState.IsNull() && data.PeerlinkDescription.IsNull()) {
+								vpcPeerLinkRn := "peerlink"
+								vpcPeerLinkDn := vpcKeepaliveDn + "/" + vpcPeerLinkRn
+								_ = vpcPeerLinkDn
+								if !existed(vpcPeerLinkDn) {
+									vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.children.-1.vpcPeerLink.attributes", map[string]interface{}{"rn": vpcPeerLinkRn, "status": "deleted"})
+								} else {
+									vpcPeerLinkBody := ""
+									if !data.PeerlinkInterfaceId.IsNull() {
+										vpcPeerLinkBody, _ = sjson.Set(vpcPeerLinkBody, "vpcPeerLink.attributes.id", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !data.PeerlinkAdminState.IsNull() {
+										vpcPeerLinkBody, _ = sjson.Set(vpcPeerLinkBody, "vpcPeerLink.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !data.PeerlinkDescription.IsNull() {
+										vpcPeerLinkBody, _ = sjson.Set(vpcPeerLinkBody, "vpcPeerLink.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if vpcPeerLinkBody != "" {
+										vpcPeerLinkBody, _ = sjson.Set(vpcPeerLinkBody, "vpcPeerLink.attributes.rn", vpcPeerLinkRn)
+										vpcKeepaliveBody, _ = sjson.SetRaw(vpcKeepaliveBody, "vpcKeepalive.children.-1", vpcPeerLinkBody)
+									}
+								}
+							}
+							if vpcKeepaliveBody != "" {
+								vpcKeepaliveBody, _ = sjson.Set(vpcKeepaliveBody, "vpcKeepalive.attributes.rn", vpcKeepaliveRn)
+								vpcDomBody, _ = sjson.SetRaw(vpcDomBody, "vpcDom.children.-1", vpcKeepaliveBody)
+							}
+						}
+					}
+					for key, child := range data.Interfaces {
+						_ = child
+						vpcIfRn := child.getRn(key)
+						vpcIfDn := vpcDomDn + "/" + vpcIfRn
+						_ = vpcIfDn
+						if !existed(vpcIfDn) {
+							vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.children.-1.vpcIf.attributes", map[string]interface{}{"rn": vpcIfRn, "status": "deleted"})
+							continue
+						}
+						vpcIfBody := ""
+						vpcIfBody, _ = sjson.Set(vpcIfBody, "vpcIf.attributes.rn", vpcIfRn)
+						if !(child.PortChannelInterfaceDn.IsNull()) {
+							vpcRsVpcConfRn_ := "rsvpcConf"
+							vpcRsVpcConfDn_ := vpcIfDn + "/" + vpcRsVpcConfRn_
+							_ = vpcRsVpcConfDn_
+							if !existed(vpcRsVpcConfDn_) {
+								vpcIfBody, _ = sjson.Set(vpcIfBody, "vpcIf.children.-1.vpcRsVpcConf.attributes", map[string]interface{}{"rn": vpcRsVpcConfRn_, "status": "deleted"})
+							} else {
+								vpcRsVpcConfBody_ := ""
+								if !child.PortChannelInterfaceDn.IsNull() {
+									vpcRsVpcConfBody_, _ = sjson.Set(vpcRsVpcConfBody_, "vpcRsVpcConf.attributes.tDn", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if vpcRsVpcConfBody_ != "" {
+									vpcRsVpcConfBody_, _ = sjson.Set(vpcRsVpcConfBody_, "vpcRsVpcConf.attributes.rn", vpcRsVpcConfRn_)
+									vpcIfBody, _ = sjson.SetRaw(vpcIfBody, "vpcIf.children.-1", vpcRsVpcConfBody_)
+								}
+							}
+						}
+						vpcDomBody, _ = sjson.SetRaw(vpcDomBody, "vpcDom.children.-1", vpcIfBody)
+					}
+					if vpcDomBody != "" {
+						vpcDomBody, _ = sjson.Set(vpcDomBody, "vpcDom.attributes.rn", vpcDomRn)
+						vpcInstBody, _ = sjson.SetRaw(vpcInstBody, "vpcInst.children.-1", vpcDomBody)
+					}
+				}
+			}
+			for key, child := range data.OrphanPorts {
+				_ = child
+				vpcOrphanPortRn := child.getRn(key)
+				vpcOrphanPortDn := vpcInstDn + "/" + vpcOrphanPortRn
+				_ = vpcOrphanPortDn
+				if !existed(vpcOrphanPortDn) {
+					vpcInstBody, _ = sjson.Set(vpcInstBody, "vpcInst.children.-1.vpcOrphanPort.attributes", map[string]interface{}{"rn": vpcOrphanPortRn, "status": "deleted"})
+					continue
+				}
+				vpcOrphanPortBody := ""
+				vpcOrphanPortBody, _ = sjson.Set(vpcOrphanPortBody, "vpcOrphanPort.attributes.rn", vpcOrphanPortRn)
+				if !child.AdminState.IsNull() {
+					vpcOrphanPortBody, _ = sjson.Set(vpcOrphanPortBody, "vpcOrphanPort.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Description.IsNull() {
+					vpcOrphanPortBody, _ = sjson.Set(vpcOrphanPortBody, "vpcOrphanPort.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Name.IsNull() {
+					vpcOrphanPortBody, _ = sjson.Set(vpcOrphanPortBody, "vpcOrphanPort.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+				}
+				vpcInstBody, _ = sjson.SetRaw(vpcInstBody, "vpcInst.children.-1", vpcOrphanPortBody)
+			}
+			if vpcInstBody != "" {
+				vpcInstBody, _ = sjson.Set(vpcInstBody, "vpcInst.attributes.rn", vpcInstRn)
+				body, _ = sjson.SetRaw(body, "vpcEntity.children.-1", vpcInstBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data VPC) toBodyWithDeletes(ctx context.Context, state VPC, config VPC, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -937,213 +1255,245 @@ func (data VPC) toBodyWithDeletes(ctx context.Context, state VPC, config VPC, im
 		}
 	}
 	if !importing {
-		if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.Control.IsNull() && config.Control.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.DomainAdminState.IsNull() && config.DomainAdminState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.AutoRecovery.IsNull() && config.AutoRecovery.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"autoRecovery", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.AutoRecoveryInterval.IsNull() && config.AutoRecoveryInterval.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"autoRecoveryIntvl", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.DelayRestoreOrphanPort.IsNull() && config.DelayRestoreOrphanPort.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delayRestoreOrphanPort", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.DelayRestoreSvi.IsNull() && config.DelayRestoreSvi.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delayRestoreSVI", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.DelayRestoreVpc.IsNull() && config.DelayRestoreVpc.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delayRestoreVPC", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.Dscp.IsNull() && config.Dscp.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dscp", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.FastConvergence.IsNull() && config.FastConvergence.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"fastConvergence", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.GracefulConsistencyCheck.IsNull() && config.GracefulConsistencyCheck.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"grcflCnstncyChck", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.L3PeerRouter.IsNull() && config.L3PeerRouter.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"l3PeerRouter", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.L3PeerRouterSyslog.IsNull() && config.L3PeerRouterSyslog.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"l3PeerRouterSyslog", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.L3PeerRouterSyslogInterval.IsNull() && config.L3PeerRouterSyslogInterval.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"l3PeerRouterSyslogInterval", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.PeerGateway.IsNull() && config.PeerGateway.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"peerGw", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.PeerIp.IsNull() && config.PeerIp.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"peerIp", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.PeerSwitch.IsNull() && config.PeerSwitch.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"peerSwitch", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.RolePriority.IsNull() && config.RolePriority.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rolePrio", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.SysMac.IsNull() && config.SysMac.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sysMac", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.SystemPriority.IsNull() && config.SystemPriority.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sysPrio", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.Track.IsNull() && config.Track.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"track", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.VirtualIp.IsNull() && config.VirtualIp.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"virtualIp", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.DelayPeerLinkBringup.IsNull() && config.DelayPeerLinkBringup.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delayPeerLinkBringup", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.ExcludeSvi.IsNull() && config.ExcludeSvi.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"excludeSVI", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.MacBpduSourceVersion2.IsNull() && config.MacBpduSourceVersion2.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"macBpduSrcVer2", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.PeerGatewayExcludeVlan.IsNull() && config.PeerGatewayExcludeVlan.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"peerGWExcludeVLAN", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.KeepaliveDestinationIp.IsNull() && config.KeepaliveDestinationIp.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"destIp", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.KeepaliveFlushTimeout.IsNull() && config.KeepaliveFlushTimeout.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"flushTout", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.KeepaliveInterval.IsNull() && config.KeepaliveInterval.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interval", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.KeepalivePrecedenceType.IsNull() && config.KeepalivePrecedenceType.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"precType", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.KeepalivePrecedenceValue.IsNull() && config.KeepalivePrecedenceValue.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"precValue", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.KeepaliveSourceIp.IsNull() && config.KeepaliveSourceIp.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"srcIp", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.KeepaliveTimeout.IsNull() && config.KeepaliveTimeout.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.KeepaliveTypeOfServiceByte.IsNull() && config.KeepaliveTypeOfServiceByte.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tosByte", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.KeepaliveTypeOfServiceConfigurationType.IsNull() && config.KeepaliveTypeOfServiceConfigurationType.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tosCfgType", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.KeepaliveTypeOfServiceType.IsNull() && config.KeepaliveTypeOfServiceType.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tosType", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.KeepaliveTypeOfServiceValue.IsNull() && config.KeepaliveTypeOfServiceValue.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tosValue", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.KeepaliveUdpPort.IsNull() && config.KeepaliveUdpPort.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"udpPort", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.KeepaliveVrf.IsNull() && config.KeepaliveVrf.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"vrf", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.PeerlinkInterfaceId.IsNull() && config.PeerlinkInterfaceId.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")+".children", "vpcPeerLink")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"id", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.PeerlinkAdminState.IsNull() && config.PeerlinkAdminState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")+".children", "vpcPeerLink")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.PeerlinkDescription.IsNull() && config.PeerlinkDescription.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")+".children", "vpcPeerLink")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-		}
-		for key := range state.Interfaces {
-			if configChild, ok := config.Interfaces[key]; ok {
-				stateChild := state.Interfaces[key]
-				_ = stateChild
-				_ = configChild
-				{
-					listChildPath := ""
-					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children").Array() {
-						if mv.Get("vpcIf.attributes.id").String() == key {
-							listChildPath = helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children", "vpcDom") + ".children" + "." + strconv.Itoa(mi) + ".vpcIf.children"
-							break
+		if deleteEmptied != nil && !(state.InstanceAdminState.IsNull() && state.Control.IsNull() && (state.DomainAdminState.IsNull() && state.DomainId.IsNull() && state.AutoRecovery.IsNull() && state.AutoRecoveryInterval.IsNull() && state.DelayRestoreOrphanPort.IsNull() && state.DelayRestoreSvi.IsNull() && state.DelayRestoreVpc.IsNull() && state.Dscp.IsNull() && state.FastConvergence.IsNull() && state.GracefulConsistencyCheck.IsNull() && state.L3PeerRouter.IsNull() && state.L3PeerRouterSyslog.IsNull() && state.L3PeerRouterSyslogInterval.IsNull() && state.PeerGateway.IsNull() && state.PeerIp.IsNull() && state.PeerSwitch.IsNull() && state.RolePriority.IsNull() && state.SysMac.IsNull() && state.SystemPriority.IsNull() && state.Track.IsNull() && state.VirtualIp.IsNull() && state.DelayPeerLinkBringup.IsNull() && state.ExcludeSvi.IsNull() && state.MacBpduSourceVersion2.IsNull() && state.PeerGatewayExcludeVlan.IsNull() && (state.KeepaliveDestinationIp.IsNull() && state.KeepaliveFlushTimeout.IsNull() && state.KeepaliveInterval.IsNull() && state.KeepalivePrecedenceType.IsNull() && state.KeepalivePrecedenceValue.IsNull() && state.KeepaliveSourceIp.IsNull() && state.KeepaliveTimeout.IsNull() && state.KeepaliveTypeOfServiceByte.IsNull() && state.KeepaliveTypeOfServiceConfigurationType.IsNull() && state.KeepaliveTypeOfServiceType.IsNull() && state.KeepaliveTypeOfServiceValue.IsNull() && state.KeepaliveUdpPort.IsNull() && state.KeepaliveVrf.IsNull() && (state.PeerlinkInterfaceId.IsNull() && state.PeerlinkAdminState.IsNull() && state.PeerlinkDescription.IsNull())) && len(state.Interfaces) == 0) && len(state.OrphanPorts) == 0) && (config.InstanceAdminState.IsNull() && config.Control.IsNull() && (config.DomainAdminState.IsNull() && config.DomainId.IsNull() && config.AutoRecovery.IsNull() && config.AutoRecoveryInterval.IsNull() && config.DelayRestoreOrphanPort.IsNull() && config.DelayRestoreSvi.IsNull() && config.DelayRestoreVpc.IsNull() && config.Dscp.IsNull() && config.FastConvergence.IsNull() && config.GracefulConsistencyCheck.IsNull() && config.L3PeerRouter.IsNull() && config.L3PeerRouterSyslog.IsNull() && config.L3PeerRouterSyslogInterval.IsNull() && config.PeerGateway.IsNull() && config.PeerIp.IsNull() && config.PeerSwitch.IsNull() && config.RolePriority.IsNull() && config.SysMac.IsNull() && config.SystemPriority.IsNull() && config.Track.IsNull() && config.VirtualIp.IsNull() && config.DelayPeerLinkBringup.IsNull() && config.ExcludeSvi.IsNull() && config.MacBpduSourceVersion2.IsNull() && config.PeerGatewayExcludeVlan.IsNull() && (config.KeepaliveDestinationIp.IsNull() && config.KeepaliveFlushTimeout.IsNull() && config.KeepaliveInterval.IsNull() && config.KeepalivePrecedenceType.IsNull() && config.KeepalivePrecedenceValue.IsNull() && config.KeepaliveSourceIp.IsNull() && config.KeepaliveTimeout.IsNull() && config.KeepaliveTypeOfServiceByte.IsNull() && config.KeepaliveTypeOfServiceConfigurationType.IsNull() && config.KeepaliveTypeOfServiceType.IsNull() && config.KeepaliveTypeOfServiceValue.IsNull() && config.KeepaliveUdpPort.IsNull() && config.KeepaliveVrf.IsNull() && (config.PeerlinkInterfaceId.IsNull() && config.PeerlinkAdminState.IsNull() && config.PeerlinkDescription.IsNull())) && len(config.Interfaces) == 0) && len(config.OrphanPorts) == 0) && deleteEmptied(data.getDn()+"/inst") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.Control.IsNull() && config.Control.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if deleteEmptied != nil && !(state.DomainAdminState.IsNull() && state.DomainId.IsNull() && state.AutoRecovery.IsNull() && state.AutoRecoveryInterval.IsNull() && state.DelayRestoreOrphanPort.IsNull() && state.DelayRestoreSvi.IsNull() && state.DelayRestoreVpc.IsNull() && state.Dscp.IsNull() && state.FastConvergence.IsNull() && state.GracefulConsistencyCheck.IsNull() && state.L3PeerRouter.IsNull() && state.L3PeerRouterSyslog.IsNull() && state.L3PeerRouterSyslogInterval.IsNull() && state.PeerGateway.IsNull() && state.PeerIp.IsNull() && state.PeerSwitch.IsNull() && state.RolePriority.IsNull() && state.SysMac.IsNull() && state.SystemPriority.IsNull() && state.Track.IsNull() && state.VirtualIp.IsNull() && state.DelayPeerLinkBringup.IsNull() && state.ExcludeSvi.IsNull() && state.MacBpduSourceVersion2.IsNull() && state.PeerGatewayExcludeVlan.IsNull() && (state.KeepaliveDestinationIp.IsNull() && state.KeepaliveFlushTimeout.IsNull() && state.KeepaliveInterval.IsNull() && state.KeepalivePrecedenceType.IsNull() && state.KeepalivePrecedenceValue.IsNull() && state.KeepaliveSourceIp.IsNull() && state.KeepaliveTimeout.IsNull() && state.KeepaliveTypeOfServiceByte.IsNull() && state.KeepaliveTypeOfServiceConfigurationType.IsNull() && state.KeepaliveTypeOfServiceType.IsNull() && state.KeepaliveTypeOfServiceValue.IsNull() && state.KeepaliveUdpPort.IsNull() && state.KeepaliveVrf.IsNull() && (state.PeerlinkInterfaceId.IsNull() && state.PeerlinkAdminState.IsNull() && state.PeerlinkDescription.IsNull())) && len(state.Interfaces) == 0) && (config.DomainAdminState.IsNull() && config.DomainId.IsNull() && config.AutoRecovery.IsNull() && config.AutoRecoveryInterval.IsNull() && config.DelayRestoreOrphanPort.IsNull() && config.DelayRestoreSvi.IsNull() && config.DelayRestoreVpc.IsNull() && config.Dscp.IsNull() && config.FastConvergence.IsNull() && config.GracefulConsistencyCheck.IsNull() && config.L3PeerRouter.IsNull() && config.L3PeerRouterSyslog.IsNull() && config.L3PeerRouterSyslogInterval.IsNull() && config.PeerGateway.IsNull() && config.PeerIp.IsNull() && config.PeerSwitch.IsNull() && config.RolePriority.IsNull() && config.SysMac.IsNull() && config.SystemPriority.IsNull() && config.Track.IsNull() && config.VirtualIp.IsNull() && config.DelayPeerLinkBringup.IsNull() && config.ExcludeSvi.IsNull() && config.MacBpduSourceVersion2.IsNull() && config.PeerGatewayExcludeVlan.IsNull() && (config.KeepaliveDestinationIp.IsNull() && config.KeepaliveFlushTimeout.IsNull() && config.KeepaliveInterval.IsNull() && config.KeepalivePrecedenceType.IsNull() && config.KeepalivePrecedenceValue.IsNull() && config.KeepaliveSourceIp.IsNull() && config.KeepaliveTimeout.IsNull() && config.KeepaliveTypeOfServiceByte.IsNull() && config.KeepaliveTypeOfServiceConfigurationType.IsNull() && config.KeepaliveTypeOfServiceType.IsNull() && config.KeepaliveTypeOfServiceValue.IsNull() && config.KeepaliveUdpPort.IsNull() && config.KeepaliveVrf.IsNull() && (config.PeerlinkInterfaceId.IsNull() && config.PeerlinkAdminState.IsNull() && config.PeerlinkDescription.IsNull())) && len(config.Interfaces) == 0) && deleteEmptied(data.getDn()+"/inst"+"/dom") {
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+				body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+			} else {
+				if !state.DomainAdminState.IsNull() && config.DomainAdminState.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.AutoRecovery.IsNull() && config.AutoRecovery.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"autoRecovery", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.AutoRecoveryInterval.IsNull() && config.AutoRecoveryInterval.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"autoRecoveryIntvl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.DelayRestoreOrphanPort.IsNull() && config.DelayRestoreOrphanPort.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delayRestoreOrphanPort", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.DelayRestoreSvi.IsNull() && config.DelayRestoreSvi.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delayRestoreSVI", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.DelayRestoreVpc.IsNull() && config.DelayRestoreVpc.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delayRestoreVPC", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.Dscp.IsNull() && config.Dscp.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dscp", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.FastConvergence.IsNull() && config.FastConvergence.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"fastConvergence", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.GracefulConsistencyCheck.IsNull() && config.GracefulConsistencyCheck.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"grcflCnstncyChck", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.L3PeerRouter.IsNull() && config.L3PeerRouter.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"l3PeerRouter", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.L3PeerRouterSyslog.IsNull() && config.L3PeerRouterSyslog.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"l3PeerRouterSyslog", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.L3PeerRouterSyslogInterval.IsNull() && config.L3PeerRouterSyslogInterval.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"l3PeerRouterSyslogInterval", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.PeerGateway.IsNull() && config.PeerGateway.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"peerGw", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.PeerIp.IsNull() && config.PeerIp.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"peerIp", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.PeerSwitch.IsNull() && config.PeerSwitch.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"peerSwitch", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.RolePriority.IsNull() && config.RolePriority.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rolePrio", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.SysMac.IsNull() && config.SysMac.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sysMac", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.SystemPriority.IsNull() && config.SystemPriority.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sysPrio", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.Track.IsNull() && config.Track.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"track", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.VirtualIp.IsNull() && config.VirtualIp.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"virtualIp", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.DelayPeerLinkBringup.IsNull() && config.DelayPeerLinkBringup.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delayPeerLinkBringup", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.ExcludeSvi.IsNull() && config.ExcludeSvi.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"excludeSVI", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.MacBpduSourceVersion2.IsNull() && config.MacBpduSourceVersion2.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"macBpduSrcVer2", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.PeerGatewayExcludeVlan.IsNull() && config.PeerGatewayExcludeVlan.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"peerGWExcludeVLAN", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if deleteEmptied != nil && !(state.KeepaliveDestinationIp.IsNull() && state.KeepaliveFlushTimeout.IsNull() && state.KeepaliveInterval.IsNull() && state.KeepalivePrecedenceType.IsNull() && state.KeepalivePrecedenceValue.IsNull() && state.KeepaliveSourceIp.IsNull() && state.KeepaliveTimeout.IsNull() && state.KeepaliveTypeOfServiceByte.IsNull() && state.KeepaliveTypeOfServiceConfigurationType.IsNull() && state.KeepaliveTypeOfServiceType.IsNull() && state.KeepaliveTypeOfServiceValue.IsNull() && state.KeepaliveUdpPort.IsNull() && state.KeepaliveVrf.IsNull() && (state.PeerlinkInterfaceId.IsNull() && state.PeerlinkAdminState.IsNull() && state.PeerlinkDescription.IsNull())) && (config.KeepaliveDestinationIp.IsNull() && config.KeepaliveFlushTimeout.IsNull() && config.KeepaliveInterval.IsNull() && config.KeepalivePrecedenceType.IsNull() && config.KeepalivePrecedenceValue.IsNull() && config.KeepaliveSourceIp.IsNull() && config.KeepaliveTimeout.IsNull() && config.KeepaliveTypeOfServiceByte.IsNull() && config.KeepaliveTypeOfServiceConfigurationType.IsNull() && config.KeepaliveTypeOfServiceType.IsNull() && config.KeepaliveTypeOfServiceValue.IsNull() && config.KeepaliveUdpPort.IsNull() && config.KeepaliveVrf.IsNull() && (config.PeerlinkInterfaceId.IsNull() && config.PeerlinkAdminState.IsNull() && config.PeerlinkDescription.IsNull())) && deleteEmptied(data.getDn()+"/inst"+"/dom"+"/keepalive") {
+					deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
+					body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+					body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+				} else {
+					if !state.KeepaliveDestinationIp.IsNull() && config.KeepaliveDestinationIp.IsNull() {
+						unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
+						body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"destIp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.KeepaliveFlushTimeout.IsNull() && config.KeepaliveFlushTimeout.IsNull() {
+						unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
+						body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"flushTout", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.KeepaliveInterval.IsNull() && config.KeepaliveInterval.IsNull() {
+						unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
+						body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interval", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.KeepalivePrecedenceType.IsNull() && config.KeepalivePrecedenceType.IsNull() {
+						unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
+						body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"precType", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.KeepalivePrecedenceValue.IsNull() && config.KeepalivePrecedenceValue.IsNull() {
+						unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
+						body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"precValue", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.KeepaliveSourceIp.IsNull() && config.KeepaliveSourceIp.IsNull() {
+						unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
+						body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"srcIp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.KeepaliveTimeout.IsNull() && config.KeepaliveTimeout.IsNull() {
+						unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
+						body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.KeepaliveTypeOfServiceByte.IsNull() && config.KeepaliveTypeOfServiceByte.IsNull() {
+						unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
+						body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tosByte", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.KeepaliveTypeOfServiceConfigurationType.IsNull() && config.KeepaliveTypeOfServiceConfigurationType.IsNull() {
+						unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
+						body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tosCfgType", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.KeepaliveTypeOfServiceType.IsNull() && config.KeepaliveTypeOfServiceType.IsNull() {
+						unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
+						body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tosType", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.KeepaliveTypeOfServiceValue.IsNull() && config.KeepaliveTypeOfServiceValue.IsNull() {
+						unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
+						body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tosValue", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.KeepaliveUdpPort.IsNull() && config.KeepaliveUdpPort.IsNull() {
+						unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
+						body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"udpPort", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !state.KeepaliveVrf.IsNull() && config.KeepaliveVrf.IsNull() {
+						unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")
+						body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"vrf", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if deleteEmptied != nil && !(state.PeerlinkInterfaceId.IsNull() && state.PeerlinkAdminState.IsNull() && state.PeerlinkDescription.IsNull()) && (config.PeerlinkInterfaceId.IsNull() && config.PeerlinkAdminState.IsNull() && config.PeerlinkDescription.IsNull()) && deleteEmptied(data.getDn()+"/inst"+"/dom"+"/keepalive"+"/peerlink") {
+						deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")+".children", "vpcPeerLink")
+						body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+						body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+					} else {
+						if !state.PeerlinkInterfaceId.IsNull() && config.PeerlinkInterfaceId.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")+".children", "vpcPeerLink")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"id", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !state.PeerlinkAdminState.IsNull() && config.PeerlinkAdminState.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")+".children", "vpcPeerLink")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !state.PeerlinkDescription.IsNull() && config.PeerlinkDescription.IsNull() {
+							unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children", "vpcKeepalive")+".children", "vpcPeerLink")
+							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
 						}
 					}
-					if listChildPath != "" {
-						if !stateChild.PortChannelInterfaceDn.IsNull() && configChild.PortChannelInterfaceDn.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "vpcRsVpcConf")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key := range state.Interfaces {
+					if configChild, ok := config.Interfaces[key]; ok {
+						stateChild := state.Interfaces[key]
+						_ = stateChild
+						_ = configChild
+						listChildDn := data.getDn() + "/inst" + "/dom" + "/" + stateChild.getRn(key)
+						_ = listChildDn
+						{
+							listChildPath := ""
+							for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children", "vpcDom")+".children").Array() {
+								if mv.Get("vpcIf.attributes.id").String() == key {
+									listChildPath = helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children", "vpcDom") + ".children" + "." + strconv.Itoa(mi) + ".vpcIf.children"
+									break
+								}
+							}
+							if listChildPath != "" {
+								if deleteEmptied != nil && !(stateChild.PortChannelInterfaceDn.IsNull()) && (configChild.PortChannelInterfaceDn.IsNull()) && deleteEmptied(listChildDn+"/rsvpcConf") {
+									deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "vpcRsVpcConf")
+									body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+									body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+								} else {
+									if !stateChild.PortChannelInterfaceDn.IsNull() && configChild.PortChannelInterfaceDn.IsNull() {
+										unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "vpcRsVpcConf")
+										body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+									}
+								}
+							}
 						}
 					}
 				}
 			}
-		}
-		for key := range state.OrphanPorts {
-			if configChild, ok := config.OrphanPorts[key]; ok {
-				stateChild := state.OrphanPorts[key]
-				_ = stateChild
-				_ = configChild
-				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children").Array() {
-					if mv.Get("vpcOrphanPort.attributes.id").String() == key {
-						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children"+"."+strconv.Itoa(mi)+".vpcOrphanPort.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			for key := range state.OrphanPorts {
+				if configChild, ok := config.OrphanPorts[key]; ok {
+					stateChild := state.OrphanPorts[key]
+					_ = stateChild
+					_ = configChild
+					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children").Array() {
+						if mv.Get("vpcOrphanPort.attributes.id").String() == key {
+							if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children"+"."+strconv.Itoa(mi)+".vpcOrphanPort.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children"+"."+strconv.Itoa(mi)+".vpcOrphanPort.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children"+"."+strconv.Itoa(mi)+".vpcOrphanPort.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
+							break
 						}
-						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children"+"."+strconv.Itoa(mi)+".vpcOrphanPort.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "vpcInst")+".children"+"."+strconv.Itoa(mi)+".vpcOrphanPort.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-						}
-						break
 					}
 				}
 			}

@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosAccessList(t *testing.T) {
+// TestAccAccessListResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccAccessListResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "access_lists.ACL1.fragments", "permit-all"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "access_lists.ACL1.ignore_routable", "false"))
@@ -126,65 +130,180 @@ func TestAccNxosAccessList(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "ipv6_egress_vty_access_list_name", "ACL2"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "port_object_groups.PG1.members.10.port_operator", "eq"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_access_list.test", "port_object_groups.PG1.members.10.port_1", "443"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.fragments", "permit-all"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.ignore_routable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.per_ace_statistics", "off"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.udf_present", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.ack", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.dscp", "46"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.destination_port_1", "443"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.destination_port_2", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.destination_port_operator", "eq"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.destination_prefix", "10.1.1.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.destination_prefix_length", "24"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.established", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.fin", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.fragment", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.http_option_type", "invalid"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.icmp_code", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.icmp_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.log", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.protocol", "tcp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.psh", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.rev", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.rst", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.source_port_1", "443"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.source_port_2", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.source_port_operator", "eq"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.source_prefix", "20.1.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.source_prefix_length", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.syn", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.urg", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.capture_session", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.dscp_mask", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.igmp_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.load_share", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.priority_all", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.tcp_flags_mask", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.tcp_option_length", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.telemetry_path", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.telemetry_queue", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "access_lists.ACL1.entries.10.type_of_service", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv4_address_object_groups.AG1.members.10.prefix", "192.168.1.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv4_address_object_groups.AG1.members.10.prefix_length", "24"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ingress_interfaces.eth1/10.access_list_name", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ingress_vty_access_list_name", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "egress_interfaces.eth1/10.access_list_name", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "egress_vty_access_list_name", "ACL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.fragments", "permit-all"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.ignore_routable", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.per_ace_statistics", "off"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.ack", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.dscp", "46"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.destination_port_1", "443"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.destination_port_2", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.destination_port_operator", "eq"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.destination_prefix", "2001:db8:1::0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.destination_prefix_length", "64"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.established", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.fin", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.flow_label", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.fragment", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.http_option_type", "invalid"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.icmp_code", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.icmp_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.log", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.protocol", "tcp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.psh", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.rev", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.rst", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.source_port_1", "443"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.source_port_2", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.source_port_operator", "eq"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.source_prefix", "2001:db8:2::0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.source_prefix_length", "48"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.syn", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.urg", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.capture_session", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.dscp_mask", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.load_share", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.priority_all", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.tcp_flags_mask", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.telemetry_path", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_access_lists.ACL2.entries.10.telemetry_queue", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_address_object_groups.AG6.members.10.prefix", "2001:db8::"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_address_object_groups.AG6.members.10.prefix_length", "64"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_ingress_interfaces.eth1/10.access_list_name", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_ingress_vty_access_list_name", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_egress_interfaces.eth1/10.access_list_name", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "ipv6_egress_vty_access_list_name", "ACL2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "port_object_groups.PG1.members.10.port_operator", "eq"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_access_list.test", "port_object_groups.PG1.members.10.port_1", "443"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccAccessListResourcePrerequisitesConfig + testAccAccessListResourceConfig_minimum(),
+		},
+		{
+			Config: testAccAccessListResourcePrerequisitesConfig + testAccAccessListResourceConfig_all() + testAccAccessListResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_access_list.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccAccessListResourceImportStateIdFunc("nxos_access_list.test"),
+		},
+		{
+			ResourceName:       "nxos_access_list.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			Config: testAccAccessListResourcePrerequisitesConfig + testAccAccessListResourceConfigAdditional0,
+		},
+		{
+			Config: testAccAccessListResourcePrerequisitesConfig + testAccAccessListResourceConfigAdditional1,
+		},
+		{
+			Config: testAccAccessListResourcePrerequisitesConfig + testAccAccessListResourceConfigAdditional2,
+		},
+		{
+			Config: testAccAccessListResourcePrerequisitesConfig + testAccAccessListResourceConfigAdditional3,
+		},
+		{
+			Config: testAccAccessListResourcePrerequisitesConfig + testAccAccessListResourceConfigAdditional4,
+		},
+		{
+			Config: testAccAccessListResourcePrerequisitesConfig + testAccAccessListResourceConfigAdditional5,
+		},
+		{
+			Config: testAccAccessListResourcePrerequisitesConfig + testAccAccessListResourceConfigAdditional6,
+		},
+		{
+			Config: testAccAccessListResourcePrerequisitesConfig + testAccAccessListResourceConfigAdditional7,
+		},
+		{
+			Config: testAccAccessListResourcePrerequisitesConfig + testAccAccessListResourceConfigAdditional8,
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccAccessListResourcePrerequisitesConfig + testAccAccessListResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccAccessListResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccAccessListResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_access_list.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccAccessListResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccAccessListResourcePrerequisitesConfig + testAccAccessListResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_access_list.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosAccessListImportStateIdFunc("nxos_access_list.test"),
-			},
-			{
-				ResourceName:       "nxos_access_list.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-			{
-				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional0,
-			},
-			{
-				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional1,
-			},
-			{
-				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional2,
-			},
-			{
-				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional3,
-			},
-			{
-				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional4,
-			},
-			{
-				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional5,
-			},
-			{
-				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional6,
-			},
-			{
-				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional7,
-			},
-			{
-				Config: testAccNxosAccessListPrerequisitesConfig + testAccNxosAccessListConfigAdditional8,
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosAccessListImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccAccessListResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -194,7 +313,7 @@ func nxosAccessListImportStateIdFunc(resourceName string) resource.ImportStateId
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosAccessListPrerequisitesConfig = `
+const testAccAccessListResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/intf/phys-[eth1/10]"
   class_name = "l1PhysIf"
@@ -216,7 +335,7 @@ resource "nxos_dme" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosAccessListConfig_minimum() string {
+func testAccAccessListResourceConfig_minimum() string {
 	config := `resource "nxos_access_list" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
@@ -226,7 +345,7 @@ func testAccNxosAccessListConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosAccessListConfig_all() string {
+func testAccAccessListResourceConfig_all() string {
 	config := `resource "nxos_access_list" "test" {` + "\n"
 	config += `	access_lists = {` + "\n"
 	config += `		"ACL1" = {` + "\n"
@@ -380,7 +499,15 @@ func testAccNxosAccessListConfig_all() string {
 	return config
 }
 
-const testAccNxosAccessListConfigAdditional0 = `
+func testAccAccessListResourceConfig_dataSource() string {
+	return `
+data "nxos_access_list" "test" {
+	depends_on = [nxos_access_list.test]
+}
+`
+}
+
+const testAccAccessListResourceConfigAdditional0 = `
 resource "nxos_access_list" "test" {
   access_lists = {
     "ACL1" = {
@@ -409,7 +536,7 @@ resource "nxos_access_list" "test" {
 }
 `
 
-const testAccNxosAccessListConfigAdditional1 = `
+const testAccAccessListResourceConfigAdditional1 = `
 resource "nxos_access_list" "test" {
   access_lists = {
     "ACL1" = {
@@ -435,7 +562,7 @@ resource "nxos_access_list" "test" {
 }
 `
 
-const testAccNxosAccessListConfigAdditional2 = `
+const testAccAccessListResourceConfigAdditional2 = `
 resource "nxos_access_list" "test" {
   access_lists = {
     "ACL1" = {
@@ -471,7 +598,7 @@ data "nxos_access_list" "verify" {
 }
 `
 
-const testAccNxosAccessListConfigAdditional3 = `
+const testAccAccessListResourceConfigAdditional3 = `
 resource "nxos_access_list" "test" {
   access_lists = {
     "ACL1" = {
@@ -491,7 +618,7 @@ resource "nxos_access_list" "test" {
 }
 `
 
-const testAccNxosAccessListConfigAdditional4 = `
+const testAccAccessListResourceConfigAdditional4 = `
 resource "nxos_access_list" "test" {
   access_lists = {
     "ACL1" = {
@@ -512,7 +639,7 @@ resource "nxos_access_list" "test" {
 }
 `
 
-const testAccNxosAccessListConfigAdditional5 = `
+const testAccAccessListResourceConfigAdditional5 = `
 resource "nxos_access_list" "test" {
   access_lists = {
     "ACL1" = {
@@ -543,7 +670,7 @@ data "nxos_access_list" "verify" {
 }
 `
 
-const testAccNxosAccessListConfigAdditional6 = `
+const testAccAccessListResourceConfigAdditional6 = `
 resource "nxos_access_list" "test" {
   access_lists = {
     "ACL1" = {
@@ -582,7 +709,7 @@ resource "nxos_access_list" "test" {
 }
 `
 
-const testAccNxosAccessListConfigAdditional7 = `
+const testAccAccessListResourceConfigAdditional7 = `
 resource "nxos_access_list" "test" {
   access_lists = {
     "ACL1" = {
@@ -616,7 +743,7 @@ resource "nxos_access_list" "test" {
 }
 `
 
-const testAccNxosAccessListConfigAdditional8 = `
+const testAccAccessListResourceConfigAdditional8 = `
 resource "nxos_access_list" "test" {
   ipv6_access_lists = {
     "ACL2" = {

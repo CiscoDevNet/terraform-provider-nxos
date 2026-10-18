@@ -52,6 +52,7 @@ child_classes:
           - disable
           - enable
         example: enable
+        exclude_test: true
       - nxos_name: slowIntvl
         tf_name: slow_interval
         type: Int64

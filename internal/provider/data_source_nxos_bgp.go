@@ -1499,7 +1499,8 @@ func (d *BGPDataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpPathCtrl", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpAddlPath", "bgpAggAddr", "bgpSessionCont", "bgpLocalAsn", "bgpPolicyCont", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP", "bgpFltrCtrlP", "bgpPolicyInheritRule", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP", "bgpPolicyInheritRule", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP", "bgpPolicyInheritRule", "bgpPeerIf"}, BGPSubtreeClassMinVersions)
+
+	res, err := getBGPTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosISIS(t *testing.T) {
+// TestAccISISResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccISISResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "instances.ISIS1.admin_state", "enabled"))
@@ -135,39 +139,158 @@ func TestAccNxosISIS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.ipv4_bfd", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.ipv6_bfd", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_isis.test", "interfaces.eth1/10.ipv6", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.flush_routes", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.isolate", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.authentication_check_l1", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.authentication_check_l2", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.authentication_type_l1", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.authentication_type_l2", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.bandwidth_reference", "400000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.bandwidth_reference_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.is_type", "l2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.metric_type", "wide"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.mtu", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.net", "49.0001.0000.0000.3333.00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.passive_default", "l12"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.control", "log-adj-changes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.lsp_lifetime", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.queue_limit", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.segment_routing_mpls", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.enable_bfd", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.prefix_advertise_passive_l1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.prefix_advertise_passive_l2", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.control", "adj-check"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.default_information_originate", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.default_information_originate_route_map", "rm1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.distance", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.max_ecmp", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.multi_topology", "st"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.router_id_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.table_map", "rm1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.table_map_filter", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.redistributions.direct;none;none.route_map", "RM_REDIST"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.redistributions.direct;none;none.scope", "inter"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.redistributions.direct;none;none.srv6_prefix_type", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.summary_addresses.10.0.0.0/8.level", "l2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.distributions.l2.destination_level", "l1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.address_families.v4.distributions.l2.route_map", "RM_DISTRIBUTE"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.levels.l2.control", "fast-converge"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.levels.l2.spf_initial_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.levels.l2.spf_max_interval", "5000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.levels.l2.spf_second_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.levels.l2.lsp_generation_initial_interval", "70"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.levels.l2.lsp_generation_max_interval", "6000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.levels.l2.lsp_generation_second_interval", "70"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.graceful_restart_admin_state", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.graceful_restart_t3_interval", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.overload_startup_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.overload_admin_state", "always-on"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.overload_bgp_as_number", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.overload_bgp_as_number_string", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "instances.ISIS1.vrfs.default.overload_suppress", "interlevel"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.authentication_check", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.authentication_check_l1", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.authentication_check_l2", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.authentication_type", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.authentication_type_l1", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.authentication_type_l2", "unknown"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.circuit_type", "l2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.hello_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.hello_interval_l1", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.hello_interval_l2", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.hello_multiplier", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.hello_multiplier_l1", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.hello_multiplier_l2", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.hello_padding", "never"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.instance_name", "ISIS1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.metric_l1", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.metric_l2", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.mtu_check", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.mtu_check_l1", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.mtu_check_l2", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.network_type_p2p", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.passive", "l1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.priority_l1", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.priority_l2", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.enable_ipv4", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.csnp_interval_l1", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.csnp_interval_l2", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.control", "advert-tep"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.description", "ISIS interface"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.lsp_refresh_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.mesh_group_id", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.ipv6_metric_l1", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.ipv6_metric_l2", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.n_flag_clear", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.retransmit_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.retransmit_throttle_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.suppressed_state", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.ipv4_bfd", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.ipv6_bfd", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_isis.test", "interfaces.eth1/10.ipv6", "true"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
+	steps := []resource.TestStep{
+		{
+			Config: testAccISISResourcePrerequisitesConfig + testAccISISResourceConfig_minimum(),
+		},
+		{
+			Config: testAccISISResourcePrerequisitesConfig + testAccISISResourceConfig_all(includeWriteOnly) + testAccISISResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_isis.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccISISResourceImportStateIdFunc("nxos_isis.test"),
+		},
+		{
+			ResourceName:       "nxos_isis.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccISISResourcePrerequisitesConfig + testAccISISResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccISISResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccISISResourceConfig_all(includeWriteOnly), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_isis.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccISISResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccISISResourcePrerequisitesConfig + testAccISISResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosISISPrerequisitesConfig + testAccNxosISISConfig_all(includeWriteOnly),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_isis.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosISISImportStateIdFunc("nxos_isis.test"),
-			},
-			{
-				ResourceName:       "nxos_isis.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosISISImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccISISResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -177,7 +300,7 @@ func nxosISISImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosISISPrerequisitesConfig = `
+const testAccISISResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/isis"
   class_name = "fmIsis"
@@ -200,7 +323,7 @@ resource "nxos_dme" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosISISConfig_minimum() string {
+func testAccISISResourceConfig_minimum() string {
 	config := `resource "nxos_isis" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
@@ -210,7 +333,7 @@ func testAccNxosISISConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosISISConfig_all(includeWriteOnly bool) string {
+func testAccISISResourceConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_isis" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instances = {` + "\n"
@@ -377,6 +500,14 @@ func testAccNxosISISConfig_all(includeWriteOnly bool) string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccISISResourceConfig_dataSource() string {
+	return `
+data "nxos_isis" "test" {
+	depends_on = [nxos_isis.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

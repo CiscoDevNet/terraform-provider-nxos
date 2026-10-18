@@ -232,6 +232,14 @@ var SNMPSubtreeClassMinVersions = map[string]string{}
 // SNMPMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var SNMPMinVersions = map[string]helpers.MinVersion{}
 
+// SNMPListClasses holds the list child classes of the resource.
+var SNMPListClasses = map[string]bool{"snmpCtx": true, "snmpCommSecP": true, "snmpLocalUser": true, "snmpUserGroup": true, "snmpHost": true, "snmpUseVrf": true, "snmpFilterVrf": true, "snmpEvent": true}
+
+// getSNMPTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getSNMPTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"snmpInst", "snmpSysInfo", "snmpGlobals", "snmpSourceInterfaceTraps", "snmpSourceInterfaceInforms", "snmpCtx", "snmpCommSecP", "snmpAcl", "snmpLocalUser", "snmpUserGroup", "snmpHost", "snmpUseVrf", "snmpHostSrcInterface", "snmpFilterVrf", "snmpTraps", "snmpTaaa", "snmpServerStateChange", "snmpTbfd", "snmpSessionDown", "snmpSessionUp", "snmpTbridge", "snmpNewRoot", "snmpTopologyChange", "snmpTcallhome", "snmpEventNotify", "snmpSmtpSendFail", "snmpTcfs", "snmpStateChangeNotif", "snmpMergeFailure", "snmpTconfig", "snmpCLIRunningConfigChange", "snmpTentity", "snmpEntityMIBChange", "snmpEntityMIBEnableStatusNotification", "snmpEntityFanStatusChange", "snmpEntityModuleInserted", "snmpEntityModuleRemoved", "snmpEntityModuleStatusChange", "snmpEntityPowerOutChange", "snmpEntityPowerStatusChange", "snmpEntitySensor", "snmpEntityUnrecognisedModule", "snmpTfcdomain", "snmpDmDomainIdNotAssignedNotify", "snmpDmFabricChangeNotify", "snmpDmNewPrincipalSwitchNotify", "snmpTfcns", "snmpTfcs", "snmpTfctrace", "snmpTfdmi", "snmpTfeaturecontrol", "snmpFeatureOpStatusChange", "snmpCiscoFeatOpStatusChange", "snmpTfspf", "snmpTgeneric", "snmpColdStart", "snmpWarmStart", "snmpThsrp", "snmpStateChange", "snmpTip", "snmpTlicense", "snmpNotifyLicenseExpiry", "snmpNotifyLicenseExpiryWarning", "snmpNotifyLicenseFileMissing", "snmpNotifyNoLicenceForFeature", "snmpTlink", "snmpCieLinkDown", "snmpCieLinkUp", "snmpCiscoXcvrMonStatusChange", "snmpCmnMacMoveNotification", "snmpDelayedLinkStateChange", "snmpExtendedLinkDown", "snmpExtendedLinkUp", "snmpLinkDown", "snmpLinkUp", "snmpCErrDisableInterfaceEventRev1", "snmpTlldp", "snmpLldpRemTablesChange", "snmpTmmode", "snmpCseMaintModeChangeNotify", "snmpCseNormalModeChangeNotify", "snmpTmpls", "snmpLdp", "snmpLdpSessiondown", "snmpLdpSessionup", "snmpVpn", "snmpVpnMaxThreshcleared", "snmpVpnMaxThreshexceeded", "snmpVpnMidThreshexceeded", "snmpVpnVrfdown", "snmpVpnVrfup", "snmpTmsdp", "snmpMsdpBackwardTransition", "snmpTpim", "snmpPimNeighborLoss", "snmpTpoe", "snmpTportsecurity", "snmpAccessSecureMacViolation", "snmpTrunkSecureMacViolation", "snmpTrf", "snmpRedundancyFramework", "snmpTrmon", "snmpRisingAlarm", "snmpFallingAlarm", "snmpHcRisingAlarm", "snmpHcFallingAlarm", "snmpTrscn", "snmpTscsi", "snmpTsnmp", "snmpAuthentication", "snmpTstormControl", "snmpCpscEventRev1", "snmpTstpx", "snmpInconsistency", "snmpLoopInconsistency", "snmpRootInconsistency", "snmpTsyslog", "snmpMessageGenerated", "snmpTsysmgr", "snmpCseFailSwCoreNotifyExtended", "snmpTsystem", "snmpClockChangeNotification", "snmpTupgrade", "snmpUpgradeJobStatusNotify", "snmpUpgradeOpNotifyOnCompletion", "snmpTvsan", "snmpTvtp", "snmpNotifs", "snmpVlancreate", "snmpVlandelete", "snmpTzone", "snmpRmon", "snmpEvent"}, SNMPSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -7415,7 +7423,2556 @@ func (data SNMP) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data SNMP) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.InstanceAdminState.IsNull() && data.Description.IsNull() && data.EngineId.IsNull() && data.LoggingLevel.IsNull() && data.OwnerKey.IsNull() && data.OwnerTag.IsNull() && data.UnknownEngineId.IsNull() && data.UnknownUser.IsNull() && (data.Contact.IsNull() && data.SystemInfoDescription.IsNull() && data.Location.IsNull()) && (data.PacketSize.IsNull() && data.DisableAaaSync.IsNull() && data.EnforcePrivacy.IsNull() && data.TcpSessionAuthentication.IsNull() && (data.SourceInterfaceTraps.IsNull()) && (data.SourceInterfaceInforms.IsNull())) && len(data.Contexts) == 0 && len(data.Communities) == 0 && len(data.LocalUsers) == 0 && len(data.Hosts) == 0 && (data.EnableAll.IsNull() && (data.AaaServerStateChangeTrapStatus.IsNull()) && ((data.BfdSessionDownTrapStatus.IsNull()) && (data.BfdSessionUpTrapStatus.IsNull())) && ((data.BridgeNewRootTrapStatus.IsNull()) && (data.BridgeTopologyChangeTrapStatus.IsNull())) && ((data.CallhomeEventNotifyTrapStatus.IsNull()) && (data.CallhomeSmtpSendFailTrapStatus.IsNull())) && ((data.CfsStateChangeNotifTrapStatus.IsNull()) && (data.CfsMergeFailureTrapStatus.IsNull())) && (data.ConfigCliRunningConfigChangeTrapStatus.IsNull()) && ((data.EntityMibChangeTrapStatus.IsNull()) && (data.EntityMibEnableStatusNotificationTrapStatus.IsNull()) && (data.EntityFanStatusChangeTrapStatus.IsNull()) && (data.EntityModuleInsertedTrapStatus.IsNull()) && (data.EntityModuleRemovedTrapStatus.IsNull()) && (data.EntityModuleStatusChangeTrapStatus.IsNull()) && (data.EntityPowerOutChangeTrapStatus.IsNull()) && (data.EntityPowerStatusChangeTrapStatus.IsNull()) && (data.EntitySensorTrapStatus.IsNull()) && (data.EntityUnrecognisedModuleTrapStatus.IsNull())) && ((data.FcdomainDomainIdNotAssignedTrapStatus.IsNull()) && (data.FcdomainFabricChangeTrapStatus.IsNull()) && (data.FcdomainNewPrincipalSwitchTrapStatus.IsNull())) && ((data.FeatureControlOpStatusChangeTrapStatus.IsNull()) && (data.FeatureControlCiscoOpStatusChangeTrapStatus.IsNull())) && ((data.GenericColdStartTrapStatus.IsNull()) && (data.GenericWarmStartTrapStatus.IsNull())) && (data.HsrpStateChangeTrapStatus.IsNull()) && ((data.LicenseExpiryTrapStatus.IsNull()) && (data.LicenseExpiryWarningTrapStatus.IsNull()) && (data.LicenseFileMissingTrapStatus.IsNull()) && (data.LicenseNoLicenseForFeatureTrapStatus.IsNull())) && ((data.LinkCieLinkDownTrapStatus.IsNull()) && (data.LinkCieLinkUpTrapStatus.IsNull()) && (data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsNull()) && (data.LinkCmnMacMoveNotificationTrapStatus.IsNull()) && (data.LinkDelayedLinkStateChangeTrapStatus.IsNull()) && (data.LinkExtendedLinkDownTrapStatus.IsNull()) && (data.LinkExtendedLinkUpTrapStatus.IsNull()) && (data.LinkLinkDownTrapStatus.IsNull()) && (data.LinkLinkUpTrapStatus.IsNull()) && (data.LinkErrDisableInterfaceEventTrapStatus.IsNull())) && (data.LldpRemTablesChangeTrapStatus.IsNull()) && ((data.MmodeMaintModeChangeTrapStatus.IsNull()) && (data.MmodeNormalModeChangeTrapStatus.IsNull())) && ((data.MplsLdpTrapStatus.IsNull() && (data.MplsLdpSessionDownTrapStatus.IsNull()) && (data.MplsLdpSessionUpTrapStatus.IsNull())) && (data.MplsVpnTrapStatus.IsNull() && (data.MplsVpnMaxThreshClearedTrapStatus.IsNull()) && (data.MplsVpnMaxThreshExceededTrapStatus.IsNull()) && (data.MplsVpnMidThreshExceededTrapStatus.IsNull()) && (data.MplsVpnVrfDownTrapStatus.IsNull()) && (data.MplsVpnVrfUpTrapStatus.IsNull()))) && (data.MsdpBackwardTransitionTrapStatus.IsNull()) && (data.PimNeighborLossTrapStatus.IsNull()) && ((data.PortSecurityAccessSecureMacViolationTrapStatus.IsNull()) && (data.PortSecurityTrunkSecureMacViolationTrapStatus.IsNull())) && (data.RfRedundancyFrameworkTrapStatus.IsNull()) && ((data.RmonRisingAlarmTrapStatus.IsNull()) && (data.RmonFallingAlarmTrapStatus.IsNull()) && (data.RmonHcRisingAlarmTrapStatus.IsNull()) && (data.RmonHcFallingAlarmTrapStatus.IsNull())) && (data.SnmpAuthenticationTrapStatus.IsNull()) && (data.StormControlCpscEventTrapStatus.IsNull()) && ((data.StpxInconsistencyTrapStatus.IsNull()) && (data.StpxLoopInconsistencyTrapStatus.IsNull()) && (data.StpxRootInconsistencyTrapStatus.IsNull())) && (data.SyslogMessageGeneratedTrapStatus.IsNull()) && (data.SysmgrFailSwCoreNotifyTrapStatus.IsNull()) && (data.SystemClockChangeNotificationTrapStatus.IsNull()) && ((data.UpgradeJobStatusNotifyTrapStatus.IsNull()) && (data.UpgradeOpNotifyOnCompletionTrapStatus.IsNull())) && ((data.VtpNotifsTrapStatus.IsNull()) && (data.VtpVlanCreateTrapStatus.IsNull()) && (data.VtpVlanDeleteTrapStatus.IsNull()))) && (len(data.RmonEvents) == 0)) {
+		snmpInstDn := dn + "/" + "inst"
+		dns[snmpInstDn] = true
+		if !(data.Contact.IsNull() && data.SystemInfoDescription.IsNull() && data.Location.IsNull()) {
+			snmpSysInfoDn := snmpInstDn + "/" + "sysinfo"
+			dns[snmpSysInfoDn] = true
+		}
+		if !(data.PacketSize.IsNull() && data.DisableAaaSync.IsNull() && data.EnforcePrivacy.IsNull() && data.TcpSessionAuthentication.IsNull() && (data.SourceInterfaceTraps.IsNull()) && (data.SourceInterfaceInforms.IsNull())) {
+			snmpGlobalsDn := snmpInstDn + "/" + "globals"
+			dns[snmpGlobalsDn] = true
+			if !(data.SourceInterfaceTraps.IsNull()) {
+				snmpSourceInterfaceTrapsDn := snmpGlobalsDn + "/" + "srcInterfaceTraps"
+				dns[snmpSourceInterfaceTrapsDn] = true
+			}
+			if !(data.SourceInterfaceInforms.IsNull()) {
+				snmpSourceInterfaceInformsDn := snmpGlobalsDn + "/" + "srcInterfaceInforms"
+				dns[snmpSourceInterfaceInformsDn] = true
+			}
+		}
+		for key, child := range data.Contexts {
+			snmpCtxDn := snmpInstDn + "/" + child.getRn(key)
+			dns[snmpCtxDn] = true
+		}
+		for key, child := range data.Communities {
+			snmpCommSecPDn := snmpInstDn + "/" + child.getRn(key)
+			dns[snmpCommSecPDn] = true
+			if !(child.AclName.IsNull() && child.Ipv4AclName.IsNull() && child.Ipv6AclName.IsNull()) {
+				snmpAclDn_ := snmpCommSecPDn + "/" + "acl"
+				dns[snmpAclDn_] = true
+			}
+		}
+		for key, child := range data.LocalUsers {
+			snmpLocalUserDn := snmpInstDn + "/" + child.getRn(key)
+			dns[snmpLocalUserDn] = true
+			for key_, child_ := range child.Groups {
+				snmpUserGroupDn_ := snmpLocalUserDn + "/" + child_.getRn(key_)
+				dns[snmpUserGroupDn_] = true
+			}
+		}
+		for key, child := range data.Hosts {
+			keyParts := strings.SplitN(key, ";", 2)
+			_ = keyParts
+			snmpHostDn := snmpInstDn + "/" + child.getRn(key)
+			dns[snmpHostDn] = true
+			for key_, child_ := range child.Vrfs {
+				snmpUseVrfDn_ := snmpHostDn + "/" + child_.getRn(key_)
+				dns[snmpUseVrfDn_] = true
+			}
+			if !(child.SourceInterface.IsNull()) {
+				snmpHostSrcInterfaceDn_ := snmpHostDn + "/" + "hostsourceinterface"
+				dns[snmpHostSrcInterfaceDn_] = true
+			}
+			for key_, child_ := range child.FilterVrfs {
+				snmpFilterVrfDn_ := snmpHostDn + "/" + child_.getRn(key_)
+				dns[snmpFilterVrfDn_] = true
+			}
+		}
+		if !(data.EnableAll.IsNull() && (data.AaaServerStateChangeTrapStatus.IsNull()) && ((data.BfdSessionDownTrapStatus.IsNull()) && (data.BfdSessionUpTrapStatus.IsNull())) && ((data.BridgeNewRootTrapStatus.IsNull()) && (data.BridgeTopologyChangeTrapStatus.IsNull())) && ((data.CallhomeEventNotifyTrapStatus.IsNull()) && (data.CallhomeSmtpSendFailTrapStatus.IsNull())) && ((data.CfsStateChangeNotifTrapStatus.IsNull()) && (data.CfsMergeFailureTrapStatus.IsNull())) && (data.ConfigCliRunningConfigChangeTrapStatus.IsNull()) && ((data.EntityMibChangeTrapStatus.IsNull()) && (data.EntityMibEnableStatusNotificationTrapStatus.IsNull()) && (data.EntityFanStatusChangeTrapStatus.IsNull()) && (data.EntityModuleInsertedTrapStatus.IsNull()) && (data.EntityModuleRemovedTrapStatus.IsNull()) && (data.EntityModuleStatusChangeTrapStatus.IsNull()) && (data.EntityPowerOutChangeTrapStatus.IsNull()) && (data.EntityPowerStatusChangeTrapStatus.IsNull()) && (data.EntitySensorTrapStatus.IsNull()) && (data.EntityUnrecognisedModuleTrapStatus.IsNull())) && ((data.FcdomainDomainIdNotAssignedTrapStatus.IsNull()) && (data.FcdomainFabricChangeTrapStatus.IsNull()) && (data.FcdomainNewPrincipalSwitchTrapStatus.IsNull())) && ((data.FeatureControlOpStatusChangeTrapStatus.IsNull()) && (data.FeatureControlCiscoOpStatusChangeTrapStatus.IsNull())) && ((data.GenericColdStartTrapStatus.IsNull()) && (data.GenericWarmStartTrapStatus.IsNull())) && (data.HsrpStateChangeTrapStatus.IsNull()) && ((data.LicenseExpiryTrapStatus.IsNull()) && (data.LicenseExpiryWarningTrapStatus.IsNull()) && (data.LicenseFileMissingTrapStatus.IsNull()) && (data.LicenseNoLicenseForFeatureTrapStatus.IsNull())) && ((data.LinkCieLinkDownTrapStatus.IsNull()) && (data.LinkCieLinkUpTrapStatus.IsNull()) && (data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsNull()) && (data.LinkCmnMacMoveNotificationTrapStatus.IsNull()) && (data.LinkDelayedLinkStateChangeTrapStatus.IsNull()) && (data.LinkExtendedLinkDownTrapStatus.IsNull()) && (data.LinkExtendedLinkUpTrapStatus.IsNull()) && (data.LinkLinkDownTrapStatus.IsNull()) && (data.LinkLinkUpTrapStatus.IsNull()) && (data.LinkErrDisableInterfaceEventTrapStatus.IsNull())) && (data.LldpRemTablesChangeTrapStatus.IsNull()) && ((data.MmodeMaintModeChangeTrapStatus.IsNull()) && (data.MmodeNormalModeChangeTrapStatus.IsNull())) && ((data.MplsLdpTrapStatus.IsNull() && (data.MplsLdpSessionDownTrapStatus.IsNull()) && (data.MplsLdpSessionUpTrapStatus.IsNull())) && (data.MplsVpnTrapStatus.IsNull() && (data.MplsVpnMaxThreshClearedTrapStatus.IsNull()) && (data.MplsVpnMaxThreshExceededTrapStatus.IsNull()) && (data.MplsVpnMidThreshExceededTrapStatus.IsNull()) && (data.MplsVpnVrfDownTrapStatus.IsNull()) && (data.MplsVpnVrfUpTrapStatus.IsNull()))) && (data.MsdpBackwardTransitionTrapStatus.IsNull()) && (data.PimNeighborLossTrapStatus.IsNull()) && ((data.PortSecurityAccessSecureMacViolationTrapStatus.IsNull()) && (data.PortSecurityTrunkSecureMacViolationTrapStatus.IsNull())) && (data.RfRedundancyFrameworkTrapStatus.IsNull()) && ((data.RmonRisingAlarmTrapStatus.IsNull()) && (data.RmonFallingAlarmTrapStatus.IsNull()) && (data.RmonHcRisingAlarmTrapStatus.IsNull()) && (data.RmonHcFallingAlarmTrapStatus.IsNull())) && (data.SnmpAuthenticationTrapStatus.IsNull()) && (data.StormControlCpscEventTrapStatus.IsNull()) && ((data.StpxInconsistencyTrapStatus.IsNull()) && (data.StpxLoopInconsistencyTrapStatus.IsNull()) && (data.StpxRootInconsistencyTrapStatus.IsNull())) && (data.SyslogMessageGeneratedTrapStatus.IsNull()) && (data.SysmgrFailSwCoreNotifyTrapStatus.IsNull()) && (data.SystemClockChangeNotificationTrapStatus.IsNull()) && ((data.UpgradeJobStatusNotifyTrapStatus.IsNull()) && (data.UpgradeOpNotifyOnCompletionTrapStatus.IsNull())) && ((data.VtpNotifsTrapStatus.IsNull()) && (data.VtpVlanCreateTrapStatus.IsNull()) && (data.VtpVlanDeleteTrapStatus.IsNull()))) {
+			snmpTrapsDn := snmpInstDn + "/" + "traps"
+			dns[snmpTrapsDn] = true
+			if !(data.AaaServerStateChangeTrapStatus.IsNull()) {
+				snmpTaaaDn := snmpTrapsDn + "/" + "aaa"
+				dns[snmpTaaaDn] = true
+				if !(data.AaaServerStateChangeTrapStatus.IsNull()) {
+					snmpServerStateChangeDn := snmpTaaaDn + "/" + "serverstatechange"
+					dns[snmpServerStateChangeDn] = true
+				}
+			}
+			if !((data.BfdSessionDownTrapStatus.IsNull()) && (data.BfdSessionUpTrapStatus.IsNull())) {
+				snmpTbfdDn := snmpTrapsDn + "/" + "bfd"
+				dns[snmpTbfdDn] = true
+				if !(data.BfdSessionDownTrapStatus.IsNull()) {
+					snmpSessionDownDn := snmpTbfdDn + "/" + "sessiondown"
+					dns[snmpSessionDownDn] = true
+				}
+				if !(data.BfdSessionUpTrapStatus.IsNull()) {
+					snmpSessionUpDn := snmpTbfdDn + "/" + "sessionup"
+					dns[snmpSessionUpDn] = true
+				}
+			}
+			if !((data.BridgeNewRootTrapStatus.IsNull()) && (data.BridgeTopologyChangeTrapStatus.IsNull())) {
+				snmpTbridgeDn := snmpTrapsDn + "/" + "bridge"
+				dns[snmpTbridgeDn] = true
+				if !(data.BridgeNewRootTrapStatus.IsNull()) {
+					snmpNewRootDn := snmpTbridgeDn + "/" + "newroot"
+					dns[snmpNewRootDn] = true
+				}
+				if !(data.BridgeTopologyChangeTrapStatus.IsNull()) {
+					snmpTopologyChangeDn := snmpTbridgeDn + "/" + "topologychange"
+					dns[snmpTopologyChangeDn] = true
+				}
+			}
+			if !((data.CallhomeEventNotifyTrapStatus.IsNull()) && (data.CallhomeSmtpSendFailTrapStatus.IsNull())) {
+				snmpTcallhomeDn := snmpTrapsDn + "/" + "callhome"
+				dns[snmpTcallhomeDn] = true
+				if !(data.CallhomeEventNotifyTrapStatus.IsNull()) {
+					snmpEventNotifyDn := snmpTcallhomeDn + "/" + "eventnotify"
+					dns[snmpEventNotifyDn] = true
+				}
+				if !(data.CallhomeSmtpSendFailTrapStatus.IsNull()) {
+					snmpSmtpSendFailDn := snmpTcallhomeDn + "/" + "smtpsendfail"
+					dns[snmpSmtpSendFailDn] = true
+				}
+			}
+			if !((data.CfsStateChangeNotifTrapStatus.IsNull()) && (data.CfsMergeFailureTrapStatus.IsNull())) {
+				snmpTcfsDn := snmpTrapsDn + "/" + "cfs"
+				dns[snmpTcfsDn] = true
+				if !(data.CfsStateChangeNotifTrapStatus.IsNull()) {
+					snmpStateChangeNotifDn := snmpTcfsDn + "/" + "statechangenotif"
+					dns[snmpStateChangeNotifDn] = true
+				}
+				if !(data.CfsMergeFailureTrapStatus.IsNull()) {
+					snmpMergeFailureDn := snmpTcfsDn + "/" + "mergefailure"
+					dns[snmpMergeFailureDn] = true
+				}
+			}
+			if !(data.ConfigCliRunningConfigChangeTrapStatus.IsNull()) {
+				snmpTconfigDn := snmpTrapsDn + "/" + "config"
+				dns[snmpTconfigDn] = true
+				if !(data.ConfigCliRunningConfigChangeTrapStatus.IsNull()) {
+					snmpCLIRunningConfigChangeDn := snmpTconfigDn + "/" + "ccmCLIRunningConfigChanged"
+					dns[snmpCLIRunningConfigChangeDn] = true
+				}
+			}
+			if !((data.EntityMibChangeTrapStatus.IsNull()) && (data.EntityMibEnableStatusNotificationTrapStatus.IsNull()) && (data.EntityFanStatusChangeTrapStatus.IsNull()) && (data.EntityModuleInsertedTrapStatus.IsNull()) && (data.EntityModuleRemovedTrapStatus.IsNull()) && (data.EntityModuleStatusChangeTrapStatus.IsNull()) && (data.EntityPowerOutChangeTrapStatus.IsNull()) && (data.EntityPowerStatusChangeTrapStatus.IsNull()) && (data.EntitySensorTrapStatus.IsNull()) && (data.EntityUnrecognisedModuleTrapStatus.IsNull())) {
+				snmpTentityDn := snmpTrapsDn + "/" + "entity"
+				dns[snmpTentityDn] = true
+				if !(data.EntityMibChangeTrapStatus.IsNull()) {
+					snmpEntityMIBChangeDn := snmpTentityDn + "/" + "entitymibchange"
+					dns[snmpEntityMIBChangeDn] = true
+				}
+				if !(data.EntityMibEnableStatusNotificationTrapStatus.IsNull()) {
+					snmpEntityMIBEnableStatusNotificationDn := snmpTentityDn + "/" + "cefcMIBEnableStatusNotification"
+					dns[snmpEntityMIBEnableStatusNotificationDn] = true
+				}
+				if !(data.EntityFanStatusChangeTrapStatus.IsNull()) {
+					snmpEntityFanStatusChangeDn := snmpTentityDn + "/" + "entityfanstatuschange"
+					dns[snmpEntityFanStatusChangeDn] = true
+				}
+				if !(data.EntityModuleInsertedTrapStatus.IsNull()) {
+					snmpEntityModuleInsertedDn := snmpTentityDn + "/" + "entitymoduleinserted"
+					dns[snmpEntityModuleInsertedDn] = true
+				}
+				if !(data.EntityModuleRemovedTrapStatus.IsNull()) {
+					snmpEntityModuleRemovedDn := snmpTentityDn + "/" + "entitymoduleremoved"
+					dns[snmpEntityModuleRemovedDn] = true
+				}
+				if !(data.EntityModuleStatusChangeTrapStatus.IsNull()) {
+					snmpEntityModuleStatusChangeDn := snmpTentityDn + "/" + "entitymodulestatuschange"
+					dns[snmpEntityModuleStatusChangeDn] = true
+				}
+				if !(data.EntityPowerOutChangeTrapStatus.IsNull()) {
+					snmpEntityPowerOutChangeDn := snmpTentityDn + "/" + "entitypoweroutchange"
+					dns[snmpEntityPowerOutChangeDn] = true
+				}
+				if !(data.EntityPowerStatusChangeTrapStatus.IsNull()) {
+					snmpEntityPowerStatusChangeDn := snmpTentityDn + "/" + "entitypowerstatuschange"
+					dns[snmpEntityPowerStatusChangeDn] = true
+				}
+				if !(data.EntitySensorTrapStatus.IsNull()) {
+					snmpEntitySensorDn := snmpTentityDn + "/" + "entitysensor"
+					dns[snmpEntitySensorDn] = true
+				}
+				if !(data.EntityUnrecognisedModuleTrapStatus.IsNull()) {
+					snmpEntityUnrecognisedModuleDn := snmpTentityDn + "/" + "entityunrecognisedmodule"
+					dns[snmpEntityUnrecognisedModuleDn] = true
+				}
+			}
+			if !((data.FcdomainDomainIdNotAssignedTrapStatus.IsNull()) && (data.FcdomainFabricChangeTrapStatus.IsNull()) && (data.FcdomainNewPrincipalSwitchTrapStatus.IsNull())) {
+				snmpTfcdomainDn := snmpTrapsDn + "/" + "fcdomain"
+				dns[snmpTfcdomainDn] = true
+				if !(data.FcdomainDomainIdNotAssignedTrapStatus.IsNull()) {
+					snmpDmDomainIdNotAssignedNotifyDn := snmpTfcdomainDn + "/" + "dmdomainidnotassignednotify"
+					dns[snmpDmDomainIdNotAssignedNotifyDn] = true
+				}
+				if !(data.FcdomainFabricChangeTrapStatus.IsNull()) {
+					snmpDmFabricChangeNotifyDn := snmpTfcdomainDn + "/" + "dmfabricchangenotify"
+					dns[snmpDmFabricChangeNotifyDn] = true
+				}
+				if !(data.FcdomainNewPrincipalSwitchTrapStatus.IsNull()) {
+					snmpDmNewPrincipalSwitchNotifyDn := snmpTfcdomainDn + "/" + "dmnewprincipalswitchnotify"
+					dns[snmpDmNewPrincipalSwitchNotifyDn] = true
+				}
+			}
+			if !true {
+				snmpTfcnsDn := snmpTrapsDn + "/" + "fcns"
+				dns[snmpTfcnsDn] = true
+			}
+			if !true {
+				snmpTfcsDn := snmpTrapsDn + "/" + "fcs"
+				dns[snmpTfcsDn] = true
+			}
+			if !true {
+				snmpTfctraceDn := snmpTrapsDn + "/" + "fctrace"
+				dns[snmpTfctraceDn] = true
+			}
+			if !true {
+				snmpTfdmiDn := snmpTrapsDn + "/" + "fdmi"
+				dns[snmpTfdmiDn] = true
+			}
+			if !((data.FeatureControlOpStatusChangeTrapStatus.IsNull()) && (data.FeatureControlCiscoOpStatusChangeTrapStatus.IsNull())) {
+				snmpTfeaturecontrolDn := snmpTrapsDn + "/" + "featurecontrol"
+				dns[snmpTfeaturecontrolDn] = true
+				if !(data.FeatureControlOpStatusChangeTrapStatus.IsNull()) {
+					snmpFeatureOpStatusChangeDn := snmpTfeaturecontrolDn + "/" + "FeatureOpStatusChange"
+					dns[snmpFeatureOpStatusChangeDn] = true
+				}
+				if !(data.FeatureControlCiscoOpStatusChangeTrapStatus.IsNull()) {
+					snmpCiscoFeatOpStatusChangeDn := snmpTfeaturecontrolDn + "/" + "ciscoFeatOpStatusChange"
+					dns[snmpCiscoFeatOpStatusChangeDn] = true
+				}
+			}
+			if !true {
+				snmpTfspfDn := snmpTrapsDn + "/" + "fspf"
+				dns[snmpTfspfDn] = true
+			}
+			if !((data.GenericColdStartTrapStatus.IsNull()) && (data.GenericWarmStartTrapStatus.IsNull())) {
+				snmpTgenericDn := snmpTrapsDn + "/" + "generic"
+				dns[snmpTgenericDn] = true
+				if !(data.GenericColdStartTrapStatus.IsNull()) {
+					snmpColdStartDn := snmpTgenericDn + "/" + "coldStart"
+					dns[snmpColdStartDn] = true
+				}
+				if !(data.GenericWarmStartTrapStatus.IsNull()) {
+					snmpWarmStartDn := snmpTgenericDn + "/" + "warmStart"
+					dns[snmpWarmStartDn] = true
+				}
+			}
+			if !(data.HsrpStateChangeTrapStatus.IsNull()) {
+				snmpThsrpDn := snmpTrapsDn + "/" + "hsrp"
+				dns[snmpThsrpDn] = true
+				if !(data.HsrpStateChangeTrapStatus.IsNull()) {
+					snmpStateChangeDn := snmpThsrpDn + "/" + "statechange"
+					dns[snmpStateChangeDn] = true
+				}
+			}
+			if !true {
+				snmpTipDn := snmpTrapsDn + "/" + "ip"
+				dns[snmpTipDn] = true
+			}
+			if !((data.LicenseExpiryTrapStatus.IsNull()) && (data.LicenseExpiryWarningTrapStatus.IsNull()) && (data.LicenseFileMissingTrapStatus.IsNull()) && (data.LicenseNoLicenseForFeatureTrapStatus.IsNull())) {
+				snmpTlicenseDn := snmpTrapsDn + "/" + "license"
+				dns[snmpTlicenseDn] = true
+				if !(data.LicenseExpiryTrapStatus.IsNull()) {
+					snmpNotifyLicenseExpiryDn := snmpTlicenseDn + "/" + "notifylicenseexpiry"
+					dns[snmpNotifyLicenseExpiryDn] = true
+				}
+				if !(data.LicenseExpiryWarningTrapStatus.IsNull()) {
+					snmpNotifyLicenseExpiryWarningDn := snmpTlicenseDn + "/" + "notifylicenseexpirywarning"
+					dns[snmpNotifyLicenseExpiryWarningDn] = true
+				}
+				if !(data.LicenseFileMissingTrapStatus.IsNull()) {
+					snmpNotifyLicenseFileMissingDn := snmpTlicenseDn + "/" + "notifylicensefilemissing"
+					dns[snmpNotifyLicenseFileMissingDn] = true
+				}
+				if !(data.LicenseNoLicenseForFeatureTrapStatus.IsNull()) {
+					snmpNotifyNoLicenceForFeatureDn := snmpTlicenseDn + "/" + "notifynolicenseforfeature"
+					dns[snmpNotifyNoLicenceForFeatureDn] = true
+				}
+			}
+			if !((data.LinkCieLinkDownTrapStatus.IsNull()) && (data.LinkCieLinkUpTrapStatus.IsNull()) && (data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsNull()) && (data.LinkCmnMacMoveNotificationTrapStatus.IsNull()) && (data.LinkDelayedLinkStateChangeTrapStatus.IsNull()) && (data.LinkExtendedLinkDownTrapStatus.IsNull()) && (data.LinkExtendedLinkUpTrapStatus.IsNull()) && (data.LinkLinkDownTrapStatus.IsNull()) && (data.LinkLinkUpTrapStatus.IsNull()) && (data.LinkErrDisableInterfaceEventTrapStatus.IsNull())) {
+				snmpTlinkDn := snmpTrapsDn + "/" + "link"
+				dns[snmpTlinkDn] = true
+				if !(data.LinkCieLinkDownTrapStatus.IsNull()) {
+					snmpCieLinkDownDn := snmpTlinkDn + "/" + "cieLinkDown"
+					dns[snmpCieLinkDownDn] = true
+				}
+				if !(data.LinkCieLinkUpTrapStatus.IsNull()) {
+					snmpCieLinkUpDn := snmpTlinkDn + "/" + "cieLinkUp"
+					dns[snmpCieLinkUpDn] = true
+				}
+				if !(data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsNull()) {
+					snmpCiscoXcvrMonStatusChangeDn := snmpTlinkDn + "/" + "ciscoxcvrmonstatuschg"
+					dns[snmpCiscoXcvrMonStatusChangeDn] = true
+				}
+				if !(data.LinkCmnMacMoveNotificationTrapStatus.IsNull()) {
+					snmpCmnMacMoveNotificationDn := snmpTlinkDn + "/" + "cmnmacmovenotification"
+					dns[snmpCmnMacMoveNotificationDn] = true
+				}
+				if !(data.LinkDelayedLinkStateChangeTrapStatus.IsNull()) {
+					snmpDelayedLinkStateChangeDn := snmpTlinkDn + "/" + "delayedlinkstatechange"
+					dns[snmpDelayedLinkStateChangeDn] = true
+				}
+				if !(data.LinkExtendedLinkDownTrapStatus.IsNull()) {
+					snmpExtendedLinkDownDn := snmpTlinkDn + "/" + "extendedlinkDown"
+					dns[snmpExtendedLinkDownDn] = true
+				}
+				if !(data.LinkExtendedLinkUpTrapStatus.IsNull()) {
+					snmpExtendedLinkUpDn := snmpTlinkDn + "/" + "extendedlinkUp"
+					dns[snmpExtendedLinkUpDn] = true
+				}
+				if !(data.LinkLinkDownTrapStatus.IsNull()) {
+					snmpLinkDownDn := snmpTlinkDn + "/" + "linkDown"
+					dns[snmpLinkDownDn] = true
+				}
+				if !(data.LinkLinkUpTrapStatus.IsNull()) {
+					snmpLinkUpDn := snmpTlinkDn + "/" + "linkUp"
+					dns[snmpLinkUpDn] = true
+				}
+				if !(data.LinkErrDisableInterfaceEventTrapStatus.IsNull()) {
+					snmpCErrDisableInterfaceEventRev1Dn := snmpTlinkDn + "/" + "cerrdisableinterfaceeventrev1"
+					dns[snmpCErrDisableInterfaceEventRev1Dn] = true
+				}
+			}
+			if !(data.LldpRemTablesChangeTrapStatus.IsNull()) {
+				snmpTlldpDn := snmpTrapsDn + "/" + "lldp"
+				dns[snmpTlldpDn] = true
+				if !(data.LldpRemTablesChangeTrapStatus.IsNull()) {
+					snmpLldpRemTablesChangeDn := snmpTlldpDn + "/" + "lldpRemTablesChange"
+					dns[snmpLldpRemTablesChangeDn] = true
+				}
+			}
+			if !((data.MmodeMaintModeChangeTrapStatus.IsNull()) && (data.MmodeNormalModeChangeTrapStatus.IsNull())) {
+				snmpTmmodeDn := snmpTrapsDn + "/" + "mmode"
+				dns[snmpTmmodeDn] = true
+				if !(data.MmodeMaintModeChangeTrapStatus.IsNull()) {
+					snmpCseMaintModeChangeNotifyDn := snmpTmmodeDn + "/" + "cseMaintModeChangeNotify"
+					dns[snmpCseMaintModeChangeNotifyDn] = true
+				}
+				if !(data.MmodeNormalModeChangeTrapStatus.IsNull()) {
+					snmpCseNormalModeChangeNotifyDn := snmpTmmodeDn + "/" + "cseNormalModeChangeNotify"
+					dns[snmpCseNormalModeChangeNotifyDn] = true
+				}
+			}
+			if !((data.MplsLdpTrapStatus.IsNull() && (data.MplsLdpSessionDownTrapStatus.IsNull()) && (data.MplsLdpSessionUpTrapStatus.IsNull())) && (data.MplsVpnTrapStatus.IsNull() && (data.MplsVpnMaxThreshClearedTrapStatus.IsNull()) && (data.MplsVpnMaxThreshExceededTrapStatus.IsNull()) && (data.MplsVpnMidThreshExceededTrapStatus.IsNull()) && (data.MplsVpnVrfDownTrapStatus.IsNull()) && (data.MplsVpnVrfUpTrapStatus.IsNull()))) {
+				snmpTmplsDn := snmpTrapsDn + "/" + "mpls"
+				dns[snmpTmplsDn] = true
+				if !(data.MplsLdpTrapStatus.IsNull() && (data.MplsLdpSessionDownTrapStatus.IsNull()) && (data.MplsLdpSessionUpTrapStatus.IsNull())) {
+					snmpLdpDn := snmpTmplsDn + "/" + "ldp"
+					dns[snmpLdpDn] = true
+					if !(data.MplsLdpSessionDownTrapStatus.IsNull()) {
+						snmpLdpSessiondownDn := snmpLdpDn + "/" + "ldpsessiondown"
+						dns[snmpLdpSessiondownDn] = true
+					}
+					if !(data.MplsLdpSessionUpTrapStatus.IsNull()) {
+						snmpLdpSessionupDn := snmpLdpDn + "/" + "ldpsessionup"
+						dns[snmpLdpSessionupDn] = true
+					}
+				}
+				if !(data.MplsVpnTrapStatus.IsNull() && (data.MplsVpnMaxThreshClearedTrapStatus.IsNull()) && (data.MplsVpnMaxThreshExceededTrapStatus.IsNull()) && (data.MplsVpnMidThreshExceededTrapStatus.IsNull()) && (data.MplsVpnVrfDownTrapStatus.IsNull()) && (data.MplsVpnVrfUpTrapStatus.IsNull())) {
+					snmpVpnDn := snmpTmplsDn + "/" + "vpn"
+					dns[snmpVpnDn] = true
+					if !(data.MplsVpnMaxThreshClearedTrapStatus.IsNull()) {
+						snmpVpnMaxThreshclearedDn := snmpVpnDn + "/" + "vpnmaxthreshcleared"
+						dns[snmpVpnMaxThreshclearedDn] = true
+					}
+					if !(data.MplsVpnMaxThreshExceededTrapStatus.IsNull()) {
+						snmpVpnMaxThreshexceededDn := snmpVpnDn + "/" + "vpnmaxthreshexceeded"
+						dns[snmpVpnMaxThreshexceededDn] = true
+					}
+					if !(data.MplsVpnMidThreshExceededTrapStatus.IsNull()) {
+						snmpVpnMidThreshexceededDn := snmpVpnDn + "/" + "vpnmidthreshexceeded"
+						dns[snmpVpnMidThreshexceededDn] = true
+					}
+					if !(data.MplsVpnVrfDownTrapStatus.IsNull()) {
+						snmpVpnVrfdownDn := snmpVpnDn + "/" + "vpnvrfdown"
+						dns[snmpVpnVrfdownDn] = true
+					}
+					if !(data.MplsVpnVrfUpTrapStatus.IsNull()) {
+						snmpVpnVrfupDn := snmpVpnDn + "/" + "vpnvrfup"
+						dns[snmpVpnVrfupDn] = true
+					}
+				}
+			}
+			if !(data.MsdpBackwardTransitionTrapStatus.IsNull()) {
+				snmpTmsdpDn := snmpTrapsDn + "/" + "msdp"
+				dns[snmpTmsdpDn] = true
+				if !(data.MsdpBackwardTransitionTrapStatus.IsNull()) {
+					snmpMsdpBackwardTransitionDn := snmpTmsdpDn + "/" + "msdpBackwardTransition"
+					dns[snmpMsdpBackwardTransitionDn] = true
+				}
+			}
+			if !(data.PimNeighborLossTrapStatus.IsNull()) {
+				snmpTpimDn := snmpTrapsDn + "/" + "pim"
+				dns[snmpTpimDn] = true
+				if !(data.PimNeighborLossTrapStatus.IsNull()) {
+					snmpPimNeighborLossDn := snmpTpimDn + "/" + "pimNeighborLoss"
+					dns[snmpPimNeighborLossDn] = true
+				}
+			}
+			if !true {
+				snmpTpoeDn := snmpTrapsDn + "/" + "poe"
+				dns[snmpTpoeDn] = true
+			}
+			if !((data.PortSecurityAccessSecureMacViolationTrapStatus.IsNull()) && (data.PortSecurityTrunkSecureMacViolationTrapStatus.IsNull())) {
+				snmpTportsecurityDn := snmpTrapsDn + "/" + "portsecurity"
+				dns[snmpTportsecurityDn] = true
+				if !(data.PortSecurityAccessSecureMacViolationTrapStatus.IsNull()) {
+					snmpAccessSecureMacViolationDn := snmpTportsecurityDn + "/" + "accesssecuremacviolation"
+					dns[snmpAccessSecureMacViolationDn] = true
+				}
+				if !(data.PortSecurityTrunkSecureMacViolationTrapStatus.IsNull()) {
+					snmpTrunkSecureMacViolationDn := snmpTportsecurityDn + "/" + "trunksecuremacviolation"
+					dns[snmpTrunkSecureMacViolationDn] = true
+				}
+			}
+			if !(data.RfRedundancyFrameworkTrapStatus.IsNull()) {
+				snmpTrfDn := snmpTrapsDn + "/" + "rf"
+				dns[snmpTrfDn] = true
+				if !(data.RfRedundancyFrameworkTrapStatus.IsNull()) {
+					snmpRedundancyFrameworkDn := snmpTrfDn + "/" + "redundancyframework"
+					dns[snmpRedundancyFrameworkDn] = true
+				}
+			}
+			if !((data.RmonRisingAlarmTrapStatus.IsNull()) && (data.RmonFallingAlarmTrapStatus.IsNull()) && (data.RmonHcRisingAlarmTrapStatus.IsNull()) && (data.RmonHcFallingAlarmTrapStatus.IsNull())) {
+				snmpTrmonDn := snmpTrapsDn + "/" + "rmon"
+				dns[snmpTrmonDn] = true
+				if !(data.RmonRisingAlarmTrapStatus.IsNull()) {
+					snmpRisingAlarmDn := snmpTrmonDn + "/" + "risingAlarm"
+					dns[snmpRisingAlarmDn] = true
+				}
+				if !(data.RmonFallingAlarmTrapStatus.IsNull()) {
+					snmpFallingAlarmDn := snmpTrmonDn + "/" + "fallingAlarm"
+					dns[snmpFallingAlarmDn] = true
+				}
+				if !(data.RmonHcRisingAlarmTrapStatus.IsNull()) {
+					snmpHcRisingAlarmDn := snmpTrmonDn + "/" + "hcRisingAlarm"
+					dns[snmpHcRisingAlarmDn] = true
+				}
+				if !(data.RmonHcFallingAlarmTrapStatus.IsNull()) {
+					snmpHcFallingAlarmDn := snmpTrmonDn + "/" + "hcFallingAlarm"
+					dns[snmpHcFallingAlarmDn] = true
+				}
+			}
+			if !true {
+				snmpTrscnDn := snmpTrapsDn + "/" + "rscn"
+				dns[snmpTrscnDn] = true
+			}
+			if !true {
+				snmpTscsiDn := snmpTrapsDn + "/" + "scsi"
+				dns[snmpTscsiDn] = true
+			}
+			if !(data.SnmpAuthenticationTrapStatus.IsNull()) {
+				snmpTsnmpDn := snmpTrapsDn + "/" + "snmp"
+				dns[snmpTsnmpDn] = true
+				if !(data.SnmpAuthenticationTrapStatus.IsNull()) {
+					snmpAuthenticationDn := snmpTsnmpDn + "/" + "authentication"
+					dns[snmpAuthenticationDn] = true
+				}
+			}
+			if !(data.StormControlCpscEventTrapStatus.IsNull()) {
+				snmpTstormControlDn := snmpTrapsDn + "/" + "stormcontrol"
+				dns[snmpTstormControlDn] = true
+				if !(data.StormControlCpscEventTrapStatus.IsNull()) {
+					snmpCpscEventRev1Dn := snmpTstormControlDn + "/" + "cpscEventRev1"
+					dns[snmpCpscEventRev1Dn] = true
+				}
+			}
+			if !((data.StpxInconsistencyTrapStatus.IsNull()) && (data.StpxLoopInconsistencyTrapStatus.IsNull()) && (data.StpxRootInconsistencyTrapStatus.IsNull())) {
+				snmpTstpxDn := snmpTrapsDn + "/" + "stpx"
+				dns[snmpTstpxDn] = true
+				if !(data.StpxInconsistencyTrapStatus.IsNull()) {
+					snmpInconsistencyDn := snmpTstpxDn + "/" + "inconsistency"
+					dns[snmpInconsistencyDn] = true
+				}
+				if !(data.StpxLoopInconsistencyTrapStatus.IsNull()) {
+					snmpLoopInconsistencyDn := snmpTstpxDn + "/" + "loopinconsistency"
+					dns[snmpLoopInconsistencyDn] = true
+				}
+				if !(data.StpxRootInconsistencyTrapStatus.IsNull()) {
+					snmpRootInconsistencyDn := snmpTstpxDn + "/" + "rootinconsistency"
+					dns[snmpRootInconsistencyDn] = true
+				}
+			}
+			if !(data.SyslogMessageGeneratedTrapStatus.IsNull()) {
+				snmpTsyslogDn := snmpTrapsDn + "/" + "syslog"
+				dns[snmpTsyslogDn] = true
+				if !(data.SyslogMessageGeneratedTrapStatus.IsNull()) {
+					snmpMessageGeneratedDn := snmpTsyslogDn + "/" + "messagegenerated"
+					dns[snmpMessageGeneratedDn] = true
+				}
+			}
+			if !(data.SysmgrFailSwCoreNotifyTrapStatus.IsNull()) {
+				snmpTsysmgrDn := snmpTrapsDn + "/" + "sysmgr"
+				dns[snmpTsysmgrDn] = true
+				if !(data.SysmgrFailSwCoreNotifyTrapStatus.IsNull()) {
+					snmpCseFailSwCoreNotifyExtendedDn := snmpTsysmgrDn + "/" + "cseFailSwCoreNotifyExtended"
+					dns[snmpCseFailSwCoreNotifyExtendedDn] = true
+				}
+			}
+			if !(data.SystemClockChangeNotificationTrapStatus.IsNull()) {
+				snmpTsystemDn := snmpTrapsDn + "/" + "system"
+				dns[snmpTsystemDn] = true
+				if !(data.SystemClockChangeNotificationTrapStatus.IsNull()) {
+					snmpClockChangeNotificationDn := snmpTsystemDn + "/" + "Clockchangenotification"
+					dns[snmpClockChangeNotificationDn] = true
+				}
+			}
+			if !((data.UpgradeJobStatusNotifyTrapStatus.IsNull()) && (data.UpgradeOpNotifyOnCompletionTrapStatus.IsNull())) {
+				snmpTupgradeDn := snmpTrapsDn + "/" + "upgrade"
+				dns[snmpTupgradeDn] = true
+				if !(data.UpgradeJobStatusNotifyTrapStatus.IsNull()) {
+					snmpUpgradeJobStatusNotifyDn := snmpTupgradeDn + "/" + "UpgradeJobStatusNotify"
+					dns[snmpUpgradeJobStatusNotifyDn] = true
+				}
+				if !(data.UpgradeOpNotifyOnCompletionTrapStatus.IsNull()) {
+					snmpUpgradeOpNotifyOnCompletionDn := snmpTupgradeDn + "/" + "UpgradeOpNotifyOnCompletion"
+					dns[snmpUpgradeOpNotifyOnCompletionDn] = true
+				}
+			}
+			if !true {
+				snmpTvsanDn := snmpTrapsDn + "/" + "vsan"
+				dns[snmpTvsanDn] = true
+			}
+			if !((data.VtpNotifsTrapStatus.IsNull()) && (data.VtpVlanCreateTrapStatus.IsNull()) && (data.VtpVlanDeleteTrapStatus.IsNull())) {
+				snmpTvtpDn := snmpTrapsDn + "/" + "vtp"
+				dns[snmpTvtpDn] = true
+				if !(data.VtpNotifsTrapStatus.IsNull()) {
+					snmpNotifsDn := snmpTvtpDn + "/" + "notifs"
+					dns[snmpNotifsDn] = true
+				}
+				if !(data.VtpVlanCreateTrapStatus.IsNull()) {
+					snmpVlancreateDn := snmpTvtpDn + "/" + "vlancreate"
+					dns[snmpVlancreateDn] = true
+				}
+				if !(data.VtpVlanDeleteTrapStatus.IsNull()) {
+					snmpVlandeleteDn := snmpTvtpDn + "/" + "vlandelete"
+					dns[snmpVlandeleteDn] = true
+				}
+			}
+			if !true {
+				snmpTzoneDn := snmpTrapsDn + "/" + "zone"
+				dns[snmpTzoneDn] = true
+			}
+		}
+		if !(len(data.RmonEvents) == 0) {
+			snmpRmonDn := snmpInstDn + "/" + "rmon"
+			dns[snmpRmonDn] = true
+			for key, child := range data.RmonEvents {
+				snmpEventDn := snmpRmonDn + "/" + child.getRn(key)
+				dns[snmpEventDn] = true
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data SNMP) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "snmpEntity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "snmpEntity.attributes", map[string]interface{}{})
+	}
+	if !(data.InstanceAdminState.IsNull() && data.Description.IsNull() && data.EngineId.IsNull() && data.LoggingLevel.IsNull() && data.OwnerKey.IsNull() && data.OwnerTag.IsNull() && data.UnknownEngineId.IsNull() && data.UnknownUser.IsNull() && (data.Contact.IsNull() && data.SystemInfoDescription.IsNull() && data.Location.IsNull()) && (data.PacketSize.IsNull() && data.DisableAaaSync.IsNull() && data.EnforcePrivacy.IsNull() && data.TcpSessionAuthentication.IsNull() && (data.SourceInterfaceTraps.IsNull()) && (data.SourceInterfaceInforms.IsNull())) && len(data.Contexts) == 0 && len(data.Communities) == 0 && len(data.LocalUsers) == 0 && len(data.Hosts) == 0 && (data.EnableAll.IsNull() && (data.AaaServerStateChangeTrapStatus.IsNull()) && ((data.BfdSessionDownTrapStatus.IsNull()) && (data.BfdSessionUpTrapStatus.IsNull())) && ((data.BridgeNewRootTrapStatus.IsNull()) && (data.BridgeTopologyChangeTrapStatus.IsNull())) && ((data.CallhomeEventNotifyTrapStatus.IsNull()) && (data.CallhomeSmtpSendFailTrapStatus.IsNull())) && ((data.CfsStateChangeNotifTrapStatus.IsNull()) && (data.CfsMergeFailureTrapStatus.IsNull())) && (data.ConfigCliRunningConfigChangeTrapStatus.IsNull()) && ((data.EntityMibChangeTrapStatus.IsNull()) && (data.EntityMibEnableStatusNotificationTrapStatus.IsNull()) && (data.EntityFanStatusChangeTrapStatus.IsNull()) && (data.EntityModuleInsertedTrapStatus.IsNull()) && (data.EntityModuleRemovedTrapStatus.IsNull()) && (data.EntityModuleStatusChangeTrapStatus.IsNull()) && (data.EntityPowerOutChangeTrapStatus.IsNull()) && (data.EntityPowerStatusChangeTrapStatus.IsNull()) && (data.EntitySensorTrapStatus.IsNull()) && (data.EntityUnrecognisedModuleTrapStatus.IsNull())) && ((data.FcdomainDomainIdNotAssignedTrapStatus.IsNull()) && (data.FcdomainFabricChangeTrapStatus.IsNull()) && (data.FcdomainNewPrincipalSwitchTrapStatus.IsNull())) && ((data.FeatureControlOpStatusChangeTrapStatus.IsNull()) && (data.FeatureControlCiscoOpStatusChangeTrapStatus.IsNull())) && ((data.GenericColdStartTrapStatus.IsNull()) && (data.GenericWarmStartTrapStatus.IsNull())) && (data.HsrpStateChangeTrapStatus.IsNull()) && ((data.LicenseExpiryTrapStatus.IsNull()) && (data.LicenseExpiryWarningTrapStatus.IsNull()) && (data.LicenseFileMissingTrapStatus.IsNull()) && (data.LicenseNoLicenseForFeatureTrapStatus.IsNull())) && ((data.LinkCieLinkDownTrapStatus.IsNull()) && (data.LinkCieLinkUpTrapStatus.IsNull()) && (data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsNull()) && (data.LinkCmnMacMoveNotificationTrapStatus.IsNull()) && (data.LinkDelayedLinkStateChangeTrapStatus.IsNull()) && (data.LinkExtendedLinkDownTrapStatus.IsNull()) && (data.LinkExtendedLinkUpTrapStatus.IsNull()) && (data.LinkLinkDownTrapStatus.IsNull()) && (data.LinkLinkUpTrapStatus.IsNull()) && (data.LinkErrDisableInterfaceEventTrapStatus.IsNull())) && (data.LldpRemTablesChangeTrapStatus.IsNull()) && ((data.MmodeMaintModeChangeTrapStatus.IsNull()) && (data.MmodeNormalModeChangeTrapStatus.IsNull())) && ((data.MplsLdpTrapStatus.IsNull() && (data.MplsLdpSessionDownTrapStatus.IsNull()) && (data.MplsLdpSessionUpTrapStatus.IsNull())) && (data.MplsVpnTrapStatus.IsNull() && (data.MplsVpnMaxThreshClearedTrapStatus.IsNull()) && (data.MplsVpnMaxThreshExceededTrapStatus.IsNull()) && (data.MplsVpnMidThreshExceededTrapStatus.IsNull()) && (data.MplsVpnVrfDownTrapStatus.IsNull()) && (data.MplsVpnVrfUpTrapStatus.IsNull()))) && (data.MsdpBackwardTransitionTrapStatus.IsNull()) && (data.PimNeighborLossTrapStatus.IsNull()) && ((data.PortSecurityAccessSecureMacViolationTrapStatus.IsNull()) && (data.PortSecurityTrunkSecureMacViolationTrapStatus.IsNull())) && (data.RfRedundancyFrameworkTrapStatus.IsNull()) && ((data.RmonRisingAlarmTrapStatus.IsNull()) && (data.RmonFallingAlarmTrapStatus.IsNull()) && (data.RmonHcRisingAlarmTrapStatus.IsNull()) && (data.RmonHcFallingAlarmTrapStatus.IsNull())) && (data.SnmpAuthenticationTrapStatus.IsNull()) && (data.StormControlCpscEventTrapStatus.IsNull()) && ((data.StpxInconsistencyTrapStatus.IsNull()) && (data.StpxLoopInconsistencyTrapStatus.IsNull()) && (data.StpxRootInconsistencyTrapStatus.IsNull())) && (data.SyslogMessageGeneratedTrapStatus.IsNull()) && (data.SysmgrFailSwCoreNotifyTrapStatus.IsNull()) && (data.SystemClockChangeNotificationTrapStatus.IsNull()) && ((data.UpgradeJobStatusNotifyTrapStatus.IsNull()) && (data.UpgradeOpNotifyOnCompletionTrapStatus.IsNull())) && ((data.VtpNotifsTrapStatus.IsNull()) && (data.VtpVlanCreateTrapStatus.IsNull()) && (data.VtpVlanDeleteTrapStatus.IsNull()))) && (len(data.RmonEvents) == 0)) {
+		snmpInstRn := "inst"
+		snmpInstDn := dn + "/" + snmpInstRn
+		_ = snmpInstDn
+		{
+			snmpInstBody := ""
+			if !data.InstanceAdminState.IsNull() {
+				snmpInstBody, _ = sjson.Set(snmpInstBody, "snmpInst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Description.IsNull() {
+				snmpInstBody, _ = sjson.Set(snmpInstBody, "snmpInst.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EngineId.IsNull() {
+				snmpInstBody, _ = sjson.Set(snmpInstBody, "snmpInst.attributes.engId", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LoggingLevel.IsNull() {
+				snmpInstBody, _ = sjson.Set(snmpInstBody, "snmpInst.attributes.loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.OwnerKey.IsNull() {
+				snmpInstBody, _ = sjson.Set(snmpInstBody, "snmpInst.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.OwnerTag.IsNull() {
+				snmpInstBody, _ = sjson.Set(snmpInstBody, "snmpInst.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.UnknownEngineId.IsNull() {
+				snmpInstBody, _ = sjson.Set(snmpInstBody, "snmpInst.attributes.unknownEngId", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.UnknownUser.IsNull() {
+				snmpInstBody, _ = sjson.Set(snmpInstBody, "snmpInst.attributes.unknownUser", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(data.Contact.IsNull() && data.SystemInfoDescription.IsNull() && data.Location.IsNull()) {
+				snmpSysInfoRn := "sysinfo"
+				snmpSysInfoDn := snmpInstDn + "/" + snmpSysInfoRn
+				_ = snmpSysInfoDn
+				{
+					snmpSysInfoBody := ""
+					if !data.Contact.IsNull() {
+						snmpSysInfoBody, _ = sjson.Set(snmpSysInfoBody, "snmpSysInfo.attributes.sysContact", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.SystemInfoDescription.IsNull() {
+						snmpSysInfoBody, _ = sjson.Set(snmpSysInfoBody, "snmpSysInfo.attributes.sysDescription", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.Location.IsNull() {
+						snmpSysInfoBody, _ = sjson.Set(snmpSysInfoBody, "snmpSysInfo.attributes.sysLocation", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if snmpSysInfoBody != "" {
+						snmpSysInfoBody, _ = sjson.Set(snmpSysInfoBody, "snmpSysInfo.attributes.rn", snmpSysInfoRn)
+						snmpInstBody, _ = sjson.SetRaw(snmpInstBody, "snmpInst.children.-1", snmpSysInfoBody)
+					}
+				}
+			}
+			if !(data.PacketSize.IsNull() && data.DisableAaaSync.IsNull() && data.EnforcePrivacy.IsNull() && data.TcpSessionAuthentication.IsNull() && (data.SourceInterfaceTraps.IsNull()) && (data.SourceInterfaceInforms.IsNull())) {
+				snmpGlobalsRn := "globals"
+				snmpGlobalsDn := snmpInstDn + "/" + snmpGlobalsRn
+				_ = snmpGlobalsDn
+				{
+					snmpGlobalsBody := ""
+					if !data.PacketSize.IsNull() {
+						snmpGlobalsBody, _ = sjson.Set(snmpGlobalsBody, "snmpGlobals.attributes.pktSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DisableAaaSync.IsNull() {
+						snmpGlobalsBody, _ = sjson.Set(snmpGlobalsBody, "snmpGlobals.attributes.disableSnmpAaaSync", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.EnforcePrivacy.IsNull() {
+						snmpGlobalsBody, _ = sjson.Set(snmpGlobalsBody, "snmpGlobals.attributes.enforcePrivacy", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcpSessionAuthentication.IsNull() {
+						snmpGlobalsBody, _ = sjson.Set(snmpGlobalsBody, "snmpGlobals.attributes.tcpSessionAuth", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !(data.SourceInterfaceTraps.IsNull()) {
+						snmpSourceInterfaceTrapsRn := "srcInterfaceTraps"
+						snmpSourceInterfaceTrapsDn := snmpGlobalsDn + "/" + snmpSourceInterfaceTrapsRn
+						_ = snmpSourceInterfaceTrapsDn
+						{
+							snmpSourceInterfaceTrapsBody := ""
+							if !data.SourceInterfaceTraps.IsNull() {
+								snmpSourceInterfaceTrapsBody, _ = sjson.Set(snmpSourceInterfaceTrapsBody, "snmpSourceInterfaceTraps.attributes.ifname", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if snmpSourceInterfaceTrapsBody != "" {
+								snmpSourceInterfaceTrapsBody, _ = sjson.Set(snmpSourceInterfaceTrapsBody, "snmpSourceInterfaceTraps.attributes.rn", snmpSourceInterfaceTrapsRn)
+								snmpGlobalsBody, _ = sjson.SetRaw(snmpGlobalsBody, "snmpGlobals.children.-1", snmpSourceInterfaceTrapsBody)
+							}
+						}
+					}
+					if !(data.SourceInterfaceInforms.IsNull()) {
+						snmpSourceInterfaceInformsRn := "srcInterfaceInforms"
+						snmpSourceInterfaceInformsDn := snmpGlobalsDn + "/" + snmpSourceInterfaceInformsRn
+						_ = snmpSourceInterfaceInformsDn
+						if !existed(snmpSourceInterfaceInformsDn) {
+							snmpGlobalsBody, _ = sjson.Set(snmpGlobalsBody, "snmpGlobals.children.-1.snmpSourceInterfaceInforms.attributes", map[string]interface{}{"rn": snmpSourceInterfaceInformsRn, "status": "deleted"})
+						} else {
+							snmpSourceInterfaceInformsBody := ""
+							if !data.SourceInterfaceInforms.IsNull() {
+								snmpSourceInterfaceInformsBody, _ = sjson.Set(snmpSourceInterfaceInformsBody, "snmpSourceInterfaceInforms.attributes.ifname", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if snmpSourceInterfaceInformsBody != "" {
+								snmpSourceInterfaceInformsBody, _ = sjson.Set(snmpSourceInterfaceInformsBody, "snmpSourceInterfaceInforms.attributes.rn", snmpSourceInterfaceInformsRn)
+								snmpGlobalsBody, _ = sjson.SetRaw(snmpGlobalsBody, "snmpGlobals.children.-1", snmpSourceInterfaceInformsBody)
+							}
+						}
+					}
+					if snmpGlobalsBody != "" {
+						snmpGlobalsBody, _ = sjson.Set(snmpGlobalsBody, "snmpGlobals.attributes.rn", snmpGlobalsRn)
+						snmpInstBody, _ = sjson.SetRaw(snmpInstBody, "snmpInst.children.-1", snmpGlobalsBody)
+					}
+				}
+			}
+			for key, child := range data.Contexts {
+				_ = child
+				snmpCtxRn := child.getRn(key)
+				snmpCtxDn := snmpInstDn + "/" + snmpCtxRn
+				_ = snmpCtxDn
+				if !existed(snmpCtxDn) {
+					snmpInstBody, _ = sjson.Set(snmpInstBody, "snmpInst.children.-1.snmpCtx.attributes", map[string]interface{}{"rn": snmpCtxRn, "status": "deleted"})
+					continue
+				}
+				snmpCtxBody := ""
+				snmpCtxBody, _ = sjson.Set(snmpCtxBody, "snmpCtx.attributes.rn", snmpCtxRn)
+				if !child.Instance.IsNull() {
+					snmpCtxBody, _ = sjson.Set(snmpCtxBody, "snmpCtx.attributes.ctxInstance", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Topology.IsNull() {
+					snmpCtxBody, _ = sjson.Set(snmpCtxBody, "snmpCtx.attributes.ctxTopology", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Description.IsNull() {
+					snmpCtxBody, _ = sjson.Set(snmpCtxBody, "snmpCtx.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Vrf.IsNull() {
+					snmpCtxBody, _ = sjson.Set(snmpCtxBody, "snmpCtx.attributes.vrf", "DME_UNSET_PROPERTY_MARKER")
+				}
+				snmpInstBody, _ = sjson.SetRaw(snmpInstBody, "snmpInst.children.-1", snmpCtxBody)
+			}
+			for key, child := range data.Communities {
+				_ = child
+				snmpCommSecPRn := child.getRn(key)
+				snmpCommSecPDn := snmpInstDn + "/" + snmpCommSecPRn
+				_ = snmpCommSecPDn
+				if !existed(snmpCommSecPDn) {
+					snmpInstBody, _ = sjson.Set(snmpInstBody, "snmpInst.children.-1.snmpCommSecP.attributes", map[string]interface{}{"rn": snmpCommSecPRn, "status": "deleted"})
+					continue
+				}
+				snmpCommSecPBody := ""
+				snmpCommSecPBody, _ = sjson.Set(snmpCommSecPBody, "snmpCommSecP.attributes.rn", snmpCommSecPRn)
+				if !child.Access.IsNull() {
+					snmpCommSecPBody, _ = sjson.Set(snmpCommSecPBody, "snmpCommSecP.attributes.commAcess", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Context.IsNull() {
+					snmpCommSecPBody, _ = sjson.Set(snmpCommSecPBody, "snmpCommSecP.attributes.contextName", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Description.IsNull() {
+					snmpCommSecPBody, _ = sjson.Set(snmpCommSecPBody, "snmpCommSecP.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Group.IsNull() {
+					snmpCommSecPBody, _ = sjson.Set(snmpCommSecPBody, "snmpCommSecP.attributes.grpName", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !(child.AclName.IsNull() && child.Ipv4AclName.IsNull() && child.Ipv6AclName.IsNull()) {
+					snmpAclRn_ := "acl"
+					snmpAclDn_ := snmpCommSecPDn + "/" + snmpAclRn_
+					_ = snmpAclDn_
+					if !existed(snmpAclDn_) {
+						snmpCommSecPBody, _ = sjson.Set(snmpCommSecPBody, "snmpCommSecP.children.-1.snmpAcl.attributes", map[string]interface{}{"rn": snmpAclRn_, "status": "deleted"})
+					} else {
+						snmpAclBody_ := ""
+						if !child.AclName.IsNull() {
+							snmpAclBody_, _ = sjson.Set(snmpAclBody_, "snmpAcl.attributes.useAclName", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.Ipv4AclName.IsNull() {
+							snmpAclBody_, _ = sjson.Set(snmpAclBody_, "snmpAcl.attributes.useIpv4AclName", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.Ipv6AclName.IsNull() {
+							snmpAclBody_, _ = sjson.Set(snmpAclBody_, "snmpAcl.attributes.useIpv6AclName", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if snmpAclBody_ != "" {
+							snmpAclBody_, _ = sjson.Set(snmpAclBody_, "snmpAcl.attributes.rn", snmpAclRn_)
+							snmpCommSecPBody, _ = sjson.SetRaw(snmpCommSecPBody, "snmpCommSecP.children.-1", snmpAclBody_)
+						}
+					}
+				}
+				snmpInstBody, _ = sjson.SetRaw(snmpInstBody, "snmpInst.children.-1", snmpCommSecPBody)
+			}
+			for key, child := range data.LocalUsers {
+				_ = child
+				snmpLocalUserRn := child.getRn(key)
+				snmpLocalUserDn := snmpInstDn + "/" + snmpLocalUserRn
+				_ = snmpLocalUserDn
+				if !existed(snmpLocalUserDn) {
+					snmpInstBody, _ = sjson.Set(snmpInstBody, "snmpInst.children.-1.snmpLocalUser.attributes", map[string]interface{}{"rn": snmpLocalUserRn, "status": "deleted"})
+					continue
+				}
+				snmpLocalUserBody := ""
+				snmpLocalUserBody, _ = sjson.Set(snmpLocalUserBody, "snmpLocalUser.attributes.rn", snmpLocalUserRn)
+				if !child.AuthenticationPassword.IsNull() {
+					snmpLocalUserBody, _ = sjson.Set(snmpLocalUserBody, "snmpLocalUser.attributes.authpwd", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.AuthenticationType.IsNull() {
+					snmpLocalUserBody, _ = sjson.Set(snmpLocalUserBody, "snmpLocalUser.attributes.authtype", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Ipv4AclName.IsNull() {
+					snmpLocalUserBody, _ = sjson.Set(snmpLocalUserBody, "snmpLocalUser.attributes.ipv4AclName", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Ipv6AclName.IsNull() {
+					snmpLocalUserBody, _ = sjson.Set(snmpLocalUserBody, "snmpLocalUser.attributes.ipv6AclName", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.EnforcePrivacy.IsNull() {
+					snmpLocalUserBody, _ = sjson.Set(snmpLocalUserBody, "snmpLocalUser.attributes.isenforcepriv", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.LocalizedV2Key.IsNull() {
+					snmpLocalUserBody, _ = sjson.Set(snmpLocalUserBody, "snmpLocalUser.attributes.islocalizedV2key", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.LocalizedKey.IsNull() {
+					snmpLocalUserBody, _ = sjson.Set(snmpLocalUserBody, "snmpLocalUser.attributes.islocalizedkey", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.PrivacyPassword.IsNull() {
+					snmpLocalUserBody, _ = sjson.Set(snmpLocalUserBody, "snmpLocalUser.attributes.privpwd", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.PrivacyType.IsNull() {
+					snmpLocalUserBody, _ = sjson.Set(snmpLocalUserBody, "snmpLocalUser.attributes.privtype", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.PasswordType.IsNull() {
+					snmpLocalUserBody, _ = sjson.Set(snmpLocalUserBody, "snmpLocalUser.attributes.pwd_type", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.EngineId.IsNull() {
+					snmpLocalUserBody, _ = sjson.Set(snmpLocalUserBody, "snmpLocalUser.attributes.usrengineId", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.EngineIdLength.IsNull() {
+					snmpLocalUserBody, _ = sjson.Set(snmpLocalUserBody, "snmpLocalUser.attributes.usrengineIdlen", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.Groups {
+					_ = child_
+					snmpUserGroupRn_ := child_.getRn(key_)
+					snmpUserGroupDn_ := snmpLocalUserDn + "/" + snmpUserGroupRn_
+					_ = snmpUserGroupDn_
+					if !existed(snmpUserGroupDn_) {
+						snmpLocalUserBody, _ = sjson.Set(snmpLocalUserBody, "snmpLocalUser.children.-1.snmpUserGroup.attributes", map[string]interface{}{"rn": snmpUserGroupRn_, "status": "deleted"})
+						continue
+					}
+					snmpUserGroupBody_ := ""
+					snmpUserGroupBody_, _ = sjson.Set(snmpUserGroupBody_, "snmpUserGroup.attributes.rn", snmpUserGroupRn_)
+					snmpLocalUserBody, _ = sjson.SetRaw(snmpLocalUserBody, "snmpLocalUser.children.-1", snmpUserGroupBody_)
+				}
+				snmpInstBody, _ = sjson.SetRaw(snmpInstBody, "snmpInst.children.-1", snmpLocalUserBody)
+			}
+			for key, child := range data.Hosts {
+				_ = child
+				keyParts := strings.SplitN(key, ";", 2)
+				_ = keyParts
+				snmpHostRn := child.getRn(key)
+				snmpHostDn := snmpInstDn + "/" + snmpHostRn
+				_ = snmpHostDn
+				if !existed(snmpHostDn) {
+					snmpInstBody, _ = sjson.Set(snmpInstBody, "snmpInst.children.-1.snmpHost.attributes", map[string]interface{}{"rn": snmpHostRn, "status": "deleted"})
+					continue
+				}
+				snmpHostBody := ""
+				snmpHostBody, _ = sjson.Set(snmpHostBody, "snmpHost.attributes.rn", snmpHostRn)
+				if !child.CommunityName.IsNull() {
+					snmpHostBody, _ = sjson.Set(snmpHostBody, "snmpHost.attributes.commName", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.NotificationType.IsNull() {
+					snmpHostBody, _ = sjson.Set(snmpHostBody, "snmpHost.attributes.notifType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SecurityLevel.IsNull() {
+					snmpHostBody, _ = sjson.Set(snmpHostBody, "snmpHost.attributes.secLevel", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Version.IsNull() {
+					snmpHostBody, _ = sjson.Set(snmpHostBody, "snmpHost.attributes.version", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.Vrfs {
+					_ = child_
+					snmpUseVrfRn_ := child_.getRn(key_)
+					snmpUseVrfDn_ := snmpHostDn + "/" + snmpUseVrfRn_
+					_ = snmpUseVrfDn_
+					if !existed(snmpUseVrfDn_) {
+						snmpHostBody, _ = sjson.Set(snmpHostBody, "snmpHost.children.-1.snmpUseVrf.attributes", map[string]interface{}{"rn": snmpUseVrfRn_, "status": "deleted"})
+						continue
+					}
+					snmpUseVrfBody_ := ""
+					snmpUseVrfBody_, _ = sjson.Set(snmpUseVrfBody_, "snmpUseVrf.attributes.rn", snmpUseVrfRn_)
+					snmpHostBody, _ = sjson.SetRaw(snmpHostBody, "snmpHost.children.-1", snmpUseVrfBody_)
+				}
+				if !(child.SourceInterface.IsNull()) {
+					snmpHostSrcInterfaceRn_ := "hostsourceinterface"
+					snmpHostSrcInterfaceDn_ := snmpHostDn + "/" + snmpHostSrcInterfaceRn_
+					_ = snmpHostSrcInterfaceDn_
+					if !existed(snmpHostSrcInterfaceDn_) {
+						snmpHostBody, _ = sjson.Set(snmpHostBody, "snmpHost.children.-1.snmpHostSrcInterface.attributes", map[string]interface{}{"rn": snmpHostSrcInterfaceRn_, "status": "deleted"})
+					} else {
+						snmpHostSrcInterfaceBody_ := ""
+						if !child.SourceInterface.IsNull() {
+							snmpHostSrcInterfaceBody_, _ = sjson.Set(snmpHostSrcInterfaceBody_, "snmpHostSrcInterface.attributes.ifName", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if snmpHostSrcInterfaceBody_ != "" {
+							snmpHostSrcInterfaceBody_, _ = sjson.Set(snmpHostSrcInterfaceBody_, "snmpHostSrcInterface.attributes.rn", snmpHostSrcInterfaceRn_)
+							snmpHostBody, _ = sjson.SetRaw(snmpHostBody, "snmpHost.children.-1", snmpHostSrcInterfaceBody_)
+						}
+					}
+				}
+				for key_, child_ := range child.FilterVrfs {
+					_ = child_
+					snmpFilterVrfRn_ := child_.getRn(key_)
+					snmpFilterVrfDn_ := snmpHostDn + "/" + snmpFilterVrfRn_
+					_ = snmpFilterVrfDn_
+					if !existed(snmpFilterVrfDn_) {
+						snmpHostBody, _ = sjson.Set(snmpHostBody, "snmpHost.children.-1.snmpFilterVrf.attributes", map[string]interface{}{"rn": snmpFilterVrfRn_, "status": "deleted"})
+						continue
+					}
+					snmpFilterVrfBody_ := ""
+					snmpFilterVrfBody_, _ = sjson.Set(snmpFilterVrfBody_, "snmpFilterVrf.attributes.rn", snmpFilterVrfRn_)
+					snmpHostBody, _ = sjson.SetRaw(snmpHostBody, "snmpHost.children.-1", snmpFilterVrfBody_)
+				}
+				snmpInstBody, _ = sjson.SetRaw(snmpInstBody, "snmpInst.children.-1", snmpHostBody)
+			}
+			if !(data.EnableAll.IsNull() && (data.AaaServerStateChangeTrapStatus.IsNull()) && ((data.BfdSessionDownTrapStatus.IsNull()) && (data.BfdSessionUpTrapStatus.IsNull())) && ((data.BridgeNewRootTrapStatus.IsNull()) && (data.BridgeTopologyChangeTrapStatus.IsNull())) && ((data.CallhomeEventNotifyTrapStatus.IsNull()) && (data.CallhomeSmtpSendFailTrapStatus.IsNull())) && ((data.CfsStateChangeNotifTrapStatus.IsNull()) && (data.CfsMergeFailureTrapStatus.IsNull())) && (data.ConfigCliRunningConfigChangeTrapStatus.IsNull()) && ((data.EntityMibChangeTrapStatus.IsNull()) && (data.EntityMibEnableStatusNotificationTrapStatus.IsNull()) && (data.EntityFanStatusChangeTrapStatus.IsNull()) && (data.EntityModuleInsertedTrapStatus.IsNull()) && (data.EntityModuleRemovedTrapStatus.IsNull()) && (data.EntityModuleStatusChangeTrapStatus.IsNull()) && (data.EntityPowerOutChangeTrapStatus.IsNull()) && (data.EntityPowerStatusChangeTrapStatus.IsNull()) && (data.EntitySensorTrapStatus.IsNull()) && (data.EntityUnrecognisedModuleTrapStatus.IsNull())) && ((data.FcdomainDomainIdNotAssignedTrapStatus.IsNull()) && (data.FcdomainFabricChangeTrapStatus.IsNull()) && (data.FcdomainNewPrincipalSwitchTrapStatus.IsNull())) && ((data.FeatureControlOpStatusChangeTrapStatus.IsNull()) && (data.FeatureControlCiscoOpStatusChangeTrapStatus.IsNull())) && ((data.GenericColdStartTrapStatus.IsNull()) && (data.GenericWarmStartTrapStatus.IsNull())) && (data.HsrpStateChangeTrapStatus.IsNull()) && ((data.LicenseExpiryTrapStatus.IsNull()) && (data.LicenseExpiryWarningTrapStatus.IsNull()) && (data.LicenseFileMissingTrapStatus.IsNull()) && (data.LicenseNoLicenseForFeatureTrapStatus.IsNull())) && ((data.LinkCieLinkDownTrapStatus.IsNull()) && (data.LinkCieLinkUpTrapStatus.IsNull()) && (data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsNull()) && (data.LinkCmnMacMoveNotificationTrapStatus.IsNull()) && (data.LinkDelayedLinkStateChangeTrapStatus.IsNull()) && (data.LinkExtendedLinkDownTrapStatus.IsNull()) && (data.LinkExtendedLinkUpTrapStatus.IsNull()) && (data.LinkLinkDownTrapStatus.IsNull()) && (data.LinkLinkUpTrapStatus.IsNull()) && (data.LinkErrDisableInterfaceEventTrapStatus.IsNull())) && (data.LldpRemTablesChangeTrapStatus.IsNull()) && ((data.MmodeMaintModeChangeTrapStatus.IsNull()) && (data.MmodeNormalModeChangeTrapStatus.IsNull())) && ((data.MplsLdpTrapStatus.IsNull() && (data.MplsLdpSessionDownTrapStatus.IsNull()) && (data.MplsLdpSessionUpTrapStatus.IsNull())) && (data.MplsVpnTrapStatus.IsNull() && (data.MplsVpnMaxThreshClearedTrapStatus.IsNull()) && (data.MplsVpnMaxThreshExceededTrapStatus.IsNull()) && (data.MplsVpnMidThreshExceededTrapStatus.IsNull()) && (data.MplsVpnVrfDownTrapStatus.IsNull()) && (data.MplsVpnVrfUpTrapStatus.IsNull()))) && (data.MsdpBackwardTransitionTrapStatus.IsNull()) && (data.PimNeighborLossTrapStatus.IsNull()) && ((data.PortSecurityAccessSecureMacViolationTrapStatus.IsNull()) && (data.PortSecurityTrunkSecureMacViolationTrapStatus.IsNull())) && (data.RfRedundancyFrameworkTrapStatus.IsNull()) && ((data.RmonRisingAlarmTrapStatus.IsNull()) && (data.RmonFallingAlarmTrapStatus.IsNull()) && (data.RmonHcRisingAlarmTrapStatus.IsNull()) && (data.RmonHcFallingAlarmTrapStatus.IsNull())) && (data.SnmpAuthenticationTrapStatus.IsNull()) && (data.StormControlCpscEventTrapStatus.IsNull()) && ((data.StpxInconsistencyTrapStatus.IsNull()) && (data.StpxLoopInconsistencyTrapStatus.IsNull()) && (data.StpxRootInconsistencyTrapStatus.IsNull())) && (data.SyslogMessageGeneratedTrapStatus.IsNull()) && (data.SysmgrFailSwCoreNotifyTrapStatus.IsNull()) && (data.SystemClockChangeNotificationTrapStatus.IsNull()) && ((data.UpgradeJobStatusNotifyTrapStatus.IsNull()) && (data.UpgradeOpNotifyOnCompletionTrapStatus.IsNull())) && ((data.VtpNotifsTrapStatus.IsNull()) && (data.VtpVlanCreateTrapStatus.IsNull()) && (data.VtpVlanDeleteTrapStatus.IsNull()))) {
+				snmpTrapsRn := "traps"
+				snmpTrapsDn := snmpInstDn + "/" + snmpTrapsRn
+				_ = snmpTrapsDn
+				{
+					snmpTrapsBody := ""
+					if !data.EnableAll.IsNull() {
+						snmpTrapsBody, _ = sjson.Set(snmpTrapsBody, "snmpTraps.attributes.enableAllViaCLI", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !(data.AaaServerStateChangeTrapStatus.IsNull()) {
+						snmpTaaaRn := "aaa"
+						snmpTaaaDn := snmpTrapsDn + "/" + snmpTaaaRn
+						_ = snmpTaaaDn
+						{
+							snmpTaaaBody := ""
+							if !(data.AaaServerStateChangeTrapStatus.IsNull()) {
+								snmpServerStateChangeRn := "serverstatechange"
+								snmpServerStateChangeDn := snmpTaaaDn + "/" + snmpServerStateChangeRn
+								_ = snmpServerStateChangeDn
+								{
+									snmpServerStateChangeBody := ""
+									if !data.AaaServerStateChangeTrapStatus.IsNull() {
+										snmpServerStateChangeBody, _ = sjson.Set(snmpServerStateChangeBody, "snmpServerStateChange.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpServerStateChangeBody != "" {
+										snmpServerStateChangeBody, _ = sjson.Set(snmpServerStateChangeBody, "snmpServerStateChange.attributes.rn", snmpServerStateChangeRn)
+										snmpTaaaBody, _ = sjson.SetRaw(snmpTaaaBody, "snmpTaaa.children.-1", snmpServerStateChangeBody)
+									}
+								}
+							}
+							if snmpTaaaBody != "" {
+								snmpTaaaBody, _ = sjson.Set(snmpTaaaBody, "snmpTaaa.attributes.rn", snmpTaaaRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTaaaBody)
+							}
+						}
+					}
+					if !((data.BfdSessionDownTrapStatus.IsNull()) && (data.BfdSessionUpTrapStatus.IsNull())) {
+						snmpTbfdRn := "bfd"
+						snmpTbfdDn := snmpTrapsDn + "/" + snmpTbfdRn
+						_ = snmpTbfdDn
+						{
+							snmpTbfdBody := ""
+							if !(data.BfdSessionDownTrapStatus.IsNull()) {
+								snmpSessionDownRn := "sessiondown"
+								snmpSessionDownDn := snmpTbfdDn + "/" + snmpSessionDownRn
+								_ = snmpSessionDownDn
+								{
+									snmpSessionDownBody := ""
+									if !data.BfdSessionDownTrapStatus.IsNull() {
+										snmpSessionDownBody, _ = sjson.Set(snmpSessionDownBody, "snmpSessionDown.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpSessionDownBody != "" {
+										snmpSessionDownBody, _ = sjson.Set(snmpSessionDownBody, "snmpSessionDown.attributes.rn", snmpSessionDownRn)
+										snmpTbfdBody, _ = sjson.SetRaw(snmpTbfdBody, "snmpTbfd.children.-1", snmpSessionDownBody)
+									}
+								}
+							}
+							if !(data.BfdSessionUpTrapStatus.IsNull()) {
+								snmpSessionUpRn := "sessionup"
+								snmpSessionUpDn := snmpTbfdDn + "/" + snmpSessionUpRn
+								_ = snmpSessionUpDn
+								{
+									snmpSessionUpBody := ""
+									if !data.BfdSessionUpTrapStatus.IsNull() {
+										snmpSessionUpBody, _ = sjson.Set(snmpSessionUpBody, "snmpSessionUp.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpSessionUpBody != "" {
+										snmpSessionUpBody, _ = sjson.Set(snmpSessionUpBody, "snmpSessionUp.attributes.rn", snmpSessionUpRn)
+										snmpTbfdBody, _ = sjson.SetRaw(snmpTbfdBody, "snmpTbfd.children.-1", snmpSessionUpBody)
+									}
+								}
+							}
+							if snmpTbfdBody != "" {
+								snmpTbfdBody, _ = sjson.Set(snmpTbfdBody, "snmpTbfd.attributes.rn", snmpTbfdRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTbfdBody)
+							}
+						}
+					}
+					if !((data.BridgeNewRootTrapStatus.IsNull()) && (data.BridgeTopologyChangeTrapStatus.IsNull())) {
+						snmpTbridgeRn := "bridge"
+						snmpTbridgeDn := snmpTrapsDn + "/" + snmpTbridgeRn
+						_ = snmpTbridgeDn
+						{
+							snmpTbridgeBody := ""
+							if !(data.BridgeNewRootTrapStatus.IsNull()) {
+								snmpNewRootRn := "newroot"
+								snmpNewRootDn := snmpTbridgeDn + "/" + snmpNewRootRn
+								_ = snmpNewRootDn
+								{
+									snmpNewRootBody := ""
+									if !data.BridgeNewRootTrapStatus.IsNull() {
+										snmpNewRootBody, _ = sjson.Set(snmpNewRootBody, "snmpNewRoot.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpNewRootBody != "" {
+										snmpNewRootBody, _ = sjson.Set(snmpNewRootBody, "snmpNewRoot.attributes.rn", snmpNewRootRn)
+										snmpTbridgeBody, _ = sjson.SetRaw(snmpTbridgeBody, "snmpTbridge.children.-1", snmpNewRootBody)
+									}
+								}
+							}
+							if !(data.BridgeTopologyChangeTrapStatus.IsNull()) {
+								snmpTopologyChangeRn := "topologychange"
+								snmpTopologyChangeDn := snmpTbridgeDn + "/" + snmpTopologyChangeRn
+								_ = snmpTopologyChangeDn
+								{
+									snmpTopologyChangeBody := ""
+									if !data.BridgeTopologyChangeTrapStatus.IsNull() {
+										snmpTopologyChangeBody, _ = sjson.Set(snmpTopologyChangeBody, "snmpTopologyChange.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpTopologyChangeBody != "" {
+										snmpTopologyChangeBody, _ = sjson.Set(snmpTopologyChangeBody, "snmpTopologyChange.attributes.rn", snmpTopologyChangeRn)
+										snmpTbridgeBody, _ = sjson.SetRaw(snmpTbridgeBody, "snmpTbridge.children.-1", snmpTopologyChangeBody)
+									}
+								}
+							}
+							if snmpTbridgeBody != "" {
+								snmpTbridgeBody, _ = sjson.Set(snmpTbridgeBody, "snmpTbridge.attributes.rn", snmpTbridgeRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTbridgeBody)
+							}
+						}
+					}
+					if !((data.CallhomeEventNotifyTrapStatus.IsNull()) && (data.CallhomeSmtpSendFailTrapStatus.IsNull())) {
+						snmpTcallhomeRn := "callhome"
+						snmpTcallhomeDn := snmpTrapsDn + "/" + snmpTcallhomeRn
+						_ = snmpTcallhomeDn
+						{
+							snmpTcallhomeBody := ""
+							if !(data.CallhomeEventNotifyTrapStatus.IsNull()) {
+								snmpEventNotifyRn := "eventnotify"
+								snmpEventNotifyDn := snmpTcallhomeDn + "/" + snmpEventNotifyRn
+								_ = snmpEventNotifyDn
+								{
+									snmpEventNotifyBody := ""
+									if !data.CallhomeEventNotifyTrapStatus.IsNull() {
+										snmpEventNotifyBody, _ = sjson.Set(snmpEventNotifyBody, "snmpEventNotify.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpEventNotifyBody != "" {
+										snmpEventNotifyBody, _ = sjson.Set(snmpEventNotifyBody, "snmpEventNotify.attributes.rn", snmpEventNotifyRn)
+										snmpTcallhomeBody, _ = sjson.SetRaw(snmpTcallhomeBody, "snmpTcallhome.children.-1", snmpEventNotifyBody)
+									}
+								}
+							}
+							if !(data.CallhomeSmtpSendFailTrapStatus.IsNull()) {
+								snmpSmtpSendFailRn := "smtpsendfail"
+								snmpSmtpSendFailDn := snmpTcallhomeDn + "/" + snmpSmtpSendFailRn
+								_ = snmpSmtpSendFailDn
+								{
+									snmpSmtpSendFailBody := ""
+									if !data.CallhomeSmtpSendFailTrapStatus.IsNull() {
+										snmpSmtpSendFailBody, _ = sjson.Set(snmpSmtpSendFailBody, "snmpSmtpSendFail.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpSmtpSendFailBody != "" {
+										snmpSmtpSendFailBody, _ = sjson.Set(snmpSmtpSendFailBody, "snmpSmtpSendFail.attributes.rn", snmpSmtpSendFailRn)
+										snmpTcallhomeBody, _ = sjson.SetRaw(snmpTcallhomeBody, "snmpTcallhome.children.-1", snmpSmtpSendFailBody)
+									}
+								}
+							}
+							if snmpTcallhomeBody != "" {
+								snmpTcallhomeBody, _ = sjson.Set(snmpTcallhomeBody, "snmpTcallhome.attributes.rn", snmpTcallhomeRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTcallhomeBody)
+							}
+						}
+					}
+					if !((data.CfsStateChangeNotifTrapStatus.IsNull()) && (data.CfsMergeFailureTrapStatus.IsNull())) {
+						snmpTcfsRn := "cfs"
+						snmpTcfsDn := snmpTrapsDn + "/" + snmpTcfsRn
+						_ = snmpTcfsDn
+						{
+							snmpTcfsBody := ""
+							if !(data.CfsStateChangeNotifTrapStatus.IsNull()) {
+								snmpStateChangeNotifRn := "statechangenotif"
+								snmpStateChangeNotifDn := snmpTcfsDn + "/" + snmpStateChangeNotifRn
+								_ = snmpStateChangeNotifDn
+								{
+									snmpStateChangeNotifBody := ""
+									if !data.CfsStateChangeNotifTrapStatus.IsNull() {
+										snmpStateChangeNotifBody, _ = sjson.Set(snmpStateChangeNotifBody, "snmpStateChangeNotif.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpStateChangeNotifBody != "" {
+										snmpStateChangeNotifBody, _ = sjson.Set(snmpStateChangeNotifBody, "snmpStateChangeNotif.attributes.rn", snmpStateChangeNotifRn)
+										snmpTcfsBody, _ = sjson.SetRaw(snmpTcfsBody, "snmpTcfs.children.-1", snmpStateChangeNotifBody)
+									}
+								}
+							}
+							if !(data.CfsMergeFailureTrapStatus.IsNull()) {
+								snmpMergeFailureRn := "mergefailure"
+								snmpMergeFailureDn := snmpTcfsDn + "/" + snmpMergeFailureRn
+								_ = snmpMergeFailureDn
+								{
+									snmpMergeFailureBody := ""
+									if !data.CfsMergeFailureTrapStatus.IsNull() {
+										snmpMergeFailureBody, _ = sjson.Set(snmpMergeFailureBody, "snmpMergeFailure.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpMergeFailureBody != "" {
+										snmpMergeFailureBody, _ = sjson.Set(snmpMergeFailureBody, "snmpMergeFailure.attributes.rn", snmpMergeFailureRn)
+										snmpTcfsBody, _ = sjson.SetRaw(snmpTcfsBody, "snmpTcfs.children.-1", snmpMergeFailureBody)
+									}
+								}
+							}
+							if snmpTcfsBody != "" {
+								snmpTcfsBody, _ = sjson.Set(snmpTcfsBody, "snmpTcfs.attributes.rn", snmpTcfsRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTcfsBody)
+							}
+						}
+					}
+					if !(data.ConfigCliRunningConfigChangeTrapStatus.IsNull()) {
+						snmpTconfigRn := "config"
+						snmpTconfigDn := snmpTrapsDn + "/" + snmpTconfigRn
+						_ = snmpTconfigDn
+						{
+							snmpTconfigBody := ""
+							if !(data.ConfigCliRunningConfigChangeTrapStatus.IsNull()) {
+								snmpCLIRunningConfigChangeRn := "ccmCLIRunningConfigChanged"
+								snmpCLIRunningConfigChangeDn := snmpTconfigDn + "/" + snmpCLIRunningConfigChangeRn
+								_ = snmpCLIRunningConfigChangeDn
+								{
+									snmpCLIRunningConfigChangeBody := ""
+									if !data.ConfigCliRunningConfigChangeTrapStatus.IsNull() {
+										snmpCLIRunningConfigChangeBody, _ = sjson.Set(snmpCLIRunningConfigChangeBody, "snmpCLIRunningConfigChange.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpCLIRunningConfigChangeBody != "" {
+										snmpCLIRunningConfigChangeBody, _ = sjson.Set(snmpCLIRunningConfigChangeBody, "snmpCLIRunningConfigChange.attributes.rn", snmpCLIRunningConfigChangeRn)
+										snmpTconfigBody, _ = sjson.SetRaw(snmpTconfigBody, "snmpTconfig.children.-1", snmpCLIRunningConfigChangeBody)
+									}
+								}
+							}
+							if snmpTconfigBody != "" {
+								snmpTconfigBody, _ = sjson.Set(snmpTconfigBody, "snmpTconfig.attributes.rn", snmpTconfigRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTconfigBody)
+							}
+						}
+					}
+					if !((data.EntityMibChangeTrapStatus.IsNull()) && (data.EntityMibEnableStatusNotificationTrapStatus.IsNull()) && (data.EntityFanStatusChangeTrapStatus.IsNull()) && (data.EntityModuleInsertedTrapStatus.IsNull()) && (data.EntityModuleRemovedTrapStatus.IsNull()) && (data.EntityModuleStatusChangeTrapStatus.IsNull()) && (data.EntityPowerOutChangeTrapStatus.IsNull()) && (data.EntityPowerStatusChangeTrapStatus.IsNull()) && (data.EntitySensorTrapStatus.IsNull()) && (data.EntityUnrecognisedModuleTrapStatus.IsNull())) {
+						snmpTentityRn := "entity"
+						snmpTentityDn := snmpTrapsDn + "/" + snmpTentityRn
+						_ = snmpTentityDn
+						{
+							snmpTentityBody := ""
+							if !(data.EntityMibChangeTrapStatus.IsNull()) {
+								snmpEntityMIBChangeRn := "entitymibchange"
+								snmpEntityMIBChangeDn := snmpTentityDn + "/" + snmpEntityMIBChangeRn
+								_ = snmpEntityMIBChangeDn
+								{
+									snmpEntityMIBChangeBody := ""
+									if !data.EntityMibChangeTrapStatus.IsNull() {
+										snmpEntityMIBChangeBody, _ = sjson.Set(snmpEntityMIBChangeBody, "snmpEntityMIBChange.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpEntityMIBChangeBody != "" {
+										snmpEntityMIBChangeBody, _ = sjson.Set(snmpEntityMIBChangeBody, "snmpEntityMIBChange.attributes.rn", snmpEntityMIBChangeRn)
+										snmpTentityBody, _ = sjson.SetRaw(snmpTentityBody, "snmpTentity.children.-1", snmpEntityMIBChangeBody)
+									}
+								}
+							}
+							if !(data.EntityMibEnableStatusNotificationTrapStatus.IsNull()) {
+								snmpEntityMIBEnableStatusNotificationRn := "cefcMIBEnableStatusNotification"
+								snmpEntityMIBEnableStatusNotificationDn := snmpTentityDn + "/" + snmpEntityMIBEnableStatusNotificationRn
+								_ = snmpEntityMIBEnableStatusNotificationDn
+								{
+									snmpEntityMIBEnableStatusNotificationBody := ""
+									if !data.EntityMibEnableStatusNotificationTrapStatus.IsNull() {
+										snmpEntityMIBEnableStatusNotificationBody, _ = sjson.Set(snmpEntityMIBEnableStatusNotificationBody, "snmpEntityMIBEnableStatusNotification.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpEntityMIBEnableStatusNotificationBody != "" {
+										snmpEntityMIBEnableStatusNotificationBody, _ = sjson.Set(snmpEntityMIBEnableStatusNotificationBody, "snmpEntityMIBEnableStatusNotification.attributes.rn", snmpEntityMIBEnableStatusNotificationRn)
+										snmpTentityBody, _ = sjson.SetRaw(snmpTentityBody, "snmpTentity.children.-1", snmpEntityMIBEnableStatusNotificationBody)
+									}
+								}
+							}
+							if !(data.EntityFanStatusChangeTrapStatus.IsNull()) {
+								snmpEntityFanStatusChangeRn := "entityfanstatuschange"
+								snmpEntityFanStatusChangeDn := snmpTentityDn + "/" + snmpEntityFanStatusChangeRn
+								_ = snmpEntityFanStatusChangeDn
+								{
+									snmpEntityFanStatusChangeBody := ""
+									if !data.EntityFanStatusChangeTrapStatus.IsNull() {
+										snmpEntityFanStatusChangeBody, _ = sjson.Set(snmpEntityFanStatusChangeBody, "snmpEntityFanStatusChange.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpEntityFanStatusChangeBody != "" {
+										snmpEntityFanStatusChangeBody, _ = sjson.Set(snmpEntityFanStatusChangeBody, "snmpEntityFanStatusChange.attributes.rn", snmpEntityFanStatusChangeRn)
+										snmpTentityBody, _ = sjson.SetRaw(snmpTentityBody, "snmpTentity.children.-1", snmpEntityFanStatusChangeBody)
+									}
+								}
+							}
+							if !(data.EntityModuleInsertedTrapStatus.IsNull()) {
+								snmpEntityModuleInsertedRn := "entitymoduleinserted"
+								snmpEntityModuleInsertedDn := snmpTentityDn + "/" + snmpEntityModuleInsertedRn
+								_ = snmpEntityModuleInsertedDn
+								{
+									snmpEntityModuleInsertedBody := ""
+									if !data.EntityModuleInsertedTrapStatus.IsNull() {
+										snmpEntityModuleInsertedBody, _ = sjson.Set(snmpEntityModuleInsertedBody, "snmpEntityModuleInserted.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpEntityModuleInsertedBody != "" {
+										snmpEntityModuleInsertedBody, _ = sjson.Set(snmpEntityModuleInsertedBody, "snmpEntityModuleInserted.attributes.rn", snmpEntityModuleInsertedRn)
+										snmpTentityBody, _ = sjson.SetRaw(snmpTentityBody, "snmpTentity.children.-1", snmpEntityModuleInsertedBody)
+									}
+								}
+							}
+							if !(data.EntityModuleRemovedTrapStatus.IsNull()) {
+								snmpEntityModuleRemovedRn := "entitymoduleremoved"
+								snmpEntityModuleRemovedDn := snmpTentityDn + "/" + snmpEntityModuleRemovedRn
+								_ = snmpEntityModuleRemovedDn
+								{
+									snmpEntityModuleRemovedBody := ""
+									if !data.EntityModuleRemovedTrapStatus.IsNull() {
+										snmpEntityModuleRemovedBody, _ = sjson.Set(snmpEntityModuleRemovedBody, "snmpEntityModuleRemoved.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpEntityModuleRemovedBody != "" {
+										snmpEntityModuleRemovedBody, _ = sjson.Set(snmpEntityModuleRemovedBody, "snmpEntityModuleRemoved.attributes.rn", snmpEntityModuleRemovedRn)
+										snmpTentityBody, _ = sjson.SetRaw(snmpTentityBody, "snmpTentity.children.-1", snmpEntityModuleRemovedBody)
+									}
+								}
+							}
+							if !(data.EntityModuleStatusChangeTrapStatus.IsNull()) {
+								snmpEntityModuleStatusChangeRn := "entitymodulestatuschange"
+								snmpEntityModuleStatusChangeDn := snmpTentityDn + "/" + snmpEntityModuleStatusChangeRn
+								_ = snmpEntityModuleStatusChangeDn
+								{
+									snmpEntityModuleStatusChangeBody := ""
+									if !data.EntityModuleStatusChangeTrapStatus.IsNull() {
+										snmpEntityModuleStatusChangeBody, _ = sjson.Set(snmpEntityModuleStatusChangeBody, "snmpEntityModuleStatusChange.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpEntityModuleStatusChangeBody != "" {
+										snmpEntityModuleStatusChangeBody, _ = sjson.Set(snmpEntityModuleStatusChangeBody, "snmpEntityModuleStatusChange.attributes.rn", snmpEntityModuleStatusChangeRn)
+										snmpTentityBody, _ = sjson.SetRaw(snmpTentityBody, "snmpTentity.children.-1", snmpEntityModuleStatusChangeBody)
+									}
+								}
+							}
+							if !(data.EntityPowerOutChangeTrapStatus.IsNull()) {
+								snmpEntityPowerOutChangeRn := "entitypoweroutchange"
+								snmpEntityPowerOutChangeDn := snmpTentityDn + "/" + snmpEntityPowerOutChangeRn
+								_ = snmpEntityPowerOutChangeDn
+								{
+									snmpEntityPowerOutChangeBody := ""
+									if !data.EntityPowerOutChangeTrapStatus.IsNull() {
+										snmpEntityPowerOutChangeBody, _ = sjson.Set(snmpEntityPowerOutChangeBody, "snmpEntityPowerOutChange.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpEntityPowerOutChangeBody != "" {
+										snmpEntityPowerOutChangeBody, _ = sjson.Set(snmpEntityPowerOutChangeBody, "snmpEntityPowerOutChange.attributes.rn", snmpEntityPowerOutChangeRn)
+										snmpTentityBody, _ = sjson.SetRaw(snmpTentityBody, "snmpTentity.children.-1", snmpEntityPowerOutChangeBody)
+									}
+								}
+							}
+							if !(data.EntityPowerStatusChangeTrapStatus.IsNull()) {
+								snmpEntityPowerStatusChangeRn := "entitypowerstatuschange"
+								snmpEntityPowerStatusChangeDn := snmpTentityDn + "/" + snmpEntityPowerStatusChangeRn
+								_ = snmpEntityPowerStatusChangeDn
+								{
+									snmpEntityPowerStatusChangeBody := ""
+									if !data.EntityPowerStatusChangeTrapStatus.IsNull() {
+										snmpEntityPowerStatusChangeBody, _ = sjson.Set(snmpEntityPowerStatusChangeBody, "snmpEntityPowerStatusChange.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpEntityPowerStatusChangeBody != "" {
+										snmpEntityPowerStatusChangeBody, _ = sjson.Set(snmpEntityPowerStatusChangeBody, "snmpEntityPowerStatusChange.attributes.rn", snmpEntityPowerStatusChangeRn)
+										snmpTentityBody, _ = sjson.SetRaw(snmpTentityBody, "snmpTentity.children.-1", snmpEntityPowerStatusChangeBody)
+									}
+								}
+							}
+							if !(data.EntitySensorTrapStatus.IsNull()) {
+								snmpEntitySensorRn := "entitysensor"
+								snmpEntitySensorDn := snmpTentityDn + "/" + snmpEntitySensorRn
+								_ = snmpEntitySensorDn
+								{
+									snmpEntitySensorBody := ""
+									if !data.EntitySensorTrapStatus.IsNull() {
+										snmpEntitySensorBody, _ = sjson.Set(snmpEntitySensorBody, "snmpEntitySensor.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpEntitySensorBody != "" {
+										snmpEntitySensorBody, _ = sjson.Set(snmpEntitySensorBody, "snmpEntitySensor.attributes.rn", snmpEntitySensorRn)
+										snmpTentityBody, _ = sjson.SetRaw(snmpTentityBody, "snmpTentity.children.-1", snmpEntitySensorBody)
+									}
+								}
+							}
+							if !(data.EntityUnrecognisedModuleTrapStatus.IsNull()) {
+								snmpEntityUnrecognisedModuleRn := "entityunrecognisedmodule"
+								snmpEntityUnrecognisedModuleDn := snmpTentityDn + "/" + snmpEntityUnrecognisedModuleRn
+								_ = snmpEntityUnrecognisedModuleDn
+								{
+									snmpEntityUnrecognisedModuleBody := ""
+									if !data.EntityUnrecognisedModuleTrapStatus.IsNull() {
+										snmpEntityUnrecognisedModuleBody, _ = sjson.Set(snmpEntityUnrecognisedModuleBody, "snmpEntityUnrecognisedModule.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpEntityUnrecognisedModuleBody != "" {
+										snmpEntityUnrecognisedModuleBody, _ = sjson.Set(snmpEntityUnrecognisedModuleBody, "snmpEntityUnrecognisedModule.attributes.rn", snmpEntityUnrecognisedModuleRn)
+										snmpTentityBody, _ = sjson.SetRaw(snmpTentityBody, "snmpTentity.children.-1", snmpEntityUnrecognisedModuleBody)
+									}
+								}
+							}
+							if snmpTentityBody != "" {
+								snmpTentityBody, _ = sjson.Set(snmpTentityBody, "snmpTentity.attributes.rn", snmpTentityRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTentityBody)
+							}
+						}
+					}
+					if !((data.FcdomainDomainIdNotAssignedTrapStatus.IsNull()) && (data.FcdomainFabricChangeTrapStatus.IsNull()) && (data.FcdomainNewPrincipalSwitchTrapStatus.IsNull())) {
+						snmpTfcdomainRn := "fcdomain"
+						snmpTfcdomainDn := snmpTrapsDn + "/" + snmpTfcdomainRn
+						_ = snmpTfcdomainDn
+						{
+							snmpTfcdomainBody := ""
+							if !(data.FcdomainDomainIdNotAssignedTrapStatus.IsNull()) {
+								snmpDmDomainIdNotAssignedNotifyRn := "dmdomainidnotassignednotify"
+								snmpDmDomainIdNotAssignedNotifyDn := snmpTfcdomainDn + "/" + snmpDmDomainIdNotAssignedNotifyRn
+								_ = snmpDmDomainIdNotAssignedNotifyDn
+								{
+									snmpDmDomainIdNotAssignedNotifyBody := ""
+									if !data.FcdomainDomainIdNotAssignedTrapStatus.IsNull() {
+										snmpDmDomainIdNotAssignedNotifyBody, _ = sjson.Set(snmpDmDomainIdNotAssignedNotifyBody, "snmpDmDomainIdNotAssignedNotify.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpDmDomainIdNotAssignedNotifyBody != "" {
+										snmpDmDomainIdNotAssignedNotifyBody, _ = sjson.Set(snmpDmDomainIdNotAssignedNotifyBody, "snmpDmDomainIdNotAssignedNotify.attributes.rn", snmpDmDomainIdNotAssignedNotifyRn)
+										snmpTfcdomainBody, _ = sjson.SetRaw(snmpTfcdomainBody, "snmpTfcdomain.children.-1", snmpDmDomainIdNotAssignedNotifyBody)
+									}
+								}
+							}
+							if !(data.FcdomainFabricChangeTrapStatus.IsNull()) {
+								snmpDmFabricChangeNotifyRn := "dmfabricchangenotify"
+								snmpDmFabricChangeNotifyDn := snmpTfcdomainDn + "/" + snmpDmFabricChangeNotifyRn
+								_ = snmpDmFabricChangeNotifyDn
+								{
+									snmpDmFabricChangeNotifyBody := ""
+									if !data.FcdomainFabricChangeTrapStatus.IsNull() {
+										snmpDmFabricChangeNotifyBody, _ = sjson.Set(snmpDmFabricChangeNotifyBody, "snmpDmFabricChangeNotify.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpDmFabricChangeNotifyBody != "" {
+										snmpDmFabricChangeNotifyBody, _ = sjson.Set(snmpDmFabricChangeNotifyBody, "snmpDmFabricChangeNotify.attributes.rn", snmpDmFabricChangeNotifyRn)
+										snmpTfcdomainBody, _ = sjson.SetRaw(snmpTfcdomainBody, "snmpTfcdomain.children.-1", snmpDmFabricChangeNotifyBody)
+									}
+								}
+							}
+							if !(data.FcdomainNewPrincipalSwitchTrapStatus.IsNull()) {
+								snmpDmNewPrincipalSwitchNotifyRn := "dmnewprincipalswitchnotify"
+								snmpDmNewPrincipalSwitchNotifyDn := snmpTfcdomainDn + "/" + snmpDmNewPrincipalSwitchNotifyRn
+								_ = snmpDmNewPrincipalSwitchNotifyDn
+								{
+									snmpDmNewPrincipalSwitchNotifyBody := ""
+									if !data.FcdomainNewPrincipalSwitchTrapStatus.IsNull() {
+										snmpDmNewPrincipalSwitchNotifyBody, _ = sjson.Set(snmpDmNewPrincipalSwitchNotifyBody, "snmpDmNewPrincipalSwitchNotify.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpDmNewPrincipalSwitchNotifyBody != "" {
+										snmpDmNewPrincipalSwitchNotifyBody, _ = sjson.Set(snmpDmNewPrincipalSwitchNotifyBody, "snmpDmNewPrincipalSwitchNotify.attributes.rn", snmpDmNewPrincipalSwitchNotifyRn)
+										snmpTfcdomainBody, _ = sjson.SetRaw(snmpTfcdomainBody, "snmpTfcdomain.children.-1", snmpDmNewPrincipalSwitchNotifyBody)
+									}
+								}
+							}
+							if snmpTfcdomainBody != "" {
+								snmpTfcdomainBody, _ = sjson.Set(snmpTfcdomainBody, "snmpTfcdomain.attributes.rn", snmpTfcdomainRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTfcdomainBody)
+							}
+						}
+					}
+					if !true {
+						snmpTfcnsRn := "fcns"
+						snmpTfcnsDn := snmpTrapsDn + "/" + snmpTfcnsRn
+						_ = snmpTfcnsDn
+						{
+							snmpTfcnsBody := ""
+							if snmpTfcnsBody != "" {
+								snmpTfcnsBody, _ = sjson.Set(snmpTfcnsBody, "snmpTfcns.attributes.rn", snmpTfcnsRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTfcnsBody)
+							}
+						}
+					}
+					if !true {
+						snmpTfcsRn := "fcs"
+						snmpTfcsDn := snmpTrapsDn + "/" + snmpTfcsRn
+						_ = snmpTfcsDn
+						{
+							snmpTfcsBody := ""
+							if snmpTfcsBody != "" {
+								snmpTfcsBody, _ = sjson.Set(snmpTfcsBody, "snmpTfcs.attributes.rn", snmpTfcsRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTfcsBody)
+							}
+						}
+					}
+					if !true {
+						snmpTfctraceRn := "fctrace"
+						snmpTfctraceDn := snmpTrapsDn + "/" + snmpTfctraceRn
+						_ = snmpTfctraceDn
+						{
+							snmpTfctraceBody := ""
+							if snmpTfctraceBody != "" {
+								snmpTfctraceBody, _ = sjson.Set(snmpTfctraceBody, "snmpTfctrace.attributes.rn", snmpTfctraceRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTfctraceBody)
+							}
+						}
+					}
+					if !true {
+						snmpTfdmiRn := "fdmi"
+						snmpTfdmiDn := snmpTrapsDn + "/" + snmpTfdmiRn
+						_ = snmpTfdmiDn
+						{
+							snmpTfdmiBody := ""
+							if snmpTfdmiBody != "" {
+								snmpTfdmiBody, _ = sjson.Set(snmpTfdmiBody, "snmpTfdmi.attributes.rn", snmpTfdmiRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTfdmiBody)
+							}
+						}
+					}
+					if !((data.FeatureControlOpStatusChangeTrapStatus.IsNull()) && (data.FeatureControlCiscoOpStatusChangeTrapStatus.IsNull())) {
+						snmpTfeaturecontrolRn := "featurecontrol"
+						snmpTfeaturecontrolDn := snmpTrapsDn + "/" + snmpTfeaturecontrolRn
+						_ = snmpTfeaturecontrolDn
+						{
+							snmpTfeaturecontrolBody := ""
+							if !(data.FeatureControlOpStatusChangeTrapStatus.IsNull()) {
+								snmpFeatureOpStatusChangeRn := "FeatureOpStatusChange"
+								snmpFeatureOpStatusChangeDn := snmpTfeaturecontrolDn + "/" + snmpFeatureOpStatusChangeRn
+								_ = snmpFeatureOpStatusChangeDn
+								{
+									snmpFeatureOpStatusChangeBody := ""
+									if !data.FeatureControlOpStatusChangeTrapStatus.IsNull() {
+										snmpFeatureOpStatusChangeBody, _ = sjson.Set(snmpFeatureOpStatusChangeBody, "snmpFeatureOpStatusChange.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpFeatureOpStatusChangeBody != "" {
+										snmpFeatureOpStatusChangeBody, _ = sjson.Set(snmpFeatureOpStatusChangeBody, "snmpFeatureOpStatusChange.attributes.rn", snmpFeatureOpStatusChangeRn)
+										snmpTfeaturecontrolBody, _ = sjson.SetRaw(snmpTfeaturecontrolBody, "snmpTfeaturecontrol.children.-1", snmpFeatureOpStatusChangeBody)
+									}
+								}
+							}
+							if !(data.FeatureControlCiscoOpStatusChangeTrapStatus.IsNull()) {
+								snmpCiscoFeatOpStatusChangeRn := "ciscoFeatOpStatusChange"
+								snmpCiscoFeatOpStatusChangeDn := snmpTfeaturecontrolDn + "/" + snmpCiscoFeatOpStatusChangeRn
+								_ = snmpCiscoFeatOpStatusChangeDn
+								{
+									snmpCiscoFeatOpStatusChangeBody := ""
+									if !data.FeatureControlCiscoOpStatusChangeTrapStatus.IsNull() {
+										snmpCiscoFeatOpStatusChangeBody, _ = sjson.Set(snmpCiscoFeatOpStatusChangeBody, "snmpCiscoFeatOpStatusChange.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpCiscoFeatOpStatusChangeBody != "" {
+										snmpCiscoFeatOpStatusChangeBody, _ = sjson.Set(snmpCiscoFeatOpStatusChangeBody, "snmpCiscoFeatOpStatusChange.attributes.rn", snmpCiscoFeatOpStatusChangeRn)
+										snmpTfeaturecontrolBody, _ = sjson.SetRaw(snmpTfeaturecontrolBody, "snmpTfeaturecontrol.children.-1", snmpCiscoFeatOpStatusChangeBody)
+									}
+								}
+							}
+							if snmpTfeaturecontrolBody != "" {
+								snmpTfeaturecontrolBody, _ = sjson.Set(snmpTfeaturecontrolBody, "snmpTfeaturecontrol.attributes.rn", snmpTfeaturecontrolRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTfeaturecontrolBody)
+							}
+						}
+					}
+					if !true {
+						snmpTfspfRn := "fspf"
+						snmpTfspfDn := snmpTrapsDn + "/" + snmpTfspfRn
+						_ = snmpTfspfDn
+						{
+							snmpTfspfBody := ""
+							if snmpTfspfBody != "" {
+								snmpTfspfBody, _ = sjson.Set(snmpTfspfBody, "snmpTfspf.attributes.rn", snmpTfspfRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTfspfBody)
+							}
+						}
+					}
+					if !((data.GenericColdStartTrapStatus.IsNull()) && (data.GenericWarmStartTrapStatus.IsNull())) {
+						snmpTgenericRn := "generic"
+						snmpTgenericDn := snmpTrapsDn + "/" + snmpTgenericRn
+						_ = snmpTgenericDn
+						{
+							snmpTgenericBody := ""
+							if !(data.GenericColdStartTrapStatus.IsNull()) {
+								snmpColdStartRn := "coldStart"
+								snmpColdStartDn := snmpTgenericDn + "/" + snmpColdStartRn
+								_ = snmpColdStartDn
+								{
+									snmpColdStartBody := ""
+									if !data.GenericColdStartTrapStatus.IsNull() {
+										snmpColdStartBody, _ = sjson.Set(snmpColdStartBody, "snmpColdStart.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpColdStartBody != "" {
+										snmpColdStartBody, _ = sjson.Set(snmpColdStartBody, "snmpColdStart.attributes.rn", snmpColdStartRn)
+										snmpTgenericBody, _ = sjson.SetRaw(snmpTgenericBody, "snmpTgeneric.children.-1", snmpColdStartBody)
+									}
+								}
+							}
+							if !(data.GenericWarmStartTrapStatus.IsNull()) {
+								snmpWarmStartRn := "warmStart"
+								snmpWarmStartDn := snmpTgenericDn + "/" + snmpWarmStartRn
+								_ = snmpWarmStartDn
+								{
+									snmpWarmStartBody := ""
+									if !data.GenericWarmStartTrapStatus.IsNull() {
+										snmpWarmStartBody, _ = sjson.Set(snmpWarmStartBody, "snmpWarmStart.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpWarmStartBody != "" {
+										snmpWarmStartBody, _ = sjson.Set(snmpWarmStartBody, "snmpWarmStart.attributes.rn", snmpWarmStartRn)
+										snmpTgenericBody, _ = sjson.SetRaw(snmpTgenericBody, "snmpTgeneric.children.-1", snmpWarmStartBody)
+									}
+								}
+							}
+							if snmpTgenericBody != "" {
+								snmpTgenericBody, _ = sjson.Set(snmpTgenericBody, "snmpTgeneric.attributes.rn", snmpTgenericRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTgenericBody)
+							}
+						}
+					}
+					if !(data.HsrpStateChangeTrapStatus.IsNull()) {
+						snmpThsrpRn := "hsrp"
+						snmpThsrpDn := snmpTrapsDn + "/" + snmpThsrpRn
+						_ = snmpThsrpDn
+						{
+							snmpThsrpBody := ""
+							if !(data.HsrpStateChangeTrapStatus.IsNull()) {
+								snmpStateChangeRn := "statechange"
+								snmpStateChangeDn := snmpThsrpDn + "/" + snmpStateChangeRn
+								_ = snmpStateChangeDn
+								{
+									snmpStateChangeBody := ""
+									if !data.HsrpStateChangeTrapStatus.IsNull() {
+										snmpStateChangeBody, _ = sjson.Set(snmpStateChangeBody, "snmpStateChange.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpStateChangeBody != "" {
+										snmpStateChangeBody, _ = sjson.Set(snmpStateChangeBody, "snmpStateChange.attributes.rn", snmpStateChangeRn)
+										snmpThsrpBody, _ = sjson.SetRaw(snmpThsrpBody, "snmpThsrp.children.-1", snmpStateChangeBody)
+									}
+								}
+							}
+							if snmpThsrpBody != "" {
+								snmpThsrpBody, _ = sjson.Set(snmpThsrpBody, "snmpThsrp.attributes.rn", snmpThsrpRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpThsrpBody)
+							}
+						}
+					}
+					if !true {
+						snmpTipRn := "ip"
+						snmpTipDn := snmpTrapsDn + "/" + snmpTipRn
+						_ = snmpTipDn
+						{
+							snmpTipBody := ""
+							if snmpTipBody != "" {
+								snmpTipBody, _ = sjson.Set(snmpTipBody, "snmpTip.attributes.rn", snmpTipRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTipBody)
+							}
+						}
+					}
+					if !((data.LicenseExpiryTrapStatus.IsNull()) && (data.LicenseExpiryWarningTrapStatus.IsNull()) && (data.LicenseFileMissingTrapStatus.IsNull()) && (data.LicenseNoLicenseForFeatureTrapStatus.IsNull())) {
+						snmpTlicenseRn := "license"
+						snmpTlicenseDn := snmpTrapsDn + "/" + snmpTlicenseRn
+						_ = snmpTlicenseDn
+						{
+							snmpTlicenseBody := ""
+							if !(data.LicenseExpiryTrapStatus.IsNull()) {
+								snmpNotifyLicenseExpiryRn := "notifylicenseexpiry"
+								snmpNotifyLicenseExpiryDn := snmpTlicenseDn + "/" + snmpNotifyLicenseExpiryRn
+								_ = snmpNotifyLicenseExpiryDn
+								{
+									snmpNotifyLicenseExpiryBody := ""
+									if !data.LicenseExpiryTrapStatus.IsNull() {
+										snmpNotifyLicenseExpiryBody, _ = sjson.Set(snmpNotifyLicenseExpiryBody, "snmpNotifyLicenseExpiry.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpNotifyLicenseExpiryBody != "" {
+										snmpNotifyLicenseExpiryBody, _ = sjson.Set(snmpNotifyLicenseExpiryBody, "snmpNotifyLicenseExpiry.attributes.rn", snmpNotifyLicenseExpiryRn)
+										snmpTlicenseBody, _ = sjson.SetRaw(snmpTlicenseBody, "snmpTlicense.children.-1", snmpNotifyLicenseExpiryBody)
+									}
+								}
+							}
+							if !(data.LicenseExpiryWarningTrapStatus.IsNull()) {
+								snmpNotifyLicenseExpiryWarningRn := "notifylicenseexpirywarning"
+								snmpNotifyLicenseExpiryWarningDn := snmpTlicenseDn + "/" + snmpNotifyLicenseExpiryWarningRn
+								_ = snmpNotifyLicenseExpiryWarningDn
+								{
+									snmpNotifyLicenseExpiryWarningBody := ""
+									if !data.LicenseExpiryWarningTrapStatus.IsNull() {
+										snmpNotifyLicenseExpiryWarningBody, _ = sjson.Set(snmpNotifyLicenseExpiryWarningBody, "snmpNotifyLicenseExpiryWarning.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpNotifyLicenseExpiryWarningBody != "" {
+										snmpNotifyLicenseExpiryWarningBody, _ = sjson.Set(snmpNotifyLicenseExpiryWarningBody, "snmpNotifyLicenseExpiryWarning.attributes.rn", snmpNotifyLicenseExpiryWarningRn)
+										snmpTlicenseBody, _ = sjson.SetRaw(snmpTlicenseBody, "snmpTlicense.children.-1", snmpNotifyLicenseExpiryWarningBody)
+									}
+								}
+							}
+							if !(data.LicenseFileMissingTrapStatus.IsNull()) {
+								snmpNotifyLicenseFileMissingRn := "notifylicensefilemissing"
+								snmpNotifyLicenseFileMissingDn := snmpTlicenseDn + "/" + snmpNotifyLicenseFileMissingRn
+								_ = snmpNotifyLicenseFileMissingDn
+								{
+									snmpNotifyLicenseFileMissingBody := ""
+									if !data.LicenseFileMissingTrapStatus.IsNull() {
+										snmpNotifyLicenseFileMissingBody, _ = sjson.Set(snmpNotifyLicenseFileMissingBody, "snmpNotifyLicenseFileMissing.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpNotifyLicenseFileMissingBody != "" {
+										snmpNotifyLicenseFileMissingBody, _ = sjson.Set(snmpNotifyLicenseFileMissingBody, "snmpNotifyLicenseFileMissing.attributes.rn", snmpNotifyLicenseFileMissingRn)
+										snmpTlicenseBody, _ = sjson.SetRaw(snmpTlicenseBody, "snmpTlicense.children.-1", snmpNotifyLicenseFileMissingBody)
+									}
+								}
+							}
+							if !(data.LicenseNoLicenseForFeatureTrapStatus.IsNull()) {
+								snmpNotifyNoLicenceForFeatureRn := "notifynolicenseforfeature"
+								snmpNotifyNoLicenceForFeatureDn := snmpTlicenseDn + "/" + snmpNotifyNoLicenceForFeatureRn
+								_ = snmpNotifyNoLicenceForFeatureDn
+								{
+									snmpNotifyNoLicenceForFeatureBody := ""
+									if !data.LicenseNoLicenseForFeatureTrapStatus.IsNull() {
+										snmpNotifyNoLicenceForFeatureBody, _ = sjson.Set(snmpNotifyNoLicenceForFeatureBody, "snmpNotifyNoLicenceForFeature.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpNotifyNoLicenceForFeatureBody != "" {
+										snmpNotifyNoLicenceForFeatureBody, _ = sjson.Set(snmpNotifyNoLicenceForFeatureBody, "snmpNotifyNoLicenceForFeature.attributes.rn", snmpNotifyNoLicenceForFeatureRn)
+										snmpTlicenseBody, _ = sjson.SetRaw(snmpTlicenseBody, "snmpTlicense.children.-1", snmpNotifyNoLicenceForFeatureBody)
+									}
+								}
+							}
+							if snmpTlicenseBody != "" {
+								snmpTlicenseBody, _ = sjson.Set(snmpTlicenseBody, "snmpTlicense.attributes.rn", snmpTlicenseRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTlicenseBody)
+							}
+						}
+					}
+					if !((data.LinkCieLinkDownTrapStatus.IsNull()) && (data.LinkCieLinkUpTrapStatus.IsNull()) && (data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsNull()) && (data.LinkCmnMacMoveNotificationTrapStatus.IsNull()) && (data.LinkDelayedLinkStateChangeTrapStatus.IsNull()) && (data.LinkExtendedLinkDownTrapStatus.IsNull()) && (data.LinkExtendedLinkUpTrapStatus.IsNull()) && (data.LinkLinkDownTrapStatus.IsNull()) && (data.LinkLinkUpTrapStatus.IsNull()) && (data.LinkErrDisableInterfaceEventTrapStatus.IsNull())) {
+						snmpTlinkRn := "link"
+						snmpTlinkDn := snmpTrapsDn + "/" + snmpTlinkRn
+						_ = snmpTlinkDn
+						{
+							snmpTlinkBody := ""
+							if !(data.LinkCieLinkDownTrapStatus.IsNull()) {
+								snmpCieLinkDownRn := "cieLinkDown"
+								snmpCieLinkDownDn := snmpTlinkDn + "/" + snmpCieLinkDownRn
+								_ = snmpCieLinkDownDn
+								{
+									snmpCieLinkDownBody := ""
+									if !data.LinkCieLinkDownTrapStatus.IsNull() {
+										snmpCieLinkDownBody, _ = sjson.Set(snmpCieLinkDownBody, "snmpCieLinkDown.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpCieLinkDownBody != "" {
+										snmpCieLinkDownBody, _ = sjson.Set(snmpCieLinkDownBody, "snmpCieLinkDown.attributes.rn", snmpCieLinkDownRn)
+										snmpTlinkBody, _ = sjson.SetRaw(snmpTlinkBody, "snmpTlink.children.-1", snmpCieLinkDownBody)
+									}
+								}
+							}
+							if !(data.LinkCieLinkUpTrapStatus.IsNull()) {
+								snmpCieLinkUpRn := "cieLinkUp"
+								snmpCieLinkUpDn := snmpTlinkDn + "/" + snmpCieLinkUpRn
+								_ = snmpCieLinkUpDn
+								{
+									snmpCieLinkUpBody := ""
+									if !data.LinkCieLinkUpTrapStatus.IsNull() {
+										snmpCieLinkUpBody, _ = sjson.Set(snmpCieLinkUpBody, "snmpCieLinkUp.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpCieLinkUpBody != "" {
+										snmpCieLinkUpBody, _ = sjson.Set(snmpCieLinkUpBody, "snmpCieLinkUp.attributes.rn", snmpCieLinkUpRn)
+										snmpTlinkBody, _ = sjson.SetRaw(snmpTlinkBody, "snmpTlink.children.-1", snmpCieLinkUpBody)
+									}
+								}
+							}
+							if !(data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsNull()) {
+								snmpCiscoXcvrMonStatusChangeRn := "ciscoxcvrmonstatuschg"
+								snmpCiscoXcvrMonStatusChangeDn := snmpTlinkDn + "/" + snmpCiscoXcvrMonStatusChangeRn
+								_ = snmpCiscoXcvrMonStatusChangeDn
+								{
+									snmpCiscoXcvrMonStatusChangeBody := ""
+									if !data.LinkCiscoXcvrMonStatusChangeTrapStatus.IsNull() {
+										snmpCiscoXcvrMonStatusChangeBody, _ = sjson.Set(snmpCiscoXcvrMonStatusChangeBody, "snmpCiscoXcvrMonStatusChange.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpCiscoXcvrMonStatusChangeBody != "" {
+										snmpCiscoXcvrMonStatusChangeBody, _ = sjson.Set(snmpCiscoXcvrMonStatusChangeBody, "snmpCiscoXcvrMonStatusChange.attributes.rn", snmpCiscoXcvrMonStatusChangeRn)
+										snmpTlinkBody, _ = sjson.SetRaw(snmpTlinkBody, "snmpTlink.children.-1", snmpCiscoXcvrMonStatusChangeBody)
+									}
+								}
+							}
+							if !(data.LinkCmnMacMoveNotificationTrapStatus.IsNull()) {
+								snmpCmnMacMoveNotificationRn := "cmnmacmovenotification"
+								snmpCmnMacMoveNotificationDn := snmpTlinkDn + "/" + snmpCmnMacMoveNotificationRn
+								_ = snmpCmnMacMoveNotificationDn
+								{
+									snmpCmnMacMoveNotificationBody := ""
+									if !data.LinkCmnMacMoveNotificationTrapStatus.IsNull() {
+										snmpCmnMacMoveNotificationBody, _ = sjson.Set(snmpCmnMacMoveNotificationBody, "snmpCmnMacMoveNotification.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpCmnMacMoveNotificationBody != "" {
+										snmpCmnMacMoveNotificationBody, _ = sjson.Set(snmpCmnMacMoveNotificationBody, "snmpCmnMacMoveNotification.attributes.rn", snmpCmnMacMoveNotificationRn)
+										snmpTlinkBody, _ = sjson.SetRaw(snmpTlinkBody, "snmpTlink.children.-1", snmpCmnMacMoveNotificationBody)
+									}
+								}
+							}
+							if !(data.LinkDelayedLinkStateChangeTrapStatus.IsNull()) {
+								snmpDelayedLinkStateChangeRn := "delayedlinkstatechange"
+								snmpDelayedLinkStateChangeDn := snmpTlinkDn + "/" + snmpDelayedLinkStateChangeRn
+								_ = snmpDelayedLinkStateChangeDn
+								{
+									snmpDelayedLinkStateChangeBody := ""
+									if !data.LinkDelayedLinkStateChangeTrapStatus.IsNull() {
+										snmpDelayedLinkStateChangeBody, _ = sjson.Set(snmpDelayedLinkStateChangeBody, "snmpDelayedLinkStateChange.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpDelayedLinkStateChangeBody != "" {
+										snmpDelayedLinkStateChangeBody, _ = sjson.Set(snmpDelayedLinkStateChangeBody, "snmpDelayedLinkStateChange.attributes.rn", snmpDelayedLinkStateChangeRn)
+										snmpTlinkBody, _ = sjson.SetRaw(snmpTlinkBody, "snmpTlink.children.-1", snmpDelayedLinkStateChangeBody)
+									}
+								}
+							}
+							if !(data.LinkExtendedLinkDownTrapStatus.IsNull()) {
+								snmpExtendedLinkDownRn := "extendedlinkDown"
+								snmpExtendedLinkDownDn := snmpTlinkDn + "/" + snmpExtendedLinkDownRn
+								_ = snmpExtendedLinkDownDn
+								{
+									snmpExtendedLinkDownBody := ""
+									if !data.LinkExtendedLinkDownTrapStatus.IsNull() {
+										snmpExtendedLinkDownBody, _ = sjson.Set(snmpExtendedLinkDownBody, "snmpExtendedLinkDown.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpExtendedLinkDownBody != "" {
+										snmpExtendedLinkDownBody, _ = sjson.Set(snmpExtendedLinkDownBody, "snmpExtendedLinkDown.attributes.rn", snmpExtendedLinkDownRn)
+										snmpTlinkBody, _ = sjson.SetRaw(snmpTlinkBody, "snmpTlink.children.-1", snmpExtendedLinkDownBody)
+									}
+								}
+							}
+							if !(data.LinkExtendedLinkUpTrapStatus.IsNull()) {
+								snmpExtendedLinkUpRn := "extendedlinkUp"
+								snmpExtendedLinkUpDn := snmpTlinkDn + "/" + snmpExtendedLinkUpRn
+								_ = snmpExtendedLinkUpDn
+								{
+									snmpExtendedLinkUpBody := ""
+									if !data.LinkExtendedLinkUpTrapStatus.IsNull() {
+										snmpExtendedLinkUpBody, _ = sjson.Set(snmpExtendedLinkUpBody, "snmpExtendedLinkUp.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpExtendedLinkUpBody != "" {
+										snmpExtendedLinkUpBody, _ = sjson.Set(snmpExtendedLinkUpBody, "snmpExtendedLinkUp.attributes.rn", snmpExtendedLinkUpRn)
+										snmpTlinkBody, _ = sjson.SetRaw(snmpTlinkBody, "snmpTlink.children.-1", snmpExtendedLinkUpBody)
+									}
+								}
+							}
+							if !(data.LinkLinkDownTrapStatus.IsNull()) {
+								snmpLinkDownRn := "linkDown"
+								snmpLinkDownDn := snmpTlinkDn + "/" + snmpLinkDownRn
+								_ = snmpLinkDownDn
+								{
+									snmpLinkDownBody := ""
+									if !data.LinkLinkDownTrapStatus.IsNull() {
+										snmpLinkDownBody, _ = sjson.Set(snmpLinkDownBody, "snmpLinkDown.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpLinkDownBody != "" {
+										snmpLinkDownBody, _ = sjson.Set(snmpLinkDownBody, "snmpLinkDown.attributes.rn", snmpLinkDownRn)
+										snmpTlinkBody, _ = sjson.SetRaw(snmpTlinkBody, "snmpTlink.children.-1", snmpLinkDownBody)
+									}
+								}
+							}
+							if !(data.LinkLinkUpTrapStatus.IsNull()) {
+								snmpLinkUpRn := "linkUp"
+								snmpLinkUpDn := snmpTlinkDn + "/" + snmpLinkUpRn
+								_ = snmpLinkUpDn
+								{
+									snmpLinkUpBody := ""
+									if !data.LinkLinkUpTrapStatus.IsNull() {
+										snmpLinkUpBody, _ = sjson.Set(snmpLinkUpBody, "snmpLinkUp.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpLinkUpBody != "" {
+										snmpLinkUpBody, _ = sjson.Set(snmpLinkUpBody, "snmpLinkUp.attributes.rn", snmpLinkUpRn)
+										snmpTlinkBody, _ = sjson.SetRaw(snmpTlinkBody, "snmpTlink.children.-1", snmpLinkUpBody)
+									}
+								}
+							}
+							if !(data.LinkErrDisableInterfaceEventTrapStatus.IsNull()) {
+								snmpCErrDisableInterfaceEventRev1Rn := "cerrdisableinterfaceeventrev1"
+								snmpCErrDisableInterfaceEventRev1Dn := snmpTlinkDn + "/" + snmpCErrDisableInterfaceEventRev1Rn
+								_ = snmpCErrDisableInterfaceEventRev1Dn
+								{
+									snmpCErrDisableInterfaceEventRev1Body := ""
+									if !data.LinkErrDisableInterfaceEventTrapStatus.IsNull() {
+										snmpCErrDisableInterfaceEventRev1Body, _ = sjson.Set(snmpCErrDisableInterfaceEventRev1Body, "snmpCErrDisableInterfaceEventRev1.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpCErrDisableInterfaceEventRev1Body != "" {
+										snmpCErrDisableInterfaceEventRev1Body, _ = sjson.Set(snmpCErrDisableInterfaceEventRev1Body, "snmpCErrDisableInterfaceEventRev1.attributes.rn", snmpCErrDisableInterfaceEventRev1Rn)
+										snmpTlinkBody, _ = sjson.SetRaw(snmpTlinkBody, "snmpTlink.children.-1", snmpCErrDisableInterfaceEventRev1Body)
+									}
+								}
+							}
+							if snmpTlinkBody != "" {
+								snmpTlinkBody, _ = sjson.Set(snmpTlinkBody, "snmpTlink.attributes.rn", snmpTlinkRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTlinkBody)
+							}
+						}
+					}
+					if !(data.LldpRemTablesChangeTrapStatus.IsNull()) {
+						snmpTlldpRn := "lldp"
+						snmpTlldpDn := snmpTrapsDn + "/" + snmpTlldpRn
+						_ = snmpTlldpDn
+						{
+							snmpTlldpBody := ""
+							if !(data.LldpRemTablesChangeTrapStatus.IsNull()) {
+								snmpLldpRemTablesChangeRn := "lldpRemTablesChange"
+								snmpLldpRemTablesChangeDn := snmpTlldpDn + "/" + snmpLldpRemTablesChangeRn
+								_ = snmpLldpRemTablesChangeDn
+								{
+									snmpLldpRemTablesChangeBody := ""
+									if !data.LldpRemTablesChangeTrapStatus.IsNull() {
+										snmpLldpRemTablesChangeBody, _ = sjson.Set(snmpLldpRemTablesChangeBody, "snmpLldpRemTablesChange.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpLldpRemTablesChangeBody != "" {
+										snmpLldpRemTablesChangeBody, _ = sjson.Set(snmpLldpRemTablesChangeBody, "snmpLldpRemTablesChange.attributes.rn", snmpLldpRemTablesChangeRn)
+										snmpTlldpBody, _ = sjson.SetRaw(snmpTlldpBody, "snmpTlldp.children.-1", snmpLldpRemTablesChangeBody)
+									}
+								}
+							}
+							if snmpTlldpBody != "" {
+								snmpTlldpBody, _ = sjson.Set(snmpTlldpBody, "snmpTlldp.attributes.rn", snmpTlldpRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTlldpBody)
+							}
+						}
+					}
+					if !((data.MmodeMaintModeChangeTrapStatus.IsNull()) && (data.MmodeNormalModeChangeTrapStatus.IsNull())) {
+						snmpTmmodeRn := "mmode"
+						snmpTmmodeDn := snmpTrapsDn + "/" + snmpTmmodeRn
+						_ = snmpTmmodeDn
+						{
+							snmpTmmodeBody := ""
+							if !(data.MmodeMaintModeChangeTrapStatus.IsNull()) {
+								snmpCseMaintModeChangeNotifyRn := "cseMaintModeChangeNotify"
+								snmpCseMaintModeChangeNotifyDn := snmpTmmodeDn + "/" + snmpCseMaintModeChangeNotifyRn
+								_ = snmpCseMaintModeChangeNotifyDn
+								{
+									snmpCseMaintModeChangeNotifyBody := ""
+									if !data.MmodeMaintModeChangeTrapStatus.IsNull() {
+										snmpCseMaintModeChangeNotifyBody, _ = sjson.Set(snmpCseMaintModeChangeNotifyBody, "snmpCseMaintModeChangeNotify.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpCseMaintModeChangeNotifyBody != "" {
+										snmpCseMaintModeChangeNotifyBody, _ = sjson.Set(snmpCseMaintModeChangeNotifyBody, "snmpCseMaintModeChangeNotify.attributes.rn", snmpCseMaintModeChangeNotifyRn)
+										snmpTmmodeBody, _ = sjson.SetRaw(snmpTmmodeBody, "snmpTmmode.children.-1", snmpCseMaintModeChangeNotifyBody)
+									}
+								}
+							}
+							if !(data.MmodeNormalModeChangeTrapStatus.IsNull()) {
+								snmpCseNormalModeChangeNotifyRn := "cseNormalModeChangeNotify"
+								snmpCseNormalModeChangeNotifyDn := snmpTmmodeDn + "/" + snmpCseNormalModeChangeNotifyRn
+								_ = snmpCseNormalModeChangeNotifyDn
+								{
+									snmpCseNormalModeChangeNotifyBody := ""
+									if !data.MmodeNormalModeChangeTrapStatus.IsNull() {
+										snmpCseNormalModeChangeNotifyBody, _ = sjson.Set(snmpCseNormalModeChangeNotifyBody, "snmpCseNormalModeChangeNotify.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpCseNormalModeChangeNotifyBody != "" {
+										snmpCseNormalModeChangeNotifyBody, _ = sjson.Set(snmpCseNormalModeChangeNotifyBody, "snmpCseNormalModeChangeNotify.attributes.rn", snmpCseNormalModeChangeNotifyRn)
+										snmpTmmodeBody, _ = sjson.SetRaw(snmpTmmodeBody, "snmpTmmode.children.-1", snmpCseNormalModeChangeNotifyBody)
+									}
+								}
+							}
+							if snmpTmmodeBody != "" {
+								snmpTmmodeBody, _ = sjson.Set(snmpTmmodeBody, "snmpTmmode.attributes.rn", snmpTmmodeRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTmmodeBody)
+							}
+						}
+					}
+					if !((data.MplsLdpTrapStatus.IsNull() && (data.MplsLdpSessionDownTrapStatus.IsNull()) && (data.MplsLdpSessionUpTrapStatus.IsNull())) && (data.MplsVpnTrapStatus.IsNull() && (data.MplsVpnMaxThreshClearedTrapStatus.IsNull()) && (data.MplsVpnMaxThreshExceededTrapStatus.IsNull()) && (data.MplsVpnMidThreshExceededTrapStatus.IsNull()) && (data.MplsVpnVrfDownTrapStatus.IsNull()) && (data.MplsVpnVrfUpTrapStatus.IsNull()))) {
+						snmpTmplsRn := "mpls"
+						snmpTmplsDn := snmpTrapsDn + "/" + snmpTmplsRn
+						_ = snmpTmplsDn
+						{
+							snmpTmplsBody := ""
+							if !(data.MplsLdpTrapStatus.IsNull() && (data.MplsLdpSessionDownTrapStatus.IsNull()) && (data.MplsLdpSessionUpTrapStatus.IsNull())) {
+								snmpLdpRn := "ldp"
+								snmpLdpDn := snmpTmplsDn + "/" + snmpLdpRn
+								_ = snmpLdpDn
+								{
+									snmpLdpBody := ""
+									if !data.MplsLdpTrapStatus.IsNull() {
+										snmpLdpBody, _ = sjson.Set(snmpLdpBody, "snmpLdp.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !(data.MplsLdpSessionDownTrapStatus.IsNull()) {
+										snmpLdpSessiondownRn := "ldpsessiondown"
+										snmpLdpSessiondownDn := snmpLdpDn + "/" + snmpLdpSessiondownRn
+										_ = snmpLdpSessiondownDn
+										{
+											snmpLdpSessiondownBody := ""
+											if !data.MplsLdpSessionDownTrapStatus.IsNull() {
+												snmpLdpSessiondownBody, _ = sjson.Set(snmpLdpSessiondownBody, "snmpLdpSessiondown.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if snmpLdpSessiondownBody != "" {
+												snmpLdpSessiondownBody, _ = sjson.Set(snmpLdpSessiondownBody, "snmpLdpSessiondown.attributes.rn", snmpLdpSessiondownRn)
+												snmpLdpBody, _ = sjson.SetRaw(snmpLdpBody, "snmpLdp.children.-1", snmpLdpSessiondownBody)
+											}
+										}
+									}
+									if !(data.MplsLdpSessionUpTrapStatus.IsNull()) {
+										snmpLdpSessionupRn := "ldpsessionup"
+										snmpLdpSessionupDn := snmpLdpDn + "/" + snmpLdpSessionupRn
+										_ = snmpLdpSessionupDn
+										{
+											snmpLdpSessionupBody := ""
+											if !data.MplsLdpSessionUpTrapStatus.IsNull() {
+												snmpLdpSessionupBody, _ = sjson.Set(snmpLdpSessionupBody, "snmpLdpSessionup.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if snmpLdpSessionupBody != "" {
+												snmpLdpSessionupBody, _ = sjson.Set(snmpLdpSessionupBody, "snmpLdpSessionup.attributes.rn", snmpLdpSessionupRn)
+												snmpLdpBody, _ = sjson.SetRaw(snmpLdpBody, "snmpLdp.children.-1", snmpLdpSessionupBody)
+											}
+										}
+									}
+									if snmpLdpBody != "" {
+										snmpLdpBody, _ = sjson.Set(snmpLdpBody, "snmpLdp.attributes.rn", snmpLdpRn)
+										snmpTmplsBody, _ = sjson.SetRaw(snmpTmplsBody, "snmpTmpls.children.-1", snmpLdpBody)
+									}
+								}
+							}
+							if !(data.MplsVpnTrapStatus.IsNull() && (data.MplsVpnMaxThreshClearedTrapStatus.IsNull()) && (data.MplsVpnMaxThreshExceededTrapStatus.IsNull()) && (data.MplsVpnMidThreshExceededTrapStatus.IsNull()) && (data.MplsVpnVrfDownTrapStatus.IsNull()) && (data.MplsVpnVrfUpTrapStatus.IsNull())) {
+								snmpVpnRn := "vpn"
+								snmpVpnDn := snmpTmplsDn + "/" + snmpVpnRn
+								_ = snmpVpnDn
+								{
+									snmpVpnBody := ""
+									if !data.MplsVpnTrapStatus.IsNull() {
+										snmpVpnBody, _ = sjson.Set(snmpVpnBody, "snmpVpn.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if !(data.MplsVpnMaxThreshClearedTrapStatus.IsNull()) {
+										snmpVpnMaxThreshclearedRn := "vpnmaxthreshcleared"
+										snmpVpnMaxThreshclearedDn := snmpVpnDn + "/" + snmpVpnMaxThreshclearedRn
+										_ = snmpVpnMaxThreshclearedDn
+										{
+											snmpVpnMaxThreshclearedBody := ""
+											if !data.MplsVpnMaxThreshClearedTrapStatus.IsNull() {
+												snmpVpnMaxThreshclearedBody, _ = sjson.Set(snmpVpnMaxThreshclearedBody, "snmpVpnMaxThreshcleared.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if snmpVpnMaxThreshclearedBody != "" {
+												snmpVpnMaxThreshclearedBody, _ = sjson.Set(snmpVpnMaxThreshclearedBody, "snmpVpnMaxThreshcleared.attributes.rn", snmpVpnMaxThreshclearedRn)
+												snmpVpnBody, _ = sjson.SetRaw(snmpVpnBody, "snmpVpn.children.-1", snmpVpnMaxThreshclearedBody)
+											}
+										}
+									}
+									if !(data.MplsVpnMaxThreshExceededTrapStatus.IsNull()) {
+										snmpVpnMaxThreshexceededRn := "vpnmaxthreshexceeded"
+										snmpVpnMaxThreshexceededDn := snmpVpnDn + "/" + snmpVpnMaxThreshexceededRn
+										_ = snmpVpnMaxThreshexceededDn
+										{
+											snmpVpnMaxThreshexceededBody := ""
+											if !data.MplsVpnMaxThreshExceededTrapStatus.IsNull() {
+												snmpVpnMaxThreshexceededBody, _ = sjson.Set(snmpVpnMaxThreshexceededBody, "snmpVpnMaxThreshexceeded.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if snmpVpnMaxThreshexceededBody != "" {
+												snmpVpnMaxThreshexceededBody, _ = sjson.Set(snmpVpnMaxThreshexceededBody, "snmpVpnMaxThreshexceeded.attributes.rn", snmpVpnMaxThreshexceededRn)
+												snmpVpnBody, _ = sjson.SetRaw(snmpVpnBody, "snmpVpn.children.-1", snmpVpnMaxThreshexceededBody)
+											}
+										}
+									}
+									if !(data.MplsVpnMidThreshExceededTrapStatus.IsNull()) {
+										snmpVpnMidThreshexceededRn := "vpnmidthreshexceeded"
+										snmpVpnMidThreshexceededDn := snmpVpnDn + "/" + snmpVpnMidThreshexceededRn
+										_ = snmpVpnMidThreshexceededDn
+										{
+											snmpVpnMidThreshexceededBody := ""
+											if !data.MplsVpnMidThreshExceededTrapStatus.IsNull() {
+												snmpVpnMidThreshexceededBody, _ = sjson.Set(snmpVpnMidThreshexceededBody, "snmpVpnMidThreshexceeded.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if snmpVpnMidThreshexceededBody != "" {
+												snmpVpnMidThreshexceededBody, _ = sjson.Set(snmpVpnMidThreshexceededBody, "snmpVpnMidThreshexceeded.attributes.rn", snmpVpnMidThreshexceededRn)
+												snmpVpnBody, _ = sjson.SetRaw(snmpVpnBody, "snmpVpn.children.-1", snmpVpnMidThreshexceededBody)
+											}
+										}
+									}
+									if !(data.MplsVpnVrfDownTrapStatus.IsNull()) {
+										snmpVpnVrfdownRn := "vpnvrfdown"
+										snmpVpnVrfdownDn := snmpVpnDn + "/" + snmpVpnVrfdownRn
+										_ = snmpVpnVrfdownDn
+										{
+											snmpVpnVrfdownBody := ""
+											if !data.MplsVpnVrfDownTrapStatus.IsNull() {
+												snmpVpnVrfdownBody, _ = sjson.Set(snmpVpnVrfdownBody, "snmpVpnVrfdown.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if snmpVpnVrfdownBody != "" {
+												snmpVpnVrfdownBody, _ = sjson.Set(snmpVpnVrfdownBody, "snmpVpnVrfdown.attributes.rn", snmpVpnVrfdownRn)
+												snmpVpnBody, _ = sjson.SetRaw(snmpVpnBody, "snmpVpn.children.-1", snmpVpnVrfdownBody)
+											}
+										}
+									}
+									if !(data.MplsVpnVrfUpTrapStatus.IsNull()) {
+										snmpVpnVrfupRn := "vpnvrfup"
+										snmpVpnVrfupDn := snmpVpnDn + "/" + snmpVpnVrfupRn
+										_ = snmpVpnVrfupDn
+										{
+											snmpVpnVrfupBody := ""
+											if !data.MplsVpnVrfUpTrapStatus.IsNull() {
+												snmpVpnVrfupBody, _ = sjson.Set(snmpVpnVrfupBody, "snmpVpnVrfup.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if snmpVpnVrfupBody != "" {
+												snmpVpnVrfupBody, _ = sjson.Set(snmpVpnVrfupBody, "snmpVpnVrfup.attributes.rn", snmpVpnVrfupRn)
+												snmpVpnBody, _ = sjson.SetRaw(snmpVpnBody, "snmpVpn.children.-1", snmpVpnVrfupBody)
+											}
+										}
+									}
+									if snmpVpnBody != "" {
+										snmpVpnBody, _ = sjson.Set(snmpVpnBody, "snmpVpn.attributes.rn", snmpVpnRn)
+										snmpTmplsBody, _ = sjson.SetRaw(snmpTmplsBody, "snmpTmpls.children.-1", snmpVpnBody)
+									}
+								}
+							}
+							if snmpTmplsBody != "" {
+								snmpTmplsBody, _ = sjson.Set(snmpTmplsBody, "snmpTmpls.attributes.rn", snmpTmplsRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTmplsBody)
+							}
+						}
+					}
+					if !(data.MsdpBackwardTransitionTrapStatus.IsNull()) {
+						snmpTmsdpRn := "msdp"
+						snmpTmsdpDn := snmpTrapsDn + "/" + snmpTmsdpRn
+						_ = snmpTmsdpDn
+						{
+							snmpTmsdpBody := ""
+							if !(data.MsdpBackwardTransitionTrapStatus.IsNull()) {
+								snmpMsdpBackwardTransitionRn := "msdpBackwardTransition"
+								snmpMsdpBackwardTransitionDn := snmpTmsdpDn + "/" + snmpMsdpBackwardTransitionRn
+								_ = snmpMsdpBackwardTransitionDn
+								{
+									snmpMsdpBackwardTransitionBody := ""
+									if !data.MsdpBackwardTransitionTrapStatus.IsNull() {
+										snmpMsdpBackwardTransitionBody, _ = sjson.Set(snmpMsdpBackwardTransitionBody, "snmpMsdpBackwardTransition.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpMsdpBackwardTransitionBody != "" {
+										snmpMsdpBackwardTransitionBody, _ = sjson.Set(snmpMsdpBackwardTransitionBody, "snmpMsdpBackwardTransition.attributes.rn", snmpMsdpBackwardTransitionRn)
+										snmpTmsdpBody, _ = sjson.SetRaw(snmpTmsdpBody, "snmpTmsdp.children.-1", snmpMsdpBackwardTransitionBody)
+									}
+								}
+							}
+							if snmpTmsdpBody != "" {
+								snmpTmsdpBody, _ = sjson.Set(snmpTmsdpBody, "snmpTmsdp.attributes.rn", snmpTmsdpRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTmsdpBody)
+							}
+						}
+					}
+					if !(data.PimNeighborLossTrapStatus.IsNull()) {
+						snmpTpimRn := "pim"
+						snmpTpimDn := snmpTrapsDn + "/" + snmpTpimRn
+						_ = snmpTpimDn
+						{
+							snmpTpimBody := ""
+							if !(data.PimNeighborLossTrapStatus.IsNull()) {
+								snmpPimNeighborLossRn := "pimNeighborLoss"
+								snmpPimNeighborLossDn := snmpTpimDn + "/" + snmpPimNeighborLossRn
+								_ = snmpPimNeighborLossDn
+								{
+									snmpPimNeighborLossBody := ""
+									if !data.PimNeighborLossTrapStatus.IsNull() {
+										snmpPimNeighborLossBody, _ = sjson.Set(snmpPimNeighborLossBody, "snmpPimNeighborLoss.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpPimNeighborLossBody != "" {
+										snmpPimNeighborLossBody, _ = sjson.Set(snmpPimNeighborLossBody, "snmpPimNeighborLoss.attributes.rn", snmpPimNeighborLossRn)
+										snmpTpimBody, _ = sjson.SetRaw(snmpTpimBody, "snmpTpim.children.-1", snmpPimNeighborLossBody)
+									}
+								}
+							}
+							if snmpTpimBody != "" {
+								snmpTpimBody, _ = sjson.Set(snmpTpimBody, "snmpTpim.attributes.rn", snmpTpimRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTpimBody)
+							}
+						}
+					}
+					if !true {
+						snmpTpoeRn := "poe"
+						snmpTpoeDn := snmpTrapsDn + "/" + snmpTpoeRn
+						_ = snmpTpoeDn
+						{
+							snmpTpoeBody := ""
+							if snmpTpoeBody != "" {
+								snmpTpoeBody, _ = sjson.Set(snmpTpoeBody, "snmpTpoe.attributes.rn", snmpTpoeRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTpoeBody)
+							}
+						}
+					}
+					if !((data.PortSecurityAccessSecureMacViolationTrapStatus.IsNull()) && (data.PortSecurityTrunkSecureMacViolationTrapStatus.IsNull())) {
+						snmpTportsecurityRn := "portsecurity"
+						snmpTportsecurityDn := snmpTrapsDn + "/" + snmpTportsecurityRn
+						_ = snmpTportsecurityDn
+						{
+							snmpTportsecurityBody := ""
+							if !(data.PortSecurityAccessSecureMacViolationTrapStatus.IsNull()) {
+								snmpAccessSecureMacViolationRn := "accesssecuremacviolation"
+								snmpAccessSecureMacViolationDn := snmpTportsecurityDn + "/" + snmpAccessSecureMacViolationRn
+								_ = snmpAccessSecureMacViolationDn
+								{
+									snmpAccessSecureMacViolationBody := ""
+									if !data.PortSecurityAccessSecureMacViolationTrapStatus.IsNull() {
+										snmpAccessSecureMacViolationBody, _ = sjson.Set(snmpAccessSecureMacViolationBody, "snmpAccessSecureMacViolation.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpAccessSecureMacViolationBody != "" {
+										snmpAccessSecureMacViolationBody, _ = sjson.Set(snmpAccessSecureMacViolationBody, "snmpAccessSecureMacViolation.attributes.rn", snmpAccessSecureMacViolationRn)
+										snmpTportsecurityBody, _ = sjson.SetRaw(snmpTportsecurityBody, "snmpTportsecurity.children.-1", snmpAccessSecureMacViolationBody)
+									}
+								}
+							}
+							if !(data.PortSecurityTrunkSecureMacViolationTrapStatus.IsNull()) {
+								snmpTrunkSecureMacViolationRn := "trunksecuremacviolation"
+								snmpTrunkSecureMacViolationDn := snmpTportsecurityDn + "/" + snmpTrunkSecureMacViolationRn
+								_ = snmpTrunkSecureMacViolationDn
+								{
+									snmpTrunkSecureMacViolationBody := ""
+									if !data.PortSecurityTrunkSecureMacViolationTrapStatus.IsNull() {
+										snmpTrunkSecureMacViolationBody, _ = sjson.Set(snmpTrunkSecureMacViolationBody, "snmpTrunkSecureMacViolation.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpTrunkSecureMacViolationBody != "" {
+										snmpTrunkSecureMacViolationBody, _ = sjson.Set(snmpTrunkSecureMacViolationBody, "snmpTrunkSecureMacViolation.attributes.rn", snmpTrunkSecureMacViolationRn)
+										snmpTportsecurityBody, _ = sjson.SetRaw(snmpTportsecurityBody, "snmpTportsecurity.children.-1", snmpTrunkSecureMacViolationBody)
+									}
+								}
+							}
+							if snmpTportsecurityBody != "" {
+								snmpTportsecurityBody, _ = sjson.Set(snmpTportsecurityBody, "snmpTportsecurity.attributes.rn", snmpTportsecurityRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTportsecurityBody)
+							}
+						}
+					}
+					if !(data.RfRedundancyFrameworkTrapStatus.IsNull()) {
+						snmpTrfRn := "rf"
+						snmpTrfDn := snmpTrapsDn + "/" + snmpTrfRn
+						_ = snmpTrfDn
+						{
+							snmpTrfBody := ""
+							if !(data.RfRedundancyFrameworkTrapStatus.IsNull()) {
+								snmpRedundancyFrameworkRn := "redundancyframework"
+								snmpRedundancyFrameworkDn := snmpTrfDn + "/" + snmpRedundancyFrameworkRn
+								_ = snmpRedundancyFrameworkDn
+								{
+									snmpRedundancyFrameworkBody := ""
+									if !data.RfRedundancyFrameworkTrapStatus.IsNull() {
+										snmpRedundancyFrameworkBody, _ = sjson.Set(snmpRedundancyFrameworkBody, "snmpRedundancyFramework.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpRedundancyFrameworkBody != "" {
+										snmpRedundancyFrameworkBody, _ = sjson.Set(snmpRedundancyFrameworkBody, "snmpRedundancyFramework.attributes.rn", snmpRedundancyFrameworkRn)
+										snmpTrfBody, _ = sjson.SetRaw(snmpTrfBody, "snmpTrf.children.-1", snmpRedundancyFrameworkBody)
+									}
+								}
+							}
+							if snmpTrfBody != "" {
+								snmpTrfBody, _ = sjson.Set(snmpTrfBody, "snmpTrf.attributes.rn", snmpTrfRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTrfBody)
+							}
+						}
+					}
+					if !((data.RmonRisingAlarmTrapStatus.IsNull()) && (data.RmonFallingAlarmTrapStatus.IsNull()) && (data.RmonHcRisingAlarmTrapStatus.IsNull()) && (data.RmonHcFallingAlarmTrapStatus.IsNull())) {
+						snmpTrmonRn := "rmon"
+						snmpTrmonDn := snmpTrapsDn + "/" + snmpTrmonRn
+						_ = snmpTrmonDn
+						{
+							snmpTrmonBody := ""
+							if !(data.RmonRisingAlarmTrapStatus.IsNull()) {
+								snmpRisingAlarmRn := "risingAlarm"
+								snmpRisingAlarmDn := snmpTrmonDn + "/" + snmpRisingAlarmRn
+								_ = snmpRisingAlarmDn
+								{
+									snmpRisingAlarmBody := ""
+									if !data.RmonRisingAlarmTrapStatus.IsNull() {
+										snmpRisingAlarmBody, _ = sjson.Set(snmpRisingAlarmBody, "snmpRisingAlarm.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpRisingAlarmBody != "" {
+										snmpRisingAlarmBody, _ = sjson.Set(snmpRisingAlarmBody, "snmpRisingAlarm.attributes.rn", snmpRisingAlarmRn)
+										snmpTrmonBody, _ = sjson.SetRaw(snmpTrmonBody, "snmpTrmon.children.-1", snmpRisingAlarmBody)
+									}
+								}
+							}
+							if !(data.RmonFallingAlarmTrapStatus.IsNull()) {
+								snmpFallingAlarmRn := "fallingAlarm"
+								snmpFallingAlarmDn := snmpTrmonDn + "/" + snmpFallingAlarmRn
+								_ = snmpFallingAlarmDn
+								{
+									snmpFallingAlarmBody := ""
+									if !data.RmonFallingAlarmTrapStatus.IsNull() {
+										snmpFallingAlarmBody, _ = sjson.Set(snmpFallingAlarmBody, "snmpFallingAlarm.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpFallingAlarmBody != "" {
+										snmpFallingAlarmBody, _ = sjson.Set(snmpFallingAlarmBody, "snmpFallingAlarm.attributes.rn", snmpFallingAlarmRn)
+										snmpTrmonBody, _ = sjson.SetRaw(snmpTrmonBody, "snmpTrmon.children.-1", snmpFallingAlarmBody)
+									}
+								}
+							}
+							if !(data.RmonHcRisingAlarmTrapStatus.IsNull()) {
+								snmpHcRisingAlarmRn := "hcRisingAlarm"
+								snmpHcRisingAlarmDn := snmpTrmonDn + "/" + snmpHcRisingAlarmRn
+								_ = snmpHcRisingAlarmDn
+								{
+									snmpHcRisingAlarmBody := ""
+									if !data.RmonHcRisingAlarmTrapStatus.IsNull() {
+										snmpHcRisingAlarmBody, _ = sjson.Set(snmpHcRisingAlarmBody, "snmpHcRisingAlarm.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpHcRisingAlarmBody != "" {
+										snmpHcRisingAlarmBody, _ = sjson.Set(snmpHcRisingAlarmBody, "snmpHcRisingAlarm.attributes.rn", snmpHcRisingAlarmRn)
+										snmpTrmonBody, _ = sjson.SetRaw(snmpTrmonBody, "snmpTrmon.children.-1", snmpHcRisingAlarmBody)
+									}
+								}
+							}
+							if !(data.RmonHcFallingAlarmTrapStatus.IsNull()) {
+								snmpHcFallingAlarmRn := "hcFallingAlarm"
+								snmpHcFallingAlarmDn := snmpTrmonDn + "/" + snmpHcFallingAlarmRn
+								_ = snmpHcFallingAlarmDn
+								{
+									snmpHcFallingAlarmBody := ""
+									if !data.RmonHcFallingAlarmTrapStatus.IsNull() {
+										snmpHcFallingAlarmBody, _ = sjson.Set(snmpHcFallingAlarmBody, "snmpHcFallingAlarm.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpHcFallingAlarmBody != "" {
+										snmpHcFallingAlarmBody, _ = sjson.Set(snmpHcFallingAlarmBody, "snmpHcFallingAlarm.attributes.rn", snmpHcFallingAlarmRn)
+										snmpTrmonBody, _ = sjson.SetRaw(snmpTrmonBody, "snmpTrmon.children.-1", snmpHcFallingAlarmBody)
+									}
+								}
+							}
+							if snmpTrmonBody != "" {
+								snmpTrmonBody, _ = sjson.Set(snmpTrmonBody, "snmpTrmon.attributes.rn", snmpTrmonRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTrmonBody)
+							}
+						}
+					}
+					if !true {
+						snmpTrscnRn := "rscn"
+						snmpTrscnDn := snmpTrapsDn + "/" + snmpTrscnRn
+						_ = snmpTrscnDn
+						{
+							snmpTrscnBody := ""
+							if snmpTrscnBody != "" {
+								snmpTrscnBody, _ = sjson.Set(snmpTrscnBody, "snmpTrscn.attributes.rn", snmpTrscnRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTrscnBody)
+							}
+						}
+					}
+					if !true {
+						snmpTscsiRn := "scsi"
+						snmpTscsiDn := snmpTrapsDn + "/" + snmpTscsiRn
+						_ = snmpTscsiDn
+						{
+							snmpTscsiBody := ""
+							if snmpTscsiBody != "" {
+								snmpTscsiBody, _ = sjson.Set(snmpTscsiBody, "snmpTscsi.attributes.rn", snmpTscsiRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTscsiBody)
+							}
+						}
+					}
+					if !(data.SnmpAuthenticationTrapStatus.IsNull()) {
+						snmpTsnmpRn := "snmp"
+						snmpTsnmpDn := snmpTrapsDn + "/" + snmpTsnmpRn
+						_ = snmpTsnmpDn
+						{
+							snmpTsnmpBody := ""
+							if !(data.SnmpAuthenticationTrapStatus.IsNull()) {
+								snmpAuthenticationRn := "authentication"
+								snmpAuthenticationDn := snmpTsnmpDn + "/" + snmpAuthenticationRn
+								_ = snmpAuthenticationDn
+								{
+									snmpAuthenticationBody := ""
+									if !data.SnmpAuthenticationTrapStatus.IsNull() {
+										snmpAuthenticationBody, _ = sjson.Set(snmpAuthenticationBody, "snmpAuthentication.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpAuthenticationBody != "" {
+										snmpAuthenticationBody, _ = sjson.Set(snmpAuthenticationBody, "snmpAuthentication.attributes.rn", snmpAuthenticationRn)
+										snmpTsnmpBody, _ = sjson.SetRaw(snmpTsnmpBody, "snmpTsnmp.children.-1", snmpAuthenticationBody)
+									}
+								}
+							}
+							if snmpTsnmpBody != "" {
+								snmpTsnmpBody, _ = sjson.Set(snmpTsnmpBody, "snmpTsnmp.attributes.rn", snmpTsnmpRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTsnmpBody)
+							}
+						}
+					}
+					if !(data.StormControlCpscEventTrapStatus.IsNull()) {
+						snmpTstormControlRn := "stormcontrol"
+						snmpTstormControlDn := snmpTrapsDn + "/" + snmpTstormControlRn
+						_ = snmpTstormControlDn
+						{
+							snmpTstormControlBody := ""
+							if !(data.StormControlCpscEventTrapStatus.IsNull()) {
+								snmpCpscEventRev1Rn := "cpscEventRev1"
+								snmpCpscEventRev1Dn := snmpTstormControlDn + "/" + snmpCpscEventRev1Rn
+								_ = snmpCpscEventRev1Dn
+								{
+									snmpCpscEventRev1Body := ""
+									if !data.StormControlCpscEventTrapStatus.IsNull() {
+										snmpCpscEventRev1Body, _ = sjson.Set(snmpCpscEventRev1Body, "snmpCpscEventRev1.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpCpscEventRev1Body != "" {
+										snmpCpscEventRev1Body, _ = sjson.Set(snmpCpscEventRev1Body, "snmpCpscEventRev1.attributes.rn", snmpCpscEventRev1Rn)
+										snmpTstormControlBody, _ = sjson.SetRaw(snmpTstormControlBody, "snmpTstormControl.children.-1", snmpCpscEventRev1Body)
+									}
+								}
+							}
+							if snmpTstormControlBody != "" {
+								snmpTstormControlBody, _ = sjson.Set(snmpTstormControlBody, "snmpTstormControl.attributes.rn", snmpTstormControlRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTstormControlBody)
+							}
+						}
+					}
+					if !((data.StpxInconsistencyTrapStatus.IsNull()) && (data.StpxLoopInconsistencyTrapStatus.IsNull()) && (data.StpxRootInconsistencyTrapStatus.IsNull())) {
+						snmpTstpxRn := "stpx"
+						snmpTstpxDn := snmpTrapsDn + "/" + snmpTstpxRn
+						_ = snmpTstpxDn
+						{
+							snmpTstpxBody := ""
+							if !(data.StpxInconsistencyTrapStatus.IsNull()) {
+								snmpInconsistencyRn := "inconsistency"
+								snmpInconsistencyDn := snmpTstpxDn + "/" + snmpInconsistencyRn
+								_ = snmpInconsistencyDn
+								{
+									snmpInconsistencyBody := ""
+									if !data.StpxInconsistencyTrapStatus.IsNull() {
+										snmpInconsistencyBody, _ = sjson.Set(snmpInconsistencyBody, "snmpInconsistency.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpInconsistencyBody != "" {
+										snmpInconsistencyBody, _ = sjson.Set(snmpInconsistencyBody, "snmpInconsistency.attributes.rn", snmpInconsistencyRn)
+										snmpTstpxBody, _ = sjson.SetRaw(snmpTstpxBody, "snmpTstpx.children.-1", snmpInconsistencyBody)
+									}
+								}
+							}
+							if !(data.StpxLoopInconsistencyTrapStatus.IsNull()) {
+								snmpLoopInconsistencyRn := "loopinconsistency"
+								snmpLoopInconsistencyDn := snmpTstpxDn + "/" + snmpLoopInconsistencyRn
+								_ = snmpLoopInconsistencyDn
+								{
+									snmpLoopInconsistencyBody := ""
+									if !data.StpxLoopInconsistencyTrapStatus.IsNull() {
+										snmpLoopInconsistencyBody, _ = sjson.Set(snmpLoopInconsistencyBody, "snmpLoopInconsistency.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpLoopInconsistencyBody != "" {
+										snmpLoopInconsistencyBody, _ = sjson.Set(snmpLoopInconsistencyBody, "snmpLoopInconsistency.attributes.rn", snmpLoopInconsistencyRn)
+										snmpTstpxBody, _ = sjson.SetRaw(snmpTstpxBody, "snmpTstpx.children.-1", snmpLoopInconsistencyBody)
+									}
+								}
+							}
+							if !(data.StpxRootInconsistencyTrapStatus.IsNull()) {
+								snmpRootInconsistencyRn := "rootinconsistency"
+								snmpRootInconsistencyDn := snmpTstpxDn + "/" + snmpRootInconsistencyRn
+								_ = snmpRootInconsistencyDn
+								{
+									snmpRootInconsistencyBody := ""
+									if !data.StpxRootInconsistencyTrapStatus.IsNull() {
+										snmpRootInconsistencyBody, _ = sjson.Set(snmpRootInconsistencyBody, "snmpRootInconsistency.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpRootInconsistencyBody != "" {
+										snmpRootInconsistencyBody, _ = sjson.Set(snmpRootInconsistencyBody, "snmpRootInconsistency.attributes.rn", snmpRootInconsistencyRn)
+										snmpTstpxBody, _ = sjson.SetRaw(snmpTstpxBody, "snmpTstpx.children.-1", snmpRootInconsistencyBody)
+									}
+								}
+							}
+							if snmpTstpxBody != "" {
+								snmpTstpxBody, _ = sjson.Set(snmpTstpxBody, "snmpTstpx.attributes.rn", snmpTstpxRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTstpxBody)
+							}
+						}
+					}
+					if !(data.SyslogMessageGeneratedTrapStatus.IsNull()) {
+						snmpTsyslogRn := "syslog"
+						snmpTsyslogDn := snmpTrapsDn + "/" + snmpTsyslogRn
+						_ = snmpTsyslogDn
+						{
+							snmpTsyslogBody := ""
+							if !(data.SyslogMessageGeneratedTrapStatus.IsNull()) {
+								snmpMessageGeneratedRn := "messagegenerated"
+								snmpMessageGeneratedDn := snmpTsyslogDn + "/" + snmpMessageGeneratedRn
+								_ = snmpMessageGeneratedDn
+								{
+									snmpMessageGeneratedBody := ""
+									if !data.SyslogMessageGeneratedTrapStatus.IsNull() {
+										snmpMessageGeneratedBody, _ = sjson.Set(snmpMessageGeneratedBody, "snmpMessageGenerated.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpMessageGeneratedBody != "" {
+										snmpMessageGeneratedBody, _ = sjson.Set(snmpMessageGeneratedBody, "snmpMessageGenerated.attributes.rn", snmpMessageGeneratedRn)
+										snmpTsyslogBody, _ = sjson.SetRaw(snmpTsyslogBody, "snmpTsyslog.children.-1", snmpMessageGeneratedBody)
+									}
+								}
+							}
+							if snmpTsyslogBody != "" {
+								snmpTsyslogBody, _ = sjson.Set(snmpTsyslogBody, "snmpTsyslog.attributes.rn", snmpTsyslogRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTsyslogBody)
+							}
+						}
+					}
+					if !(data.SysmgrFailSwCoreNotifyTrapStatus.IsNull()) {
+						snmpTsysmgrRn := "sysmgr"
+						snmpTsysmgrDn := snmpTrapsDn + "/" + snmpTsysmgrRn
+						_ = snmpTsysmgrDn
+						{
+							snmpTsysmgrBody := ""
+							if !(data.SysmgrFailSwCoreNotifyTrapStatus.IsNull()) {
+								snmpCseFailSwCoreNotifyExtendedRn := "cseFailSwCoreNotifyExtended"
+								snmpCseFailSwCoreNotifyExtendedDn := snmpTsysmgrDn + "/" + snmpCseFailSwCoreNotifyExtendedRn
+								_ = snmpCseFailSwCoreNotifyExtendedDn
+								{
+									snmpCseFailSwCoreNotifyExtendedBody := ""
+									if !data.SysmgrFailSwCoreNotifyTrapStatus.IsNull() {
+										snmpCseFailSwCoreNotifyExtendedBody, _ = sjson.Set(snmpCseFailSwCoreNotifyExtendedBody, "snmpCseFailSwCoreNotifyExtended.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpCseFailSwCoreNotifyExtendedBody != "" {
+										snmpCseFailSwCoreNotifyExtendedBody, _ = sjson.Set(snmpCseFailSwCoreNotifyExtendedBody, "snmpCseFailSwCoreNotifyExtended.attributes.rn", snmpCseFailSwCoreNotifyExtendedRn)
+										snmpTsysmgrBody, _ = sjson.SetRaw(snmpTsysmgrBody, "snmpTsysmgr.children.-1", snmpCseFailSwCoreNotifyExtendedBody)
+									}
+								}
+							}
+							if snmpTsysmgrBody != "" {
+								snmpTsysmgrBody, _ = sjson.Set(snmpTsysmgrBody, "snmpTsysmgr.attributes.rn", snmpTsysmgrRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTsysmgrBody)
+							}
+						}
+					}
+					if !(data.SystemClockChangeNotificationTrapStatus.IsNull()) {
+						snmpTsystemRn := "system"
+						snmpTsystemDn := snmpTrapsDn + "/" + snmpTsystemRn
+						_ = snmpTsystemDn
+						{
+							snmpTsystemBody := ""
+							if !(data.SystemClockChangeNotificationTrapStatus.IsNull()) {
+								snmpClockChangeNotificationRn := "Clockchangenotification"
+								snmpClockChangeNotificationDn := snmpTsystemDn + "/" + snmpClockChangeNotificationRn
+								_ = snmpClockChangeNotificationDn
+								{
+									snmpClockChangeNotificationBody := ""
+									if !data.SystemClockChangeNotificationTrapStatus.IsNull() {
+										snmpClockChangeNotificationBody, _ = sjson.Set(snmpClockChangeNotificationBody, "snmpClockChangeNotification.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpClockChangeNotificationBody != "" {
+										snmpClockChangeNotificationBody, _ = sjson.Set(snmpClockChangeNotificationBody, "snmpClockChangeNotification.attributes.rn", snmpClockChangeNotificationRn)
+										snmpTsystemBody, _ = sjson.SetRaw(snmpTsystemBody, "snmpTsystem.children.-1", snmpClockChangeNotificationBody)
+									}
+								}
+							}
+							if snmpTsystemBody != "" {
+								snmpTsystemBody, _ = sjson.Set(snmpTsystemBody, "snmpTsystem.attributes.rn", snmpTsystemRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTsystemBody)
+							}
+						}
+					}
+					if !((data.UpgradeJobStatusNotifyTrapStatus.IsNull()) && (data.UpgradeOpNotifyOnCompletionTrapStatus.IsNull())) {
+						snmpTupgradeRn := "upgrade"
+						snmpTupgradeDn := snmpTrapsDn + "/" + snmpTupgradeRn
+						_ = snmpTupgradeDn
+						{
+							snmpTupgradeBody := ""
+							if !(data.UpgradeJobStatusNotifyTrapStatus.IsNull()) {
+								snmpUpgradeJobStatusNotifyRn := "UpgradeJobStatusNotify"
+								snmpUpgradeJobStatusNotifyDn := snmpTupgradeDn + "/" + snmpUpgradeJobStatusNotifyRn
+								_ = snmpUpgradeJobStatusNotifyDn
+								{
+									snmpUpgradeJobStatusNotifyBody := ""
+									if !data.UpgradeJobStatusNotifyTrapStatus.IsNull() {
+										snmpUpgradeJobStatusNotifyBody, _ = sjson.Set(snmpUpgradeJobStatusNotifyBody, "snmpUpgradeJobStatusNotify.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpUpgradeJobStatusNotifyBody != "" {
+										snmpUpgradeJobStatusNotifyBody, _ = sjson.Set(snmpUpgradeJobStatusNotifyBody, "snmpUpgradeJobStatusNotify.attributes.rn", snmpUpgradeJobStatusNotifyRn)
+										snmpTupgradeBody, _ = sjson.SetRaw(snmpTupgradeBody, "snmpTupgrade.children.-1", snmpUpgradeJobStatusNotifyBody)
+									}
+								}
+							}
+							if !(data.UpgradeOpNotifyOnCompletionTrapStatus.IsNull()) {
+								snmpUpgradeOpNotifyOnCompletionRn := "UpgradeOpNotifyOnCompletion"
+								snmpUpgradeOpNotifyOnCompletionDn := snmpTupgradeDn + "/" + snmpUpgradeOpNotifyOnCompletionRn
+								_ = snmpUpgradeOpNotifyOnCompletionDn
+								{
+									snmpUpgradeOpNotifyOnCompletionBody := ""
+									if !data.UpgradeOpNotifyOnCompletionTrapStatus.IsNull() {
+										snmpUpgradeOpNotifyOnCompletionBody, _ = sjson.Set(snmpUpgradeOpNotifyOnCompletionBody, "snmpUpgradeOpNotifyOnCompletion.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpUpgradeOpNotifyOnCompletionBody != "" {
+										snmpUpgradeOpNotifyOnCompletionBody, _ = sjson.Set(snmpUpgradeOpNotifyOnCompletionBody, "snmpUpgradeOpNotifyOnCompletion.attributes.rn", snmpUpgradeOpNotifyOnCompletionRn)
+										snmpTupgradeBody, _ = sjson.SetRaw(snmpTupgradeBody, "snmpTupgrade.children.-1", snmpUpgradeOpNotifyOnCompletionBody)
+									}
+								}
+							}
+							if snmpTupgradeBody != "" {
+								snmpTupgradeBody, _ = sjson.Set(snmpTupgradeBody, "snmpTupgrade.attributes.rn", snmpTupgradeRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTupgradeBody)
+							}
+						}
+					}
+					if !true {
+						snmpTvsanRn := "vsan"
+						snmpTvsanDn := snmpTrapsDn + "/" + snmpTvsanRn
+						_ = snmpTvsanDn
+						{
+							snmpTvsanBody := ""
+							if snmpTvsanBody != "" {
+								snmpTvsanBody, _ = sjson.Set(snmpTvsanBody, "snmpTvsan.attributes.rn", snmpTvsanRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTvsanBody)
+							}
+						}
+					}
+					if !((data.VtpNotifsTrapStatus.IsNull()) && (data.VtpVlanCreateTrapStatus.IsNull()) && (data.VtpVlanDeleteTrapStatus.IsNull())) {
+						snmpTvtpRn := "vtp"
+						snmpTvtpDn := snmpTrapsDn + "/" + snmpTvtpRn
+						_ = snmpTvtpDn
+						{
+							snmpTvtpBody := ""
+							if !(data.VtpNotifsTrapStatus.IsNull()) {
+								snmpNotifsRn := "notifs"
+								snmpNotifsDn := snmpTvtpDn + "/" + snmpNotifsRn
+								_ = snmpNotifsDn
+								{
+									snmpNotifsBody := ""
+									if !data.VtpNotifsTrapStatus.IsNull() {
+										snmpNotifsBody, _ = sjson.Set(snmpNotifsBody, "snmpNotifs.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpNotifsBody != "" {
+										snmpNotifsBody, _ = sjson.Set(snmpNotifsBody, "snmpNotifs.attributes.rn", snmpNotifsRn)
+										snmpTvtpBody, _ = sjson.SetRaw(snmpTvtpBody, "snmpTvtp.children.-1", snmpNotifsBody)
+									}
+								}
+							}
+							if !(data.VtpVlanCreateTrapStatus.IsNull()) {
+								snmpVlancreateRn := "vlancreate"
+								snmpVlancreateDn := snmpTvtpDn + "/" + snmpVlancreateRn
+								_ = snmpVlancreateDn
+								{
+									snmpVlancreateBody := ""
+									if !data.VtpVlanCreateTrapStatus.IsNull() {
+										snmpVlancreateBody, _ = sjson.Set(snmpVlancreateBody, "snmpVlancreate.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpVlancreateBody != "" {
+										snmpVlancreateBody, _ = sjson.Set(snmpVlancreateBody, "snmpVlancreate.attributes.rn", snmpVlancreateRn)
+										snmpTvtpBody, _ = sjson.SetRaw(snmpTvtpBody, "snmpTvtp.children.-1", snmpVlancreateBody)
+									}
+								}
+							}
+							if !(data.VtpVlanDeleteTrapStatus.IsNull()) {
+								snmpVlandeleteRn := "vlandelete"
+								snmpVlandeleteDn := snmpTvtpDn + "/" + snmpVlandeleteRn
+								_ = snmpVlandeleteDn
+								{
+									snmpVlandeleteBody := ""
+									if !data.VtpVlanDeleteTrapStatus.IsNull() {
+										snmpVlandeleteBody, _ = sjson.Set(snmpVlandeleteBody, "snmpVlandelete.attributes.trapstatus", "DME_UNSET_PROPERTY_MARKER")
+									}
+									if snmpVlandeleteBody != "" {
+										snmpVlandeleteBody, _ = sjson.Set(snmpVlandeleteBody, "snmpVlandelete.attributes.rn", snmpVlandeleteRn)
+										snmpTvtpBody, _ = sjson.SetRaw(snmpTvtpBody, "snmpTvtp.children.-1", snmpVlandeleteBody)
+									}
+								}
+							}
+							if snmpTvtpBody != "" {
+								snmpTvtpBody, _ = sjson.Set(snmpTvtpBody, "snmpTvtp.attributes.rn", snmpTvtpRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTvtpBody)
+							}
+						}
+					}
+					if !true {
+						snmpTzoneRn := "zone"
+						snmpTzoneDn := snmpTrapsDn + "/" + snmpTzoneRn
+						_ = snmpTzoneDn
+						{
+							snmpTzoneBody := ""
+							if snmpTzoneBody != "" {
+								snmpTzoneBody, _ = sjson.Set(snmpTzoneBody, "snmpTzone.attributes.rn", snmpTzoneRn)
+								snmpTrapsBody, _ = sjson.SetRaw(snmpTrapsBody, "snmpTraps.children.-1", snmpTzoneBody)
+							}
+						}
+					}
+					if snmpTrapsBody != "" {
+						snmpTrapsBody, _ = sjson.Set(snmpTrapsBody, "snmpTraps.attributes.rn", snmpTrapsRn)
+						snmpInstBody, _ = sjson.SetRaw(snmpInstBody, "snmpInst.children.-1", snmpTrapsBody)
+					}
+				}
+			}
+			if !(len(data.RmonEvents) == 0) {
+				snmpRmonRn := "rmon"
+				snmpRmonDn := snmpInstDn + "/" + snmpRmonRn
+				_ = snmpRmonDn
+				{
+					snmpRmonBody := ""
+					for key, child := range data.RmonEvents {
+						_ = child
+						snmpEventRn := child.getRn(key)
+						snmpEventDn := snmpRmonDn + "/" + snmpEventRn
+						_ = snmpEventDn
+						snmpEventBody := ""
+						snmpEventBody, _ = sjson.Set(snmpEventBody, "snmpEvent.attributes.rn", snmpEventRn)
+						if !child.Description.IsNull() {
+							snmpEventBody, _ = sjson.Set(snmpEventBody, "snmpEvent.attributes.description", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.Log.IsNull() {
+							snmpEventBody, _ = sjson.Set(snmpEventBody, "snmpEvent.attributes.log", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.Owner.IsNull() {
+							snmpEventBody, _ = sjson.Set(snmpEventBody, "snmpEvent.attributes.owner", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.Trap.IsNull() {
+							snmpEventBody, _ = sjson.Set(snmpEventBody, "snmpEvent.attributes.trap", "DME_UNSET_PROPERTY_MARKER")
+						}
+						snmpRmonBody, _ = sjson.SetRaw(snmpRmonBody, "snmpRmon.children.-1", snmpEventBody)
+					}
+					if snmpRmonBody != "" {
+						snmpRmonBody, _ = sjson.Set(snmpRmonBody, "snmpRmon.attributes.rn", snmpRmonRn)
+						snmpInstBody, _ = sjson.SetRaw(snmpInstBody, "snmpInst.children.-1", snmpRmonBody)
+					}
+				}
+			}
+			if snmpInstBody != "" {
+				snmpInstBody, _ = sjson.Set(snmpInstBody, "snmpInst.attributes.rn", snmpInstRn)
+				body, _ = sjson.SetRaw(body, "snmpEntity.children.-1", snmpInstBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -7623,9 +10180,15 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP,
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "snmpInst")+".children", "snmpGlobals")+".children", "snmpSourceInterfaceTraps")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ifname", "DME_UNSET_PROPERTY_MARKER")
 		}
-		if !state.SourceInterfaceInforms.IsNull() && config.SourceInterfaceInforms.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "snmpInst")+".children", "snmpGlobals")+".children", "snmpSourceInterfaceInforms")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ifname", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.SourceInterfaceInforms.IsNull()) && (config.SourceInterfaceInforms.IsNull()) && deleteEmptied(data.getDn()+"/inst"+"/globals"+"/srcInterfaceInforms") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "snmpInst")+".children", "snmpGlobals")+".children", "snmpSourceInterfaceInforms")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.SourceInterfaceInforms.IsNull() && config.SourceInterfaceInforms.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "snmpInst")+".children", "snmpGlobals")+".children", "snmpSourceInterfaceInforms")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ifname", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 		for key := range state.Contexts {
 			if configChild, ok := config.Contexts[key]; ok {
@@ -7656,6 +10219,8 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP,
 				stateChild := state.Communities[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/inst" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children").Array() {
 					if mv.Get("snmpCommSecP.attributes.name").String() == key {
 						if !stateChild.Access.IsNull() && configChild.Access.IsNull() {
@@ -7682,17 +10247,23 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP,
 						}
 					}
 					if listChildPath != "" {
-						if !stateChild.AclName.IsNull() && configChild.AclName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "snmpAcl")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"useAclName", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.Ipv4AclName.IsNull() && configChild.Ipv4AclName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "snmpAcl")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"useIpv4AclName", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.Ipv6AclName.IsNull() && configChild.Ipv6AclName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "snmpAcl")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"useIpv6AclName", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.AclName.IsNull() && stateChild.Ipv4AclName.IsNull() && stateChild.Ipv6AclName.IsNull()) && (configChild.AclName.IsNull() && configChild.Ipv4AclName.IsNull() && configChild.Ipv6AclName.IsNull()) && deleteEmptied(listChildDn+"/acl") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "snmpAcl")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.AclName.IsNull() && configChild.AclName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "snmpAcl")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"useAclName", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Ipv4AclName.IsNull() && configChild.Ipv4AclName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "snmpAcl")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"useIpv4AclName", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Ipv6AclName.IsNull() && configChild.Ipv6AclName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "snmpAcl")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"useIpv6AclName", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 					}
 				}
@@ -7703,6 +10274,8 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP,
 				stateChild := state.LocalUsers[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/inst" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children").Array() {
 					if mv.Get("snmpLocalUser.attributes.userName").String() == key {
 						if !stateChild.AuthenticationType.IsNull() && configChild.AuthenticationType.IsNull() {
@@ -7763,6 +10336,8 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP,
 				stateChild := state.Hosts[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/inst" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				keyParts := strings.SplitN(key, ";", 2)
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "snmpInst")+".children").Array() {
 					if mv.Get("snmpHost.attributes.hostName").String() == keyParts[0] &&
@@ -7799,9 +10374,15 @@ func (data SNMP) toBodyWithDeletes(ctx context.Context, state SNMP, config SNMP,
 								_ = configChild
 							}
 						}
-						if !stateChild.SourceInterface.IsNull() && configChild.SourceInterface.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "snmpHostSrcInterface")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ifName", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.SourceInterface.IsNull()) && (configChild.SourceInterface.IsNull()) && deleteEmptied(listChildDn+"/hostsourceinterface") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "snmpHostSrcInterface")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.SourceInterface.IsNull() && configChild.SourceInterface.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "snmpHostSrcInterface")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ifName", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 						for key := range stateChild.FilterVrfs {
 							if configChild, ok := configChild.FilterVrfs[key]; ok {

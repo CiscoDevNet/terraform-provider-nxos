@@ -18,6 +18,7 @@ any real-time space e.g., Slack, Discord, etc.
   - [Building the Provider](#building-the-provider)
   - [Code Generation](#code-generation)
   - [Acceptance Tests](#acceptance-tests)
+  - [Unit Tests](#unit-tests)
   - [Changelog Entries](#changelog-entries)
 - [Sending Pull Requests](#sending-pull-requests)
 - [Other Ways to Contribute](#other-ways-to-contribute)
@@ -93,7 +94,16 @@ make test
 # Run tests for a specific definition (by name from gen/definitions/*.yaml)
 make test NAME="BGP"
 make test NAME="Loopback Interface"
+
+# Also destroy every resource with the reset deletion policy, e.g. before a release
+make test DELETION_POLICIES=1
 ```
+
+The generated acceptance test of a resource runs its whole lifecycle in a single test case: it creates the minimal configuration, adds the full configuration and checks it with the data source, imports it, reduces it to the minimal configuration again and finally destroys it with the default `delete` deletion policy. With `DELETION_POLICIES=1`, it also destroys the full configuration with the `reset` deletion policy and creates the minimal configuration on top of what is left. The `reset` and `retain` deletion policies are always tested on representative resources in `internal/provider/deletion_policy_test.go`.
+
+### Unit Tests
+
+Unit tests don't need a device and run with `go test ./...`. They follow the [Terraform unit testing conventions](https://developer.hashicorp.com/terraform/plugin/testing/unit-testing): they are named `TestNxos_<Test Name>` and are table-driven, comparing the output with the expected value for each case.
 
 ### Changelog Entries
 

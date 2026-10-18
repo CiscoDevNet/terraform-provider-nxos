@@ -135,6 +135,14 @@ var IPv4SubtreeClassMinVersions = map[string]string{}
 // IPv4MinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var IPv4MinVersions = map[string]helpers.MinVersion{}
 
+// IPv4ListClasses holds the list child classes of the resource.
+var IPv4ListClasses = map[string]bool{"ipv4Dom": true, "ipv4Route": true, "ipv4Nexthop": true, "ipv4If": true, "ipv4Addr": true}
+
+// getIPv4Tree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getIPv4Tree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"ipv4Inst", "ipv4IPLoadSharing", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, IPv4SubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -996,7 +1004,294 @@ func (data IPv4) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data IPv4) toBodyWithDeletes(ctx context.Context, state IPv4, config IPv4, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data IPv4) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.InstanceAdminState.IsNull() && data.AccessListMatchLocal.IsNull() && data.Control.IsNull() && data.HardwareEcmpHashOffsetConcatenation.IsNull() && data.HardwareEcmpHashOffsetValue.IsNull() && data.HardwareEcmpHashPolynomial.IsNull() && data.LoggingLevel.IsNull() && data.RedirectSyslog.IsNull() && data.RedirectSyslogInterval.IsNull() && data.SourceRoute.IsNull() && (data.LoadSharingConcatenation.IsNull() && data.LoadSharingEcmp.IsNull() && data.LoadSharingExcludeL3Protocol.IsNull() && data.LoadSharingGreOuterHash.IsNull() && data.LoadSharingSecondHierarchyKeyshift.IsNull() && data.LoadSharingKeyshift.IsNull() && data.LoadSharingMode.IsNull() && data.LoadSharingRotate.IsNull() && data.LoadSharingUdfLength.IsNull() && data.LoadSharingUdfOffset.IsNull() && data.LoadSharingUniversalId.IsNull()) && len(data.Vrfs) == 0) {
+		ipv4InstDn := dn + "/" + "inst"
+		dns[ipv4InstDn] = true
+		if !(data.LoadSharingConcatenation.IsNull() && data.LoadSharingEcmp.IsNull() && data.LoadSharingExcludeL3Protocol.IsNull() && data.LoadSharingGreOuterHash.IsNull() && data.LoadSharingSecondHierarchyKeyshift.IsNull() && data.LoadSharingKeyshift.IsNull() && data.LoadSharingMode.IsNull() && data.LoadSharingRotate.IsNull() && data.LoadSharingUdfLength.IsNull() && data.LoadSharingUdfOffset.IsNull() && data.LoadSharingUniversalId.IsNull()) {
+			ipv4IPLoadSharingDn := ipv4InstDn + "/" + "iploadsharing"
+			dns[ipv4IPLoadSharingDn] = true
+		}
+		for key, child := range data.Vrfs {
+			ipv4DomDn := ipv4InstDn + "/" + child.getRn(key)
+			dns[ipv4DomDn] = true
+			for key_, child_ := range child.StaticRoutes {
+				ipv4RouteDn_ := ipv4DomDn + "/" + child_.getRn(key_)
+				dns[ipv4RouteDn_] = true
+				for key__, child__ := range child_.NextHops {
+					keyParts := strings.SplitN(key__, ";", 3)
+					_ = keyParts
+					ipv4NexthopDn__ := ipv4RouteDn_ + "/" + child__.getRn(key__)
+					dns[ipv4NexthopDn__] = true
+				}
+			}
+			for key_, child_ := range child.Interfaces {
+				ipv4IfDn_ := ipv4DomDn + "/" + child_.getRn(key_)
+				dns[ipv4IfDn_] = true
+				for key__, child__ := range child_.Addresses {
+					ipv4AddrDn__ := ipv4IfDn_ + "/" + child__.getRn(key__)
+					dns[ipv4AddrDn__] = true
+				}
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data IPv4) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "ipv4Entity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "ipv4Entity.attributes", map[string]interface{}{})
+	}
+	if !(data.InstanceAdminState.IsNull() && data.AccessListMatchLocal.IsNull() && data.Control.IsNull() && data.HardwareEcmpHashOffsetConcatenation.IsNull() && data.HardwareEcmpHashOffsetValue.IsNull() && data.HardwareEcmpHashPolynomial.IsNull() && data.LoggingLevel.IsNull() && data.RedirectSyslog.IsNull() && data.RedirectSyslogInterval.IsNull() && data.SourceRoute.IsNull() && (data.LoadSharingConcatenation.IsNull() && data.LoadSharingEcmp.IsNull() && data.LoadSharingExcludeL3Protocol.IsNull() && data.LoadSharingGreOuterHash.IsNull() && data.LoadSharingSecondHierarchyKeyshift.IsNull() && data.LoadSharingKeyshift.IsNull() && data.LoadSharingMode.IsNull() && data.LoadSharingRotate.IsNull() && data.LoadSharingUdfLength.IsNull() && data.LoadSharingUdfOffset.IsNull() && data.LoadSharingUniversalId.IsNull()) && len(data.Vrfs) == 0) {
+		ipv4InstRn := "inst"
+		ipv4InstDn := dn + "/" + ipv4InstRn
+		_ = ipv4InstDn
+		{
+			ipv4InstBody := ""
+			if !data.InstanceAdminState.IsNull() {
+				ipv4InstBody, _ = sjson.Set(ipv4InstBody, "ipv4Inst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AccessListMatchLocal.IsNull() {
+				ipv4InstBody, _ = sjson.Set(ipv4InstBody, "ipv4Inst.attributes.accessListMatchLocal", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Control.IsNull() {
+				ipv4InstBody, _ = sjson.Set(ipv4InstBody, "ipv4Inst.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.HardwareEcmpHashOffsetConcatenation.IsNull() {
+				ipv4InstBody, _ = sjson.Set(ipv4InstBody, "ipv4Inst.attributes.hardwareEcmpHashOffsetConcat", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.HardwareEcmpHashOffsetValue.IsNull() {
+				ipv4InstBody, _ = sjson.Set(ipv4InstBody, "ipv4Inst.attributes.hardwareEcmpHashOffsetValue", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.HardwareEcmpHashPolynomial.IsNull() {
+				ipv4InstBody, _ = sjson.Set(ipv4InstBody, "ipv4Inst.attributes.hardwareEcmpHashPolynomial", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LoggingLevel.IsNull() {
+				ipv4InstBody, _ = sjson.Set(ipv4InstBody, "ipv4Inst.attributes.loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RedirectSyslog.IsNull() {
+				ipv4InstBody, _ = sjson.Set(ipv4InstBody, "ipv4Inst.attributes.redirectSyslog", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RedirectSyslogInterval.IsNull() {
+				ipv4InstBody, _ = sjson.Set(ipv4InstBody, "ipv4Inst.attributes.redirectSyslogInterval", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SourceRoute.IsNull() {
+				ipv4InstBody, _ = sjson.Set(ipv4InstBody, "ipv4Inst.attributes.sourceRoute", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(data.LoadSharingConcatenation.IsNull() && data.LoadSharingEcmp.IsNull() && data.LoadSharingExcludeL3Protocol.IsNull() && data.LoadSharingGreOuterHash.IsNull() && data.LoadSharingSecondHierarchyKeyshift.IsNull() && data.LoadSharingKeyshift.IsNull() && data.LoadSharingMode.IsNull() && data.LoadSharingRotate.IsNull() && data.LoadSharingUdfLength.IsNull() && data.LoadSharingUdfOffset.IsNull() && data.LoadSharingUniversalId.IsNull()) {
+				ipv4IPLoadSharingRn := "iploadsharing"
+				ipv4IPLoadSharingDn := ipv4InstDn + "/" + ipv4IPLoadSharingRn
+				_ = ipv4IPLoadSharingDn
+				if !existed(ipv4IPLoadSharingDn) {
+					ipv4InstBody, _ = sjson.Set(ipv4InstBody, "ipv4Inst.children.-1.ipv4IPLoadSharing.attributes", map[string]interface{}{"rn": ipv4IPLoadSharingRn, "status": "deleted"})
+				} else {
+					ipv4IPLoadSharingBody := ""
+					if !data.LoadSharingConcatenation.IsNull() {
+						ipv4IPLoadSharingBody, _ = sjson.Set(ipv4IPLoadSharingBody, "ipv4IPLoadSharing.attributes.concatenation", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.LoadSharingEcmp.IsNull() {
+						ipv4IPLoadSharingBody, _ = sjson.Set(ipv4IPLoadSharingBody, "ipv4IPLoadSharing.attributes.ecmpLoadSharing", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.LoadSharingExcludeL3Protocol.IsNull() {
+						ipv4IPLoadSharingBody, _ = sjson.Set(ipv4IPLoadSharingBody, "ipv4IPLoadSharing.attributes.excludeL3Proto", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.LoadSharingGreOuterHash.IsNull() {
+						ipv4IPLoadSharingBody, _ = sjson.Set(ipv4IPLoadSharingBody, "ipv4IPLoadSharing.attributes.greOuterHash", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.LoadSharingSecondHierarchyKeyshift.IsNull() {
+						ipv4IPLoadSharingBody, _ = sjson.Set(ipv4IPLoadSharingBody, "ipv4IPLoadSharing.attributes.lb2ndHierKeyshift", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.LoadSharingKeyshift.IsNull() {
+						ipv4IPLoadSharingBody, _ = sjson.Set(ipv4IPLoadSharingBody, "ipv4IPLoadSharing.attributes.lbKeyshift", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.LoadSharingMode.IsNull() {
+						ipv4IPLoadSharingBody, _ = sjson.Set(ipv4IPLoadSharingBody, "ipv4IPLoadSharing.attributes.loadShareMode", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.LoadSharingRotate.IsNull() {
+						ipv4IPLoadSharingBody, _ = sjson.Set(ipv4IPLoadSharingBody, "ipv4IPLoadSharing.attributes.rotate", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.LoadSharingUdfLength.IsNull() {
+						ipv4IPLoadSharingBody, _ = sjson.Set(ipv4IPLoadSharingBody, "ipv4IPLoadSharing.attributes.udfLength", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.LoadSharingUdfOffset.IsNull() {
+						ipv4IPLoadSharingBody, _ = sjson.Set(ipv4IPLoadSharingBody, "ipv4IPLoadSharing.attributes.udfOffset", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.LoadSharingUniversalId.IsNull() {
+						ipv4IPLoadSharingBody, _ = sjson.Set(ipv4IPLoadSharingBody, "ipv4IPLoadSharing.attributes.universalID", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if ipv4IPLoadSharingBody != "" {
+						ipv4IPLoadSharingBody, _ = sjson.Set(ipv4IPLoadSharingBody, "ipv4IPLoadSharing.attributes.rn", ipv4IPLoadSharingRn)
+						ipv4InstBody, _ = sjson.SetRaw(ipv4InstBody, "ipv4Inst.children.-1", ipv4IPLoadSharingBody)
+					}
+				}
+			}
+			for key, child := range data.Vrfs {
+				_ = child
+				ipv4DomRn := child.getRn(key)
+				ipv4DomDn := ipv4InstDn + "/" + ipv4DomRn
+				_ = ipv4DomDn
+				if !existed(ipv4DomDn) {
+					ipv4InstBody, _ = sjson.Set(ipv4InstBody, "ipv4Inst.children.-1.ipv4Dom.attributes", map[string]interface{}{"rn": ipv4DomRn, "status": "deleted"})
+					continue
+				}
+				ipv4DomBody := ""
+				ipv4DomBody, _ = sjson.Set(ipv4DomBody, "ipv4Dom.attributes.rn", ipv4DomRn)
+				if !child.AutoDiscard.IsNull() {
+					ipv4DomBody, _ = sjson.Set(ipv4DomBody, "ipv4Dom.attributes.autoDiscard", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.IcmpErrorsSourceInterface.IsNull() {
+					ipv4DomBody, _ = sjson.Set(ipv4DomBody, "ipv4Dom.attributes.ipIcmpErrorsSrcIntf", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.StaticRoutes {
+					_ = child_
+					ipv4RouteRn_ := child_.getRn(key_)
+					ipv4RouteDn_ := ipv4DomDn + "/" + ipv4RouteRn_
+					_ = ipv4RouteDn_
+					if !existed(ipv4RouteDn_) {
+						ipv4DomBody, _ = sjson.Set(ipv4DomBody, "ipv4Dom.children.-1.ipv4Route.attributes", map[string]interface{}{"rn": ipv4RouteRn_, "status": "deleted"})
+						continue
+					}
+					ipv4RouteBody_ := ""
+					ipv4RouteBody_, _ = sjson.Set(ipv4RouteBody_, "ipv4Route.attributes.rn", ipv4RouteRn_)
+					if !child_.Control.IsNull() {
+						ipv4RouteBody_, _ = sjson.Set(ipv4RouteBody_, "ipv4Route.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Description.IsNull() {
+						ipv4RouteBody_, _ = sjson.Set(ipv4RouteBody_, "ipv4Route.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Preference.IsNull() {
+						ipv4RouteBody_, _ = sjson.Set(ipv4RouteBody_, "ipv4Route.attributes.pref", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Tag.IsNull() {
+						ipv4RouteBody_, _ = sjson.Set(ipv4RouteBody_, "ipv4Route.attributes.tag", "DME_UNSET_PROPERTY_MARKER")
+					}
+					for key__, child__ := range child_.NextHops {
+						_ = child__
+						keyParts := strings.SplitN(key__, ";", 3)
+						_ = keyParts
+						ipv4NexthopRn__ := child__.getRn(key__)
+						ipv4NexthopDn__ := ipv4RouteDn_ + "/" + ipv4NexthopRn__
+						_ = ipv4NexthopDn__
+						if !existed(ipv4NexthopDn__) {
+							ipv4RouteBody_, _ = sjson.Set(ipv4RouteBody_, "ipv4Route.children.-1.ipv4Nexthop.attributes", map[string]interface{}{"rn": ipv4NexthopRn__, "status": "deleted"})
+							continue
+						}
+						ipv4NexthopBody__ := ""
+						ipv4NexthopBody__, _ = sjson.Set(ipv4NexthopBody__, "ipv4Nexthop.attributes.rn", ipv4NexthopRn__)
+						if !child__.Description.IsNull() {
+							ipv4NexthopBody__, _ = sjson.Set(ipv4NexthopBody__, "ipv4Nexthop.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Object.IsNull() {
+							ipv4NexthopBody__, _ = sjson.Set(ipv4NexthopBody__, "ipv4Nexthop.attributes.object", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Preference.IsNull() {
+							ipv4NexthopBody__, _ = sjson.Set(ipv4NexthopBody__, "ipv4Nexthop.attributes.pref", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Tag.IsNull() {
+							ipv4NexthopBody__, _ = sjson.Set(ipv4NexthopBody__, "ipv4Nexthop.attributes.tag", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Name.IsNull() {
+							ipv4NexthopBody__, _ = sjson.Set(ipv4NexthopBody__, "ipv4Nexthop.attributes.rtname", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.RewriteEncapsulation.IsNull() {
+							ipv4NexthopBody__, _ = sjson.Set(ipv4NexthopBody__, "ipv4Nexthop.attributes.rwEncap", "DME_UNSET_PROPERTY_MARKER")
+						}
+						ipv4RouteBody_, _ = sjson.SetRaw(ipv4RouteBody_, "ipv4Route.children.-1", ipv4NexthopBody__)
+					}
+					ipv4DomBody, _ = sjson.SetRaw(ipv4DomBody, "ipv4Dom.children.-1", ipv4RouteBody_)
+				}
+				for key_, child_ := range child.Interfaces {
+					_ = child_
+					ipv4IfRn_ := child_.getRn(key_)
+					ipv4IfDn_ := ipv4DomDn + "/" + ipv4IfRn_
+					_ = ipv4IfDn_
+					if !existed(ipv4IfDn_) {
+						ipv4DomBody, _ = sjson.Set(ipv4DomBody, "ipv4Dom.children.-1.ipv4If.attributes", map[string]interface{}{"rn": ipv4IfRn_, "status": "deleted"})
+						continue
+					}
+					ipv4IfBody_ := ""
+					ipv4IfBody_, _ = sjson.Set(ipv4IfBody_, "ipv4If.attributes.rn", ipv4IfRn_)
+					if !child_.DropGlean.IsNull() {
+						ipv4IfBody_, _ = sjson.Set(ipv4IfBody_, "ipv4If.attributes.dropGlean", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Forward.IsNull() {
+						ipv4IfBody_, _ = sjson.Set(ipv4IfBody_, "ipv4If.attributes.forward", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Unnumbered.IsNull() {
+						ipv4IfBody_, _ = sjson.Set(ipv4IfBody_, "ipv4If.attributes.unnumbered", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Urpf.IsNull() {
+						ipv4IfBody_, _ = sjson.Set(ipv4IfBody_, "ipv4If.attributes.urpf", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DirectedBroadcastAcl.IsNull() {
+						ipv4IfBody_, _ = sjson.Set(ipv4IfBody_, "ipv4If.attributes.acl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DirectedBroadcast.IsNull() {
+						ipv4IfBody_, _ = sjson.Set(ipv4IfBody_, "ipv4If.attributes.directedBroadcast", "DME_UNSET_PROPERTY_MARKER")
+					}
+					for key__, child__ := range child_.Addresses {
+						_ = child__
+						ipv4AddrRn__ := child__.getRn(key__)
+						ipv4AddrDn__ := ipv4IfDn_ + "/" + ipv4AddrRn__
+						_ = ipv4AddrDn__
+						if !existed(ipv4AddrDn__) {
+							ipv4IfBody_, _ = sjson.Set(ipv4IfBody_, "ipv4If.children.-1.ipv4Addr.attributes", map[string]interface{}{"rn": ipv4AddrRn__, "status": "deleted"})
+							continue
+						}
+						ipv4AddrBody__ := ""
+						ipv4AddrBody__, _ = sjson.Set(ipv4AddrBody__, "ipv4Addr.attributes.rn", ipv4AddrRn__)
+						if !child__.Type.IsNull() {
+							ipv4AddrBody__, _ = sjson.Set(ipv4AddrBody__, "ipv4Addr.attributes.type", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Tag.IsNull() {
+							ipv4AddrBody__, _ = sjson.Set(ipv4AddrBody__, "ipv4Addr.attributes.tag", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Control.IsNull() {
+							ipv4AddrBody__, _ = sjson.Set(ipv4AddrBody__, "ipv4Addr.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.Preference.IsNull() {
+							ipv4AddrBody__, _ = sjson.Set(ipv4AddrBody__, "ipv4Addr.attributes.pref", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.UseBia.IsNull() {
+							ipv4AddrBody__, _ = sjson.Set(ipv4AddrBody__, "ipv4Addr.attributes.useBia", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.VpcPeer.IsNull() {
+							ipv4AddrBody__, _ = sjson.Set(ipv4AddrBody__, "ipv4Addr.attributes.vpcPeer", "DME_UNSET_PROPERTY_MARKER")
+						}
+						ipv4IfBody_, _ = sjson.SetRaw(ipv4IfBody_, "ipv4If.children.-1", ipv4AddrBody__)
+					}
+					ipv4DomBody, _ = sjson.SetRaw(ipv4DomBody, "ipv4Dom.children.-1", ipv4IfBody_)
+				}
+				ipv4InstBody, _ = sjson.SetRaw(ipv4InstBody, "ipv4Inst.children.-1", ipv4DomBody)
+			}
+			if ipv4InstBody != "" {
+				ipv4InstBody, _ = sjson.Set(ipv4InstBody, "ipv4Inst.attributes.rn", ipv4InstRn)
+				body, _ = sjson.SetRaw(body, "ipv4Entity.children.-1", ipv4InstBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data IPv4) toBodyWithDeletes(ctx context.Context, state IPv4, config IPv4, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -1146,55 +1441,63 @@ func (data IPv4) toBodyWithDeletes(ctx context.Context, state IPv4, config IPv4,
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceRoute", "DME_UNSET_PROPERTY_MARKER")
 		}
-		if !state.LoadSharingConcatenation.IsNull() && config.LoadSharingConcatenation.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"concatenation", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.LoadSharingEcmp.IsNull() && config.LoadSharingEcmp.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ecmpLoadSharing", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.LoadSharingExcludeL3Protocol.IsNull() && config.LoadSharingExcludeL3Protocol.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"excludeL3Proto", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.LoadSharingGreOuterHash.IsNull() && config.LoadSharingGreOuterHash.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"greOuterHash", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.LoadSharingSecondHierarchyKeyshift.IsNull() && config.LoadSharingSecondHierarchyKeyshift.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lb2ndHierKeyshift", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.LoadSharingKeyshift.IsNull() && config.LoadSharingKeyshift.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lbKeyshift", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.LoadSharingMode.IsNull() && config.LoadSharingMode.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loadShareMode", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.LoadSharingRotate.IsNull() && config.LoadSharingRotate.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rotate", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.LoadSharingUdfLength.IsNull() && config.LoadSharingUdfLength.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"udfLength", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.LoadSharingUdfOffset.IsNull() && config.LoadSharingUdfOffset.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"udfOffset", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.LoadSharingUniversalId.IsNull() && config.LoadSharingUniversalId.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"universalID", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.LoadSharingConcatenation.IsNull() && state.LoadSharingEcmp.IsNull() && state.LoadSharingExcludeL3Protocol.IsNull() && state.LoadSharingGreOuterHash.IsNull() && state.LoadSharingSecondHierarchyKeyshift.IsNull() && state.LoadSharingKeyshift.IsNull() && state.LoadSharingMode.IsNull() && state.LoadSharingRotate.IsNull() && state.LoadSharingUdfLength.IsNull() && state.LoadSharingUdfOffset.IsNull() && state.LoadSharingUniversalId.IsNull()) && (config.LoadSharingConcatenation.IsNull() && config.LoadSharingEcmp.IsNull() && config.LoadSharingExcludeL3Protocol.IsNull() && config.LoadSharingGreOuterHash.IsNull() && config.LoadSharingSecondHierarchyKeyshift.IsNull() && config.LoadSharingKeyshift.IsNull() && config.LoadSharingMode.IsNull() && config.LoadSharingRotate.IsNull() && config.LoadSharingUdfLength.IsNull() && config.LoadSharingUdfOffset.IsNull() && config.LoadSharingUniversalId.IsNull()) && deleteEmptied(data.getDn()+"/inst"+"/iploadsharing") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.LoadSharingConcatenation.IsNull() && config.LoadSharingConcatenation.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"concatenation", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.LoadSharingEcmp.IsNull() && config.LoadSharingEcmp.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ecmpLoadSharing", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.LoadSharingExcludeL3Protocol.IsNull() && config.LoadSharingExcludeL3Protocol.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"excludeL3Proto", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.LoadSharingGreOuterHash.IsNull() && config.LoadSharingGreOuterHash.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"greOuterHash", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.LoadSharingSecondHierarchyKeyshift.IsNull() && config.LoadSharingSecondHierarchyKeyshift.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lb2ndHierKeyshift", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.LoadSharingKeyshift.IsNull() && config.LoadSharingKeyshift.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"lbKeyshift", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.LoadSharingMode.IsNull() && config.LoadSharingMode.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loadShareMode", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.LoadSharingRotate.IsNull() && config.LoadSharingRotate.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rotate", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.LoadSharingUdfLength.IsNull() && config.LoadSharingUdfLength.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"udfLength", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.LoadSharingUdfOffset.IsNull() && config.LoadSharingUdfOffset.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"udfOffset", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.LoadSharingUniversalId.IsNull() && config.LoadSharingUniversalId.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "ipv4Inst")+".children", "ipv4IPLoadSharing")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"universalID", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 		for key := range state.Vrfs {
 			if configChild, ok := config.Vrfs[key]; ok {
 				stateChild := state.Vrfs[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/inst" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipv4Inst")+".children").Array() {
 					if mv.Get("ipv4Dom.attributes.name").String() == key {
 						if !stateChild.AutoDiscard.IsNull() && configChild.AutoDiscard.IsNull() {
@@ -1220,6 +1523,8 @@ func (data IPv4) toBodyWithDeletes(ctx context.Context, state IPv4, config IPv4,
 								stateChild := stateChild.StaticRoutes[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("ipv4Route.attributes.prefix").String() == key {
 										if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
@@ -1288,6 +1593,8 @@ func (data IPv4) toBodyWithDeletes(ctx context.Context, state IPv4, config IPv4,
 								stateChild := stateChild.Interfaces[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("ipv4If.attributes.id").String() == key {
 										if !stateChild.DropGlean.IsNull() && configChild.DropGlean.IsNull() {

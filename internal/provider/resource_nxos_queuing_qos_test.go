@@ -33,9 +33,16 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosQueuingQoS(t *testing.T) {
+// TestAccQueuingQoSResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccQueuingQoSResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_type", "match-any"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q2.remaining_bandwidth", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q3.remaining_bandwidth", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q-default.remaining_bandwidth", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.priority", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.cap_average", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.drop_availability", "7"))
@@ -57,38 +64,87 @@ func TestAccNxosQueuingQoS(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_map_statistics", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_interface_out.eth1/10.policy_map_name", "PM1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_queuing_qos.test", "policy_interface_out.eth1/10.policy_map_statistics", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_type", "match-any"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q2.remaining_bandwidth", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q3.remaining_bandwidth", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q-default.remaining_bandwidth", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.priority", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.cap_average", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.drop_availability", "7"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.random_detect_ecn", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.max_threshold", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.max_threshold_unit", "kbytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.min_threshold", "150"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.min_threshold_unit", "kbytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.optimization", "mesh"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.weight", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.shape_max_rate", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.shape_max_rate_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.shape_min_rate", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.shape_min_rate_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.queue_limit_unit", "kbytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.queue_limit", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_maps.PM1.match_class_maps.c-out-q1.burst_detect_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "system_out_policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_map_statistics", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_interface_out.eth1/10.policy_map_name", "PM1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_queuing_qos.test", "policy_interface_out.eth1/10.policy_map_statistics", "false"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccQueuingQoSResourceConfig_minimum(),
+		},
+		{
+			Config: testAccQueuingQoSResourceConfig_all() + testAccQueuingQoSResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_queuing_qos.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccQueuingQoSResourceImportStateIdFunc("nxos_queuing_qos.test"),
+		},
+		{
+			ResourceName:       "nxos_queuing_qos.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccQueuingQoSResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccWithDeletionPolicy(testAccQueuingQoSResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_queuing_qos.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccNoResourcesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccQueuingQoSResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosQueuingQoSPrerequisitesConfig + testAccNxosQueuingQoSConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_queuing_qos.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosQueuingQoSImportStateIdFunc("nxos_queuing_qos.test"),
-			},
-			{
-				ResourceName:       "nxos_queuing_qos.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosQueuingQoSImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccQueuingQoSResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -98,99 +154,12 @@ func nxosQueuingQoSImportStateIdFunc(resourceName string) resource.ImportStateId
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosQueuingQoSPrerequisitesConfig = `
-resource "nxos_dme" "PreReq0" {
-  dn = "sys/ipqos/queuing/p/name-[PM1]"
-  class_name = "ipqosPMapInst"
-  content = {
-      name = "PM1"
-  }
-}
-
-resource "nxos_dme" "PreReq1" {
-  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]"
-  class_name = "ipqosMatchCMap"
-  content = {
-      name = "c-out-q1"
-  }
-  depends_on = [nxos_dme.PreReq0, ]
-}
-
-resource "nxos_dme" "PreReq2" {
-  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q1]/prio"
-  class_name = "ipqosPriority"
-  delete = false
-  content = {
-      level = "3"
-  }
-  depends_on = [nxos_dme.PreReq1, ]
-}
-
-resource "nxos_dme" "PreReq3" {
-  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]"
-  class_name = "ipqosMatchCMap"
-  content = {
-      name = "c-out-q2"
-  }
-  depends_on = [nxos_dme.PreReq0, ]
-}
-
-resource "nxos_dme" "PreReq4" {
-  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q2]/setRemBW"
-  class_name = "ipqosSetRemBW"
-  delete = false
-  content = {
-      val = "10"
-  }
-  depends_on = [nxos_dme.PreReq3, ]
-}
-
-resource "nxos_dme" "PreReq5" {
-  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q3]"
-  class_name = "ipqosMatchCMap"
-  content = {
-      name = "c-out-q3"
-  }
-  depends_on = [nxos_dme.PreReq0, ]
-}
-
-resource "nxos_dme" "PreReq6" {
-  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q3]/setRemBW"
-  class_name = "ipqosSetRemBW"
-  delete = false
-  content = {
-      val = "10"
-  }
-  depends_on = [nxos_dme.PreReq5, ]
-}
-
-resource "nxos_dme" "PreReq7" {
-  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]"
-  class_name = "ipqosMatchCMap"
-  content = {
-      name = "c-out-q-default"
-  }
-  depends_on = [nxos_dme.PreReq0, ]
-}
-
-resource "nxos_dme" "PreReq8" {
-  dn = "sys/ipqos/queuing/p/name-[PM1]/cmap-[c-out-q-default]/setRemBW"
-  class_name = "ipqosSetRemBW"
-  delete = false
-  content = {
-      val = "10"
-  }
-  depends_on = [nxos_dme.PreReq7, ]
-}
-
-`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosQueuingQoSConfig_minimum() string {
+func testAccQueuingQoSResourceConfig_minimum() string {
 	config := `resource "nxos_queuing_qos" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -198,7 +167,7 @@ func testAccNxosQueuingQoSConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosQueuingQoSConfig_all() string {
+func testAccQueuingQoSResourceConfig_all() string {
 	config := `resource "nxos_queuing_qos" "test" {` + "\n"
 	config += `	policy_maps = {` + "\n"
 	config += `		"PM1" = {` + "\n"
@@ -223,6 +192,15 @@ func testAccNxosQueuingQoSConfig_all() string {
 	config += `					queue_limit = 1000` + "\n"
 	config += `					burst_detect_state = "enabled"` + "\n"
 	config += `				}` + "\n"
+	config += `				"c-out-q2" = {` + "\n"
+	config += `					remaining_bandwidth = 10` + "\n"
+	config += `				}` + "\n"
+	config += `				"c-out-q3" = {` + "\n"
+	config += `					remaining_bandwidth = 10` + "\n"
+	config += `				}` + "\n"
+	config += `				"c-out-q-default" = {` + "\n"
+	config += `					remaining_bandwidth = 10` + "\n"
+	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
@@ -234,9 +212,16 @@ func testAccNxosQueuingQoSConfig_all() string {
 	config += `			policy_map_statistics = false` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccQueuingQoSResourceConfig_dataSource() string {
+	return `
+data "nxos_queuing_qos" "test" {
+	depends_on = [nxos_queuing_qos.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

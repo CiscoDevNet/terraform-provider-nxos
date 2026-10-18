@@ -96,6 +96,14 @@ var TrackSubtreeClassMinVersions = map[string]string{}
 // TrackMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var TrackMinVersions = map[string]helpers.MinVersion{}
 
+// TrackListClasses holds the list child classes of the resource.
+var TrackListClasses = map[string]bool{"trackObject": true, "trackMember": true}
+
+// getTrackTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getTrackTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"trackObject", "trackIf", "trackIpRoute", "trackIpSla", "trackList", "trackMember"}, TrackSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -567,7 +575,199 @@ func (data Track) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data Track) toBodyWithDeletes(ctx context.Context, state Track, config Track, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data Track) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.Objects {
+		trackObjectDn := dn + "/" + child.getRn(key)
+		dns[trackObjectDn] = true
+		if !(child.InterfaceId.IsNull() && child.InterfaceProtocolType.IsNull()) {
+			trackIfDn_ := trackObjectDn + "/" + "if"
+			dns[trackIfDn_] = true
+		}
+		if !(child.IpRouteAddressFamily.IsNull() && child.IpRoutePrefix.IsNull() && child.IpRouteOwner.IsNull() && child.IpRouteState.IsNull() && child.IpRouteVrfName.IsNull()) {
+			trackIpRouteDn_ := trackObjectDn + "/" + "iprt"
+			dns[trackIpRouteDn_] = true
+		}
+		if !(child.IpSlaProbeId.IsNull() && child.IpSlaProbeState.IsNull()) {
+			trackIpSlaDn_ := trackObjectDn + "/" + "ipsla"
+			dns[trackIpSlaDn_] = true
+		}
+		if !(child.ListType.IsNull() && child.ListPercentageDown.IsNull() && child.ListPercentageUp.IsNull() && child.ListWeightDown.IsNull() && child.ListWeightUp.IsNull() && len(child.ListMembers) == 0) {
+			trackListDn_ := trackObjectDn + "/" + "list"
+			dns[trackListDn_] = true
+			for key_, child_ := range child.ListMembers {
+				trackMemberDn_ := trackListDn_ + "/" + child_.getRn(key_)
+				dns[trackMemberDn_] = true
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data Track) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "trackEntity.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.Objects {
+		_ = child
+		trackObjectRn := child.getRn(key)
+		trackObjectDn := dn + "/" + trackObjectRn
+		_ = trackObjectDn
+		if !existed(trackObjectDn) {
+			body, _ = sjson.Set(body, "trackEntity.children.-1.trackObject.attributes", map[string]interface{}{"rn": trackObjectRn, "status": "deleted"})
+			continue
+		}
+		trackObjectBody := ""
+		trackObjectBody, _ = sjson.Set(trackObjectBody, "trackObject.attributes.rn", trackObjectRn)
+		if !child.DelayDown.IsNull() {
+			trackObjectBody, _ = sjson.Set(trackObjectBody, "trackObject.attributes.delayDown", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DelayDownMilliseconds.IsNull() {
+			trackObjectBody, _ = sjson.Set(trackObjectBody, "trackObject.attributes.delayDownMs", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DelayUp.IsNull() {
+			trackObjectBody, _ = sjson.Set(trackObjectBody, "trackObject.attributes.delayUp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DelayUpMilliseconds.IsNull() {
+			trackObjectBody, _ = sjson.Set(trackObjectBody, "trackObject.attributes.delayUpMs", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !(child.InterfaceId.IsNull() && child.InterfaceProtocolType.IsNull()) {
+			trackIfRn_ := "if"
+			trackIfDn_ := trackObjectDn + "/" + trackIfRn_
+			_ = trackIfDn_
+			if !existed(trackIfDn_) {
+				trackObjectBody, _ = sjson.Set(trackObjectBody, "trackObject.children.-1.trackIf.attributes", map[string]interface{}{"rn": trackIfRn_, "status": "deleted"})
+			} else {
+				trackIfBody_ := ""
+				if !child.InterfaceId.IsNull() {
+					trackIfBody_, _ = sjson.Set(trackIfBody_, "trackIf.attributes.id", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.InterfaceProtocolType.IsNull() {
+					trackIfBody_, _ = sjson.Set(trackIfBody_, "trackIf.attributes.protocolType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if trackIfBody_ != "" {
+					trackIfBody_, _ = sjson.Set(trackIfBody_, "trackIf.attributes.rn", trackIfRn_)
+					trackObjectBody, _ = sjson.SetRaw(trackObjectBody, "trackObject.children.-1", trackIfBody_)
+				}
+			}
+		}
+		if !(child.IpRouteAddressFamily.IsNull() && child.IpRoutePrefix.IsNull() && child.IpRouteOwner.IsNull() && child.IpRouteState.IsNull() && child.IpRouteVrfName.IsNull()) {
+			trackIpRouteRn_ := "iprt"
+			trackIpRouteDn_ := trackObjectDn + "/" + trackIpRouteRn_
+			_ = trackIpRouteDn_
+			if !existed(trackIpRouteDn_) {
+				trackObjectBody, _ = sjson.Set(trackObjectBody, "trackObject.children.-1.trackIpRoute.attributes", map[string]interface{}{"rn": trackIpRouteRn_, "status": "deleted"})
+			} else {
+				trackIpRouteBody_ := ""
+				if !child.IpRouteAddressFamily.IsNull() {
+					trackIpRouteBody_, _ = sjson.Set(trackIpRouteBody_, "trackIpRoute.attributes.af", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.IpRoutePrefix.IsNull() {
+					trackIpRouteBody_, _ = sjson.Set(trackIpRouteBody_, "trackIpRoute.attributes.prefix", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.IpRouteOwner.IsNull() {
+					trackIpRouteBody_, _ = sjson.Set(trackIpRouteBody_, "trackIpRoute.attributes.routeOwner", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.IpRouteState.IsNull() {
+					trackIpRouteBody_, _ = sjson.Set(trackIpRouteBody_, "trackIpRoute.attributes.routeState", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.IpRouteVrfName.IsNull() {
+					trackIpRouteBody_, _ = sjson.Set(trackIpRouteBody_, "trackIpRoute.attributes.vrf", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if trackIpRouteBody_ != "" {
+					trackIpRouteBody_, _ = sjson.Set(trackIpRouteBody_, "trackIpRoute.attributes.rn", trackIpRouteRn_)
+					trackObjectBody, _ = sjson.SetRaw(trackObjectBody, "trackObject.children.-1", trackIpRouteBody_)
+				}
+			}
+		}
+		if !(child.IpSlaProbeId.IsNull() && child.IpSlaProbeState.IsNull()) {
+			trackIpSlaRn_ := "ipsla"
+			trackIpSlaDn_ := trackObjectDn + "/" + trackIpSlaRn_
+			_ = trackIpSlaDn_
+			if !existed(trackIpSlaDn_) {
+				trackObjectBody, _ = sjson.Set(trackObjectBody, "trackObject.children.-1.trackIpSla.attributes", map[string]interface{}{"rn": trackIpSlaRn_, "status": "deleted"})
+			} else {
+				trackIpSlaBody_ := ""
+				if !child.IpSlaProbeId.IsNull() {
+					trackIpSlaBody_, _ = sjson.Set(trackIpSlaBody_, "trackIpSla.attributes.probeId", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.IpSlaProbeState.IsNull() {
+					trackIpSlaBody_, _ = sjson.Set(trackIpSlaBody_, "trackIpSla.attributes.probeState", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if trackIpSlaBody_ != "" {
+					trackIpSlaBody_, _ = sjson.Set(trackIpSlaBody_, "trackIpSla.attributes.rn", trackIpSlaRn_)
+					trackObjectBody, _ = sjson.SetRaw(trackObjectBody, "trackObject.children.-1", trackIpSlaBody_)
+				}
+			}
+		}
+		if !(child.ListType.IsNull() && child.ListPercentageDown.IsNull() && child.ListPercentageUp.IsNull() && child.ListWeightDown.IsNull() && child.ListWeightUp.IsNull() && len(child.ListMembers) == 0) {
+			trackListRn_ := "list"
+			trackListDn_ := trackObjectDn + "/" + trackListRn_
+			_ = trackListDn_
+			if !existed(trackListDn_) {
+				trackObjectBody, _ = sjson.Set(trackObjectBody, "trackObject.children.-1.trackList.attributes", map[string]interface{}{"rn": trackListRn_, "status": "deleted"})
+			} else {
+				trackListBody_ := ""
+				if !child.ListType.IsNull() {
+					trackListBody_, _ = sjson.Set(trackListBody_, "trackList.attributes.type", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ListPercentageDown.IsNull() {
+					trackListBody_, _ = sjson.Set(trackListBody_, "trackList.attributes.percentageDown", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ListPercentageUp.IsNull() {
+					trackListBody_, _ = sjson.Set(trackListBody_, "trackList.attributes.percentageUp", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ListWeightDown.IsNull() {
+					trackListBody_, _ = sjson.Set(trackListBody_, "trackList.attributes.weightDown", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ListWeightUp.IsNull() {
+					trackListBody_, _ = sjson.Set(trackListBody_, "trackList.attributes.weightUp", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.ListMembers {
+					_ = child_
+					trackMemberRn_ := child_.getRn(key_)
+					trackMemberDn_ := trackListDn_ + "/" + trackMemberRn_
+					_ = trackMemberDn_
+					if !existed(trackMemberDn_) {
+						trackListBody_, _ = sjson.Set(trackListBody_, "trackList.children.-1.trackMember.attributes", map[string]interface{}{"rn": trackMemberRn_, "status": "deleted"})
+						continue
+					}
+					trackMemberBody_ := ""
+					trackMemberBody_, _ = sjson.Set(trackMemberBody_, "trackMember.attributes.rn", trackMemberRn_)
+					if !child_.Negate.IsNull() {
+						trackMemberBody_, _ = sjson.Set(trackMemberBody_, "trackMember.attributes.not", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Weight.IsNull() {
+						trackMemberBody_, _ = sjson.Set(trackMemberBody_, "trackMember.attributes.weight", "DME_UNSET_PROPERTY_MARKER")
+					}
+					trackListBody_, _ = sjson.SetRaw(trackListBody_, "trackList.children.-1", trackMemberBody_)
+				}
+				if trackListBody_ != "" {
+					trackListBody_, _ = sjson.Set(trackListBody_, "trackList.attributes.rn", trackListRn_)
+					trackObjectBody, _ = sjson.SetRaw(trackObjectBody, "trackObject.children.-1", trackListBody_)
+				}
+			}
+		}
+		body, _ = sjson.SetRaw(body, "trackEntity.children.-1", trackObjectBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data Track) toBodyWithDeletes(ctx context.Context, state Track, config Track, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -619,6 +819,8 @@ func (data Track) toBodyWithDeletes(ctx context.Context, state Track, config Tra
 				stateChild := state.Objects[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("trackObject.attributes.id").String() == key {
 						if !stateChild.DelayDown.IsNull() && configChild.DelayDown.IsNull() {
@@ -645,76 +847,100 @@ func (data Track) toBodyWithDeletes(ctx context.Context, state Track, config Tra
 						}
 					}
 					if listChildPath != "" {
-						if !stateChild.InterfaceId.IsNull() && configChild.InterfaceId.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIf")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"id", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.InterfaceId.IsNull() && stateChild.InterfaceProtocolType.IsNull()) && (configChild.InterfaceId.IsNull() && configChild.InterfaceProtocolType.IsNull()) && deleteEmptied(listChildDn+"/if") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIf")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.InterfaceId.IsNull() && configChild.InterfaceId.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIf")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"id", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.InterfaceProtocolType.IsNull() && configChild.InterfaceProtocolType.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIf")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"protocolType", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
-						if !stateChild.InterfaceProtocolType.IsNull() && configChild.InterfaceProtocolType.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIf")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"protocolType", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.IpRouteAddressFamily.IsNull() && stateChild.IpRoutePrefix.IsNull() && stateChild.IpRouteOwner.IsNull() && stateChild.IpRouteState.IsNull() && stateChild.IpRouteVrfName.IsNull()) && (configChild.IpRouteAddressFamily.IsNull() && configChild.IpRoutePrefix.IsNull() && configChild.IpRouteOwner.IsNull() && configChild.IpRouteState.IsNull() && configChild.IpRouteVrfName.IsNull()) && deleteEmptied(listChildDn+"/iprt") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpRoute")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.IpRouteAddressFamily.IsNull() && configChild.IpRouteAddressFamily.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpRoute")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"af", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.IpRoutePrefix.IsNull() && configChild.IpRoutePrefix.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpRoute")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"prefix", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.IpRouteOwner.IsNull() && configChild.IpRouteOwner.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpRoute")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"routeOwner", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.IpRouteState.IsNull() && configChild.IpRouteState.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpRoute")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"routeState", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.IpRouteVrfName.IsNull() && configChild.IpRouteVrfName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpRoute")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"vrf", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
-						if !stateChild.IpRouteAddressFamily.IsNull() && configChild.IpRouteAddressFamily.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpRoute")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"af", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.IpSlaProbeId.IsNull() && stateChild.IpSlaProbeState.IsNull()) && (configChild.IpSlaProbeId.IsNull() && configChild.IpSlaProbeState.IsNull()) && deleteEmptied(listChildDn+"/ipsla") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpSla")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.IpSlaProbeId.IsNull() && configChild.IpSlaProbeId.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpSla")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"probeId", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.IpSlaProbeState.IsNull() && configChild.IpSlaProbeState.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpSla")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"probeState", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
-						if !stateChild.IpRoutePrefix.IsNull() && configChild.IpRoutePrefix.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpRoute")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"prefix", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.IpRouteOwner.IsNull() && configChild.IpRouteOwner.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpRoute")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"routeOwner", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.IpRouteState.IsNull() && configChild.IpRouteState.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpRoute")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"routeState", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.IpRouteVrfName.IsNull() && configChild.IpRouteVrfName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpRoute")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"vrf", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.IpSlaProbeId.IsNull() && configChild.IpSlaProbeId.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpSla")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"probeId", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.IpSlaProbeState.IsNull() && configChild.IpSlaProbeState.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackIpSla")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"probeState", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ListType.IsNull() && configChild.ListType.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackList")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"type", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ListPercentageDown.IsNull() && configChild.ListPercentageDown.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackList")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"percentageDown", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ListPercentageUp.IsNull() && configChild.ListPercentageUp.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackList")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"percentageUp", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ListWeightDown.IsNull() && configChild.ListWeightDown.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackList")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"weightDown", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ListWeightUp.IsNull() && configChild.ListWeightUp.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackList")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"weightUp", "DME_UNSET_PROPERTY_MARKER")
-						}
-						for key := range stateChild.ListMembers {
-							if configChild, ok := configChild.ListMembers[key]; ok {
-								stateChild := stateChild.ListMembers[key]
-								_ = stateChild
-								_ = configChild
-								for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, listChildPath, "trackList")+".children").Array() {
-									if mv.Get("trackMember.attributes.id").String() == key {
-										if !stateChild.Negate.IsNull() && configChild.Negate.IsNull() {
-											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, listChildPath, "trackList")+".children"+"."+strconv.Itoa(mi)+".trackMember.attributes."+"not", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.ListType.IsNull() && stateChild.ListPercentageDown.IsNull() && stateChild.ListPercentageUp.IsNull() && stateChild.ListWeightDown.IsNull() && stateChild.ListWeightUp.IsNull() && len(stateChild.ListMembers) == 0) && (configChild.ListType.IsNull() && configChild.ListPercentageDown.IsNull() && configChild.ListPercentageUp.IsNull() && configChild.ListWeightDown.IsNull() && configChild.ListWeightUp.IsNull() && len(configChild.ListMembers) == 0) && deleteEmptied(listChildDn+"/list") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackList")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.ListType.IsNull() && configChild.ListType.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackList")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"type", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ListPercentageDown.IsNull() && configChild.ListPercentageDown.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackList")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"percentageDown", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ListPercentageUp.IsNull() && configChild.ListPercentageUp.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackList")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"percentageUp", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ListWeightDown.IsNull() && configChild.ListWeightDown.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackList")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"weightDown", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.ListWeightUp.IsNull() && configChild.ListWeightUp.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "trackList")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"weightUp", "DME_UNSET_PROPERTY_MARKER")
+							}
+							for key := range stateChild.ListMembers {
+								if configChild, ok := configChild.ListMembers[key]; ok {
+									stateChild := stateChild.ListMembers[key]
+									_ = stateChild
+									_ = configChild
+									for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, listChildPath, "trackList")+".children").Array() {
+										if mv.Get("trackMember.attributes.id").String() == key {
+											if !stateChild.Negate.IsNull() && configChild.Negate.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, listChildPath, "trackList")+".children"+"."+strconv.Itoa(mi)+".trackMember.attributes."+"not", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Weight.IsNull() && configChild.Weight.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, listChildPath, "trackList")+".children"+"."+strconv.Itoa(mi)+".trackMember.attributes."+"weight", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
 										}
-										if !stateChild.Weight.IsNull() && configChild.Weight.IsNull() {
-											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, listChildPath, "trackList")+".children"+"."+strconv.Itoa(mi)+".trackMember.attributes."+"weight", "DME_UNSET_PROPERTY_MARKER")
-										}
-										break
 									}
 								}
 							}

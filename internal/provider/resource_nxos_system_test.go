@@ -34,7 +34,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosSystem(t *testing.T) {
+// TestAccSystemResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccSystemResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "name", "LEAF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ethernet_mtu", "9216"))
@@ -304,39 +308,316 @@ func TestAccNxosSystem(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "l2rib_duplicate_mac_recovery_retry_count", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "l2rib_duplicate_mac_recovery_timeout", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ngoam_install_acl", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "name", "LEAF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_mtu", "9216"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_default_admin_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_admin_link_down_syslog_level", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_admin_link_up_syslog_level", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_allow_unsupported_sfp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_chassis_infrastructure_adaptor_vlan", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_chassis_infrastructure_epds_port_number", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_chassis_infrastructure_ipv6_address", "2001:db8::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_chassis_infrastructure_vlan", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_chassis_management_instance", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_chassis_management_instance_fabric_number", "LeftFabric"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_interface_syslog_info", "info-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_log_event", "linkStatusEnable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_default_layer", "Layer2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_system_interface_admin_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_system_link_failure_laser_on", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_system_storm_control_multi_threshold", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_vlan_tag_native", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "errdisable_recovery_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "errdisable_recovery_control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "errdisable_recovery_interval", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "errdisable_events.event-bpduguard.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "errdisable_events.event-bpduguard.control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "errdisable_events.event-bpduguard.detect", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "errdisable_events.event-bpduguard.recover", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_allow_static_arp_outside_subnet", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_unnumbered_svi_software_replication", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_cache_limit", "200000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_cache_syslog_rate", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_evpn_timeout", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_interface_cache_limit", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_ip_adjacency_route_distance", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_ip_arp_cos", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_off_list_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_rarp_fabric_forwarding", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_rarp_fabric_forwarding_rate", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_resolve_outside_subnet", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_suppression_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_timeout", "1800"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_accept_solicit_neighbor_entry", "accept"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_aging_interval", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_cache_limit", "200000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_cache_syslog_rate", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_ipv6_adjacency_route_distance", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_off_list_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_probe_interval_for_solicit_neighbor", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_solicit_neighbor_advertisement", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_authentication_state", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_format", "24hours"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_format_debug", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_format_syslog", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_timezone_name", "PST"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_timezone_hours", "-8"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_timezone_minutes", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_name", "PDT"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_offset_minutes", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_start_week", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_start_day", "Sun"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_start_month", "Mar"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_start_time", "02:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_end_week", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_end_day", "Sun"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_end_month", "Nov"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_summer_time_end_time", "02:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.description", "My DNS Profile"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.owner_key", "owner_key_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.owner_tag", "owner_tag_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.domain_name", "example.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.domain_description", "DNS domain description."))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.domain_is_default", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.providers.10.1.1.1.name", "DNS1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.providers.10.1.1.1.source_interface", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.domain_lists.example.net.description", "My domain list entry"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.hosts.server1.ipv4_address", "10.2.2.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.hosts.server1.ipv6_address", "2001:db8::2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.vrfs.management.domain_name", "mgmt.example.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.vrfs.management.domain_description", "DNS domain description."))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.vrfs.management.domain_is_default", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.vrfs.management.providers.10.3.3.3.name", "DNS2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.vrfs.management.providers.10.3.3.3.source_interface", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "dns_profiles.default.vrfs.management.domain_lists.mgmt.example.net.description", "My VRF domain list entry"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.name", "LEAF1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.multicast_ipv4_route_memory_maximum", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.multicast_ipv4_route_memory_minimum", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.multicast_ipv6_route_memory_maximum", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.multicast_ipv6_route_memory_minimum", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.port_channel_maximum", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.port_channel_minimum", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.unicast_ipv4_route_memory_maximum", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.unicast_ipv4_route_memory_minimum", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.unicast_ipv6_route_memory_maximum", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.unicast_ipv6_route_memory_minimum", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.vlan_maximum", "4094"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.vlan_minimum", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.vrf_maximum", "4096"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vdcs.1.vrf_minimum", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cli_aliases.myalias.command", "show ip route"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "smart_licensing_transport_mode", "transportSmart"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "smart_licensing_transport_cslu_url", "https://cslu.example.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "boot_auto_copy", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "boot_dhcp", "500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "boot_exclude_configuration", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "boot_order", "pxe"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "boot_poap", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "boot_image_verification", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "udld_aggressive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "udld_message_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "udld_interfaces.eth1/9.aggressive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "udld_interfaces.eth1/9.bidirectional_detection", "port-enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lacp_system_priority", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lacp_system_role", "secondary"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lacp_system_mac", "00:11:22:33:44:55"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lacp_control", "rapid-transition"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lacp_interfaces.eth1/13.priority", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lacp_interfaces.eth1/13.transmit_rate", "fast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mac_address_table_aging_time", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mac_address_table_notification_mac_move", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mac_address_table_static_clear", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mac_address_table_threshold_interval", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mac_address_table_threshold_limit", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mac_address_table_user_defined_limit", "32"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mac_address_table_static_entries.vlan-100;00:00:11:11:22:22.interface_id", "eth1/9"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mac_address_table_static_entries.vlan-100;00:00:11:11:22:22.drop", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.admin_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.auto_negotiation", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.duplex", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.itu_channel", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.media_type", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.name", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.snmp_trap_state", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.speed", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_advertise_system_chassis_id", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_hold_time", "180"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_init_delay_time", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_multi_peer", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_optional_tlv_select", "port-desc"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_port_channel", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_port_id_sub_type", "short"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_system_description", "Cisco NX-OS"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_transmit_frequency", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_interfaces.eth1/1.admin_receive_state", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_interfaces.eth1/1.admin_transmit_state", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_interfaces.eth1/1.port_dcbxp_version", "CEE"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_interfaces.eth1/1.port_description", "My Port"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_interfaces.eth1/1.system_description", "Cisco NX-OS"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_interfaces.eth1/1.tlv_management_ipv4", "10.0.0.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_interfaces.eth1/1.tlv_management_ipv6", "2001:db8::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_interfaces.eth1/1.tlv_vlan", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_device_id_type", "mac"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_hold_interval", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_pnp_startup_vlan", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_transmit_frequency", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_version", "v1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_interfaces.eth1/1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_interfaces.eth1/1.port_description", "My Port"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "copp_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "copp_rate_limiter", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "qos_mode", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "qos_statistics", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "console_exec_timeout", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vty_exec_timeout", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "vty_session_limit", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "icam_monitor_interval", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "icam_number_of_intervals", "336"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "icam_scale_critical_threshold", "95"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "icam_scale_info_threshold", "70"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "icam_scale_configuration", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "icam_scale_warning_threshold", "85"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "breakout_modules.1.front_panel_ports.49.breakout_map", "10g-4x"))
+	if os.Getenv("HYPERSHIELD") != "" {
+		if os.Getenv("HYPERSHIELD") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.source_interface", "lo100"))
+		}
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.controller_https_proxy_port", "8080"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.controller_https_proxy_server", "proxy.example.com"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.controller_ip1", "10.0.0.1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.controller_ip2", "10.0.0.2"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.controller_ip3", "10.0.0.3"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.firewall_policy_admin_state", "in-service"))
+		if os.Getenv("HYPERSHIELD") != "" {
+			checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "service_instances.hypershield.vrfs.vrf1.affinity", "1"))
+		}
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_ciphers", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_description", "SSH access"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_enable_weak_ciphers", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_key_exchange_algorithms", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_key_types", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_login_attempts", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_login_grace_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_message_authentication_codes", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_port", "22"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_keys.rsa.key_length", "2048"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ssh_source_interfaces.management.source_interface", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ftp_source_interfaces.management.source_interface", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "password_encryption_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "password_encryption_use_tam", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "acl_log_detailed", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "acl_log_entries", "8000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "acl_log_include_mac", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "acl_log_include_sgt", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "acl_log_interval", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "acl_log_match_log_level", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "acl_log_threshold", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "erspan_origin_ip_is_global", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "erspan_origin_ip_address", "10.0.0.1"))
+	if os.Getenv("TTAG") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ttag_marker_interval", "120"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ttag_interfaces.eth1/10.ttag", "true"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ttag_interfaces.eth1/10.ttag_inner", "false"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ttag_interfaces.eth1/10.ttag_marker", "false"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ttag_interfaces.eth1/10.ttag_strip", "false"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "pvlan_fex_trunk", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "pvlans.vlan-100.type", "primary"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "pvlans.vlan-100.association", "101-102"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "pvlan_interfaces.eth1/9.access_promiscuous_primary_vlan", "vlan-100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "pvlan_interfaces.eth1/9.access_promiscuous_secondary_vlans", "101-102"))
+	if os.Getenv("PVLAN") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "pvlan_interfaces.eth1/9.access_secondary_primary_vlan", "vlan-100"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "pvlan_interfaces.eth1/9.access_secondary_secondary_vlan", "vlan-101"))
+	}
+	if os.Getenv("PVLAN") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "pvlan_interfaces.eth1/9.trunk_native_vlan", "vlan-10"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "pvlan_interfaces.eth1/9.trunk_allowed_vlans", "1-4094"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "pvlan_interfaces.eth1/9.trunk_promiscuous_mappings.vlan-100.secondary_vlans", "101-102"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "pvlan_interfaces.eth1/9.trunk_secondary_associations.vlan-100.secondary_vlan", "vlan-101"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "pvlan_svis.vlan100.secondary_vlans", "101-102"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_overlay_spt_only", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_vrfs.VRF1.mdt_v4_vxlan", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngmvpn_vrfs.VRF1.mdt_v6_vxlan", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "l2rib_duplicate_mac_detection_duration", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "l2rib_duplicate_mac_detection_moves", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "l2rib_duplicate_mac_recovery_retry_count", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "l2rib_duplicate_mac_recovery_timeout", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngoam_install_acl", "true"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
+	steps := []resource.TestStep{
+		{
+			Config: testAccSystemResourcePrerequisitesConfig + testAccSystemResourceConfig_minimum(),
+		},
+		{
+			Config: testAccSystemResourcePrerequisitesConfig + testAccSystemResourceConfig_all(includeWriteOnly) + testAccSystemResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_system.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccSystemResourceImportStateIdFunc("nxos_system.test"),
+		},
+		{
+			ResourceName:       "nxos_system.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccSystemResourcePrerequisitesConfig + testAccSystemResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccSystemResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccSystemResourceConfig_all(includeWriteOnly), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_system.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccSystemResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccSystemResourcePrerequisitesConfig + testAccSystemResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosSystemPrerequisitesConfig + testAccNxosSystemConfig_all(includeWriteOnly),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_system.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosSystemImportStateIdFunc("nxos_system.test"),
-			},
-			{
-				ResourceName:       "nxos_system.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosSystemImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccSystemResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -346,7 +627,7 @@ func nxosSystemImportStateIdFunc(resourceName string) resource.ImportStateIdFunc
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosSystemPrerequisitesConfig = `
+const testAccSystemResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/udld"
   class_name = "fmUdld"
@@ -458,7 +739,7 @@ resource "nxos_dme" "PreReq12" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosSystemConfig_minimum() string {
+func testAccSystemResourceConfig_minimum() string {
 	config := `resource "nxos_system" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, ]` + "\n"
 	config += `}` + "\n"
@@ -468,7 +749,7 @@ func testAccNxosSystemConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
+func testAccSystemResourceConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_system" "test" {` + "\n"
 	config += `	name = "LEAF1"` + "\n"
 	config += `	ethernet_mtu = 9216` + "\n"
@@ -861,6 +1142,14 @@ func testAccNxosSystemConfig_all(includeWriteOnly bool) string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccSystemResourceConfig_dataSource() string {
+	return `
+data "nxos_system" "test" {
+	depends_on = [nxos_system.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

@@ -109,6 +109,14 @@ var SPANSubtreeClassMinVersions = map[string]string{}
 // SPANMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var SPANMinVersions = map[string]helpers.MinVersion{}
 
+// SPANListClasses holds the list child classes of the resource.
+var SPANListClasses = map[string]bool{"spanMonitor": true, "spanSourceIntf": true, "spanSourceVlan": true, "spanFilterVlan": true}
+
+// getSPANTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getSPANTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"spanMonitor", "spanSourceIntf", "spanSourceVlan", "spanFilterVlan"}, SPANSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -580,7 +588,179 @@ func (data SPAN) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data SPAN) toBodyWithDeletes(ctx context.Context, state SPAN, config SPAN, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data SPAN) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.Sessions {
+		spanMonitorDn := dn + "/" + child.getRn(key)
+		dns[spanMonitorDn] = true
+		for key_, child_ := range child.SourceInterfaces {
+			spanSourceIntfDn_ := spanMonitorDn + "/" + child_.getRn(key_)
+			dns[spanSourceIntfDn_] = true
+		}
+		for key_, child_ := range child.SourceVlans {
+			spanSourceVlanDn_ := spanMonitorDn + "/" + child_.getRn(key_)
+			dns[spanSourceVlanDn_] = true
+		}
+		for key_, child_ := range child.FilterVlans {
+			spanFilterVlanDn_ := spanMonitorDn + "/" + child_.getRn(key_)
+			dns[spanFilterVlanDn_] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data SPAN) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	if !existed(dn) {
+		return data.toDeleteBody()
+	}
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "spanEntity.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.Sessions {
+		_ = child
+		spanMonitorRn := child.getRn(key)
+		spanMonitorDn := dn + "/" + spanMonitorRn
+		_ = spanMonitorDn
+		if !existed(spanMonitorDn) {
+			body, _ = sjson.Set(body, "spanEntity.children.-1.spanMonitor.attributes", map[string]interface{}{"rn": spanMonitorRn, "status": "deleted"})
+			continue
+		}
+		spanMonitorBody := ""
+		spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.rn", spanMonitorRn)
+		if !child.AclName.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.aclName", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AllowSharing.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.allowSharing", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ConfigState.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.configState", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Description.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.description", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DestinationIp.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.destinationIp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DestinationIpv6.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.destinationIpv6", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DestinationPorts.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.destinationPorts", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ErspanId.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.erspanId", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ForwardingDropsDirection.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.fwdDropsDirection", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.HeaderType.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.headerType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.IpDscp.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.ipDscp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.IpTtl.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.ipTtl", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ForwardingDropsReceive.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.isFwdDropsRx", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ForwardingDropsReceiveLowPriority.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.isFwdDropsRxLowPriority", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MarkerMilliseconds.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.isMarkerMilliSeconds", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MarkerPacket.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.isMarkerPacket", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MarkerPacketInterval.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.markerPktInt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Mtu.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SourceIp.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.sourceIp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SourceIpv6.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.sourceIpv6", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Type.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.type", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.VrfName.IsNull() {
+			spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.attributes.vrfName", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key_, child_ := range child.SourceInterfaces {
+			_ = child_
+			spanSourceIntfRn_ := child_.getRn(key_)
+			spanSourceIntfDn_ := spanMonitorDn + "/" + spanSourceIntfRn_
+			_ = spanSourceIntfDn_
+			if !existed(spanSourceIntfDn_) {
+				spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.children.-1.spanSourceIntf.attributes", map[string]interface{}{"rn": spanSourceIntfRn_, "status": "deleted"})
+				continue
+			}
+			spanSourceIntfBody_ := ""
+			spanSourceIntfBody_, _ = sjson.Set(spanSourceIntfBody_, "spanSourceIntf.attributes.rn", spanSourceIntfRn_)
+			if !child_.AllowPfc.IsNull() {
+				spanSourceIntfBody_, _ = sjson.Set(spanSourceIntfBody_, "spanSourceIntf.attributes.allowPfc", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Direction.IsNull() {
+				spanSourceIntfBody_, _ = sjson.Set(spanSourceIntfBody_, "spanSourceIntf.attributes.direction", "DME_UNSET_PROPERTY_MARKER")
+			}
+			spanMonitorBody, _ = sjson.SetRaw(spanMonitorBody, "spanMonitor.children.-1", spanSourceIntfBody_)
+		}
+		for key_, child_ := range child.SourceVlans {
+			_ = child_
+			spanSourceVlanRn_ := child_.getRn(key_)
+			spanSourceVlanDn_ := spanMonitorDn + "/" + spanSourceVlanRn_
+			_ = spanSourceVlanDn_
+			if !existed(spanSourceVlanDn_) {
+				spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.children.-1.spanSourceVlan.attributes", map[string]interface{}{"rn": spanSourceVlanRn_, "status": "deleted"})
+				continue
+			}
+			spanSourceVlanBody_ := ""
+			spanSourceVlanBody_, _ = sjson.Set(spanSourceVlanBody_, "spanSourceVlan.attributes.rn", spanSourceVlanRn_)
+			if !child_.Direction.IsNull() {
+				spanSourceVlanBody_, _ = sjson.Set(spanSourceVlanBody_, "spanSourceVlan.attributes.direction", "DME_UNSET_PROPERTY_MARKER")
+			}
+			spanMonitorBody, _ = sjson.SetRaw(spanMonitorBody, "spanMonitor.children.-1", spanSourceVlanBody_)
+		}
+		for key_, child_ := range child.FilterVlans {
+			_ = child_
+			spanFilterVlanRn_ := child_.getRn(key_)
+			spanFilterVlanDn_ := spanMonitorDn + "/" + spanFilterVlanRn_
+			_ = spanFilterVlanDn_
+			if !existed(spanFilterVlanDn_) {
+				spanMonitorBody, _ = sjson.Set(spanMonitorBody, "spanMonitor.children.-1.spanFilterVlan.attributes", map[string]interface{}{"rn": spanFilterVlanRn_, "status": "deleted"})
+				continue
+			}
+			spanFilterVlanBody_ := ""
+			spanFilterVlanBody_, _ = sjson.Set(spanFilterVlanBody_, "spanFilterVlan.attributes.rn", spanFilterVlanRn_)
+			spanMonitorBody, _ = sjson.SetRaw(spanMonitorBody, "spanMonitor.children.-1", spanFilterVlanBody_)
+		}
+		body, _ = sjson.SetRaw(body, "spanEntity.children.-1", spanMonitorBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data SPAN) toBodyWithDeletes(ctx context.Context, state SPAN, config SPAN, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -649,6 +829,8 @@ func (data SPAN) toBodyWithDeletes(ctx context.Context, state SPAN, config SPAN,
 				stateChild := state.Sessions[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("spanMonitor.attributes.id").String() == key {
 						if !stateChild.AclName.IsNull() && configChild.AclName.IsNull() {

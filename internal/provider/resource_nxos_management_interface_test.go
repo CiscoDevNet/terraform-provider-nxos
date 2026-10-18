@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosManagementInterface(t *testing.T) {
+// TestAccManagementInterfaceResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccManagementInterfaceResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_management_interface.test", "management_interfaces.mgmt0.admin_state", "up"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_management_interface.test", "management_interfaces.mgmt0.auto_negotiation", "on"))
@@ -43,38 +47,70 @@ func TestAccNxosManagementInterface(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_management_interface.test", "management_interfaces.mgmt0.snmp_trap_state", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_management_interface.test", "management_interfaces.mgmt0.speed", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_management_interface.test", "management_interfaces.mgmt0.vrf_dn", "sys/inst-management"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_management_interface.test", "management_interfaces.mgmt0.admin_state", "up"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_management_interface.test", "management_interfaces.mgmt0.auto_negotiation", "on"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_management_interface.test", "management_interfaces.mgmt0.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_management_interface.test", "management_interfaces.mgmt0.duplex", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_management_interface.test", "management_interfaces.mgmt0.mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_management_interface.test", "management_interfaces.mgmt0.snmp_trap_state", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_management_interface.test", "management_interfaces.mgmt0.speed", "auto"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_management_interface.test", "management_interfaces.mgmt0.vrf_dn", "sys/inst-management"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccManagementInterfaceResourceConfig_minimum(),
+		},
+		{
+			Config: testAccManagementInterfaceResourceConfig_all() + testAccManagementInterfaceResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_management_interface.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccManagementInterfaceResourceImportStateIdFunc("nxos_management_interface.test"),
+		},
+		{
+			ResourceName:       "nxos_management_interface.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccManagementInterfaceResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccWithDeletionPolicy(testAccManagementInterfaceResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_management_interface.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccNoResourcesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccManagementInterfaceResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosManagementInterfaceConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_management_interface.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosManagementInterfaceImportStateIdFunc("nxos_management_interface.test"),
-			},
-			{
-				ResourceName:       "nxos_management_interface.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosManagementInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccManagementInterfaceResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -88,7 +124,7 @@ func nxosManagementInterfaceImportStateIdFunc(resourceName string) resource.Impo
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosManagementInterfaceConfig_minimum() string {
+func testAccManagementInterfaceResourceConfig_minimum() string {
 	config := `resource "nxos_management_interface" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
@@ -97,7 +133,7 @@ func testAccNxosManagementInterfaceConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosManagementInterfaceConfig_all() string {
+func testAccManagementInterfaceResourceConfig_all() string {
 	config := `resource "nxos_management_interface" "test" {` + "\n"
 	config += `	management_interfaces = {` + "\n"
 	config += `		"mgmt0" = {` + "\n"
@@ -113,6 +149,14 @@ func testAccNxosManagementInterfaceConfig_all() string {
 	config += `	}` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccManagementInterfaceResourceConfig_dataSource() string {
+	return `
+data "nxos_management_interface" "test" {
+	depends_on = [nxos_management_interface.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

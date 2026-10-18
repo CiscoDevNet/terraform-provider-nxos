@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosVPC(t *testing.T) {
+// TestAccVPCResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccVPCResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "instance_admin_state", "enabled"))
@@ -83,38 +87,110 @@ func TestAccNxosVPC(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "orphan_ports.eth1/10.admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "orphan_ports.eth1/10.description", "My orphan port"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_vpc.test", "orphan_ports.eth1/10.name", "ORPHAN1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "domain_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "domain_id", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "auto_recovery", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "auto_recovery_interval", "480"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "delay_restore_orphan_port", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "delay_restore_svi", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "delay_restore_vpc", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "dscp", "46"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "fast_convergence", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "graceful_consistency_check", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "l3_peer_router", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "l3_peer_router_syslog", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "l3_peer_router_syslog_interval", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "peer_gateway", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "peer_ip", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "peer_switch", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "role_priority", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "sys_mac", "01:01:01:01:01:01"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "system_priority", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "track", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "virtual_ip", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "delay_peer_link_bringup", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "exclude_svi", "1-2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "mac_bpdu_source_version_2", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "peer_gateway_exclude_vlan", "1-2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_destination_ip", "192.168.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_flush_timeout", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_interval", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_precedence_type", "network"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_precedence_value", "6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_source_ip", "192.168.1.2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_timeout", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_type_of_service_byte", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_type_of_service_configuration_type", "noCfg"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_type_of_service_type", "min-delay"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_type_of_service_value", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_udp_port", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "keepalive_vrf", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "peerlink_interface_id", "eth1/9"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "peerlink_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "peerlink_description", "My description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "interfaces.1.port_channel_interface_dn", "sys/intf/aggr-[po1]"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "orphan_ports.eth1/10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "orphan_ports.eth1/10.description", "My orphan port"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_vpc.test", "orphan_ports.eth1/10.name", "ORPHAN1"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccVPCResourcePrerequisitesConfig + testAccVPCResourceConfig_minimum(),
+		},
+		{
+			Config: testAccVPCResourcePrerequisitesConfig + testAccVPCResourceConfig_all() + testAccVPCResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_vpc.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccVPCResourceImportStateIdFunc("nxos_vpc.test"),
+		},
+		{
+			ResourceName:       "nxos_vpc.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccVPCResourcePrerequisitesConfig + testAccVPCResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccVPCResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccVPCResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_vpc.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccVPCResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccVPCResourcePrerequisitesConfig + testAccVPCResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosVPCPrerequisitesConfig + testAccNxosVPCConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_vpc.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosVPCImportStateIdFunc("nxos_vpc.test"),
-			},
-			{
-				ResourceName:       "nxos_vpc.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosVPCImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccVPCResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -124,7 +200,7 @@ func nxosVPCImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosVPCPrerequisitesConfig = `
+const testAccVPCResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/vpc"
   class_name = "fmVpc"
@@ -174,8 +250,9 @@ resource "nxos_dme" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosVPCConfig_minimum() string {
+func testAccVPCResourceConfig_minimum() string {
 	config := `resource "nxos_vpc" "test" {` + "\n"
+	config += `	domain_id = 100` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 	return config
@@ -184,7 +261,7 @@ func testAccNxosVPCConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosVPCConfig_all() string {
+func testAccVPCResourceConfig_all() string {
 	config := `resource "nxos_vpc" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
@@ -245,6 +322,14 @@ func testAccNxosVPCConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccVPCResourceConfig_dataSource() string {
+	return `
+data "nxos_vpc" "test" {
+	depends_on = [nxos_vpc.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

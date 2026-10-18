@@ -94,6 +94,14 @@ var BridgeDomainMinVersions = map[string]helpers.MinVersion{
 	"l2BD.isolate": {Version: "10.6(3)", Path: "bridge_domains.isolate"},
 }
 
+// BridgeDomainListClasses holds the list child classes of the resource.
+var BridgeDomainListClasses = map[string]bool{"l2BD": true, "l2VlanConfig": true}
+
+// getBridgeDomainTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getBridgeDomainTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"l2BD", "l2VlanConfig"}, BridgeDomainSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -400,7 +408,115 @@ func (data BridgeDomain) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data BridgeDomain) toBodyWithDeletes(ctx context.Context, state BridgeDomain, config BridgeDomain, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data BridgeDomain) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.BridgeDomains {
+		l2BDDn := dn + "/" + child.getRn(key)
+		dns[l2BDDn] = true
+	}
+	for key, child := range data.VlanConfigurations {
+		l2VlanConfigDn := dn + "/" + child.getRn(key)
+		dns[l2VlanConfigDn] = true
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data BridgeDomain) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if !data.SviAutostate.IsNull() {
+		body, _ = sjson.Set(body, "bdEntity.attributes.sysDefaultSVIAutostate", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "bdEntity.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.BridgeDomains {
+		_ = child
+		l2BDRn := child.getRn(key)
+		l2BDDn := dn + "/" + l2BDRn
+		_ = l2BDDn
+		if !existed(l2BDDn) {
+			body, _ = sjson.Set(body, "bdEntity.children.-1.l2BD.attributes", map[string]interface{}{"rn": l2BDRn, "status": "deleted"})
+			continue
+		}
+		l2BDBody := ""
+		l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.rn", l2BDRn)
+		if !child.AccessEncap.IsNull() {
+			l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.accEncap", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Name.IsNull() {
+			l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.BridgeDomainState.IsNull() {
+			l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.BdState", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AdminState.IsNull() {
+			l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.BridgeMode.IsNull() {
+			l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.bridgeMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Control.IsNull() {
+			l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ForwardingControl.IsNull() {
+			l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.fwdCtrl", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ForwardingMode.IsNull() {
+			l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.fwdMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Isolate.IsNull() {
+			l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.isolate", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LongName.IsNull() {
+			l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.longName", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MacPacketClassify.IsNull() {
+			l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.macPacketClassify", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Mode.IsNull() {
+			l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.VrfName.IsNull() {
+			l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.vrfName", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.CrossConnect.IsNull() {
+			l2BDBody, _ = sjson.Set(l2BDBody, "l2BD.attributes.xConnect", "DME_UNSET_PROPERTY_MARKER")
+		}
+		body, _ = sjson.SetRaw(body, "bdEntity.children.-1", l2BDBody)
+	}
+	for key, child := range data.VlanConfigurations {
+		_ = child
+		l2VlanConfigRn := child.getRn(key)
+		l2VlanConfigDn := dn + "/" + l2VlanConfigRn
+		_ = l2VlanConfigDn
+		if !existed(l2VlanConfigDn) {
+			body, _ = sjson.Set(body, "bdEntity.children.-1.l2VlanConfig.attributes", map[string]interface{}{"rn": l2VlanConfigRn, "status": "deleted"})
+			continue
+		}
+		l2VlanConfigBody := ""
+		l2VlanConfigBody, _ = sjson.Set(l2VlanConfigBody, "l2VlanConfig.attributes.rn", l2VlanConfigRn)
+		if !child.MacLearning.IsNull() {
+			l2VlanConfigBody, _ = sjson.Set(l2VlanConfigBody, "l2VlanConfig.attributes.vlanMacLearn", "DME_UNSET_PROPERTY_MARKER")
+		}
+		body, _ = sjson.SetRaw(body, "bdEntity.children.-1", l2VlanConfigBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data BridgeDomain) toBodyWithDeletes(ctx context.Context, state BridgeDomain, config BridgeDomain, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath

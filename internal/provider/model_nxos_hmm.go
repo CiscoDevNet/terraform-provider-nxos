@@ -91,6 +91,14 @@ var HMMMinVersions = map[string]helpers.MinVersion{
 	"hmmFwdIf.proxy": {Version: "10.6(3)", Path: "interfaces.proxy"},
 }
 
+// HMMListClasses holds the list child classes of the resource.
+var HMMListClasses = map[string]bool{"hmmFwdIf": true}
+
+// getHMMTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getHMMTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"hmmFwdInst", "hmmFwdEvpn", "hmmFwdIf"}, HMMSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -411,7 +419,140 @@ func (data HMM) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data HMM) toBodyWithDeletes(ctx context.Context, state HMM, config HMM, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data HMM) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.InstanceAdminState.IsNull() && data.AnycastMac.IsNull() && data.AdministrativeDistance.IsNull() && data.Control.IsNull() && data.LimitVlanMac.IsNull() && data.SelectiveHostProbe.IsNull() && (data.EvpnAdminState.IsNull() && data.EvpnControl.IsNull() && data.DuplicateHostDetectionMoves.IsNull() && data.DuplicateHostDetectionSeconds.IsNull() && data.DuplicateHostRecoveryCount.IsNull() && data.DuplicateHostRecoveryTimeout.IsNull()) && len(data.Interfaces) == 0) {
+		hmmFwdInstDn := dn + "/" + "fwdinst"
+		dns[hmmFwdInstDn] = true
+		if !(data.EvpnAdminState.IsNull() && data.EvpnControl.IsNull() && data.DuplicateHostDetectionMoves.IsNull() && data.DuplicateHostDetectionSeconds.IsNull() && data.DuplicateHostRecoveryCount.IsNull() && data.DuplicateHostRecoveryTimeout.IsNull()) {
+			hmmFwdEvpnDn := hmmFwdInstDn + "/" + "evpn"
+			dns[hmmFwdEvpnDn] = true
+		}
+		for key, child := range data.Interfaces {
+			hmmFwdIfDn := hmmFwdInstDn + "/" + child.getRn(key)
+			dns[hmmFwdIfDn] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data HMM) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	if !existed(dn) {
+		return data.toDeleteBody()
+	}
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "hmmEntity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "hmmEntity.attributes", map[string]interface{}{})
+	}
+	if !(data.InstanceAdminState.IsNull() && data.AnycastMac.IsNull() && data.AdministrativeDistance.IsNull() && data.Control.IsNull() && data.LimitVlanMac.IsNull() && data.SelectiveHostProbe.IsNull() && (data.EvpnAdminState.IsNull() && data.EvpnControl.IsNull() && data.DuplicateHostDetectionMoves.IsNull() && data.DuplicateHostDetectionSeconds.IsNull() && data.DuplicateHostRecoveryCount.IsNull() && data.DuplicateHostRecoveryTimeout.IsNull()) && len(data.Interfaces) == 0) {
+		hmmFwdInstRn := "fwdinst"
+		hmmFwdInstDn := dn + "/" + hmmFwdInstRn
+		_ = hmmFwdInstDn
+		if !existed(hmmFwdInstDn) {
+			body, _ = sjson.Set(body, "hmmEntity.children.-1.hmmFwdInst.attributes", map[string]interface{}{"rn": hmmFwdInstRn, "status": "deleted"})
+		} else {
+			hmmFwdInstBody := ""
+			if !data.InstanceAdminState.IsNull() {
+				hmmFwdInstBody, _ = sjson.Set(hmmFwdInstBody, "hmmFwdInst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AnycastMac.IsNull() {
+				hmmFwdInstBody, _ = sjson.Set(hmmFwdInstBody, "hmmFwdInst.attributes.amac", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AdministrativeDistance.IsNull() {
+				hmmFwdInstBody, _ = sjson.Set(hmmFwdInstBody, "hmmFwdInst.attributes.adminDist", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Control.IsNull() {
+				hmmFwdInstBody, _ = sjson.Set(hmmFwdInstBody, "hmmFwdInst.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LimitVlanMac.IsNull() {
+				hmmFwdInstBody, _ = sjson.Set(hmmFwdInstBody, "hmmFwdInst.attributes.limitVlanMac", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SelectiveHostProbe.IsNull() {
+				hmmFwdInstBody, _ = sjson.Set(hmmFwdInstBody, "hmmFwdInst.attributes.selHostProbe", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(data.EvpnAdminState.IsNull() && data.EvpnControl.IsNull() && data.DuplicateHostDetectionMoves.IsNull() && data.DuplicateHostDetectionSeconds.IsNull() && data.DuplicateHostRecoveryCount.IsNull() && data.DuplicateHostRecoveryTimeout.IsNull()) {
+				hmmFwdEvpnRn := "evpn"
+				hmmFwdEvpnDn := hmmFwdInstDn + "/" + hmmFwdEvpnRn
+				_ = hmmFwdEvpnDn
+				if !existed(hmmFwdEvpnDn) {
+					hmmFwdInstBody, _ = sjson.Set(hmmFwdInstBody, "hmmFwdInst.children.-1.hmmFwdEvpn.attributes", map[string]interface{}{"rn": hmmFwdEvpnRn, "status": "deleted"})
+				} else {
+					hmmFwdEvpnBody := ""
+					if !data.EvpnAdminState.IsNull() {
+						hmmFwdEvpnBody, _ = sjson.Set(hmmFwdEvpnBody, "hmmFwdEvpn.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.EvpnControl.IsNull() {
+						hmmFwdEvpnBody, _ = sjson.Set(hmmFwdEvpnBody, "hmmFwdEvpn.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DuplicateHostDetectionMoves.IsNull() {
+						hmmFwdEvpnBody, _ = sjson.Set(hmmFwdEvpnBody, "hmmFwdEvpn.attributes.ddHmmoves", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DuplicateHostDetectionSeconds.IsNull() {
+						hmmFwdEvpnBody, _ = sjson.Set(hmmFwdEvpnBody, "hmmFwdEvpn.attributes.ddHnsecs", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DuplicateHostRecoveryCount.IsNull() {
+						hmmFwdEvpnBody, _ = sjson.Set(hmmFwdEvpnBody, "hmmFwdEvpn.attributes.dhrcount", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DuplicateHostRecoveryTimeout.IsNull() {
+						hmmFwdEvpnBody, _ = sjson.Set(hmmFwdEvpnBody, "hmmFwdEvpn.attributes.dhrtimeout", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if hmmFwdEvpnBody != "" {
+						hmmFwdEvpnBody, _ = sjson.Set(hmmFwdEvpnBody, "hmmFwdEvpn.attributes.rn", hmmFwdEvpnRn)
+						hmmFwdInstBody, _ = sjson.SetRaw(hmmFwdInstBody, "hmmFwdInst.children.-1", hmmFwdEvpnBody)
+					}
+				}
+			}
+			for key, child := range data.Interfaces {
+				_ = child
+				hmmFwdIfRn := child.getRn(key)
+				hmmFwdIfDn := hmmFwdInstDn + "/" + hmmFwdIfRn
+				_ = hmmFwdIfDn
+				if !existed(hmmFwdIfDn) {
+					hmmFwdInstBody, _ = sjson.Set(hmmFwdInstBody, "hmmFwdInst.children.-1.hmmFwdIf.attributes", map[string]interface{}{"rn": hmmFwdIfRn, "status": "deleted"})
+					continue
+				}
+				hmmFwdIfBody := ""
+				hmmFwdIfBody, _ = sjson.Set(hmmFwdIfBody, "hmmFwdIf.attributes.rn", hmmFwdIfRn)
+				if !child.AdminState.IsNull() {
+					hmmFwdIfBody, _ = sjson.Set(hmmFwdIfBody, "hmmFwdIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Mode.IsNull() {
+					hmmFwdIfBody, _ = sjson.Set(hmmFwdIfBody, "hmmFwdIf.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Proxy.IsNull() {
+					hmmFwdIfBody, _ = sjson.Set(hmmFwdIfBody, "hmmFwdIf.attributes.proxy", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Description.IsNull() {
+					hmmFwdIfBody, _ = sjson.Set(hmmFwdIfBody, "hmmFwdIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				hmmFwdInstBody, _ = sjson.SetRaw(hmmFwdInstBody, "hmmFwdInst.children.-1", hmmFwdIfBody)
+			}
+			if hmmFwdInstBody != "" {
+				hmmFwdInstBody, _ = sjson.Set(hmmFwdInstBody, "hmmFwdInst.attributes.rn", hmmFwdInstRn)
+				body, _ = sjson.SetRaw(body, "hmmEntity.children.-1", hmmFwdInstBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data HMM) toBodyWithDeletes(ctx context.Context, state HMM, config HMM, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -434,74 +575,86 @@ func (data HMM) toBodyWithDeletes(ctx context.Context, state HMM, config HMM, im
 		}
 	}
 	if !importing {
-		if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.AnycastMac.IsNull() && config.AnycastMac.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"amac", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.AdministrativeDistance.IsNull() && config.AdministrativeDistance.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminDist", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.Control.IsNull() && config.Control.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.LimitVlanMac.IsNull() && config.LimitVlanMac.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"limitVlanMac", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.SelectiveHostProbe.IsNull() && config.SelectiveHostProbe.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"selHostProbe", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.EvpnAdminState.IsNull() && config.EvpnAdminState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.EvpnControl.IsNull() && config.EvpnControl.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.DuplicateHostDetectionMoves.IsNull() && config.DuplicateHostDetectionMoves.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ddHmmoves", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.DuplicateHostDetectionSeconds.IsNull() && config.DuplicateHostDetectionSeconds.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ddHnsecs", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.DuplicateHostRecoveryCount.IsNull() && config.DuplicateHostRecoveryCount.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dhrcount", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.DuplicateHostRecoveryTimeout.IsNull() && config.DuplicateHostRecoveryTimeout.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dhrtimeout", "DME_UNSET_PROPERTY_MARKER")
-		}
-		for key := range state.Interfaces {
-			if configChild, ok := config.Interfaces[key]; ok {
-				stateChild := state.Interfaces[key]
-				_ = stateChild
-				_ = configChild
-				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "hmmFwdInst")+".children").Array() {
-					if mv.Get("hmmFwdIf.attributes.id").String() == key {
-						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "hmmFwdInst")+".children"+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.InstanceAdminState.IsNull() && state.AnycastMac.IsNull() && state.AdministrativeDistance.IsNull() && state.Control.IsNull() && state.LimitVlanMac.IsNull() && state.SelectiveHostProbe.IsNull() && (state.EvpnAdminState.IsNull() && state.EvpnControl.IsNull() && state.DuplicateHostDetectionMoves.IsNull() && state.DuplicateHostDetectionSeconds.IsNull() && state.DuplicateHostRecoveryCount.IsNull() && state.DuplicateHostRecoveryTimeout.IsNull()) && len(state.Interfaces) == 0) && (config.InstanceAdminState.IsNull() && config.AnycastMac.IsNull() && config.AdministrativeDistance.IsNull() && config.Control.IsNull() && config.LimitVlanMac.IsNull() && config.SelectiveHostProbe.IsNull() && (config.EvpnAdminState.IsNull() && config.EvpnControl.IsNull() && config.DuplicateHostDetectionMoves.IsNull() && config.DuplicateHostDetectionSeconds.IsNull() && config.DuplicateHostRecoveryCount.IsNull() && config.DuplicateHostRecoveryTimeout.IsNull()) && len(config.Interfaces) == 0) && deleteEmptied(data.getDn()+"/fwdinst") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.AnycastMac.IsNull() && config.AnycastMac.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"amac", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.AdministrativeDistance.IsNull() && config.AdministrativeDistance.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminDist", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.Control.IsNull() && config.Control.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.LimitVlanMac.IsNull() && config.LimitVlanMac.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"limitVlanMac", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.SelectiveHostProbe.IsNull() && config.SelectiveHostProbe.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"selHostProbe", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if deleteEmptied != nil && !(state.EvpnAdminState.IsNull() && state.EvpnControl.IsNull() && state.DuplicateHostDetectionMoves.IsNull() && state.DuplicateHostDetectionSeconds.IsNull() && state.DuplicateHostRecoveryCount.IsNull() && state.DuplicateHostRecoveryTimeout.IsNull()) && (config.EvpnAdminState.IsNull() && config.EvpnControl.IsNull() && config.DuplicateHostDetectionMoves.IsNull() && config.DuplicateHostDetectionSeconds.IsNull() && config.DuplicateHostRecoveryCount.IsNull() && config.DuplicateHostRecoveryTimeout.IsNull()) && deleteEmptied(data.getDn()+"/fwdinst"+"/evpn") {
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
+				body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+			} else {
+				if !state.EvpnAdminState.IsNull() && config.EvpnAdminState.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.EvpnControl.IsNull() && config.EvpnControl.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.DuplicateHostDetectionMoves.IsNull() && config.DuplicateHostDetectionMoves.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ddHmmoves", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.DuplicateHostDetectionSeconds.IsNull() && config.DuplicateHostDetectionSeconds.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ddHnsecs", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.DuplicateHostRecoveryCount.IsNull() && config.DuplicateHostRecoveryCount.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dhrcount", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.DuplicateHostRecoveryTimeout.IsNull() && config.DuplicateHostRecoveryTimeout.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "hmmFwdInst")+".children", "hmmFwdEvpn")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dhrtimeout", "DME_UNSET_PROPERTY_MARKER")
+				}
+			}
+			for key := range state.Interfaces {
+				if configChild, ok := config.Interfaces[key]; ok {
+					stateChild := state.Interfaces[key]
+					_ = stateChild
+					_ = configChild
+					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "hmmFwdInst")+".children").Array() {
+						if mv.Get("hmmFwdIf.attributes.id").String() == key {
+							if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "hmmFwdInst")+".children"+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Mode.IsNull() && configChild.Mode.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "hmmFwdInst")+".children"+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Proxy.IsNull() && configChild.Proxy.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "hmmFwdInst")+".children"+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"proxy", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "hmmFwdInst")+".children"+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							break
 						}
-						if !stateChild.Mode.IsNull() && configChild.Mode.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "hmmFwdInst")+".children"+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.Proxy.IsNull() && configChild.Proxy.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "hmmFwdInst")+".children"+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"proxy", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "hmmFwdInst")+".children"+"."+strconv.Itoa(mi)+".hmmFwdIf.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-						}
-						break
 					}
 				}
 			}

@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosTelemetry(t *testing.T) {
+// TestAccTelemetryResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccTelemetryResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "batch_dme_events", "false"))
@@ -49,38 +53,76 @@ func TestAccNxosTelemetry(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "sensor_groups.1.sensor_paths.sys/intf.filter_condition", "gt(operBitrate,0)"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "sensor_groups.1.sensor_paths.sys/intf.query_condition", "query-condition-example"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "subscriptions.1.sensor_group_relationships.sys/tm/sensor-1.sample_interval", "5000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "batch_dme_events", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "merge_subscriptions", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_profile_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_profile_vrf", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.encoding", "GPB"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.node_id", "host1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.protocol", "gRPC"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "sensor_groups.1.data_source", "DME"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "sensor_groups.1.sensor_paths.sys/intf.alias", "mypath"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "sensor_groups.1.sensor_paths.sys/intf.depth", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "sensor_groups.1.sensor_paths.sys/intf.filter_condition", "gt(operBitrate,0)"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "sensor_groups.1.sensor_paths.sys/intf.query_condition", "query-condition-example"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "subscriptions.1.sensor_group_relationships.sys/tm/sensor-1.sample_interval", "5000"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccTelemetryResourcePrerequisitesConfig + testAccTelemetryResourceConfig_minimum(),
+		},
+		{
+			Config: testAccTelemetryResourcePrerequisitesConfig + testAccTelemetryResourceConfig_all() + testAccTelemetryResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_telemetry.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccTelemetryResourceImportStateIdFunc("nxos_telemetry.test"),
+		},
+		{
+			ResourceName:       "nxos_telemetry.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccTelemetryResourcePrerequisitesConfig + testAccTelemetryResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccTelemetryResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccTelemetryResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_telemetry.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccTelemetryResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccTelemetryResourcePrerequisitesConfig + testAccTelemetryResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosTelemetryPrerequisitesConfig + testAccNxosTelemetryConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_telemetry.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosTelemetryImportStateIdFunc("nxos_telemetry.test"),
-			},
-			{
-				ResourceName:       "nxos_telemetry.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosTelemetryImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccTelemetryResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -90,7 +132,7 @@ func nxosTelemetryImportStateIdFunc(resourceName string) resource.ImportStateIdF
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosTelemetryPrerequisitesConfig = `
+const testAccTelemetryResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/telemetry"
   class_name = "fmTelemetry"
@@ -105,7 +147,7 @@ resource "nxos_dme" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosTelemetryConfig_minimum() string {
+func testAccTelemetryResourceConfig_minimum() string {
 	config := `resource "nxos_telemetry" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
@@ -115,7 +157,7 @@ func testAccNxosTelemetryConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosTelemetryConfig_all() string {
+func testAccTelemetryResourceConfig_all() string {
 	config := `resource "nxos_telemetry" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	batch_dme_events = false` + "\n"
@@ -162,6 +204,14 @@ func testAccNxosTelemetryConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccTelemetryResourceConfig_dataSource() string {
+	return `
+data "nxos_telemetry" "test" {
+	depends_on = [nxos_telemetry.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

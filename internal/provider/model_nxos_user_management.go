@@ -314,6 +314,14 @@ var UserManagementSubtreeClassMinVersions = map[string]string{}
 // UserManagementMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var UserManagementMinVersions = map[string]helpers.MinVersion{}
 
+// UserManagementListClasses holds the list child classes of the resource.
+var UserManagementListClasses = map[string]bool{"aaaUser": true, "aaaUserRole": true, "aaaTacacsPlusProvider": true, "aaaTacacsPlusProviderGroup": true, "aaaProviderRef": true, "aaaRadiusProvider": true, "aaaRadiusProviderGroup": true, "aaaDefaultAuthor": true}
+
+// getUserManagementTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getUserManagementTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, UserManagementSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -3299,7 +3307,926 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserManagement, config UserManagement, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data UserManagement) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.PreLoginBannerDescription.IsNull() && data.PreLoginBannerName.IsNull() && data.PreLoginBannerOwnerKey.IsNull() && data.PreLoginBannerMessage.IsNull() && data.PreLoginBannerOwnerTag.IsNull()) {
+		aaaPreLoginBannerDn := dn + "/" + "preloginbanner"
+		dns[aaaPreLoginBannerDn] = true
+	}
+	if !(data.PostLoginBannerDescription.IsNull() && data.PostLoginBannerName.IsNull() && data.PostLoginBannerOwnerKey.IsNull() && data.PostLoginBannerMessage.IsNull() && data.PostLoginBannerOwnerTag.IsNull()) {
+		aaaPostLoginBannerDn := dn + "/" + "postloginbanner"
+		dns[aaaPostLoginBannerDn] = true
+	}
+	for key, child := range data.Users {
+		aaaUserDn := dn + "/" + child.getRn(key)
+		dns[aaaUserDn] = true
+		if !(len(child.Roles) == 0) {
+			aaaUserDomainDn_ := aaaUserDn + "/" + "userdomain-[all]"
+			dns[aaaUserDomainDn_] = true
+			for key_, child_ := range child.Roles {
+				aaaUserRoleDn_ := aaaUserDomainDn_ + "/" + child_.getRn(key_)
+				dns[aaaUserRoleDn_] = true
+			}
+		}
+	}
+	if !(data.TacacsDeadtime.IsNull() && data.TacacsDescription.IsNull() && data.TacacsKey.IsNull() && data.TacacsKeyEncryption.IsNull() && data.TacacsLoggingLevel.IsNull() && data.TacacsName.IsNull() && data.TacacsOwnerKey.IsNull() && data.TacacsOwnerTag.IsNull() && data.TacacsRetries.IsNull() && data.TacacsSourceInterface.IsNull() && data.TacacsTimeout.IsNull() && len(data.TacacsProviders) == 0 && len(data.TacacsProviderGroups) == 0) {
+		aaaTacacsPlusEpDn := dn + "/" + "tacacsext"
+		dns[aaaTacacsPlusEpDn] = true
+		for key, child := range data.TacacsProviders {
+			aaaTacacsPlusProviderDn := aaaTacacsPlusEpDn + "/" + child.getRn(key)
+			dns[aaaTacacsPlusProviderDn] = true
+		}
+		for key, child := range data.TacacsProviderGroups {
+			aaaTacacsPlusProviderGroupDn := aaaTacacsPlusEpDn + "/" + child.getRn(key)
+			dns[aaaTacacsPlusProviderGroupDn] = true
+			for key_, child_ := range child.Servers {
+				aaaProviderRefDn_ := aaaTacacsPlusProviderGroupDn + "/" + child_.getRn(key_)
+				dns[aaaProviderRefDn_] = true
+			}
+		}
+	}
+	if !(data.RadiusDeadtime.IsNull() && data.RadiusDescription.IsNull() && data.RadiusKey.IsNull() && data.RadiusKeyEncryption.IsNull() && data.RadiusLoggingLevel.IsNull() && data.RadiusName.IsNull() && data.RadiusOwnerKey.IsNull() && data.RadiusOwnerTag.IsNull() && data.RadiusRetries.IsNull() && data.RadiusSecureMode.IsNull() && data.RadiusSourceInterface.IsNull() && data.RadiusTimeout.IsNull() && (data.RadiusMonitoringDescription.IsNull() && data.RadiusMonitoringIdleTime.IsNull() && data.RadiusMonitoringUser.IsNull() && data.RadiusMonitoringOwnerKey.IsNull() && data.RadiusMonitoringOwnerTag.IsNull() && data.RadiusMonitoringPasswordType.IsNull() && data.RadiusMonitoringPassword.IsNull()) && len(data.RadiusProviders) == 0 && len(data.RadiusProviderGroups) == 0) {
+		aaaRadiusEpDn := dn + "/" + "radiusext"
+		dns[aaaRadiusEpDn] = true
+		if !(data.RadiusMonitoringDescription.IsNull() && data.RadiusMonitoringIdleTime.IsNull() && data.RadiusMonitoringUser.IsNull() && data.RadiusMonitoringOwnerKey.IsNull() && data.RadiusMonitoringOwnerTag.IsNull() && data.RadiusMonitoringPasswordType.IsNull() && data.RadiusMonitoringPassword.IsNull()) {
+			aaaRadiusServerMonitorDn := aaaRadiusEpDn + "/" + "radiusservermonitor"
+			dns[aaaRadiusServerMonitorDn] = true
+		}
+		for key, child := range data.RadiusProviders {
+			aaaRadiusProviderDn := aaaRadiusEpDn + "/" + child.getRn(key)
+			dns[aaaRadiusProviderDn] = true
+		}
+		for key, child := range data.RadiusProviderGroups {
+			aaaRadiusProviderGroupDn := aaaRadiusEpDn + "/" + child.getRn(key)
+			dns[aaaRadiusProviderGroupDn] = true
+			for key_, child_ := range child.Servers {
+				aaaProviderRefDn_ := aaaRadiusProviderGroupDn + "/" + child_.getRn(key_)
+				dns[aaaProviderRefDn_] = true
+			}
+		}
+	}
+	if !(data.AuthenticationRealmDefaultRolePolicy.IsNull() && data.AuthenticationRealmDescription.IsNull() && data.AuthenticationRealmLoggingLevel.IsNull() && data.AuthenticationRealmOwnerKey.IsNull() && data.AuthenticationRealmOwnerTag.IsNull() && data.AuthenticationRealmRadiusDirectedRequest.IsNull() && data.AuthenticationRealmTacacsDirectedRequest.IsNull() && (data.DefaultAuthenticationProtocol.IsNull() && data.DefaultAuthenticationDescription.IsNull() && data.DefaultAuthenticationErrorEnable.IsNull() && data.DefaultAuthenticationFallback.IsNull() && data.DefaultAuthenticationInvalidUserLog.IsNull() && data.DefaultAuthenticationLocal.IsNull() && data.DefaultAuthenticationNone.IsNull() && data.DefaultAuthenticationOwnerKey.IsNull() && data.DefaultAuthenticationOwnerTag.IsNull() && data.DefaultAuthenticationProviderGroup.IsNull() && data.DefaultAuthenticationProviderGroup2.IsNull() && data.DefaultAuthenticationProviderGroup3.IsNull() && data.DefaultAuthenticationProviderGroup4.IsNull() && data.DefaultAuthenticationProviderGroup5.IsNull() && data.DefaultAuthenticationProviderGroup6.IsNull() && data.DefaultAuthenticationProviderGroup7.IsNull() && data.DefaultAuthenticationProviderGroup8.IsNull() && data.DefaultAuthenticationRealm.IsNull()) && (data.ConsoleAuthenticationProtocol.IsNull() && data.ConsoleAuthenticationDescription.IsNull() && data.ConsoleAuthenticationErrorEnable.IsNull() && data.ConsoleAuthenticationFallback.IsNull() && data.ConsoleAuthenticationInvalidUserLog.IsNull() && data.ConsoleAuthenticationLocal.IsNull() && data.ConsoleAuthenticationNone.IsNull() && data.ConsoleAuthenticationOwnerKey.IsNull() && data.ConsoleAuthenticationOwnerTag.IsNull() && data.ConsoleAuthenticationProviderGroup.IsNull() && data.ConsoleAuthenticationProviderGroup2.IsNull() && data.ConsoleAuthenticationProviderGroup3.IsNull() && data.ConsoleAuthenticationProviderGroup4.IsNull() && data.ConsoleAuthenticationProviderGroup5.IsNull() && data.ConsoleAuthenticationProviderGroup6.IsNull() && data.ConsoleAuthenticationProviderGroup7.IsNull() && data.ConsoleAuthenticationProviderGroup8.IsNull() && data.ConsoleAuthenticationRealm.IsNull()) && len(data.DefaultAuthorizations) == 0 && (data.DefaultAccountingMethodNone.IsNull() && data.DefaultAccountingDescription.IsNull() && data.DefaultAccountingLocalRbac.IsNull() && data.DefaultAccountingOwnerKey.IsNull() && data.DefaultAccountingOwnerTag.IsNull() && data.DefaultAccountingProviderGroup.IsNull() && data.DefaultAccountingProviderGroup2.IsNull() && data.DefaultAccountingProviderGroup3.IsNull() && data.DefaultAccountingProviderGroup4.IsNull() && data.DefaultAccountingProviderGroup5.IsNull() && data.DefaultAccountingProviderGroup6.IsNull() && data.DefaultAccountingProviderGroup7.IsNull() && data.DefaultAccountingProviderGroup8.IsNull() && data.DefaultAccountingRealm.IsNull())) {
+		aaaAuthRealmDn := dn + "/" + "authrealm"
+		dns[aaaAuthRealmDn] = true
+		if !(data.DefaultAuthenticationProtocol.IsNull() && data.DefaultAuthenticationDescription.IsNull() && data.DefaultAuthenticationErrorEnable.IsNull() && data.DefaultAuthenticationFallback.IsNull() && data.DefaultAuthenticationInvalidUserLog.IsNull() && data.DefaultAuthenticationLocal.IsNull() && data.DefaultAuthenticationNone.IsNull() && data.DefaultAuthenticationOwnerKey.IsNull() && data.DefaultAuthenticationOwnerTag.IsNull() && data.DefaultAuthenticationProviderGroup.IsNull() && data.DefaultAuthenticationProviderGroup2.IsNull() && data.DefaultAuthenticationProviderGroup3.IsNull() && data.DefaultAuthenticationProviderGroup4.IsNull() && data.DefaultAuthenticationProviderGroup5.IsNull() && data.DefaultAuthenticationProviderGroup6.IsNull() && data.DefaultAuthenticationProviderGroup7.IsNull() && data.DefaultAuthenticationProviderGroup8.IsNull() && data.DefaultAuthenticationRealm.IsNull()) {
+			aaaDefaultAuthDn := aaaAuthRealmDn + "/" + "defaultauth"
+			dns[aaaDefaultAuthDn] = true
+		}
+		if !(data.ConsoleAuthenticationProtocol.IsNull() && data.ConsoleAuthenticationDescription.IsNull() && data.ConsoleAuthenticationErrorEnable.IsNull() && data.ConsoleAuthenticationFallback.IsNull() && data.ConsoleAuthenticationInvalidUserLog.IsNull() && data.ConsoleAuthenticationLocal.IsNull() && data.ConsoleAuthenticationNone.IsNull() && data.ConsoleAuthenticationOwnerKey.IsNull() && data.ConsoleAuthenticationOwnerTag.IsNull() && data.ConsoleAuthenticationProviderGroup.IsNull() && data.ConsoleAuthenticationProviderGroup2.IsNull() && data.ConsoleAuthenticationProviderGroup3.IsNull() && data.ConsoleAuthenticationProviderGroup4.IsNull() && data.ConsoleAuthenticationProviderGroup5.IsNull() && data.ConsoleAuthenticationProviderGroup6.IsNull() && data.ConsoleAuthenticationProviderGroup7.IsNull() && data.ConsoleAuthenticationProviderGroup8.IsNull() && data.ConsoleAuthenticationRealm.IsNull()) {
+			aaaConsoleAuthDn := aaaAuthRealmDn + "/" + "consoleauth"
+			dns[aaaConsoleAuthDn] = true
+		}
+		for key, child := range data.DefaultAuthorizations {
+			aaaDefaultAuthorDn := aaaAuthRealmDn + "/" + child.getRn(key)
+			dns[aaaDefaultAuthorDn] = true
+		}
+		if !(data.DefaultAccountingMethodNone.IsNull() && data.DefaultAccountingDescription.IsNull() && data.DefaultAccountingLocalRbac.IsNull() && data.DefaultAccountingOwnerKey.IsNull() && data.DefaultAccountingOwnerTag.IsNull() && data.DefaultAccountingProviderGroup.IsNull() && data.DefaultAccountingProviderGroup2.IsNull() && data.DefaultAccountingProviderGroup3.IsNull() && data.DefaultAccountingProviderGroup4.IsNull() && data.DefaultAccountingProviderGroup5.IsNull() && data.DefaultAccountingProviderGroup6.IsNull() && data.DefaultAccountingProviderGroup7.IsNull() && data.DefaultAccountingProviderGroup8.IsNull() && data.DefaultAccountingRealm.IsNull()) {
+			aaaDefaultAccDn := aaaAuthRealmDn + "/" + "defaultacc"
+			dns[aaaDefaultAccDn] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data UserManagement) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if !data.AlphabetSequence.IsNull() {
+		body, _ = sjson.Set(body, "aaaUserEp.attributes.alphabetSequence", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Description.IsNull() {
+		body, _ = sjson.Set(body, "aaaUserEp.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.KeyboardSequence.IsNull() {
+		body, _ = sjson.Set(body, "aaaUserEp.attributes.keyBoardSequence", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MaxLogins.IsNull() {
+		body, _ = sjson.Set(body, "aaaUserEp.attributes.maxLogins", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MinUnique.IsNull() {
+		body, _ = sjson.Set(body, "aaaUserEp.attributes.minUnique", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PasswordGraceTime.IsNull() {
+		body, _ = sjson.Set(body, "aaaUserEp.attributes.pwdGraceTime", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PasswordLifeTime.IsNull() {
+		body, _ = sjson.Set(body, "aaaUserEp.attributes.pwdLifeTime", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PasswordMaxLength.IsNull() {
+		body, _ = sjson.Set(body, "aaaUserEp.attributes.pwdMaxLength", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PasswordMinLength.IsNull() {
+		body, _ = sjson.Set(body, "aaaUserEp.attributes.pwdMinLength", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PasswordSecureMode.IsNull() {
+		body, _ = sjson.Set(body, "aaaUserEp.attributes.pwdSecureMode", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PasswordStrengthCheck.IsNull() {
+		body, _ = sjson.Set(body, "aaaUserEp.attributes.pwdStrengthCheck", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.PasswordWarningTime.IsNull() {
+		body, _ = sjson.Set(body, "aaaUserEp.attributes.pwdWarningTime", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.ServicePasswordRecovery.IsNull() {
+		body, _ = sjson.Set(body, "aaaUserEp.attributes.svcPwdRecovery", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "aaaUserEp.attributes", map[string]interface{}{})
+	}
+	if !(data.PreLoginBannerDescription.IsNull() && data.PreLoginBannerName.IsNull() && data.PreLoginBannerOwnerKey.IsNull() && data.PreLoginBannerMessage.IsNull() && data.PreLoginBannerOwnerTag.IsNull()) {
+		aaaPreLoginBannerRn := "preloginbanner"
+		aaaPreLoginBannerDn := dn + "/" + aaaPreLoginBannerRn
+		_ = aaaPreLoginBannerDn
+		{
+			aaaPreLoginBannerBody := ""
+			if !data.PreLoginBannerDescription.IsNull() {
+				aaaPreLoginBannerBody, _ = sjson.Set(aaaPreLoginBannerBody, "aaaPreLoginBanner.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PreLoginBannerName.IsNull() {
+				aaaPreLoginBannerBody, _ = sjson.Set(aaaPreLoginBannerBody, "aaaPreLoginBanner.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PreLoginBannerOwnerKey.IsNull() {
+				aaaPreLoginBannerBody, _ = sjson.Set(aaaPreLoginBannerBody, "aaaPreLoginBanner.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PreLoginBannerMessage.IsNull() {
+				aaaPreLoginBannerBody, _ = sjson.Set(aaaPreLoginBannerBody, "aaaPreLoginBanner.attributes.message", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PreLoginBannerOwnerTag.IsNull() {
+				aaaPreLoginBannerBody, _ = sjson.Set(aaaPreLoginBannerBody, "aaaPreLoginBanner.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if aaaPreLoginBannerBody != "" {
+				aaaPreLoginBannerBody, _ = sjson.Set(aaaPreLoginBannerBody, "aaaPreLoginBanner.attributes.rn", aaaPreLoginBannerRn)
+				body, _ = sjson.SetRaw(body, "aaaUserEp.children.-1", aaaPreLoginBannerBody)
+			}
+		}
+	}
+	if !(data.PostLoginBannerDescription.IsNull() && data.PostLoginBannerName.IsNull() && data.PostLoginBannerOwnerKey.IsNull() && data.PostLoginBannerMessage.IsNull() && data.PostLoginBannerOwnerTag.IsNull()) {
+		aaaPostLoginBannerRn := "postloginbanner"
+		aaaPostLoginBannerDn := dn + "/" + aaaPostLoginBannerRn
+		_ = aaaPostLoginBannerDn
+		{
+			aaaPostLoginBannerBody := ""
+			if !data.PostLoginBannerDescription.IsNull() {
+				aaaPostLoginBannerBody, _ = sjson.Set(aaaPostLoginBannerBody, "aaaPostLoginBanner.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PostLoginBannerName.IsNull() {
+				aaaPostLoginBannerBody, _ = sjson.Set(aaaPostLoginBannerBody, "aaaPostLoginBanner.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PostLoginBannerOwnerKey.IsNull() {
+				aaaPostLoginBannerBody, _ = sjson.Set(aaaPostLoginBannerBody, "aaaPostLoginBanner.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PostLoginBannerMessage.IsNull() {
+				aaaPostLoginBannerBody, _ = sjson.Set(aaaPostLoginBannerBody, "aaaPostLoginBanner.attributes.message", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PostLoginBannerOwnerTag.IsNull() {
+				aaaPostLoginBannerBody, _ = sjson.Set(aaaPostLoginBannerBody, "aaaPostLoginBanner.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if aaaPostLoginBannerBody != "" {
+				aaaPostLoginBannerBody, _ = sjson.Set(aaaPostLoginBannerBody, "aaaPostLoginBanner.attributes.rn", aaaPostLoginBannerRn)
+				body, _ = sjson.SetRaw(body, "aaaUserEp.children.-1", aaaPostLoginBannerBody)
+			}
+		}
+	}
+	for key, child := range data.Users {
+		_ = child
+		aaaUserRn := child.getRn(key)
+		aaaUserDn := dn + "/" + aaaUserRn
+		_ = aaaUserDn
+		if !existed(aaaUserDn) {
+			body, _ = sjson.Set(body, "aaaUserEp.children.-1.aaaUser.attributes", map[string]interface{}{"rn": aaaUserRn, "status": "deleted"})
+			continue
+		}
+		aaaUserBody := ""
+		aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.rn", aaaUserRn)
+		if !child.AccountStatus.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.accountStatus", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AllowExpired.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.allowExpired", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ClearPasswordHistory.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.clearPwdHistory", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Description.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Email.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.email", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Expiration.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.expiration", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Expires.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.expires", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.FirstName.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.firstName", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Force.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.force", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LastName.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.lastName", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.PasswordHash.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.passwordHash", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Phone.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.phone", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Password.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.pwd", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.PasswordEncryptionType.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.pwdEncryptType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ShellType.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.shelltype", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.UnixUserId.IsNull() {
+			aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.attributes.unixUserId", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !(len(child.Roles) == 0) {
+			aaaUserDomainRn_ := "userdomain-[all]"
+			aaaUserDomainDn_ := aaaUserDn + "/" + aaaUserDomainRn_
+			_ = aaaUserDomainDn_
+			if !existed(aaaUserDomainDn_) {
+				aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.children.-1.aaaUserDomain.attributes", map[string]interface{}{"rn": aaaUserDomainRn_, "status": "deleted"})
+			} else {
+				aaaUserDomainBody_ := ""
+				for key_, child_ := range child.Roles {
+					_ = child_
+					aaaUserRoleRn_ := child_.getRn(key_)
+					aaaUserRoleDn_ := aaaUserDomainDn_ + "/" + aaaUserRoleRn_
+					_ = aaaUserRoleDn_
+					if !existed(aaaUserRoleDn_) {
+						aaaUserDomainBody_, _ = sjson.Set(aaaUserDomainBody_, "aaaUserDomain.children.-1.aaaUserRole.attributes", map[string]interface{}{"rn": aaaUserRoleRn_, "status": "deleted"})
+						continue
+					}
+					aaaUserRoleBody_ := ""
+					aaaUserRoleBody_, _ = sjson.Set(aaaUserRoleBody_, "aaaUserRole.attributes.rn", aaaUserRoleRn_)
+					if !child_.Description.IsNull() {
+						aaaUserRoleBody_, _ = sjson.Set(aaaUserRoleBody_, "aaaUserRole.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PrivilegeType.IsNull() {
+						aaaUserRoleBody_, _ = sjson.Set(aaaUserRoleBody_, "aaaUserRole.attributes.privType", "DME_UNSET_PROPERTY_MARKER")
+					}
+					aaaUserDomainBody_, _ = sjson.SetRaw(aaaUserDomainBody_, "aaaUserDomain.children.-1", aaaUserRoleBody_)
+				}
+				if aaaUserDomainBody_ != "" {
+					aaaUserDomainBody_, _ = sjson.Set(aaaUserDomainBody_, "aaaUserDomain.attributes.rn", aaaUserDomainRn_)
+					aaaUserBody, _ = sjson.SetRaw(aaaUserBody, "aaaUser.children.-1", aaaUserDomainBody_)
+				}
+			}
+		}
+		body, _ = sjson.SetRaw(body, "aaaUserEp.children.-1", aaaUserBody)
+	}
+	if !(data.TacacsDeadtime.IsNull() && data.TacacsDescription.IsNull() && data.TacacsKey.IsNull() && data.TacacsKeyEncryption.IsNull() && data.TacacsLoggingLevel.IsNull() && data.TacacsName.IsNull() && data.TacacsOwnerKey.IsNull() && data.TacacsOwnerTag.IsNull() && data.TacacsRetries.IsNull() && data.TacacsSourceInterface.IsNull() && data.TacacsTimeout.IsNull() && len(data.TacacsProviders) == 0 && len(data.TacacsProviderGroups) == 0) {
+		aaaTacacsPlusEpRn := "tacacsext"
+		aaaTacacsPlusEpDn := dn + "/" + aaaTacacsPlusEpRn
+		_ = aaaTacacsPlusEpDn
+		{
+			aaaTacacsPlusEpBody := ""
+			if !data.TacacsDeadtime.IsNull() {
+				aaaTacacsPlusEpBody, _ = sjson.Set(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.attributes.deadtime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TacacsDescription.IsNull() {
+				aaaTacacsPlusEpBody, _ = sjson.Set(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TacacsKey.IsNull() {
+				aaaTacacsPlusEpBody, _ = sjson.Set(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.attributes.key", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TacacsKeyEncryption.IsNull() {
+				aaaTacacsPlusEpBody, _ = sjson.Set(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.attributes.keyEnc", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TacacsLoggingLevel.IsNull() {
+				aaaTacacsPlusEpBody, _ = sjson.Set(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.attributes.loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TacacsName.IsNull() {
+				aaaTacacsPlusEpBody, _ = sjson.Set(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TacacsOwnerKey.IsNull() {
+				aaaTacacsPlusEpBody, _ = sjson.Set(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TacacsOwnerTag.IsNull() {
+				aaaTacacsPlusEpBody, _ = sjson.Set(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TacacsRetries.IsNull() {
+				aaaTacacsPlusEpBody, _ = sjson.Set(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.attributes.retries", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TacacsSourceInterface.IsNull() {
+				aaaTacacsPlusEpBody, _ = sjson.Set(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.attributes.srcIf", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TacacsTimeout.IsNull() {
+				aaaTacacsPlusEpBody, _ = sjson.Set(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.attributes.timeout", "DME_UNSET_PROPERTY_MARKER")
+			}
+			for key, child := range data.TacacsProviders {
+				_ = child
+				aaaTacacsPlusProviderRn := child.getRn(key)
+				aaaTacacsPlusProviderDn := aaaTacacsPlusEpDn + "/" + aaaTacacsPlusProviderRn
+				_ = aaaTacacsPlusProviderDn
+				if !existed(aaaTacacsPlusProviderDn) {
+					aaaTacacsPlusEpBody, _ = sjson.Set(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.children.-1.aaaTacacsPlusProvider.attributes", map[string]interface{}{"rn": aaaTacacsPlusProviderRn, "status": "deleted"})
+					continue
+				}
+				aaaTacacsPlusProviderBody := ""
+				aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.rn", aaaTacacsPlusProviderRn)
+				if !child.AuthenticationProtocol.IsNull() {
+					aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.authProtocol", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Description.IsNull() {
+					aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Key.IsNull() {
+					aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.key", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.KeyEncryption.IsNull() {
+					aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.keyEnc", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.MonitoringIdleTime.IsNull() {
+					aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.monitoringIdleTime", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.MonitoringPassword.IsNull() {
+					aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.monitoringPassword", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.MonitoringPasswordType.IsNull() {
+					aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.monitoringPasswordType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.MonitoringUser.IsNull() {
+					aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.monitoringUser", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.OwnerKey.IsNull() {
+					aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.OwnerTag.IsNull() {
+					aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Port.IsNull() {
+					aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.port", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Retries.IsNull() {
+					aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.retries", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SingleConnection.IsNull() {
+					aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.singleConnection", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Timeout.IsNull() {
+					aaaTacacsPlusProviderBody, _ = sjson.Set(aaaTacacsPlusProviderBody, "aaaTacacsPlusProvider.attributes.timeout", "DME_UNSET_PROPERTY_MARKER")
+				}
+				aaaTacacsPlusEpBody, _ = sjson.SetRaw(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.children.-1", aaaTacacsPlusProviderBody)
+			}
+			for key, child := range data.TacacsProviderGroups {
+				_ = child
+				aaaTacacsPlusProviderGroupRn := child.getRn(key)
+				aaaTacacsPlusProviderGroupDn := aaaTacacsPlusEpDn + "/" + aaaTacacsPlusProviderGroupRn
+				_ = aaaTacacsPlusProviderGroupDn
+				if !existed(aaaTacacsPlusProviderGroupDn) {
+					aaaTacacsPlusEpBody, _ = sjson.Set(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.children.-1.aaaTacacsPlusProviderGroup.attributes", map[string]interface{}{"rn": aaaTacacsPlusProviderGroupRn, "status": "deleted"})
+					continue
+				}
+				aaaTacacsPlusProviderGroupBody := ""
+				aaaTacacsPlusProviderGroupBody, _ = sjson.Set(aaaTacacsPlusProviderGroupBody, "aaaTacacsPlusProviderGroup.attributes.rn", aaaTacacsPlusProviderGroupRn)
+				if !child.Deadtime.IsNull() {
+					aaaTacacsPlusProviderGroupBody, _ = sjson.Set(aaaTacacsPlusProviderGroupBody, "aaaTacacsPlusProviderGroup.attributes.deadtime", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Description.IsNull() {
+					aaaTacacsPlusProviderGroupBody, _ = sjson.Set(aaaTacacsPlusProviderGroupBody, "aaaTacacsPlusProviderGroup.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.OwnerKey.IsNull() {
+					aaaTacacsPlusProviderGroupBody, _ = sjson.Set(aaaTacacsPlusProviderGroupBody, "aaaTacacsPlusProviderGroup.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.OwnerTag.IsNull() {
+					aaaTacacsPlusProviderGroupBody, _ = sjson.Set(aaaTacacsPlusProviderGroupBody, "aaaTacacsPlusProviderGroup.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SourceInterface.IsNull() {
+					aaaTacacsPlusProviderGroupBody, _ = sjson.Set(aaaTacacsPlusProviderGroupBody, "aaaTacacsPlusProviderGroup.attributes.srcIf", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Vrf.IsNull() {
+					aaaTacacsPlusProviderGroupBody, _ = sjson.Set(aaaTacacsPlusProviderGroupBody, "aaaTacacsPlusProviderGroup.attributes.vrf", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.Servers {
+					_ = child_
+					aaaProviderRefRn_ := child_.getRn(key_)
+					aaaProviderRefDn_ := aaaTacacsPlusProviderGroupDn + "/" + aaaProviderRefRn_
+					_ = aaaProviderRefDn_
+					if !existed(aaaProviderRefDn_) {
+						aaaTacacsPlusProviderGroupBody, _ = sjson.Set(aaaTacacsPlusProviderGroupBody, "aaaTacacsPlusProviderGroup.children.-1.aaaProviderRef.attributes", map[string]interface{}{"rn": aaaProviderRefRn_, "status": "deleted"})
+						continue
+					}
+					aaaProviderRefBody_ := ""
+					aaaProviderRefBody_, _ = sjson.Set(aaaProviderRefBody_, "aaaProviderRef.attributes.rn", aaaProviderRefRn_)
+					if !child_.Description.IsNull() {
+						aaaProviderRefBody_, _ = sjson.Set(aaaProviderRefBody_, "aaaProviderRef.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Order.IsNull() {
+						aaaProviderRefBody_, _ = sjson.Set(aaaProviderRefBody_, "aaaProviderRef.attributes.order", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.OwnerKey.IsNull() {
+						aaaProviderRefBody_, _ = sjson.Set(aaaProviderRefBody_, "aaaProviderRef.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.OwnerTag.IsNull() {
+						aaaProviderRefBody_, _ = sjson.Set(aaaProviderRefBody_, "aaaProviderRef.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+					}
+					aaaTacacsPlusProviderGroupBody, _ = sjson.SetRaw(aaaTacacsPlusProviderGroupBody, "aaaTacacsPlusProviderGroup.children.-1", aaaProviderRefBody_)
+				}
+				aaaTacacsPlusEpBody, _ = sjson.SetRaw(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.children.-1", aaaTacacsPlusProviderGroupBody)
+			}
+			if aaaTacacsPlusEpBody != "" {
+				aaaTacacsPlusEpBody, _ = sjson.Set(aaaTacacsPlusEpBody, "aaaTacacsPlusEp.attributes.rn", aaaTacacsPlusEpRn)
+				body, _ = sjson.SetRaw(body, "aaaUserEp.children.-1", aaaTacacsPlusEpBody)
+			}
+		}
+	}
+	if !(data.RadiusDeadtime.IsNull() && data.RadiusDescription.IsNull() && data.RadiusKey.IsNull() && data.RadiusKeyEncryption.IsNull() && data.RadiusLoggingLevel.IsNull() && data.RadiusName.IsNull() && data.RadiusOwnerKey.IsNull() && data.RadiusOwnerTag.IsNull() && data.RadiusRetries.IsNull() && data.RadiusSecureMode.IsNull() && data.RadiusSourceInterface.IsNull() && data.RadiusTimeout.IsNull() && (data.RadiusMonitoringDescription.IsNull() && data.RadiusMonitoringIdleTime.IsNull() && data.RadiusMonitoringUser.IsNull() && data.RadiusMonitoringOwnerKey.IsNull() && data.RadiusMonitoringOwnerTag.IsNull() && data.RadiusMonitoringPasswordType.IsNull() && data.RadiusMonitoringPassword.IsNull()) && len(data.RadiusProviders) == 0 && len(data.RadiusProviderGroups) == 0) {
+		aaaRadiusEpRn := "radiusext"
+		aaaRadiusEpDn := dn + "/" + aaaRadiusEpRn
+		_ = aaaRadiusEpDn
+		{
+			aaaRadiusEpBody := ""
+			if !data.RadiusDeadtime.IsNull() {
+				aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.attributes.deadtime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RadiusDescription.IsNull() {
+				aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RadiusKey.IsNull() {
+				aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.attributes.key", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RadiusKeyEncryption.IsNull() {
+				aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.attributes.keyEnc", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RadiusLoggingLevel.IsNull() {
+				aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.attributes.loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RadiusName.IsNull() {
+				aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RadiusOwnerKey.IsNull() {
+				aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RadiusOwnerTag.IsNull() {
+				aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RadiusRetries.IsNull() {
+				aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.attributes.retries", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RadiusSecureMode.IsNull() {
+				aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.attributes.secureMode", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RadiusSourceInterface.IsNull() {
+				aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.attributes.srcIf", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RadiusTimeout.IsNull() {
+				aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.attributes.timeout", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(data.RadiusMonitoringDescription.IsNull() && data.RadiusMonitoringIdleTime.IsNull() && data.RadiusMonitoringUser.IsNull() && data.RadiusMonitoringOwnerKey.IsNull() && data.RadiusMonitoringOwnerTag.IsNull() && data.RadiusMonitoringPasswordType.IsNull() && data.RadiusMonitoringPassword.IsNull()) {
+				aaaRadiusServerMonitorRn := "radiusservermonitor"
+				aaaRadiusServerMonitorDn := aaaRadiusEpDn + "/" + aaaRadiusServerMonitorRn
+				_ = aaaRadiusServerMonitorDn
+				{
+					aaaRadiusServerMonitorBody := ""
+					if !data.RadiusMonitoringDescription.IsNull() {
+						aaaRadiusServerMonitorBody, _ = sjson.Set(aaaRadiusServerMonitorBody, "aaaRadiusServerMonitor.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.RadiusMonitoringIdleTime.IsNull() {
+						aaaRadiusServerMonitorBody, _ = sjson.Set(aaaRadiusServerMonitorBody, "aaaRadiusServerMonitor.attributes.idleTime", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.RadiusMonitoringUser.IsNull() {
+						aaaRadiusServerMonitorBody, _ = sjson.Set(aaaRadiusServerMonitorBody, "aaaRadiusServerMonitor.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.RadiusMonitoringOwnerKey.IsNull() {
+						aaaRadiusServerMonitorBody, _ = sjson.Set(aaaRadiusServerMonitorBody, "aaaRadiusServerMonitor.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.RadiusMonitoringOwnerTag.IsNull() {
+						aaaRadiusServerMonitorBody, _ = sjson.Set(aaaRadiusServerMonitorBody, "aaaRadiusServerMonitor.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.RadiusMonitoringPasswordType.IsNull() {
+						aaaRadiusServerMonitorBody, _ = sjson.Set(aaaRadiusServerMonitorBody, "aaaRadiusServerMonitor.attributes.passwordType", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.RadiusMonitoringPassword.IsNull() {
+						aaaRadiusServerMonitorBody, _ = sjson.Set(aaaRadiusServerMonitorBody, "aaaRadiusServerMonitor.attributes.pwd", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if aaaRadiusServerMonitorBody != "" {
+						aaaRadiusServerMonitorBody, _ = sjson.Set(aaaRadiusServerMonitorBody, "aaaRadiusServerMonitor.attributes.rn", aaaRadiusServerMonitorRn)
+						aaaRadiusEpBody, _ = sjson.SetRaw(aaaRadiusEpBody, "aaaRadiusEp.children.-1", aaaRadiusServerMonitorBody)
+					}
+				}
+			}
+			for key, child := range data.RadiusProviders {
+				_ = child
+				aaaRadiusProviderRn := child.getRn(key)
+				aaaRadiusProviderDn := aaaRadiusEpDn + "/" + aaaRadiusProviderRn
+				_ = aaaRadiusProviderDn
+				if !existed(aaaRadiusProviderDn) {
+					aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.children.-1.aaaRadiusProvider.attributes", map[string]interface{}{"rn": aaaRadiusProviderRn, "status": "deleted"})
+					continue
+				}
+				aaaRadiusProviderBody := ""
+				aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.rn", aaaRadiusProviderRn)
+				if !child.AccountingPort.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.acctPort", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.AuthenticationPort.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.authPort", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.AuthenticationProtocol.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.authProtocol", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Description.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.DtlsClientTrustpoint.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.dtlsClientTrustpoint", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.DtlsIdleTimeout.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.dtlsIdleTimeout", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Key.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.key", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.KeyEncryption.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.keyEnc", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.MonitoringIdleTime.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.monitoringIdleTime", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.MonitoringPassword.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.monitoringPassword", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.MonitoringPasswordType.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.monitoringPasswordType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.MonitoringUser.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.monitoringUser", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.OwnerKey.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.OwnerTag.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Retries.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.retries", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Timeout.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.timeout", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.TlsClientTrustpoint.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.tlsClientTrustpoint", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.TlsIdleTimeout.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.tlsIdleTimeout", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.UseType.IsNull() {
+					aaaRadiusProviderBody, _ = sjson.Set(aaaRadiusProviderBody, "aaaRadiusProvider.attributes.useType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				aaaRadiusEpBody, _ = sjson.SetRaw(aaaRadiusEpBody, "aaaRadiusEp.children.-1", aaaRadiusProviderBody)
+			}
+			for key, child := range data.RadiusProviderGroups {
+				_ = child
+				aaaRadiusProviderGroupRn := child.getRn(key)
+				aaaRadiusProviderGroupDn := aaaRadiusEpDn + "/" + aaaRadiusProviderGroupRn
+				_ = aaaRadiusProviderGroupDn
+				if !existed(aaaRadiusProviderGroupDn) {
+					aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.children.-1.aaaRadiusProviderGroup.attributes", map[string]interface{}{"rn": aaaRadiusProviderGroupRn, "status": "deleted"})
+					continue
+				}
+				aaaRadiusProviderGroupBody := ""
+				aaaRadiusProviderGroupBody, _ = sjson.Set(aaaRadiusProviderGroupBody, "aaaRadiusProviderGroup.attributes.rn", aaaRadiusProviderGroupRn)
+				if !child.Deadtime.IsNull() {
+					aaaRadiusProviderGroupBody, _ = sjson.Set(aaaRadiusProviderGroupBody, "aaaRadiusProviderGroup.attributes.deadtime", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Description.IsNull() {
+					aaaRadiusProviderGroupBody, _ = sjson.Set(aaaRadiusProviderGroupBody, "aaaRadiusProviderGroup.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.OwnerKey.IsNull() {
+					aaaRadiusProviderGroupBody, _ = sjson.Set(aaaRadiusProviderGroupBody, "aaaRadiusProviderGroup.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.OwnerTag.IsNull() {
+					aaaRadiusProviderGroupBody, _ = sjson.Set(aaaRadiusProviderGroupBody, "aaaRadiusProviderGroup.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SourceInterface.IsNull() {
+					aaaRadiusProviderGroupBody, _ = sjson.Set(aaaRadiusProviderGroupBody, "aaaRadiusProviderGroup.attributes.srcIf", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Vrf.IsNull() {
+					aaaRadiusProviderGroupBody, _ = sjson.Set(aaaRadiusProviderGroupBody, "aaaRadiusProviderGroup.attributes.vrf", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.Servers {
+					_ = child_
+					aaaProviderRefRn_ := child_.getRn(key_)
+					aaaProviderRefDn_ := aaaRadiusProviderGroupDn + "/" + aaaProviderRefRn_
+					_ = aaaProviderRefDn_
+					if !existed(aaaProviderRefDn_) {
+						aaaRadiusProviderGroupBody, _ = sjson.Set(aaaRadiusProviderGroupBody, "aaaRadiusProviderGroup.children.-1.aaaProviderRef.attributes", map[string]interface{}{"rn": aaaProviderRefRn_, "status": "deleted"})
+						continue
+					}
+					aaaProviderRefBody_ := ""
+					aaaProviderRefBody_, _ = sjson.Set(aaaProviderRefBody_, "aaaProviderRef.attributes.rn", aaaProviderRefRn_)
+					if !child_.Description.IsNull() {
+						aaaProviderRefBody_, _ = sjson.Set(aaaProviderRefBody_, "aaaProviderRef.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Order.IsNull() {
+						aaaProviderRefBody_, _ = sjson.Set(aaaProviderRefBody_, "aaaProviderRef.attributes.order", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.OwnerKey.IsNull() {
+						aaaProviderRefBody_, _ = sjson.Set(aaaProviderRefBody_, "aaaProviderRef.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.OwnerTag.IsNull() {
+						aaaProviderRefBody_, _ = sjson.Set(aaaProviderRefBody_, "aaaProviderRef.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+					}
+					aaaRadiusProviderGroupBody, _ = sjson.SetRaw(aaaRadiusProviderGroupBody, "aaaRadiusProviderGroup.children.-1", aaaProviderRefBody_)
+				}
+				aaaRadiusEpBody, _ = sjson.SetRaw(aaaRadiusEpBody, "aaaRadiusEp.children.-1", aaaRadiusProviderGroupBody)
+			}
+			if aaaRadiusEpBody != "" {
+				aaaRadiusEpBody, _ = sjson.Set(aaaRadiusEpBody, "aaaRadiusEp.attributes.rn", aaaRadiusEpRn)
+				body, _ = sjson.SetRaw(body, "aaaUserEp.children.-1", aaaRadiusEpBody)
+			}
+		}
+	}
+	if !(data.AuthenticationRealmDefaultRolePolicy.IsNull() && data.AuthenticationRealmDescription.IsNull() && data.AuthenticationRealmLoggingLevel.IsNull() && data.AuthenticationRealmOwnerKey.IsNull() && data.AuthenticationRealmOwnerTag.IsNull() && data.AuthenticationRealmRadiusDirectedRequest.IsNull() && data.AuthenticationRealmTacacsDirectedRequest.IsNull() && (data.DefaultAuthenticationProtocol.IsNull() && data.DefaultAuthenticationDescription.IsNull() && data.DefaultAuthenticationErrorEnable.IsNull() && data.DefaultAuthenticationFallback.IsNull() && data.DefaultAuthenticationInvalidUserLog.IsNull() && data.DefaultAuthenticationLocal.IsNull() && data.DefaultAuthenticationNone.IsNull() && data.DefaultAuthenticationOwnerKey.IsNull() && data.DefaultAuthenticationOwnerTag.IsNull() && data.DefaultAuthenticationProviderGroup.IsNull() && data.DefaultAuthenticationProviderGroup2.IsNull() && data.DefaultAuthenticationProviderGroup3.IsNull() && data.DefaultAuthenticationProviderGroup4.IsNull() && data.DefaultAuthenticationProviderGroup5.IsNull() && data.DefaultAuthenticationProviderGroup6.IsNull() && data.DefaultAuthenticationProviderGroup7.IsNull() && data.DefaultAuthenticationProviderGroup8.IsNull() && data.DefaultAuthenticationRealm.IsNull()) && (data.ConsoleAuthenticationProtocol.IsNull() && data.ConsoleAuthenticationDescription.IsNull() && data.ConsoleAuthenticationErrorEnable.IsNull() && data.ConsoleAuthenticationFallback.IsNull() && data.ConsoleAuthenticationInvalidUserLog.IsNull() && data.ConsoleAuthenticationLocal.IsNull() && data.ConsoleAuthenticationNone.IsNull() && data.ConsoleAuthenticationOwnerKey.IsNull() && data.ConsoleAuthenticationOwnerTag.IsNull() && data.ConsoleAuthenticationProviderGroup.IsNull() && data.ConsoleAuthenticationProviderGroup2.IsNull() && data.ConsoleAuthenticationProviderGroup3.IsNull() && data.ConsoleAuthenticationProviderGroup4.IsNull() && data.ConsoleAuthenticationProviderGroup5.IsNull() && data.ConsoleAuthenticationProviderGroup6.IsNull() && data.ConsoleAuthenticationProviderGroup7.IsNull() && data.ConsoleAuthenticationProviderGroup8.IsNull() && data.ConsoleAuthenticationRealm.IsNull()) && len(data.DefaultAuthorizations) == 0 && (data.DefaultAccountingMethodNone.IsNull() && data.DefaultAccountingDescription.IsNull() && data.DefaultAccountingLocalRbac.IsNull() && data.DefaultAccountingOwnerKey.IsNull() && data.DefaultAccountingOwnerTag.IsNull() && data.DefaultAccountingProviderGroup.IsNull() && data.DefaultAccountingProviderGroup2.IsNull() && data.DefaultAccountingProviderGroup3.IsNull() && data.DefaultAccountingProviderGroup4.IsNull() && data.DefaultAccountingProviderGroup5.IsNull() && data.DefaultAccountingProviderGroup6.IsNull() && data.DefaultAccountingProviderGroup7.IsNull() && data.DefaultAccountingProviderGroup8.IsNull() && data.DefaultAccountingRealm.IsNull())) {
+		aaaAuthRealmRn := "authrealm"
+		aaaAuthRealmDn := dn + "/" + aaaAuthRealmRn
+		_ = aaaAuthRealmDn
+		{
+			aaaAuthRealmBody := ""
+			if !data.AuthenticationRealmDefaultRolePolicy.IsNull() {
+				aaaAuthRealmBody, _ = sjson.Set(aaaAuthRealmBody, "aaaAuthRealm.attributes.defRolePolicy", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AuthenticationRealmDescription.IsNull() {
+				aaaAuthRealmBody, _ = sjson.Set(aaaAuthRealmBody, "aaaAuthRealm.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AuthenticationRealmLoggingLevel.IsNull() {
+				aaaAuthRealmBody, _ = sjson.Set(aaaAuthRealmBody, "aaaAuthRealm.attributes.loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AuthenticationRealmOwnerKey.IsNull() {
+				aaaAuthRealmBody, _ = sjson.Set(aaaAuthRealmBody, "aaaAuthRealm.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AuthenticationRealmOwnerTag.IsNull() {
+				aaaAuthRealmBody, _ = sjson.Set(aaaAuthRealmBody, "aaaAuthRealm.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AuthenticationRealmRadiusDirectedRequest.IsNull() {
+				aaaAuthRealmBody, _ = sjson.Set(aaaAuthRealmBody, "aaaAuthRealm.attributes.radDirectedReq", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AuthenticationRealmTacacsDirectedRequest.IsNull() {
+				aaaAuthRealmBody, _ = sjson.Set(aaaAuthRealmBody, "aaaAuthRealm.attributes.tacDirectedReq", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(data.DefaultAuthenticationProtocol.IsNull() && data.DefaultAuthenticationDescription.IsNull() && data.DefaultAuthenticationErrorEnable.IsNull() && data.DefaultAuthenticationFallback.IsNull() && data.DefaultAuthenticationInvalidUserLog.IsNull() && data.DefaultAuthenticationLocal.IsNull() && data.DefaultAuthenticationNone.IsNull() && data.DefaultAuthenticationOwnerKey.IsNull() && data.DefaultAuthenticationOwnerTag.IsNull() && data.DefaultAuthenticationProviderGroup.IsNull() && data.DefaultAuthenticationProviderGroup2.IsNull() && data.DefaultAuthenticationProviderGroup3.IsNull() && data.DefaultAuthenticationProviderGroup4.IsNull() && data.DefaultAuthenticationProviderGroup5.IsNull() && data.DefaultAuthenticationProviderGroup6.IsNull() && data.DefaultAuthenticationProviderGroup7.IsNull() && data.DefaultAuthenticationProviderGroup8.IsNull() && data.DefaultAuthenticationRealm.IsNull()) {
+				aaaDefaultAuthRn := "defaultauth"
+				aaaDefaultAuthDn := aaaAuthRealmDn + "/" + aaaDefaultAuthRn
+				_ = aaaDefaultAuthDn
+				{
+					aaaDefaultAuthBody := ""
+					if !data.DefaultAuthenticationProtocol.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.authProtocol", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationDescription.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationErrorEnable.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.errEn", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationFallback.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.fallback", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationInvalidUserLog.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.invalidUserLog", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationLocal.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.local", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationNone.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.none", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationOwnerKey.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationOwnerTag.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationProviderGroup.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.providerGroup", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationProviderGroup2.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.providerGroup2", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationProviderGroup3.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.providerGroup3", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationProviderGroup4.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.providerGroup4", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationProviderGroup5.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.providerGroup5", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationProviderGroup6.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.providerGroup6", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationProviderGroup7.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.providerGroup7", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationProviderGroup8.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.providerGroup8", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAuthenticationRealm.IsNull() {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.realm", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if aaaDefaultAuthBody != "" {
+						aaaDefaultAuthBody, _ = sjson.Set(aaaDefaultAuthBody, "aaaDefaultAuth.attributes.rn", aaaDefaultAuthRn)
+						aaaAuthRealmBody, _ = sjson.SetRaw(aaaAuthRealmBody, "aaaAuthRealm.children.-1", aaaDefaultAuthBody)
+					}
+				}
+			}
+			if !(data.ConsoleAuthenticationProtocol.IsNull() && data.ConsoleAuthenticationDescription.IsNull() && data.ConsoleAuthenticationErrorEnable.IsNull() && data.ConsoleAuthenticationFallback.IsNull() && data.ConsoleAuthenticationInvalidUserLog.IsNull() && data.ConsoleAuthenticationLocal.IsNull() && data.ConsoleAuthenticationNone.IsNull() && data.ConsoleAuthenticationOwnerKey.IsNull() && data.ConsoleAuthenticationOwnerTag.IsNull() && data.ConsoleAuthenticationProviderGroup.IsNull() && data.ConsoleAuthenticationProviderGroup2.IsNull() && data.ConsoleAuthenticationProviderGroup3.IsNull() && data.ConsoleAuthenticationProviderGroup4.IsNull() && data.ConsoleAuthenticationProviderGroup5.IsNull() && data.ConsoleAuthenticationProviderGroup6.IsNull() && data.ConsoleAuthenticationProviderGroup7.IsNull() && data.ConsoleAuthenticationProviderGroup8.IsNull() && data.ConsoleAuthenticationRealm.IsNull()) {
+				aaaConsoleAuthRn := "consoleauth"
+				aaaConsoleAuthDn := aaaAuthRealmDn + "/" + aaaConsoleAuthRn
+				_ = aaaConsoleAuthDn
+				{
+					aaaConsoleAuthBody := ""
+					if !data.ConsoleAuthenticationProtocol.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.authProtocol", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationDescription.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationErrorEnable.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.errEn", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationFallback.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.fallback", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationInvalidUserLog.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.invalidUserLog", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationLocal.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.local", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationNone.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.none", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationOwnerKey.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationOwnerTag.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationProviderGroup.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.providerGroup", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationProviderGroup2.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.providerGroup2", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationProviderGroup3.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.providerGroup3", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationProviderGroup4.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.providerGroup4", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationProviderGroup5.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.providerGroup5", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationProviderGroup6.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.providerGroup6", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationProviderGroup7.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.providerGroup7", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationProviderGroup8.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.providerGroup8", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.ConsoleAuthenticationRealm.IsNull() {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.realm", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if aaaConsoleAuthBody != "" {
+						aaaConsoleAuthBody, _ = sjson.Set(aaaConsoleAuthBody, "aaaConsoleAuth.attributes.rn", aaaConsoleAuthRn)
+						aaaAuthRealmBody, _ = sjson.SetRaw(aaaAuthRealmBody, "aaaAuthRealm.children.-1", aaaConsoleAuthBody)
+					}
+				}
+			}
+			for key, child := range data.DefaultAuthorizations {
+				_ = child
+				aaaDefaultAuthorRn := child.getRn(key)
+				aaaDefaultAuthorDn := aaaAuthRealmDn + "/" + aaaDefaultAuthorRn
+				_ = aaaDefaultAuthorDn
+				aaaDefaultAuthorBody := ""
+				aaaDefaultAuthorBody, _ = sjson.Set(aaaDefaultAuthorBody, "aaaDefaultAuthor.attributes.rn", aaaDefaultAuthorRn)
+				if !child.AuthorizationMethodNone.IsNull() {
+					aaaDefaultAuthorBody, _ = sjson.Set(aaaDefaultAuthorBody, "aaaDefaultAuthor.attributes.authorMethodNone", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Description.IsNull() {
+					aaaDefaultAuthorBody, _ = sjson.Set(aaaDefaultAuthorBody, "aaaDefaultAuthor.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.LocalRbac.IsNull() {
+					aaaDefaultAuthorBody, _ = sjson.Set(aaaDefaultAuthorBody, "aaaDefaultAuthor.attributes.localRbac", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.OwnerKey.IsNull() {
+					aaaDefaultAuthorBody, _ = sjson.Set(aaaDefaultAuthorBody, "aaaDefaultAuthor.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.OwnerTag.IsNull() {
+					aaaDefaultAuthorBody, _ = sjson.Set(aaaDefaultAuthorBody, "aaaDefaultAuthor.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ProviderGroup.IsNull() {
+					aaaDefaultAuthorBody, _ = sjson.Set(aaaDefaultAuthorBody, "aaaDefaultAuthor.attributes.providerGroup", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ProviderGroup2.IsNull() {
+					aaaDefaultAuthorBody, _ = sjson.Set(aaaDefaultAuthorBody, "aaaDefaultAuthor.attributes.providerGroup2", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ProviderGroup3.IsNull() {
+					aaaDefaultAuthorBody, _ = sjson.Set(aaaDefaultAuthorBody, "aaaDefaultAuthor.attributes.providerGroup3", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ProviderGroup4.IsNull() {
+					aaaDefaultAuthorBody, _ = sjson.Set(aaaDefaultAuthorBody, "aaaDefaultAuthor.attributes.providerGroup4", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ProviderGroup5.IsNull() {
+					aaaDefaultAuthorBody, _ = sjson.Set(aaaDefaultAuthorBody, "aaaDefaultAuthor.attributes.providerGroup5", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ProviderGroup6.IsNull() {
+					aaaDefaultAuthorBody, _ = sjson.Set(aaaDefaultAuthorBody, "aaaDefaultAuthor.attributes.providerGroup6", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ProviderGroup7.IsNull() {
+					aaaDefaultAuthorBody, _ = sjson.Set(aaaDefaultAuthorBody, "aaaDefaultAuthor.attributes.providerGroup7", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ProviderGroup8.IsNull() {
+					aaaDefaultAuthorBody, _ = sjson.Set(aaaDefaultAuthorBody, "aaaDefaultAuthor.attributes.providerGroup8", "DME_UNSET_PROPERTY_MARKER")
+				}
+				aaaAuthRealmBody, _ = sjson.SetRaw(aaaAuthRealmBody, "aaaAuthRealm.children.-1", aaaDefaultAuthorBody)
+			}
+			if !(data.DefaultAccountingMethodNone.IsNull() && data.DefaultAccountingDescription.IsNull() && data.DefaultAccountingLocalRbac.IsNull() && data.DefaultAccountingOwnerKey.IsNull() && data.DefaultAccountingOwnerTag.IsNull() && data.DefaultAccountingProviderGroup.IsNull() && data.DefaultAccountingProviderGroup2.IsNull() && data.DefaultAccountingProviderGroup3.IsNull() && data.DefaultAccountingProviderGroup4.IsNull() && data.DefaultAccountingProviderGroup5.IsNull() && data.DefaultAccountingProviderGroup6.IsNull() && data.DefaultAccountingProviderGroup7.IsNull() && data.DefaultAccountingProviderGroup8.IsNull() && data.DefaultAccountingRealm.IsNull()) {
+				aaaDefaultAccRn := "defaultacc"
+				aaaDefaultAccDn := aaaAuthRealmDn + "/" + aaaDefaultAccRn
+				_ = aaaDefaultAccDn
+				{
+					aaaDefaultAccBody := ""
+					if !data.DefaultAccountingMethodNone.IsNull() {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.accMethodNone", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAccountingDescription.IsNull() {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAccountingLocalRbac.IsNull() {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.localRbac", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAccountingOwnerKey.IsNull() {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAccountingOwnerTag.IsNull() {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAccountingProviderGroup.IsNull() {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.providerGroup", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAccountingProviderGroup2.IsNull() {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.providerGroup2", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAccountingProviderGroup3.IsNull() {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.providerGroup3", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAccountingProviderGroup4.IsNull() {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.providerGroup4", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAccountingProviderGroup5.IsNull() {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.providerGroup5", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAccountingProviderGroup6.IsNull() {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.providerGroup6", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAccountingProviderGroup7.IsNull() {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.providerGroup7", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAccountingProviderGroup8.IsNull() {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.providerGroup8", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.DefaultAccountingRealm.IsNull() {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.realm", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if aaaDefaultAccBody != "" {
+						aaaDefaultAccBody, _ = sjson.Set(aaaDefaultAccBody, "aaaDefaultAcc.attributes.rn", aaaDefaultAccRn)
+						aaaAuthRealmBody, _ = sjson.SetRaw(aaaAuthRealmBody, "aaaAuthRealm.children.-1", aaaDefaultAccBody)
+					}
+				}
+			}
+			if aaaAuthRealmBody != "" {
+				aaaAuthRealmBody, _ = sjson.Set(aaaAuthRealmBody, "aaaAuthRealm.attributes.rn", aaaAuthRealmRn)
+				body, _ = sjson.SetRaw(body, "aaaUserEp.children.-1", aaaAuthRealmBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserManagement, config UserManagement, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -3544,6 +4471,8 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 				stateChild := state.Users[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("aaaUser.attributes.name").String() == key {
 						if !stateChild.AccountStatus.IsNull() && configChild.AccountStatus.IsNull() {
@@ -3705,6 +4634,8 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 				stateChild := state.TacacsProviderGroups[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/tacacsext" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaTacacsPlusEp")+".children").Array() {
 					if mv.Get("aaaTacacsPlusProviderGroup.attributes.name").String() == key {
 						if !stateChild.Deadtime.IsNull() && configChild.Deadtime.IsNull() {
@@ -3887,6 +4818,8 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 				stateChild := state.RadiusProviderGroups[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/radiusext" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "aaaRadiusEp")+".children").Array() {
 					if mv.Get("aaaRadiusProviderGroup.attributes.name").String() == key {
 						if !stateChild.Deadtime.IsNull() && configChild.Deadtime.IsNull() {

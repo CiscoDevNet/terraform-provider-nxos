@@ -107,6 +107,14 @@ var KeychainSubtreeClassMinVersions = map[string]string{}
 // KeychainMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var KeychainMinVersions = map[string]helpers.MinVersion{}
 
+// KeychainListClasses holds the list child classes of the resource.
+var KeychainListClasses = map[string]bool{"kcmgrClassicKeychain": true, "kcmgrKey": true, "kcmgrMacsecKeychain": true, "kcmgrMacsecKeyId": true}
+
+// getKeychainTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getKeychainTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey", "kcmgrMacsecKeychain", "kcmgrMacsecKeyId", "kcmgrMacsecSendlifetime", "kcmgrMacsecpsk"}, KeychainSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -613,7 +621,213 @@ func (data Keychain) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, config Keychain, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data Keychain) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(len(data.Keychains) == 0 && len(data.MacsecKeychains) == 0 && (data.MacsecPskNoShow.IsNull())) {
+		kcmgrKeychainsDn := dn + "/" + "keychains"
+		dns[kcmgrKeychainsDn] = true
+		for key, child := range data.Keychains {
+			kcmgrClassicKeychainDn := kcmgrKeychainsDn + "/" + child.getRn(key)
+			dns[kcmgrClassicKeychainDn] = true
+			for key_, child_ := range child.Keys {
+				kcmgrKeyDn_ := kcmgrClassicKeychainDn + "/" + child_.getRn(key_)
+				dns[kcmgrKeyDn_] = true
+			}
+		}
+		for key, child := range data.MacsecKeychains {
+			kcmgrMacsecKeychainDn := kcmgrKeychainsDn + "/" + child.getRn(key)
+			dns[kcmgrMacsecKeychainDn] = true
+			for key_, child_ := range child.Keys {
+				kcmgrMacsecKeyIdDn_ := kcmgrMacsecKeychainDn + "/" + child_.getRn(key_)
+				dns[kcmgrMacsecKeyIdDn_] = true
+				if !(child_.Duration.IsNull() && child_.EndDay.IsNull() && child_.EndMonth.IsNull() && child_.EndTime.IsNull() && child_.EndYear.IsNull() && child_.Infinite.IsNull() && child_.Local.IsNull() && child_.StartDay.IsNull() && child_.StartMonth.IsNull() && child_.StartTime.IsNull() && child_.StartYear.IsNull()) {
+					kcmgrMacsecSendlifetimeDn__ := kcmgrMacsecKeyIdDn_ + "/" + "macsecsendlifetime"
+					dns[kcmgrMacsecSendlifetimeDn__] = true
+				}
+			}
+		}
+		if !(data.MacsecPskNoShow.IsNull()) {
+			kcmgrMacsecpskDn := kcmgrKeychainsDn + "/" + "macsecpsk"
+			dns[kcmgrMacsecpskDn] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data Keychain) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	if !existed(dn) {
+		return data.toDeleteBody()
+	}
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "kcmgrEntity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "kcmgrEntity.attributes", map[string]interface{}{})
+	}
+	if !(len(data.Keychains) == 0 && len(data.MacsecKeychains) == 0 && (data.MacsecPskNoShow.IsNull())) {
+		kcmgrKeychainsRn := "keychains"
+		kcmgrKeychainsDn := dn + "/" + kcmgrKeychainsRn
+		_ = kcmgrKeychainsDn
+		if !existed(kcmgrKeychainsDn) {
+			body, _ = sjson.Set(body, "kcmgrEntity.children.-1.kcmgrKeychains.attributes", map[string]interface{}{"rn": kcmgrKeychainsRn, "status": "deleted"})
+		} else {
+			kcmgrKeychainsBody := ""
+			for key, child := range data.Keychains {
+				_ = child
+				kcmgrClassicKeychainRn := child.getRn(key)
+				kcmgrClassicKeychainDn := kcmgrKeychainsDn + "/" + kcmgrClassicKeychainRn
+				_ = kcmgrClassicKeychainDn
+				if !existed(kcmgrClassicKeychainDn) {
+					kcmgrKeychainsBody, _ = sjson.Set(kcmgrKeychainsBody, "kcmgrKeychains.children.-1.kcmgrClassicKeychain.attributes", map[string]interface{}{"rn": kcmgrClassicKeychainRn, "status": "deleted"})
+					continue
+				}
+				kcmgrClassicKeychainBody := ""
+				kcmgrClassicKeychainBody, _ = sjson.Set(kcmgrClassicKeychainBody, "kcmgrClassicKeychain.attributes.rn", kcmgrClassicKeychainRn)
+				for key_, child_ := range child.Keys {
+					_ = child_
+					kcmgrKeyRn_ := child_.getRn(key_)
+					kcmgrKeyDn_ := kcmgrClassicKeychainDn + "/" + kcmgrKeyRn_
+					_ = kcmgrKeyDn_
+					if !existed(kcmgrKeyDn_) {
+						kcmgrClassicKeychainBody, _ = sjson.Set(kcmgrClassicKeychainBody, "kcmgrClassicKeychain.children.-1.kcmgrKey.attributes", map[string]interface{}{"rn": kcmgrKeyRn_, "status": "deleted"})
+						continue
+					}
+					kcmgrKeyBody_ := ""
+					kcmgrKeyBody_, _ = sjson.Set(kcmgrKeyBody_, "kcmgrKey.attributes.rn", kcmgrKeyRn_)
+					if !child_.CryptographicAlgorithm.IsNull() {
+						kcmgrKeyBody_, _ = sjson.Set(kcmgrKeyBody_, "kcmgrKey.attributes.cryptoAlgo", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.EncryptionType.IsNull() {
+						kcmgrKeyBody_, _ = sjson.Set(kcmgrKeyBody_, "kcmgrKey.attributes.encryptType", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.KeyString.IsNull() {
+						kcmgrKeyBody_, _ = sjson.Set(kcmgrKeyBody_, "kcmgrKey.attributes.keyString", "DME_UNSET_PROPERTY_MARKER")
+					}
+					kcmgrClassicKeychainBody, _ = sjson.SetRaw(kcmgrClassicKeychainBody, "kcmgrClassicKeychain.children.-1", kcmgrKeyBody_)
+				}
+				kcmgrKeychainsBody, _ = sjson.SetRaw(kcmgrKeychainsBody, "kcmgrKeychains.children.-1", kcmgrClassicKeychainBody)
+			}
+			for key, child := range data.MacsecKeychains {
+				_ = child
+				kcmgrMacsecKeychainRn := child.getRn(key)
+				kcmgrMacsecKeychainDn := kcmgrKeychainsDn + "/" + kcmgrMacsecKeychainRn
+				_ = kcmgrMacsecKeychainDn
+				if !existed(kcmgrMacsecKeychainDn) {
+					kcmgrKeychainsBody, _ = sjson.Set(kcmgrKeychainsBody, "kcmgrKeychains.children.-1.kcmgrMacsecKeychain.attributes", map[string]interface{}{"rn": kcmgrMacsecKeychainRn, "status": "deleted"})
+					continue
+				}
+				kcmgrMacsecKeychainBody := ""
+				kcmgrMacsecKeychainBody, _ = sjson.Set(kcmgrMacsecKeychainBody, "kcmgrMacsecKeychain.attributes.rn", kcmgrMacsecKeychainRn)
+				for key_, child_ := range child.Keys {
+					_ = child_
+					kcmgrMacsecKeyIdRn_ := child_.getRn(key_)
+					kcmgrMacsecKeyIdDn_ := kcmgrMacsecKeychainDn + "/" + kcmgrMacsecKeyIdRn_
+					_ = kcmgrMacsecKeyIdDn_
+					if !existed(kcmgrMacsecKeyIdDn_) {
+						kcmgrMacsecKeychainBody, _ = sjson.Set(kcmgrMacsecKeychainBody, "kcmgrMacsecKeychain.children.-1.kcmgrMacsecKeyId.attributes", map[string]interface{}{"rn": kcmgrMacsecKeyIdRn_, "status": "deleted"})
+						continue
+					}
+					kcmgrMacsecKeyIdBody_ := ""
+					kcmgrMacsecKeyIdBody_, _ = sjson.Set(kcmgrMacsecKeyIdBody_, "kcmgrMacsecKeyId.attributes.rn", kcmgrMacsecKeyIdRn_)
+					if !child_.CryptographicAlgorithm.IsNull() {
+						kcmgrMacsecKeyIdBody_, _ = sjson.Set(kcmgrMacsecKeyIdBody_, "kcmgrMacsecKeyId.attributes.cryptographicAlgo", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.EncryptionType.IsNull() {
+						kcmgrMacsecKeyIdBody_, _ = sjson.Set(kcmgrMacsecKeyIdBody_, "kcmgrMacsecKeyId.attributes.encryptType", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.KeyHexString.IsNull() {
+						kcmgrMacsecKeyIdBody_, _ = sjson.Set(kcmgrMacsecKeyIdBody_, "kcmgrMacsecKeyId.attributes.keyHexString", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !(child_.Duration.IsNull() && child_.EndDay.IsNull() && child_.EndMonth.IsNull() && child_.EndTime.IsNull() && child_.EndYear.IsNull() && child_.Infinite.IsNull() && child_.Local.IsNull() && child_.StartDay.IsNull() && child_.StartMonth.IsNull() && child_.StartTime.IsNull() && child_.StartYear.IsNull()) {
+						kcmgrMacsecSendlifetimeRn__ := "macsecsendlifetime"
+						kcmgrMacsecSendlifetimeDn__ := kcmgrMacsecKeyIdDn_ + "/" + kcmgrMacsecSendlifetimeRn__
+						_ = kcmgrMacsecSendlifetimeDn__
+						if !existed(kcmgrMacsecSendlifetimeDn__) {
+							kcmgrMacsecKeyIdBody_, _ = sjson.Set(kcmgrMacsecKeyIdBody_, "kcmgrMacsecKeyId.children.-1.kcmgrMacsecSendlifetime.attributes", map[string]interface{}{"rn": kcmgrMacsecSendlifetimeRn__, "status": "deleted"})
+						} else {
+							kcmgrMacsecSendlifetimeBody__ := ""
+							if !child_.Duration.IsNull() {
+								kcmgrMacsecSendlifetimeBody__, _ = sjson.Set(kcmgrMacsecSendlifetimeBody__, "kcmgrMacsecSendlifetime.attributes.duration", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.EndDay.IsNull() {
+								kcmgrMacsecSendlifetimeBody__, _ = sjson.Set(kcmgrMacsecSendlifetimeBody__, "kcmgrMacsecSendlifetime.attributes.endDay", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.EndMonth.IsNull() {
+								kcmgrMacsecSendlifetimeBody__, _ = sjson.Set(kcmgrMacsecSendlifetimeBody__, "kcmgrMacsecSendlifetime.attributes.endMonth", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.EndTime.IsNull() {
+								kcmgrMacsecSendlifetimeBody__, _ = sjson.Set(kcmgrMacsecSendlifetimeBody__, "kcmgrMacsecSendlifetime.attributes.endTime", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.EndYear.IsNull() {
+								kcmgrMacsecSendlifetimeBody__, _ = sjson.Set(kcmgrMacsecSendlifetimeBody__, "kcmgrMacsecSendlifetime.attributes.endYear", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.Infinite.IsNull() {
+								kcmgrMacsecSendlifetimeBody__, _ = sjson.Set(kcmgrMacsecSendlifetimeBody__, "kcmgrMacsecSendlifetime.attributes.infinite", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.Local.IsNull() {
+								kcmgrMacsecSendlifetimeBody__, _ = sjson.Set(kcmgrMacsecSendlifetimeBody__, "kcmgrMacsecSendlifetime.attributes.local", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.StartDay.IsNull() {
+								kcmgrMacsecSendlifetimeBody__, _ = sjson.Set(kcmgrMacsecSendlifetimeBody__, "kcmgrMacsecSendlifetime.attributes.startDay", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.StartMonth.IsNull() {
+								kcmgrMacsecSendlifetimeBody__, _ = sjson.Set(kcmgrMacsecSendlifetimeBody__, "kcmgrMacsecSendlifetime.attributes.startMonth", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.StartTime.IsNull() {
+								kcmgrMacsecSendlifetimeBody__, _ = sjson.Set(kcmgrMacsecSendlifetimeBody__, "kcmgrMacsecSendlifetime.attributes.startTime", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.StartYear.IsNull() {
+								kcmgrMacsecSendlifetimeBody__, _ = sjson.Set(kcmgrMacsecSendlifetimeBody__, "kcmgrMacsecSendlifetime.attributes.startYear", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if kcmgrMacsecSendlifetimeBody__ != "" {
+								kcmgrMacsecSendlifetimeBody__, _ = sjson.Set(kcmgrMacsecSendlifetimeBody__, "kcmgrMacsecSendlifetime.attributes.rn", kcmgrMacsecSendlifetimeRn__)
+								kcmgrMacsecKeyIdBody_, _ = sjson.SetRaw(kcmgrMacsecKeyIdBody_, "kcmgrMacsecKeyId.children.-1", kcmgrMacsecSendlifetimeBody__)
+							}
+						}
+					}
+					kcmgrMacsecKeychainBody, _ = sjson.SetRaw(kcmgrMacsecKeychainBody, "kcmgrMacsecKeychain.children.-1", kcmgrMacsecKeyIdBody_)
+				}
+				kcmgrKeychainsBody, _ = sjson.SetRaw(kcmgrKeychainsBody, "kcmgrKeychains.children.-1", kcmgrMacsecKeychainBody)
+			}
+			if !(data.MacsecPskNoShow.IsNull()) {
+				kcmgrMacsecpskRn := "macsecpsk"
+				kcmgrMacsecpskDn := kcmgrKeychainsDn + "/" + kcmgrMacsecpskRn
+				_ = kcmgrMacsecpskDn
+				{
+					kcmgrMacsecpskBody := ""
+					if !data.MacsecPskNoShow.IsNull() {
+						kcmgrMacsecpskBody, _ = sjson.Set(kcmgrMacsecpskBody, "kcmgrMacsecpsk.attributes.pskNoshow", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if kcmgrMacsecpskBody != "" {
+						kcmgrMacsecpskBody, _ = sjson.Set(kcmgrMacsecpskBody, "kcmgrMacsecpsk.attributes.rn", kcmgrMacsecpskRn)
+						kcmgrKeychainsBody, _ = sjson.SetRaw(kcmgrKeychainsBody, "kcmgrKeychains.children.-1", kcmgrMacsecpskBody)
+					}
+				}
+			}
+			if kcmgrKeychainsBody != "" {
+				kcmgrKeychainsBody, _ = sjson.Set(kcmgrKeychainsBody, "kcmgrKeychains.attributes.rn", kcmgrKeychainsRn)
+				body, _ = sjson.SetRaw(body, "kcmgrEntity.children.-1", kcmgrKeychainsBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, config Keychain, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -718,6 +932,8 @@ func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, conf
 				stateChild := state.Keychains[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/keychains" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "kcmgrKeychains")+".children").Array() {
@@ -751,6 +967,8 @@ func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, conf
 				stateChild := state.MacsecKeychains[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/keychains" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "kcmgrKeychains")+".children").Array() {
@@ -765,6 +983,8 @@ func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, conf
 								stateChild := stateChild.Keys[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("kcmgrMacsecKeyId.attributes.keyId").String() == key {
 										if !stateChild.CryptographicAlgorithm.IsNull() && configChild.CryptographicAlgorithm.IsNull() {
@@ -782,49 +1002,55 @@ func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, conf
 										}
 									}
 									if listChildPath_ != "" {
-										if !stateChild.Duration.IsNull() && configChild.Duration.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"duration", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.EndDay.IsNull() && configChild.EndDay.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endDay", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.EndMonth.IsNull() && configChild.EndMonth.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endMonth", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.EndTime.IsNull() && configChild.EndTime.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endTime", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.EndYear.IsNull() && configChild.EndYear.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endYear", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.Infinite.IsNull() && configChild.Infinite.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"infinite", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.Local.IsNull() && configChild.Local.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"local", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.StartDay.IsNull() && configChild.StartDay.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startDay", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.StartMonth.IsNull() && configChild.StartMonth.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startMonth", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.StartTime.IsNull() && configChild.StartTime.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startTime", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.StartYear.IsNull() && configChild.StartYear.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startYear", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.Duration.IsNull() && stateChild.EndDay.IsNull() && stateChild.EndMonth.IsNull() && stateChild.EndTime.IsNull() && stateChild.EndYear.IsNull() && stateChild.Infinite.IsNull() && stateChild.Local.IsNull() && stateChild.StartDay.IsNull() && stateChild.StartMonth.IsNull() && stateChild.StartTime.IsNull() && stateChild.StartYear.IsNull()) && (configChild.Duration.IsNull() && configChild.EndDay.IsNull() && configChild.EndMonth.IsNull() && configChild.EndTime.IsNull() && configChild.EndYear.IsNull() && configChild.Infinite.IsNull() && configChild.Local.IsNull() && configChild.StartDay.IsNull() && configChild.StartMonth.IsNull() && configChild.StartTime.IsNull() && configChild.StartYear.IsNull()) && deleteEmptied(listChildDn_+"/macsecsendlifetime") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.Duration.IsNull() && configChild.Duration.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"duration", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.EndDay.IsNull() && configChild.EndDay.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endDay", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.EndMonth.IsNull() && configChild.EndMonth.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endMonth", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.EndTime.IsNull() && configChild.EndTime.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endTime", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.EndYear.IsNull() && configChild.EndYear.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endYear", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Infinite.IsNull() && configChild.Infinite.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"infinite", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.Local.IsNull() && configChild.Local.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"local", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.StartDay.IsNull() && configChild.StartDay.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startDay", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.StartMonth.IsNull() && configChild.StartMonth.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startMonth", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.StartTime.IsNull() && configChild.StartTime.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startTime", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.StartYear.IsNull() && configChild.StartYear.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrMacsecSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startYear", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
 									}
 								}

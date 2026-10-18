@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosBGP(t *testing.T) {
+// TestAccBGPResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccBGPResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "instance_admin_state", "enabled"))
@@ -294,39 +298,314 @@ func TestAccNxosBGP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.private_as_control", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.session_template", "SESS_TEMPLATE"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.internal_vpn_client", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "disable_policy_batching", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "disable_policy_batching_nexthop", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "disable_policy_batching_ipv4_prefix_list", "PFX_LIST1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "disable_policy_batching_ipv6_prefix_list", "PFX_LIST_V6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "enhanced_error_handling", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "flush_routes", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "isolate", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "mvpn_vri_id", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "nexthop_suppress_default_resolution", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "rd_dual", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.router_id", "1.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.bestpath_first_always", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.bestpath_interval", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.bandwidth_reference", "40000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.bandwidth_reference_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.cluster_id", "1.2.3.4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.hold_time", "180"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.keepalive_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.mode", "fabric"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.prefix_peer_timeout", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.prefix_peer_wait_time", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.reconnect_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.router_id_auto", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.route_control_enforce_first_as", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.route_control_fib_accelerate", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.route_control_log_neighbor_changes", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.route_control_suppress_routes", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.graceful_restart_control", "complete"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.graceful_restart_interval", "240"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.graceful_restart_stale_interval", "1800"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_aigp_ignore", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_always_compare_med", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_as_path_ignore", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_as_path_multipath_relax", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_compare_neighbor_id", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_compare_router_id", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_cost_community_ignore", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_igp_metric_ignore", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_med_confed", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_med_missing_as_worst", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.path_control_med_non_deterministic", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.critical_nexthop_timeout", "2500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.non_critical_nexthop_timeout", "8000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertise_l2vpn_evpn", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertise_physical_ip_for_type5_routes", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.max_ecmp_paths", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.max_external_ecmp_paths", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.max_external_internal_ecmp_paths", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.max_local_ecmp_paths", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.max_mixed_ecmp_paths", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.default_information_originate", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.next_hop_route_map_name", "ROUTEMAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.prefix_priority", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.retain_rt_all", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertise_only_active_routes", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.table_map_route_map_name", "ROUTE_MAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.vni_ethernet_tag", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.wait_igp_converged", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertise_system_mac", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.bestpath_origin_as_allow_invalid", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.bestpath_origin_as_use_validity", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.client_to_client_reflection", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.default_metric", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.export_gateway_ip", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.igp_metric", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.max_path_unequal_cost", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.nexthop_load_balance_egress_multisite", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.origin_as_validate", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.origin_as_validate_signal_ibgp", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.table_map_filter", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.load_balance_egress_filter_policy_route_map", "LB_EGR_FILTER_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.load_balance_egress_multipath_auto_policy_route_map", "LB_EGR_MPATH_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertised_prefixes.192.168.1.0/24.route_map", "rt-map"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.advertised_prefixes.192.168.1.0/24.evpn", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf;OSPF1.route_map", "route_map_ospf_1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf;OSPF1.scope", "inter"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.redistributions.ospf;OSPF1.srv6_prefix_type", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.additional_paths_capability", "send"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.additional_paths_route_map", "ADD_PATH_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.aggregate_addresses.10.0.0.0/8.advertise_map", "ADV_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.aggregate_addresses.10.0.0.0/8.as_set", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.aggregate_addresses.10.0.0.0/8.attribute_map", "ATTR_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.address_families.ipv4-ucast.aggregate_addresses.10.0.0.0/8.summary_only", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.remote_asn", "65002"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.peer_type", "fabric-external"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.asn_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.bfd_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.bmp_server_1", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.bmp_server_2", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.capability_suppress_4_byte_asn", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.connection_mode", "passive"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.peer_control", "bfd"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.dscp", "af11"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.hold_time", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.internal_vpn_client", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.keepalive_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.log_neighbor_changes", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.low_memory_exempt", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.max_peer_count", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.private_as_control", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.session_template", "SESS_TEMPLATE2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.ebgp_multihop_ttl", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.local_asn_propagation", "no-prepend"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_session_templates.SESS_TEMPLATE.local_asn", "65009"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.advertisement_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.advertise_local_labeled_route", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.aigp", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.allowed_self_as_count", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.as_override", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.capability_additional_paths", "send"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.control", "nh-self"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.default_originate", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.default_originate_route_map", "DEF_ORIG_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.dmz_link_bandwidth", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.link_bandwidth_cumulative", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.next_hop_self_all", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.nexthop_thirdparty", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.send_community_extended", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.send_community_standard", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.soft_reconfiguration_backup", "inbound"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.site_of_origin", "soo:as2-nn2:65001:200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.unsuppress_map", "UNSUPP_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.weight", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.max_prefix_action", "restart"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.max_prefix_number", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.max_prefix_restart_time", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.max_prefix_threshold", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.route_controls.in.route_map_name", "ROUTE_MAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.prefix_list_controls.in.list", "PREFIX_LIST1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.filter_list_controls.out.list", "AS_PATH_LIST1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_policy_templates.POLICY_TEMPLATE.inherit_peer_policies.POLICY_TEMPLATE2.sequence", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.remote_asn", "65002"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_type", "fabric-internal"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.asn_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.bfd_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.bmp_server_1", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.bmp_server_2", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.capability_suppress_4_byte_asn", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.connection_mode", "passive"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_control", "bfd"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.hold_time", "180"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.keepalive_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.log_neighbor_changes", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.low_memory_exempt", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.max_peer_count", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.private_as_control", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.session_template", "SESS_TEMPLATE"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.ebgp_multihop_ttl", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.control", "nh-self,rr-client"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.send_community_extended", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.send_community_standard", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.advertisement_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.advertise_local_labeled_route", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.aigp", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.allowed_self_as_count", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.as_override", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.default_originate", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.default_originate_route_map", "DEF_ORIG_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.dmz_link_bandwidth", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.link_bandwidth_cumulative", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.nexthop_thirdparty", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.rewrite_rt_asn", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.soft_reconfiguration_backup", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.site_of_origin", "soo:as2-nn2:65001:200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.unsuppress_map", "UNSUPP_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.weight", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.max_prefix_action", "restart"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.max_prefix_number", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.max_prefix_restart_time", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.max_prefix_threshold", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.route_controls.in.route_map_name", "ROUTE_MAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.prefix_list_controls.in.list", "PREFIX_LIST1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peer_templates.SPINE-PEERS.peer_template_address_families.ipv4-ucast.inherit_peer_policies.POLICY_TEMPLATE.sequence", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.remote_asn", "65002"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.description", "My description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_template", "SPINE-PEERS"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_type", "fabric-internal"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.hold_time", "45"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.keepalive_interval", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.ebgp_multihop_ttl", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_control", "bfd,dis-conn-check"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.asn_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.bfd_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.bmp_server_1", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.bmp_server_2", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.capability_suppress_4_byte_asn", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.connection_mode", "passive"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.log_neighbor_changes", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.low_memory_exempt", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.private_as_control", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.session_template", "SESS_TEMPLATE"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.local_asn_propagation", "no-prepend"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.local_asn", "65001"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.control", "nh-self"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.send_community_extended", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.send_community_standard", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.advertisement_interval", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.advertise_local_labeled_route", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.aigp", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.allowed_self_as_count", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.as_override", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.default_originate", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.default_originate_route_map", "DEF_ORIG_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.dmz_link_bandwidth", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.link_bandwidth_cumulative", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.nexthop_thirdparty", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.rewrite_rt_asn", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.soft_reconfiguration_backup", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.unsuppress_map", "UNSUPP_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.weight", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.max_prefix_action", "restart"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.max_prefix_number", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.max_prefix_restart_time", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.max_prefix_threshold", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.route_controls.in.route_map_name", "ROUTE_MAP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.prefix_list_controls.in.list", "PREFIX_LIST1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.peers.192.168.0.1.peer_address_families.ipv4-ucast.inherit_peer_policies.POLICY_TEMPLATE.sequence", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.remote_asn", "65002"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.description", "My description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.peer_template", "SPINE-PEERS"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.peer_type", "fabric-internal"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.asn_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.bfd_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.bmp_server_1", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.bmp_server_2", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.capability_suppress_4_byte_asn", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.connection_mode", "passive"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.peer_control", "bfd"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.dscp", "af11"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.dynamic_route_map", "DYN_RT_MAP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.hold_time", "45"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.keepalive_interval", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.log_neighbor_changes", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.low_memory_exempt", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.max_peer_count", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.private_as_control", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.session_template", "SESS_TEMPLATE"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.internal_vpn_client", "disabled"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
+	steps := []resource.TestStep{
+		{
+			Config: testAccBGPResourcePrerequisitesConfig + testAccBGPResourceConfig_minimum(),
+		},
+		{
+			Config: testAccBGPResourcePrerequisitesConfig + testAccBGPResourceConfig_all(includeWriteOnly) + testAccBGPResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_bgp.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccBGPResourceImportStateIdFunc("nxos_bgp.test"),
+		},
+		{
+			ResourceName:       "nxos_bgp.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccBGPResourcePrerequisitesConfig + testAccBGPResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccBGPResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccBGPResourceConfig_all(includeWriteOnly), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_bgp.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccBGPResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccBGPResourcePrerequisitesConfig + testAccBGPResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosBGPPrerequisitesConfig + testAccNxosBGPConfig_all(includeWriteOnly),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_bgp.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosBGPImportStateIdFunc("nxos_bgp.test"),
-			},
-			{
-				ResourceName:       "nxos_bgp.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosBGPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccBGPResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -336,7 +615,7 @@ func nxosBGPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosBGPPrerequisitesConfig = `
+const testAccBGPResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/bgp"
   class_name = "fmBgp"
@@ -361,7 +640,7 @@ resource "nxos_dme" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosBGPConfig_minimum() string {
+func testAccBGPResourceConfig_minimum() string {
 	config := `resource "nxos_bgp" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
@@ -371,7 +650,7 @@ func testAccNxosBGPConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosBGPConfig_all(includeWriteOnly bool) string {
+func testAccBGPResourceConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_bgp" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
@@ -747,6 +1026,14 @@ func testAccNxosBGPConfig_all(includeWriteOnly bool) string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccBGPResourceConfig_dataSource() string {
+	return `
+data "nxos_bgp" "test" {
+	depends_on = [nxos_bgp.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

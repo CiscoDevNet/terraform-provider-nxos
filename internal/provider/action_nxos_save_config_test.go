@@ -24,7 +24,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
-func TestActionAccNxosSaveConfig(t *testing.T) {
+func TestAccSaveConfigAction(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			tfversion.SkipBelow(tfversion.Version1_14_0),
@@ -33,13 +33,13 @@ func TestActionAccNxosSaveConfig(t *testing.T) {
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			{
-				Config: testActionAccNxosSaveConfig(),
+				Config: testAccSaveConfigActionConfig(),
 			},
 		},
 	})
 }
 
-func testActionAccNxosSaveConfig() string {
+func testAccSaveConfigActionConfig() string {
 	return `
 	action "nxos_save_config" "test" {
 	}

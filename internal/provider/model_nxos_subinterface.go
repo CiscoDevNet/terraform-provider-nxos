@@ -85,6 +85,14 @@ var SubinterfaceSubtreeClassMinVersions = map[string]string{}
 // SubinterfaceMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var SubinterfaceMinVersions = map[string]helpers.MinVersion{}
 
+// SubinterfaceListClasses holds the list child classes of the resource.
+var SubinterfaceListClasses = map[string]bool{"l3EncRtdIf": true}
+
+// getSubinterfaceTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getSubinterfaceTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"l3EncRtdIf", "nwRtVrfMbr"}, SubinterfaceSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -343,7 +351,107 @@ func (data Subinterface) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data Subinterface) toBodyWithDeletes(ctx context.Context, state Subinterface, config Subinterface, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data Subinterface) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.Subinterfaces {
+		l3EncRtdIfDn := dn + "/" + child.getRn(key)
+		dns[l3EncRtdIfDn] = true
+		if !(child.VrfDn.IsNull()) {
+			nwRtVrfMbrDn_ := l3EncRtdIfDn + "/" + "rtvrfMbr"
+			dns[nwRtVrfMbrDn_] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data Subinterface) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "interfaceEntity.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.Subinterfaces {
+		_ = child
+		l3EncRtdIfRn := child.getRn(key)
+		l3EncRtdIfDn := dn + "/" + l3EncRtdIfRn
+		_ = l3EncRtdIfDn
+		if !existed(l3EncRtdIfDn) {
+			body, _ = sjson.Set(body, "interfaceEntity.children.-1.l3EncRtdIf.attributes", map[string]interface{}{"rn": l3EncRtdIfRn, "status": "deleted"})
+			continue
+		}
+		l3EncRtdIfBody := ""
+		l3EncRtdIfBody, _ = sjson.Set(l3EncRtdIfBody, "l3EncRtdIf.attributes.rn", l3EncRtdIfRn)
+		if !child.AdminState.IsNull() {
+			l3EncRtdIfBody, _ = sjson.Set(l3EncRtdIfBody, "l3EncRtdIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Bandwidth.IsNull() {
+			l3EncRtdIfBody, _ = sjson.Set(l3EncRtdIfBody, "l3EncRtdIf.attributes.bw", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Delay.IsNull() {
+			l3EncRtdIfBody, _ = sjson.Set(l3EncRtdIfBody, "l3EncRtdIf.attributes.delay", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Description.IsNull() {
+			l3EncRtdIfBody, _ = sjson.Set(l3EncRtdIfBody, "l3EncRtdIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Encap.IsNull() {
+			l3EncRtdIfBody, _ = sjson.Set(l3EncRtdIfBody, "l3EncRtdIf.attributes.encap", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LinkLogging.IsNull() {
+			l3EncRtdIfBody, _ = sjson.Set(l3EncRtdIfBody, "l3EncRtdIf.attributes.linkLog", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Medium.IsNull() {
+			l3EncRtdIfBody, _ = sjson.Set(l3EncRtdIfBody, "l3EncRtdIf.attributes.mediumType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Mtu.IsNull() {
+			l3EncRtdIfBody, _ = sjson.Set(l3EncRtdIfBody, "l3EncRtdIf.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MtuInherit.IsNull() {
+			l3EncRtdIfBody, _ = sjson.Set(l3EncRtdIfBody, "l3EncRtdIf.attributes.mtuInherit", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.RouterMac.IsNull() {
+			l3EncRtdIfBody, _ = sjson.Set(l3EncRtdIfBody, "l3EncRtdIf.attributes.routerMac", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.RouterMacIpv6Extract.IsNull() {
+			l3EncRtdIfBody, _ = sjson.Set(l3EncRtdIfBody, "l3EncRtdIf.attributes.routerMacIpv6Extract", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SnmpTrap.IsNull() {
+			l3EncRtdIfBody, _ = sjson.Set(l3EncRtdIfBody, "l3EncRtdIf.attributes.snmpTrap", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !(child.VrfDn.IsNull()) {
+			nwRtVrfMbrRn_ := "rtvrfMbr"
+			nwRtVrfMbrDn_ := l3EncRtdIfDn + "/" + nwRtVrfMbrRn_
+			_ = nwRtVrfMbrDn_
+			if !existed(nwRtVrfMbrDn_) {
+				l3EncRtdIfBody, _ = sjson.Set(l3EncRtdIfBody, "l3EncRtdIf.children.-1.nwRtVrfMbr.attributes", map[string]interface{}{"rn": nwRtVrfMbrRn_, "status": "deleted"})
+			} else {
+				nwRtVrfMbrBody_ := ""
+				if !child.VrfDn.IsNull() {
+					nwRtVrfMbrBody_, _ = sjson.Set(nwRtVrfMbrBody_, "nwRtVrfMbr.attributes.tDn", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if nwRtVrfMbrBody_ != "" {
+					nwRtVrfMbrBody_, _ = sjson.Set(nwRtVrfMbrBody_, "nwRtVrfMbr.attributes.rn", nwRtVrfMbrRn_)
+					l3EncRtdIfBody, _ = sjson.SetRaw(l3EncRtdIfBody, "l3EncRtdIf.children.-1", nwRtVrfMbrBody_)
+				}
+			}
+		}
+		body, _ = sjson.SetRaw(body, "interfaceEntity.children.-1", l3EncRtdIfBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data Subinterface) toBodyWithDeletes(ctx context.Context, state Subinterface, config Subinterface, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -383,6 +491,8 @@ func (data Subinterface) toBodyWithDeletes(ctx context.Context, state Subinterfa
 				stateChild := state.Subinterfaces[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("l3EncRtdIf.attributes.id").String() == key {
 						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
@@ -433,9 +543,15 @@ func (data Subinterface) toBodyWithDeletes(ctx context.Context, state Subinterfa
 						}
 					}
 					if listChildPath != "" {
-						if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nwRtVrfMbr")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.VrfDn.IsNull()) && (configChild.VrfDn.IsNull()) && deleteEmptied(listChildDn+"/rtvrfMbr") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "nwRtVrfMbr")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nwRtVrfMbr")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 					}
 				}

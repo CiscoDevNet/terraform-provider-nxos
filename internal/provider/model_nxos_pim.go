@@ -145,6 +145,14 @@ var PIMSubtreeClassMinVersions = map[string]string{}
 // PIMMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var PIMMinVersions = map[string]helpers.MinVersion{}
 
+// PIMListClasses holds the list child classes of the resource.
+var PIMListClasses = map[string]bool{"pimDom": true, "pimIf": true, "pimStaticRP": true, "pimRPGrpList": true, "pimAcastRPPeer": true}
+
+// getPIMTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getPIMTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"pimInst", "pimGl", "pimDom", "pimIf", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimAcastRPFuncP", "pimAcastRPPeer"}, PIMSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -1239,10 +1247,399 @@ func (data PIM) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data PIM) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.InstanceAdminState.IsNull() && data.Control.IsNull() && data.EvpnBorderLeaf.IsNull() && data.ExtraNet.IsNull() && data.JoinPruneDelay.IsNull() && data.NullRegisterDelay.IsNull() && data.NullRegisterNumberOfRoutes.IsNull() && data.RegisterStop.IsNull() && (data.Isolate.IsNull() && data.LogLevel.IsNull() && data.SyslogLevel.IsNull()) && len(data.Vrfs) == 0) {
+		pimInstDn := dn + "/" + "inst"
+		dns[pimInstDn] = true
+		if !(data.Isolate.IsNull() && data.LogLevel.IsNull() && data.SyslogLevel.IsNull()) {
+			pimGlDn := pimInstDn + "/" + "gl"
+			dns[pimGlDn] = true
+		}
+		for key, child := range data.Vrfs {
+			pimDomDn := pimInstDn + "/" + child.getRn(key)
+			dns[pimDomDn] = true
+			for key_, child_ := range child.Interfaces {
+				pimIfDn_ := pimDomDn + "/" + child_.getRn(key_)
+				dns[pimIfDn_] = true
+			}
+			if !(child.SsmPolicyName.IsNull() && child.SsmPolicyDescription.IsNull() && (child.SsmRangeGroupList1.IsNull() && child.SsmRangeGroupList2.IsNull() && child.SsmRangeGroupList3.IsNull() && child.SsmRangeGroupList4.IsNull() && child.SsmRangePrefixList.IsNull() && child.SsmRangeRouteMap.IsNull() && child.SsmRangeNone.IsNull())) {
+				pimSSMPatPDn_ := pimDomDn + "/" + "ssm"
+				dns[pimSSMPatPDn_] = true
+				if !(child.SsmRangeGroupList1.IsNull() && child.SsmRangeGroupList2.IsNull() && child.SsmRangeGroupList3.IsNull() && child.SsmRangeGroupList4.IsNull() && child.SsmRangePrefixList.IsNull() && child.SsmRangeRouteMap.IsNull() && child.SsmRangeNone.IsNull()) {
+					pimSSMRangePDn_ := pimSSMPatPDn_ + "/" + "range"
+					dns[pimSSMRangePDn_] = true
+				}
+			}
+			if !(child.StaticRpPolicyName.IsNull() && child.StaticRpPolicyDescription.IsNull() && len(child.StaticRps) == 0) {
+				pimStaticRPPDn_ := pimDomDn + "/" + "staticrp"
+				dns[pimStaticRPPDn_] = true
+				for key_, child_ := range child.StaticRps {
+					pimStaticRPDn_ := pimStaticRPPDn_ + "/" + child_.getRn(key_)
+					dns[pimStaticRPDn_] = true
+					for key__, child__ := range child_.GroupLists {
+						pimRPGrpListDn__ := pimStaticRPDn_ + "/" + child__.getRn(key__)
+						dns[pimRPGrpListDn__] = true
+					}
+				}
+			}
+			if !(child.AnycastRpLocalInterface.IsNull() && child.AnycastRpSourceInterface.IsNull() && child.AnycastRpDescription.IsNull() && child.AnycastRpName.IsNull() && len(child.AnycastRpPeers) == 0) {
+				pimAcastRPFuncPDn_ := pimDomDn + "/" + "acastrpfunc"
+				dns[pimAcastRPFuncPDn_] = true
+				for key_, child_ := range child.AnycastRpPeers {
+					keyParts := strings.SplitN(key_, ";", 2)
+					_ = keyParts
+					pimAcastRPPeerDn_ := pimAcastRPFuncPDn_ + "/" + child_.getRn(key_)
+					dns[pimAcastRPPeerDn_] = true
+				}
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data PIM) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "pimEntity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "pimEntity.attributes", map[string]interface{}{})
+	}
+	if !(data.InstanceAdminState.IsNull() && data.Control.IsNull() && data.EvpnBorderLeaf.IsNull() && data.ExtraNet.IsNull() && data.JoinPruneDelay.IsNull() && data.NullRegisterDelay.IsNull() && data.NullRegisterNumberOfRoutes.IsNull() && data.RegisterStop.IsNull() && (data.Isolate.IsNull() && data.LogLevel.IsNull() && data.SyslogLevel.IsNull()) && len(data.Vrfs) == 0) {
+		pimInstRn := "inst"
+		pimInstDn := dn + "/" + pimInstRn
+		_ = pimInstDn
+		{
+			pimInstBody := ""
+			if !data.InstanceAdminState.IsNull() {
+				pimInstBody, _ = sjson.Set(pimInstBody, "pimInst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Control.IsNull() {
+				pimInstBody, _ = sjson.Set(pimInstBody, "pimInst.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.EvpnBorderLeaf.IsNull() {
+				pimInstBody, _ = sjson.Set(pimInstBody, "pimInst.attributes.evpnBorderLeaf", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.ExtraNet.IsNull() {
+				pimInstBody, _ = sjson.Set(pimInstBody, "pimInst.attributes.extraNet", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.JoinPruneDelay.IsNull() {
+				pimInstBody, _ = sjson.Set(pimInstBody, "pimInst.attributes.jpDelay", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.NullRegisterDelay.IsNull() {
+				pimInstBody, _ = sjson.Set(pimInstBody, "pimInst.attributes.nrDelay", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.NullRegisterNumberOfRoutes.IsNull() {
+				pimInstBody, _ = sjson.Set(pimInstBody, "pimInst.attributes.nrNumRt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RegisterStop.IsNull() {
+				pimInstBody, _ = sjson.Set(pimInstBody, "pimInst.attributes.regStop", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(data.Isolate.IsNull() && data.LogLevel.IsNull() && data.SyslogLevel.IsNull()) {
+				pimGlRn := "gl"
+				pimGlDn := pimInstDn + "/" + pimGlRn
+				_ = pimGlDn
+				if !existed(pimGlDn) {
+					pimInstBody, _ = sjson.Set(pimInstBody, "pimInst.children.-1.pimGl.attributes", map[string]interface{}{"rn": pimGlRn, "status": "deleted"})
+				} else {
+					pimGlBody := ""
+					if !data.Isolate.IsNull() {
+						pimGlBody, _ = sjson.Set(pimGlBody, "pimGl.attributes.isolate", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.LogLevel.IsNull() {
+						pimGlBody, _ = sjson.Set(pimGlBody, "pimGl.attributes.logLevel", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.SyslogLevel.IsNull() {
+						pimGlBody, _ = sjson.Set(pimGlBody, "pimGl.attributes.logLvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if pimGlBody != "" {
+						pimGlBody, _ = sjson.Set(pimGlBody, "pimGl.attributes.rn", pimGlRn)
+						pimInstBody, _ = sjson.SetRaw(pimInstBody, "pimInst.children.-1", pimGlBody)
+					}
+				}
+			}
+			for key, child := range data.Vrfs {
+				_ = child
+				pimDomRn := child.getRn(key)
+				pimDomDn := pimInstDn + "/" + pimDomRn
+				_ = pimDomDn
+				if !existed(pimDomDn) {
+					pimInstBody, _ = sjson.Set(pimInstBody, "pimInst.children.-1.pimDom.attributes", map[string]interface{}{"rn": pimDomRn, "status": "deleted"})
+					continue
+				}
+				pimDomBody := ""
+				pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.attributes.rn", pimDomRn)
+				if !child.AdminState.IsNull() {
+					pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Bfd.IsNull() {
+					pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.attributes.bfd", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.AutoEnable.IsNull() {
+					pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.attributes.autoEnable", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Control.IsNull() {
+					pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.FlushRoutes.IsNull() {
+					pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.attributes.flushRoutes", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.JoinPruneDelay.IsNull() {
+					pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.attributes.jpDelay", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.LogNeighborChanges.IsNull() {
+					pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.attributes.logNbhChng", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Mtu.IsNull() {
+					pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.RegisterRateLimit.IsNull() {
+					pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.attributes.regRateLmt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.RfcStrict.IsNull() {
+					pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.attributes.rfcStrict", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SptSwitchGraceful.IsNull() {
+					pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.attributes.sptSwitchGraceful", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.Interfaces {
+					_ = child_
+					pimIfRn_ := child_.getRn(key_)
+					pimIfDn_ := pimDomDn + "/" + pimIfRn_
+					_ = pimIfDn_
+					if !existed(pimIfDn_) {
+						pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.children.-1.pimIf.attributes", map[string]interface{}{"rn": pimIfRn_, "status": "deleted"})
+						continue
+					}
+					pimIfBody_ := ""
+					pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.rn", pimIfRn_)
+					if !child_.AdminState.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Bfd.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.bfdInst", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DrPriority.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.drPrio", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Passive.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.passive", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SparseMode.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.pimSparseMode", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Border.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.border", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.BorderRouter.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.borderRouter", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Control.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Description.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DrDelay.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.drDelay", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.JoinPruneRouteMap.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.jpRtMap", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Name.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.NeighborRouteMap.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.neighRtMap", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.NeighborPrefixList.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.neighpfxList", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PfmSdBoundary.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.pfmSdBoundary", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.RfcStrict.IsNull() {
+						pimIfBody_, _ = sjson.Set(pimIfBody_, "pimIf.attributes.rfcStrict", "DME_UNSET_PROPERTY_MARKER")
+					}
+					pimDomBody, _ = sjson.SetRaw(pimDomBody, "pimDom.children.-1", pimIfBody_)
+				}
+				if !(child.SsmPolicyName.IsNull() && child.SsmPolicyDescription.IsNull() && (child.SsmRangeGroupList1.IsNull() && child.SsmRangeGroupList2.IsNull() && child.SsmRangeGroupList3.IsNull() && child.SsmRangeGroupList4.IsNull() && child.SsmRangePrefixList.IsNull() && child.SsmRangeRouteMap.IsNull() && child.SsmRangeNone.IsNull())) {
+					pimSSMPatPRn_ := "ssm"
+					pimSSMPatPDn_ := pimDomDn + "/" + pimSSMPatPRn_
+					_ = pimSSMPatPDn_
+					if !existed(pimSSMPatPDn_) {
+						pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.children.-1.pimSSMPatP.attributes", map[string]interface{}{"rn": pimSSMPatPRn_, "status": "deleted"})
+					} else {
+						pimSSMPatPBody_ := ""
+						if !child.SsmPolicyName.IsNull() {
+							pimSSMPatPBody_, _ = sjson.Set(pimSSMPatPBody_, "pimSSMPatP.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.SsmPolicyDescription.IsNull() {
+							pimSSMPatPBody_, _ = sjson.Set(pimSSMPatPBody_, "pimSSMPatP.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !(child.SsmRangeGroupList1.IsNull() && child.SsmRangeGroupList2.IsNull() && child.SsmRangeGroupList3.IsNull() && child.SsmRangeGroupList4.IsNull() && child.SsmRangePrefixList.IsNull() && child.SsmRangeRouteMap.IsNull() && child.SsmRangeNone.IsNull()) {
+							pimSSMRangePRn_ := "range"
+							pimSSMRangePDn_ := pimSSMPatPDn_ + "/" + pimSSMRangePRn_
+							_ = pimSSMRangePDn_
+							if !existed(pimSSMRangePDn_) {
+								pimSSMPatPBody_, _ = sjson.Set(pimSSMPatPBody_, "pimSSMPatP.children.-1.pimSSMRangeP.attributes", map[string]interface{}{"rn": pimSSMRangePRn_, "status": "deleted"})
+							} else {
+								pimSSMRangePBody_ := ""
+								if !child.SsmRangeGroupList1.IsNull() {
+									pimSSMRangePBody_, _ = sjson.Set(pimSSMRangePBody_, "pimSSMRangeP.attributes.grpList", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !child.SsmRangeGroupList2.IsNull() {
+									pimSSMRangePBody_, _ = sjson.Set(pimSSMRangePBody_, "pimSSMRangeP.attributes.grpList1", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !child.SsmRangeGroupList3.IsNull() {
+									pimSSMRangePBody_, _ = sjson.Set(pimSSMRangePBody_, "pimSSMRangeP.attributes.grpList2", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !child.SsmRangeGroupList4.IsNull() {
+									pimSSMRangePBody_, _ = sjson.Set(pimSSMRangePBody_, "pimSSMRangeP.attributes.grpList3", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !child.SsmRangePrefixList.IsNull() {
+									pimSSMRangePBody_, _ = sjson.Set(pimSSMRangePBody_, "pimSSMRangeP.attributes.pfxList", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !child.SsmRangeRouteMap.IsNull() {
+									pimSSMRangePBody_, _ = sjson.Set(pimSSMRangePBody_, "pimSSMRangeP.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !child.SsmRangeNone.IsNull() {
+									pimSSMRangePBody_, _ = sjson.Set(pimSSMRangePBody_, "pimSSMRangeP.attributes.ssmNone", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if pimSSMRangePBody_ != "" {
+									pimSSMRangePBody_, _ = sjson.Set(pimSSMRangePBody_, "pimSSMRangeP.attributes.rn", pimSSMRangePRn_)
+									pimSSMPatPBody_, _ = sjson.SetRaw(pimSSMPatPBody_, "pimSSMPatP.children.-1", pimSSMRangePBody_)
+								}
+							}
+						}
+						if pimSSMPatPBody_ != "" {
+							pimSSMPatPBody_, _ = sjson.Set(pimSSMPatPBody_, "pimSSMPatP.attributes.rn", pimSSMPatPRn_)
+							pimDomBody, _ = sjson.SetRaw(pimDomBody, "pimDom.children.-1", pimSSMPatPBody_)
+						}
+					}
+				}
+				if !(child.StaticRpPolicyName.IsNull() && child.StaticRpPolicyDescription.IsNull() && len(child.StaticRps) == 0) {
+					pimStaticRPPRn_ := "staticrp"
+					pimStaticRPPDn_ := pimDomDn + "/" + pimStaticRPPRn_
+					_ = pimStaticRPPDn_
+					if !existed(pimStaticRPPDn_) {
+						pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.children.-1.pimStaticRPP.attributes", map[string]interface{}{"rn": pimStaticRPPRn_, "status": "deleted"})
+					} else {
+						pimStaticRPPBody_ := ""
+						if !child.StaticRpPolicyName.IsNull() {
+							pimStaticRPPBody_, _ = sjson.Set(pimStaticRPPBody_, "pimStaticRPP.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.StaticRpPolicyDescription.IsNull() {
+							pimStaticRPPBody_, _ = sjson.Set(pimStaticRPPBody_, "pimStaticRPP.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						for key_, child_ := range child.StaticRps {
+							_ = child_
+							pimStaticRPRn_ := child_.getRn(key_)
+							pimStaticRPDn_ := pimStaticRPPDn_ + "/" + pimStaticRPRn_
+							_ = pimStaticRPDn_
+							if !existed(pimStaticRPDn_) {
+								pimStaticRPPBody_, _ = sjson.Set(pimStaticRPPBody_, "pimStaticRPP.children.-1.pimStaticRP.attributes", map[string]interface{}{"rn": pimStaticRPRn_, "status": "deleted"})
+								continue
+							}
+							pimStaticRPBody_ := ""
+							pimStaticRPBody_, _ = sjson.Set(pimStaticRPBody_, "pimStaticRP.attributes.rn", pimStaticRPRn_)
+							for key__, child__ := range child_.GroupLists {
+								_ = child__
+								pimRPGrpListRn__ := child__.getRn(key__)
+								pimRPGrpListDn__ := pimStaticRPDn_ + "/" + pimRPGrpListRn__
+								_ = pimRPGrpListDn__
+								if !existed(pimRPGrpListDn__) {
+									pimStaticRPBody_, _ = sjson.Set(pimStaticRPBody_, "pimStaticRP.children.-1.pimRPGrpList.attributes", map[string]interface{}{"rn": pimRPGrpListRn__, "status": "deleted"})
+									continue
+								}
+								pimRPGrpListBody__ := ""
+								pimRPGrpListBody__, _ = sjson.Set(pimRPGrpListBody__, "pimRPGrpList.attributes.rn", pimRPGrpListRn__)
+								if !child__.Bidir.IsNull() {
+									pimRPGrpListBody__, _ = sjson.Set(pimRPGrpListBody__, "pimRPGrpList.attributes.bidir", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !child__.Override.IsNull() {
+									pimRPGrpListBody__, _ = sjson.Set(pimRPGrpListBody__, "pimRPGrpList.attributes.override", "DME_UNSET_PROPERTY_MARKER")
+								}
+								pimStaticRPBody_, _ = sjson.SetRaw(pimStaticRPBody_, "pimStaticRP.children.-1", pimRPGrpListBody__)
+							}
+							pimStaticRPPBody_, _ = sjson.SetRaw(pimStaticRPPBody_, "pimStaticRPP.children.-1", pimStaticRPBody_)
+						}
+						if pimStaticRPPBody_ != "" {
+							pimStaticRPPBody_, _ = sjson.Set(pimStaticRPPBody_, "pimStaticRPP.attributes.rn", pimStaticRPPRn_)
+							pimDomBody, _ = sjson.SetRaw(pimDomBody, "pimDom.children.-1", pimStaticRPPBody_)
+						}
+					}
+				}
+				if !(child.AnycastRpLocalInterface.IsNull() && child.AnycastRpSourceInterface.IsNull() && child.AnycastRpDescription.IsNull() && child.AnycastRpName.IsNull() && len(child.AnycastRpPeers) == 0) {
+					pimAcastRPFuncPRn_ := "acastrpfunc"
+					pimAcastRPFuncPDn_ := pimDomDn + "/" + pimAcastRPFuncPRn_
+					_ = pimAcastRPFuncPDn_
+					if !existed(pimAcastRPFuncPDn_) {
+						pimDomBody, _ = sjson.Set(pimDomBody, "pimDom.children.-1.pimAcastRPFuncP.attributes", map[string]interface{}{"rn": pimAcastRPFuncPRn_, "status": "deleted"})
+					} else {
+						pimAcastRPFuncPBody_ := ""
+						if !child.AnycastRpLocalInterface.IsNull() {
+							pimAcastRPFuncPBody_, _ = sjson.Set(pimAcastRPFuncPBody_, "pimAcastRPFuncP.attributes.localIf", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.AnycastRpSourceInterface.IsNull() {
+							pimAcastRPFuncPBody_, _ = sjson.Set(pimAcastRPFuncPBody_, "pimAcastRPFuncP.attributes.srcIf", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.AnycastRpDescription.IsNull() {
+							pimAcastRPFuncPBody_, _ = sjson.Set(pimAcastRPFuncPBody_, "pimAcastRPFuncP.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child.AnycastRpName.IsNull() {
+							pimAcastRPFuncPBody_, _ = sjson.Set(pimAcastRPFuncPBody_, "pimAcastRPFuncP.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+						}
+						for key_, child_ := range child.AnycastRpPeers {
+							_ = child_
+							keyParts := strings.SplitN(key_, ";", 2)
+							_ = keyParts
+							pimAcastRPPeerRn_ := child_.getRn(key_)
+							pimAcastRPPeerDn_ := pimAcastRPFuncPDn_ + "/" + pimAcastRPPeerRn_
+							_ = pimAcastRPPeerDn_
+							if !existed(pimAcastRPPeerDn_) {
+								pimAcastRPFuncPBody_, _ = sjson.Set(pimAcastRPFuncPBody_, "pimAcastRPFuncP.children.-1.pimAcastRPPeer.attributes", map[string]interface{}{"rn": pimAcastRPPeerRn_, "status": "deleted"})
+								continue
+							}
+							pimAcastRPPeerBody_ := ""
+							pimAcastRPPeerBody_, _ = sjson.Set(pimAcastRPPeerBody_, "pimAcastRPPeer.attributes.rn", pimAcastRPPeerRn_)
+							pimAcastRPFuncPBody_, _ = sjson.SetRaw(pimAcastRPFuncPBody_, "pimAcastRPFuncP.children.-1", pimAcastRPPeerBody_)
+						}
+						if pimAcastRPFuncPBody_ != "" {
+							pimAcastRPFuncPBody_, _ = sjson.Set(pimAcastRPFuncPBody_, "pimAcastRPFuncP.attributes.rn", pimAcastRPFuncPRn_)
+							pimDomBody, _ = sjson.SetRaw(pimDomBody, "pimDom.children.-1", pimAcastRPFuncPBody_)
+						}
+					}
+				}
+				pimInstBody, _ = sjson.SetRaw(pimInstBody, "pimInst.children.-1", pimDomBody)
+			}
+			if pimInstBody != "" {
+				pimInstBody, _ = sjson.Set(pimInstBody, "pimInst.attributes.rn", pimInstRn)
+				body, _ = sjson.SetRaw(body, "pimEntity.children.-1", pimInstBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
 // toBodyWithDeletes returns the update body. With deferEmptied set, deletes of children that would
 // leave an auto_delete_on_empty parent without children are left out and deferred is true, so the
 // caller can send them in a second request after the new children have been created.
-func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM, config PIM, importing bool, deferEmptied bool) (body nxos.Body, deferred bool) {
+func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM, config PIM, importing bool, deleteEmptied func(dn string) bool, deferEmptied bool) (body nxos.Body, deferred bool) {
 	body = data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -1385,23 +1782,31 @@ func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM, config PIM, im
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "pimInst")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"regStop", "DME_UNSET_PROPERTY_MARKER")
 		}
-		if !state.Isolate.IsNull() && config.Isolate.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "pimInst")+".children", "pimGl")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"isolate", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.LogLevel.IsNull() && config.LogLevel.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "pimInst")+".children", "pimGl")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"logLevel", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.SyslogLevel.IsNull() && config.SyslogLevel.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "pimInst")+".children", "pimGl")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"logLvl", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.Isolate.IsNull() && state.LogLevel.IsNull() && state.SyslogLevel.IsNull()) && (config.Isolate.IsNull() && config.LogLevel.IsNull() && config.SyslogLevel.IsNull()) && deleteEmptied(data.getDn()+"/inst"+"/gl") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "pimInst")+".children", "pimGl")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.Isolate.IsNull() && config.Isolate.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "pimInst")+".children", "pimGl")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"isolate", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.LogLevel.IsNull() && config.LogLevel.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "pimInst")+".children", "pimGl")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"logLevel", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.SyslogLevel.IsNull() && config.SyslogLevel.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "pimInst")+".children", "pimGl")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"logLvl", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 		for key := range state.Vrfs {
 			if configChild, ok := config.Vrfs[key]; ok {
 				stateChild := state.Vrfs[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/inst" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pimInst")+".children").Array() {
 					if mv.Get("pimDom.attributes.name").String() == key {
 						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
@@ -1509,78 +1914,98 @@ func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM, config PIM, im
 								}
 							}
 						}
-						if !stateChild.SsmPolicyName.IsNull() && configChild.SsmPolicyName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.SsmPolicyName.IsNull() && stateChild.SsmPolicyDescription.IsNull() && (stateChild.SsmRangeGroupList1.IsNull() && stateChild.SsmRangeGroupList2.IsNull() && stateChild.SsmRangeGroupList3.IsNull() && stateChild.SsmRangeGroupList4.IsNull() && stateChild.SsmRangePrefixList.IsNull() && stateChild.SsmRangeRouteMap.IsNull() && stateChild.SsmRangeNone.IsNull())) && (configChild.SsmPolicyName.IsNull() && configChild.SsmPolicyDescription.IsNull() && (configChild.SsmRangeGroupList1.IsNull() && configChild.SsmRangeGroupList2.IsNull() && configChild.SsmRangeGroupList3.IsNull() && configChild.SsmRangeGroupList4.IsNull() && configChild.SsmRangePrefixList.IsNull() && configChild.SsmRangeRouteMap.IsNull() && configChild.SsmRangeNone.IsNull())) && deleteEmptied(listChildDn+"/ssm") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.SsmPolicyName.IsNull() && configChild.SsmPolicyName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.SsmPolicyDescription.IsNull() && configChild.SsmPolicyDescription.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if deleteEmptied != nil && !(stateChild.SsmRangeGroupList1.IsNull() && stateChild.SsmRangeGroupList2.IsNull() && stateChild.SsmRangeGroupList3.IsNull() && stateChild.SsmRangeGroupList4.IsNull() && stateChild.SsmRangePrefixList.IsNull() && stateChild.SsmRangeRouteMap.IsNull() && stateChild.SsmRangeNone.IsNull()) && (configChild.SsmRangeGroupList1.IsNull() && configChild.SsmRangeGroupList2.IsNull() && configChild.SsmRangeGroupList3.IsNull() && configChild.SsmRangeGroupList4.IsNull() && configChild.SsmRangePrefixList.IsNull() && configChild.SsmRangeRouteMap.IsNull() && configChild.SsmRangeNone.IsNull()) && deleteEmptied(listChildDn+"/ssm"+"/range") {
+								deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
+								body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+								body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+							} else {
+								if !stateChild.SsmRangeGroupList1.IsNull() && configChild.SsmRangeGroupList1.IsNull() {
+									unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
+									body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"grpList", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !stateChild.SsmRangeGroupList2.IsNull() && configChild.SsmRangeGroupList2.IsNull() {
+									unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
+									body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"grpList1", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !stateChild.SsmRangeGroupList3.IsNull() && configChild.SsmRangeGroupList3.IsNull() {
+									unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
+									body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"grpList2", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !stateChild.SsmRangeGroupList4.IsNull() && configChild.SsmRangeGroupList4.IsNull() {
+									unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
+									body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"grpList3", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !stateChild.SsmRangePrefixList.IsNull() && configChild.SsmRangePrefixList.IsNull() {
+									unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
+									body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pfxList", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !stateChild.SsmRangeRouteMap.IsNull() && configChild.SsmRangeRouteMap.IsNull() {
+									unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
+									body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !stateChild.SsmRangeNone.IsNull() && configChild.SsmRangeNone.IsNull() {
+									unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
+									body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ssmNone", "DME_UNSET_PROPERTY_MARKER")
+								}
+							}
 						}
-						if !stateChild.SsmPolicyDescription.IsNull() && configChild.SsmPolicyDescription.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.SsmRangeGroupList1.IsNull() && configChild.SsmRangeGroupList1.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"grpList", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.SsmRangeGroupList2.IsNull() && configChild.SsmRangeGroupList2.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"grpList1", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.SsmRangeGroupList3.IsNull() && configChild.SsmRangeGroupList3.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"grpList2", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.SsmRangeGroupList4.IsNull() && configChild.SsmRangeGroupList4.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"grpList3", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.SsmRangePrefixList.IsNull() && configChild.SsmRangePrefixList.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pfxList", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.SsmRangeRouteMap.IsNull() && configChild.SsmRangeRouteMap.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.SsmRangeNone.IsNull() && configChild.SsmRangeNone.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, listChildPath, "pimSSMPatP")+".children", "pimSSMRangeP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ssmNone", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.StaticRpPolicyName.IsNull() && configChild.StaticRpPolicyName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimStaticRPP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.StaticRpPolicyDescription.IsNull() && configChild.StaticRpPolicyDescription.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimStaticRPP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-						}
-						for key := range stateChild.StaticRps {
-							if configChild, ok := configChild.StaticRps[key]; ok {
-								stateChild := stateChild.StaticRps[key]
-								_ = stateChild
-								_ = configChild
-								{
-									listChildPath_ := ""
-									for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, listChildPath, "pimStaticRPP")+".children").Array() {
-										if mv.Get("pimStaticRP.attributes.addr").String() == key {
-											listChildPath_ = helpers.FindChildPath(body.Str, listChildPath, "pimStaticRPP") + ".children" + "." + strconv.Itoa(mi) + ".pimStaticRP.children"
-											break
+						if deleteEmptied != nil && !(stateChild.StaticRpPolicyName.IsNull() && stateChild.StaticRpPolicyDescription.IsNull() && len(stateChild.StaticRps) == 0) && (configChild.StaticRpPolicyName.IsNull() && configChild.StaticRpPolicyDescription.IsNull() && len(configChild.StaticRps) == 0) && deleteEmptied(listChildDn+"/staticrp") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimStaticRPP")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.StaticRpPolicyName.IsNull() && configChild.StaticRpPolicyName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimStaticRPP")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.StaticRpPolicyDescription.IsNull() && configChild.StaticRpPolicyDescription.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimStaticRPP")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							for key := range stateChild.StaticRps {
+								if configChild, ok := configChild.StaticRps[key]; ok {
+									stateChild := stateChild.StaticRps[key]
+									_ = stateChild
+									_ = configChild
+									listChildDn_ := listChildDn + "/staticrp" + "/" + stateChild.getRn(key)
+									_ = listChildDn_
+									{
+										listChildPath_ := ""
+										for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, listChildPath, "pimStaticRPP")+".children").Array() {
+											if mv.Get("pimStaticRP.attributes.addr").String() == key {
+												listChildPath_ = helpers.FindChildPath(body.Str, listChildPath, "pimStaticRPP") + ".children" + "." + strconv.Itoa(mi) + ".pimStaticRP.children"
+												break
+											}
 										}
-									}
-									if listChildPath_ != "" {
-										for key := range stateChild.GroupLists {
-											if configChild, ok := configChild.GroupLists[key]; ok {
-												stateChild := stateChild.GroupLists[key]
-												_ = stateChild
-												_ = configChild
-												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
-													if mv.Get("pimRPGrpList.attributes.grpListName").String() == key {
-														if !stateChild.Bidir.IsNull() && configChild.Bidir.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".pimRPGrpList.attributes."+"bidir", "DME_UNSET_PROPERTY_MARKER")
+										if listChildPath_ != "" {
+											for key := range stateChild.GroupLists {
+												if configChild, ok := configChild.GroupLists[key]; ok {
+													stateChild := stateChild.GroupLists[key]
+													_ = stateChild
+													_ = configChild
+													for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
+														if mv.Get("pimRPGrpList.attributes.grpListName").String() == key {
+															if !stateChild.Bidir.IsNull() && configChild.Bidir.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".pimRPGrpList.attributes."+"bidir", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.Override.IsNull() && configChild.Override.IsNull() {
+																body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".pimRPGrpList.attributes."+"override", "DME_UNSET_PROPERTY_MARKER")
+															}
+															break
 														}
-														if !stateChild.Override.IsNull() && configChild.Override.IsNull() {
-															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".pimRPGrpList.attributes."+"override", "DME_UNSET_PROPERTY_MARKER")
-														}
-														break
 													}
 												}
 											}
@@ -1589,27 +2014,33 @@ func (data PIM) toBodyWithDeletes(ctx context.Context, state PIM, config PIM, im
 								}
 							}
 						}
-						if !stateChild.AnycastRpLocalInterface.IsNull() && configChild.AnycastRpLocalInterface.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimAcastRPFuncP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"localIf", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.AnycastRpSourceInterface.IsNull() && configChild.AnycastRpSourceInterface.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimAcastRPFuncP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.AnycastRpDescription.IsNull() && configChild.AnycastRpDescription.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimAcastRPFuncP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.AnycastRpName.IsNull() && configChild.AnycastRpName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimAcastRPFuncP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-						}
-						for key := range stateChild.AnycastRpPeers {
-							if configChild, ok := configChild.AnycastRpPeers[key]; ok {
-								stateChild := stateChild.AnycastRpPeers[key]
-								_ = stateChild
-								_ = configChild
+						if deleteEmptied != nil && !(stateChild.AnycastRpLocalInterface.IsNull() && stateChild.AnycastRpSourceInterface.IsNull() && stateChild.AnycastRpDescription.IsNull() && stateChild.AnycastRpName.IsNull() && len(stateChild.AnycastRpPeers) == 0) && (configChild.AnycastRpLocalInterface.IsNull() && configChild.AnycastRpSourceInterface.IsNull() && configChild.AnycastRpDescription.IsNull() && configChild.AnycastRpName.IsNull() && len(configChild.AnycastRpPeers) == 0) && deleteEmptied(listChildDn+"/acastrpfunc") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimAcastRPFuncP")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.AnycastRpLocalInterface.IsNull() && configChild.AnycastRpLocalInterface.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimAcastRPFuncP")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"localIf", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.AnycastRpSourceInterface.IsNull() && configChild.AnycastRpSourceInterface.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimAcastRPFuncP")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.AnycastRpDescription.IsNull() && configChild.AnycastRpDescription.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimAcastRPFuncP")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.AnycastRpName.IsNull() && configChild.AnycastRpName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "pimAcastRPFuncP")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
+							for key := range stateChild.AnycastRpPeers {
+								if configChild, ok := configChild.AnycastRpPeers[key]; ok {
+									stateChild := stateChild.AnycastRpPeers[key]
+									_ = stateChild
+									_ = configChild
+								}
 							}
 						}
 					}

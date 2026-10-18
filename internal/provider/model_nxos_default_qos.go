@@ -163,6 +163,14 @@ var DefaultQoSSubtreeClassMinVersions = map[string]string{}
 // DefaultQoSMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var DefaultQoSMinVersions = map[string]helpers.MinVersion{}
 
+// DefaultQoSListClasses holds the list child classes of the resource.
+var DefaultQoSListClasses = map[string]bool{"ipqosCMapInst": true, "ipqosDscp": true, "ipqosNotDscp": true, "ipqosDscpTunnel": true, "ipqosCos": true, "ipqosNotCos": true, "ipqosPrecedence": true, "ipqosNotPrecedence": true, "ipqosQoSGrp": true, "ipqosAcl": true, "ipqosPMapInst": true, "ipqosMatchCMap": true, "ipqosIf": true, "ipqosNveIf": true}
+
+// getDefaultQoSTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getDefaultQoSTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"ipqosCMapEntity", "ipqosCMapInst", "ipqosDscp", "ipqosNotDscp", "ipqosDscpTunnel", "ipqosCos", "ipqosNotCos", "ipqosPrecedence", "ipqosNotPrecedence", "ipqosQoSGrp", "ipqosAcl", "ipqosPMapEntity", "ipqosPMapInst", "ipqosMatchCMap", "ipqosSetQoSGrp", "ipqosSetDscp", "ipqosSetDscpTunnel", "ipqosSetCos", "ipqosSetPrecedence", "ipqosSetDlbMode", "ipqosPolice", "ipqosServPol", "ipqosIngress", "ipqosIf", "ipqosInst", "ipqosNveIf", "ipqosInst"}, DefaultQoSSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -1790,7 +1798,614 @@ func (data DefaultQoS) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, config DefaultQoS, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data DefaultQoS) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(len(data.ClassMaps) == 0) {
+		ipqosCMapEntityDn := dn + "/" + "c"
+		dns[ipqosCMapEntityDn] = true
+		for key, child := range data.ClassMaps {
+			ipqosCMapInstDn := ipqosCMapEntityDn + "/" + child.getRn(key)
+			dns[ipqosCMapInstDn] = true
+			for key_, child_ := range child.DscpValues {
+				ipqosDscpDn_ := ipqosCMapInstDn + "/" + child_.getRn(key_)
+				dns[ipqosDscpDn_] = true
+			}
+			for key_, child_ := range child.NotDscpValues {
+				ipqosNotDscpDn_ := ipqosCMapInstDn + "/" + child_.getRn(key_)
+				dns[ipqosNotDscpDn_] = true
+			}
+			for key_, child_ := range child.DscpTunnelValues {
+				ipqosDscpTunnelDn_ := ipqosCMapInstDn + "/" + child_.getRn(key_)
+				dns[ipqosDscpTunnelDn_] = true
+			}
+			for key_, child_ := range child.CosValues {
+				ipqosCosDn_ := ipqosCMapInstDn + "/" + child_.getRn(key_)
+				dns[ipqosCosDn_] = true
+			}
+			for key_, child_ := range child.NotCosValues {
+				ipqosNotCosDn_ := ipqosCMapInstDn + "/" + child_.getRn(key_)
+				dns[ipqosNotCosDn_] = true
+			}
+			for key_, child_ := range child.PrecedenceValues {
+				ipqosPrecedenceDn_ := ipqosCMapInstDn + "/" + child_.getRn(key_)
+				dns[ipqosPrecedenceDn_] = true
+			}
+			for key_, child_ := range child.NotPrecedenceValues {
+				ipqosNotPrecedenceDn_ := ipqosCMapInstDn + "/" + child_.getRn(key_)
+				dns[ipqosNotPrecedenceDn_] = true
+			}
+			for key_, child_ := range child.QosGroupValues {
+				ipqosQoSGrpDn_ := ipqosCMapInstDn + "/" + child_.getRn(key_)
+				dns[ipqosQoSGrpDn_] = true
+			}
+			for key_, child_ := range child.AccessGroups {
+				ipqosAclDn_ := ipqosCMapInstDn + "/" + child_.getRn(key_)
+				dns[ipqosAclDn_] = true
+			}
+		}
+	}
+	if !(len(data.PolicyMaps) == 0) {
+		ipqosPMapEntityDn := dn + "/" + "p"
+		dns[ipqosPMapEntityDn] = true
+		for key, child := range data.PolicyMaps {
+			ipqosPMapInstDn := ipqosPMapEntityDn + "/" + child.getRn(key)
+			dns[ipqosPMapInstDn] = true
+			for key_, child_ := range child.MatchClassMaps {
+				ipqosMatchCMapDn_ := ipqosPMapInstDn + "/" + child_.getRn(key_)
+				dns[ipqosMatchCMapDn_] = true
+				if !(child_.SetQosGroupId.IsNull()) {
+					ipqosSetQoSGrpDn__ := ipqosMatchCMapDn_ + "/" + "setGrp"
+					dns[ipqosSetQoSGrpDn__] = true
+				}
+				if !(child_.SetDscpTunnel.IsNull() && child_.SetDscpValue.IsNull()) {
+					ipqosSetDscpDn__ := ipqosMatchCMapDn_ + "/" + "setDscp"
+					dns[ipqosSetDscpDn__] = true
+				}
+				if !(child_.SetDscpTunnelValue.IsNull()) {
+					ipqosSetDscpTunnelDn__ := ipqosMatchCMapDn_ + "/" + "setdscptunnel"
+					dns[ipqosSetDscpTunnelDn__] = true
+				}
+				if !(child_.SetCosValue.IsNull()) {
+					ipqosSetCosDn__ := ipqosMatchCMapDn_ + "/" + "setCos"
+					dns[ipqosSetCosDn__] = true
+				}
+				if !(child_.SetPrecedenceTunnel.IsNull() && child_.SetPrecedenceValue.IsNull()) {
+					ipqosSetPrecedenceDn__ := ipqosMatchCMapDn_ + "/" + "setPrecedence"
+					dns[ipqosSetPrecedenceDn__] = true
+				}
+				if !(child_.SetDlbMode.IsNull()) {
+					ipqosSetDlbModeDn__ := ipqosMatchCMapDn_ + "/" + "setdlbmode"
+					dns[ipqosSetDlbModeDn__] = true
+				}
+				if !(child_.PoliceBcRate.IsNull() && child_.PoliceBcUnit.IsNull() && child_.PoliceBeRate.IsNull() && child_.PoliceBeUnit.IsNull() && child_.PoliceCirRate.IsNull() && child_.PoliceCirUnit.IsNull() && child_.PoliceConformAction.IsNull() && child_.PoliceConformSetCos.IsNull() && child_.PoliceConformSetDscp.IsNull() && child_.PoliceConformSetPrecedence.IsNull() && child_.PoliceConformSetQosGroup.IsNull() && child_.PoliceExceedAction.IsNull() && child_.PoliceExceedSetCos.IsNull() && child_.PoliceExceedSetDscp.IsNull() && child_.PoliceExceedSetPrecedence.IsNull() && child_.PoliceExceedSetQosGroup.IsNull() && child_.PolicePirRate.IsNull() && child_.PolicePirUnit.IsNull() && child_.PoliceViolateAction.IsNull() && child_.PoliceViolateSetCos.IsNull() && child_.PoliceViolateSetDscp.IsNull() && child_.PoliceViolateSetPrecedence.IsNull() && child_.PoliceViolateSetQosGroup.IsNull()) {
+					ipqosPoliceDn__ := ipqosMatchCMapDn_ + "/" + "police"
+					dns[ipqosPoliceDn__] = true
+				}
+			}
+		}
+	}
+	if !(len(data.PolicyInterfaceIn) == 0 && len(data.PolicyNveInterfaceIn) == 0) {
+		ipqosServPolDn := dn + "/" + "policy"
+		dns[ipqosServPolDn] = true
+		if !(len(data.PolicyInterfaceIn) == 0 && len(data.PolicyNveInterfaceIn) == 0) {
+			ipqosIngressDn := ipqosServPolDn + "/" + "in"
+			dns[ipqosIngressDn] = true
+			for key, child := range data.PolicyInterfaceIn {
+				ipqosIfDn := ipqosIngressDn + "/" + child.getRn(key)
+				dns[ipqosIfDn] = true
+				if !(child.PolicyMapName.IsNull() && child.PolicyMapStatistics.IsNull()) {
+					ipqosInstDn_ := ipqosIfDn + "/" + "pmap"
+					dns[ipqosInstDn_] = true
+				}
+			}
+			for key, child := range data.PolicyNveInterfaceIn {
+				ipqosNveIfDn := ipqosIngressDn + "/" + child.getRn(key)
+				dns[ipqosNveIfDn] = true
+				if !(child.PolicyMapName.IsNull() && child.PolicyMapStatistics.IsNull()) {
+					ipqosInstDn_ := ipqosNveIfDn + "/" + "pmap"
+					dns[ipqosInstDn_] = true
+				}
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data DefaultQoS) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "ipqosDefaultQoS.attributes", map[string]interface{}{})
+	}
+	if !(len(data.ClassMaps) == 0) {
+		ipqosCMapEntityRn := "c"
+		ipqosCMapEntityDn := dn + "/" + ipqosCMapEntityRn
+		_ = ipqosCMapEntityDn
+		{
+			ipqosCMapEntityBody := ""
+			for key, child := range data.ClassMaps {
+				_ = child
+				ipqosCMapInstRn := child.getRn(key)
+				ipqosCMapInstDn := ipqosCMapEntityDn + "/" + ipqosCMapInstRn
+				_ = ipqosCMapInstDn
+				if !existed(ipqosCMapInstDn) {
+					ipqosCMapEntityBody, _ = sjson.Set(ipqosCMapEntityBody, "ipqosCMapEntity.children.-1.ipqosCMapInst.attributes", map[string]interface{}{"rn": ipqosCMapInstRn, "status": "deleted"})
+					continue
+				}
+				ipqosCMapInstBody := ""
+				ipqosCMapInstBody, _ = sjson.Set(ipqosCMapInstBody, "ipqosCMapInst.attributes.rn", ipqosCMapInstRn)
+				if !child.MatchType.IsNull() {
+					ipqosCMapInstBody, _ = sjson.Set(ipqosCMapInstBody, "ipqosCMapInst.attributes.matchType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.DscpValues {
+					_ = child_
+					ipqosDscpRn_ := child_.getRn(key_)
+					ipqosDscpDn_ := ipqosCMapInstDn + "/" + ipqosDscpRn_
+					_ = ipqosDscpDn_
+					if !existed(ipqosDscpDn_) {
+						ipqosCMapInstBody, _ = sjson.Set(ipqosCMapInstBody, "ipqosCMapInst.children.-1.ipqosDscp.attributes", map[string]interface{}{"rn": ipqosDscpRn_, "status": "deleted"})
+						continue
+					}
+					ipqosDscpBody_ := ""
+					ipqosDscpBody_, _ = sjson.Set(ipqosDscpBody_, "ipqosDscp.attributes.rn", ipqosDscpRn_)
+					ipqosCMapInstBody, _ = sjson.SetRaw(ipqosCMapInstBody, "ipqosCMapInst.children.-1", ipqosDscpBody_)
+				}
+				for key_, child_ := range child.NotDscpValues {
+					_ = child_
+					ipqosNotDscpRn_ := child_.getRn(key_)
+					ipqosNotDscpDn_ := ipqosCMapInstDn + "/" + ipqosNotDscpRn_
+					_ = ipqosNotDscpDn_
+					if !existed(ipqosNotDscpDn_) {
+						ipqosCMapInstBody, _ = sjson.Set(ipqosCMapInstBody, "ipqosCMapInst.children.-1.ipqosNotDscp.attributes", map[string]interface{}{"rn": ipqosNotDscpRn_, "status": "deleted"})
+						continue
+					}
+					ipqosNotDscpBody_ := ""
+					ipqosNotDscpBody_, _ = sjson.Set(ipqosNotDscpBody_, "ipqosNotDscp.attributes.rn", ipqosNotDscpRn_)
+					ipqosCMapInstBody, _ = sjson.SetRaw(ipqosCMapInstBody, "ipqosCMapInst.children.-1", ipqosNotDscpBody_)
+				}
+				for key_, child_ := range child.DscpTunnelValues {
+					_ = child_
+					ipqosDscpTunnelRn_ := child_.getRn(key_)
+					ipqosDscpTunnelDn_ := ipqosCMapInstDn + "/" + ipqosDscpTunnelRn_
+					_ = ipqosDscpTunnelDn_
+					if !existed(ipqosDscpTunnelDn_) {
+						ipqosCMapInstBody, _ = sjson.Set(ipqosCMapInstBody, "ipqosCMapInst.children.-1.ipqosDscpTunnel.attributes", map[string]interface{}{"rn": ipqosDscpTunnelRn_, "status": "deleted"})
+						continue
+					}
+					ipqosDscpTunnelBody_ := ""
+					ipqosDscpTunnelBody_, _ = sjson.Set(ipqosDscpTunnelBody_, "ipqosDscpTunnel.attributes.rn", ipqosDscpTunnelRn_)
+					ipqosCMapInstBody, _ = sjson.SetRaw(ipqosCMapInstBody, "ipqosCMapInst.children.-1", ipqosDscpTunnelBody_)
+				}
+				for key_, child_ := range child.CosValues {
+					_ = child_
+					ipqosCosRn_ := child_.getRn(key_)
+					ipqosCosDn_ := ipqosCMapInstDn + "/" + ipqosCosRn_
+					_ = ipqosCosDn_
+					if !existed(ipqosCosDn_) {
+						ipqosCMapInstBody, _ = sjson.Set(ipqosCMapInstBody, "ipqosCMapInst.children.-1.ipqosCos.attributes", map[string]interface{}{"rn": ipqosCosRn_, "status": "deleted"})
+						continue
+					}
+					ipqosCosBody_ := ""
+					ipqosCosBody_, _ = sjson.Set(ipqosCosBody_, "ipqosCos.attributes.rn", ipqosCosRn_)
+					ipqosCMapInstBody, _ = sjson.SetRaw(ipqosCMapInstBody, "ipqosCMapInst.children.-1", ipqosCosBody_)
+				}
+				for key_, child_ := range child.NotCosValues {
+					_ = child_
+					ipqosNotCosRn_ := child_.getRn(key_)
+					ipqosNotCosDn_ := ipqosCMapInstDn + "/" + ipqosNotCosRn_
+					_ = ipqosNotCosDn_
+					if !existed(ipqosNotCosDn_) {
+						ipqosCMapInstBody, _ = sjson.Set(ipqosCMapInstBody, "ipqosCMapInst.children.-1.ipqosNotCos.attributes", map[string]interface{}{"rn": ipqosNotCosRn_, "status": "deleted"})
+						continue
+					}
+					ipqosNotCosBody_ := ""
+					ipqosNotCosBody_, _ = sjson.Set(ipqosNotCosBody_, "ipqosNotCos.attributes.rn", ipqosNotCosRn_)
+					ipqosCMapInstBody, _ = sjson.SetRaw(ipqosCMapInstBody, "ipqosCMapInst.children.-1", ipqosNotCosBody_)
+				}
+				for key_, child_ := range child.PrecedenceValues {
+					_ = child_
+					ipqosPrecedenceRn_ := child_.getRn(key_)
+					ipqosPrecedenceDn_ := ipqosCMapInstDn + "/" + ipqosPrecedenceRn_
+					_ = ipqosPrecedenceDn_
+					if !existed(ipqosPrecedenceDn_) {
+						ipqosCMapInstBody, _ = sjson.Set(ipqosCMapInstBody, "ipqosCMapInst.children.-1.ipqosPrecedence.attributes", map[string]interface{}{"rn": ipqosPrecedenceRn_, "status": "deleted"})
+						continue
+					}
+					ipqosPrecedenceBody_ := ""
+					ipqosPrecedenceBody_, _ = sjson.Set(ipqosPrecedenceBody_, "ipqosPrecedence.attributes.rn", ipqosPrecedenceRn_)
+					ipqosCMapInstBody, _ = sjson.SetRaw(ipqosCMapInstBody, "ipqosCMapInst.children.-1", ipqosPrecedenceBody_)
+				}
+				for key_, child_ := range child.NotPrecedenceValues {
+					_ = child_
+					ipqosNotPrecedenceRn_ := child_.getRn(key_)
+					ipqosNotPrecedenceDn_ := ipqosCMapInstDn + "/" + ipqosNotPrecedenceRn_
+					_ = ipqosNotPrecedenceDn_
+					if !existed(ipqosNotPrecedenceDn_) {
+						ipqosCMapInstBody, _ = sjson.Set(ipqosCMapInstBody, "ipqosCMapInst.children.-1.ipqosNotPrecedence.attributes", map[string]interface{}{"rn": ipqosNotPrecedenceRn_, "status": "deleted"})
+						continue
+					}
+					ipqosNotPrecedenceBody_ := ""
+					ipqosNotPrecedenceBody_, _ = sjson.Set(ipqosNotPrecedenceBody_, "ipqosNotPrecedence.attributes.rn", ipqosNotPrecedenceRn_)
+					ipqosCMapInstBody, _ = sjson.SetRaw(ipqosCMapInstBody, "ipqosCMapInst.children.-1", ipqosNotPrecedenceBody_)
+				}
+				for key_, child_ := range child.QosGroupValues {
+					_ = child_
+					ipqosQoSGrpRn_ := child_.getRn(key_)
+					ipqosQoSGrpDn_ := ipqosCMapInstDn + "/" + ipqosQoSGrpRn_
+					_ = ipqosQoSGrpDn_
+					if !existed(ipqosQoSGrpDn_) {
+						ipqosCMapInstBody, _ = sjson.Set(ipqosCMapInstBody, "ipqosCMapInst.children.-1.ipqosQoSGrp.attributes", map[string]interface{}{"rn": ipqosQoSGrpRn_, "status": "deleted"})
+						continue
+					}
+					ipqosQoSGrpBody_ := ""
+					ipqosQoSGrpBody_, _ = sjson.Set(ipqosQoSGrpBody_, "ipqosQoSGrp.attributes.rn", ipqosQoSGrpRn_)
+					ipqosCMapInstBody, _ = sjson.SetRaw(ipqosCMapInstBody, "ipqosCMapInst.children.-1", ipqosQoSGrpBody_)
+				}
+				for key_, child_ := range child.AccessGroups {
+					_ = child_
+					ipqosAclRn_ := child_.getRn(key_)
+					ipqosAclDn_ := ipqosCMapInstDn + "/" + ipqosAclRn_
+					_ = ipqosAclDn_
+					if !existed(ipqosAclDn_) {
+						ipqosCMapInstBody, _ = sjson.Set(ipqosCMapInstBody, "ipqosCMapInst.children.-1.ipqosAcl.attributes", map[string]interface{}{"rn": ipqosAclRn_, "status": "deleted"})
+						continue
+					}
+					ipqosAclBody_ := ""
+					ipqosAclBody_, _ = sjson.Set(ipqosAclBody_, "ipqosAcl.attributes.rn", ipqosAclRn_)
+					ipqosCMapInstBody, _ = sjson.SetRaw(ipqosCMapInstBody, "ipqosCMapInst.children.-1", ipqosAclBody_)
+				}
+				ipqosCMapEntityBody, _ = sjson.SetRaw(ipqosCMapEntityBody, "ipqosCMapEntity.children.-1", ipqosCMapInstBody)
+			}
+			if ipqosCMapEntityBody != "" {
+				ipqosCMapEntityBody, _ = sjson.Set(ipqosCMapEntityBody, "ipqosCMapEntity.attributes.rn", ipqosCMapEntityRn)
+				body, _ = sjson.SetRaw(body, "ipqosDefaultQoS.children.-1", ipqosCMapEntityBody)
+			}
+		}
+	}
+	if !(len(data.PolicyMaps) == 0) {
+		ipqosPMapEntityRn := "p"
+		ipqosPMapEntityDn := dn + "/" + ipqosPMapEntityRn
+		_ = ipqosPMapEntityDn
+		{
+			ipqosPMapEntityBody := ""
+			for key, child := range data.PolicyMaps {
+				_ = child
+				ipqosPMapInstRn := child.getRn(key)
+				ipqosPMapInstDn := ipqosPMapEntityDn + "/" + ipqosPMapInstRn
+				_ = ipqosPMapInstDn
+				if !existed(ipqosPMapInstDn) {
+					ipqosPMapEntityBody, _ = sjson.Set(ipqosPMapEntityBody, "ipqosPMapEntity.children.-1.ipqosPMapInst.attributes", map[string]interface{}{"rn": ipqosPMapInstRn, "status": "deleted"})
+					continue
+				}
+				ipqosPMapInstBody := ""
+				ipqosPMapInstBody, _ = sjson.Set(ipqosPMapInstBody, "ipqosPMapInst.attributes.rn", ipqosPMapInstRn)
+				if !child.MatchType.IsNull() {
+					ipqosPMapInstBody, _ = sjson.Set(ipqosPMapInstBody, "ipqosPMapInst.attributes.matchType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.MatchClassMaps {
+					_ = child_
+					ipqosMatchCMapRn_ := child_.getRn(key_)
+					ipqosMatchCMapDn_ := ipqosPMapInstDn + "/" + ipqosMatchCMapRn_
+					_ = ipqosMatchCMapDn_
+					if !existed(ipqosMatchCMapDn_) {
+						ipqosPMapInstBody, _ = sjson.Set(ipqosPMapInstBody, "ipqosPMapInst.children.-1.ipqosMatchCMap.attributes", map[string]interface{}{"rn": ipqosMatchCMapRn_, "status": "deleted"})
+						continue
+					}
+					ipqosMatchCMapBody_ := ""
+					ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.attributes.rn", ipqosMatchCMapRn_)
+					if !child_.NextClassMap.IsNull() {
+						ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.attributes.nextCMap", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.PreviousClassMap.IsNull() {
+						ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.attributes.prevCMap", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !(child_.SetQosGroupId.IsNull()) {
+						ipqosSetQoSGrpRn__ := "setGrp"
+						ipqosSetQoSGrpDn__ := ipqosMatchCMapDn_ + "/" + ipqosSetQoSGrpRn__
+						_ = ipqosSetQoSGrpDn__
+						if !existed(ipqosSetQoSGrpDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosSetQoSGrp.attributes", map[string]interface{}{"rn": ipqosSetQoSGrpRn__, "status": "deleted"})
+						} else {
+							ipqosSetQoSGrpBody__ := ""
+							if !child_.SetQosGroupId.IsNull() {
+								ipqosSetQoSGrpBody__, _ = sjson.Set(ipqosSetQoSGrpBody__, "ipqosSetQoSGrp.attributes.id", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosSetQoSGrpBody__ != "" {
+								ipqosSetQoSGrpBody__, _ = sjson.Set(ipqosSetQoSGrpBody__, "ipqosSetQoSGrp.attributes.rn", ipqosSetQoSGrpRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosSetQoSGrpBody__)
+							}
+						}
+					}
+					if !(child_.SetDscpTunnel.IsNull() && child_.SetDscpValue.IsNull()) {
+						ipqosSetDscpRn__ := "setDscp"
+						ipqosSetDscpDn__ := ipqosMatchCMapDn_ + "/" + ipqosSetDscpRn__
+						_ = ipqosSetDscpDn__
+						if !existed(ipqosSetDscpDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosSetDscp.attributes", map[string]interface{}{"rn": ipqosSetDscpRn__, "status": "deleted"})
+						} else {
+							ipqosSetDscpBody__ := ""
+							if !child_.SetDscpTunnel.IsNull() {
+								ipqosSetDscpBody__, _ = sjson.Set(ipqosSetDscpBody__, "ipqosSetDscp.attributes.tunnel", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.SetDscpValue.IsNull() {
+								ipqosSetDscpBody__, _ = sjson.Set(ipqosSetDscpBody__, "ipqosSetDscp.attributes.val", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosSetDscpBody__ != "" {
+								ipqosSetDscpBody__, _ = sjson.Set(ipqosSetDscpBody__, "ipqosSetDscp.attributes.rn", ipqosSetDscpRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosSetDscpBody__)
+							}
+						}
+					}
+					if !(child_.SetDscpTunnelValue.IsNull()) {
+						ipqosSetDscpTunnelRn__ := "setdscptunnel"
+						ipqosSetDscpTunnelDn__ := ipqosMatchCMapDn_ + "/" + ipqosSetDscpTunnelRn__
+						_ = ipqosSetDscpTunnelDn__
+						if !existed(ipqosSetDscpTunnelDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosSetDscpTunnel.attributes", map[string]interface{}{"rn": ipqosSetDscpTunnelRn__, "status": "deleted"})
+						} else {
+							ipqosSetDscpTunnelBody__ := ""
+							if !child_.SetDscpTunnelValue.IsNull() {
+								ipqosSetDscpTunnelBody__, _ = sjson.Set(ipqosSetDscpTunnelBody__, "ipqosSetDscpTunnel.attributes.val", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosSetDscpTunnelBody__ != "" {
+								ipqosSetDscpTunnelBody__, _ = sjson.Set(ipqosSetDscpTunnelBody__, "ipqosSetDscpTunnel.attributes.rn", ipqosSetDscpTunnelRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosSetDscpTunnelBody__)
+							}
+						}
+					}
+					if !(child_.SetCosValue.IsNull()) {
+						ipqosSetCosRn__ := "setCos"
+						ipqosSetCosDn__ := ipqosMatchCMapDn_ + "/" + ipqosSetCosRn__
+						_ = ipqosSetCosDn__
+						if !existed(ipqosSetCosDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosSetCos.attributes", map[string]interface{}{"rn": ipqosSetCosRn__, "status": "deleted"})
+						} else {
+							ipqosSetCosBody__ := ""
+							if !child_.SetCosValue.IsNull() {
+								ipqosSetCosBody__, _ = sjson.Set(ipqosSetCosBody__, "ipqosSetCos.attributes.val", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosSetCosBody__ != "" {
+								ipqosSetCosBody__, _ = sjson.Set(ipqosSetCosBody__, "ipqosSetCos.attributes.rn", ipqosSetCosRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosSetCosBody__)
+							}
+						}
+					}
+					if !(child_.SetPrecedenceTunnel.IsNull() && child_.SetPrecedenceValue.IsNull()) {
+						ipqosSetPrecedenceRn__ := "setPrecedence"
+						ipqosSetPrecedenceDn__ := ipqosMatchCMapDn_ + "/" + ipqosSetPrecedenceRn__
+						_ = ipqosSetPrecedenceDn__
+						if !existed(ipqosSetPrecedenceDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosSetPrecedence.attributes", map[string]interface{}{"rn": ipqosSetPrecedenceRn__, "status": "deleted"})
+						} else {
+							ipqosSetPrecedenceBody__ := ""
+							if !child_.SetPrecedenceTunnel.IsNull() {
+								ipqosSetPrecedenceBody__, _ = sjson.Set(ipqosSetPrecedenceBody__, "ipqosSetPrecedence.attributes.tunnel", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.SetPrecedenceValue.IsNull() {
+								ipqosSetPrecedenceBody__, _ = sjson.Set(ipqosSetPrecedenceBody__, "ipqosSetPrecedence.attributes.val", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosSetPrecedenceBody__ != "" {
+								ipqosSetPrecedenceBody__, _ = sjson.Set(ipqosSetPrecedenceBody__, "ipqosSetPrecedence.attributes.rn", ipqosSetPrecedenceRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosSetPrecedenceBody__)
+							}
+						}
+					}
+					if !(child_.SetDlbMode.IsNull()) {
+						ipqosSetDlbModeRn__ := "setdlbmode"
+						ipqosSetDlbModeDn__ := ipqosMatchCMapDn_ + "/" + ipqosSetDlbModeRn__
+						_ = ipqosSetDlbModeDn__
+						if !existed(ipqosSetDlbModeDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosSetDlbMode.attributes", map[string]interface{}{"rn": ipqosSetDlbModeRn__, "status": "deleted"})
+						} else {
+							ipqosSetDlbModeBody__ := ""
+							if !child_.SetDlbMode.IsNull() {
+								ipqosSetDlbModeBody__, _ = sjson.Set(ipqosSetDlbModeBody__, "ipqosSetDlbMode.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosSetDlbModeBody__ != "" {
+								ipqosSetDlbModeBody__, _ = sjson.Set(ipqosSetDlbModeBody__, "ipqosSetDlbMode.attributes.rn", ipqosSetDlbModeRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosSetDlbModeBody__)
+							}
+						}
+					}
+					if !(child_.PoliceBcRate.IsNull() && child_.PoliceBcUnit.IsNull() && child_.PoliceBeRate.IsNull() && child_.PoliceBeUnit.IsNull() && child_.PoliceCirRate.IsNull() && child_.PoliceCirUnit.IsNull() && child_.PoliceConformAction.IsNull() && child_.PoliceConformSetCos.IsNull() && child_.PoliceConformSetDscp.IsNull() && child_.PoliceConformSetPrecedence.IsNull() && child_.PoliceConformSetQosGroup.IsNull() && child_.PoliceExceedAction.IsNull() && child_.PoliceExceedSetCos.IsNull() && child_.PoliceExceedSetDscp.IsNull() && child_.PoliceExceedSetPrecedence.IsNull() && child_.PoliceExceedSetQosGroup.IsNull() && child_.PolicePirRate.IsNull() && child_.PolicePirUnit.IsNull() && child_.PoliceViolateAction.IsNull() && child_.PoliceViolateSetCos.IsNull() && child_.PoliceViolateSetDscp.IsNull() && child_.PoliceViolateSetPrecedence.IsNull() && child_.PoliceViolateSetQosGroup.IsNull()) {
+						ipqosPoliceRn__ := "police"
+						ipqosPoliceDn__ := ipqosMatchCMapDn_ + "/" + ipqosPoliceRn__
+						_ = ipqosPoliceDn__
+						if !existed(ipqosPoliceDn__) {
+							ipqosMatchCMapBody_, _ = sjson.Set(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1.ipqosPolice.attributes", map[string]interface{}{"rn": ipqosPoliceRn__, "status": "deleted"})
+						} else {
+							ipqosPoliceBody__ := ""
+							if !child_.PoliceBcRate.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.bcRate", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceBcUnit.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.bcUnit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceBeRate.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.beRate", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceBeUnit.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.beUnit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceCirRate.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.cirRate", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceCirUnit.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.cirUnit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceConformAction.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.conformAction", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceConformSetCos.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.conformSetCosTransmit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceConformSetDscp.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.conformSetDscpTransmit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceConformSetPrecedence.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.conformSetPrecTransmit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceConformSetQosGroup.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.conformSetQosGrpTransmit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceExceedAction.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.exceedAction", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceExceedSetCos.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.exceedSetCosTransmit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceExceedSetDscp.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.exceedSetDscpTransmit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceExceedSetPrecedence.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.exceedSetPrecTransmit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceExceedSetQosGroup.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.exceedSetQosGrpTransmit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PolicePirRate.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.pirRate", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PolicePirUnit.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.pirUnit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceViolateAction.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.violateAction", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceViolateSetCos.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.violateSetCosTransmit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceViolateSetDscp.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.violateSetDscpTransmit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceViolateSetPrecedence.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.violateSetPrecTransmit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.PoliceViolateSetQosGroup.IsNull() {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.violateSetQosGrpTransmit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if ipqosPoliceBody__ != "" {
+								ipqosPoliceBody__, _ = sjson.Set(ipqosPoliceBody__, "ipqosPolice.attributes.rn", ipqosPoliceRn__)
+								ipqosMatchCMapBody_, _ = sjson.SetRaw(ipqosMatchCMapBody_, "ipqosMatchCMap.children.-1", ipqosPoliceBody__)
+							}
+						}
+					}
+					ipqosPMapInstBody, _ = sjson.SetRaw(ipqosPMapInstBody, "ipqosPMapInst.children.-1", ipqosMatchCMapBody_)
+				}
+				ipqosPMapEntityBody, _ = sjson.SetRaw(ipqosPMapEntityBody, "ipqosPMapEntity.children.-1", ipqosPMapInstBody)
+			}
+			if ipqosPMapEntityBody != "" {
+				ipqosPMapEntityBody, _ = sjson.Set(ipqosPMapEntityBody, "ipqosPMapEntity.attributes.rn", ipqosPMapEntityRn)
+				body, _ = sjson.SetRaw(body, "ipqosDefaultQoS.children.-1", ipqosPMapEntityBody)
+			}
+		}
+	}
+	if !(len(data.PolicyInterfaceIn) == 0 && len(data.PolicyNveInterfaceIn) == 0) {
+		ipqosServPolRn := "policy"
+		ipqosServPolDn := dn + "/" + ipqosServPolRn
+		_ = ipqosServPolDn
+		{
+			ipqosServPolBody := ""
+			if !(len(data.PolicyInterfaceIn) == 0 && len(data.PolicyNveInterfaceIn) == 0) {
+				ipqosIngressRn := "in"
+				ipqosIngressDn := ipqosServPolDn + "/" + ipqosIngressRn
+				_ = ipqosIngressDn
+				{
+					ipqosIngressBody := ""
+					for key, child := range data.PolicyInterfaceIn {
+						_ = child
+						ipqosIfRn := child.getRn(key)
+						ipqosIfDn := ipqosIngressDn + "/" + ipqosIfRn
+						_ = ipqosIfDn
+						if !existed(ipqosIfDn) {
+							ipqosIngressBody, _ = sjson.Set(ipqosIngressBody, "ipqosIngress.children.-1.ipqosIf.attributes", map[string]interface{}{"rn": ipqosIfRn, "status": "deleted"})
+							continue
+						}
+						ipqosIfBody := ""
+						ipqosIfBody, _ = sjson.Set(ipqosIfBody, "ipqosIf.attributes.rn", ipqosIfRn)
+						if !(child.PolicyMapName.IsNull() && child.PolicyMapStatistics.IsNull()) {
+							ipqosInstRn_ := "pmap"
+							ipqosInstDn_ := ipqosIfDn + "/" + ipqosInstRn_
+							_ = ipqosInstDn_
+							if !existed(ipqosInstDn_) {
+								ipqosIfBody, _ = sjson.Set(ipqosIfBody, "ipqosIf.children.-1.ipqosInst.attributes", map[string]interface{}{"rn": ipqosInstRn_, "status": "deleted"})
+							} else {
+								ipqosInstBody_ := ""
+								if !child.PolicyMapName.IsNull() {
+									ipqosInstBody_, _ = sjson.Set(ipqosInstBody_, "ipqosInst.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !child.PolicyMapStatistics.IsNull() {
+									ipqosInstBody_, _ = sjson.Set(ipqosInstBody_, "ipqosInst.attributes.stats", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if ipqosInstBody_ != "" {
+									ipqosInstBody_, _ = sjson.Set(ipqosInstBody_, "ipqosInst.attributes.rn", ipqosInstRn_)
+									ipqosIfBody, _ = sjson.SetRaw(ipqosIfBody, "ipqosIf.children.-1", ipqosInstBody_)
+								}
+							}
+						}
+						ipqosIngressBody, _ = sjson.SetRaw(ipqosIngressBody, "ipqosIngress.children.-1", ipqosIfBody)
+					}
+					for key, child := range data.PolicyNveInterfaceIn {
+						_ = child
+						ipqosNveIfRn := child.getRn(key)
+						ipqosNveIfDn := ipqosIngressDn + "/" + ipqosNveIfRn
+						_ = ipqosNveIfDn
+						if !existed(ipqosNveIfDn) {
+							ipqosIngressBody, _ = sjson.Set(ipqosIngressBody, "ipqosIngress.children.-1.ipqosNveIf.attributes", map[string]interface{}{"rn": ipqosNveIfRn, "status": "deleted"})
+							continue
+						}
+						ipqosNveIfBody := ""
+						ipqosNveIfBody, _ = sjson.Set(ipqosNveIfBody, "ipqosNveIf.attributes.rn", ipqosNveIfRn)
+						if !(child.PolicyMapName.IsNull() && child.PolicyMapStatistics.IsNull()) {
+							ipqosInstRn_ := "pmap"
+							ipqosInstDn_ := ipqosNveIfDn + "/" + ipqosInstRn_
+							_ = ipqosInstDn_
+							if !existed(ipqosInstDn_) {
+								ipqosNveIfBody, _ = sjson.Set(ipqosNveIfBody, "ipqosNveIf.children.-1.ipqosInst.attributes", map[string]interface{}{"rn": ipqosInstRn_, "status": "deleted"})
+							} else {
+								ipqosInstBody_ := ""
+								if !child.PolicyMapName.IsNull() {
+									ipqosInstBody_, _ = sjson.Set(ipqosInstBody_, "ipqosInst.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if !child.PolicyMapStatistics.IsNull() {
+									ipqosInstBody_, _ = sjson.Set(ipqosInstBody_, "ipqosInst.attributes.stats", "DME_UNSET_PROPERTY_MARKER")
+								}
+								if ipqosInstBody_ != "" {
+									ipqosInstBody_, _ = sjson.Set(ipqosInstBody_, "ipqosInst.attributes.rn", ipqosInstRn_)
+									ipqosNveIfBody, _ = sjson.SetRaw(ipqosNveIfBody, "ipqosNveIf.children.-1", ipqosInstBody_)
+								}
+							}
+						}
+						ipqosIngressBody, _ = sjson.SetRaw(ipqosIngressBody, "ipqosIngress.children.-1", ipqosNveIfBody)
+					}
+					if ipqosIngressBody != "" {
+						ipqosIngressBody, _ = sjson.Set(ipqosIngressBody, "ipqosIngress.attributes.rn", ipqosIngressRn)
+						ipqosServPolBody, _ = sjson.SetRaw(ipqosServPolBody, "ipqosServPol.children.-1", ipqosIngressBody)
+					}
+				}
+			}
+			if ipqosServPolBody != "" {
+				ipqosServPolBody, _ = sjson.Set(ipqosServPolBody, "ipqosServPol.attributes.rn", ipqosServPolRn)
+				body, _ = sjson.SetRaw(body, "ipqosDefaultQoS.children.-1", ipqosServPolBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, config DefaultQoS, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -2014,6 +2629,8 @@ func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, 
 				stateChild := state.ClassMaps[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/c" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipqosCMapEntity")+".children").Array() {
 					if mv.Get("ipqosCMapInst.attributes.name").String() == key {
 						if !stateChild.MatchType.IsNull() && configChild.MatchType.IsNull() {
@@ -2103,6 +2720,8 @@ func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, 
 				stateChild := state.PolicyMaps[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/p" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipqosPMapEntity")+".children").Array() {
 					if mv.Get("ipqosPMapInst.attributes.name").String() == key {
 						if !stateChild.MatchType.IsNull() && configChild.MatchType.IsNull() {
@@ -2125,6 +2744,8 @@ func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, 
 								stateChild := stateChild.MatchClassMaps[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("ipqosMatchCMap.attributes.name").String() == key {
 										if !stateChild.NextClassMap.IsNull() && configChild.NextClassMap.IsNull() {
@@ -2145,129 +2766,171 @@ func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, 
 										}
 									}
 									if listChildPath_ != "" {
-										if !stateChild.SetQosGroupId.IsNull() && configChild.SetQosGroupId.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetQoSGrp")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"id", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.SetQosGroupId.IsNull()) && (configChild.SetQosGroupId.IsNull()) && deleteEmptied(listChildDn_+"/setGrp") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetQoSGrp")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetQosGroupId.IsNull() && configChild.SetQosGroupId.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetQoSGrp")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"id", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.SetDscpTunnel.IsNull() && configChild.SetDscpTunnel.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDscp")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tunnel", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.SetDscpTunnel.IsNull() && stateChild.SetDscpValue.IsNull()) && (configChild.SetDscpTunnel.IsNull() && configChild.SetDscpValue.IsNull()) && deleteEmptied(listChildDn_+"/setDscp") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDscp")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetDscpTunnel.IsNull() && configChild.SetDscpTunnel.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDscp")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tunnel", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SetDscpValue.IsNull() && configChild.SetDscpValue.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDscp")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.SetDscpValue.IsNull() && configChild.SetDscpValue.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDscp")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.SetDscpTunnelValue.IsNull()) && (configChild.SetDscpTunnelValue.IsNull()) && deleteEmptied(listChildDn_+"/setdscptunnel") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDscpTunnel")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetDscpTunnelValue.IsNull() && configChild.SetDscpTunnelValue.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDscpTunnel")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.SetDscpTunnelValue.IsNull() && configChild.SetDscpTunnelValue.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDscpTunnel")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.SetCosValue.IsNull()) && (configChild.SetCosValue.IsNull()) && deleteEmptied(listChildDn_+"/setCos") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetCos")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetCosValue.IsNull() && configChild.SetCosValue.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetCos")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.SetCosValue.IsNull() && configChild.SetCosValue.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetCos")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.SetPrecedenceTunnel.IsNull() && stateChild.SetPrecedenceValue.IsNull()) && (configChild.SetPrecedenceTunnel.IsNull() && configChild.SetPrecedenceValue.IsNull()) && deleteEmptied(listChildDn_+"/setPrecedence") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetPrecedence")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetPrecedenceTunnel.IsNull() && configChild.SetPrecedenceTunnel.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetPrecedence")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tunnel", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SetPrecedenceValue.IsNull() && configChild.SetPrecedenceValue.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetPrecedence")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.SetPrecedenceTunnel.IsNull() && configChild.SetPrecedenceTunnel.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetPrecedence")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tunnel", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.SetDlbMode.IsNull()) && (configChild.SetDlbMode.IsNull()) && deleteEmptied(listChildDn_+"/setdlbmode") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDlbMode")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetDlbMode.IsNull() && configChild.SetDlbMode.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDlbMode")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.SetPrecedenceValue.IsNull() && configChild.SetPrecedenceValue.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetPrecedence")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"val", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.SetDlbMode.IsNull() && configChild.SetDlbMode.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosSetDlbMode")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceBcRate.IsNull() && configChild.PoliceBcRate.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bcRate", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceBcUnit.IsNull() && configChild.PoliceBcUnit.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bcUnit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceBeRate.IsNull() && configChild.PoliceBeRate.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"beRate", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceBeUnit.IsNull() && configChild.PoliceBeUnit.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"beUnit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceCirRate.IsNull() && configChild.PoliceCirRate.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"cirRate", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceCirUnit.IsNull() && configChild.PoliceCirUnit.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"cirUnit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceConformAction.IsNull() && configChild.PoliceConformAction.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"conformAction", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceConformSetCos.IsNull() && configChild.PoliceConformSetCos.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"conformSetCosTransmit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceConformSetDscp.IsNull() && configChild.PoliceConformSetDscp.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"conformSetDscpTransmit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceConformSetPrecedence.IsNull() && configChild.PoliceConformSetPrecedence.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"conformSetPrecTransmit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceConformSetQosGroup.IsNull() && configChild.PoliceConformSetQosGroup.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"conformSetQosGrpTransmit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceExceedAction.IsNull() && configChild.PoliceExceedAction.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"exceedAction", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceExceedSetCos.IsNull() && configChild.PoliceExceedSetCos.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"exceedSetCosTransmit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceExceedSetDscp.IsNull() && configChild.PoliceExceedSetDscp.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"exceedSetDscpTransmit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceExceedSetPrecedence.IsNull() && configChild.PoliceExceedSetPrecedence.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"exceedSetPrecTransmit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceExceedSetQosGroup.IsNull() && configChild.PoliceExceedSetQosGroup.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"exceedSetQosGrpTransmit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PolicePirRate.IsNull() && configChild.PolicePirRate.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pirRate", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PolicePirUnit.IsNull() && configChild.PolicePirUnit.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pirUnit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceViolateAction.IsNull() && configChild.PoliceViolateAction.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"violateAction", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceViolateSetCos.IsNull() && configChild.PoliceViolateSetCos.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"violateSetCosTransmit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceViolateSetDscp.IsNull() && configChild.PoliceViolateSetDscp.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"violateSetDscpTransmit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceViolateSetPrecedence.IsNull() && configChild.PoliceViolateSetPrecedence.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"violateSetPrecTransmit", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.PoliceViolateSetQosGroup.IsNull() && configChild.PoliceViolateSetQosGroup.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"violateSetQosGrpTransmit", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.PoliceBcRate.IsNull() && stateChild.PoliceBcUnit.IsNull() && stateChild.PoliceBeRate.IsNull() && stateChild.PoliceBeUnit.IsNull() && stateChild.PoliceCirRate.IsNull() && stateChild.PoliceCirUnit.IsNull() && stateChild.PoliceConformAction.IsNull() && stateChild.PoliceConformSetCos.IsNull() && stateChild.PoliceConformSetDscp.IsNull() && stateChild.PoliceConformSetPrecedence.IsNull() && stateChild.PoliceConformSetQosGroup.IsNull() && stateChild.PoliceExceedAction.IsNull() && stateChild.PoliceExceedSetCos.IsNull() && stateChild.PoliceExceedSetDscp.IsNull() && stateChild.PoliceExceedSetPrecedence.IsNull() && stateChild.PoliceExceedSetQosGroup.IsNull() && stateChild.PolicePirRate.IsNull() && stateChild.PolicePirUnit.IsNull() && stateChild.PoliceViolateAction.IsNull() && stateChild.PoliceViolateSetCos.IsNull() && stateChild.PoliceViolateSetDscp.IsNull() && stateChild.PoliceViolateSetPrecedence.IsNull() && stateChild.PoliceViolateSetQosGroup.IsNull()) && (configChild.PoliceBcRate.IsNull() && configChild.PoliceBcUnit.IsNull() && configChild.PoliceBeRate.IsNull() && configChild.PoliceBeUnit.IsNull() && configChild.PoliceCirRate.IsNull() && configChild.PoliceCirUnit.IsNull() && configChild.PoliceConformAction.IsNull() && configChild.PoliceConformSetCos.IsNull() && configChild.PoliceConformSetDscp.IsNull() && configChild.PoliceConformSetPrecedence.IsNull() && configChild.PoliceConformSetQosGroup.IsNull() && configChild.PoliceExceedAction.IsNull() && configChild.PoliceExceedSetCos.IsNull() && configChild.PoliceExceedSetDscp.IsNull() && configChild.PoliceExceedSetPrecedence.IsNull() && configChild.PoliceExceedSetQosGroup.IsNull() && configChild.PolicePirRate.IsNull() && configChild.PolicePirUnit.IsNull() && configChild.PoliceViolateAction.IsNull() && configChild.PoliceViolateSetCos.IsNull() && configChild.PoliceViolateSetDscp.IsNull() && configChild.PoliceViolateSetPrecedence.IsNull() && configChild.PoliceViolateSetQosGroup.IsNull()) && deleteEmptied(listChildDn_+"/police") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.PoliceBcRate.IsNull() && configChild.PoliceBcRate.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bcRate", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceBcUnit.IsNull() && configChild.PoliceBcUnit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bcUnit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceBeRate.IsNull() && configChild.PoliceBeRate.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"beRate", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceBeUnit.IsNull() && configChild.PoliceBeUnit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"beUnit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceCirRate.IsNull() && configChild.PoliceCirRate.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"cirRate", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceCirUnit.IsNull() && configChild.PoliceCirUnit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"cirUnit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceConformAction.IsNull() && configChild.PoliceConformAction.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"conformAction", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceConformSetCos.IsNull() && configChild.PoliceConformSetCos.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"conformSetCosTransmit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceConformSetDscp.IsNull() && configChild.PoliceConformSetDscp.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"conformSetDscpTransmit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceConformSetPrecedence.IsNull() && configChild.PoliceConformSetPrecedence.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"conformSetPrecTransmit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceConformSetQosGroup.IsNull() && configChild.PoliceConformSetQosGroup.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"conformSetQosGrpTransmit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceExceedAction.IsNull() && configChild.PoliceExceedAction.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"exceedAction", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceExceedSetCos.IsNull() && configChild.PoliceExceedSetCos.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"exceedSetCosTransmit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceExceedSetDscp.IsNull() && configChild.PoliceExceedSetDscp.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"exceedSetDscpTransmit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceExceedSetPrecedence.IsNull() && configChild.PoliceExceedSetPrecedence.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"exceedSetPrecTransmit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceExceedSetQosGroup.IsNull() && configChild.PoliceExceedSetQosGroup.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"exceedSetQosGrpTransmit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PolicePirRate.IsNull() && configChild.PolicePirRate.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pirRate", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PolicePirUnit.IsNull() && configChild.PolicePirUnit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pirUnit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceViolateAction.IsNull() && configChild.PoliceViolateAction.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"violateAction", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceViolateSetCos.IsNull() && configChild.PoliceViolateSetCos.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"violateSetCosTransmit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceViolateSetDscp.IsNull() && configChild.PoliceViolateSetDscp.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"violateSetDscpTransmit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceViolateSetPrecedence.IsNull() && configChild.PoliceViolateSetPrecedence.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"violateSetPrecTransmit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.PoliceViolateSetQosGroup.IsNull() && configChild.PoliceViolateSetQosGroup.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ipqosPolice")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"violateSetQosGrpTransmit", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
 									}
 								}
@@ -2282,6 +2945,8 @@ func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, 
 				stateChild := state.PolicyInterfaceIn[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/policy" + "/in" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipqosServPol")+".children", "ipqosIngress")+".children").Array() {
@@ -2291,13 +2956,19 @@ func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, 
 						}
 					}
 					if listChildPath != "" {
-						if !stateChild.PolicyMapName.IsNull() && configChild.PolicyMapName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.PolicyMapStatistics.IsNull() && configChild.PolicyMapStatistics.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stats", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.PolicyMapName.IsNull() && stateChild.PolicyMapStatistics.IsNull()) && (configChild.PolicyMapName.IsNull() && configChild.PolicyMapStatistics.IsNull()) && deleteEmptied(listChildDn+"/pmap") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.PolicyMapName.IsNull() && configChild.PolicyMapName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.PolicyMapStatistics.IsNull() && configChild.PolicyMapStatistics.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stats", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 					}
 				}
@@ -2308,6 +2979,8 @@ func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, 
 				stateChild := state.PolicyNveInterfaceIn[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/policy" + "/in" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				{
 					listChildPath := ""
 					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "ipqosServPol")+".children", "ipqosIngress")+".children").Array() {
@@ -2317,13 +2990,19 @@ func (data DefaultQoS) toBodyWithDeletes(ctx context.Context, state DefaultQoS, 
 						}
 					}
 					if listChildPath != "" {
-						if !stateChild.PolicyMapName.IsNull() && configChild.PolicyMapName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.PolicyMapStatistics.IsNull() && configChild.PolicyMapStatistics.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stats", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.PolicyMapName.IsNull() && stateChild.PolicyMapStatistics.IsNull()) && (configChild.PolicyMapName.IsNull() && configChild.PolicyMapStatistics.IsNull()) && deleteEmptied(listChildDn+"/pmap") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.PolicyMapName.IsNull() && configChild.PolicyMapName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.PolicyMapStatistics.IsNull() && configChild.PolicyMapStatistics.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosInst")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"stats", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 					}
 				}

@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosUserManagement(t *testing.T) {
+// TestAccUserManagementResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccUserManagementResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "alphabet_sequence", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "description", "User management policy"))
@@ -183,39 +187,203 @@ func TestAccNxosUserManagement(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_accounting_owner_tag", "tag1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_accounting_provider_group", "TACACS_GROUP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_accounting_realm", "tacacs"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "alphabet_sequence", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "description", "User management policy"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "keyboard_sequence", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "max_logins", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "min_unique", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "password_grace_time", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "password_life_time", "90"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "password_max_length", "127"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "password_min_length", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "password_secure_mode", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "password_strength_check", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "password_warning_time", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "service_password_recovery", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pre_login_banner_description", "Pre-login banner"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pre_login_banner_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pre_login_banner_message", "Authorized users only."))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pre_login_banner_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "post_login_banner_description", "Post-login banner"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "post_login_banner_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "post_login_banner_message", "Welcome to the system."))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "post_login_banner_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.account_status", "active"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.allow_expired", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.clear_password_history", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.description", "Test user account"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.email", "user1@example.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.expiration", "2030-01-01T00:00:00.000+00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.expires", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.first_name", "John"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.force", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.last_name", "Doe"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.phone", "1234567890"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.shell_type", "shellvsh"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.roles.network-operator.description", "Operator role"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.roles.network-operator.privilege_type", "readPriv"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_deadtime", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_description", "TACACS+ settings"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_retries", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_source_interface", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_timeout", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.authentication_protocol", "chap"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.description", "TACACS+ provider"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.monitoring_idle_time", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.port", "149"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.retries", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.single_connection", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_providers.10.1.1.1.timeout", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.deadtime", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.description", "TACACS+ provider group"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.source_interface", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.servers.10.1.1.1.description", "TACACS+ server reference"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.servers.10.1.1.1.order", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.servers.10.1.1.1.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_provider_groups.TACACS_GROUP1.servers.10.1.1.1.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_deadtime", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_description", "RADIUS settings"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_retries", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_secure_mode", "tls"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_source_interface", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_timeout", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_monitoring_description", "RADIUS server monitoring"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_monitoring_idle_time", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_monitoring_user", "monuser"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_monitoring_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_monitoring_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.accounting_port", "1646"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.authentication_port", "1645"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.authentication_protocol", "chap"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.description", "RADIUS provider"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.dtls_client_trustpoint", "TP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.dtls_idle_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.monitoring_idle_time", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.monitoring_user", "monuser"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.retries", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.timeout", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.tls_client_trustpoint", "TP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.tls_idle_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_providers.10.1.1.1.use_type", "Auth"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.deadtime", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.description", "RADIUS provider group"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.source_interface", "mgmt0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.vrf", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.servers.10.1.1.1.description", "RADIUS server reference"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.servers.10.1.1.1.order", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.servers.10.1.1.1.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "radius_provider_groups.RADIUS_GROUP1.servers.10.1.1.1.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "authentication_realm_default_role_policy", "no-login"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "authentication_realm_description", "AAA authentication realm"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "authentication_realm_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "authentication_realm_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "authentication_realm_radius_directed_request", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "authentication_realm_tacacs_directed_request", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_protocol", "chap"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_description", "Default authentication"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_error_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_fallback", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_invalid_user_log", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_local", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_none", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_provider_group", "TACACS_GROUP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authentication_realm", "local"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_protocol", "chap"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_description", "Console authentication"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_error_enable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_fallback", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_invalid_user_log", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_local", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_none", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_provider_group", "TACACS_GROUP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "console_authentication_realm", "local"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authorizations.config.authorization_method_none", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authorizations.config.description", "Default authorization"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authorizations.config.local_rbac", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authorizations.config.owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authorizations.config.owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_authorizations.config.provider_group", "TACACS_GROUP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_method_none", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_description", "Default accounting"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_local_rbac", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_provider_group", "TACACS_GROUP1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_realm", "tacacs"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
+	steps := []resource.TestStep{
+		{
+			Config: testAccUserManagementResourcePrerequisitesConfig + testAccUserManagementResourceConfig_minimum(),
+		},
+		{
+			Config: testAccUserManagementResourcePrerequisitesConfig + testAccUserManagementResourceConfig_all(includeWriteOnly) + testAccUserManagementResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_user_management.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccUserManagementResourceImportStateIdFunc("nxos_user_management.test"),
+		},
+		{
+			ResourceName:       "nxos_user_management.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccUserManagementResourcePrerequisitesConfig + testAccUserManagementResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccUserManagementResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccUserManagementResourceConfig_all(includeWriteOnly), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_user_management.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccUserManagementResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccUserManagementResourcePrerequisitesConfig + testAccUserManagementResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosUserManagementPrerequisitesConfig + testAccNxosUserManagementConfig_all(includeWriteOnly),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_user_management.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosUserManagementImportStateIdFunc("nxos_user_management.test"),
-			},
-			{
-				ResourceName:       "nxos_user_management.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosUserManagementImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccUserManagementResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -225,7 +393,7 @@ func nxosUserManagementImportStateIdFunc(resourceName string) resource.ImportSta
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosUserManagementPrerequisitesConfig = `
+const testAccUserManagementResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/tacacsplus"
   class_name = "fmTacacsplus"
@@ -240,7 +408,7 @@ resource "nxos_dme" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosUserManagementConfig_minimum() string {
+func testAccUserManagementResourceConfig_minimum() string {
 	config := `resource "nxos_user_management" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
@@ -250,7 +418,7 @@ func testAccNxosUserManagementConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosUserManagementConfig_all(includeWriteOnly bool) string {
+func testAccUserManagementResourceConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_user_management" "test" {` + "\n"
 	config += `	alphabet_sequence = 3` + "\n"
 	config += `	description = "User management policy"` + "\n"
@@ -463,6 +631,14 @@ func testAccNxosUserManagementConfig_all(includeWriteOnly bool) string {
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccUserManagementResourceConfig_dataSource() string {
+	return `
+data "nxos_user_management" "test" {
+	depends_on = [nxos_user_management.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

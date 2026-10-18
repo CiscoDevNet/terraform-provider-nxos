@@ -88,6 +88,14 @@ var HardwareTelemetrySubtreeClassMinVersions = map[string]string{}
 // HardwareTelemetryMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var HardwareTelemetryMinVersions = map[string]helpers.MinVersion{}
 
+// HardwareTelemetryListClasses holds the list child classes of the resource.
+var HardwareTelemetryListClasses = map[string]bool{"sflowReceiver": true, "sflowSflowFsDataSource": true}
+
+// getHardwareTelemetryTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getHardwareTelemetryTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"sflowSflow", "sflowInst", "sflowTransport", "sflowReceiver", "sflowSflowFsDataSource"}, HardwareTelemetrySubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -562,7 +570,152 @@ func (data HardwareTelemetry) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data HardwareTelemetry) toBodyWithDeletes(ctx context.Context, state HardwareTelemetry, config HardwareTelemetry, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data HardwareTelemetry) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.SflowAdminState.IsNull() && data.SflowAgentAddress.IsNull() && data.SflowCounterPollInterval.IsNull() && data.SflowControl.IsNull() && data.SflowExtendedBgp.IsNull() && data.SflowExtendedSwitch.IsNull() && data.SflowMaxHeaderSize.IsNull() && data.SflowPacketSamplingRate.IsNull() && data.SflowReceiverMaxDatagramSize.IsNull() && data.SflowReceiverPort.IsNull() && (len(data.Receivers) == 0) && len(data.DataSources) == 0) {
+		sflowSflowDn := dn + "/" + "sflow"
+		dns[sflowSflowDn] = true
+		if !(data.SflowAdminState.IsNull() && data.SflowAgentAddress.IsNull() && data.SflowCounterPollInterval.IsNull() && data.SflowControl.IsNull() && data.SflowExtendedBgp.IsNull() && data.SflowExtendedSwitch.IsNull() && data.SflowMaxHeaderSize.IsNull() && data.SflowPacketSamplingRate.IsNull() && data.SflowReceiverMaxDatagramSize.IsNull() && data.SflowReceiverPort.IsNull() && (len(data.Receivers) == 0) && len(data.DataSources) == 0) {
+			sflowInstDn := sflowSflowDn + "/" + "inst"
+			dns[sflowInstDn] = true
+			if !(len(data.Receivers) == 0) {
+				sflowTransportDn := sflowInstDn + "/" + "transport"
+				dns[sflowTransportDn] = true
+				for key, child := range data.Receivers {
+					keyParts := strings.SplitN(key, ";", 2)
+					_ = keyParts
+					sflowReceiverDn := sflowTransportDn + "/" + child.getRn(key)
+					dns[sflowReceiverDn] = true
+				}
+			}
+			for key, child := range data.DataSources {
+				sflowSflowFsDataSourceDn := sflowInstDn + "/" + child.getRn(key)
+				dns[sflowSflowFsDataSourceDn] = true
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data HardwareTelemetry) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "analyticsHwTelemetry.attributes", map[string]interface{}{})
+	}
+	if !(data.SflowAdminState.IsNull() && data.SflowAgentAddress.IsNull() && data.SflowCounterPollInterval.IsNull() && data.SflowControl.IsNull() && data.SflowExtendedBgp.IsNull() && data.SflowExtendedSwitch.IsNull() && data.SflowMaxHeaderSize.IsNull() && data.SflowPacketSamplingRate.IsNull() && data.SflowReceiverMaxDatagramSize.IsNull() && data.SflowReceiverPort.IsNull() && (len(data.Receivers) == 0) && len(data.DataSources) == 0) {
+		sflowSflowRn := "sflow"
+		sflowSflowDn := dn + "/" + sflowSflowRn
+		_ = sflowSflowDn
+		{
+			sflowSflowBody := ""
+			if !(data.SflowAdminState.IsNull() && data.SflowAgentAddress.IsNull() && data.SflowCounterPollInterval.IsNull() && data.SflowControl.IsNull() && data.SflowExtendedBgp.IsNull() && data.SflowExtendedSwitch.IsNull() && data.SflowMaxHeaderSize.IsNull() && data.SflowPacketSamplingRate.IsNull() && data.SflowReceiverMaxDatagramSize.IsNull() && data.SflowReceiverPort.IsNull() && (len(data.Receivers) == 0) && len(data.DataSources) == 0) {
+				sflowInstRn := "inst"
+				sflowInstDn := sflowSflowDn + "/" + sflowInstRn
+				_ = sflowInstDn
+				{
+					sflowInstBody := ""
+					if !data.SflowAdminState.IsNull() {
+						sflowInstBody, _ = sjson.Set(sflowInstBody, "sflowInst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.SflowAgentAddress.IsNull() {
+						sflowInstBody, _ = sjson.Set(sflowInstBody, "sflowInst.attributes.agentAddress", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.SflowCounterPollInterval.IsNull() {
+						sflowInstBody, _ = sjson.Set(sflowInstBody, "sflowInst.attributes.counterPollInterval", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.SflowControl.IsNull() {
+						sflowInstBody, _ = sjson.Set(sflowInstBody, "sflowInst.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.SflowExtendedBgp.IsNull() {
+						sflowInstBody, _ = sjson.Set(sflowInstBody, "sflowInst.attributes.isExtendedBgp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.SflowExtendedSwitch.IsNull() {
+						sflowInstBody, _ = sjson.Set(sflowInstBody, "sflowInst.attributes.isExtendedSwitch", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.SflowMaxHeaderSize.IsNull() {
+						sflowInstBody, _ = sjson.Set(sflowInstBody, "sflowInst.attributes.maxHeaderSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.SflowPacketSamplingRate.IsNull() {
+						sflowInstBody, _ = sjson.Set(sflowInstBody, "sflowInst.attributes.pktSamplingRate", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.SflowReceiverMaxDatagramSize.IsNull() {
+						sflowInstBody, _ = sjson.Set(sflowInstBody, "sflowInst.attributes.rcvrMaxDatagramSize", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.SflowReceiverPort.IsNull() {
+						sflowInstBody, _ = sjson.Set(sflowInstBody, "sflowInst.attributes.rcvrPort", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !(len(data.Receivers) == 0) {
+						sflowTransportRn := "transport"
+						sflowTransportDn := sflowInstDn + "/" + sflowTransportRn
+						_ = sflowTransportDn
+						{
+							sflowTransportBody := ""
+							for key, child := range data.Receivers {
+								_ = child
+								keyParts := strings.SplitN(key, ";", 2)
+								_ = keyParts
+								sflowReceiverRn := child.getRn(key)
+								sflowReceiverDn := sflowTransportDn + "/" + sflowReceiverRn
+								_ = sflowReceiverDn
+								if !existed(sflowReceiverDn) {
+									sflowTransportBody, _ = sjson.Set(sflowTransportBody, "sflowTransport.children.-1.sflowReceiver.attributes", map[string]interface{}{"rn": sflowReceiverRn, "status": "deleted"})
+									continue
+								}
+								sflowReceiverBody := ""
+								sflowReceiverBody, _ = sjson.Set(sflowReceiverBody, "sflowReceiver.attributes.rn", sflowReceiverRn)
+								if !child.SourceAddress.IsNull() {
+									sflowReceiverBody, _ = sjson.Set(sflowReceiverBody, "sflowReceiver.attributes.rcvrSrcAddress", "DME_UNSET_PROPERTY_MARKER")
+								}
+								sflowTransportBody, _ = sjson.SetRaw(sflowTransportBody, "sflowTransport.children.-1", sflowReceiverBody)
+							}
+							if sflowTransportBody != "" {
+								sflowTransportBody, _ = sjson.Set(sflowTransportBody, "sflowTransport.attributes.rn", sflowTransportRn)
+								sflowInstBody, _ = sjson.SetRaw(sflowInstBody, "sflowInst.children.-1", sflowTransportBody)
+							}
+						}
+					}
+					for key, child := range data.DataSources {
+						_ = child
+						sflowSflowFsDataSourceRn := child.getRn(key)
+						sflowSflowFsDataSourceDn := sflowInstDn + "/" + sflowSflowFsDataSourceRn
+						_ = sflowSflowFsDataSourceDn
+						if !existed(sflowSflowFsDataSourceDn) {
+							sflowInstBody, _ = sjson.Set(sflowInstBody, "sflowInst.children.-1.sflowSflowFsDataSource.attributes", map[string]interface{}{"rn": sflowSflowFsDataSourceRn, "status": "deleted"})
+							continue
+						}
+						sflowSflowFsDataSourceBody := ""
+						sflowSflowFsDataSourceBody, _ = sjson.Set(sflowSflowFsDataSourceBody, "sflowSflowFsDataSource.attributes.rn", sflowSflowFsDataSourceRn)
+						sflowInstBody, _ = sjson.SetRaw(sflowInstBody, "sflowInst.children.-1", sflowSflowFsDataSourceBody)
+					}
+					if sflowInstBody != "" {
+						sflowInstBody, _ = sjson.Set(sflowInstBody, "sflowInst.attributes.rn", sflowInstRn)
+						sflowSflowBody, _ = sjson.SetRaw(sflowSflowBody, "sflowSflow.children.-1", sflowInstBody)
+					}
+				}
+			}
+			if sflowSflowBody != "" {
+				sflowSflowBody, _ = sjson.Set(sflowSflowBody, "sflowSflow.attributes.rn", sflowSflowRn)
+				body, _ = sjson.SetRaw(body, "analyticsHwTelemetry.children.-1", sflowSflowBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data HardwareTelemetry) toBodyWithDeletes(ctx context.Context, state HardwareTelemetry, config HardwareTelemetry, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath

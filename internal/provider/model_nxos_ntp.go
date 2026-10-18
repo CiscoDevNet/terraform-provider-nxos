@@ -106,6 +106,14 @@ var NTPSubtreeClassMinVersions = map[string]string{}
 // NTPMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var NTPMinVersions = map[string]helpers.MinVersion{}
 
+// NTPListClasses holds the list child classes of the resource.
+var NTPListClasses = map[string]bool{"datetimeNtpProvider": true, "datetimeNtpAuth": true}
+
+// getNTPTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getNTPTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"datetimeNtpProvider", "datetimeNtpAuth", "datetimeNtpSrcIf", "datetimeAccessGroup"}, NTPSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -599,7 +607,187 @@ func (data NTP) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data NTP) toBodyWithDeletes(ctx context.Context, state NTP, config NTP, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data NTP) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.Servers {
+		datetimeNtpProviderDn := dn + "/" + child.getRn(key)
+		dns[datetimeNtpProviderDn] = true
+	}
+	for key, child := range data.AuthenticationKeys {
+		datetimeNtpAuthDn := dn + "/" + child.getRn(key)
+		dns[datetimeNtpAuthDn] = true
+	}
+	if !(data.SourceInterface.IsNull()) {
+		datetimeNtpSrcIfDn := dn + "/" + "srcIf"
+		dns[datetimeNtpSrcIfDn] = true
+	}
+	if !(data.AccessGroupMatchAll.IsNull() && data.AccessGroupPeer.IsNull() && data.AccessGroupQueryOnly.IsNull() && data.AccessGroupServe.IsNull() && data.AccessGroupServeOnly.IsNull()) {
+		datetimeAccessGroupDn := dn + "/" + "accessgroup"
+		dns[datetimeAccessGroupDn] = true
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data NTP) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "datetimeClkPol.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.AllowControl.IsNull() {
+		body, _ = sjson.Set(body, "datetimeClkPol.attributes.allowControl", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.AllowPrivate.IsNull() {
+		body, _ = sjson.Set(body, "datetimeClkPol.attributes.allowPrivate", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.AuthenticationState.IsNull() {
+		body, _ = sjson.Set(body, "datetimeClkPol.attributes.authSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Logging.IsNull() {
+		body, _ = sjson.Set(body, "datetimeClkPol.attributes.logging", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.LoggingLevel.IsNull() {
+		body, _ = sjson.Set(body, "datetimeClkPol.attributes.loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Master.IsNull() {
+		body, _ = sjson.Set(body, "datetimeClkPol.attributes.master", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.MasterStratum.IsNull() {
+		body, _ = sjson.Set(body, "datetimeClkPol.attributes.masterStratum", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.Passive.IsNull() {
+		body, _ = sjson.Set(body, "datetimeClkPol.attributes.passive", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if !data.RateLimit.IsNull() {
+		body, _ = sjson.Set(body, "datetimeClkPol.attributes.rateLimit", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "datetimeClkPol.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.Servers {
+		_ = child
+		datetimeNtpProviderRn := child.getRn(key)
+		datetimeNtpProviderDn := dn + "/" + datetimeNtpProviderRn
+		_ = datetimeNtpProviderDn
+		if !existed(datetimeNtpProviderDn) {
+			body, _ = sjson.Set(body, "datetimeClkPol.children.-1.datetimeNtpProvider.attributes", map[string]interface{}{"rn": datetimeNtpProviderRn, "status": "deleted"})
+			continue
+		}
+		datetimeNtpProviderBody := ""
+		datetimeNtpProviderBody, _ = sjson.Set(datetimeNtpProviderBody, "datetimeNtpProvider.attributes.rn", datetimeNtpProviderRn)
+		if !child.Vrf.IsNull() {
+			datetimeNtpProviderBody, _ = sjson.Set(datetimeNtpProviderBody, "datetimeNtpProvider.attributes.vrf", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Type.IsNull() {
+			datetimeNtpProviderBody, _ = sjson.Set(datetimeNtpProviderBody, "datetimeNtpProvider.attributes.provT", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.KeyId.IsNull() {
+			datetimeNtpProviderBody, _ = sjson.Set(datetimeNtpProviderBody, "datetimeNtpProvider.attributes.keyId", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MinPoll.IsNull() {
+			datetimeNtpProviderBody, _ = sjson.Set(datetimeNtpProviderBody, "datetimeNtpProvider.attributes.minPoll", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MaxPoll.IsNull() {
+			datetimeNtpProviderBody, _ = sjson.Set(datetimeNtpProviderBody, "datetimeNtpProvider.attributes.maxPoll", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Preferred.IsNull() {
+			datetimeNtpProviderBody, _ = sjson.Set(datetimeNtpProviderBody, "datetimeNtpProvider.attributes.preferred", "DME_UNSET_PROPERTY_MARKER")
+		}
+		body, _ = sjson.SetRaw(body, "datetimeClkPol.children.-1", datetimeNtpProviderBody)
+	}
+	for key, child := range data.AuthenticationKeys {
+		_ = child
+		datetimeNtpAuthRn := child.getRn(key)
+		datetimeNtpAuthDn := dn + "/" + datetimeNtpAuthRn
+		_ = datetimeNtpAuthDn
+		if !existed(datetimeNtpAuthDn) {
+			body, _ = sjson.Set(body, "datetimeClkPol.children.-1.datetimeNtpAuth.attributes", map[string]interface{}{"rn": datetimeNtpAuthRn, "status": "deleted"})
+			continue
+		}
+		datetimeNtpAuthBody := ""
+		datetimeNtpAuthBody, _ = sjson.Set(datetimeNtpAuthBody, "datetimeNtpAuth.attributes.rn", datetimeNtpAuthRn)
+		if !child.AuthenticationType.IsNull() {
+			datetimeNtpAuthBody, _ = sjson.Set(datetimeNtpAuthBody, "datetimeNtpAuth.attributes.authType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.EncryptionType.IsNull() {
+			datetimeNtpAuthBody, _ = sjson.Set(datetimeNtpAuthBody, "datetimeNtpAuth.attributes.encryptType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Encrypted.IsNull() {
+			datetimeNtpAuthBody, _ = sjson.Set(datetimeNtpAuthBody, "datetimeNtpAuth.attributes.isEncrypt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Key.IsNull() {
+			datetimeNtpAuthBody, _ = sjson.Set(datetimeNtpAuthBody, "datetimeNtpAuth.attributes.key", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Name.IsNull() {
+			datetimeNtpAuthBody, _ = sjson.Set(datetimeNtpAuthBody, "datetimeNtpAuth.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Trusted.IsNull() {
+			datetimeNtpAuthBody, _ = sjson.Set(datetimeNtpAuthBody, "datetimeNtpAuth.attributes.trusted", "DME_UNSET_PROPERTY_MARKER")
+		}
+		body, _ = sjson.SetRaw(body, "datetimeClkPol.children.-1", datetimeNtpAuthBody)
+	}
+	if !(data.SourceInterface.IsNull()) {
+		datetimeNtpSrcIfRn := "srcIf"
+		datetimeNtpSrcIfDn := dn + "/" + datetimeNtpSrcIfRn
+		_ = datetimeNtpSrcIfDn
+		if !existed(datetimeNtpSrcIfDn) {
+			body, _ = sjson.Set(body, "datetimeClkPol.children.-1.datetimeNtpSrcIf.attributes", map[string]interface{}{"rn": datetimeNtpSrcIfRn, "status": "deleted"})
+		} else {
+			datetimeNtpSrcIfBody := ""
+			if !data.SourceInterface.IsNull() {
+				datetimeNtpSrcIfBody, _ = sjson.Set(datetimeNtpSrcIfBody, "datetimeNtpSrcIf.attributes.srcIf", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if datetimeNtpSrcIfBody != "" {
+				datetimeNtpSrcIfBody, _ = sjson.Set(datetimeNtpSrcIfBody, "datetimeNtpSrcIf.attributes.rn", datetimeNtpSrcIfRn)
+				body, _ = sjson.SetRaw(body, "datetimeClkPol.children.-1", datetimeNtpSrcIfBody)
+			}
+		}
+	}
+	if !(data.AccessGroupMatchAll.IsNull() && data.AccessGroupPeer.IsNull() && data.AccessGroupQueryOnly.IsNull() && data.AccessGroupServe.IsNull() && data.AccessGroupServeOnly.IsNull()) {
+		datetimeAccessGroupRn := "accessgroup"
+		datetimeAccessGroupDn := dn + "/" + datetimeAccessGroupRn
+		_ = datetimeAccessGroupDn
+		if !existed(datetimeAccessGroupDn) {
+			body, _ = sjson.Set(body, "datetimeClkPol.children.-1.datetimeAccessGroup.attributes", map[string]interface{}{"rn": datetimeAccessGroupRn, "status": "deleted"})
+		} else {
+			datetimeAccessGroupBody := ""
+			if !data.AccessGroupMatchAll.IsNull() {
+				datetimeAccessGroupBody, _ = sjson.Set(datetimeAccessGroupBody, "datetimeAccessGroup.attributes.matchAll", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AccessGroupPeer.IsNull() {
+				datetimeAccessGroupBody, _ = sjson.Set(datetimeAccessGroupBody, "datetimeAccessGroup.attributes.peer", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AccessGroupQueryOnly.IsNull() {
+				datetimeAccessGroupBody, _ = sjson.Set(datetimeAccessGroupBody, "datetimeAccessGroup.attributes.queryOnly", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AccessGroupServe.IsNull() {
+				datetimeAccessGroupBody, _ = sjson.Set(datetimeAccessGroupBody, "datetimeAccessGroup.attributes.serve", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AccessGroupServeOnly.IsNull() {
+				datetimeAccessGroupBody, _ = sjson.Set(datetimeAccessGroupBody, "datetimeAccessGroup.attributes.serveOnly", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if datetimeAccessGroupBody != "" {
+				datetimeAccessGroupBody, _ = sjson.Set(datetimeAccessGroupBody, "datetimeAccessGroup.attributes.rn", datetimeAccessGroupRn)
+				body, _ = sjson.SetRaw(body, "datetimeClkPol.children.-1", datetimeAccessGroupBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data NTP) toBodyWithDeletes(ctx context.Context, state NTP, config NTP, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -710,29 +898,41 @@ func (data NTP) toBodyWithDeletes(ctx context.Context, state NTP, config NTP, im
 				}
 			}
 		}
-		if !state.SourceInterface.IsNull() && config.SourceInterface.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeNtpSrcIf")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.SourceInterface.IsNull()) && (config.SourceInterface.IsNull()) && deleteEmptied(data.getDn()+"/srcIf") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeNtpSrcIf")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.SourceInterface.IsNull() && config.SourceInterface.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeNtpSrcIf")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"srcIf", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
-		if !state.AccessGroupMatchAll.IsNull() && config.AccessGroupMatchAll.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"matchAll", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.AccessGroupPeer.IsNull() && config.AccessGroupPeer.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"peer", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.AccessGroupQueryOnly.IsNull() && config.AccessGroupQueryOnly.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"queryOnly", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.AccessGroupServe.IsNull() && config.AccessGroupServe.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"serve", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.AccessGroupServeOnly.IsNull() && config.AccessGroupServeOnly.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"serveOnly", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.AccessGroupMatchAll.IsNull() && state.AccessGroupPeer.IsNull() && state.AccessGroupQueryOnly.IsNull() && state.AccessGroupServe.IsNull() && state.AccessGroupServeOnly.IsNull()) && (config.AccessGroupMatchAll.IsNull() && config.AccessGroupPeer.IsNull() && config.AccessGroupQueryOnly.IsNull() && config.AccessGroupServe.IsNull() && config.AccessGroupServeOnly.IsNull()) && deleteEmptied(data.getDn()+"/accessgroup") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.AccessGroupMatchAll.IsNull() && config.AccessGroupMatchAll.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"matchAll", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.AccessGroupPeer.IsNull() && config.AccessGroupPeer.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"peer", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.AccessGroupQueryOnly.IsNull() && config.AccessGroupQueryOnly.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"queryOnly", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.AccessGroupServe.IsNull() && config.AccessGroupServe.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"serve", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.AccessGroupServeOnly.IsNull() && config.AccessGroupServeOnly.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeAccessGroup")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"serveOnly", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 	}
 

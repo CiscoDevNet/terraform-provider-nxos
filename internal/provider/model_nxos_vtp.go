@@ -82,6 +82,14 @@ var VTPSubtreeClassMinVersions = map[string]string{}
 // VTPMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var VTPMinVersions = map[string]helpers.MinVersion{}
 
+// VTPListClasses holds the list child classes of the resource.
+var VTPListClasses = map[string]bool{"vtpIntf": true}
+
+// getVTPTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getVTPTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"vtpInst", "vtpIntf"}, VTPSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -275,7 +283,95 @@ func (data VTP) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data VTP) toBodyWithDeletes(ctx context.Context, state VTP, config VTP, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data VTP) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.InstanceAdminState.IsNull() && data.Domain.IsNull() && data.FilePath.IsNull() && data.Mode.IsNull() && data.Password.IsNull() && data.Version.IsNull()) {
+		vtpInstDn := dn + "/" + "inst"
+		dns[vtpInstDn] = true
+	}
+	for key, child := range data.Interfaces {
+		vtpIntfDn := dn + "/" + child.getRn(key)
+		dns[vtpIntfDn] = true
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data VTP) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	if !existed(dn) {
+		return data.toDeleteBody()
+	}
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "vtpEntity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "vtpEntity.attributes", map[string]interface{}{})
+	}
+	if !(data.InstanceAdminState.IsNull() && data.Domain.IsNull() && data.FilePath.IsNull() && data.Mode.IsNull() && data.Password.IsNull() && data.Version.IsNull()) {
+		vtpInstRn := "inst"
+		vtpInstDn := dn + "/" + vtpInstRn
+		_ = vtpInstDn
+		if !existed(vtpInstDn) {
+			body, _ = sjson.Set(body, "vtpEntity.children.-1.vtpInst.attributes", map[string]interface{}{"rn": vtpInstRn, "status": "deleted"})
+		} else {
+			vtpInstBody := ""
+			if !data.InstanceAdminState.IsNull() {
+				vtpInstBody, _ = sjson.Set(vtpInstBody, "vtpInst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Domain.IsNull() {
+				vtpInstBody, _ = sjson.Set(vtpInstBody, "vtpInst.attributes.domain", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.FilePath.IsNull() {
+				vtpInstBody, _ = sjson.Set(vtpInstBody, "vtpInst.attributes.filePath", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Mode.IsNull() {
+				vtpInstBody, _ = sjson.Set(vtpInstBody, "vtpInst.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Password.IsNull() {
+				vtpInstBody, _ = sjson.Set(vtpInstBody, "vtpInst.attributes.password", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Version.IsNull() {
+				vtpInstBody, _ = sjson.Set(vtpInstBody, "vtpInst.attributes.version", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if vtpInstBody != "" {
+				vtpInstBody, _ = sjson.Set(vtpInstBody, "vtpInst.attributes.rn", vtpInstRn)
+				body, _ = sjson.SetRaw(body, "vtpEntity.children.-1", vtpInstBody)
+			}
+		}
+	}
+	for key, child := range data.Interfaces {
+		_ = child
+		vtpIntfRn := child.getRn(key)
+		vtpIntfDn := dn + "/" + vtpIntfRn
+		_ = vtpIntfDn
+		if !existed(vtpIntfDn) {
+			body, _ = sjson.Set(body, "vtpEntity.children.-1.vtpIntf.attributes", map[string]interface{}{"rn": vtpIntfRn, "status": "deleted"})
+			continue
+		}
+		vtpIntfBody := ""
+		vtpIntfBody, _ = sjson.Set(vtpIntfBody, "vtpIntf.attributes.rn", vtpIntfRn)
+		if !child.AdminState.IsNull() {
+			vtpIntfBody, _ = sjson.Set(vtpIntfBody, "vtpIntf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		body, _ = sjson.SetRaw(body, "vtpEntity.children.-1", vtpIntfBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data VTP) toBodyWithDeletes(ctx context.Context, state VTP, config VTP, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -298,25 +394,31 @@ func (data VTP) toBodyWithDeletes(ctx context.Context, state VTP, config VTP, im
 		}
 	}
 	if !importing {
-		if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "vtpInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.Domain.IsNull() && config.Domain.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "vtpInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"domain", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.FilePath.IsNull() && config.FilePath.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "vtpInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"filePath", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.Mode.IsNull() && config.Mode.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "vtpInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.Version.IsNull() && config.Version.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "vtpInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"version", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.InstanceAdminState.IsNull() && state.Domain.IsNull() && state.FilePath.IsNull() && state.Mode.IsNull() && state.Password.IsNull() && state.Version.IsNull()) && (config.InstanceAdminState.IsNull() && config.Domain.IsNull() && config.FilePath.IsNull() && config.Mode.IsNull() && config.Password.IsNull() && config.Version.IsNull()) && deleteEmptied(data.getDn()+"/inst") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "vtpInst")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "vtpInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.Domain.IsNull() && config.Domain.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "vtpInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"domain", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.FilePath.IsNull() && config.FilePath.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "vtpInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"filePath", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.Mode.IsNull() && config.Mode.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "vtpInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.Version.IsNull() && config.Version.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "vtpInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"version", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 		for key := range state.Interfaces {
 			if configChild, ok := config.Interfaces[key]; ok {

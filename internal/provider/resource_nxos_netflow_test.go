@@ -34,7 +34,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosNetflow(t *testing.T) {
+// TestAccNetflowResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccNetflowResource(t *testing.T) {
 	if os.Getenv("FEATURE_NETFLOW") == "" {
 		t.Skip("skipping test, set environment variable FEATURE_NETFLOW")
 	}
@@ -62,38 +66,85 @@ func TestAccNxosNetflow(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_netflow.test", "hardware_profiles.HWPROFILE1.ip_packet_id_shift", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_netflow.test", "hardware_profiles.HWPROFILE1.mtu", "1500"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_netflow.test", "hardware_profiles.HWPROFILE1.source_port", "10000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "exporters.EXPORTER1.description", "Netflow exporter"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "exporters.EXPORTER1.destination_ip", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "exporters.EXPORTER1.destination_port", "9995"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "exporters.EXPORTER1.dscp", "46"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "exporters.EXPORTER1.source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "exporters.EXPORTER1.version", "v9"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "exporters.EXPORTER1.vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "records.RECORD1.description", "Netflow record"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "records.RECORD1.collect_parameters", "count-bytes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "records.RECORD1.match_parameters", "src-ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "monitors.MONITOR1.description", "Netflow monitor"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "monitors.MONITOR1.record_target_dn", "sys/flow/fr-[RECORD1]"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "monitors.MONITOR1.exporter_buckets.1.description", "Bucket 1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "monitors.MONITOR1.exporter_buckets.1.hash_high", "4294967295"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "monitors.MONITOR1.exporter_buckets.1.hash_low", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "monitors.MONITOR1.exporter_buckets.1.exporter1_target_dn", "sys/flow/fe-[EXPORTER1]"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "monitors.MONITOR1.exporter_buckets.1.exporter2_target_dn", "sys/flow/fe-[EXPORTER2]"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "hardware_profiles.HWPROFILE1.description", "Hardware profile"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "hardware_profiles.HWPROFILE1.burst_interval_shift", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "hardware_profiles.HWPROFILE1.export_interval", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "hardware_profiles.HWPROFILE1.ip_packet_id_shift", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "hardware_profiles.HWPROFILE1.mtu", "1500"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_netflow.test", "hardware_profiles.HWPROFILE1.source_port", "10000"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccNetflowResourcePrerequisitesConfig + testAccNetflowResourceConfig_minimum(),
+		},
+		{
+			Config: testAccNetflowResourcePrerequisitesConfig + testAccNetflowResourceConfig_all() + testAccNetflowResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_netflow.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccNetflowResourceImportStateIdFunc("nxos_netflow.test"),
+		},
+		{
+			ResourceName:       "nxos_netflow.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccNetflowResourcePrerequisitesConfig + testAccNetflowResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccNetflowResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccNetflowResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_netflow.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccNetflowResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccNetflowResourcePrerequisitesConfig + testAccNetflowResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosNetflowPrerequisitesConfig + testAccNxosNetflowConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_netflow.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosNetflowImportStateIdFunc("nxos_netflow.test"),
-			},
-			{
-				ResourceName:       "nxos_netflow.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosNetflowImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccNetflowResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -103,7 +154,7 @@ func nxosNetflowImportStateIdFunc(resourceName string) resource.ImportStateIdFun
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosNetflowPrerequisitesConfig = `
+const testAccNetflowResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/netflow"
   class_name = "fmNetflow"
@@ -118,7 +169,7 @@ resource "nxos_dme" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosNetflowConfig_minimum() string {
+func testAccNetflowResourceConfig_minimum() string {
 	config := `resource "nxos_netflow" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
@@ -128,7 +179,7 @@ func testAccNxosNetflowConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosNetflowConfig_all() string {
+func testAccNetflowResourceConfig_all() string {
 	config := `resource "nxos_netflow" "test" {` + "\n"
 	config += `	exporters = {` + "\n"
 	config += `		"EXPORTER1" = {` + "\n"
@@ -184,6 +235,14 @@ func testAccNxosNetflowConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccNetflowResourceConfig_dataSource() string {
+	return `
+data "nxos_netflow" "test" {
+	depends_on = [nxos_netflow.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

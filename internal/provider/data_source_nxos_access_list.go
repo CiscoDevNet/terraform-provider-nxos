@@ -755,7 +755,8 @@ func (d *AccessListDataSource) Read(ctx context.Context, req datasource.ReadRequ
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"ipv4aclAF", "ipv4aclACL", "ipv4aclACE", "ipv4aclAddrGroup", "ipv4aclAddrMember", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst", "ipv6aclAF", "ipv6aclACL", "ipv6aclACE", "ipv6aclAddrGroup", "ipv6aclAddrMember", "aclPolicy", "aclIngress", "aclIf", "aclInst", "aclVty", "aclInst", "aclEgress", "aclIf", "aclInst", "aclVty", "aclInst", "aclPortGroup", "aclPortMember"}, AccessListSubtreeClassMinVersions)
+
+	res, err := getAccessListTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

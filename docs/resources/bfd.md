@@ -29,7 +29,6 @@ resource "nxos_bfd" "example" {
   instance_admin_state  = "enabled"
   instance_control      = "stateful-ha"
   echo_interface        = "lo10"
-  hardware_offload      = "enable"
   slow_interval         = 3000
   startup_interval      = 10
   detect_multiplier     = 5
@@ -61,6 +60,8 @@ resource "nxos_bfd" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
+- `deletion_policy` (String) What happens on the device when objects managed by the resource are removed. `delete` deletes the object on destroy, including any configuration not managed by Terraform, and deletes single child objects once none of their attributes are configured anymore, unless the device holds other entries below them. `reset` deletes the objects created by the resource on destroy, resets the managed attributes of the objects that already existed and leaves configuration not managed by Terraform in place. `retain` leaves the device unchanged on destroy and only removes the resource from the state. Overrides the `deletion_policy` of the provider, which defaults to `delete`. See the [Deletion Policy](../guides/deletion_policy) guide for details.
+  - Choices: `delete`, `reset`, `retain`
 - `detect_multiplier` (Number) Detection Multiplier. This is the desired detection time multiplier for BFD packets on the local system.
   - Range: `1`-`50`
 - `device` (String) A device name from the provider configuration.

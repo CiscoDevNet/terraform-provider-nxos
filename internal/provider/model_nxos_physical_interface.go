@@ -201,9 +201,18 @@ var PhysicalInterfaceMinVersions = map[string]helpers.MinVersion{
 }
 
 // PhysicalInterfaceSeparateRequest lists the classes and attributes that are sent in a second request after the rest of the body,
-// together with the values that reset the attributes before their object is deleted.
+// together with the values that reset the attributes when they are removed or before their object is deleted, and the
+// attributes identifying the objects of each class.
 var PhysicalInterfaceSeparateRequest = helpers.SeparateRequest{
 	Classes: []string{"l1VlanMapping"},
+}
+
+// PhysicalInterfaceListClasses holds the list child classes of the resource.
+var PhysicalInterfaceListClasses = map[string]bool{"l1PhysIf": true, "l1SelectiveQinq": true, "l1VlanTranslateEntry": true}
+
+// getPhysicalInterfaceTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getPhysicalInterfaceTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"l1PhysIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "nvoEsiMhCoreTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "l1VlanMapping", "l1SelectiveQinqTable", "l1SelectiveQinq", "l1VlanTranslateTable", "l1VlanTranslateEntry", "l1PhysIfExtended"}, PhysicalInterfaceSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -2027,7 +2036,619 @@ func (data PhysicalInterface) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data PhysicalInterface) toBodyWithDeletes(ctx context.Context, state PhysicalInterface, config PhysicalInterface, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data PhysicalInterface) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.PhysicalInterfaces {
+		l1PhysIfDn := dn + "/" + child.getRn(key)
+		dns[l1PhysIfDn] = true
+		if !(child.VrfDn.IsNull()) {
+			nwRtVrfMbrDn_ := l1PhysIfDn + "/" + "rtvrfMbr"
+			dns[nwRtVrfMbrDn_] = true
+		}
+		if !(child.StormControlBurstPacketsPerSecond.IsNull() && child.StormControlBurstRate.IsNull() && child.StormControlRate.IsNull() && child.StormControlRatePacketsPerSecond.IsNull() && child.StormControlPacketType.IsNull()) {
+			l1StormCtrlPDn_ := l1PhysIfDn + "/" + "stormctrlp"
+			dns[l1StormCtrlPDn_] = true
+		}
+		if !(child.LoadIntervalCounter1.IsNull() && child.LoadIntervalCounter2.IsNull() && child.LoadIntervalCounter3.IsNull()) {
+			l1LoadPDn_ := l1PhysIfDn + "/" + "loadp"
+			dns[l1LoadPDn_] = true
+		}
+		if !(child.MultisiteInterfaceTracking.IsNull()) {
+			nvoMultisiteIfTrackingDn_ := l1PhysIfDn + "/" + "multisiteiftracking"
+			dns[nvoMultisiteIfTrackingDn_] = true
+		}
+		if !(child.EvpnMultihomingCoreTracking.IsNull()) {
+			nvoEsiMhCoreTrackingDn_ := l1PhysIfDn + "/" + "esimhcoretracking"
+			dns[nvoEsiMhCoreTrackingDn_] = true
+		}
+		if !(child.PriorityFlowControlMode.IsNull() && child.PriorityFlowControlSendTlv.IsNull()) {
+			ipqosPriorFlowCtrlDn_ := l1PhysIfDn + "/" + "priorflowctrl"
+			dns[ipqosPriorFlowCtrlDn_] = true
+		}
+		if !(child.PriorityFlowControlWatchdogDisableAction.IsNull() && child.PriorityFlowControlWatchdogInterfaceMultiplier.IsNull() && child.PriorityFlowControlWatchdogInterval.IsNull()) {
+			ipqosPriorFlowCtrlWdDn_ := l1PhysIfDn + "/" + "priorflowctrlwd"
+			dns[ipqosPriorFlowCtrlWdDn_] = true
+		}
+		if !(child.VlanMappingEnable.IsNull() && child.SelectiveQinqAll.IsNull() && child.SelectiveQinqOuterVlanId.IsNull() && (len(child.SelectiveQinqMappings) == 0) && (len(child.VlanMappings) == 0)) {
+			l1VlanMappingDn_ := l1PhysIfDn + "/" + "vlanmapping"
+			dns[l1VlanMappingDn_] = true
+			if !(len(child.SelectiveQinqMappings) == 0) {
+				l1SelectiveQinqTableDn_ := l1VlanMappingDn_ + "/" + "selqinqtable"
+				dns[l1SelectiveQinqTableDn_] = true
+				for key_, child_ := range child.SelectiveQinqMappings {
+					l1SelectiveQinqDn_ := l1SelectiveQinqTableDn_ + "/" + child_.getRn(key_)
+					dns[l1SelectiveQinqDn_] = true
+				}
+			}
+			if !(len(child.VlanMappings) == 0) {
+				l1VlanTranslateTableDn_ := l1VlanMappingDn_ + "/" + "vlantranslatetable"
+				dns[l1VlanTranslateTableDn_] = true
+				for key_, child_ := range child.VlanMappings {
+					l1VlanTranslateEntryDn_ := l1VlanTranslateTableDn_ + "/" + child_.getRn(key_)
+					dns[l1VlanTranslateEntryDn_] = true
+				}
+			}
+		}
+		if !(child.AllowMultiTag.IsNull() && child.AutoExcludeVlans.IsNull() && child.BufferBoost.IsNull() && child.ChassisModuleSerial.IsNull() && child.ChassisModuleSide.IsNull() && child.ChassisNumber.IsNull() && child.ChassisProfileName.IsNull() && child.ChassisSerial.IsNull() && child.ExtendedDescription.IsNull() && child.FlowControlReceive.IsNull() && child.FlowControlSend.IsNull() && child.FlowRedirect.IsNull() && child.GtpHashMode.IsNull() && child.Layer3MulticastReceiverVlan.IsNull() && child.PortTypeExternal.IsNull() && child.PortTypeFabric.IsNull() && child.RouterMacIpv6Extract.IsNull() && child.ShutDownLan.IsNull() && child.StormControlAction.IsNull() && child.StormControlAction1.IsNull() && child.StormControlAction2.IsNull() && child.StormControlBroadcastLevel.IsNull() && child.StormControlBroadcastLevel1.IsNull() && child.StormControlBroadcastLevel2.IsNull() && child.StormControlBroadcastPacketsPerSecond.IsNull() && child.StormControlMulticastLevel.IsNull() && child.StormControlMulticastLevel1.IsNull() && child.StormControlMulticastLevel2.IsNull() && child.StormControlMulticastPacketsPerSecond.IsNull() && child.StormControlUnicastLevel.IsNull() && child.StormControlUnicastLevel1.IsNull() && child.StormControlUnicastLevel2.IsNull() && child.StormControlUnicastPacketsPerSecond.IsNull() && child.SwitchportBlock.IsNull() && child.SwitchportIsolated.IsNull() && child.SwitchportMacLearn.IsNull() && child.SwitchportMacPermit.IsNull() && child.SwitchportVirtualEthernetBridge.IsNull()) {
+			l1PhysIfExtendedDn_ := l1PhysIfDn + "/" + "physExtd"
+			dns[l1PhysIfExtendedDn_] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data PhysicalInterface) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "interfaceEntity.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.PhysicalInterfaces {
+		_ = child
+		l1PhysIfRn := child.getRn(key)
+		l1PhysIfDn := dn + "/" + l1PhysIfRn
+		_ = l1PhysIfDn
+		l1PhysIfBody := ""
+		l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.rn", l1PhysIfRn)
+		if !child.FecMode.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.FECMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AccessVlan.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.accessVlan", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AdminState.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AutoNegotiation.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.autoNeg", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Bandwidth.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.bw", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Delay.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.delay", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Description.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Duplex.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.duplex", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Layer.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.layer", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LinkLogging.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.linkLog", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LinkDebounceDown.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.linkDebounce", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LinkDebounceUp.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.linkDebounceLinkUp", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Medium.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.medium", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Mode.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Mtu.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.NativeVlan.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.nativeVlan", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Speed.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.speed", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SpeedGroup.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.speedGroup", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.TrunkVlans.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.trunkVlans", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.UniDirectionalEthernet.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.uniDirectionalEthernet", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.UserConfiguredFlags.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.userCfgdFlags", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Beacon.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.beacon", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DfeAdaptiveTuning.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.dfeAdaptiveTuning", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DfeTuningDelay.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.dfeTuningDelay", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Dot1qEtherType.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.dot1qEtherType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.EqualizationDelay.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.equalizationDelay", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.InheritBandwidth.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.inhBw", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.ItuChannel.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.ituChannel", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LinkActiveJitterManagement.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.linkActiveJitterMgmt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LinkFlapErrorDisable.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.linkFlapErrDis", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LinkFlapErrorMax.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.linkFlapErrorMax", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LinkFlapErrorSeconds.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.linkFlapErrorSeconds", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LinkLoopback.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.linkLoopback", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LinkMacUpTimer.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.linkMacUpTimer", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LinkMaxBringUpTimer.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.linkMaxBringUpTimer", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LinkTransmitReset.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.linkTransmitReset", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Mdix.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.mdix", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MediaType.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.mediaType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.OpticsLoopback.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.opticsLoopback", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.PacketTimestampEgressSourceId.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.packetTimestampEgressSourceId", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.PacketTimestampIngressSourceId.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.packetTimestampIngressSourceId", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.PacketTimestampState.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.packetTimestampState", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.PortType.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.portT", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.RouterMac.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.routerMac", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SnmpTrapState.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SpanMode.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.spanMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Squelch.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.squelch", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.TransparentMode.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.transMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.TrunkLogging.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.trunkLog", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Usage.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.usage", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.VoicePortCos.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.voicePortCos", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.VoicePortTrust.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.voicePortTrust", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.VoiceVlanId.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.voiceVlanId", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.VoiceVlanType.IsNull() {
+			l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.attributes.voiceVlanType", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !(child.VrfDn.IsNull()) {
+			nwRtVrfMbrRn_ := "rtvrfMbr"
+			nwRtVrfMbrDn_ := l1PhysIfDn + "/" + nwRtVrfMbrRn_
+			_ = nwRtVrfMbrDn_
+			if !existed(nwRtVrfMbrDn_) {
+				l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.children.-1.nwRtVrfMbr.attributes", map[string]interface{}{"rn": nwRtVrfMbrRn_, "status": "deleted"})
+			} else {
+				nwRtVrfMbrBody_ := ""
+				if !child.VrfDn.IsNull() {
+					nwRtVrfMbrBody_, _ = sjson.Set(nwRtVrfMbrBody_, "nwRtVrfMbr.attributes.tDn", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if nwRtVrfMbrBody_ != "" {
+					nwRtVrfMbrBody_, _ = sjson.Set(nwRtVrfMbrBody_, "nwRtVrfMbr.attributes.rn", nwRtVrfMbrRn_)
+					l1PhysIfBody, _ = sjson.SetRaw(l1PhysIfBody, "l1PhysIf.children.-1", nwRtVrfMbrBody_)
+				}
+			}
+		}
+		if !(child.StormControlBurstPacketsPerSecond.IsNull() && child.StormControlBurstRate.IsNull() && child.StormControlRate.IsNull() && child.StormControlRatePacketsPerSecond.IsNull() && child.StormControlPacketType.IsNull()) {
+			l1StormCtrlPRn_ := "stormctrlp"
+			l1StormCtrlPDn_ := l1PhysIfDn + "/" + l1StormCtrlPRn_
+			_ = l1StormCtrlPDn_
+			if !existed(l1StormCtrlPDn_) {
+				l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.children.-1.l1StormCtrlP.attributes", map[string]interface{}{"rn": l1StormCtrlPRn_, "status": "deleted"})
+			} else {
+				l1StormCtrlPBody_ := ""
+				if !child.StormControlBurstPacketsPerSecond.IsNull() {
+					l1StormCtrlPBody_, _ = sjson.Set(l1StormCtrlPBody_, "l1StormCtrlP.attributes.burstPps", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlBurstRate.IsNull() {
+					l1StormCtrlPBody_, _ = sjson.Set(l1StormCtrlPBody_, "l1StormCtrlP.attributes.burstRate", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlRate.IsNull() {
+					l1StormCtrlPBody_, _ = sjson.Set(l1StormCtrlPBody_, "l1StormCtrlP.attributes.rate", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlRatePacketsPerSecond.IsNull() {
+					l1StormCtrlPBody_, _ = sjson.Set(l1StormCtrlPBody_, "l1StormCtrlP.attributes.ratePps", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlPacketType.IsNull() {
+					l1StormCtrlPBody_, _ = sjson.Set(l1StormCtrlPBody_, "l1StormCtrlP.attributes.type", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if l1StormCtrlPBody_ != "" {
+					l1StormCtrlPBody_, _ = sjson.Set(l1StormCtrlPBody_, "l1StormCtrlP.attributes.rn", l1StormCtrlPRn_)
+					l1PhysIfBody, _ = sjson.SetRaw(l1PhysIfBody, "l1PhysIf.children.-1", l1StormCtrlPBody_)
+				}
+			}
+		}
+		if !(child.LoadIntervalCounter1.IsNull() && child.LoadIntervalCounter2.IsNull() && child.LoadIntervalCounter3.IsNull()) {
+			l1LoadPRn_ := "loadp"
+			l1LoadPDn_ := l1PhysIfDn + "/" + l1LoadPRn_
+			_ = l1LoadPDn_
+			{
+				l1LoadPBody_ := ""
+				if !child.LoadIntervalCounter1.IsNull() {
+					l1LoadPBody_, _ = sjson.Set(l1LoadPBody_, "l1LoadP.attributes.loadIntvl1", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.LoadIntervalCounter2.IsNull() {
+					l1LoadPBody_, _ = sjson.Set(l1LoadPBody_, "l1LoadP.attributes.loadIntvl2", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.LoadIntervalCounter3.IsNull() {
+					l1LoadPBody_, _ = sjson.Set(l1LoadPBody_, "l1LoadP.attributes.loadIntvl3", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if l1LoadPBody_ != "" {
+					l1LoadPBody_, _ = sjson.Set(l1LoadPBody_, "l1LoadP.attributes.rn", l1LoadPRn_)
+					l1PhysIfBody, _ = sjson.SetRaw(l1PhysIfBody, "l1PhysIf.children.-1", l1LoadPBody_)
+				}
+			}
+		}
+		if !(child.MultisiteInterfaceTracking.IsNull()) {
+			nvoMultisiteIfTrackingRn_ := "multisiteiftracking"
+			nvoMultisiteIfTrackingDn_ := l1PhysIfDn + "/" + nvoMultisiteIfTrackingRn_
+			_ = nvoMultisiteIfTrackingDn_
+			if !existed(nvoMultisiteIfTrackingDn_) {
+				l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.children.-1.nvoMultisiteIfTracking.attributes", map[string]interface{}{"rn": nvoMultisiteIfTrackingRn_, "status": "deleted"})
+			} else {
+				nvoMultisiteIfTrackingBody_ := ""
+				if !child.MultisiteInterfaceTracking.IsNull() {
+					nvoMultisiteIfTrackingBody_, _ = sjson.Set(nvoMultisiteIfTrackingBody_, "nvoMultisiteIfTracking.attributes.tracking", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if nvoMultisiteIfTrackingBody_ != "" {
+					nvoMultisiteIfTrackingBody_, _ = sjson.Set(nvoMultisiteIfTrackingBody_, "nvoMultisiteIfTracking.attributes.rn", nvoMultisiteIfTrackingRn_)
+					l1PhysIfBody, _ = sjson.SetRaw(l1PhysIfBody, "l1PhysIf.children.-1", nvoMultisiteIfTrackingBody_)
+				}
+			}
+		}
+		if !(child.EvpnMultihomingCoreTracking.IsNull()) {
+			nvoEsiMhCoreTrackingRn_ := "esimhcoretracking"
+			nvoEsiMhCoreTrackingDn_ := l1PhysIfDn + "/" + nvoEsiMhCoreTrackingRn_
+			_ = nvoEsiMhCoreTrackingDn_
+			if !existed(nvoEsiMhCoreTrackingDn_) {
+				l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.children.-1.nvoEsiMhCoreTracking.attributes", map[string]interface{}{"rn": nvoEsiMhCoreTrackingRn_, "status": "deleted"})
+			} else {
+				nvoEsiMhCoreTrackingBody_ := ""
+				if !child.EvpnMultihomingCoreTracking.IsNull() {
+					nvoEsiMhCoreTrackingBody_, _ = sjson.Set(nvoEsiMhCoreTrackingBody_, "nvoEsiMhCoreTracking.attributes.coretracking", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if nvoEsiMhCoreTrackingBody_ != "" {
+					nvoEsiMhCoreTrackingBody_, _ = sjson.Set(nvoEsiMhCoreTrackingBody_, "nvoEsiMhCoreTracking.attributes.rn", nvoEsiMhCoreTrackingRn_)
+					l1PhysIfBody, _ = sjson.SetRaw(l1PhysIfBody, "l1PhysIf.children.-1", nvoEsiMhCoreTrackingBody_)
+				}
+			}
+		}
+		if !(child.PriorityFlowControlMode.IsNull() && child.PriorityFlowControlSendTlv.IsNull()) {
+			ipqosPriorFlowCtrlRn_ := "priorflowctrl"
+			ipqosPriorFlowCtrlDn_ := l1PhysIfDn + "/" + ipqosPriorFlowCtrlRn_
+			_ = ipqosPriorFlowCtrlDn_
+			if !existed(ipqosPriorFlowCtrlDn_) {
+				l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.children.-1.ipqosPriorFlowCtrl.attributes", map[string]interface{}{"rn": ipqosPriorFlowCtrlRn_, "status": "deleted"})
+			} else {
+				ipqosPriorFlowCtrlBody_ := ""
+				if !child.PriorityFlowControlMode.IsNull() {
+					ipqosPriorFlowCtrlBody_, _ = sjson.Set(ipqosPriorFlowCtrlBody_, "ipqosPriorFlowCtrl.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.PriorityFlowControlSendTlv.IsNull() {
+					ipqosPriorFlowCtrlBody_, _ = sjson.Set(ipqosPriorFlowCtrlBody_, "ipqosPriorFlowCtrl.attributes.send_tlv", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if ipqosPriorFlowCtrlBody_ != "" {
+					ipqosPriorFlowCtrlBody_, _ = sjson.Set(ipqosPriorFlowCtrlBody_, "ipqosPriorFlowCtrl.attributes.rn", ipqosPriorFlowCtrlRn_)
+					l1PhysIfBody, _ = sjson.SetRaw(l1PhysIfBody, "l1PhysIf.children.-1", ipqosPriorFlowCtrlBody_)
+				}
+			}
+		}
+		if !(child.PriorityFlowControlWatchdogDisableAction.IsNull() && child.PriorityFlowControlWatchdogInterfaceMultiplier.IsNull() && child.PriorityFlowControlWatchdogInterval.IsNull()) {
+			ipqosPriorFlowCtrlWdRn_ := "priorflowctrlwd"
+			ipqosPriorFlowCtrlWdDn_ := l1PhysIfDn + "/" + ipqosPriorFlowCtrlWdRn_
+			_ = ipqosPriorFlowCtrlWdDn_
+			if !existed(ipqosPriorFlowCtrlWdDn_) {
+				l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.children.-1.ipqosPriorFlowCtrlWd.attributes", map[string]interface{}{"rn": ipqosPriorFlowCtrlWdRn_, "status": "deleted"})
+			} else {
+				ipqosPriorFlowCtrlWdBody_ := ""
+				if !child.PriorityFlowControlWatchdogDisableAction.IsNull() {
+					ipqosPriorFlowCtrlWdBody_, _ = sjson.Set(ipqosPriorFlowCtrlWdBody_, "ipqosPriorFlowCtrlWd.attributes.disableAction", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.PriorityFlowControlWatchdogInterfaceMultiplier.IsNull() {
+					ipqosPriorFlowCtrlWdBody_, _ = sjson.Set(ipqosPriorFlowCtrlWdBody_, "ipqosPriorFlowCtrlWd.attributes.interfaceMutiplier", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.PriorityFlowControlWatchdogInterval.IsNull() {
+					ipqosPriorFlowCtrlWdBody_, _ = sjson.Set(ipqosPriorFlowCtrlWdBody_, "ipqosPriorFlowCtrlWd.attributes.watchDogInterval", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if ipqosPriorFlowCtrlWdBody_ != "" {
+					ipqosPriorFlowCtrlWdBody_, _ = sjson.Set(ipqosPriorFlowCtrlWdBody_, "ipqosPriorFlowCtrlWd.attributes.rn", ipqosPriorFlowCtrlWdRn_)
+					l1PhysIfBody, _ = sjson.SetRaw(l1PhysIfBody, "l1PhysIf.children.-1", ipqosPriorFlowCtrlWdBody_)
+				}
+			}
+		}
+		if !(child.VlanMappingEnable.IsNull() && child.SelectiveQinqAll.IsNull() && child.SelectiveQinqOuterVlanId.IsNull() && (len(child.SelectiveQinqMappings) == 0) && (len(child.VlanMappings) == 0)) {
+			l1VlanMappingRn_ := "vlanmapping"
+			l1VlanMappingDn_ := l1PhysIfDn + "/" + l1VlanMappingRn_
+			_ = l1VlanMappingDn_
+			if !existed(l1VlanMappingDn_) {
+				l1PhysIfBody, _ = sjson.Set(l1PhysIfBody, "l1PhysIf.children.-1.l1VlanMapping.attributes", map[string]interface{}{"rn": l1VlanMappingRn_, "status": "deleted"})
+			} else {
+				l1VlanMappingBody_ := ""
+				if !child.VlanMappingEnable.IsNull() {
+					l1VlanMappingBody_, _ = sjson.Set(l1VlanMappingBody_, "l1VlanMapping.attributes.Enabled", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SelectiveQinqAll.IsNull() {
+					l1VlanMappingBody_, _ = sjson.Set(l1VlanMappingBody_, "l1VlanMapping.attributes.selectiveQinqAll", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SelectiveQinqOuterVlanId.IsNull() {
+					l1VlanMappingBody_, _ = sjson.Set(l1VlanMappingBody_, "l1VlanMapping.attributes.selectiveQinqTranslateVlan", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !(len(child.SelectiveQinqMappings) == 0) {
+					l1SelectiveQinqTableRn_ := "selqinqtable"
+					l1SelectiveQinqTableDn_ := l1VlanMappingDn_ + "/" + l1SelectiveQinqTableRn_
+					_ = l1SelectiveQinqTableDn_
+					if !existed(l1SelectiveQinqTableDn_) {
+						l1VlanMappingBody_, _ = sjson.Set(l1VlanMappingBody_, "l1VlanMapping.children.-1.l1SelectiveQinqTable.attributes", map[string]interface{}{"rn": l1SelectiveQinqTableRn_, "status": "deleted"})
+					} else {
+						l1SelectiveQinqTableBody_ := ""
+						for key_, child_ := range child.SelectiveQinqMappings {
+							_ = child_
+							l1SelectiveQinqRn_ := child_.getRn(key_)
+							l1SelectiveQinqDn_ := l1SelectiveQinqTableDn_ + "/" + l1SelectiveQinqRn_
+							_ = l1SelectiveQinqDn_
+							if !existed(l1SelectiveQinqDn_) {
+								l1SelectiveQinqTableBody_, _ = sjson.Set(l1SelectiveQinqTableBody_, "l1SelectiveQinqTable.children.-1.l1SelectiveQinq.attributes", map[string]interface{}{"rn": l1SelectiveQinqRn_, "status": "deleted"})
+								continue
+							}
+							l1SelectiveQinqBody_ := ""
+							l1SelectiveQinqBody_, _ = sjson.Set(l1SelectiveQinqBody_, "l1SelectiveQinq.attributes.rn", l1SelectiveQinqRn_)
+							if !child_.Vlans.IsNull() {
+								l1SelectiveQinqBody_, _ = sjson.Set(l1SelectiveQinqBody_, "l1SelectiveQinq.attributes.selectiveQinqVlans", "DME_UNSET_PROPERTY_MARKER")
+							}
+							l1SelectiveQinqTableBody_, _ = sjson.SetRaw(l1SelectiveQinqTableBody_, "l1SelectiveQinqTable.children.-1", l1SelectiveQinqBody_)
+						}
+						if l1SelectiveQinqTableBody_ != "" {
+							l1SelectiveQinqTableBody_, _ = sjson.Set(l1SelectiveQinqTableBody_, "l1SelectiveQinqTable.attributes.rn", l1SelectiveQinqTableRn_)
+							l1VlanMappingBody_, _ = sjson.SetRaw(l1VlanMappingBody_, "l1VlanMapping.children.-1", l1SelectiveQinqTableBody_)
+						}
+					}
+				}
+				if !(len(child.VlanMappings) == 0) {
+					l1VlanTranslateTableRn_ := "vlantranslatetable"
+					l1VlanTranslateTableDn_ := l1VlanMappingDn_ + "/" + l1VlanTranslateTableRn_
+					_ = l1VlanTranslateTableDn_
+					if !existed(l1VlanTranslateTableDn_) {
+						l1VlanMappingBody_, _ = sjson.Set(l1VlanMappingBody_, "l1VlanMapping.children.-1.l1VlanTranslateTable.attributes", map[string]interface{}{"rn": l1VlanTranslateTableRn_, "status": "deleted"})
+					} else {
+						l1VlanTranslateTableBody_ := ""
+						for key_, child_ := range child.VlanMappings {
+							_ = child_
+							l1VlanTranslateEntryRn_ := child_.getRn(key_)
+							l1VlanTranslateEntryDn_ := l1VlanTranslateTableDn_ + "/" + l1VlanTranslateEntryRn_
+							_ = l1VlanTranslateEntryDn_
+							if !existed(l1VlanTranslateEntryDn_) {
+								l1VlanTranslateTableBody_, _ = sjson.Set(l1VlanTranslateTableBody_, "l1VlanTranslateTable.children.-1.l1VlanTranslateEntry.attributes", map[string]interface{}{"rn": l1VlanTranslateEntryRn_, "status": "deleted"})
+								continue
+							}
+							l1VlanTranslateEntryBody_ := ""
+							l1VlanTranslateEntryBody_, _ = sjson.Set(l1VlanTranslateEntryBody_, "l1VlanTranslateEntry.attributes.rn", l1VlanTranslateEntryRn_)
+							if !child_.TranslatedVlanId.IsNull() {
+								l1VlanTranslateEntryBody_, _ = sjson.Set(l1VlanTranslateEntryBody_, "l1VlanTranslateEntry.attributes.translatevlanid", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.InnerVlanId.IsNull() {
+								l1VlanTranslateEntryBody_, _ = sjson.Set(l1VlanTranslateEntryBody_, "l1VlanTranslateEntry.attributes.innervlanid", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.RxOnly.IsNull() {
+								l1VlanTranslateEntryBody_, _ = sjson.Set(l1VlanTranslateEntryBody_, "l1VlanTranslateEntry.attributes.direction", "DME_UNSET_PROPERTY_MARKER")
+							}
+							l1VlanTranslateTableBody_, _ = sjson.SetRaw(l1VlanTranslateTableBody_, "l1VlanTranslateTable.children.-1", l1VlanTranslateEntryBody_)
+						}
+						if l1VlanTranslateTableBody_ != "" {
+							l1VlanTranslateTableBody_, _ = sjson.Set(l1VlanTranslateTableBody_, "l1VlanTranslateTable.attributes.rn", l1VlanTranslateTableRn_)
+							l1VlanMappingBody_, _ = sjson.SetRaw(l1VlanMappingBody_, "l1VlanMapping.children.-1", l1VlanTranslateTableBody_)
+						}
+					}
+				}
+				if l1VlanMappingBody_ != "" {
+					l1VlanMappingBody_, _ = sjson.Set(l1VlanMappingBody_, "l1VlanMapping.attributes.rn", l1VlanMappingRn_)
+					l1PhysIfBody, _ = sjson.SetRaw(l1PhysIfBody, "l1PhysIf.children.-1", l1VlanMappingBody_)
+				}
+			}
+		}
+		if !(child.AllowMultiTag.IsNull() && child.AutoExcludeVlans.IsNull() && child.BufferBoost.IsNull() && child.ChassisModuleSerial.IsNull() && child.ChassisModuleSide.IsNull() && child.ChassisNumber.IsNull() && child.ChassisProfileName.IsNull() && child.ChassisSerial.IsNull() && child.ExtendedDescription.IsNull() && child.FlowControlReceive.IsNull() && child.FlowControlSend.IsNull() && child.FlowRedirect.IsNull() && child.GtpHashMode.IsNull() && child.Layer3MulticastReceiverVlan.IsNull() && child.PortTypeExternal.IsNull() && child.PortTypeFabric.IsNull() && child.RouterMacIpv6Extract.IsNull() && child.ShutDownLan.IsNull() && child.StormControlAction.IsNull() && child.StormControlAction1.IsNull() && child.StormControlAction2.IsNull() && child.StormControlBroadcastLevel.IsNull() && child.StormControlBroadcastLevel1.IsNull() && child.StormControlBroadcastLevel2.IsNull() && child.StormControlBroadcastPacketsPerSecond.IsNull() && child.StormControlMulticastLevel.IsNull() && child.StormControlMulticastLevel1.IsNull() && child.StormControlMulticastLevel2.IsNull() && child.StormControlMulticastPacketsPerSecond.IsNull() && child.StormControlUnicastLevel.IsNull() && child.StormControlUnicastLevel1.IsNull() && child.StormControlUnicastLevel2.IsNull() && child.StormControlUnicastPacketsPerSecond.IsNull() && child.SwitchportBlock.IsNull() && child.SwitchportIsolated.IsNull() && child.SwitchportMacLearn.IsNull() && child.SwitchportMacPermit.IsNull() && child.SwitchportVirtualEthernetBridge.IsNull()) {
+			l1PhysIfExtendedRn_ := "physExtd"
+			l1PhysIfExtendedDn_ := l1PhysIfDn + "/" + l1PhysIfExtendedRn_
+			_ = l1PhysIfExtendedDn_
+			{
+				l1PhysIfExtendedBody_ := ""
+				if !child.AllowMultiTag.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.allowMultiTag", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.AutoExcludeVlans.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.autoExcludeVlans", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.BufferBoost.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.bufferBoost", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ChassisModuleSerial.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.chassisModuleSerial", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ChassisModuleSide.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.chassisModuleSide", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ChassisNumber.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.chassisNumber", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ChassisProfileName.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.chassisProfileName", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ChassisSerial.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.chassisSerial", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ExtendedDescription.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.FlowControlReceive.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.flowCtrlReceive", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.FlowControlSend.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.flowCtrlSend", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.FlowRedirect.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.flowRedirect", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.GtpHashMode.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.gtpHashMode", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Layer3MulticastReceiverVlan.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.l3McastReceiverVlan", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.PortTypeExternal.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.portTypeExternal", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.PortTypeFabric.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.portTypeFabric", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.RouterMacIpv6Extract.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.routerMacIpv6Extract", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ShutDownLan.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.shutDownLan", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlAction.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlAct", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlAction1.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlAct1", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlAction2.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlAct2", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlBroadcastLevel.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlBCastLevel", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlBroadcastLevel1.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlBCastLevel1", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlBroadcastLevel2.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlBCastLevel2", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlBroadcastPacketsPerSecond.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlBCastPPS", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlMulticastLevel.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlMCastLevel", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlMulticastLevel1.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlMCastLevel1", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlMulticastLevel2.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlMCastLevel2", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlMulticastPacketsPerSecond.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlMCastPPS", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlUnicastLevel.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlUCastLevel", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlUnicastLevel1.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlUCastLevel1", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlUnicastLevel2.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlUCastLevel2", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.StormControlUnicastPacketsPerSecond.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.stormCtrlUCastPPS", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SwitchportBlock.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.switchportBlock", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SwitchportIsolated.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.switchportIsolated", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SwitchportMacLearn.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.switchportMacLearn", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SwitchportMacPermit.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.switchportMacPermit", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SwitchportVirtualEthernetBridge.IsNull() {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.switchportVirtualEthernetBridge", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if l1PhysIfExtendedBody_ != "" {
+					l1PhysIfExtendedBody_, _ = sjson.Set(l1PhysIfExtendedBody_, "l1PhysIfExtended.attributes.rn", l1PhysIfExtendedRn_)
+					l1PhysIfBody, _ = sjson.SetRaw(l1PhysIfBody, "l1PhysIf.children.-1", l1PhysIfExtendedBody_)
+				}
+			}
+		}
+		body, _ = sjson.SetRaw(body, "interfaceEntity.children.-1", l1PhysIfBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data PhysicalInterface) toBodyWithDeletes(ctx context.Context, state PhysicalInterface, config PhysicalInterface, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -2300,6 +2921,8 @@ func (data PhysicalInterface) toBodyWithDeletes(ctx context.Context, state Physi
 				stateChild := state.PhysicalInterfaces[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("l1PhysIf.attributes.id").String() == key {
 						if !stateChild.FecMode.IsNull() && configChild.FecMode.IsNull() {
@@ -2476,29 +3099,41 @@ func (data PhysicalInterface) toBodyWithDeletes(ctx context.Context, state Physi
 						}
 					}
 					if listChildPath != "" {
-						if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nwRtVrfMbr")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.VrfDn.IsNull()) && (configChild.VrfDn.IsNull()) && deleteEmptied(listChildDn+"/rtvrfMbr") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "nwRtVrfMbr")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nwRtVrfMbr")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
-						if !stateChild.StormControlBurstPacketsPerSecond.IsNull() && configChild.StormControlBurstPacketsPerSecond.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstPps", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.StormControlBurstRate.IsNull() && configChild.StormControlBurstRate.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstRate", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.StormControlRate.IsNull() && configChild.StormControlRate.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rate", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.StormControlRatePacketsPerSecond.IsNull() && configChild.StormControlRatePacketsPerSecond.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ratePps", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.StormControlPacketType.IsNull() && configChild.StormControlPacketType.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"type", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.StormControlBurstPacketsPerSecond.IsNull() && stateChild.StormControlBurstRate.IsNull() && stateChild.StormControlRate.IsNull() && stateChild.StormControlRatePacketsPerSecond.IsNull() && stateChild.StormControlPacketType.IsNull()) && (configChild.StormControlBurstPacketsPerSecond.IsNull() && configChild.StormControlBurstRate.IsNull() && configChild.StormControlRate.IsNull() && configChild.StormControlRatePacketsPerSecond.IsNull() && configChild.StormControlPacketType.IsNull()) && deleteEmptied(listChildDn+"/stormctrlp") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.StormControlBurstPacketsPerSecond.IsNull() && configChild.StormControlBurstPacketsPerSecond.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstPps", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.StormControlBurstRate.IsNull() && configChild.StormControlBurstRate.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstRate", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.StormControlRate.IsNull() && configChild.StormControlRate.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rate", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.StormControlRatePacketsPerSecond.IsNull() && configChild.StormControlRatePacketsPerSecond.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ratePps", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.StormControlPacketType.IsNull() && configChild.StormControlPacketType.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1StormCtrlP")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"type", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 						if !stateChild.LoadIntervalCounter1.IsNull() && configChild.LoadIntervalCounter1.IsNull() {
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1LoadP")
@@ -2512,78 +3147,108 @@ func (data PhysicalInterface) toBodyWithDeletes(ctx context.Context, state Physi
 							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1LoadP")
 							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loadIntvl3", "DME_UNSET_PROPERTY_MARKER")
 						}
-						if !stateChild.MultisiteInterfaceTracking.IsNull() && configChild.MultisiteInterfaceTracking.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoMultisiteIfTracking")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tracking", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.MultisiteInterfaceTracking.IsNull()) && (configChild.MultisiteInterfaceTracking.IsNull()) && deleteEmptied(listChildDn+"/multisiteiftracking") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoMultisiteIfTracking")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.MultisiteInterfaceTracking.IsNull() && configChild.MultisiteInterfaceTracking.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoMultisiteIfTracking")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tracking", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
-						if !stateChild.EvpnMultihomingCoreTracking.IsNull() && configChild.EvpnMultihomingCoreTracking.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEsiMhCoreTracking")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"coretracking", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.EvpnMultihomingCoreTracking.IsNull()) && (configChild.EvpnMultihomingCoreTracking.IsNull()) && deleteEmptied(listChildDn+"/esimhcoretracking") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEsiMhCoreTracking")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.EvpnMultihomingCoreTracking.IsNull() && configChild.EvpnMultihomingCoreTracking.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEsiMhCoreTracking")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"coretracking", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
-						if !stateChild.PriorityFlowControlMode.IsNull() && configChild.PriorityFlowControlMode.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrl")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.PriorityFlowControlMode.IsNull() && stateChild.PriorityFlowControlSendTlv.IsNull()) && (configChild.PriorityFlowControlMode.IsNull() && configChild.PriorityFlowControlSendTlv.IsNull()) && deleteEmptied(listChildDn+"/priorflowctrl") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrl")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.PriorityFlowControlMode.IsNull() && configChild.PriorityFlowControlMode.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrl")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.PriorityFlowControlSendTlv.IsNull() && configChild.PriorityFlowControlSendTlv.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrl")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"send_tlv", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
-						if !stateChild.PriorityFlowControlSendTlv.IsNull() && configChild.PriorityFlowControlSendTlv.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrl")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"send_tlv", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.PriorityFlowControlWatchdogDisableAction.IsNull() && stateChild.PriorityFlowControlWatchdogInterfaceMultiplier.IsNull() && stateChild.PriorityFlowControlWatchdogInterval.IsNull()) && (configChild.PriorityFlowControlWatchdogDisableAction.IsNull() && configChild.PriorityFlowControlWatchdogInterfaceMultiplier.IsNull() && configChild.PriorityFlowControlWatchdogInterval.IsNull()) && deleteEmptied(listChildDn+"/priorflowctrlwd") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrlWd")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.PriorityFlowControlWatchdogDisableAction.IsNull() && configChild.PriorityFlowControlWatchdogDisableAction.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrlWd")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"disableAction", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.PriorityFlowControlWatchdogInterfaceMultiplier.IsNull() && configChild.PriorityFlowControlWatchdogInterfaceMultiplier.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrlWd")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interfaceMutiplier", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.PriorityFlowControlWatchdogInterval.IsNull() && configChild.PriorityFlowControlWatchdogInterval.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrlWd")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"watchDogInterval", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
-						if !stateChild.PriorityFlowControlWatchdogDisableAction.IsNull() && configChild.PriorityFlowControlWatchdogDisableAction.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrlWd")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"disableAction", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.PriorityFlowControlWatchdogInterfaceMultiplier.IsNull() && configChild.PriorityFlowControlWatchdogInterfaceMultiplier.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrlWd")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interfaceMutiplier", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.PriorityFlowControlWatchdogInterval.IsNull() && configChild.PriorityFlowControlWatchdogInterval.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "ipqosPriorFlowCtrlWd")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"watchDogInterval", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.VlanMappingEnable.IsNull() && configChild.VlanMappingEnable.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1VlanMapping")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"Enabled", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.SelectiveQinqAll.IsNull() && configChild.SelectiveQinqAll.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1VlanMapping")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"selectiveQinqAll", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.SelectiveQinqOuterVlanId.IsNull() && configChild.SelectiveQinqOuterVlanId.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1VlanMapping")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"selectiveQinqTranslateVlan", "DME_UNSET_PROPERTY_MARKER")
-						}
-						for key := range stateChild.SelectiveQinqMappings {
-							if configChild, ok := configChild.SelectiveQinqMappings[key]; ok {
-								stateChild := stateChild.SelectiveQinqMappings[key]
-								_ = stateChild
-								_ = configChild
-								for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, listChildPath, "l1VlanMapping")+".children", "l1SelectiveQinqTable")+".children").Array() {
-									if mv.Get("l1SelectiveQinq.attributes.selectiveQinqTranslateVlan").String() == key {
-										if !stateChild.Vlans.IsNull() && configChild.Vlans.IsNull() {
-											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, listChildPath, "l1VlanMapping")+".children", "l1SelectiveQinqTable")+".children"+"."+strconv.Itoa(mi)+".l1SelectiveQinq.attributes."+"selectiveQinqVlans", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.VlanMappingEnable.IsNull() && stateChild.SelectiveQinqAll.IsNull() && stateChild.SelectiveQinqOuterVlanId.IsNull() && (len(stateChild.SelectiveQinqMappings) == 0) && (len(stateChild.VlanMappings) == 0)) && (configChild.VlanMappingEnable.IsNull() && configChild.SelectiveQinqAll.IsNull() && configChild.SelectiveQinqOuterVlanId.IsNull() && (len(configChild.SelectiveQinqMappings) == 0) && (len(configChild.VlanMappings) == 0)) && deleteEmptied(listChildDn+"/vlanmapping") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1VlanMapping")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.VlanMappingEnable.IsNull() && configChild.VlanMappingEnable.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1VlanMapping")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"Enabled", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.SelectiveQinqAll.IsNull() && configChild.SelectiveQinqAll.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1VlanMapping")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"selectiveQinqAll", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.SelectiveQinqOuterVlanId.IsNull() && configChild.SelectiveQinqOuterVlanId.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "l1VlanMapping")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"selectiveQinqTranslateVlan", "DME_UNSET_PROPERTY_MARKER")
+							}
+							for key := range stateChild.SelectiveQinqMappings {
+								if configChild, ok := configChild.SelectiveQinqMappings[key]; ok {
+									stateChild := stateChild.SelectiveQinqMappings[key]
+									_ = stateChild
+									_ = configChild
+									for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, listChildPath, "l1VlanMapping")+".children", "l1SelectiveQinqTable")+".children").Array() {
+										if mv.Get("l1SelectiveQinq.attributes.selectiveQinqTranslateVlan").String() == key {
+											if !stateChild.Vlans.IsNull() && configChild.Vlans.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, listChildPath, "l1VlanMapping")+".children", "l1SelectiveQinqTable")+".children"+"."+strconv.Itoa(mi)+".l1SelectiveQinq.attributes."+"selectiveQinqVlans", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
 										}
-										break
 									}
 								}
 							}
-						}
-						for key := range stateChild.VlanMappings {
-							if configChild, ok := configChild.VlanMappings[key]; ok {
-								stateChild := stateChild.VlanMappings[key]
-								_ = stateChild
-								_ = configChild
-								for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, listChildPath, "l1VlanMapping")+".children", "l1VlanTranslateTable")+".children").Array() {
-									if mv.Get("l1VlanTranslateEntry.attributes.vlanid").String() == key {
-										if !stateChild.TranslatedVlanId.IsNull() && configChild.TranslatedVlanId.IsNull() {
-											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, listChildPath, "l1VlanMapping")+".children", "l1VlanTranslateTable")+".children"+"."+strconv.Itoa(mi)+".l1VlanTranslateEntry.attributes."+"translatevlanid", "DME_UNSET_PROPERTY_MARKER")
+							for key := range stateChild.VlanMappings {
+								if configChild, ok := configChild.VlanMappings[key]; ok {
+									stateChild := stateChild.VlanMappings[key]
+									_ = stateChild
+									_ = configChild
+									for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, listChildPath, "l1VlanMapping")+".children", "l1VlanTranslateTable")+".children").Array() {
+										if mv.Get("l1VlanTranslateEntry.attributes.vlanid").String() == key {
+											if !stateChild.TranslatedVlanId.IsNull() && configChild.TranslatedVlanId.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, listChildPath, "l1VlanMapping")+".children", "l1VlanTranslateTable")+".children"+"."+strconv.Itoa(mi)+".l1VlanTranslateEntry.attributes."+"translatevlanid", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.InnerVlanId.IsNull() && configChild.InnerVlanId.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, listChildPath, "l1VlanMapping")+".children", "l1VlanTranslateTable")+".children"+"."+strconv.Itoa(mi)+".l1VlanTranslateEntry.attributes."+"innervlanid", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.RxOnly.IsNull() && configChild.RxOnly.IsNull() {
+												body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, listChildPath, "l1VlanMapping")+".children", "l1VlanTranslateTable")+".children"+"."+strconv.Itoa(mi)+".l1VlanTranslateEntry.attributes."+"direction", "DME_UNSET_PROPERTY_MARKER")
+											}
+											break
 										}
-										if !stateChild.InnerVlanId.IsNull() && configChild.InnerVlanId.IsNull() {
-											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, listChildPath, "l1VlanMapping")+".children", "l1VlanTranslateTable")+".children"+"."+strconv.Itoa(mi)+".l1VlanTranslateEntry.attributes."+"innervlanid", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.RxOnly.IsNull() && configChild.RxOnly.IsNull() {
-											body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, listChildPath, "l1VlanMapping")+".children", "l1VlanTranslateTable")+".children"+"."+strconv.Itoa(mi)+".l1VlanTranslateEntry.attributes."+"direction", "DME_UNSET_PROPERTY_MARKER")
-										}
-										break
 									}
 								}
 							}

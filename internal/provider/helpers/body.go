@@ -62,16 +62,21 @@ type SeparateRequest struct {
 	Classes []string
 	// Attributes maps a class to attributes that are sent in a second request,
 	// once the object exists, together with the value that resets each of them.
-	// Before an object of the class is deleted, these attributes are reset in a
-	// request of their own, because the device rejects deleting it otherwise.
+	// When they are removed, or before an object of the class is deleted, these
+	// attributes are reset in a request of their own before the rest of the body,
+	// because the device rejects removing what they depend on, or deleting the
+	// object, while they are set.
 	Attributes map[string]map[string]string
+	// Keys maps a class to the attributes identifying its objects, which are the
+	// only other attributes sent with the reset of separate attributes.
+	Keys map[string][]string
 }
 
 // SplitSeparateRequestBody splits body into up to three bodies that are sent
 // in this order:
-//   - a reset body that resets the separate attributes of objects about to be
-//     deleted, marked with status "modified" so that the request fails instead
-//     of creating an object that does not exist
+//   - a reset body that resets the separate attributes that are removed, and
+//     those of objects about to be deleted, marked with status "modified" so
+//     that the request fails instead of creating an object that does not exist
 //   - the main body without objects of the separate classes and without the
 //     separate attributes
 //   - a separate body with those objects and attributes
@@ -84,10 +89,21 @@ func SplitSeparateRequestBody(body string, separate SeparateRequest) (string, st
 	for _, c := range separate.Classes {
 		classes[c] = true
 	}
-	return splitSeparateRequestNode(gjson.Parse(body), classes, separate.Attributes)
+	return splitSeparateRequestNode(gjson.Parse(body), classes, separate.Attributes, separate.Keys)
 }
 
-func splitSeparateRequestNode(node gjson.Result, classes map[string]bool, attributes map[string]map[string]string) (string, string, string) {
+// keyAttributes returns the attributes of attrs that identify the object: its keys and its rn.
+func keyAttributes(attrs string, keys []string) string {
+	result := "{}"
+	for _, name := range append([]string{"rn"}, keys...) {
+		if v := gjson.Get(attrs, gjsonEscape(name)); v.Exists() {
+			result, _ = sjson.Set(result, gjsonEscape(name), v.String())
+		}
+	}
+	return result
+}
+
+func splitSeparateRequestNode(node gjson.Result, classes map[string]bool, attributes map[string]map[string]string, keys map[string][]string) (string, string, string) {
 	var className string
 	var content gjson.Result
 	node.ForEach(func(key, value gjson.Result) bool {
@@ -114,10 +130,21 @@ func splitSeparateRequestNode(node gjson.Result, classes map[string]bool, attrib
 		return node.Raw, "", `{"` + className + `":{"attributes":` + resetAttrs + `}}`
 	}
 	mainAttrs := attrs
-	movedAttrs := false
-	for name := range separateAttrs {
-		if gjson.Get(attrs, gjsonEscape(name)).Exists() {
-			mainAttrs, _ = sjson.Delete(mainAttrs, gjsonEscape(name))
+	separateNodeAttrs := attrs
+	resetNodeAttrs := keyAttributes(attrs, keys[className])
+	movedAttrs, resetAttrs := false, false
+	for _, name := range sortedKeys(separateAttrs) {
+		v := gjson.Get(attrs, gjsonEscape(name))
+		if !v.Exists() {
+			continue
+		}
+		mainAttrs, _ = sjson.Delete(mainAttrs, gjsonEscape(name))
+		if v.String() == separateAttrs[name] {
+			// A removed attribute is reset before the rest of the body
+			separateNodeAttrs, _ = sjson.Delete(separateNodeAttrs, gjsonEscape(name))
+			resetNodeAttrs, _ = sjson.Set(resetNodeAttrs, gjsonEscape(name), v.String())
+			resetAttrs = true
+		} else {
 			movedAttrs = true
 		}
 	}
@@ -132,7 +159,7 @@ func splitSeparateRequestNode(node gjson.Result, classes map[string]bool, attrib
 			separateChildren = append(separateChildren, child.Raw)
 			continue
 		}
-		mainChild, separateChild, resetChild := splitSeparateRequestNode(child, classes, attributes)
+		mainChild, separateChild, resetChild := splitSeparateRequestNode(child, classes, attributes, keys)
 		mainChildren = append(mainChildren, mainChild)
 		if separateChild != "" {
 			separateChildren = append(separateChildren, separateChild)
@@ -141,7 +168,7 @@ func splitSeparateRequestNode(node gjson.Result, classes map[string]bool, attrib
 			resetChildren = append(resetChildren, resetChild)
 		}
 	}
-	if !movedAttrs && len(separateChildren) == 0 && len(resetChildren) == 0 {
+	if !movedAttrs && !resetAttrs && len(separateChildren) == 0 && len(resetChildren) == 0 {
 		return node.Raw, "", ""
 	}
 	mainContent := content.Raw
@@ -156,15 +183,23 @@ func splitSeparateRequestNode(node gjson.Result, classes map[string]bool, attrib
 	mainBody := `{"` + className + `":` + mainContent + `}`
 	separateBody := ""
 	if movedAttrs || len(separateChildren) > 0 {
-		separateContent := `{"attributes":` + attrs
+		separateContent := `{"attributes":` + separateNodeAttrs
 		if len(separateChildren) > 0 {
 			separateContent += `,"children":[` + strings.Join(separateChildren, ",") + `]`
 		}
 		separateBody = `{"` + className + `":` + separateContent + `}}`
 	}
 	resetBody := ""
-	if len(resetChildren) > 0 {
-		resetBody = `{"` + className + `":{"attributes":` + attrs + `,"children":[` + strings.Join(resetChildren, ",") + `]}}`
+	if resetAttrs || len(resetChildren) > 0 {
+		resetContent := `{"attributes":` + keyAttributes(attrs, keys[className])
+		if resetAttrs {
+			resetNodeAttrs, _ = sjson.Set(resetNodeAttrs, "status", "modified")
+			resetContent = `{"attributes":` + resetNodeAttrs
+		}
+		if len(resetChildren) > 0 {
+			resetContent += `,"children":[` + strings.Join(resetChildren, ",") + `]`
+		}
+		resetBody = `{"` + className + `":` + resetContent + `}}`
 	}
 	return mainBody, separateBody, resetBody
 }

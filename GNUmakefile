@@ -7,20 +7,20 @@ ifneq (,$(wildcard ./.env))
 endif
 
 # Run acceptance tests across all devices and versions
-# Usage: make test [NAME="Definition Name"] [DEBUG=1]
+# Usage: make test [NAME="Definition Name"] [DEBUG=1] [DELETION_POLICIES=1]
 .PHONY: test
 test: test-10-5-6 test-10-6-4
 	@echo ""
 	@echo "All multi-device tests completed!"
 
 # Test against NX-OS 10.5.6
-# Usage: make test-10-5-6 [NAME="Definition Name"] [DEBUG=1]
+# Usage: make test-10-5-6 [NAME="Definition Name"] [DEBUG=1] [DELETION_POLICIES=1]
 .PHONY: test-10-5-6
 test-10-5-6:
 	@$(MAKE) --no-print-directory run-acc-tests VERSION=10.5.6 URL_VAR=NXOS_10_5_6_URL NXOS_URL="$(NXOS_10_5_6_URL)" LOG=test-output-10-5-6.log
 
 # Test against NX-OS 10.6.4
-# Usage: make test-10-6-4 [NAME="Definition Name"] [DEBUG=1]
+# Usage: make test-10-6-4 [NAME="Definition Name"] [DEBUG=1] [DELETION_POLICIES=1]
 .PHONY: test-10-6-4
 test-10-6-4:
 	@$(MAKE) --no-print-directory run-acc-tests VERSION=10.6.4 URL_VAR=NXOS_10_6_4_URL NXOS_URL="$(NXOS_10_6_4_URL)" LOG=test-output-10-6-4.log
@@ -43,7 +43,7 @@ run-acc-tests:
 			if [ -n "$${MATCH}" ]; then \
 				DEFNAME=$$(grep -i -m1 -h '^name: $(NAME)$$' "$${MATCH}" | sed 's/^name: //'); \
 				CAMEL=$$(echo "$${DEFNAME}" | awk '{for(i=1;i<=NF;i++) $$i=toupper(substr($$i,1,1)) substr($$i,2)} 1' | tr -d ' '); \
-				TEST_NAME="TestAcc.*Nxos$${CAMEL}"; \
+				TEST_NAME="^TestAcc$${CAMEL}Resource(_|$$)"; \
 				echo "Resolved definition '$(NAME)' to test pattern: $${TEST_NAME}"; \
 			else \
 				echo "ERROR: No definition found matching '$(NAME)' in gen/definitions/*.yaml"; \
@@ -53,6 +53,7 @@ run-acc-tests:
 		$(if $(DEBUG),echo "Debug mode enabled - logs will be written to $(LOG)";) \
 		if [ -n "$${TEST_NAME}" ]; then echo "Running tests matching: $${TEST_NAME}"; fi; \
 		TF_ACC=1 \
+		$(if $(DELETION_POLICIES),NXOS_TEST_DELETION_POLICIES=1) \
 		$(if $(DEBUG),TF_LOG=Trace) \
 		go test -v $${TEST_NAME:+-run "$${TEST_NAME}"} $(TESTARGS) -count 1 -timeout 120m ./internal/provider $(if $(DEBUG),2>&1 | tee $(LOG)); \
 	fi

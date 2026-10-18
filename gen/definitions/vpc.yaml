@@ -126,6 +126,7 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+            separate_request: true
           - nxos_name: l3PeerRouterSyslog
             tf_name: l3_peer_router_syslog
             type: String
@@ -215,6 +216,7 @@ child_classes:
             type: String
             description: "Exclude VLAN List."
             example: "1-2"
+            separate_request: true
         child_classes:
           - class_name: vpcKeepalive
             doc_path: System/vpc:Keepalive/

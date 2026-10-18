@@ -97,6 +97,8 @@ resource "nxos_dhcp" "example" {
 - `dai_validate_destination` (Boolean) DAI Validate Type: dst-mac.
 - `dai_validate_ip` (Boolean) DAI Validate Type: ip.
 - `dai_validate_source` (Boolean) DAI Validate Type: src-mac.
+- `deletion_policy` (String) What happens on the device when objects managed by the resource are removed. `delete` deletes the object on destroy, including any configuration not managed by Terraform, and deletes single child objects once none of their attributes are configured anymore, unless the device holds other entries below them. `reset` deletes the objects created by the resource on destroy, resets the managed attributes of the objects that already existed and leaves configuration not managed by Terraform in place. `retain` leaves the device unchanged on destroy and only removes the resource from the state. Overrides the `deletion_policy` of the provider, which defaults to `delete`. See the [Deletion Policy](../guides/deletion_policy) guide for details.
+  - Choices: `delete`, `reset`, `retain`
 - `device` (String) A device name from the provider configuration.
 - `ipv6_relay_information_option_vpn` (Boolean) IPv6 Relay Information Option Vpn Enabled.
 - `ipv6_relay_option79` (Boolean) IPv6 Relay Option79 Enabled.

@@ -124,6 +124,14 @@ var DHCPSubtreeClassMinVersions = map[string]string{}
 // DHCPMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var DHCPMinVersions = map[string]helpers.MinVersion{}
 
+// DHCPListClasses holds the list child classes of the resource.
+var DHCPListClasses = map[string]bool{"dhcpRelayIf": true, "dhcpRelayAddr": true, "dhcpV6RelayAddr": true}
+
+// getDHCPTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getDHCPTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"dhcpInst", "dhcpSourceIf", "dhcpV6SourceIf", "dhcpRelayIf", "dhcpRelayAddr", "dhcpV6RelayAddr", "dhcpSrcIf", "dhcpV6SrcIf"}, DHCPSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -1011,7 +1019,309 @@ func (data DHCP) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data DHCP) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.Ipv6RelayInformationOptionVpn.IsNull() && data.Ipv6RelayOptionTypeCisco.IsNull() && data.RelayInformationOption.IsNull() && data.RelayInformationOptionTrust.IsNull() && data.RelayInformationOptionVpn.IsNull() && data.RelayInformationTrustAll.IsNull() && data.RelaySubOptionCircuitIdCustomized.IsNull() && data.RelaySubOptionCircuitIdFormatString.IsNull() && data.RelaySubOptionTypeCisco.IsNull() && data.SmartRelayGlobal.IsNull() && data.Snooping.IsNull() && data.SnoopingInformationOption.IsNull() && data.SnoopingVerifyMacAddress.IsNull() && data.DaiLogBufferEntries.IsNull() && data.DaiValidateDestination.IsNull() && data.DaiValidateIp.IsNull() && data.DaiValidateSource.IsNull() && data.Ipv6RelayOption79.IsNull() && data.PacketStrictValidation.IsNull() && data.RelayDai.IsNull() && data.RelayInformationOptionServerIdOverride.IsNull() && data.RelaySubOptionFormatNonTlv.IsNull() && data.RelayV4OverV6.IsNull() && data.RelayV6IapdRouteAdd.IsNull() && data.SnoopSubOptionCircuitIdFormatString.IsNull() && data.SnoopingSubOptionFormatNonTlv.IsNull() && data.V4Relay.IsNull() && data.V6Relay.IsNull() && data.V6SmartRelayGlobal.IsNull() && (data.SourceInterface.IsNull()) && (data.Ipv6SourceInterfaceAdminState.IsNull() && data.Ipv6SourceInterface.IsNull()) && len(data.RelayInterfaces) == 0) {
+		dhcpInstDn := dn + "/" + "inst"
+		dns[dhcpInstDn] = true
+		if !(data.SourceInterface.IsNull()) {
+			dhcpSourceIfDn := dhcpInstDn + "/" + "srcif"
+			dns[dhcpSourceIfDn] = true
+		}
+		if !(data.Ipv6SourceInterfaceAdminState.IsNull() && data.Ipv6SourceInterface.IsNull()) {
+			dhcpV6SourceIfDn := dhcpInstDn + "/" + "v6srcif"
+			dns[dhcpV6SourceIfDn] = true
+		}
+		for key, child := range data.RelayInterfaces {
+			dhcpRelayIfDn := dhcpInstDn + "/" + child.getRn(key)
+			dns[dhcpRelayIfDn] = true
+			for key_, child_ := range child.Addresses {
+				keyParts := strings.SplitN(key_, ";", 2)
+				_ = keyParts
+				dhcpRelayAddrDn_ := dhcpRelayIfDn + "/" + child_.getRn(key_)
+				dns[dhcpRelayAddrDn_] = true
+			}
+			for key_, child_ := range child.Ipv6Addresses {
+				keyParts := strings.SplitN(key_, ";", 3)
+				_ = keyParts
+				dhcpV6RelayAddrDn_ := dhcpRelayIfDn + "/" + child_.getRn(key_)
+				dns[dhcpV6RelayAddrDn_] = true
+			}
+			if !(child.SourceInterface.IsNull()) {
+				dhcpSrcIfDn_ := dhcpRelayIfDn + "/" + "srcif"
+				dns[dhcpSrcIfDn_] = true
+			}
+			if !(child.Ipv6SourceInterface.IsNull()) {
+				dhcpV6SrcIfDn_ := dhcpRelayIfDn + "/" + "v6srcif"
+				dns[dhcpV6SrcIfDn_] = true
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data DHCP) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "dhcpEntity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "dhcpEntity.attributes", map[string]interface{}{})
+	}
+	if !(data.Ipv6RelayInformationOptionVpn.IsNull() && data.Ipv6RelayOptionTypeCisco.IsNull() && data.RelayInformationOption.IsNull() && data.RelayInformationOptionTrust.IsNull() && data.RelayInformationOptionVpn.IsNull() && data.RelayInformationTrustAll.IsNull() && data.RelaySubOptionCircuitIdCustomized.IsNull() && data.RelaySubOptionCircuitIdFormatString.IsNull() && data.RelaySubOptionTypeCisco.IsNull() && data.SmartRelayGlobal.IsNull() && data.Snooping.IsNull() && data.SnoopingInformationOption.IsNull() && data.SnoopingVerifyMacAddress.IsNull() && data.DaiLogBufferEntries.IsNull() && data.DaiValidateDestination.IsNull() && data.DaiValidateIp.IsNull() && data.DaiValidateSource.IsNull() && data.Ipv6RelayOption79.IsNull() && data.PacketStrictValidation.IsNull() && data.RelayDai.IsNull() && data.RelayInformationOptionServerIdOverride.IsNull() && data.RelaySubOptionFormatNonTlv.IsNull() && data.RelayV4OverV6.IsNull() && data.RelayV6IapdRouteAdd.IsNull() && data.SnoopSubOptionCircuitIdFormatString.IsNull() && data.SnoopingSubOptionFormatNonTlv.IsNull() && data.V4Relay.IsNull() && data.V6Relay.IsNull() && data.V6SmartRelayGlobal.IsNull() && (data.SourceInterface.IsNull()) && (data.Ipv6SourceInterfaceAdminState.IsNull() && data.Ipv6SourceInterface.IsNull()) && len(data.RelayInterfaces) == 0) {
+		dhcpInstRn := "inst"
+		dhcpInstDn := dn + "/" + dhcpInstRn
+		_ = dhcpInstDn
+		{
+			dhcpInstBody := ""
+			if !data.Ipv6RelayInformationOptionVpn.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.Ipv6RelayInformationOptionVpnEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Ipv6RelayOptionTypeCisco.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.Ipv6RelayOptionTypeCiscoEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RelayInformationOption.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.RelayInformationOptionEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RelayInformationOptionTrust.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.RelayInformationOptionTrustEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RelayInformationOptionVpn.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.RelayInformationOptionVpnEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RelayInformationTrustAll.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.RelayInformationTrustAllEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RelaySubOptionCircuitIdCustomized.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.RelaySubOptionCircuitIdCustomizedEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RelaySubOptionCircuitIdFormatString.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.RelaySubOptionCircuitIdFormatString", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RelaySubOptionTypeCisco.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.RelaySubOptionTypeCiscoEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SmartRelayGlobal.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.SmartRelayGlobalEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Snooping.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.SnoopingEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SnoopingInformationOption.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.SnoopingInformationOptionEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SnoopingVerifyMacAddress.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.SnoopingVerifyMacAddressEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DaiLogBufferEntries.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.daiLogBufEntries", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DaiValidateDestination.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.daiValidateDst", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DaiValidateIp.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.daiValidateIp", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.DaiValidateSource.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.daiValidateSrc", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Ipv6RelayOption79.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.ipv6RelayOption79Enabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PacketStrictValidation.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.pktStrictVal", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RelayDai.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.relayDAIEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RelayInformationOptionServerIdOverride.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.relayInformationOptionServerIdOverrideDisableEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RelaySubOptionFormatNonTlv.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.relaySubOptionFormatNonTLVEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RelayV4OverV6.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.relayV4overV6Enabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RelayV6IapdRouteAdd.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.relayV6IAPDRouteAddEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SnoopSubOptionCircuitIdFormatString.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.snoopSubOptionCircuitIdFormatString", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.SnoopingSubOptionFormatNonTlv.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.snoopingSubOptionFormatNonTLVEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.V4Relay.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.v4RelayEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.V6Relay.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.v6RelayEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.V6SmartRelayGlobal.IsNull() {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.v6SmartRelayGlobalEnabled", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(data.SourceInterface.IsNull()) {
+				dhcpSourceIfRn := "srcif"
+				dhcpSourceIfDn := dhcpInstDn + "/" + dhcpSourceIfRn
+				_ = dhcpSourceIfDn
+				if !existed(dhcpSourceIfDn) {
+					dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.children.-1.dhcpSourceIf.attributes", map[string]interface{}{"rn": dhcpSourceIfRn, "status": "deleted"})
+				} else {
+					dhcpSourceIfBody := ""
+					if !data.SourceInterface.IsNull() {
+						dhcpSourceIfBody, _ = sjson.Set(dhcpSourceIfBody, "dhcpSourceIf.attributes.sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if dhcpSourceIfBody != "" {
+						dhcpSourceIfBody, _ = sjson.Set(dhcpSourceIfBody, "dhcpSourceIf.attributes.rn", dhcpSourceIfRn)
+						dhcpInstBody, _ = sjson.SetRaw(dhcpInstBody, "dhcpInst.children.-1", dhcpSourceIfBody)
+					}
+				}
+			}
+			if !(data.Ipv6SourceInterfaceAdminState.IsNull() && data.Ipv6SourceInterface.IsNull()) {
+				dhcpV6SourceIfRn := "v6srcif"
+				dhcpV6SourceIfDn := dhcpInstDn + "/" + dhcpV6SourceIfRn
+				_ = dhcpV6SourceIfDn
+				if !existed(dhcpV6SourceIfDn) {
+					dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.children.-1.dhcpV6SourceIf.attributes", map[string]interface{}{"rn": dhcpV6SourceIfRn, "status": "deleted"})
+				} else {
+					dhcpV6SourceIfBody := ""
+					if !data.Ipv6SourceInterfaceAdminState.IsNull() {
+						dhcpV6SourceIfBody, _ = sjson.Set(dhcpV6SourceIfBody, "dhcpV6SourceIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.Ipv6SourceInterface.IsNull() {
+						dhcpV6SourceIfBody, _ = sjson.Set(dhcpV6SourceIfBody, "dhcpV6SourceIf.attributes.v6sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if dhcpV6SourceIfBody != "" {
+						dhcpV6SourceIfBody, _ = sjson.Set(dhcpV6SourceIfBody, "dhcpV6SourceIf.attributes.rn", dhcpV6SourceIfRn)
+						dhcpInstBody, _ = sjson.SetRaw(dhcpInstBody, "dhcpInst.children.-1", dhcpV6SourceIfBody)
+					}
+				}
+			}
+			for key, child := range data.RelayInterfaces {
+				_ = child
+				dhcpRelayIfRn := child.getRn(key)
+				dhcpRelayIfDn := dhcpInstDn + "/" + dhcpRelayIfRn
+				_ = dhcpRelayIfDn
+				if !existed(dhcpRelayIfDn) {
+					dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.children.-1.dhcpRelayIf.attributes", map[string]interface{}{"rn": dhcpRelayIfRn, "status": "deleted"})
+					continue
+				}
+				dhcpRelayIfBody := ""
+				dhcpRelayIfBody, _ = sjson.Set(dhcpRelayIfBody, "dhcpRelayIf.attributes.rn", dhcpRelayIfRn)
+				if !child.InformationTrusted.IsNull() {
+					dhcpRelayIfBody, _ = sjson.Set(dhcpRelayIfBody, "dhcpRelayIf.attributes.InformationTrustedEnabled", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SmartRelay.IsNull() {
+					dhcpRelayIfBody, _ = sjson.Set(dhcpRelayIfBody, "dhcpRelayIf.attributes.SmartRelayEnabled", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SubnetBroadcast.IsNull() {
+					dhcpRelayIfBody, _ = sjson.Set(dhcpRelayIfBody, "dhcpRelayIf.attributes.SubnetBroadcastEnabled", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Options.IsNull() {
+					dhcpRelayIfBody, _ = sjson.Set(dhcpRelayIfBody, "dhcpRelayIf.attributes.options", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SubnetSelection.IsNull() {
+					dhcpRelayIfBody, _ = sjson.Set(dhcpRelayIfBody, "dhcpRelayIf.attributes.subnetSelection", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.V6SmartRelay.IsNull() {
+					dhcpRelayIfBody, _ = sjson.Set(dhcpRelayIfBody, "dhcpRelayIf.attributes.v6SmartRelayEnabled", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.Addresses {
+					_ = child_
+					keyParts := strings.SplitN(key_, ";", 2)
+					_ = keyParts
+					dhcpRelayAddrRn_ := child_.getRn(key_)
+					dhcpRelayAddrDn_ := dhcpRelayIfDn + "/" + dhcpRelayAddrRn_
+					_ = dhcpRelayAddrDn_
+					if !existed(dhcpRelayAddrDn_) {
+						dhcpRelayIfBody, _ = sjson.Set(dhcpRelayIfBody, "dhcpRelayIf.children.-1.dhcpRelayAddr.attributes", map[string]interface{}{"rn": dhcpRelayAddrRn_, "status": "deleted"})
+						continue
+					}
+					dhcpRelayAddrBody_ := ""
+					dhcpRelayAddrBody_, _ = sjson.Set(dhcpRelayAddrBody_, "dhcpRelayAddr.attributes.rn", dhcpRelayAddrRn_)
+					if !child_.Counter.IsNull() {
+						dhcpRelayAddrBody_, _ = sjson.Set(dhcpRelayAddrBody_, "dhcpRelayAddr.attributes.counter", "DME_UNSET_PROPERTY_MARKER")
+					}
+					dhcpRelayIfBody, _ = sjson.SetRaw(dhcpRelayIfBody, "dhcpRelayIf.children.-1", dhcpRelayAddrBody_)
+				}
+				for key_, child_ := range child.Ipv6Addresses {
+					_ = child_
+					keyParts := strings.SplitN(key_, ";", 3)
+					_ = keyParts
+					dhcpV6RelayAddrRn_ := child_.getRn(key_)
+					dhcpV6RelayAddrDn_ := dhcpRelayIfDn + "/" + dhcpV6RelayAddrRn_
+					_ = dhcpV6RelayAddrDn_
+					if !existed(dhcpV6RelayAddrDn_) {
+						dhcpRelayIfBody, _ = sjson.Set(dhcpRelayIfBody, "dhcpRelayIf.children.-1.dhcpV6RelayAddr.attributes", map[string]interface{}{"rn": dhcpV6RelayAddrRn_, "status": "deleted"})
+						continue
+					}
+					dhcpV6RelayAddrBody_ := ""
+					dhcpV6RelayAddrBody_, _ = sjson.Set(dhcpV6RelayAddrBody_, "dhcpV6RelayAddr.attributes.rn", dhcpV6RelayAddrRn_)
+					if !child_.Counter.IsNull() {
+						dhcpV6RelayAddrBody_, _ = sjson.Set(dhcpV6RelayAddrBody_, "dhcpV6RelayAddr.attributes.counter", "DME_UNSET_PROPERTY_MARKER")
+					}
+					dhcpRelayIfBody, _ = sjson.SetRaw(dhcpRelayIfBody, "dhcpRelayIf.children.-1", dhcpV6RelayAddrBody_)
+				}
+				if !(child.SourceInterface.IsNull()) {
+					dhcpSrcIfRn_ := "srcif"
+					dhcpSrcIfDn_ := dhcpRelayIfDn + "/" + dhcpSrcIfRn_
+					_ = dhcpSrcIfDn_
+					if !existed(dhcpSrcIfDn_) {
+						dhcpRelayIfBody, _ = sjson.Set(dhcpRelayIfBody, "dhcpRelayIf.children.-1.dhcpSrcIf.attributes", map[string]interface{}{"rn": dhcpSrcIfRn_, "status": "deleted"})
+					} else {
+						dhcpSrcIfBody_ := ""
+						if !child.SourceInterface.IsNull() {
+							dhcpSrcIfBody_, _ = sjson.Set(dhcpSrcIfBody_, "dhcpSrcIf.attributes.sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if dhcpSrcIfBody_ != "" {
+							dhcpSrcIfBody_, _ = sjson.Set(dhcpSrcIfBody_, "dhcpSrcIf.attributes.rn", dhcpSrcIfRn_)
+							dhcpRelayIfBody, _ = sjson.SetRaw(dhcpRelayIfBody, "dhcpRelayIf.children.-1", dhcpSrcIfBody_)
+						}
+					}
+				}
+				if !(child.Ipv6SourceInterface.IsNull()) {
+					dhcpV6SrcIfRn_ := "v6srcif"
+					dhcpV6SrcIfDn_ := dhcpRelayIfDn + "/" + dhcpV6SrcIfRn_
+					_ = dhcpV6SrcIfDn_
+					if !existed(dhcpV6SrcIfDn_) {
+						dhcpRelayIfBody, _ = sjson.Set(dhcpRelayIfBody, "dhcpRelayIf.children.-1.dhcpV6SrcIf.attributes", map[string]interface{}{"rn": dhcpV6SrcIfRn_, "status": "deleted"})
+					} else {
+						dhcpV6SrcIfBody_ := ""
+						if !child.Ipv6SourceInterface.IsNull() {
+							dhcpV6SrcIfBody_, _ = sjson.Set(dhcpV6SrcIfBody_, "dhcpV6SrcIf.attributes.v6sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if dhcpV6SrcIfBody_ != "" {
+							dhcpV6SrcIfBody_, _ = sjson.Set(dhcpV6SrcIfBody_, "dhcpV6SrcIf.attributes.rn", dhcpV6SrcIfRn_)
+							dhcpRelayIfBody, _ = sjson.SetRaw(dhcpRelayIfBody, "dhcpRelayIf.children.-1", dhcpV6SrcIfBody_)
+						}
+					}
+				}
+				dhcpInstBody, _ = sjson.SetRaw(dhcpInstBody, "dhcpInst.children.-1", dhcpRelayIfBody)
+			}
+			if dhcpInstBody != "" {
+				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.rn", dhcpInstRn)
+				body, _ = sjson.SetRaw(body, "dhcpEntity.children.-1", dhcpInstBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -1185,23 +1495,37 @@ func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP,
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"v6SmartRelayGlobalEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
-		if !state.SourceInterface.IsNull() && config.SourceInterface.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")+".children", "dhcpSourceIf")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.SourceInterface.IsNull()) && (config.SourceInterface.IsNull()) && deleteEmptied(data.getDn()+"/inst"+"/srcif") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")+".children", "dhcpSourceIf")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.SourceInterface.IsNull() && config.SourceInterface.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")+".children", "dhcpSourceIf")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
-		if !state.Ipv6SourceInterfaceAdminState.IsNull() && config.Ipv6SourceInterfaceAdminState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")+".children", "dhcpV6SourceIf")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.Ipv6SourceInterface.IsNull() && config.Ipv6SourceInterface.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")+".children", "dhcpV6SourceIf")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"v6sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.Ipv6SourceInterfaceAdminState.IsNull() && state.Ipv6SourceInterface.IsNull()) && (config.Ipv6SourceInterfaceAdminState.IsNull() && config.Ipv6SourceInterface.IsNull()) && deleteEmptied(data.getDn()+"/inst"+"/v6srcif") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")+".children", "dhcpV6SourceIf")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.Ipv6SourceInterfaceAdminState.IsNull() && config.Ipv6SourceInterfaceAdminState.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")+".children", "dhcpV6SourceIf")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.Ipv6SourceInterface.IsNull() && config.Ipv6SourceInterface.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst")+".children", "dhcpV6SourceIf")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"v6sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 		for key := range state.RelayInterfaces {
 			if configChild, ok := config.RelayInterfaces[key]; ok {
 				stateChild := state.RelayInterfaces[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/inst" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children").Array() {
 					if mv.Get("dhcpRelayIf.attributes.id").String() == key {
 						if !stateChild.InformationTrusted.IsNull() && configChild.InformationTrusted.IsNull() {
@@ -1269,13 +1593,25 @@ func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP,
 								}
 							}
 						}
-						if !stateChild.SourceInterface.IsNull() && configChild.SourceInterface.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "dhcpSrcIf")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.SourceInterface.IsNull()) && (configChild.SourceInterface.IsNull()) && deleteEmptied(listChildDn+"/srcif") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "dhcpSrcIf")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.SourceInterface.IsNull() && configChild.SourceInterface.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "dhcpSrcIf")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
-						if !stateChild.Ipv6SourceInterface.IsNull() && configChild.Ipv6SourceInterface.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "dhcpV6SrcIf")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"v6sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.Ipv6SourceInterface.IsNull()) && (configChild.Ipv6SourceInterface.IsNull()) && deleteEmptied(listChildDn+"/v6srcif") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "dhcpV6SrcIf")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.Ipv6SourceInterface.IsNull() && configChild.Ipv6SourceInterface.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "dhcpV6SrcIf")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"v6sourceInterface", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 					}
 				}

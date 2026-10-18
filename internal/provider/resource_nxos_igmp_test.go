@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosIGMP(t *testing.T) {
+// TestAccIGMPResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccIGMPResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_igmp.test", "instance_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_igmp.test", "any_query_destination", "true"))
@@ -77,41 +81,107 @@ func TestAccNxosIGMP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_igmp.test", "vrfs.default.interfaces.eth1/10.state_limit_reserved_route_map", "RESERVED_RM"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_igmp.test", "vrfs.default.interfaces.eth1/10.join_types.1.versions.3.groups.239.1.1.2.use_static_oif", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_igmp.test", "vrfs.default.interfaces.eth1/10.join_types.1.versions.3.groups.239.1.1.2.sources.10.1.1.1.use_static_oif", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "any_query_destination", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "bootup_delay", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "flush_routes", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "heavy_template", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "instance_control", "rtr-alert"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "enforce_router_alert", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "spoof_check", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "strict_querier_election", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "syslog_threshold", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.allow_v3_asm", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.description", "My description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.group_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.control", "fast-leave"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.immediate_leave", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.name", "igmp-if"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.report_link_local_groups", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.suppress_v3_gsq", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.version", "v3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.querier_address", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.querier_description", "My querier description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.last_member_query_count", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.last_member_query_response_time", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.querier_name", "querier"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.querier_timeout", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.query_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.robustness_variable", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.query_max_response_time", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.startup_query_count", "4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.startup_query_interval", "40"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.querier_version", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.report_policy_route_map", "REPORT_POLICY"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.report_policy_access_group", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.state_limit_description", "My state limit description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.state_limit_maximum", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.state_limit_name", "state-limit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.state_limit_reserved", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.state_limit_reserved_route_map", "RESERVED_RM"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.join_types.1.versions.3.groups.239.1.1.2.use_static_oif", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_igmp.test", "vrfs.default.interfaces.eth1/10.join_types.1.versions.3.groups.239.1.1.2.sources.10.1.1.1.use_static_oif", "false"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccIGMPResourcePrerequisitesConfig + testAccIGMPResourceConfig_minimum(),
+		},
+		{
+			Config: testAccIGMPResourcePrerequisitesConfig + testAccIGMPResourceConfig_all() + testAccIGMPResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_igmp.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccIGMPResourceImportStateIdFunc("nxos_igmp.test"),
+		},
+		{
+			ResourceName:       "nxos_igmp.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			Config: testAccIGMPResourcePrerequisitesConfig + testAccIGMPResourceConfigAdditional0,
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccIGMPResourcePrerequisitesConfig + testAccIGMPResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccIGMPResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccIGMPResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_igmp.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccIGMPResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccIGMPResourcePrerequisitesConfig + testAccIGMPResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosIGMPPrerequisitesConfig + testAccNxosIGMPConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_igmp.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosIGMPImportStateIdFunc("nxos_igmp.test"),
-			},
-			{
-				ResourceName:       "nxos_igmp.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-			{
-				Config: testAccNxosIGMPPrerequisitesConfig + testAccNxosIGMPConfigAdditional0,
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosIGMPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccIGMPResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -121,7 +191,7 @@ func nxosIGMPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosIGMPPrerequisitesConfig = `
+const testAccIGMPResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/intf/phys-[eth1/10]"
   class_name = "l1PhysIf"
@@ -145,7 +215,7 @@ resource "nxos_dme" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosIGMPConfig_minimum() string {
+func testAccIGMPResourceConfig_minimum() string {
 	config := `resource "nxos_igmp" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
@@ -155,7 +225,7 @@ func testAccNxosIGMPConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosIGMPConfig_all() string {
+func testAccIGMPResourceConfig_all() string {
 	config := `resource "nxos_igmp" "test" {` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
 	config += `	any_query_destination = true` + "\n"
@@ -232,7 +302,15 @@ func testAccNxosIGMPConfig_all() string {
 	return config
 }
 
-const testAccNxosIGMPConfigAdditional0 = `
+func testAccIGMPResourceConfig_dataSource() string {
+	return `
+data "nxos_igmp" "test" {
+	depends_on = [nxos_igmp.test]
+}
+`
+}
+
+const testAccIGMPResourceConfigAdditional0 = `
 resource "nxos_igmp" "test" {
   vrfs = {
     "default" = {

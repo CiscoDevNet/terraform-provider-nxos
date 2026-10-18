@@ -80,6 +80,14 @@ var ICMPv6SubtreeClassMinVersions = map[string]string{}
 // ICMPv6MinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var ICMPv6MinVersions = map[string]helpers.MinVersion{}
 
+// ICMPv6ListClasses holds the list child classes of the resource.
+var ICMPv6ListClasses = map[string]bool{"icmpv6If": true}
+
+// getICMPv6Tree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getICMPv6Tree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"icmpv6Inst", "icmpv6If"}, ICMPv6SubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -336,7 +344,90 @@ func (data ICMPv6) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data ICMPv6) toBodyWithDeletes(ctx context.Context, state ICMPv6, config ICMPv6, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data ICMPv6) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.AdjacencyStaleTimer.IsNull() && data.AdjacencyStaleTimerIcmp.IsNull() && data.InstanceAdminState.IsNull() && data.Control.IsNull() && data.RedirectSyslog.IsNull() && data.RedirectSyslogInterval.IsNull() && len(data.Interfaces) == 0) {
+		icmpv6InstDn := dn + "/" + "inst"
+		dns[icmpv6InstDn] = true
+		for key, child := range data.Interfaces {
+			icmpv6IfDn := icmpv6InstDn + "/" + child.getRn(key)
+			dns[icmpv6IfDn] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data ICMPv6) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "icmpv6Entity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "icmpv6Entity.attributes", map[string]interface{}{})
+	}
+	if !(data.AdjacencyStaleTimer.IsNull() && data.AdjacencyStaleTimerIcmp.IsNull() && data.InstanceAdminState.IsNull() && data.Control.IsNull() && data.RedirectSyslog.IsNull() && data.RedirectSyslogInterval.IsNull() && len(data.Interfaces) == 0) {
+		icmpv6InstRn := "inst"
+		icmpv6InstDn := dn + "/" + icmpv6InstRn
+		_ = icmpv6InstDn
+		{
+			icmpv6InstBody := ""
+			if !data.AdjacencyStaleTimer.IsNull() {
+				icmpv6InstBody, _ = sjson.Set(icmpv6InstBody, "icmpv6Inst.attributes.adjStaleTimer", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.AdjacencyStaleTimerIcmp.IsNull() {
+				icmpv6InstBody, _ = sjson.Set(icmpv6InstBody, "icmpv6Inst.attributes.adjStaleTimerIcmp", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.InstanceAdminState.IsNull() {
+				icmpv6InstBody, _ = sjson.Set(icmpv6InstBody, "icmpv6Inst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Control.IsNull() {
+				icmpv6InstBody, _ = sjson.Set(icmpv6InstBody, "icmpv6Inst.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RedirectSyslog.IsNull() {
+				icmpv6InstBody, _ = sjson.Set(icmpv6InstBody, "icmpv6Inst.attributes.redirectSyslog", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.RedirectSyslogInterval.IsNull() {
+				icmpv6InstBody, _ = sjson.Set(icmpv6InstBody, "icmpv6Inst.attributes.redirectSyslogInterval", "DME_UNSET_PROPERTY_MARKER")
+			}
+			for key, child := range data.Interfaces {
+				_ = child
+				icmpv6IfRn := child.getRn(key)
+				icmpv6IfDn := icmpv6InstDn + "/" + icmpv6IfRn
+				_ = icmpv6IfDn
+				if !existed(icmpv6IfDn) {
+					icmpv6InstBody, _ = sjson.Set(icmpv6InstBody, "icmpv6Inst.children.-1.icmpv6If.attributes", map[string]interface{}{"rn": icmpv6IfRn, "status": "deleted"})
+					continue
+				}
+				icmpv6IfBody := ""
+				icmpv6IfBody, _ = sjson.Set(icmpv6IfBody, "icmpv6If.attributes.rn", icmpv6IfRn)
+				if !child.Control.IsNull() {
+					icmpv6IfBody, _ = sjson.Set(icmpv6IfBody, "icmpv6If.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				icmpv6InstBody, _ = sjson.SetRaw(icmpv6InstBody, "icmpv6Inst.children.-1", icmpv6IfBody)
+			}
+			if icmpv6InstBody != "" {
+				icmpv6InstBody, _ = sjson.Set(icmpv6InstBody, "icmpv6Inst.attributes.rn", icmpv6InstRn)
+				body, _ = sjson.SetRaw(body, "icmpv6Entity.children.-1", icmpv6InstBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data ICMPv6) toBodyWithDeletes(ctx context.Context, state ICMPv6, config ICMPv6, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath

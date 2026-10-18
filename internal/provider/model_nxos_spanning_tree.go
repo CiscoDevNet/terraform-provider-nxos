@@ -107,6 +107,14 @@ var SpanningTreeSubtreeClassMinVersions = map[string]string{}
 // SpanningTreeMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var SpanningTreeMinVersions = map[string]helpers.MinVersion{}
 
+// SpanningTreeListClasses holds the list child classes of the resource.
+var SpanningTreeListClasses = map[string]bool{"stpIf": true, "stpVlan": true}
+
+// getSpanningTreeTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getSpanningTreeTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"stpInst", "stpIf", "stpVlan"}, SpanningTreeSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -654,7 +662,168 @@ func (data SpanningTree) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data SpanningTree) toBodyWithDeletes(ctx context.Context, state SpanningTree, config SpanningTree, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data SpanningTree) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.InstanceAdminState.IsNull() && data.BridgeAssurance.IsNull() && data.Control.IsNull() && data.Fcoe.IsNull() && data.L2GatewayStpDomainId.IsNull() && data.LinecardIssu.IsNull() && data.Loopguard.IsNull() && data.Mode.IsNull() && data.PathcostOption.IsNull() && len(data.Interfaces) == 0 && len(data.Vlans) == 0) {
+		stpInstDn := dn + "/" + "inst"
+		dns[stpInstDn] = true
+		for key, child := range data.Interfaces {
+			stpIfDn := stpInstDn + "/" + child.getRn(key)
+			dns[stpIfDn] = true
+		}
+		for key, child := range data.Vlans {
+			stpVlanDn := stpInstDn + "/" + child.getRn(key)
+			dns[stpVlanDn] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data SpanningTree) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "stpEntity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "stpEntity.attributes", map[string]interface{}{})
+	}
+	if !(data.InstanceAdminState.IsNull() && data.BridgeAssurance.IsNull() && data.Control.IsNull() && data.Fcoe.IsNull() && data.L2GatewayStpDomainId.IsNull() && data.LinecardIssu.IsNull() && data.Loopguard.IsNull() && data.Mode.IsNull() && data.PathcostOption.IsNull() && len(data.Interfaces) == 0 && len(data.Vlans) == 0) {
+		stpInstRn := "inst"
+		stpInstDn := dn + "/" + stpInstRn
+		_ = stpInstDn
+		{
+			stpInstBody := ""
+			if !data.InstanceAdminState.IsNull() {
+				stpInstBody, _ = sjson.Set(stpInstBody, "stpInst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.BridgeAssurance.IsNull() {
+				stpInstBody, _ = sjson.Set(stpInstBody, "stpInst.attributes.bridge", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Control.IsNull() {
+				stpInstBody, _ = sjson.Set(stpInstBody, "stpInst.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Fcoe.IsNull() {
+				stpInstBody, _ = sjson.Set(stpInstBody, "stpInst.attributes.fcoe", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.L2GatewayStpDomainId.IsNull() {
+				stpInstBody, _ = sjson.Set(stpInstBody, "stpInst.attributes.l2GStpDomId", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LinecardIssu.IsNull() {
+				stpInstBody, _ = sjson.Set(stpInstBody, "stpInst.attributes.lcIssu", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Loopguard.IsNull() {
+				stpInstBody, _ = sjson.Set(stpInstBody, "stpInst.attributes.loopguard", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.Mode.IsNull() {
+				stpInstBody, _ = sjson.Set(stpInstBody, "stpInst.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.PathcostOption.IsNull() {
+				stpInstBody, _ = sjson.Set(stpInstBody, "stpInst.attributes.pathcostOp", "DME_UNSET_PROPERTY_MARKER")
+			}
+			for key, child := range data.Interfaces {
+				_ = child
+				stpIfRn := child.getRn(key)
+				stpIfDn := stpInstDn + "/" + stpIfRn
+				_ = stpIfDn
+				stpIfBody := ""
+				stpIfBody, _ = sjson.Set(stpIfBody, "stpIf.attributes.rn", stpIfRn)
+				if !child.BpduFilter.IsNull() {
+					stpIfBody, _ = sjson.Set(stpIfBody, "stpIf.attributes.bpdufilter", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.BpduGuard.IsNull() {
+					stpIfBody, _ = sjson.Set(stpIfBody, "stpIf.attributes.bpduguard", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Cost.IsNull() {
+					stpIfBody, _ = sjson.Set(stpIfBody, "stpIf.attributes.cost", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Guard.IsNull() {
+					stpIfBody, _ = sjson.Set(stpIfBody, "stpIf.attributes.guard", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.LinkType.IsNull() {
+					stpIfBody, _ = sjson.Set(stpIfBody, "stpIf.attributes.linkType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Mode.IsNull() {
+					stpIfBody, _ = sjson.Set(stpIfBody, "stpIf.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Priority.IsNull() {
+					stpIfBody, _ = sjson.Set(stpIfBody, "stpIf.attributes.priority", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Control.IsNull() {
+					stpIfBody, _ = sjson.Set(stpIfBody, "stpIf.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Description.IsNull() {
+					stpIfBody, _ = sjson.Set(stpIfBody, "stpIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.LinecardIssu.IsNull() {
+					stpIfBody, _ = sjson.Set(stpIfBody, "stpIf.attributes.lcIssu", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.PrestandardConfiguration.IsNull() {
+					stpIfBody, _ = sjson.Set(stpIfBody, "stpIf.attributes.prestdCfg", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SimulatePvst.IsNull() {
+					stpIfBody, _ = sjson.Set(stpIfBody, "stpIf.attributes.simulatePvst", "DME_UNSET_PROPERTY_MARKER")
+				}
+				stpInstBody, _ = sjson.SetRaw(stpInstBody, "stpInst.children.-1", stpIfBody)
+			}
+			for key, child := range data.Vlans {
+				_ = child
+				stpVlanRn := child.getRn(key)
+				stpVlanDn := stpInstDn + "/" + stpVlanRn
+				_ = stpVlanDn
+				stpVlanBody := ""
+				stpVlanBody, _ = sjson.Set(stpVlanBody, "stpVlan.attributes.rn", stpVlanRn)
+				if !child.AdminState.IsNull() {
+					stpVlanBody, _ = sjson.Set(stpVlanBody, "stpVlan.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Diameter.IsNull() {
+					stpVlanBody, _ = sjson.Set(stpVlanBody, "stpVlan.attributes.diameter", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.EnabledInterfaces.IsNull() {
+					stpVlanBody, _ = sjson.Set(stpVlanBody, "stpVlan.attributes.enabledIntf", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.ForwardTime.IsNull() {
+					stpVlanBody, _ = sjson.Set(stpVlanBody, "stpVlan.attributes.fwdTime", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.HelloTime.IsNull() {
+					stpVlanBody, _ = sjson.Set(stpVlanBody, "stpVlan.attributes.helloTime", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.MaxAge.IsNull() {
+					stpVlanBody, _ = sjson.Set(stpVlanBody, "stpVlan.attributes.maxAge", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Priority.IsNull() {
+					stpVlanBody, _ = sjson.Set(stpVlanBody, "stpVlan.attributes.priority", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.RootMode.IsNull() {
+					stpVlanBody, _ = sjson.Set(stpVlanBody, "stpVlan.attributes.rootMode", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.RootType.IsNull() {
+					stpVlanBody, _ = sjson.Set(stpVlanBody, "stpVlan.attributes.rootType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				stpInstBody, _ = sjson.SetRaw(stpInstBody, "stpInst.children.-1", stpVlanBody)
+			}
+			if stpInstBody != "" {
+				stpInstBody, _ = sjson.Set(stpInstBody, "stpInst.attributes.rn", stpInstRn)
+				body, _ = sjson.SetRaw(body, "stpEntity.children.-1", stpInstBody)
+			}
+		}
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data SpanningTree) toBodyWithDeletes(ctx context.Context, state SpanningTree, config SpanningTree, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath

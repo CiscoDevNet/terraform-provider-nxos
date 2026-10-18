@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosOSPFv3(t *testing.T) {
+// TestAccOSPFv3Resource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccOSPFv3Resource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "instances.OSPFv3.admin_state", "enabled"))
@@ -92,38 +96,119 @@ func TestAccNxosOSPFv3(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.eth1/4.mtu_ignore", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.eth1/4.retransmit_interval", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospfv3.test", "interfaces.eth1/4.transmit_delay", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.flush_routes", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.isolate", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.bandwidth_reference", "400000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.bandwidth_reference_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.router_id", "34.56.78.90"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.bfd_control", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.log_adjacency_changes", "brief"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.discard_route_external", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.discard_route_internal", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.name_lookup", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.passive_interface_default", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.areas.0.0.0.10.redistribute", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.areas.0.0.0.10.nssa_translator_role", "always"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.areas.0.0.0.10.summary", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.areas.0.0.0.10.suppress_forward_address", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.areas.0.0.0.10.type", "regular"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.areas.0.0.0.10.address_families.ipv6-ucast.cost", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.areas.0.0.0.10.address_families.ipv6-ucast.ranges.2001:db8::/32.cost", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.areas.0.0.0.10.address_families.ipv6-ucast.ranges.2001:db8::/32.control", "no-advertise"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.administrative_distance", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.default_metric", "1024"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.default_route_nssa_pbit_clear", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.max_ecmp_cost", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.redistributions.direct;none;none.route_map", "RM_REDIST"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.redistributions.direct;none;none.srv6_prefix_type", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.default_information_originate_always", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.default_information_originate_route_map", "RM_DEFAULT"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.spf_throttle_hold_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.spf_throttle_initial_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.spf_throttle_max_interval", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.address_families.ipv6-ucast.summary_addresses.2001:db8:1::/48.tag", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.lsa_arrival_interval", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.lsa_group_pacing_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.lsa_throttle_hold_interval", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.lsa_throttle_max_interval", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.lsa_throttle_start_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.graceful_restart_control", "planned-only"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.graceful_restart_period", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "instances.OSPFv3.vrfs.VRF1.graceful_restart_helper", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.advertise_secondaries", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.area", "0.0.0.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.bfd_control", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.cost", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.dead_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.hello_interval", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.network_type", "p2p"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.passive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.instance_name", "OSPFv3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.instance_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.mtu_ignore", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.retransmit_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospfv3.test", "interfaces.eth1/4.transmit_delay", "5"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccOSPFv3ResourcePrerequisitesConfig + testAccOSPFv3ResourceConfig_minimum(),
+		},
+		{
+			Config: testAccOSPFv3ResourcePrerequisitesConfig + testAccOSPFv3ResourceConfig_all() + testAccOSPFv3ResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_ospfv3.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccOSPFv3ResourceImportStateIdFunc("nxos_ospfv3.test"),
+		},
+		{
+			ResourceName:       "nxos_ospfv3.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccOSPFv3ResourcePrerequisitesConfig + testAccOSPFv3ResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccOSPFv3ResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccOSPFv3ResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_ospfv3.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccOSPFv3ResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccOSPFv3ResourcePrerequisitesConfig + testAccOSPFv3ResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosOSPFv3PrerequisitesConfig + testAccNxosOSPFv3Config_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_ospfv3.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosOSPFv3ImportStateIdFunc("nxos_ospfv3.test"),
-			},
-			{
-				ResourceName:       "nxos_ospfv3.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosOSPFv3ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccOSPFv3ResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -133,7 +218,7 @@ func nxosOSPFv3ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosOSPFv3PrerequisitesConfig = `
+const testAccOSPFv3ResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/ospfv3"
   class_name = "fmOspfv3"
@@ -167,7 +252,7 @@ resource "nxos_dme" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosOSPFv3Config_minimum() string {
+func testAccOSPFv3ResourceConfig_minimum() string {
 	config := `resource "nxos_ospfv3" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
@@ -177,7 +262,7 @@ func testAccNxosOSPFv3Config_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosOSPFv3Config_all() string {
+func testAccOSPFv3ResourceConfig_all() string {
 	config := `resource "nxos_ospfv3" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instances = {` + "\n"
@@ -275,6 +360,14 @@ func testAccNxosOSPFv3Config_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccOSPFv3ResourceConfig_dataSource() string {
+	return `
+data "nxos_ospfv3" "test" {
+	depends_on = [nxos_ospfv3.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

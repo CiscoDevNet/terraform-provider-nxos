@@ -182,6 +182,14 @@ var ESGMinVersions = map[string]helpers.MinVersion{
 	"esgIsolationEntity":    {Version: "10.6(3)", Path: "security_groups.intra_group_isolation"},
 }
 
+// ESGListClasses holds the list child classes of the resource.
+var ESGListClasses = map[string]bool{"esgGroupInst": true, "esgMatchConnectedEpV4": true, "esgMatchConnectedEpV6": true, "esgMatchVlan": true, "esgMatchExternalSubnetV4": true, "esgMatchExternalSubnetV6": true, "esgMatchExternalSubnetV4WithNh": true, "esgMatchExternalSubnetV6WithNh": true, "esgMatchExternalSubnetV4WithNhEncap": true, "esgMatchExternalSubnetV6WithNhEncap": true, "esgMatchInterface": true, "esgMatchVlanMac": true, "esgMatchVlanInterface": true, "esgClassMapInst": true, "esgClassMapFilterEntry": true, "esgPolicyMapInst": true, "esgMatchClassMap": true, "esgDom": true, "esgContract": true}
+
+// getESGTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getESGTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"esgGroupEntity", "esgGroupInst", "esgSelectorEntity", "esgMatchConnectedEpV4", "esgMatchConnectedEpV6", "esgMatchVlan", "esgMatchExternalSubnetV4", "esgMatchExternalSubnetV6", "esgMatchExternalSubnetV4WithNh", "esgMatchExternalSubnetV6WithNh", "esgMatchExternalSubnetV4WithNhEncap", "esgMatchExternalSubnetV6WithNhEncap", "esgMatchInterface", "esgMatchVlanMac", "esgMatchVlanInterface", "esgAttributeEntity", "esgIsolationEntity", "esgClassMapEntity", "esgClassMapInst", "esgClassMapFilterEntry", "esgPolicyMapEntity", "esgPolicyMapInst", "esgMatchClassMap", "esgDom", "esgContractEntity", "esgContract"}, ESGSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -1772,7 +1780,622 @@ func (data ESG) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data ESG) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(len(data.SecurityGroups) == 0) {
+		esgGroupEntityDn := dn + "/" + "group"
+		dns[esgGroupEntityDn] = true
+		for key, child := range data.SecurityGroups {
+			esgGroupInstDn := esgGroupEntityDn + "/" + child.getRn(key)
+			dns[esgGroupInstDn] = true
+			if !(len(child.SelectorConnectedEndpointsIpv4) == 0 && len(child.SelectorConnectedEndpointsIpv6) == 0 && len(child.SelectorMatchVlans) == 0 && len(child.SelectorExternalSubnetsIpv4) == 0 && len(child.SelectorExternalSubnetsIpv6) == 0 && len(child.SelectorExternalSubnetsNexthopIpv4) == 0 && len(child.SelectorExternalSubnetsNexthopIpv6) == 0 && len(child.SelectorExternalSubnetsNexthopEncapIpv4) == 0 && len(child.SelectorExternalSubnetsNexthopEncapIpv6) == 0 && len(child.SelectorMatchInterfaces) == 0 && len(child.SelectorMatchVlanMacs) == 0 && len(child.SelectorMatchVlanInterfaces) == 0) {
+				esgSelectorEntityDn_ := esgGroupInstDn + "/" + "selector"
+				dns[esgSelectorEntityDn_] = true
+				for key_, child_ := range child.SelectorConnectedEndpointsIpv4 {
+					keyParts := strings.SplitN(key_, ";", 2)
+					_ = keyParts
+					esgMatchConnectedEpV4Dn_ := esgSelectorEntityDn_ + "/" + child_.getRn(key_)
+					dns[esgMatchConnectedEpV4Dn_] = true
+				}
+				for key_, child_ := range child.SelectorConnectedEndpointsIpv6 {
+					keyParts := strings.SplitN(key_, ";", 2)
+					_ = keyParts
+					esgMatchConnectedEpV6Dn_ := esgSelectorEntityDn_ + "/" + child_.getRn(key_)
+					dns[esgMatchConnectedEpV6Dn_] = true
+				}
+				for key_, child_ := range child.SelectorMatchVlans {
+					esgMatchVlanDn_ := esgSelectorEntityDn_ + "/" + child_.getRn(key_)
+					dns[esgMatchVlanDn_] = true
+				}
+				for key_, child_ := range child.SelectorExternalSubnetsIpv4 {
+					keyParts := strings.SplitN(key_, ";", 2)
+					_ = keyParts
+					esgMatchExternalSubnetV4Dn_ := esgSelectorEntityDn_ + "/" + child_.getRn(key_)
+					dns[esgMatchExternalSubnetV4Dn_] = true
+				}
+				for key_, child_ := range child.SelectorExternalSubnetsIpv6 {
+					keyParts := strings.SplitN(key_, ";", 2)
+					_ = keyParts
+					esgMatchExternalSubnetV6Dn_ := esgSelectorEntityDn_ + "/" + child_.getRn(key_)
+					dns[esgMatchExternalSubnetV6Dn_] = true
+				}
+				for key_, child_ := range child.SelectorExternalSubnetsNexthopIpv4 {
+					keyParts := strings.SplitN(key_, ";", 3)
+					_ = keyParts
+					esgMatchExternalSubnetV4WithNhDn_ := esgSelectorEntityDn_ + "/" + child_.getRn(key_)
+					dns[esgMatchExternalSubnetV4WithNhDn_] = true
+				}
+				for key_, child_ := range child.SelectorExternalSubnetsNexthopIpv6 {
+					keyParts := strings.SplitN(key_, ";", 3)
+					_ = keyParts
+					esgMatchExternalSubnetV6WithNhDn_ := esgSelectorEntityDn_ + "/" + child_.getRn(key_)
+					dns[esgMatchExternalSubnetV6WithNhDn_] = true
+				}
+				for key_, child_ := range child.SelectorExternalSubnetsNexthopEncapIpv4 {
+					keyParts := strings.SplitN(key_, ";", 4)
+					_ = keyParts
+					esgMatchExternalSubnetV4WithNhEncapDn_ := esgSelectorEntityDn_ + "/" + child_.getRn(key_)
+					dns[esgMatchExternalSubnetV4WithNhEncapDn_] = true
+				}
+				for key_, child_ := range child.SelectorExternalSubnetsNexthopEncapIpv6 {
+					keyParts := strings.SplitN(key_, ";", 4)
+					_ = keyParts
+					esgMatchExternalSubnetV6WithNhEncapDn_ := esgSelectorEntityDn_ + "/" + child_.getRn(key_)
+					dns[esgMatchExternalSubnetV6WithNhEncapDn_] = true
+				}
+				for key_, child_ := range child.SelectorMatchInterfaces {
+					esgMatchInterfaceDn_ := esgSelectorEntityDn_ + "/" + child_.getRn(key_)
+					dns[esgMatchInterfaceDn_] = true
+				}
+				for key_, child_ := range child.SelectorMatchVlanMacs {
+					keyParts := strings.SplitN(key_, ";", 2)
+					_ = keyParts
+					esgMatchVlanMacDn_ := esgSelectorEntityDn_ + "/" + child_.getRn(key_)
+					dns[esgMatchVlanMacDn_] = true
+				}
+				for key_, child_ := range child.SelectorMatchVlanInterfaces {
+					keyParts := strings.SplitN(key_, ";", 2)
+					_ = keyParts
+					esgMatchVlanInterfaceDn_ := esgSelectorEntityDn_ + "/" + child_.getRn(key_)
+					dns[esgMatchVlanInterfaceDn_] = true
+				}
+			}
+			if !(child.TypeLayer47.IsNull()) {
+				esgAttributeEntityDn_ := esgGroupInstDn + "/" + "attribute"
+				dns[esgAttributeEntityDn_] = true
+			}
+			if !(child.IntraGroupIsolation.IsNull()) {
+				esgIsolationEntityDn_ := esgGroupInstDn + "/" + "isolation"
+				dns[esgIsolationEntityDn_] = true
+			}
+		}
+	}
+	if !(len(data.ClassMaps) == 0) {
+		esgClassMapEntityDn := dn + "/" + "classmap"
+		dns[esgClassMapEntityDn] = true
+		for key, child := range data.ClassMaps {
+			esgClassMapInstDn := esgClassMapEntityDn + "/" + child.getRn(key)
+			dns[esgClassMapInstDn] = true
+			for key_, child_ := range child.FilterEntries {
+				esgClassMapFilterEntryDn_ := esgClassMapInstDn + "/" + child_.getRn(key_)
+				dns[esgClassMapFilterEntryDn_] = true
+			}
+		}
+	}
+	if !(len(data.PolicyMaps) == 0) {
+		esgPolicyMapEntityDn := dn + "/" + "policymap"
+		dns[esgPolicyMapEntityDn] = true
+		for key, child := range data.PolicyMaps {
+			esgPolicyMapInstDn := esgPolicyMapEntityDn + "/" + child.getRn(key)
+			dns[esgPolicyMapInstDn] = true
+			for key_, child_ := range child.MatchClassMaps {
+				esgMatchClassMapDn_ := esgPolicyMapInstDn + "/" + child_.getRn(key_)
+				dns[esgMatchClassMapDn_] = true
+			}
+		}
+	}
+	for key, child := range data.Domains {
+		esgDomDn := dn + "/" + child.getRn(key)
+		dns[esgDomDn] = true
+		if !(len(child.Contracts) == 0) {
+			esgContractEntityDn_ := esgDomDn + "/" + "contract"
+			dns[esgContractEntityDn_] = true
+			for key_, child_ := range child.Contracts {
+				keyParts := strings.SplitN(key_, ";", 3)
+				_ = keyParts
+				esgContractDn_ := esgContractEntityDn_ + "/" + child_.getRn(key_)
+				dns[esgContractDn_] = true
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data ESG) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	if !existed(dn) {
+		return data.toDeleteBody()
+	}
+	body := ""
+	if !data.MacSegmentation.IsNull() {
+		body, _ = sjson.Set(body, "esgEntity.attributes.macSegmentation", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "esgEntity.attributes", map[string]interface{}{})
+	}
+	if !(len(data.SecurityGroups) == 0) {
+		esgGroupEntityRn := "group"
+		esgGroupEntityDn := dn + "/" + esgGroupEntityRn
+		_ = esgGroupEntityDn
+		if !existed(esgGroupEntityDn) {
+			body, _ = sjson.Set(body, "esgEntity.children.-1.esgGroupEntity.attributes", map[string]interface{}{"rn": esgGroupEntityRn, "status": "deleted"})
+		} else {
+			esgGroupEntityBody := ""
+			for key, child := range data.SecurityGroups {
+				_ = child
+				esgGroupInstRn := child.getRn(key)
+				esgGroupInstDn := esgGroupEntityDn + "/" + esgGroupInstRn
+				_ = esgGroupInstDn
+				if !existed(esgGroupInstDn) {
+					esgGroupEntityBody, _ = sjson.Set(esgGroupEntityBody, "esgGroupEntity.children.-1.esgGroupInst.attributes", map[string]interface{}{"rn": esgGroupInstRn, "status": "deleted"})
+					continue
+				}
+				esgGroupInstBody := ""
+				esgGroupInstBody, _ = sjson.Set(esgGroupInstBody, "esgGroupInst.attributes.rn", esgGroupInstRn)
+				if !child.Name.IsNull() {
+					esgGroupInstBody, _ = sjson.Set(esgGroupInstBody, "esgGroupInst.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !(len(child.SelectorConnectedEndpointsIpv4) == 0 && len(child.SelectorConnectedEndpointsIpv6) == 0 && len(child.SelectorMatchVlans) == 0 && len(child.SelectorExternalSubnetsIpv4) == 0 && len(child.SelectorExternalSubnetsIpv6) == 0 && len(child.SelectorExternalSubnetsNexthopIpv4) == 0 && len(child.SelectorExternalSubnetsNexthopIpv6) == 0 && len(child.SelectorExternalSubnetsNexthopEncapIpv4) == 0 && len(child.SelectorExternalSubnetsNexthopEncapIpv6) == 0 && len(child.SelectorMatchInterfaces) == 0 && len(child.SelectorMatchVlanMacs) == 0 && len(child.SelectorMatchVlanInterfaces) == 0) {
+					esgSelectorEntityRn_ := "selector"
+					esgSelectorEntityDn_ := esgGroupInstDn + "/" + esgSelectorEntityRn_
+					_ = esgSelectorEntityDn_
+					if !existed(esgSelectorEntityDn_) {
+						esgGroupInstBody, _ = sjson.Set(esgGroupInstBody, "esgGroupInst.children.-1.esgSelectorEntity.attributes", map[string]interface{}{"rn": esgSelectorEntityRn_, "status": "deleted"})
+					} else {
+						esgSelectorEntityBody_ := ""
+						for key_, child_ := range child.SelectorConnectedEndpointsIpv4 {
+							_ = child_
+							keyParts := strings.SplitN(key_, ";", 2)
+							_ = keyParts
+							esgMatchConnectedEpV4Rn_ := child_.getRn(key_)
+							esgMatchConnectedEpV4Dn_ := esgSelectorEntityDn_ + "/" + esgMatchConnectedEpV4Rn_
+							_ = esgMatchConnectedEpV4Dn_
+							if !existed(esgMatchConnectedEpV4Dn_) {
+								esgSelectorEntityBody_, _ = sjson.Set(esgSelectorEntityBody_, "esgSelectorEntity.children.-1.esgMatchConnectedEpV4.attributes", map[string]interface{}{"rn": esgMatchConnectedEpV4Rn_, "status": "deleted"})
+								continue
+							}
+							esgMatchConnectedEpV4Body_ := ""
+							esgMatchConnectedEpV4Body_, _ = sjson.Set(esgMatchConnectedEpV4Body_, "esgMatchConnectedEpV4.attributes.rn", esgMatchConnectedEpV4Rn_)
+							esgSelectorEntityBody_, _ = sjson.SetRaw(esgSelectorEntityBody_, "esgSelectorEntity.children.-1", esgMatchConnectedEpV4Body_)
+						}
+						for key_, child_ := range child.SelectorConnectedEndpointsIpv6 {
+							_ = child_
+							keyParts := strings.SplitN(key_, ";", 2)
+							_ = keyParts
+							esgMatchConnectedEpV6Rn_ := child_.getRn(key_)
+							esgMatchConnectedEpV6Dn_ := esgSelectorEntityDn_ + "/" + esgMatchConnectedEpV6Rn_
+							_ = esgMatchConnectedEpV6Dn_
+							if !existed(esgMatchConnectedEpV6Dn_) {
+								esgSelectorEntityBody_, _ = sjson.Set(esgSelectorEntityBody_, "esgSelectorEntity.children.-1.esgMatchConnectedEpV6.attributes", map[string]interface{}{"rn": esgMatchConnectedEpV6Rn_, "status": "deleted"})
+								continue
+							}
+							esgMatchConnectedEpV6Body_ := ""
+							esgMatchConnectedEpV6Body_, _ = sjson.Set(esgMatchConnectedEpV6Body_, "esgMatchConnectedEpV6.attributes.rn", esgMatchConnectedEpV6Rn_)
+							esgSelectorEntityBody_, _ = sjson.SetRaw(esgSelectorEntityBody_, "esgSelectorEntity.children.-1", esgMatchConnectedEpV6Body_)
+						}
+						for key_, child_ := range child.SelectorMatchVlans {
+							_ = child_
+							esgMatchVlanRn_ := child_.getRn(key_)
+							esgMatchVlanDn_ := esgSelectorEntityDn_ + "/" + esgMatchVlanRn_
+							_ = esgMatchVlanDn_
+							if !existed(esgMatchVlanDn_) {
+								esgSelectorEntityBody_, _ = sjson.Set(esgSelectorEntityBody_, "esgSelectorEntity.children.-1.esgMatchVlan.attributes", map[string]interface{}{"rn": esgMatchVlanRn_, "status": "deleted"})
+								continue
+							}
+							esgMatchVlanBody_ := ""
+							esgMatchVlanBody_, _ = sjson.Set(esgMatchVlanBody_, "esgMatchVlan.attributes.rn", esgMatchVlanRn_)
+							esgSelectorEntityBody_, _ = sjson.SetRaw(esgSelectorEntityBody_, "esgSelectorEntity.children.-1", esgMatchVlanBody_)
+						}
+						for key_, child_ := range child.SelectorExternalSubnetsIpv4 {
+							_ = child_
+							keyParts := strings.SplitN(key_, ";", 2)
+							_ = keyParts
+							esgMatchExternalSubnetV4Rn_ := child_.getRn(key_)
+							esgMatchExternalSubnetV4Dn_ := esgSelectorEntityDn_ + "/" + esgMatchExternalSubnetV4Rn_
+							_ = esgMatchExternalSubnetV4Dn_
+							if !existed(esgMatchExternalSubnetV4Dn_) {
+								esgSelectorEntityBody_, _ = sjson.Set(esgSelectorEntityBody_, "esgSelectorEntity.children.-1.esgMatchExternalSubnetV4.attributes", map[string]interface{}{"rn": esgMatchExternalSubnetV4Rn_, "status": "deleted"})
+								continue
+							}
+							esgMatchExternalSubnetV4Body_ := ""
+							esgMatchExternalSubnetV4Body_, _ = sjson.Set(esgMatchExternalSubnetV4Body_, "esgMatchExternalSubnetV4.attributes.rn", esgMatchExternalSubnetV4Rn_)
+							if !child_.RouteInject.IsNull() {
+								esgMatchExternalSubnetV4Body_, _ = sjson.Set(esgMatchExternalSubnetV4Body_, "esgMatchExternalSubnetV4.attributes.rtInject", "DME_UNSET_PROPERTY_MARKER")
+							}
+							esgSelectorEntityBody_, _ = sjson.SetRaw(esgSelectorEntityBody_, "esgSelectorEntity.children.-1", esgMatchExternalSubnetV4Body_)
+						}
+						for key_, child_ := range child.SelectorExternalSubnetsIpv6 {
+							_ = child_
+							keyParts := strings.SplitN(key_, ";", 2)
+							_ = keyParts
+							esgMatchExternalSubnetV6Rn_ := child_.getRn(key_)
+							esgMatchExternalSubnetV6Dn_ := esgSelectorEntityDn_ + "/" + esgMatchExternalSubnetV6Rn_
+							_ = esgMatchExternalSubnetV6Dn_
+							if !existed(esgMatchExternalSubnetV6Dn_) {
+								esgSelectorEntityBody_, _ = sjson.Set(esgSelectorEntityBody_, "esgSelectorEntity.children.-1.esgMatchExternalSubnetV6.attributes", map[string]interface{}{"rn": esgMatchExternalSubnetV6Rn_, "status": "deleted"})
+								continue
+							}
+							esgMatchExternalSubnetV6Body_ := ""
+							esgMatchExternalSubnetV6Body_, _ = sjson.Set(esgMatchExternalSubnetV6Body_, "esgMatchExternalSubnetV6.attributes.rn", esgMatchExternalSubnetV6Rn_)
+							if !child_.RouteInject.IsNull() {
+								esgMatchExternalSubnetV6Body_, _ = sjson.Set(esgMatchExternalSubnetV6Body_, "esgMatchExternalSubnetV6.attributes.rtInject", "DME_UNSET_PROPERTY_MARKER")
+							}
+							esgSelectorEntityBody_, _ = sjson.SetRaw(esgSelectorEntityBody_, "esgSelectorEntity.children.-1", esgMatchExternalSubnetV6Body_)
+						}
+						for key_, child_ := range child.SelectorExternalSubnetsNexthopIpv4 {
+							_ = child_
+							keyParts := strings.SplitN(key_, ";", 3)
+							_ = keyParts
+							esgMatchExternalSubnetV4WithNhRn_ := child_.getRn(key_)
+							esgMatchExternalSubnetV4WithNhDn_ := esgSelectorEntityDn_ + "/" + esgMatchExternalSubnetV4WithNhRn_
+							_ = esgMatchExternalSubnetV4WithNhDn_
+							if !existed(esgMatchExternalSubnetV4WithNhDn_) {
+								esgSelectorEntityBody_, _ = sjson.Set(esgSelectorEntityBody_, "esgSelectorEntity.children.-1.esgMatchExternalSubnetV4WithNh.attributes", map[string]interface{}{"rn": esgMatchExternalSubnetV4WithNhRn_, "status": "deleted"})
+								continue
+							}
+							esgMatchExternalSubnetV4WithNhBody_ := ""
+							esgMatchExternalSubnetV4WithNhBody_, _ = sjson.Set(esgMatchExternalSubnetV4WithNhBody_, "esgMatchExternalSubnetV4WithNh.attributes.rn", esgMatchExternalSubnetV4WithNhRn_)
+							esgSelectorEntityBody_, _ = sjson.SetRaw(esgSelectorEntityBody_, "esgSelectorEntity.children.-1", esgMatchExternalSubnetV4WithNhBody_)
+						}
+						for key_, child_ := range child.SelectorExternalSubnetsNexthopIpv6 {
+							_ = child_
+							keyParts := strings.SplitN(key_, ";", 3)
+							_ = keyParts
+							esgMatchExternalSubnetV6WithNhRn_ := child_.getRn(key_)
+							esgMatchExternalSubnetV6WithNhDn_ := esgSelectorEntityDn_ + "/" + esgMatchExternalSubnetV6WithNhRn_
+							_ = esgMatchExternalSubnetV6WithNhDn_
+							if !existed(esgMatchExternalSubnetV6WithNhDn_) {
+								esgSelectorEntityBody_, _ = sjson.Set(esgSelectorEntityBody_, "esgSelectorEntity.children.-1.esgMatchExternalSubnetV6WithNh.attributes", map[string]interface{}{"rn": esgMatchExternalSubnetV6WithNhRn_, "status": "deleted"})
+								continue
+							}
+							esgMatchExternalSubnetV6WithNhBody_ := ""
+							esgMatchExternalSubnetV6WithNhBody_, _ = sjson.Set(esgMatchExternalSubnetV6WithNhBody_, "esgMatchExternalSubnetV6WithNh.attributes.rn", esgMatchExternalSubnetV6WithNhRn_)
+							esgSelectorEntityBody_, _ = sjson.SetRaw(esgSelectorEntityBody_, "esgSelectorEntity.children.-1", esgMatchExternalSubnetV6WithNhBody_)
+						}
+						for key_, child_ := range child.SelectorExternalSubnetsNexthopEncapIpv4 {
+							_ = child_
+							keyParts := strings.SplitN(key_, ";", 4)
+							_ = keyParts
+							esgMatchExternalSubnetV4WithNhEncapRn_ := child_.getRn(key_)
+							esgMatchExternalSubnetV4WithNhEncapDn_ := esgSelectorEntityDn_ + "/" + esgMatchExternalSubnetV4WithNhEncapRn_
+							_ = esgMatchExternalSubnetV4WithNhEncapDn_
+							if !existed(esgMatchExternalSubnetV4WithNhEncapDn_) {
+								esgSelectorEntityBody_, _ = sjson.Set(esgSelectorEntityBody_, "esgSelectorEntity.children.-1.esgMatchExternalSubnetV4WithNhEncap.attributes", map[string]interface{}{"rn": esgMatchExternalSubnetV4WithNhEncapRn_, "status": "deleted"})
+								continue
+							}
+							esgMatchExternalSubnetV4WithNhEncapBody_ := ""
+							esgMatchExternalSubnetV4WithNhEncapBody_, _ = sjson.Set(esgMatchExternalSubnetV4WithNhEncapBody_, "esgMatchExternalSubnetV4WithNhEncap.attributes.rn", esgMatchExternalSubnetV4WithNhEncapRn_)
+							esgSelectorEntityBody_, _ = sjson.SetRaw(esgSelectorEntityBody_, "esgSelectorEntity.children.-1", esgMatchExternalSubnetV4WithNhEncapBody_)
+						}
+						for key_, child_ := range child.SelectorExternalSubnetsNexthopEncapIpv6 {
+							_ = child_
+							keyParts := strings.SplitN(key_, ";", 4)
+							_ = keyParts
+							esgMatchExternalSubnetV6WithNhEncapRn_ := child_.getRn(key_)
+							esgMatchExternalSubnetV6WithNhEncapDn_ := esgSelectorEntityDn_ + "/" + esgMatchExternalSubnetV6WithNhEncapRn_
+							_ = esgMatchExternalSubnetV6WithNhEncapDn_
+							if !existed(esgMatchExternalSubnetV6WithNhEncapDn_) {
+								esgSelectorEntityBody_, _ = sjson.Set(esgSelectorEntityBody_, "esgSelectorEntity.children.-1.esgMatchExternalSubnetV6WithNhEncap.attributes", map[string]interface{}{"rn": esgMatchExternalSubnetV6WithNhEncapRn_, "status": "deleted"})
+								continue
+							}
+							esgMatchExternalSubnetV6WithNhEncapBody_ := ""
+							esgMatchExternalSubnetV6WithNhEncapBody_, _ = sjson.Set(esgMatchExternalSubnetV6WithNhEncapBody_, "esgMatchExternalSubnetV6WithNhEncap.attributes.rn", esgMatchExternalSubnetV6WithNhEncapRn_)
+							esgSelectorEntityBody_, _ = sjson.SetRaw(esgSelectorEntityBody_, "esgSelectorEntity.children.-1", esgMatchExternalSubnetV6WithNhEncapBody_)
+						}
+						for key_, child_ := range child.SelectorMatchInterfaces {
+							_ = child_
+							esgMatchInterfaceRn_ := child_.getRn(key_)
+							esgMatchInterfaceDn_ := esgSelectorEntityDn_ + "/" + esgMatchInterfaceRn_
+							_ = esgMatchInterfaceDn_
+							if !existed(esgMatchInterfaceDn_) {
+								esgSelectorEntityBody_, _ = sjson.Set(esgSelectorEntityBody_, "esgSelectorEntity.children.-1.esgMatchInterface.attributes", map[string]interface{}{"rn": esgMatchInterfaceRn_, "status": "deleted"})
+								continue
+							}
+							esgMatchInterfaceBody_ := ""
+							esgMatchInterfaceBody_, _ = sjson.Set(esgMatchInterfaceBody_, "esgMatchInterface.attributes.rn", esgMatchInterfaceRn_)
+							esgSelectorEntityBody_, _ = sjson.SetRaw(esgSelectorEntityBody_, "esgSelectorEntity.children.-1", esgMatchInterfaceBody_)
+						}
+						for key_, child_ := range child.SelectorMatchVlanMacs {
+							_ = child_
+							keyParts := strings.SplitN(key_, ";", 2)
+							_ = keyParts
+							esgMatchVlanMacRn_ := child_.getRn(key_)
+							esgMatchVlanMacDn_ := esgSelectorEntityDn_ + "/" + esgMatchVlanMacRn_
+							_ = esgMatchVlanMacDn_
+							if !existed(esgMatchVlanMacDn_) {
+								esgSelectorEntityBody_, _ = sjson.Set(esgSelectorEntityBody_, "esgSelectorEntity.children.-1.esgMatchVlanMac.attributes", map[string]interface{}{"rn": esgMatchVlanMacRn_, "status": "deleted"})
+								continue
+							}
+							esgMatchVlanMacBody_ := ""
+							esgMatchVlanMacBody_, _ = sjson.Set(esgMatchVlanMacBody_, "esgMatchVlanMac.attributes.rn", esgMatchVlanMacRn_)
+							esgSelectorEntityBody_, _ = sjson.SetRaw(esgSelectorEntityBody_, "esgSelectorEntity.children.-1", esgMatchVlanMacBody_)
+						}
+						for key_, child_ := range child.SelectorMatchVlanInterfaces {
+							_ = child_
+							keyParts := strings.SplitN(key_, ";", 2)
+							_ = keyParts
+							esgMatchVlanInterfaceRn_ := child_.getRn(key_)
+							esgMatchVlanInterfaceDn_ := esgSelectorEntityDn_ + "/" + esgMatchVlanInterfaceRn_
+							_ = esgMatchVlanInterfaceDn_
+							if !existed(esgMatchVlanInterfaceDn_) {
+								esgSelectorEntityBody_, _ = sjson.Set(esgSelectorEntityBody_, "esgSelectorEntity.children.-1.esgMatchVlanInterface.attributes", map[string]interface{}{"rn": esgMatchVlanInterfaceRn_, "status": "deleted"})
+								continue
+							}
+							esgMatchVlanInterfaceBody_ := ""
+							esgMatchVlanInterfaceBody_, _ = sjson.Set(esgMatchVlanInterfaceBody_, "esgMatchVlanInterface.attributes.rn", esgMatchVlanInterfaceRn_)
+							esgSelectorEntityBody_, _ = sjson.SetRaw(esgSelectorEntityBody_, "esgSelectorEntity.children.-1", esgMatchVlanInterfaceBody_)
+						}
+						if esgSelectorEntityBody_ != "" {
+							esgSelectorEntityBody_, _ = sjson.Set(esgSelectorEntityBody_, "esgSelectorEntity.attributes.rn", esgSelectorEntityRn_)
+							esgGroupInstBody, _ = sjson.SetRaw(esgGroupInstBody, "esgGroupInst.children.-1", esgSelectorEntityBody_)
+						}
+					}
+				}
+				if !(child.TypeLayer47.IsNull()) {
+					esgAttributeEntityRn_ := "attribute"
+					esgAttributeEntityDn_ := esgGroupInstDn + "/" + esgAttributeEntityRn_
+					_ = esgAttributeEntityDn_
+					if !existed(esgAttributeEntityDn_) {
+						esgGroupInstBody, _ = sjson.Set(esgGroupInstBody, "esgGroupInst.children.-1.esgAttributeEntity.attributes", map[string]interface{}{"rn": esgAttributeEntityRn_, "status": "deleted"})
+					} else {
+						esgAttributeEntityBody_ := ""
+						if !child.TypeLayer47.IsNull() {
+							esgAttributeEntityBody_, _ = sjson.Set(esgAttributeEntityBody_, "esgAttributeEntity.attributes.typeLayer4To7", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if esgAttributeEntityBody_ != "" {
+							esgAttributeEntityBody_, _ = sjson.Set(esgAttributeEntityBody_, "esgAttributeEntity.attributes.rn", esgAttributeEntityRn_)
+							esgGroupInstBody, _ = sjson.SetRaw(esgGroupInstBody, "esgGroupInst.children.-1", esgAttributeEntityBody_)
+						}
+					}
+				}
+				if !(child.IntraGroupIsolation.IsNull()) {
+					esgIsolationEntityRn_ := "isolation"
+					esgIsolationEntityDn_ := esgGroupInstDn + "/" + esgIsolationEntityRn_
+					_ = esgIsolationEntityDn_
+					if !existed(esgIsolationEntityDn_) {
+						esgGroupInstBody, _ = sjson.Set(esgGroupInstBody, "esgGroupInst.children.-1.esgIsolationEntity.attributes", map[string]interface{}{"rn": esgIsolationEntityRn_, "status": "deleted"})
+					} else {
+						esgIsolationEntityBody_ := ""
+						if !child.IntraGroupIsolation.IsNull() {
+							esgIsolationEntityBody_, _ = sjson.Set(esgIsolationEntityBody_, "esgIsolationEntity.attributes.intraGroupIsolation", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if esgIsolationEntityBody_ != "" {
+							esgIsolationEntityBody_, _ = sjson.Set(esgIsolationEntityBody_, "esgIsolationEntity.attributes.rn", esgIsolationEntityRn_)
+							esgGroupInstBody, _ = sjson.SetRaw(esgGroupInstBody, "esgGroupInst.children.-1", esgIsolationEntityBody_)
+						}
+					}
+				}
+				esgGroupEntityBody, _ = sjson.SetRaw(esgGroupEntityBody, "esgGroupEntity.children.-1", esgGroupInstBody)
+			}
+			if esgGroupEntityBody != "" {
+				esgGroupEntityBody, _ = sjson.Set(esgGroupEntityBody, "esgGroupEntity.attributes.rn", esgGroupEntityRn)
+				body, _ = sjson.SetRaw(body, "esgEntity.children.-1", esgGroupEntityBody)
+			}
+		}
+	}
+	if !(len(data.ClassMaps) == 0) {
+		esgClassMapEntityRn := "classmap"
+		esgClassMapEntityDn := dn + "/" + esgClassMapEntityRn
+		_ = esgClassMapEntityDn
+		if !existed(esgClassMapEntityDn) {
+			body, _ = sjson.Set(body, "esgEntity.children.-1.esgClassMapEntity.attributes", map[string]interface{}{"rn": esgClassMapEntityRn, "status": "deleted"})
+		} else {
+			esgClassMapEntityBody := ""
+			for key, child := range data.ClassMaps {
+				_ = child
+				esgClassMapInstRn := child.getRn(key)
+				esgClassMapInstDn := esgClassMapEntityDn + "/" + esgClassMapInstRn
+				_ = esgClassMapInstDn
+				if !existed(esgClassMapInstDn) {
+					esgClassMapEntityBody, _ = sjson.Set(esgClassMapEntityBody, "esgClassMapEntity.children.-1.esgClassMapInst.attributes", map[string]interface{}{"rn": esgClassMapInstRn, "status": "deleted"})
+					continue
+				}
+				esgClassMapInstBody := ""
+				esgClassMapInstBody, _ = sjson.Set(esgClassMapInstBody, "esgClassMapInst.attributes.rn", esgClassMapInstRn)
+				if !child.Description.IsNull() {
+					esgClassMapInstBody, _ = sjson.Set(esgClassMapInstBody, "esgClassMapInst.attributes.desc", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.FilterEntries {
+					_ = child_
+					esgClassMapFilterEntryRn_ := child_.getRn(key_)
+					esgClassMapFilterEntryDn_ := esgClassMapInstDn + "/" + esgClassMapFilterEntryRn_
+					_ = esgClassMapFilterEntryDn_
+					if !existed(esgClassMapFilterEntryDn_) {
+						esgClassMapInstBody, _ = sjson.Set(esgClassMapInstBody, "esgClassMapInst.children.-1.esgClassMapFilterEntry.attributes", map[string]interface{}{"rn": esgClassMapFilterEntryRn_, "status": "deleted"})
+						continue
+					}
+					esgClassMapFilterEntryBody_ := ""
+					esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.rn", esgClassMapFilterEntryRn_)
+					if !child_.ApplyToFragment.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.applyToFrag", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.ArpOpcode.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.arpOpc", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPortFrom.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.dFromPort", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DestinationPortTo.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.dToPort", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.EtherType.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.etherT", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Icmpv4Type.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.icmpv4T", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Icmpv6Type.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.icmpv6T", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.MatchDestinationPortZero.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.matchDPortZero", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.MatchDscp.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.matchDscp", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.MatchSourcePortZero.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.matchSPortZero", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Protocol.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.prot", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePortFrom.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.sFromPort", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SourcePortTo.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.sToPort", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.Stateful.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.stateful", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.TcpRules.IsNull() {
+						esgClassMapFilterEntryBody_, _ = sjson.Set(esgClassMapFilterEntryBody_, "esgClassMapFilterEntry.attributes.tcpRules", "DME_UNSET_PROPERTY_MARKER")
+					}
+					esgClassMapInstBody, _ = sjson.SetRaw(esgClassMapInstBody, "esgClassMapInst.children.-1", esgClassMapFilterEntryBody_)
+				}
+				esgClassMapEntityBody, _ = sjson.SetRaw(esgClassMapEntityBody, "esgClassMapEntity.children.-1", esgClassMapInstBody)
+			}
+			if esgClassMapEntityBody != "" {
+				esgClassMapEntityBody, _ = sjson.Set(esgClassMapEntityBody, "esgClassMapEntity.attributes.rn", esgClassMapEntityRn)
+				body, _ = sjson.SetRaw(body, "esgEntity.children.-1", esgClassMapEntityBody)
+			}
+		}
+	}
+	if !(len(data.PolicyMaps) == 0) {
+		esgPolicyMapEntityRn := "policymap"
+		esgPolicyMapEntityDn := dn + "/" + esgPolicyMapEntityRn
+		_ = esgPolicyMapEntityDn
+		if !existed(esgPolicyMapEntityDn) {
+			body, _ = sjson.Set(body, "esgEntity.children.-1.esgPolicyMapEntity.attributes", map[string]interface{}{"rn": esgPolicyMapEntityRn, "status": "deleted"})
+		} else {
+			esgPolicyMapEntityBody := ""
+			for key, child := range data.PolicyMaps {
+				_ = child
+				esgPolicyMapInstRn := child.getRn(key)
+				esgPolicyMapInstDn := esgPolicyMapEntityDn + "/" + esgPolicyMapInstRn
+				_ = esgPolicyMapInstDn
+				if !existed(esgPolicyMapInstDn) {
+					esgPolicyMapEntityBody, _ = sjson.Set(esgPolicyMapEntityBody, "esgPolicyMapEntity.children.-1.esgPolicyMapInst.attributes", map[string]interface{}{"rn": esgPolicyMapInstRn, "status": "deleted"})
+					continue
+				}
+				esgPolicyMapInstBody := ""
+				esgPolicyMapInstBody, _ = sjson.Set(esgPolicyMapInstBody, "esgPolicyMapInst.attributes.rn", esgPolicyMapInstRn)
+				if !child.Description.IsNull() {
+					esgPolicyMapInstBody, _ = sjson.Set(esgPolicyMapInstBody, "esgPolicyMapInst.attributes.desc", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.MatchClassMaps {
+					_ = child_
+					esgMatchClassMapRn_ := child_.getRn(key_)
+					esgMatchClassMapDn_ := esgPolicyMapInstDn + "/" + esgMatchClassMapRn_
+					_ = esgMatchClassMapDn_
+					if !existed(esgMatchClassMapDn_) {
+						esgPolicyMapInstBody, _ = sjson.Set(esgPolicyMapInstBody, "esgPolicyMapInst.children.-1.esgMatchClassMap.attributes", map[string]interface{}{"rn": esgMatchClassMapRn_, "status": "deleted"})
+						continue
+					}
+					esgMatchClassMapBody_ := ""
+					esgMatchClassMapBody_, _ = sjson.Set(esgMatchClassMapBody_, "esgMatchClassMap.attributes.rn", esgMatchClassMapRn_)
+					if !child_.CountAction.IsNull() {
+						esgMatchClassMapBody_, _ = sjson.Set(esgMatchClassMapBody_, "esgMatchClassMap.attributes.countAction", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.ForwardingAction.IsNull() {
+						esgMatchClassMapBody_, _ = sjson.Set(esgMatchClassMapBody_, "esgMatchClassMap.attributes.forwardingAction", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.LogAction.IsNull() {
+						esgMatchClassMapBody_, _ = sjson.Set(esgMatchClassMapBody_, "esgMatchClassMap.attributes.logAction", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.RedirectChain.IsNull() {
+						esgMatchClassMapBody_, _ = sjson.Set(esgMatchClassMapBody_, "esgMatchClassMap.attributes.redirectChain", "DME_UNSET_PROPERTY_MARKER")
+					}
+					esgPolicyMapInstBody, _ = sjson.SetRaw(esgPolicyMapInstBody, "esgPolicyMapInst.children.-1", esgMatchClassMapBody_)
+				}
+				esgPolicyMapEntityBody, _ = sjson.SetRaw(esgPolicyMapEntityBody, "esgPolicyMapEntity.children.-1", esgPolicyMapInstBody)
+			}
+			if esgPolicyMapEntityBody != "" {
+				esgPolicyMapEntityBody, _ = sjson.Set(esgPolicyMapEntityBody, "esgPolicyMapEntity.attributes.rn", esgPolicyMapEntityRn)
+				body, _ = sjson.SetRaw(body, "esgEntity.children.-1", esgPolicyMapEntityBody)
+			}
+		}
+	}
+	for key, child := range data.Domains {
+		_ = child
+		esgDomRn := child.getRn(key)
+		esgDomDn := dn + "/" + esgDomRn
+		_ = esgDomDn
+		if !existed(esgDomDn) {
+			body, _ = sjson.Set(body, "esgEntity.children.-1.esgDom.attributes", map[string]interface{}{"rn": esgDomRn, "status": "deleted"})
+			continue
+		}
+		esgDomBody := ""
+		esgDomBody, _ = sjson.Set(esgDomBody, "esgDom.attributes.rn", esgDomRn)
+		if !child.DefaultAction.IsNull() {
+			esgDomBody, _ = sjson.Set(esgDomBody, "esgDom.attributes.defaultAction", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.PolicyClassifierTag.IsNull() {
+			esgDomBody, _ = sjson.Set(esgDomBody, "esgDom.attributes.pcTag", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SecurityMode.IsNull() {
+			esgDomBody, _ = sjson.Set(esgDomBody, "esgDom.attributes.securityMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !(len(child.Contracts) == 0) {
+			esgContractEntityRn_ := "contract"
+			esgContractEntityDn_ := esgDomDn + "/" + esgContractEntityRn_
+			_ = esgContractEntityDn_
+			if !existed(esgContractEntityDn_) {
+				esgDomBody, _ = sjson.Set(esgDomBody, "esgDom.children.-1.esgContractEntity.attributes", map[string]interface{}{"rn": esgContractEntityRn_, "status": "deleted"})
+			} else {
+				esgContractEntityBody_ := ""
+				for key_, child_ := range child.Contracts {
+					_ = child_
+					keyParts := strings.SplitN(key_, ";", 3)
+					_ = keyParts
+					esgContractRn_ := child_.getRn(key_)
+					esgContractDn_ := esgContractEntityDn_ + "/" + esgContractRn_
+					_ = esgContractDn_
+					if !existed(esgContractDn_) {
+						esgContractEntityBody_, _ = sjson.Set(esgContractEntityBody_, "esgContractEntity.children.-1.esgContract.attributes", map[string]interface{}{"rn": esgContractRn_, "status": "deleted"})
+						continue
+					}
+					esgContractBody_ := ""
+					esgContractBody_, _ = sjson.Set(esgContractBody_, "esgContract.attributes.rn", esgContractRn_)
+					if !child_.Direction.IsNull() {
+						esgContractBody_, _ = sjson.Set(esgContractBody_, "esgContract.attributes.direction", "DME_UNSET_PROPERTY_MARKER")
+					}
+					esgContractEntityBody_, _ = sjson.SetRaw(esgContractEntityBody_, "esgContractEntity.children.-1", esgContractBody_)
+				}
+				if esgContractEntityBody_ != "" {
+					esgContractEntityBody_, _ = sjson.Set(esgContractEntityBody_, "esgContractEntity.attributes.rn", esgContractEntityRn_)
+					esgDomBody, _ = sjson.SetRaw(esgDomBody, "esgDom.children.-1", esgContractEntityBody_)
+				}
+			}
+		}
+		body, _ = sjson.SetRaw(body, "esgEntity.children.-1", esgDomBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -2046,6 +2669,8 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, im
 				stateChild := state.SecurityGroups[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/group" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "esgGroupEntity")+".children").Array() {
 					if mv.Get("esgGroupInst.attributes.id").String() == key {
 						if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
@@ -2167,13 +2792,25 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, im
 								_ = configChild
 							}
 						}
-						if !stateChild.TypeLayer47.IsNull() && configChild.TypeLayer47.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "esgAttributeEntity")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"typeLayer4To7", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.TypeLayer47.IsNull()) && (configChild.TypeLayer47.IsNull()) && deleteEmptied(listChildDn+"/attribute") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "esgAttributeEntity")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.TypeLayer47.IsNull() && configChild.TypeLayer47.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "esgAttributeEntity")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"typeLayer4To7", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
-						if !stateChild.IntraGroupIsolation.IsNull() && configChild.IntraGroupIsolation.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "esgIsolationEntity")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"intraGroupIsolation", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.IntraGroupIsolation.IsNull()) && (configChild.IntraGroupIsolation.IsNull()) && deleteEmptied(listChildDn+"/isolation") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "esgIsolationEntity")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.IntraGroupIsolation.IsNull() && configChild.IntraGroupIsolation.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "esgIsolationEntity")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"intraGroupIsolation", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 					}
 				}
@@ -2184,6 +2821,8 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, im
 				stateChild := state.ClassMaps[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/classmap" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "esgClassMapEntity")+".children").Array() {
 					if mv.Get("esgClassMapInst.attributes.name").String() == key {
 						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
@@ -2267,6 +2906,8 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, im
 				stateChild := state.PolicyMaps[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/policymap" + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "esgPolicyMapEntity")+".children").Array() {
 					if mv.Get("esgPolicyMapInst.attributes.name").String() == key {
 						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
@@ -2317,6 +2958,8 @@ func (data ESG) toBodyWithDeletes(ctx context.Context, state ESG, config ESG, im
 				stateChild := state.Domains[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("esgDom.attributes.name").String() == key {
 						if !stateChild.DefaultAction.IsNull() && configChild.DefaultAction.IsNull() {

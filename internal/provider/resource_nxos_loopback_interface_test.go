@@ -33,44 +33,76 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosLoopbackInterface(t *testing.T) {
+// TestAccLoopbackInterfaceResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccLoopbackInterfaceResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interface.test", "loopback_interfaces.lo123.admin_state", "down"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interface.test", "loopback_interfaces.lo123.description", "My Description"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interface.test", "loopback_interfaces.lo123.link_logging", "enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_loopback_interface.test", "loopback_interfaces.lo123.vrf_dn", "sys/inst-default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_loopback_interface.test", "loopback_interfaces.lo123.admin_state", "down"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_loopback_interface.test", "loopback_interfaces.lo123.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_loopback_interface.test", "loopback_interfaces.lo123.link_logging", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_loopback_interface.test", "loopback_interfaces.lo123.vrf_dn", "sys/inst-default"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccLoopbackInterfaceResourceConfig_minimum(),
+		},
+		{
+			Config: testAccLoopbackInterfaceResourceConfig_all() + testAccLoopbackInterfaceResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_loopback_interface.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccLoopbackInterfaceResourceImportStateIdFunc("nxos_loopback_interface.test"),
+		},
+		{
+			ResourceName:       "nxos_loopback_interface.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccLoopbackInterfaceResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccWithDeletionPolicy(testAccLoopbackInterfaceResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_loopback_interface.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccNoResourcesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccLoopbackInterfaceResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosLoopbackInterfaceConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_loopback_interface.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosLoopbackInterfaceImportStateIdFunc("nxos_loopback_interface.test"),
-			},
-			{
-				ResourceName:       "nxos_loopback_interface.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosLoopbackInterfaceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccLoopbackInterfaceResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -84,7 +116,7 @@ func nxosLoopbackInterfaceImportStateIdFunc(resourceName string) resource.Import
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosLoopbackInterfaceConfig_minimum() string {
+func testAccLoopbackInterfaceResourceConfig_minimum() string {
 	config := `resource "nxos_loopback_interface" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
@@ -93,7 +125,7 @@ func testAccNxosLoopbackInterfaceConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosLoopbackInterfaceConfig_all() string {
+func testAccLoopbackInterfaceResourceConfig_all() string {
 	config := `resource "nxos_loopback_interface" "test" {` + "\n"
 	config += `	loopback_interfaces = {` + "\n"
 	config += `		"lo123" = {` + "\n"
@@ -105,6 +137,14 @@ func testAccNxosLoopbackInterfaceConfig_all() string {
 	config += `	}` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccLoopbackInterfaceResourceConfig_dataSource() string {
+	return `
+data "nxos_loopback_interface" "test" {
+	depends_on = [nxos_loopback_interface.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

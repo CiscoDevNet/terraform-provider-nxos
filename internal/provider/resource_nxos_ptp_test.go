@@ -34,7 +34,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosPTP(t *testing.T) {
+// TestAccPTPResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccPTPResource(t *testing.T) {
 	if os.Getenv("PTP") == "" {
 		t.Skip("skipping test, set environment variable PTP")
 	}
@@ -116,38 +120,139 @@ func TestAccNxosPTP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ptp.test", "interfaces.eth1/1.unicast_vrf_ipv6", "default"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ptp.test", "interfaces.eth1/1.vlan", "vlan-100"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ptp.test", "interfaces.eth1/1.peers.10.1.1.2.negotiation_schema", "schema1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "acl_redirect", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_identity", "01:02:03:04:05:06"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_operation_one_step", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_periodic_update", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_periodic_update_interval", "120"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "clock_sync_auto", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "convergence_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "correction_range_logging", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "correction_range_threshold", "200000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "device_type", "generalizedPtp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "domain_number", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "enhanced_client_scale", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "forward_version1", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "grandmaster_capable_convergence_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "grandmaster_capable", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "ipv6_multicast_receive_scope", "2-13"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "ipv6_multicast_transmit_scope", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "mean_path_delay", "500000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "management", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "multi_domain", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "multi_domain_transition_priority1", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "multi_domain_transition_priority2", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_grandmaster_change", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_parent_change", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "offload", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "peer_delay_request_interval", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "priority1", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "priority2", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "using_system_clock", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "scale_1g", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "source_ip", "10.1.1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "source_ipv6", "2001:db8::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "tolerance_mean_path_delay_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "tolerance_mean_path_delay_value", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "tolerance_reverse_path_delay_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "tolerance_reverse_path_delay_value", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "vrf_name", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "vrf_name_ipv6", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "domains.1.clock_accuracy_threshold", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "domains.1.clock_class_threshold", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "domains.1.priority", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_high_correction_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_high_correction", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_high_correction_periodic", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_port_state_change_category", "all"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_port_state_change_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_port_state_change", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "notify_port_state_change_periodic", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.announce_interval_type", "aes67"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.announce_interval_value", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.announce_timeout_type", "aes67"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.announce_timeout_value", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.asymmetric_delay_value", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.asymmetric_direction", "forward-path"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.delay_request_min_interval_type", "aes67"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.delay_request_min_interval_value", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.ipv6_multicast_receive_scope", "1-14"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.ipv6_multicast_transmit_scope", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.negotiation_schema", "schema1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.neighbor_propagation_delay_threshold", "500000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.profile_override", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.ptp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.cost", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.destination_mac", "forwardable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.domain", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.receive_no_match", "drop"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.role", "master"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.sync_interval_type", "aes67"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.sync_interval_value", "-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.transmission", "multicast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.transport", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.unicast_source", "10.2.2.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.unicast_source_ipv6", "2001:db8::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.unicast_vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.unicast_vrf_ipv6", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.vlan", "vlan-100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ptp.test", "interfaces.eth1/1.peers.10.1.1.2.negotiation_schema", "schema1"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccPTPResourcePrerequisitesConfig + testAccPTPResourceConfig_minimum(),
+		},
+		{
+			Config: testAccPTPResourcePrerequisitesConfig + testAccPTPResourceConfig_all() + testAccPTPResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_ptp.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccPTPResourceImportStateIdFunc("nxos_ptp.test"),
+		},
+		{
+			ResourceName:       "nxos_ptp.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccPTPResourcePrerequisitesConfig + testAccPTPResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccPTPResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccPTPResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_ptp.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccPTPResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccPTPResourcePrerequisitesConfig + testAccPTPResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosPTPPrerequisitesConfig + testAccNxosPTPConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_ptp.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosPTPImportStateIdFunc("nxos_ptp.test"),
-			},
-			{
-				ResourceName:       "nxos_ptp.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosPTPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccPTPResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -157,7 +262,7 @@ func nxosPTPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosPTPPrerequisitesConfig = `
+const testAccPTPResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/ptp"
   class_name = "fmPtp"
@@ -172,7 +277,7 @@ resource "nxos_dme" "PreReq0" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosPTPConfig_minimum() string {
+func testAccPTPResourceConfig_minimum() string {
 	config := `resource "nxos_ptp" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
@@ -182,7 +287,7 @@ func testAccNxosPTPConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosPTPConfig_all() string {
+func testAccPTPResourceConfig_all() string {
 	config := `resource "nxos_ptp" "test" {` + "\n"
 	config += `	acl_redirect = "enabled"` + "\n"
 	config += `	clock_identity = "01:02:03:04:05:06"` + "\n"
@@ -276,6 +381,14 @@ func testAccNxosPTPConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccPTPResourceConfig_dataSource() string {
+	return `
+data "nxos_ptp" "test" {
+	depends_on = [nxos_ptp.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

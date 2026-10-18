@@ -575,7 +575,8 @@ func (d *PortChannelInterfaceDataSource) Read(ctx context.Context, req datasourc
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"pcAggrIf", "nwRtVrfMbr", "l1StormCtrlP", "l1LoadP", "nvoMultisiteIfTracking", "nvoEtherSeg", "nvoEsiMhCoreTracking", "ipqosPriorFlowCtrl", "ipqosPriorFlowCtrlWd", "pcVlanMapping", "pcSelectiveQinqTable", "pcSelectiveQinq", "pcVlanTranslateTable", "pcVlanTranslateEntry", "pcAggrIfExtended", "pcRsMbrIfs"}, PortChannelInterfaceSubtreeClassMinVersions)
+
+	res, err := getPortChannelInterfaceTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

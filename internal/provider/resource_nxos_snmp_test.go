@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosSNMP(t *testing.T) {
+// TestAccSNMPResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccSNMPResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "instance_admin_state", "enabled"))
@@ -134,39 +138,160 @@ func TestAccNxosSNMP(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "rmon_events.1.log", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "rmon_events.1.owner", "admin"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "rmon_events.1.trap", "public"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "instance_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "description", "My SNMP instance"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "engine_id", "00:00:00:63:00:01:00:10:20:15:10:03"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "logging_level", "warnings"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "owner_key", "key1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "unknown_engine_id", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "unknown_user", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "contact", "admin@example.com"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "system_info_description", "My NX-OS device"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "location", "DC1-Room42"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "packet_size", "8192"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "disable_aaa_sync", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "enforce_privacy", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "tcp_session_authentication", "tcpSessAuth"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "source_interface_traps", "eth1/1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "source_interface_informs", "eth1/2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "contexts.ctx1.instance", "inst1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "contexts.ctx1.topology", "topo1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "contexts.ctx1.description", "My SNMP context"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "contexts.ctx1.vrf", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "communities.COMMUNITY1.context", "ctx1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "communities.COMMUNITY1.description", "My SNMP community"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "communities.COMMUNITY1.group", "network-operator"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "communities.COMMUNITY1.ipv4_acl_name", "snmp-acl-v4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "communities.COMMUNITY1.ipv6_acl_name", "snmp-acl-v6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "local_users.user1.authentication_type", "md5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "local_users.user1.ipv4_acl_name", "snmp-acl-v4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "local_users.user1.ipv6_acl_name", "snmp-acl-v6"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "local_users.user1.enforce_privacy", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "local_users.user1.privacy_type", "des"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "local_users.user1.password_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "hosts.10.0.0.1;1162.community_name", "public"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "hosts.10.0.0.1;1162.notification_type", "traps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "hosts.10.0.0.1;1162.security_level", "auth"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "hosts.10.0.0.1;1162.version", "v3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "hosts.10.0.0.1;1162.source_interface", "eth1/3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "enable_all", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "aaa_server_state_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "bridge_new_root_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "bridge_topology_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "callhome_event_notify_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "callhome_smtp_send_fail_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "cfs_state_change_notif_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "cfs_merge_failure_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "config_cli_running_config_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_mib_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_mib_enable_status_notification_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_fan_status_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_module_inserted_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_module_removed_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_module_status_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_power_out_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_power_status_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_sensor_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "entity_unrecognised_module_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "generic_cold_start_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "generic_warm_start_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "license_expiry_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "license_expiry_warning_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "license_file_missing_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "license_no_license_for_feature_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_cie_link_down_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_cie_link_up_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_cisco_xcvr_mon_status_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_cmn_mac_move_notification_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_delayed_link_state_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_extended_link_down_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_extended_link_up_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_link_down_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_link_up_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "link_err_disable_interface_event_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "mmode_maint_mode_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "mmode_normal_mode_change_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rf_redundancy_framework_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_rising_alarm_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_falling_alarm_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_hc_rising_alarm_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_hc_falling_alarm_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "snmp_authentication_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "storm_control_cpsc_event_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "stpx_inconsistency_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "stpx_loop_inconsistency_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "stpx_root_inconsistency_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "syslog_message_generated_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "sysmgr_fail_sw_core_notify_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "system_clock_change_notification_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "upgrade_job_status_notify_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "upgrade_op_notify_on_completion_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "vtp_notifs_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "vtp_vlan_create_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "vtp_vlan_delete_trap_status", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_events.1.description", "Test event"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_events.1.log", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_events.1.owner", "admin"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_events.1.trap", "public"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
+	steps := []resource.TestStep{
+		{
+			Config: testAccSNMPResourceConfig_minimum(),
+		},
+		{
+			Config: testAccSNMPResourceConfig_all(includeWriteOnly) + testAccSNMPResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_snmp.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccSNMPResourceImportStateIdFunc("nxos_snmp.test"),
+		},
+		{
+			ResourceName:       "nxos_snmp.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccSNMPResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccWithDeletionPolicy(testAccSNMPResourceConfig_all(includeWriteOnly), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_snmp.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccNoResourcesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccSNMPResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosSNMPConfig_all(includeWriteOnly),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_snmp.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosSNMPImportStateIdFunc("nxos_snmp.test"),
-			},
-			{
-				ResourceName:       "nxos_snmp.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosSNMPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccSNMPResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -180,7 +305,7 @@ func nxosSNMPImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosSNMPConfig_minimum() string {
+func testAccSNMPResourceConfig_minimum() string {
 	config := `resource "nxos_snmp" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
@@ -189,7 +314,7 @@ func testAccNxosSNMPConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosSNMPConfig_all(includeWriteOnly bool) string {
+func testAccSNMPResourceConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_snmp" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instance_admin_state = "enabled"` + "\n"
@@ -336,6 +461,14 @@ func testAccNxosSNMPConfig_all(includeWriteOnly bool) string {
 	config += `	}` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccSNMPResourceConfig_dataSource() string {
+	return `
+data "nxos_snmp" "test" {
+	depends_on = [nxos_snmp.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

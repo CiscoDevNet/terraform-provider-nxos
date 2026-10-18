@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosNVO(t *testing.T) {
+// TestAccNVOResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccNVOResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "vxlan_udp_port", "4789"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "vxlan_udp_source_port_mode", "high"))
@@ -72,38 +76,99 @@ func TestAccNxosNVO(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.vnis.103100.multisite_multicast_group", "0.0.0.0"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.vnis.103100.spine_anycast_gateway", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_nvo.test", "nve_interfaces.1.vnis.103100.ingress_replication_protocol", "bgp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "vxlan_udp_port", "4789"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "vxlan_udp_source_port_mode", "high"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "evpn_multisite_border_gateway_dci_advertise_pip", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "evpn_multisite_border_gateway_delay_restore_time", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "evpn_multisite_border_gateway_df_election_time", "2.000000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "evpn_multisite_border_gateway_fabric_advertise_pip", "enableL3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "evpn_multisite_border_gateway_site_id", "65535"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "evpn_multisite_border_gateway_split_horizon_per_site", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "evpn_multisite_border_gateway_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "advertise_evpn_multicast_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "evpn_storm_controls.bcast.level", "10.500000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.advertise_virtual_mac", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.hold_down_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.host_reachability_protocol", "bgp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.ingress_replication_protocol_bgp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.multicast_group_l2", "0.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.multicast_group_l3", "0.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.multisite_source_interface", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.suppress_arp", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.suppress_mac_route", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.anycast_source_interface", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.description", "My NVE interface"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.fabric_ready_time", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.multicast_routing_source_interface", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.multisite_virtual_mac", "00:00:00:00:00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.suppress_nd", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.virtual_mac", "00:00:00:00:00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.vnis.103100.associate_vrf", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.vnis.103100.multicast_group", "0.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.vnis.103100.multisite_ingress_replication", "disable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.vnis.103100.suppress_arp", "off"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.vnis.103100.legacy_mode", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.vnis.103100.multisite_multicast_group", "0.0.0.0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.vnis.103100.spine_anycast_gateway", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_nvo.test", "nve_interfaces.1.vnis.103100.ingress_replication_protocol", "bgp"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccNVOResourcePrerequisitesConfig + testAccNVOResourceConfig_minimum(),
+		},
+		{
+			Config: testAccNVOResourcePrerequisitesConfig + testAccNVOResourceConfig_all() + testAccNVOResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_nvo.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccNVOResourceImportStateIdFunc("nxos_nvo.test"),
+		},
+		{
+			ResourceName:       "nxos_nvo.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccNVOResourcePrerequisitesConfig + testAccNVOResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccNVOResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccNVOResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_nvo.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccNVOResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccNVOResourcePrerequisitesConfig + testAccNVOResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosNVOPrerequisitesConfig + testAccNxosNVOConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_nvo.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosNVOImportStateIdFunc("nxos_nvo.test"),
-			},
-			{
-				ResourceName:       "nxos_nvo.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosNVOImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccNVOResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -113,7 +178,7 @@ func nxosNVOImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosNVOPrerequisitesConfig = `
+const testAccNVOResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/nvo"
   class_name = "fmNvo"
@@ -138,7 +203,7 @@ resource "nxos_dme" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosNVOConfig_minimum() string {
+func testAccNVOResourceConfig_minimum() string {
 	config := `resource "nxos_nvo" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
@@ -148,7 +213,7 @@ func testAccNxosNVOConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosNVOConfig_all() string {
+func testAccNVOResourceConfig_all() string {
 	config := `resource "nxos_nvo" "test" {` + "\n"
 	config += `	vxlan_udp_port = 4789` + "\n"
 	config += `	vxlan_udp_source_port_mode = "high"` + "\n"
@@ -202,6 +267,14 @@ func testAccNxosNVOConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccNVOResourceConfig_dataSource() string {
+	return `
+data "nxos_nvo" "test" {
+	depends_on = [nxos_nvo.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

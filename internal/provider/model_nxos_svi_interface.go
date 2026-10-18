@@ -95,6 +95,14 @@ var SVIInterfaceMinVersions = map[string]helpers.MinVersion{
 	"nvoEsiMhCoreTracking": {Version: "10.6(1)", Path: "svi_interfaces.evpn_multihoming_core_tracking"},
 }
 
+// SVIInterfaceListClasses holds the list child classes of the resource.
+var SVIInterfaceListClasses = map[string]bool{"sviIf": true}
+
+// getSVIInterfaceTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getSVIInterfaceTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"sviIf", "nwRtVrfMbr", "nvoMultisiteIfTracking", "nvoEsiMhCoreTracking"}, SVIInterfaceSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -467,7 +475,161 @@ func (data SVIInterface) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data SVIInterface) toBodyWithDeletes(ctx context.Context, state SVIInterface, config SVIInterface, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data SVIInterface) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.SviInterfaces {
+		sviIfDn := dn + "/" + child.getRn(key)
+		dns[sviIfDn] = true
+		if !(child.VrfDn.IsNull()) {
+			nwRtVrfMbrDn_ := sviIfDn + "/" + "rtvrfMbr"
+			dns[nwRtVrfMbrDn_] = true
+		}
+		if !(child.MultisiteInterfaceTracking.IsNull()) {
+			nvoMultisiteIfTrackingDn_ := sviIfDn + "/" + "multisiteiftracking"
+			dns[nvoMultisiteIfTrackingDn_] = true
+		}
+		if !(child.EvpnMultihomingCoreTracking.IsNull()) {
+			nvoEsiMhCoreTrackingDn_ := sviIfDn + "/" + "esimhcoretracking"
+			dns[nvoEsiMhCoreTrackingDn_] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data SVIInterface) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "interfaceEntity.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.SviInterfaces {
+		_ = child
+		sviIfRn := child.getRn(key)
+		sviIfDn := dn + "/" + sviIfRn
+		_ = sviIfDn
+		if !existed(sviIfDn) {
+			body, _ = sjson.Set(body, "interfaceEntity.children.-1.sviIf.attributes", map[string]interface{}{"rn": sviIfRn, "status": "deleted"})
+			continue
+		}
+		sviIfBody := ""
+		sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.rn", sviIfRn)
+		if !child.AdminState.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Autostate.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.autostate", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Bandwidth.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.bw", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.CarrierDelay.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.carDel", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Delay.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.delay", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Description.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.InbandManagement.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.inbMgmt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LoadIntervalCounter1.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.loadIntvl1", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LoadIntervalCounter2.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.loadIntvl2", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.LoadIntervalCounter3.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.loadIntvl3", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MacAddress.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.mac", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Medium.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.medium", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Mtu.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.MtuInherit.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.mtuInherit", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SnmpTrapLinkStatus.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.snmpTrap", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.VlanId.IsNull() {
+			sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.attributes.vlanId", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !(child.VrfDn.IsNull()) {
+			nwRtVrfMbrRn_ := "rtvrfMbr"
+			nwRtVrfMbrDn_ := sviIfDn + "/" + nwRtVrfMbrRn_
+			_ = nwRtVrfMbrDn_
+			if !existed(nwRtVrfMbrDn_) {
+				sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.children.-1.nwRtVrfMbr.attributes", map[string]interface{}{"rn": nwRtVrfMbrRn_, "status": "deleted"})
+			} else {
+				nwRtVrfMbrBody_ := ""
+				if !child.VrfDn.IsNull() {
+					nwRtVrfMbrBody_, _ = sjson.Set(nwRtVrfMbrBody_, "nwRtVrfMbr.attributes.tDn", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if nwRtVrfMbrBody_ != "" {
+					nwRtVrfMbrBody_, _ = sjson.Set(nwRtVrfMbrBody_, "nwRtVrfMbr.attributes.rn", nwRtVrfMbrRn_)
+					sviIfBody, _ = sjson.SetRaw(sviIfBody, "sviIf.children.-1", nwRtVrfMbrBody_)
+				}
+			}
+		}
+		if !(child.MultisiteInterfaceTracking.IsNull()) {
+			nvoMultisiteIfTrackingRn_ := "multisiteiftracking"
+			nvoMultisiteIfTrackingDn_ := sviIfDn + "/" + nvoMultisiteIfTrackingRn_
+			_ = nvoMultisiteIfTrackingDn_
+			if !existed(nvoMultisiteIfTrackingDn_) {
+				sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.children.-1.nvoMultisiteIfTracking.attributes", map[string]interface{}{"rn": nvoMultisiteIfTrackingRn_, "status": "deleted"})
+			} else {
+				nvoMultisiteIfTrackingBody_ := ""
+				if !child.MultisiteInterfaceTracking.IsNull() {
+					nvoMultisiteIfTrackingBody_, _ = sjson.Set(nvoMultisiteIfTrackingBody_, "nvoMultisiteIfTracking.attributes.tracking", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if nvoMultisiteIfTrackingBody_ != "" {
+					nvoMultisiteIfTrackingBody_, _ = sjson.Set(nvoMultisiteIfTrackingBody_, "nvoMultisiteIfTracking.attributes.rn", nvoMultisiteIfTrackingRn_)
+					sviIfBody, _ = sjson.SetRaw(sviIfBody, "sviIf.children.-1", nvoMultisiteIfTrackingBody_)
+				}
+			}
+		}
+		if !(child.EvpnMultihomingCoreTracking.IsNull()) {
+			nvoEsiMhCoreTrackingRn_ := "esimhcoretracking"
+			nvoEsiMhCoreTrackingDn_ := sviIfDn + "/" + nvoEsiMhCoreTrackingRn_
+			_ = nvoEsiMhCoreTrackingDn_
+			if !existed(nvoEsiMhCoreTrackingDn_) {
+				sviIfBody, _ = sjson.Set(sviIfBody, "sviIf.children.-1.nvoEsiMhCoreTracking.attributes", map[string]interface{}{"rn": nvoEsiMhCoreTrackingRn_, "status": "deleted"})
+			} else {
+				nvoEsiMhCoreTrackingBody_ := ""
+				if !child.EvpnMultihomingCoreTracking.IsNull() {
+					nvoEsiMhCoreTrackingBody_, _ = sjson.Set(nvoEsiMhCoreTrackingBody_, "nvoEsiMhCoreTracking.attributes.coretracking", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if nvoEsiMhCoreTrackingBody_ != "" {
+					nvoEsiMhCoreTrackingBody_, _ = sjson.Set(nvoEsiMhCoreTrackingBody_, "nvoEsiMhCoreTracking.attributes.rn", nvoEsiMhCoreTrackingRn_)
+					sviIfBody, _ = sjson.SetRaw(sviIfBody, "sviIf.children.-1", nvoEsiMhCoreTrackingBody_)
+				}
+			}
+		}
+		body, _ = sjson.SetRaw(body, "interfaceEntity.children.-1", sviIfBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data SVIInterface) toBodyWithDeletes(ctx context.Context, state SVIInterface, config SVIInterface, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -507,6 +669,8 @@ func (data SVIInterface) toBodyWithDeletes(ctx context.Context, state SVIInterfa
 				stateChild := state.SviInterfaces[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("sviIf.attributes.id").String() == key {
 						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
@@ -569,17 +733,35 @@ func (data SVIInterface) toBodyWithDeletes(ctx context.Context, state SVIInterfa
 						}
 					}
 					if listChildPath != "" {
-						if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nwRtVrfMbr")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.VrfDn.IsNull()) && (configChild.VrfDn.IsNull()) && deleteEmptied(listChildDn+"/rtvrfMbr") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "nwRtVrfMbr")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.VrfDn.IsNull() && configChild.VrfDn.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nwRtVrfMbr")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
-						if !stateChild.MultisiteInterfaceTracking.IsNull() && configChild.MultisiteInterfaceTracking.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoMultisiteIfTracking")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tracking", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.MultisiteInterfaceTracking.IsNull()) && (configChild.MultisiteInterfaceTracking.IsNull()) && deleteEmptied(listChildDn+"/multisiteiftracking") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoMultisiteIfTracking")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.MultisiteInterfaceTracking.IsNull() && configChild.MultisiteInterfaceTracking.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoMultisiteIfTracking")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tracking", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
-						if !stateChild.EvpnMultihomingCoreTracking.IsNull() && configChild.EvpnMultihomingCoreTracking.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEsiMhCoreTracking")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"coretracking", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.EvpnMultihomingCoreTracking.IsNull()) && (configChild.EvpnMultihomingCoreTracking.IsNull()) && deleteEmptied(listChildDn+"/esimhcoretracking") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEsiMhCoreTracking")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.EvpnMultihomingCoreTracking.IsNull() && configChild.EvpnMultihomingCoreTracking.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEsiMhCoreTracking")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"coretracking", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 					}
 				}

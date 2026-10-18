@@ -23,6 +23,7 @@ package provider
 import (
 	"context"
 	"fmt"
+	"maps"
 	"strings"
 
 	"github.com/CiscoDevNet/terraform-provider-nxos/internal/provider/helpers"
@@ -56,6 +57,12 @@ type HardwareTelemetryResource struct {
 	data *NxosProviderData
 }
 
+// HardwareTelemetryResourceModel adds the attributes that only exist on the resource to the model shared with the data source.
+type HardwareTelemetryResourceModel struct {
+	HardwareTelemetry
+	DeletionPolicy types.String `tfsdk:"deletion_policy"`
+}
+
 func (r *HardwareTelemetryResource) Metadata(ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_hardware_telemetry"
 }
@@ -75,6 +82,13 @@ func (r *HardwareTelemetryResource) Schema(ctx context.Context, req resource.Sch
 				Computed:            true,
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.UseStateForUnknown(),
+				},
+			},
+			"deletion_policy": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("What happens on the device when objects managed by the resource are removed. `delete` deletes the object on destroy, including any configuration not managed by Terraform, and deletes single child objects once none of their attributes are configured anymore, unless the device holds other entries below them. `reset` deletes the objects created by the resource on destroy, resets the managed attributes of the objects that already existed and leaves configuration not managed by Terraform in place. `retain` leaves the device unchanged on destroy and only removes the resource from the state. Overrides the `deletion_policy` of the provider, which defaults to `delete`. See the [Deletion Policy](../guides/deletion_policy) guide for details.").AddStringEnumDescription("delete", "reset", "retain").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("delete", "reset", "retain"),
 				},
 			},
 			"sflow_admin_state": schema.StringAttribute{
@@ -178,6 +192,14 @@ func (r *HardwareTelemetryResource) Configure(ctx context.Context, req resource.
 	r.data = req.ProviderData.(*NxosProviderData)
 }
 
+// deletionPolicy returns the deletion policy of the resource, or the one of the provider if the resource does not set one.
+func (r *HardwareTelemetryResource) deletionPolicy(policy types.String) string {
+	if policy.IsNull() || policy.IsUnknown() {
+		return r.data.DeletionPolicy
+	}
+	return policy.ValueString()
+}
+
 // ModifyPlan rejects configurations using objects not supported by the NX-OS version of the device,
 // so that the error surfaces during plan rather than apply. It also forces a recompute during the
 // leniency window that follows an import, so that Update always runs (and clears the `importing`
@@ -192,10 +214,10 @@ func (r *HardwareTelemetryResource) ModifyPlan(ctx context.Context, req resource
 	// The check is skipped if the plan cannot be fully evaluated yet (e.g. unknown map keys or device);
 	// Create and Update repeat it before sending the request.
 	if len(HardwareTelemetryMinVersions) > 0 && r.data != nil {
-		var plan, config HardwareTelemetry
+		var plan, config HardwareTelemetryResourceModel
 		if !req.Plan.Get(ctx, &plan).HasError() && !req.Config.Get(ctx, &config).HasError() && !plan.Device.IsUnknown() {
 			if device, ok := r.data.Devices[plan.Device.ValueString()]; ok && device.Managed {
-				resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), plan.toBody(config).Str, HardwareTelemetryMinVersions)...)
+				resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), plan.toBody(config.HardwareTelemetry).Str, HardwareTelemetryMinVersions)...)
 				if resp.Diagnostics.HasError() {
 					return
 				}
@@ -220,7 +242,7 @@ func (r *HardwareTelemetryResource) ModifyPlan(ctx context.Context, req resource
 
 // Section below is generated&owned by "gen/generator.go". //template:begin create
 func (r *HardwareTelemetryResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
-	var plan HardwareTelemetry
+	var plan HardwareTelemetryResourceModel
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -230,7 +252,7 @@ func (r *HardwareTelemetryResource) Create(ctx context.Context, req resource.Cre
 	}
 
 	// Read config
-	var config HardwareTelemetry
+	var config HardwareTelemetryResourceModel
 	diags = req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
@@ -246,13 +268,21 @@ func (r *HardwareTelemetryResource) Create(ctx context.Context, req resource.Cre
 	}
 
 	// Post object
+	var preexisting map[string]bool
 	if device.Managed {
-		body := plan.toBody(config)
+		body := plan.toBody(config.HardwareTelemetry)
 		resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), body.Str, HardwareTelemetryMinVersions)...)
 		if resp.Diagnostics.HasError() {
 			return
 		}
-		_, err := device.Client.Post(plan.getDn(), body.Str)
+		// Record which of the managed objects already exist, for the reset deletion policy
+		res, err := getHardwareTelemetryTree(ctx, device, plan.getDn())
+		if err != nil {
+			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+			return
+		}
+		preexisting = helpers.FilterExisting(plan.managedDns(), helpers.ReadTree(res, plan.getDn()).Dns())
+		_, err = device.Client.Post(plan.getDn(), body.Str)
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to post object, got error: %s", err))
 			return
@@ -261,7 +291,7 @@ func (r *HardwareTelemetryResource) Create(ctx context.Context, req resource.Cre
 
 	plan.Dn = types.StringValue(plan.getDn())
 	var identity HardwareTelemetryIdentity
-	identity.toIdentity(ctx, &plan)
+	identity.toIdentity(ctx, &plan.HardwareTelemetry)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Create finished successfully", plan.getDn()))
 
@@ -270,6 +300,9 @@ func (r *HardwareTelemetryResource) Create(ctx context.Context, req resource.Cre
 	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
+	if preexisting != nil {
+		helpers.SetPreexisting(ctx, resp.Private, preexisting, &resp.Diagnostics)
+	}
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
@@ -277,7 +310,7 @@ func (r *HardwareTelemetryResource) Create(ctx context.Context, req resource.Cre
 
 // Section below is generated&owned by "gen/generator.go". //template:begin read
 func (r *HardwareTelemetryResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
-	var state HardwareTelemetry
+	var state HardwareTelemetryResourceModel
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -305,7 +338,7 @@ func (r *HardwareTelemetryResource) Read(ctx context.Context, req resource.ReadR
 	}
 
 	if device.Managed {
-		res, err := device.GetSubtree(ctx, state.Dn.ValueString(), []string{"sflowSflow", "sflowInst", "sflowTransport", "sflowReceiver", "sflowSflowFsDataSource"}, HardwareTelemetrySubtreeClassMinVersions)
+		res, err := getHardwareTelemetryTree(ctx, device, state.Dn.ValueString())
 		if err != nil {
 			resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 			return
@@ -322,6 +355,8 @@ func (r *HardwareTelemetryResource) Read(ctx context.Context, req resource.ReadR
 		}
 		if imp {
 			state.fromBody(res)
+			// Everything that was imported already existed on the device
+			helpers.SetPreexisting(ctx, resp.Private, state.managedDns(), &resp.Diagnostics)
 			// Warn here rather than in ModifyPlan: Terraform reuses this same refresh for both the
 			// preview plan and the plan it recomputes right before applying, so Read only runs once
 			// per operation - unlike ModifyPlan, which runs (and would warn) twice.
@@ -337,7 +372,7 @@ func (r *HardwareTelemetryResource) Read(ctx context.Context, req resource.ReadR
 	}
 
 	var identity HardwareTelemetryIdentity
-	identity.toIdentity(ctx, &state)
+	identity.toIdentity(ctx, &state.HardwareTelemetry)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Read finished successfully", state.Dn.ValueString()))
 
@@ -351,7 +386,7 @@ func (r *HardwareTelemetryResource) Read(ctx context.Context, req resource.ReadR
 
 // Section below is generated&owned by "gen/generator.go". //template:begin update
 func (r *HardwareTelemetryResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
-	var plan HardwareTelemetry
+	var plan HardwareTelemetryResourceModel
 
 	// Read plan
 	diags := req.Plan.Get(ctx, &plan)
@@ -361,14 +396,14 @@ func (r *HardwareTelemetryResource) Update(ctx context.Context, req resource.Upd
 	}
 
 	// Read config
-	var config HardwareTelemetry
+	var config HardwareTelemetryResourceModel
 	diags = req.Config.Get(ctx, &config)
 	resp.Diagnostics.Append(diags...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
-	var state HardwareTelemetry
+	var state HardwareTelemetryResourceModel
 
 	// Read state
 	diags = req.State.Get(ctx, &state)
@@ -391,8 +426,54 @@ func (r *HardwareTelemetryResource) Update(ctx context.Context, req resource.Upd
 		return
 	}
 
+	var preexisting map[string]bool
 	if device.Managed {
-		body := plan.toBodyWithDeletes(ctx, state, config, imp)
+		// Keep track of which managed objects already existed, for the reset deletion policy. State written
+		// before this was recorded has an unknown history, so all of its objects are assumed to have existed.
+		preexisting, diags = helpers.GetPreexisting(ctx, req.Private)
+		if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+			return
+		}
+		stateDns := state.managedDns()
+		if preexisting == nil {
+			preexisting = maps.Clone(stateDns)
+		}
+		planDns := plan.managedDns()
+		added := map[string]bool{}
+		for dn := range planDns {
+			if !stateDns[dn] {
+				added[dn] = true
+			}
+		}
+		removed := false
+		for dn := range stateDns {
+			if !planDns[dn] {
+				removed = true
+				break
+			}
+		}
+		deletePolicy := r.deletionPolicy(plan.DeletionPolicy) == "delete"
+		var tree helpers.Tree
+		if len(added) > 0 || (deletePolicy && removed) {
+			res, err := getHardwareTelemetryTree(ctx, device, plan.getDn())
+			if err != nil {
+				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
+				return
+			}
+			tree = helpers.ReadTree(res, plan.getDn())
+		}
+		for dn := range helpers.FilterExisting(added, tree.Dns()) {
+			preexisting[dn] = true
+		}
+		// Objects no longer managed are forgotten, they are deleted or reset by this update
+		preexisting = helpers.FilterExisting(preexisting, planDns)
+		// With the delete policy, single child objects without configured attributes or children are deleted,
+		// unless the device holds list entries below them that are not managed by the resource
+		var deleteEmptied func(dn string) bool
+		if deletePolicy && removed {
+			deleteEmptied = func(dn string) bool { return !tree.HasUnmanagedEntries(dn, stateDns, HardwareTelemetryListClasses) }
+		}
+		body := plan.toBodyWithDeletes(ctx, state.HardwareTelemetry, config.HardwareTelemetry, imp, deleteEmptied)
 		resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), body.Str, HardwareTelemetryMinVersions)...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -406,7 +487,7 @@ func (r *HardwareTelemetryResource) Update(ctx context.Context, req resource.Upd
 
 	plan.Dn = types.StringValue(plan.getDn())
 	var identity HardwareTelemetryIdentity
-	identity.toIdentity(ctx, &plan)
+	identity.toIdentity(ctx, &plan.HardwareTelemetry)
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Update finished successfully", plan.getDn()))
 
@@ -415,6 +496,10 @@ func (r *HardwareTelemetryResource) Update(ctx context.Context, req resource.Upd
 	diags = resp.Identity.Set(ctx, &identity)
 	resp.Diagnostics.Append(diags...)
 
+	if preexisting != nil {
+		helpers.SetPreexisting(ctx, resp.Private, preexisting, &resp.Diagnostics)
+	}
+
 	helpers.SetFlagImporting(ctx, false, resp.Private, &resp.Diagnostics)
 }
 
@@ -422,7 +507,7 @@ func (r *HardwareTelemetryResource) Update(ctx context.Context, req resource.Upd
 
 // Section below is generated&owned by "gen/generator.go". //template:begin delete
 func (r *HardwareTelemetryResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
-	var state HardwareTelemetry
+	var state HardwareTelemetryResourceModel
 
 	// Read state
 	diags := req.State.Get(ctx, &state)
@@ -439,8 +524,16 @@ func (r *HardwareTelemetryResource) Delete(ctx context.Context, req resource.Del
 		return
 	}
 
-	if device.Managed {
+	deletionPolicy := r.deletionPolicy(state.DeletionPolicy)
+	if device.Managed && deletionPolicy != "retain" {
 		body := state.toDeleteBody()
+		if deletionPolicy == "reset" {
+			preexisting, diags := helpers.GetPreexisting(ctx, req.Private)
+			if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
+				return
+			}
+			body = state.toResetBody(preexisting)
+		}
 		if len(body.Str) > 0 {
 			_, err := device.Client.Post(state.getDn(), body.Str)
 			if err != nil {
@@ -487,7 +580,7 @@ func (r *HardwareTelemetryResource) ImportState(ctx context.Context, req resourc
 		}
 	}
 
-	var state HardwareTelemetry
+	var state HardwareTelemetryResourceModel
 	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), state.getDn())...)
 
 	helpers.SetFlagImporting(ctx, true, resp.Private, &resp.Diagnostics)

@@ -80,6 +80,14 @@ var ManagementInterfaceSubtreeClassMinVersions = map[string]string{}
 // ManagementInterfaceMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var ManagementInterfaceMinVersions = map[string]helpers.MinVersion{}
 
+// ManagementInterfaceListClasses holds the list child classes of the resource.
+var ManagementInterfaceListClasses = map[string]bool{"mgmtMgmtIf": true}
+
+// getManagementInterfaceTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getManagementInterfaceTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"mgmtMgmtIf", "nwRtVrfMbr"}, ManagementInterfaceSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -311,7 +319,86 @@ func (data ManagementInterface) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data ManagementInterface) toBodyWithDeletes(ctx context.Context, state ManagementInterface, config ManagementInterface, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data ManagementInterface) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.ManagementInterfaces {
+		mgmtMgmtIfDn := dn + "/" + child.getRn(key)
+		dns[mgmtMgmtIfDn] = true
+		if !(child.VrfDn.IsNull()) {
+			nwRtVrfMbrDn_ := mgmtMgmtIfDn + "/" + "rtvrfMbr"
+			dns[nwRtVrfMbrDn_] = true
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data ManagementInterface) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "topSystem.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.ManagementInterfaces {
+		_ = child
+		mgmtMgmtIfRn := child.getRn(key)
+		mgmtMgmtIfDn := dn + "/" + mgmtMgmtIfRn
+		_ = mgmtMgmtIfDn
+		mgmtMgmtIfBody := ""
+		mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.rn", mgmtMgmtIfRn)
+		if !child.AdminState.IsNull() {
+			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.AutoNegotiation.IsNull() {
+			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.autoNeg", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Description.IsNull() {
+			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Duplex.IsNull() {
+			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.duplex", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Mtu.IsNull() {
+			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.SnmpTrapState.IsNull() {
+			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Speed.IsNull() {
+			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.speed", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !(child.VrfDn.IsNull()) {
+			nwRtVrfMbrRn_ := "rtvrfMbr"
+			nwRtVrfMbrDn_ := mgmtMgmtIfDn + "/" + nwRtVrfMbrRn_
+			_ = nwRtVrfMbrDn_
+			{
+				nwRtVrfMbrBody_ := ""
+				if !child.VrfDn.IsNull() {
+					nwRtVrfMbrBody_, _ = sjson.Set(nwRtVrfMbrBody_, "nwRtVrfMbr.attributes.tDn", "sys/inst-management")
+				}
+				if nwRtVrfMbrBody_ != "" {
+					nwRtVrfMbrBody_, _ = sjson.Set(nwRtVrfMbrBody_, "nwRtVrfMbr.attributes.rn", nwRtVrfMbrRn_)
+					mgmtMgmtIfBody, _ = sjson.SetRaw(mgmtMgmtIfBody, "mgmtMgmtIf.children.-1", nwRtVrfMbrBody_)
+				}
+			}
+		}
+		body, _ = sjson.SetRaw(body, "topSystem.children.-1", mgmtMgmtIfBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data ManagementInterface) toBodyWithDeletes(ctx context.Context, state ManagementInterface, config ManagementInterface, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -367,6 +454,8 @@ func (data ManagementInterface) toBodyWithDeletes(ctx context.Context, state Man
 				stateChild := state.ManagementInterfaces[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("mgmtMgmtIf.attributes.id").String() == key {
 						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {

@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosOSPF(t *testing.T) {
+// TestAccOSPFResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccOSPFResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.OSPF1.admin_state", "enabled"))
@@ -107,39 +111,131 @@ func TestAccNxosOSPF(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.graceful_restart_period", "30"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.graceful_restart_helper", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.summary_addresses.10.0.0.0/8.tag", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.log_adjacency_changes", "brief"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.bandwidth_reference", "400000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.bandwidth_reference_unit", "mbps"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.distance", "110"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.router_id", "34.56.78.90"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.capability_vrf_lite", "l3vpn"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.control", "bfd,default-passive"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.default_metric", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.default_route_nssa_pbit_clear", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.discard_route", "ext,int"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.down_bit_ignore", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_ecmp", "16"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.name_lookup_vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.rfc1583_compatible", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.rfc1583_compatible_ios", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.authentication_type", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.cost", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.control", "summary"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.nssa_translator_role", "always"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.segment_routing_mpls", "mpls"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.type", "stub"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.ranges.10.1.0.0/16.cost", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.areas.0.0.0.10.ranges.10.1.0.0/16.control", "no-advertise"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_metric_await_convergence_bgp_asn", "65535"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_metric_control", "external-lsa,startup,stub,summary-lsa"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_metric_external_lsa", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_metric_summary_lsa", "600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.max_metric_startup_interval", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.advertise_secondaries", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.area", "0.0.0.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.bfd", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.cost", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.dead_interval", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.hello_interval", "15"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.network_type", "p2p"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.passive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.priority", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.control", "mtu-ignore"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.node_flag", "clear"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.retransmit_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.transmit_delay", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_key_id", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_key_secure_mode", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_keychain", "mykeychain"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_md5_key_secure_mode", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.interfaces.eth1/10.authentication_type", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.redistributions.static;none;none.always", "no"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.redistributions.static;none;none.route_map", "route_map_ospf"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.redistributions.static;none;none.srv6_prefix_type", "unspecified"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.default_information_originate_always", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.default_information_originate_route_map", "RM_DEFAULT"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.spf_throttle_hold_interval", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.spf_throttle_initial_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.spf_throttle_max_interval", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.lsa_arrival_interval", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.lsa_group_pacing_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.lsa_throttle_hold_interval", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.lsa_throttle_max_interval", "3000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.lsa_throttle_start_interval", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.graceful_restart_control", "planned-only"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.graceful_restart_period", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.graceful_restart_helper", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ospf.test", "instances.OSPF1.vrfs.VRF1.summary_addresses.10.0.0.0/8.tag", "5"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
+	steps := []resource.TestStep{
+		{
+			Config: testAccOSPFResourcePrerequisitesConfig + testAccOSPFResourceConfig_minimum(),
+		},
+		{
+			Config: testAccOSPFResourcePrerequisitesConfig + testAccOSPFResourceConfig_all(includeWriteOnly) + testAccOSPFResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_ospf.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccOSPFResourceImportStateIdFunc("nxos_ospf.test"),
+		},
+		{
+			ResourceName:       "nxos_ospf.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccOSPFResourcePrerequisitesConfig + testAccOSPFResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccOSPFResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccOSPFResourceConfig_all(includeWriteOnly), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_ospf.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccOSPFResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccOSPFResourcePrerequisitesConfig + testAccOSPFResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosOSPFPrerequisitesConfig + testAccNxosOSPFConfig_all(includeWriteOnly),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_ospf.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosOSPFImportStateIdFunc("nxos_ospf.test"),
-			},
-			{
-				ResourceName:       "nxos_ospf.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosOSPFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccOSPFResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -149,7 +245,7 @@ func nxosOSPFImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosOSPFPrerequisitesConfig = `
+const testAccOSPFResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/ospf"
   class_name = "fmOspf"
@@ -192,7 +288,7 @@ resource "nxos_dme" "PreReq3" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosOSPFConfig_minimum() string {
+func testAccOSPFResourceConfig_minimum() string {
 	config := `resource "nxos_ospf" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
@@ -202,7 +298,7 @@ func testAccNxosOSPFConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosOSPFConfig_all(includeWriteOnly bool) string {
+func testAccOSPFResourceConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_ospf" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	instances = {` + "\n"
@@ -331,6 +427,14 @@ func testAccNxosOSPFConfig_all(includeWriteOnly bool) string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccOSPFResourceConfig_dataSource() string {
+	return `
+data "nxos_ospf" "test" {
+	depends_on = [nxos_ospf.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

@@ -1019,7 +1019,8 @@ func (d *UserManagementDataSource) Read(ctx context.Context, req datasource.Read
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, UserManagementSubtreeClassMinVersions)
+
+	res, err := getUserManagementTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

@@ -288,7 +288,8 @@ func (d *HSRPDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"hsrpInst", "hsrpIf", "hsrpGroup", "hsrpObjectTrack"}, HSRPSubtreeClassMinVersions)
+
+	res, err := getHSRPTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

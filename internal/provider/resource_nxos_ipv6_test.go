@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosIPv6(t *testing.T) {
+// TestAccIPv6Resource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccIPv6Resource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "access_list_match_local", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "admin_state", "enabled"))
@@ -64,38 +68,91 @@ func TestAccNxosIPv6(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.addresses.2001:db8:3333:4444:5555:6666:7777:8888.control", "anycast"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.addresses.2001:db8:3333:4444:5555:6666:7777:8888.preference", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.addresses.2001:db8:3333:4444:5555:6666:7777:8888.vpc_peer", "2001:db8::1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "access_list_match_local", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "control", "stateful-ha"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "drop_nd_fragments", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "queue_packets", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "static_neighbor_outside_subnet", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "switch_packets", "all"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.control", "bfd"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.preference", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.tag", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.description", "My Description"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.object", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.preference", "123"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.tag", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.name", "nh-name"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.static_routes.2001:db8:3333:4444:5555:6666:102:304/128.next_hops.unspecified;a:b::c:d/128;default.rewrite_encapsulation", "vlan-1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.auto_configuration", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.default_route", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.forward", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.link_local_address_use_bia", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.use_link_local_address", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.urpf", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.link_local_address", "2001:db8:3333:4444:5555:6666:7777:8888"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.addresses.2001:db8:3333:4444:5555:6666:7777:8888.type", "primary"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.addresses.2001:db8:3333:4444:5555:6666:7777:8888.tag", "1234"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.addresses.2001:db8:3333:4444:5555:6666:7777:8888.control", "anycast"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.addresses.2001:db8:3333:4444:5555:6666:7777:8888.preference", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_ipv6.test", "vrfs.VRF1.interfaces.eth1/10.addresses.2001:db8:3333:4444:5555:6666:7777:8888.vpc_peer", "2001:db8::1"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccIPv6ResourcePrerequisitesConfig + testAccIPv6ResourceConfig_minimum(),
+		},
+		{
+			Config: testAccIPv6ResourcePrerequisitesConfig + testAccIPv6ResourceConfig_all() + testAccIPv6ResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_ipv6.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccIPv6ResourceImportStateIdFunc("nxos_ipv6.test"),
+		},
+		{
+			ResourceName:       "nxos_ipv6.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccIPv6ResourcePrerequisitesConfig + testAccIPv6ResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccIPv6ResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccIPv6ResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_ipv6.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccIPv6ResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccIPv6ResourcePrerequisitesConfig + testAccIPv6ResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosIPv6PrerequisitesConfig + testAccNxosIPv6Config_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_ipv6.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosIPv6ImportStateIdFunc("nxos_ipv6.test"),
-			},
-			{
-				ResourceName:       "nxos_ipv6.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosIPv6ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccIPv6ResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -105,7 +162,7 @@ func nxosIPv6ImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosIPv6PrerequisitesConfig = `
+const testAccIPv6ResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/intf/phys-[eth1/10]"
   class_name = "l1PhysIf"
@@ -138,7 +195,7 @@ resource "nxos_dme" "PreReq1" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosIPv6Config_minimum() string {
+func testAccIPv6ResourceConfig_minimum() string {
 	config := `resource "nxos_ipv6" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
@@ -148,7 +205,7 @@ func testAccNxosIPv6Config_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosIPv6Config_all() string {
+func testAccIPv6ResourceConfig_all() string {
 	config := `resource "nxos_ipv6" "test" {` + "\n"
 	config += `	access_list_match_local = "enabled"` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
@@ -202,6 +259,14 @@ func testAccNxosIPv6Config_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccIPv6ResourceConfig_dataSource() string {
+	return `
+data "nxos_ipv6" "test" {
+	depends_on = [nxos_ipv6.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosESG(t *testing.T) {
+// TestAccESGResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccESGResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "mac_segmentation", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "security_groups.100.name", "group1"))
@@ -70,38 +74,97 @@ func TestAccNxosESG(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "domains.VRF1.policy_classifier_tag", "200"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "domains.VRF1.security_mode", "enforced"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_esg.test", "domains.VRF1.contracts.100;any;pmap1.direction", "uni-dir"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "mac_segmentation", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "security_groups.100.name", "group1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "security_groups.100.selector_external_subnets_ipv4.default;20.0.0.0/8.route_inject", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "security_groups.100.selector_external_subnets_ipv6.default;2001:db9::/32.route_inject", "enabled"))
+	if testAccDeviceVersionAtLeast("10.6(1)") {
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "security_groups.100.type_layer4_7", "enabled"))
+	if testAccDeviceVersionAtLeast("10.6(3)") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "security_groups.100.intra_group_isolation", "enabled"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.description", "My class map"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.apply_to_fragment", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.arp_opcode", "req"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.destination_port_from", "300"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.destination_port_to", "400"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.ether_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.icmpv4_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.icmpv6_type", "0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.match_destination_port_zero", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.match_dscp", "AF11"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.match_source_port_zero", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.protocol", "tcp"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.source_port_from", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.source_port_to", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.stateful", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "class_maps.cmap1.filter_entries.entry1.tcp_rules", "ack,syn"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.description", "My policy map"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.match_class_maps.cmap1.count_action", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.match_class_maps.cmap1.forwarding_action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.match_class_maps.cmap1.log_action", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "policy_maps.pmap1.match_class_maps.cmap1.redirect_chain", "chain1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.VRF1.default_action", "deny"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.VRF1.policy_classifier_tag", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.VRF1.security_mode", "enforced"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_esg.test", "domains.VRF1.contracts.100;any;pmap1.direction", "uni-dir"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccESGResourcePrerequisitesConfig + testAccESGResourceConfig_minimum(),
+		},
+		{
+			Config: testAccESGResourcePrerequisitesConfig + testAccESGResourceConfig_all() + testAccESGResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_esg.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccESGResourceImportStateIdFunc("nxos_esg.test"),
+		},
+		{
+			ResourceName:       "nxos_esg.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccESGResourcePrerequisitesConfig + testAccESGResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccESGResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccESGResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_esg.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccESGResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccESGResourcePrerequisitesConfig + testAccESGResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosESGPrerequisitesConfig + testAccNxosESGConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_esg.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosESGImportStateIdFunc("nxos_esg.test"),
-			},
-			{
-				ResourceName:       "nxos_esg.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosESGImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccESGResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -111,7 +174,7 @@ func nxosESGImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosESGPrerequisitesConfig = `
+const testAccESGResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/inst-VRF1"
   class_name = "l3Inst"
@@ -141,7 +204,7 @@ resource "nxos_dme" "PreReq2" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosESGConfig_minimum() string {
+func testAccESGResourceConfig_minimum() string {
 	config := `resource "nxos_esg" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
@@ -151,7 +214,7 @@ func testAccNxosESGConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosESGConfig_all() string {
+func testAccESGResourceConfig_all() string {
 	config := `resource "nxos_esg" "test" {` + "\n"
 	config += `	mac_segmentation = "enabled"` + "\n"
 	config += `	security_groups = {` + "\n"
@@ -263,6 +326,14 @@ func testAccNxosESGConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccESGResourceConfig_dataSource() string {
+	return `
+data "nxos_esg" "test" {
+	depends_on = [nxos_esg.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

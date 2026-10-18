@@ -178,6 +178,14 @@ var OSPFSubtreeClassMinVersions = map[string]string{}
 // OSPFMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var OSPFMinVersions = map[string]helpers.MinVersion{}
 
+// OSPFListClasses holds the list child classes of the resource.
+var OSPFListClasses = map[string]bool{"ospfInst": true, "ospfDom": true, "ospfArea": true, "ospfInterAreaRtSum": true, "ospfIf": true, "ospfInterLeakP": true, "ospfExtRtSum": true}
+
+// getOSPFTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getOSPFTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"ospfInst", "ospfDom", "ospfArea", "ospfInterAreaRtSum", "ospfMaxMetricLsaP", "ospfIf", "ospfAuthNewP", "ospfInterLeakP", "ospfDefRtLeakP", "ospfSpfComp", "ospfLsaCtrl", "ospfGr", "ospfExtRtSum"}, OSPFSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -1411,7 +1419,486 @@ func (data OSPF) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF, config OSPF, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data OSPF) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.Instances {
+		ospfInstDn := dn + "/" + child.getRn(key)
+		dns[ospfInstDn] = true
+		for key_, child_ := range child.Vrfs {
+			ospfDomDn_ := ospfInstDn + "/" + child_.getRn(key_)
+			dns[ospfDomDn_] = true
+			for key__, child__ := range child_.Areas {
+				ospfAreaDn__ := ospfDomDn_ + "/" + child__.getRn(key__)
+				dns[ospfAreaDn__] = true
+				for key___, child___ := range child__.Ranges {
+					ospfInterAreaRtSumDn___ := ospfAreaDn__ + "/" + child___.getRn(key___)
+					dns[ospfInterAreaRtSumDn___] = true
+				}
+			}
+			if !(child_.MaxMetricAwaitConvergenceBgpAsn.IsNull() && child_.MaxMetricControl.IsNull() && child_.MaxMetricExternalLsa.IsNull() && child_.MaxMetricSummaryLsa.IsNull() && child_.MaxMetricStartupInterval.IsNull()) {
+				ospfMaxMetricLsaPDn__ := ospfDomDn_ + "/" + "maxmetriclsap"
+				dns[ospfMaxMetricLsaPDn__] = true
+			}
+			for key__, child__ := range child_.Interfaces {
+				ospfIfDn__ := ospfDomDn_ + "/" + child__.getRn(key__)
+				dns[ospfIfDn__] = true
+				if !(child__.AuthenticationKey.IsNull() && child__.AuthenticationKeyId.IsNull() && child__.AuthenticationKeyNew.IsNull() && child__.AuthenticationKeySecureMode.IsNull() && child__.AuthenticationKeychain.IsNull() && child__.AuthenticationMd5Key.IsNull() && child__.AuthenticationMd5KeyNew.IsNull() && child__.AuthenticationMd5KeySecureMode.IsNull() && child__.AuthenticationType.IsNull()) {
+					ospfAuthNewPDn___ := ospfIfDn__ + "/" + "authnew"
+					dns[ospfAuthNewPDn___] = true
+				}
+			}
+			for key__, child__ := range child_.Redistributions {
+				keyParts := strings.SplitN(key__, ";", 3)
+				_ = keyParts
+				ospfInterLeakPDn__ := ospfDomDn_ + "/" + child__.getRn(key__)
+				dns[ospfInterLeakPDn__] = true
+			}
+			if !(child_.DefaultInformationOriginateAlways.IsNull() && child_.DefaultInformationOriginateRouteMap.IsNull()) {
+				ospfDefRtLeakPDn__ := ospfDomDn_ + "/" + "defrtleak"
+				dns[ospfDefRtLeakPDn__] = true
+			}
+			if !(child_.SpfThrottleHoldInterval.IsNull() && child_.SpfThrottleInitialInterval.IsNull() && child_.SpfThrottleMaxInterval.IsNull()) {
+				ospfSpfCompDn__ := ospfDomDn_ + "/" + "spfcomp"
+				dns[ospfSpfCompDn__] = true
+			}
+			if !(child_.LsaArrivalInterval.IsNull() && child_.LsaGroupPacingInterval.IsNull() && child_.LsaThrottleHoldInterval.IsNull() && child_.LsaThrottleMaxInterval.IsNull() && child_.LsaThrottleStartInterval.IsNull()) {
+				ospfLsaCtrlDn__ := ospfDomDn_ + "/" + "lsactrl"
+				dns[ospfLsaCtrlDn__] = true
+			}
+			if !(child_.GracefulRestartControl.IsNull() && child_.GracefulRestartPeriod.IsNull() && child_.GracefulRestartHelper.IsNull()) {
+				ospfGrDn__ := ospfDomDn_ + "/" + "gr"
+				dns[ospfGrDn__] = true
+			}
+			for key__, child__ := range child_.SummaryAddresses {
+				ospfExtRtSumDn__ := ospfDomDn_ + "/" + child__.getRn(key__)
+				dns[ospfExtRtSumDn__] = true
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data OSPF) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	if !existed(dn) {
+		return data.toDeleteBody()
+	}
+	body := ""
+	if !data.AdminState.IsNull() {
+		body, _ = sjson.Set(body, "ospfEntity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+	}
+	if body == "" {
+		body, _ = sjson.Set(body, "ospfEntity.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.Instances {
+		_ = child
+		ospfInstRn := child.getRn(key)
+		ospfInstDn := dn + "/" + ospfInstRn
+		_ = ospfInstDn
+		if !existed(ospfInstDn) {
+			body, _ = sjson.Set(body, "ospfEntity.children.-1.ospfInst.attributes", map[string]interface{}{"rn": ospfInstRn, "status": "deleted"})
+			continue
+		}
+		ospfInstBody := ""
+		ospfInstBody, _ = sjson.Set(ospfInstBody, "ospfInst.attributes.rn", ospfInstRn)
+		if !child.AdminState.IsNull() {
+			ospfInstBody, _ = sjson.Set(ospfInstBody, "ospfInst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Control.IsNull() {
+			ospfInstBody, _ = sjson.Set(ospfInstBody, "ospfInst.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key_, child_ := range child.Vrfs {
+			_ = child_
+			ospfDomRn_ := child_.getRn(key_)
+			ospfDomDn_ := ospfInstDn + "/" + ospfDomRn_
+			_ = ospfDomDn_
+			if !existed(ospfDomDn_) {
+				ospfInstBody, _ = sjson.Set(ospfInstBody, "ospfInst.children.-1.ospfDom.attributes", map[string]interface{}{"rn": ospfDomRn_, "status": "deleted"})
+				continue
+			}
+			ospfDomBody_ := ""
+			ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.rn", ospfDomRn_)
+			if !child_.LogAdjacencyChanges.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.adjChangeLogLevel", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.AdminState.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.BandwidthReference.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.bwRef", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.BandwidthReferenceUnit.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.bwRefUnit", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Distance.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.dist", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.RouterId.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.rtrId", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.CapabilityVrfLite.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.capVrfLite", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Control.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.DefaultMetric.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.defMetric", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.DefaultRouteNssaPbitClear.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.defRtNssaPbitClear", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.DiscardRoute.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.discardRoute", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.DownBitIgnore.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.downbitIgnore", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.MaxEcmp.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.maxEcmp", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.NameLookupVrf.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.nameLookupVrf", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Rfc1583Compatible.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.rfc1583Compat", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Rfc1583CompatibleIos.IsNull() {
+				ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.attributes.rfc1583CompatIos", "DME_UNSET_PROPERTY_MARKER")
+			}
+			for key__, child__ := range child_.Areas {
+				_ = child__
+				ospfAreaRn__ := child__.getRn(key__)
+				ospfAreaDn__ := ospfDomDn_ + "/" + ospfAreaRn__
+				_ = ospfAreaDn__
+				if !existed(ospfAreaDn__) {
+					ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.children.-1.ospfArea.attributes", map[string]interface{}{"rn": ospfAreaRn__, "status": "deleted"})
+					continue
+				}
+				ospfAreaBody__ := ""
+				ospfAreaBody__, _ = sjson.Set(ospfAreaBody__, "ospfArea.attributes.rn", ospfAreaRn__)
+				if !child__.AuthenticationType.IsNull() {
+					ospfAreaBody__, _ = sjson.Set(ospfAreaBody__, "ospfArea.attributes.authType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Cost.IsNull() {
+					ospfAreaBody__, _ = sjson.Set(ospfAreaBody__, "ospfArea.attributes.cost", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Control.IsNull() {
+					ospfAreaBody__, _ = sjson.Set(ospfAreaBody__, "ospfArea.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.NssaTranslatorRole.IsNull() {
+					ospfAreaBody__, _ = sjson.Set(ospfAreaBody__, "ospfArea.attributes.nssaTransRole", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.SegmentRoutingMpls.IsNull() {
+					ospfAreaBody__, _ = sjson.Set(ospfAreaBody__, "ospfArea.attributes.sgmntRtgMpls", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Type.IsNull() {
+					ospfAreaBody__, _ = sjson.Set(ospfAreaBody__, "ospfArea.attributes.type", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key___, child___ := range child__.Ranges {
+					_ = child___
+					ospfInterAreaRtSumRn___ := child___.getRn(key___)
+					ospfInterAreaRtSumDn___ := ospfAreaDn__ + "/" + ospfInterAreaRtSumRn___
+					_ = ospfInterAreaRtSumDn___
+					if !existed(ospfInterAreaRtSumDn___) {
+						ospfAreaBody__, _ = sjson.Set(ospfAreaBody__, "ospfArea.children.-1.ospfInterAreaRtSum.attributes", map[string]interface{}{"rn": ospfInterAreaRtSumRn___, "status": "deleted"})
+						continue
+					}
+					ospfInterAreaRtSumBody___ := ""
+					ospfInterAreaRtSumBody___, _ = sjson.Set(ospfInterAreaRtSumBody___, "ospfInterAreaRtSum.attributes.rn", ospfInterAreaRtSumRn___)
+					if !child___.Cost.IsNull() {
+						ospfInterAreaRtSumBody___, _ = sjson.Set(ospfInterAreaRtSumBody___, "ospfInterAreaRtSum.attributes.cost", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child___.Control.IsNull() {
+						ospfInterAreaRtSumBody___, _ = sjson.Set(ospfInterAreaRtSumBody___, "ospfInterAreaRtSum.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					ospfAreaBody__, _ = sjson.SetRaw(ospfAreaBody__, "ospfArea.children.-1", ospfInterAreaRtSumBody___)
+				}
+				ospfDomBody_, _ = sjson.SetRaw(ospfDomBody_, "ospfDom.children.-1", ospfAreaBody__)
+			}
+			if !(child_.MaxMetricAwaitConvergenceBgpAsn.IsNull() && child_.MaxMetricControl.IsNull() && child_.MaxMetricExternalLsa.IsNull() && child_.MaxMetricSummaryLsa.IsNull() && child_.MaxMetricStartupInterval.IsNull()) {
+				ospfMaxMetricLsaPRn__ := "maxmetriclsap"
+				ospfMaxMetricLsaPDn__ := ospfDomDn_ + "/" + ospfMaxMetricLsaPRn__
+				_ = ospfMaxMetricLsaPDn__
+				if !existed(ospfMaxMetricLsaPDn__) {
+					ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.children.-1.ospfMaxMetricLsaP.attributes", map[string]interface{}{"rn": ospfMaxMetricLsaPRn__, "status": "deleted"})
+				} else {
+					ospfMaxMetricLsaPBody__ := ""
+					if !child_.MaxMetricAwaitConvergenceBgpAsn.IsNull() {
+						ospfMaxMetricLsaPBody__, _ = sjson.Set(ospfMaxMetricLsaPBody__, "ospfMaxMetricLsaP.attributes.awaitConvBgpAsn", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.MaxMetricControl.IsNull() {
+						ospfMaxMetricLsaPBody__, _ = sjson.Set(ospfMaxMetricLsaPBody__, "ospfMaxMetricLsaP.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.MaxMetricExternalLsa.IsNull() {
+						ospfMaxMetricLsaPBody__, _ = sjson.Set(ospfMaxMetricLsaPBody__, "ospfMaxMetricLsaP.attributes.maxMetricExtLsa", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.MaxMetricSummaryLsa.IsNull() {
+						ospfMaxMetricLsaPBody__, _ = sjson.Set(ospfMaxMetricLsaPBody__, "ospfMaxMetricLsaP.attributes.maxMetricSummLsa", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.MaxMetricStartupInterval.IsNull() {
+						ospfMaxMetricLsaPBody__, _ = sjson.Set(ospfMaxMetricLsaPBody__, "ospfMaxMetricLsaP.attributes.startupIntvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if ospfMaxMetricLsaPBody__ != "" {
+						ospfMaxMetricLsaPBody__, _ = sjson.Set(ospfMaxMetricLsaPBody__, "ospfMaxMetricLsaP.attributes.rn", ospfMaxMetricLsaPRn__)
+						ospfDomBody_, _ = sjson.SetRaw(ospfDomBody_, "ospfDom.children.-1", ospfMaxMetricLsaPBody__)
+					}
+				}
+			}
+			for key__, child__ := range child_.Interfaces {
+				_ = child__
+				ospfIfRn__ := child__.getRn(key__)
+				ospfIfDn__ := ospfDomDn_ + "/" + ospfIfRn__
+				_ = ospfIfDn__
+				if !existed(ospfIfDn__) {
+					ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.children.-1.ospfIf.attributes", map[string]interface{}{"rn": ospfIfRn__, "status": "deleted"})
+					continue
+				}
+				ospfIfBody__ := ""
+				ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.rn", ospfIfRn__)
+				if !child__.AdminState.IsNull() {
+					ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.AdvertiseSecondaries.IsNull() {
+					ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.advertiseSecondaries", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Area.IsNull() {
+					ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.area", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Bfd.IsNull() {
+					ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.bfdCtrl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Cost.IsNull() {
+					ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.cost", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.DeadInterval.IsNull() {
+					ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.deadIntvl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.HelloInterval.IsNull() {
+					ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.helloIntvl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.NetworkType.IsNull() {
+					ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.nwT", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Passive.IsNull() {
+					ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.passiveCtrl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Priority.IsNull() {
+					ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.prio", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Control.IsNull() {
+					ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.NodeFlag.IsNull() {
+					ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.nodeFlag", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.RetransmitInterval.IsNull() {
+					ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.rexmitIntvl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.TransmitDelay.IsNull() {
+					ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.attributes.xmitDelay", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !(child__.AuthenticationKey.IsNull() && child__.AuthenticationKeyId.IsNull() && child__.AuthenticationKeyNew.IsNull() && child__.AuthenticationKeySecureMode.IsNull() && child__.AuthenticationKeychain.IsNull() && child__.AuthenticationMd5Key.IsNull() && child__.AuthenticationMd5KeyNew.IsNull() && child__.AuthenticationMd5KeySecureMode.IsNull() && child__.AuthenticationType.IsNull()) {
+					ospfAuthNewPRn___ := "authnew"
+					ospfAuthNewPDn___ := ospfIfDn__ + "/" + ospfAuthNewPRn___
+					_ = ospfAuthNewPDn___
+					if !existed(ospfAuthNewPDn___) {
+						ospfIfBody__, _ = sjson.Set(ospfIfBody__, "ospfIf.children.-1.ospfAuthNewP.attributes", map[string]interface{}{"rn": ospfAuthNewPRn___, "status": "deleted"})
+					} else {
+						ospfAuthNewPBody___ := ""
+						if !child__.AuthenticationKey.IsNull() {
+							ospfAuthNewPBody___, _ = sjson.Set(ospfAuthNewPBody___, "ospfAuthNewP.attributes.key", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.AuthenticationKeyId.IsNull() {
+							ospfAuthNewPBody___, _ = sjson.Set(ospfAuthNewPBody___, "ospfAuthNewP.attributes.keyId", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.AuthenticationKeyNew.IsNull() {
+							ospfAuthNewPBody___, _ = sjson.Set(ospfAuthNewPBody___, "ospfAuthNewP.attributes.keyNew", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.AuthenticationKeySecureMode.IsNull() {
+							ospfAuthNewPBody___, _ = sjson.Set(ospfAuthNewPBody___, "ospfAuthNewP.attributes.keySecureMode", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.AuthenticationKeychain.IsNull() {
+							ospfAuthNewPBody___, _ = sjson.Set(ospfAuthNewPBody___, "ospfAuthNewP.attributes.keychain", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.AuthenticationMd5Key.IsNull() {
+							ospfAuthNewPBody___, _ = sjson.Set(ospfAuthNewPBody___, "ospfAuthNewP.attributes.md5key", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.AuthenticationMd5KeyNew.IsNull() {
+							ospfAuthNewPBody___, _ = sjson.Set(ospfAuthNewPBody___, "ospfAuthNewP.attributes.md5keyNew", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.AuthenticationMd5KeySecureMode.IsNull() {
+							ospfAuthNewPBody___, _ = sjson.Set(ospfAuthNewPBody___, "ospfAuthNewP.attributes.md5keySecureMode", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.AuthenticationType.IsNull() {
+							ospfAuthNewPBody___, _ = sjson.Set(ospfAuthNewPBody___, "ospfAuthNewP.attributes.type", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if ospfAuthNewPBody___ != "" {
+							ospfAuthNewPBody___, _ = sjson.Set(ospfAuthNewPBody___, "ospfAuthNewP.attributes.rn", ospfAuthNewPRn___)
+							ospfIfBody__, _ = sjson.SetRaw(ospfIfBody__, "ospfIf.children.-1", ospfAuthNewPBody___)
+						}
+					}
+				}
+				ospfDomBody_, _ = sjson.SetRaw(ospfDomBody_, "ospfDom.children.-1", ospfIfBody__)
+			}
+			for key__, child__ := range child_.Redistributions {
+				_ = child__
+				keyParts := strings.SplitN(key__, ";", 3)
+				_ = keyParts
+				ospfInterLeakPRn__ := child__.getRn(key__)
+				ospfInterLeakPDn__ := ospfDomDn_ + "/" + ospfInterLeakPRn__
+				_ = ospfInterLeakPDn__
+				if !existed(ospfInterLeakPDn__) {
+					ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.children.-1.ospfInterLeakP.attributes", map[string]interface{}{"rn": ospfInterLeakPRn__, "status": "deleted"})
+					continue
+				}
+				ospfInterLeakPBody__ := ""
+				ospfInterLeakPBody__, _ = sjson.Set(ospfInterLeakPBody__, "ospfInterLeakP.attributes.rn", ospfInterLeakPRn__)
+				if !child__.Always.IsNull() {
+					ospfInterLeakPBody__, _ = sjson.Set(ospfInterLeakPBody__, "ospfInterLeakP.attributes.always", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.RouteMap.IsNull() {
+					ospfInterLeakPBody__, _ = sjson.Set(ospfInterLeakPBody__, "ospfInterLeakP.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Srv6PrefixType.IsNull() {
+					ospfInterLeakPBody__, _ = sjson.Set(ospfInterLeakPBody__, "ospfInterLeakP.attributes.srv6PrefixType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				ospfDomBody_, _ = sjson.SetRaw(ospfDomBody_, "ospfDom.children.-1", ospfInterLeakPBody__)
+			}
+			if !(child_.DefaultInformationOriginateAlways.IsNull() && child_.DefaultInformationOriginateRouteMap.IsNull()) {
+				ospfDefRtLeakPRn__ := "defrtleak"
+				ospfDefRtLeakPDn__ := ospfDomDn_ + "/" + ospfDefRtLeakPRn__
+				_ = ospfDefRtLeakPDn__
+				if !existed(ospfDefRtLeakPDn__) {
+					ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.children.-1.ospfDefRtLeakP.attributes", map[string]interface{}{"rn": ospfDefRtLeakPRn__, "status": "deleted"})
+				} else {
+					ospfDefRtLeakPBody__ := ""
+					if !child_.DefaultInformationOriginateAlways.IsNull() {
+						ospfDefRtLeakPBody__, _ = sjson.Set(ospfDefRtLeakPBody__, "ospfDefRtLeakP.attributes.always", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.DefaultInformationOriginateRouteMap.IsNull() {
+						ospfDefRtLeakPBody__, _ = sjson.Set(ospfDefRtLeakPBody__, "ospfDefRtLeakP.attributes.rtMap", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if ospfDefRtLeakPBody__ != "" {
+						ospfDefRtLeakPBody__, _ = sjson.Set(ospfDefRtLeakPBody__, "ospfDefRtLeakP.attributes.rn", ospfDefRtLeakPRn__)
+						ospfDomBody_, _ = sjson.SetRaw(ospfDomBody_, "ospfDom.children.-1", ospfDefRtLeakPBody__)
+					}
+				}
+			}
+			if !(child_.SpfThrottleHoldInterval.IsNull() && child_.SpfThrottleInitialInterval.IsNull() && child_.SpfThrottleMaxInterval.IsNull()) {
+				ospfSpfCompRn__ := "spfcomp"
+				ospfSpfCompDn__ := ospfDomDn_ + "/" + ospfSpfCompRn__
+				_ = ospfSpfCompDn__
+				if !existed(ospfSpfCompDn__) {
+					ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.children.-1.ospfSpfComp.attributes", map[string]interface{}{"rn": ospfSpfCompRn__, "status": "deleted"})
+				} else {
+					ospfSpfCompBody__ := ""
+					if !child_.SpfThrottleHoldInterval.IsNull() {
+						ospfSpfCompBody__, _ = sjson.Set(ospfSpfCompBody__, "ospfSpfComp.attributes.holdIntvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SpfThrottleInitialInterval.IsNull() {
+						ospfSpfCompBody__, _ = sjson.Set(ospfSpfCompBody__, "ospfSpfComp.attributes.initIntvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SpfThrottleMaxInterval.IsNull() {
+						ospfSpfCompBody__, _ = sjson.Set(ospfSpfCompBody__, "ospfSpfComp.attributes.maxIntvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if ospfSpfCompBody__ != "" {
+						ospfSpfCompBody__, _ = sjson.Set(ospfSpfCompBody__, "ospfSpfComp.attributes.rn", ospfSpfCompRn__)
+						ospfDomBody_, _ = sjson.SetRaw(ospfDomBody_, "ospfDom.children.-1", ospfSpfCompBody__)
+					}
+				}
+			}
+			if !(child_.LsaArrivalInterval.IsNull() && child_.LsaGroupPacingInterval.IsNull() && child_.LsaThrottleHoldInterval.IsNull() && child_.LsaThrottleMaxInterval.IsNull() && child_.LsaThrottleStartInterval.IsNull()) {
+				ospfLsaCtrlRn__ := "lsactrl"
+				ospfLsaCtrlDn__ := ospfDomDn_ + "/" + ospfLsaCtrlRn__
+				_ = ospfLsaCtrlDn__
+				if !existed(ospfLsaCtrlDn__) {
+					ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.children.-1.ospfLsaCtrl.attributes", map[string]interface{}{"rn": ospfLsaCtrlRn__, "status": "deleted"})
+				} else {
+					ospfLsaCtrlBody__ := ""
+					if !child_.LsaArrivalInterval.IsNull() {
+						ospfLsaCtrlBody__, _ = sjson.Set(ospfLsaCtrlBody__, "ospfLsaCtrl.attributes.arrivalIntvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.LsaGroupPacingInterval.IsNull() {
+						ospfLsaCtrlBody__, _ = sjson.Set(ospfLsaCtrlBody__, "ospfLsaCtrl.attributes.gpPacingIntvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.LsaThrottleHoldInterval.IsNull() {
+						ospfLsaCtrlBody__, _ = sjson.Set(ospfLsaCtrlBody__, "ospfLsaCtrl.attributes.holdIntvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.LsaThrottleMaxInterval.IsNull() {
+						ospfLsaCtrlBody__, _ = sjson.Set(ospfLsaCtrlBody__, "ospfLsaCtrl.attributes.maxIntvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.LsaThrottleStartInterval.IsNull() {
+						ospfLsaCtrlBody__, _ = sjson.Set(ospfLsaCtrlBody__, "ospfLsaCtrl.attributes.startIntvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if ospfLsaCtrlBody__ != "" {
+						ospfLsaCtrlBody__, _ = sjson.Set(ospfLsaCtrlBody__, "ospfLsaCtrl.attributes.rn", ospfLsaCtrlRn__)
+						ospfDomBody_, _ = sjson.SetRaw(ospfDomBody_, "ospfDom.children.-1", ospfLsaCtrlBody__)
+					}
+				}
+			}
+			if !(child_.GracefulRestartControl.IsNull() && child_.GracefulRestartPeriod.IsNull() && child_.GracefulRestartHelper.IsNull()) {
+				ospfGrRn__ := "gr"
+				ospfGrDn__ := ospfDomDn_ + "/" + ospfGrRn__
+				_ = ospfGrDn__
+				if !existed(ospfGrDn__) {
+					ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.children.-1.ospfGr.attributes", map[string]interface{}{"rn": ospfGrRn__, "status": "deleted"})
+				} else {
+					ospfGrBody__ := ""
+					if !child_.GracefulRestartControl.IsNull() {
+						ospfGrBody__, _ = sjson.Set(ospfGrBody__, "ospfGr.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.GracefulRestartPeriod.IsNull() {
+						ospfGrBody__, _ = sjson.Set(ospfGrBody__, "ospfGr.attributes.gracePeriod", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.GracefulRestartHelper.IsNull() {
+						ospfGrBody__, _ = sjson.Set(ospfGrBody__, "ospfGr.attributes.helper", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if ospfGrBody__ != "" {
+						ospfGrBody__, _ = sjson.Set(ospfGrBody__, "ospfGr.attributes.rn", ospfGrRn__)
+						ospfDomBody_, _ = sjson.SetRaw(ospfDomBody_, "ospfDom.children.-1", ospfGrBody__)
+					}
+				}
+			}
+			for key__, child__ := range child_.SummaryAddresses {
+				_ = child__
+				ospfExtRtSumRn__ := child__.getRn(key__)
+				ospfExtRtSumDn__ := ospfDomDn_ + "/" + ospfExtRtSumRn__
+				_ = ospfExtRtSumDn__
+				if !existed(ospfExtRtSumDn__) {
+					ospfDomBody_, _ = sjson.Set(ospfDomBody_, "ospfDom.children.-1.ospfExtRtSum.attributes", map[string]interface{}{"rn": ospfExtRtSumRn__, "status": "deleted"})
+					continue
+				}
+				ospfExtRtSumBody__ := ""
+				ospfExtRtSumBody__, _ = sjson.Set(ospfExtRtSumBody__, "ospfExtRtSum.attributes.rn", ospfExtRtSumRn__)
+				if !child__.Control.IsNull() {
+					ospfExtRtSumBody__, _ = sjson.Set(ospfExtRtSumBody__, "ospfExtRtSum.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Tag.IsNull() {
+					ospfExtRtSumBody__, _ = sjson.Set(ospfExtRtSumBody__, "ospfExtRtSum.attributes.tag", "DME_UNSET_PROPERTY_MARKER")
+				}
+				ospfDomBody_, _ = sjson.SetRaw(ospfDomBody_, "ospfDom.children.-1", ospfExtRtSumBody__)
+			}
+			ospfInstBody, _ = sjson.SetRaw(ospfInstBody, "ospfInst.children.-1", ospfDomBody_)
+		}
+		body, _ = sjson.SetRaw(body, "ospfEntity.children.-1", ospfInstBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF, config OSPF, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -1559,6 +2046,8 @@ func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF, config OSPF,
 				stateChild := state.Instances[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("ospfInst.attributes.name").String() == key {
 						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
@@ -1584,6 +2073,8 @@ func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF, config OSPF,
 								stateChild := stateChild.Vrfs[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("ospfDom.attributes.name").String() == key {
 										if !stateChild.LogAdjacencyChanges.IsNull() && configChild.LogAdjacencyChanges.IsNull() {
@@ -1651,6 +2142,8 @@ func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF, config OSPF,
 												stateChild := stateChild.Areas[key]
 												_ = stateChild
 												_ = configChild
+												listChildDn__ := listChildDn_ + "/" + stateChild.getRn(key)
+												_ = listChildDn__
 												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
 													if mv.Get("ospfArea.attributes.id").String() == key {
 														if !stateChild.AuthenticationType.IsNull() && configChild.AuthenticationType.IsNull() {
@@ -1705,31 +2198,39 @@ func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF, config OSPF,
 												}
 											}
 										}
-										if !stateChild.MaxMetricAwaitConvergenceBgpAsn.IsNull() && configChild.MaxMetricAwaitConvergenceBgpAsn.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfMaxMetricLsaP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"awaitConvBgpAsn", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.MaxMetricControl.IsNull() && configChild.MaxMetricControl.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfMaxMetricLsaP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.MaxMetricExternalLsa.IsNull() && configChild.MaxMetricExternalLsa.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfMaxMetricLsaP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxMetricExtLsa", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.MaxMetricSummaryLsa.IsNull() && configChild.MaxMetricSummaryLsa.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfMaxMetricLsaP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxMetricSummLsa", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.MaxMetricStartupInterval.IsNull() && configChild.MaxMetricStartupInterval.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfMaxMetricLsaP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startupIntvl", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.MaxMetricAwaitConvergenceBgpAsn.IsNull() && stateChild.MaxMetricControl.IsNull() && stateChild.MaxMetricExternalLsa.IsNull() && stateChild.MaxMetricSummaryLsa.IsNull() && stateChild.MaxMetricStartupInterval.IsNull()) && (configChild.MaxMetricAwaitConvergenceBgpAsn.IsNull() && configChild.MaxMetricControl.IsNull() && configChild.MaxMetricExternalLsa.IsNull() && configChild.MaxMetricSummaryLsa.IsNull() && configChild.MaxMetricStartupInterval.IsNull()) && deleteEmptied(listChildDn_+"/maxmetriclsap") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfMaxMetricLsaP")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.MaxMetricAwaitConvergenceBgpAsn.IsNull() && configChild.MaxMetricAwaitConvergenceBgpAsn.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfMaxMetricLsaP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"awaitConvBgpAsn", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.MaxMetricControl.IsNull() && configChild.MaxMetricControl.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfMaxMetricLsaP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.MaxMetricExternalLsa.IsNull() && configChild.MaxMetricExternalLsa.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfMaxMetricLsaP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxMetricExtLsa", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.MaxMetricSummaryLsa.IsNull() && configChild.MaxMetricSummaryLsa.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfMaxMetricLsaP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxMetricSummLsa", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.MaxMetricStartupInterval.IsNull() && configChild.MaxMetricStartupInterval.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfMaxMetricLsaP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startupIntvl", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
 										for key := range stateChild.Interfaces {
 											if configChild, ok := configChild.Interfaces[key]; ok {
 												stateChild := stateChild.Interfaces[key]
 												_ = stateChild
 												_ = configChild
+												listChildDn__ := listChildDn_ + "/" + stateChild.getRn(key)
+												_ = listChildDn__
 												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
 													if mv.Get("ospfIf.attributes.id").String() == key {
 														if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
@@ -1786,25 +2287,31 @@ func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF, config OSPF,
 														}
 													}
 													if listChildPath__ != "" {
-														if !stateChild.AuthenticationKeyId.IsNull() && configChild.AuthenticationKeyId.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfAuthNewP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"keyId", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.AuthenticationKeySecureMode.IsNull() && configChild.AuthenticationKeySecureMode.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfAuthNewP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"keySecureMode", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.AuthenticationKeychain.IsNull() && configChild.AuthenticationKeychain.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfAuthNewP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"keychain", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.AuthenticationMd5KeySecureMode.IsNull() && configChild.AuthenticationMd5KeySecureMode.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfAuthNewP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"md5keySecureMode", "DME_UNSET_PROPERTY_MARKER")
-														}
-														if !stateChild.AuthenticationType.IsNull() && configChild.AuthenticationType.IsNull() {
-															unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfAuthNewP")
-															body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"type", "DME_UNSET_PROPERTY_MARKER")
+														if deleteEmptied != nil && !(stateChild.AuthenticationKey.IsNull() && stateChild.AuthenticationKeyId.IsNull() && stateChild.AuthenticationKeyNew.IsNull() && stateChild.AuthenticationKeySecureMode.IsNull() && stateChild.AuthenticationKeychain.IsNull() && stateChild.AuthenticationMd5Key.IsNull() && stateChild.AuthenticationMd5KeyNew.IsNull() && stateChild.AuthenticationMd5KeySecureMode.IsNull() && stateChild.AuthenticationType.IsNull()) && (configChild.AuthenticationKey.IsNull() && configChild.AuthenticationKeyId.IsNull() && configChild.AuthenticationKeyNew.IsNull() && configChild.AuthenticationKeySecureMode.IsNull() && configChild.AuthenticationKeychain.IsNull() && configChild.AuthenticationMd5Key.IsNull() && configChild.AuthenticationMd5KeyNew.IsNull() && configChild.AuthenticationMd5KeySecureMode.IsNull() && configChild.AuthenticationType.IsNull()) && deleteEmptied(listChildDn__+"/authnew") {
+															deletePath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfAuthNewP")
+															body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+															body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+														} else {
+															if !stateChild.AuthenticationKeyId.IsNull() && configChild.AuthenticationKeyId.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfAuthNewP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"keyId", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.AuthenticationKeySecureMode.IsNull() && configChild.AuthenticationKeySecureMode.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfAuthNewP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"keySecureMode", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.AuthenticationKeychain.IsNull() && configChild.AuthenticationKeychain.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfAuthNewP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"keychain", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.AuthenticationMd5KeySecureMode.IsNull() && configChild.AuthenticationMd5KeySecureMode.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfAuthNewP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"md5keySecureMode", "DME_UNSET_PROPERTY_MARKER")
+															}
+															if !stateChild.AuthenticationType.IsNull() && configChild.AuthenticationType.IsNull() {
+																unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath__, "ospfAuthNewP")
+																body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"type", "DME_UNSET_PROPERTY_MARKER")
+															}
 														}
 													}
 												}
@@ -1834,57 +2341,81 @@ func (data OSPF) toBodyWithDeletes(ctx context.Context, state OSPF, config OSPF,
 												}
 											}
 										}
-										if !stateChild.DefaultInformationOriginateAlways.IsNull() && configChild.DefaultInformationOriginateAlways.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfDefRtLeakP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"always", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.DefaultInformationOriginateAlways.IsNull() && stateChild.DefaultInformationOriginateRouteMap.IsNull()) && (configChild.DefaultInformationOriginateAlways.IsNull() && configChild.DefaultInformationOriginateRouteMap.IsNull()) && deleteEmptied(listChildDn_+"/defrtleak") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfDefRtLeakP")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.DefaultInformationOriginateAlways.IsNull() && configChild.DefaultInformationOriginateAlways.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfDefRtLeakP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"always", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.DefaultInformationOriginateRouteMap.IsNull() && configChild.DefaultInformationOriginateRouteMap.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfDefRtLeakP")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.DefaultInformationOriginateRouteMap.IsNull() && configChild.DefaultInformationOriginateRouteMap.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfDefRtLeakP")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rtMap", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.SpfThrottleHoldInterval.IsNull() && stateChild.SpfThrottleInitialInterval.IsNull() && stateChild.SpfThrottleMaxInterval.IsNull()) && (configChild.SpfThrottleHoldInterval.IsNull() && configChild.SpfThrottleInitialInterval.IsNull() && configChild.SpfThrottleMaxInterval.IsNull()) && deleteEmptied(listChildDn_+"/spfcomp") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfSpfComp")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SpfThrottleHoldInterval.IsNull() && configChild.SpfThrottleHoldInterval.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfSpfComp")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"holdIntvl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SpfThrottleInitialInterval.IsNull() && configChild.SpfThrottleInitialInterval.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfSpfComp")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"initIntvl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SpfThrottleMaxInterval.IsNull() && configChild.SpfThrottleMaxInterval.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfSpfComp")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxIntvl", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.SpfThrottleHoldInterval.IsNull() && configChild.SpfThrottleHoldInterval.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfSpfComp")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"holdIntvl", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.LsaArrivalInterval.IsNull() && stateChild.LsaGroupPacingInterval.IsNull() && stateChild.LsaThrottleHoldInterval.IsNull() && stateChild.LsaThrottleMaxInterval.IsNull() && stateChild.LsaThrottleStartInterval.IsNull()) && (configChild.LsaArrivalInterval.IsNull() && configChild.LsaGroupPacingInterval.IsNull() && configChild.LsaThrottleHoldInterval.IsNull() && configChild.LsaThrottleMaxInterval.IsNull() && configChild.LsaThrottleStartInterval.IsNull()) && deleteEmptied(listChildDn_+"/lsactrl") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfLsaCtrl")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.LsaArrivalInterval.IsNull() && configChild.LsaArrivalInterval.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfLsaCtrl")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"arrivalIntvl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.LsaGroupPacingInterval.IsNull() && configChild.LsaGroupPacingInterval.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfLsaCtrl")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"gpPacingIntvl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.LsaThrottleHoldInterval.IsNull() && configChild.LsaThrottleHoldInterval.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfLsaCtrl")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"holdIntvl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.LsaThrottleMaxInterval.IsNull() && configChild.LsaThrottleMaxInterval.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfLsaCtrl")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxIntvl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.LsaThrottleStartInterval.IsNull() && configChild.LsaThrottleStartInterval.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfLsaCtrl")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startIntvl", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.SpfThrottleInitialInterval.IsNull() && configChild.SpfThrottleInitialInterval.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfSpfComp")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"initIntvl", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.SpfThrottleMaxInterval.IsNull() && configChild.SpfThrottleMaxInterval.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfSpfComp")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxIntvl", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.LsaArrivalInterval.IsNull() && configChild.LsaArrivalInterval.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfLsaCtrl")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"arrivalIntvl", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.LsaGroupPacingInterval.IsNull() && configChild.LsaGroupPacingInterval.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfLsaCtrl")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"gpPacingIntvl", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.LsaThrottleHoldInterval.IsNull() && configChild.LsaThrottleHoldInterval.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfLsaCtrl")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"holdIntvl", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.LsaThrottleMaxInterval.IsNull() && configChild.LsaThrottleMaxInterval.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfLsaCtrl")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxIntvl", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.LsaThrottleStartInterval.IsNull() && configChild.LsaThrottleStartInterval.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfLsaCtrl")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startIntvl", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.GracefulRestartControl.IsNull() && configChild.GracefulRestartControl.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfGr")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.GracefulRestartPeriod.IsNull() && configChild.GracefulRestartPeriod.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfGr")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"gracePeriod", "DME_UNSET_PROPERTY_MARKER")
-										}
-										if !stateChild.GracefulRestartHelper.IsNull() && configChild.GracefulRestartHelper.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfGr")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"helper", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.GracefulRestartControl.IsNull() && stateChild.GracefulRestartPeriod.IsNull() && stateChild.GracefulRestartHelper.IsNull()) && (configChild.GracefulRestartControl.IsNull() && configChild.GracefulRestartPeriod.IsNull() && configChild.GracefulRestartHelper.IsNull()) && deleteEmptied(listChildDn_+"/gr") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfGr")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.GracefulRestartControl.IsNull() && configChild.GracefulRestartControl.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfGr")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.GracefulRestartPeriod.IsNull() && configChild.GracefulRestartPeriod.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfGr")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"gracePeriod", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.GracefulRestartHelper.IsNull() && configChild.GracefulRestartHelper.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "ospfGr")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"helper", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
 										for key := range stateChild.SummaryAddresses {
 											if configChild, ok := configChild.SummaryAddresses[key]; ok {

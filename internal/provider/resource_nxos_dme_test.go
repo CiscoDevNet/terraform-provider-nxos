@@ -26,7 +26,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/tfversion"
 )
 
-func TestAccNxosDme(t *testing.T) {
+func TestAccDmeResource(t *testing.T) {
 	var tfVersion *goversion.Version
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
@@ -36,14 +36,14 @@ func TestAccNxosDme(t *testing.T) {
 		},
 		Steps: []resource.TestStep{
 			{
-				Config: testAccNxosDmeConfig_empty(),
+				Config: testAccDmeResourceConfig_empty(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_dme.l1PhysIf", "class_name", "l1PhysIf"),
 					resource.TestCheckResourceAttr("nxos_dme.l1PhysIf", "id", "sys/intf/phys-[eth1/1]"),
 				),
 			},
 			{
-				Config: testAccNxosDmeConfig_child(),
+				Config: testAccDmeResourceConfig_child(),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_dme.ipqosCMapInst", "class_name", "ipqosCMapInst"),
 					resource.TestCheckResourceAttr("nxos_dme.ipqosCMapInst", "id", "sys/ipqos/dflt/c/name-[CM1]"),
@@ -51,7 +51,7 @@ func TestAccNxosDme(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccNxosDmeConfig_interface("Create description"),
+				Config: testAccDmeResourceConfig_interface("Create description"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_dme.l1PhysIf", "class_name", "l1PhysIf"),
 					resource.TestCheckResourceAttr("nxos_dme.l1PhysIf", "id", "sys/intf/phys-[eth1/1]"),
@@ -71,7 +71,7 @@ func TestAccNxosDme(t *testing.T) {
 				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
 			},
 			{
-				Config: testAccNxosDmeConfig_interface("Updated description"),
+				Config: testAccDmeResourceConfig_interface("Updated description"),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("nxos_dme.l1PhysIf", "content.descr", "Updated description"),
 				),
@@ -80,7 +80,7 @@ func TestAccNxosDme(t *testing.T) {
 	})
 }
 
-func testAccNxosDmeConfig_empty() string {
+func testAccDmeResourceConfig_empty() string {
 	return `
 	resource "nxos_dme" "l1PhysIf" {
 		dn = "sys/intf/phys-[eth1/1]"
@@ -89,7 +89,7 @@ func testAccNxosDmeConfig_empty() string {
 	`
 }
 
-func testAccNxosDmeConfig_interface(description string) string {
+func testAccDmeResourceConfig_interface(description string) string {
 	return fmt.Sprintf(`
 	resource "nxos_dme" "l1PhysIf" {
 		dn = "sys/intf/phys-[eth1/1]"
@@ -102,7 +102,7 @@ func testAccNxosDmeConfig_interface(description string) string {
 	`, description)
 }
 
-func testAccNxosDmeConfig_child() string {
+func testAccDmeResourceConfig_child() string {
 	return `
 	resource "nxos_dme" "ipqosCMapInst" {
 		dn = "sys/ipqos/dflt/c/name-[CM1]"

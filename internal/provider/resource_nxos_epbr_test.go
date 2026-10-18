@@ -33,7 +33,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosEPBR(t *testing.T) {
+// TestAccEPBRResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccEPBRResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_epbr.test", "services.SVC1.admin_state", "shut"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_epbr.test", "services.SVC1.connection_mode", "full-duplex"))
@@ -92,41 +96,122 @@ func TestAccNxosEPBR(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_epbr.test", "policies.POL1.matches.EPBR-ACL1.sequences.10.service", "SVC3"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_epbr.test", "policies.POL1.matches.EPBR-ACL1.sequences.10.fail_action", "drop"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_epbr.test", "interfaces.eth1/11;ipv4;no-reverse.policy", "POL1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.admin_state", "shut"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.connection_mode", "full-duplex"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.hold_down_threshold_count", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.hold_down_threshold_time", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.reverse_security_group", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.security_group", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.service_interface", "eth1/10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.threshold_up", "50"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.type", "l3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.probe_control", "enable"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.probe_frequency", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.probe_port", "80"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.probe_protocol", "TCP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.probe_retry_down_count", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.probe_retry_up_count", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.probe_reverse_source_interface", "lo123"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.probe_source_interface", "lo123"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.probe_timeout", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.admin_state", "shut"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.hold_down_threshold_count", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.hold_down_threshold_time", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.mode", "hot-standby"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.weight", "3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.probe_frequency", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.probe_http_get", "index.html"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.probe_http_version", "1.1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.probe_protocol", "HTTP"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.probe_retry_down_count", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.probe_retry_up_count", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.probe_source_interface", "lo123"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.probe_timeout", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.reverse_ip", "10.2.2.10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.reverse_probe_protocol", "noProtocol"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "services.SVC1.endpoints.10.1.1.10.reverse_probe_track_id", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "failover_groups.FG1.service_chains.CHAIN2.preference", "10"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "service_chains.CHAIN1.failover_group", "FG1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "service_chains.CHAIN1.load_balance_method", "src"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "service_chains.CHAIN1.mode", "multisite"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "service_chains.CHAIN1.sequences.10.service", "SVC2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "service_chains.CHAIN1.sequences.10.action", "route"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "service_chains.CHAIN1.sequences.10.load_balance_method", "dst"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "service_chains.CHAIN1.sequences.10.reverse_action", "route"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "policies.POL1.default_traffic_action", "redirect"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "policies.POL1.destination_vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "policies.POL1.source_vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "policies.POL1.statistics", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "policies.POL1.matches.EPBR-ACL1.access_list_type", "ipv4"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "policies.POL1.matches.EPBR-ACL1.buckets", "8"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "policies.POL1.matches.EPBR-ACL1.destination_vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "policies.POL1.matches.EPBR-ACL1.load_balance_method", "src"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "policies.POL1.matches.EPBR-ACL1.mask_position", "2"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "policies.POL1.matches.EPBR-ACL1.source_vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "policies.POL1.matches.EPBR-ACL1.traffic_action", "redirect"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "policies.POL1.matches.EPBR-ACL1.sequences.10.service", "SVC3"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "policies.POL1.matches.EPBR-ACL1.sequences.10.fail_action", "drop"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_epbr.test", "interfaces.eth1/11;ipv4;no-reverse.policy", "POL1"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccEPBRResourcePrerequisitesConfig + testAccEPBRResourceConfig_minimum(),
+		},
+		{
+			Config: testAccEPBRResourcePrerequisitesConfig + testAccEPBRResourceConfig_all() + testAccEPBRResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_epbr.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccEPBRResourceImportStateIdFunc("nxos_epbr.test"),
+		},
+		{
+			ResourceName:       "nxos_epbr.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			Config: testAccEPBRResourcePrerequisitesConfig + testAccEPBRResourceConfigAdditional0,
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccEPBRResourcePrerequisitesConfig + testAccEPBRResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccEPBRResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccEPBRResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_epbr.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccEPBRResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccEPBRResourcePrerequisitesConfig + testAccEPBRResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosEPBRPrerequisitesConfig + testAccNxosEPBRConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_epbr.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosEPBRImportStateIdFunc("nxos_epbr.test"),
-			},
-			{
-				ResourceName:       "nxos_epbr.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-			{
-				Config: testAccNxosEPBRPrerequisitesConfig + testAccNxosEPBRConfigAdditional0,
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosEPBRImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccEPBRResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -136,7 +221,7 @@ func nxosEPBRImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosEPBRPrerequisitesConfig = `
+const testAccEPBRResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/epbr"
   class_name = "fmEpbr"
@@ -353,7 +438,7 @@ resource "nxos_dme" "PreReq15" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosEPBRConfig_minimum() string {
+func testAccEPBRResourceConfig_minimum() string {
 	config := `resource "nxos_epbr" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, nxos_dme.PreReq13, nxos_dme.PreReq14, nxos_dme.PreReq15, ]` + "\n"
 	config += `}` + "\n"
@@ -363,7 +448,7 @@ func testAccNxosEPBRConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosEPBRConfig_all() string {
+func testAccEPBRResourceConfig_all() string {
 	config := `resource "nxos_epbr" "test" {` + "\n"
 	config += `	services = {` + "\n"
 	config += `		"SVC1" = {` + "\n"
@@ -471,7 +556,15 @@ func testAccNxosEPBRConfig_all() string {
 	return config
 }
 
-const testAccNxosEPBRConfigAdditional0 = `
+func testAccEPBRResourceConfig_dataSource() string {
+	return `
+data "nxos_epbr" "test" {
+	depends_on = [nxos_epbr.test]
+}
+`
+}
+
+const testAccEPBRResourceConfigAdditional0 = `
 resource "nxos_epbr" "test" {
   services = {
     "L2SVC" = {

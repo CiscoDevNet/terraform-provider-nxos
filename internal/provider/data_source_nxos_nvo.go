@@ -311,7 +311,8 @@ func (d *NVODataSource) Read(ctx context.Context, req datasource.ReadRequest, re
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"nvoEvpnMultisiteBordergw", "nvoEvpnMulticast", "nvoEvpnEsiMultiHoming", "nvoEvpnStormControl", "nvoEp", "nvoNws", "nvoNw", "nvoIngRepl"}, NVOSubtreeClassMinVersions)
+
+	res, err := getNVOTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

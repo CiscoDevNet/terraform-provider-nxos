@@ -28,6 +28,7 @@ import (
 	"path"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 	"text/template"
@@ -63,11 +64,6 @@ var templates = []t{
 		path:   "./gen/templates/data_source.go",
 		prefix: "./internal/provider/data_source_nxos_",
 		suffix: ".go",
-	},
-	{
-		path:   "./gen/templates/data_source_test.go",
-		prefix: "./internal/provider/data_source_nxos_",
-		suffix: "_test.go",
 	},
 	{
 		path:   "./gen/templates/resource.go",
@@ -165,6 +161,7 @@ type YamlConfigChildClass struct {
 	DocMinVersion     string                 `yaml:"-"`
 	Attributes        []YamlConfigAttribute  `yaml:"attributes"`
 	ChildClasses      []YamlConfigChildClass `yaml:"child_classes"`
+	ExampleEntries    []map[string]any       `yaml:"example_entries"`
 	TfChildClasses    []YamlConfigChildClass `yaml:"-"`
 }
 
@@ -337,22 +334,32 @@ func TestChildClasses(children []YamlConfigChildClass) []YamlConfigChildClass {
 	return result
 }
 
-// Templating helper function to check if any child class (recursively) is a list
-func HasListChildClasses(children []YamlConfigChildClass) bool {
-	for _, c := range children {
-		if c.Type == "list" {
-			return true
-		}
-		if HasListChildClasses(c.ChildClasses) {
-			return true
-		}
-	}
-	return false
-}
-
 // RnHasDynamicSegment returns true if the rn contains a format placeholder ('%').
 func RnHasDynamicSegment(rn string) bool {
 	return strings.Contains(rn, "%")
+}
+
+// SingleEmptyExpr returns a Go expression that is true if none of the attributes and nested child classes of a
+// single child class are configured. v is the Go expression holding the data the attributes are flattened into.
+func SingleEmptyExpr(v string, c YamlConfigChildClass) string {
+	var conds []string
+	for _, a := range c.Attributes {
+		if a.Value != "" {
+			continue
+		}
+		conds = append(conds, fmt.Sprintf("%s.%s.IsNull()", v, ToGoName(a.TfName)))
+	}
+	for _, cc := range c.ChildClasses {
+		if cc.Type == "list" {
+			conds = append(conds, fmt.Sprintf("len(%s.%s) == 0", v, ToGoName(cc.TfName)))
+		} else if sub := SingleEmptyExpr(v, cc); sub != "true" {
+			conds = append(conds, sub)
+		}
+	}
+	if len(conds) == 0 {
+		return "true"
+	}
+	return "(" + strings.Join(conds, " && ") + ")"
 }
 
 // RnFormatArgs generates the Go expression list for fmt.Sprintf arguments
@@ -406,17 +413,20 @@ var functions = template.FuncMap{
 	"hasSensitiveAttr":          HasSensitiveAttr,
 	"hasSensitiveAttrRecursive": HasSensitiveAttrRecursive,
 	"importAttributes":          ImportAttributes,
-	"hasListChildClasses":       HasListChildClasses,
 	"hasTestAttrs":              HasTestAttrs,
 	"makeMap":                   MakeMap,
 	"rnHasDynamicSegment":       RnHasDynamicSegment,
+	"singleEmptyExpr":           SingleEmptyExpr,
 	"rnFormatArgs":              RnFormatArgs,
 	"childRn":                   ChildRn,
 	"allChildClassNames":        AllChildClassNames,
-	"join":                      strings.Join,
+	"allListClassNames":         AllListClassNames,
+	"keyAttributes":             KeyAttributes,
+	"exampleEntries":            ExampleEntries,
 	"hasNonIdAttrs":             HasNonIdAttrs,
 	"needsPlanItem":             NeedsPlanItem,
 	"hasAutoDeleteOnEmpty":      HasAutoDeleteOnEmpty,
+	"hasKeepOnDestroy":          HasKeepOnDestroy,
 	"separateRequestClasses":    SeparateRequestClasses,
 	"separateRequestAttributes": SeparateRequestAttributes,
 	"hasSeparateRequest":        HasSeparateRequest,
@@ -442,6 +452,22 @@ func AllChildClassNames(children []YamlConfigChildClass) []string {
 	for _, c := range children {
 		names = append(names, c.ClassName)
 		names = append(names, AllChildClassNames(c.ChildClasses)...)
+	}
+	return names
+}
+
+// AllListClassNames recursively collects the unique class names of all list child classes.
+func AllListClassNames(children []YamlConfigChildClass) []string {
+	var names []string
+	for _, c := range children {
+		if c.Type == "list" && !slices.Contains(names, c.ClassName) {
+			names = append(names, c.ClassName)
+		}
+		for _, n := range AllListClassNames(c.ChildClasses) {
+			if !slices.Contains(names, n) {
+				names = append(names, n)
+			}
+		}
 	}
 	return names
 }
@@ -481,6 +507,16 @@ func HasAutoDeleteOnEmpty(children []YamlConfigChildClass) bool {
 	return false
 }
 
+// HasKeepOnDestroy returns true if any of the child classes, or their child classes, has keep_on_destroy set.
+func HasKeepOnDestroy(children []YamlConfigChildClass) bool {
+	for _, c := range children {
+		if c.KeepOnDestroy || HasKeepOnDestroy(c.ChildClasses) {
+			return true
+		}
+	}
+	return false
+}
+
 // SeparateRequestClasses recursively collects the class names of all child classes with separate_request set.
 func SeparateRequestClasses(children []YamlConfigChildClass) []string {
 	var names []string
@@ -512,6 +548,39 @@ func SeparateRequestAttributes(config YamlConfig) []SeparateRequestAttributeClas
 		}
 		if len(separate) > 0 {
 			classes = append(classes, SeparateRequestAttributeClass{ClassName: className, Attributes: separate})
+		}
+	}
+	add(config.ClassName, config.Attributes)
+	var walk func(children []YamlConfigChildClass)
+	walk = func(children []YamlConfigChildClass) {
+		for _, c := range children {
+			add(c.ClassName, c.Attributes)
+			walk(c.ChildClasses)
+		}
+	}
+	walk(config.ChildClasses)
+	return classes
+}
+
+// KeyAttributeClass holds the NX-OS names of the attributes identifying the objects of a class.
+type KeyAttributeClass struct {
+	ClassName string
+	Names     []string
+}
+
+// KeyAttributes collects, for the resource class and all child classes (recursively), the attributes identifying
+// their objects. Classes without such attributes are omitted.
+func KeyAttributes(config YamlConfig) []KeyAttributeClass {
+	var classes []KeyAttributeClass
+	add := func(className string, attrs []YamlConfigAttribute) {
+		var names []string
+		for _, a := range attrs {
+			if a.Id {
+				names = append(names, a.NxosName)
+			}
+		}
+		if len(names) > 0 && !slices.ContainsFunc(classes, func(c KeyAttributeClass) bool { return c.ClassName == className }) {
+			classes = append(classes, KeyAttributeClass{ClassName: className, Names: names})
 		}
 	}
 	add(config.ClassName, config.Attributes)
@@ -571,6 +640,68 @@ func MapKeyExpr(varName string, attrs []YamlConfigAttribute) string {
 }
 
 // MapKeyExample returns the map key computed from Example values of ID attributes.
+// ExampleEntry is an additional list entry of the examples and acceptance tests.
+type ExampleEntry struct {
+	Key        string
+	Attributes []ExampleEntryAttribute
+}
+
+// ExampleEntryAttribute is an attribute of an ExampleEntry.
+type ExampleEntryAttribute struct {
+	TfName string
+	Value  string
+	Hcl    string
+}
+
+// ExampleEntries returns the example_entries of a list child class with their map keys and their attributes in the order
+// of the definition. The attributes can belong to the list class or to its flattened single child classes.
+func ExampleEntries(c YamlConfigChildClass) []ExampleEntry {
+	var attrs []YamlConfigAttribute
+	var collect func(attributes []YamlConfigAttribute, children []YamlConfigChildClass)
+	collect = func(attributes []YamlConfigAttribute, children []YamlConfigChildClass) {
+		attrs = append(attrs, attributes...)
+		for _, cc := range children {
+			if cc.Type == "single" {
+				collect(cc.Attributes, cc.TfChildClasses)
+			}
+		}
+	}
+	collect(c.Attributes, c.TfChildClasses)
+
+	var entries []ExampleEntry
+	for _, values := range c.ExampleEntries {
+		var entry ExampleEntry
+		var keys []string
+		used := 0
+		for _, a := range attrs {
+			v, ok := values[a.TfName]
+			if !ok {
+				if a.Id {
+					log.Fatalf("example_entries of %s: missing key attribute %s", c.ClassName, a.TfName)
+				}
+				continue
+			}
+			used++
+			value := fmt.Sprint(v)
+			if a.Id {
+				keys = append(keys, value)
+				continue
+			}
+			hcl := value
+			if a.Type == "String" {
+				hcl = strconv.Quote(value)
+			}
+			entry.Attributes = append(entry.Attributes, ExampleEntryAttribute{TfName: a.TfName, Value: value, Hcl: hcl})
+		}
+		if used != len(values) {
+			log.Fatalf("example_entries of %s: unknown attributes in %v", c.ClassName, values)
+		}
+		entry.Key = strings.Join(keys, ";")
+		entries = append(entries, entry)
+	}
+	return entries
+}
+
 func MapKeyExample(attrs []YamlConfigAttribute) string {
 	ids := idAttrs(attrs)
 	if len(ids) == 0 {

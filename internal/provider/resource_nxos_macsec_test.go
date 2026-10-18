@@ -34,7 +34,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosMACsec(t *testing.T) {
+// TestAccMACsecResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccMACsecResource(t *testing.T) {
 	var checks []resource.TestCheckFunc
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_macsec.test", "shutdown", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_macsec.test", "policies.POLICY1.allowed_peer_cipher_suite_1", "GCM-AES-128"))
@@ -56,38 +60,82 @@ func TestAccNxosMACsec(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_macsec.test", "interfaces.eth1/30.keychain_pki", "false"))
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_macsec.test", "interfaces.eth1/30.policy_name", "POLICY1"))
 	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "shutdown", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "policies.POLICY1.allowed_peer_cipher_suite_1", "GCM-AES-128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "policies.POLICY1.allowed_peer_cipher_suite_2", "GCM-AES-256"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "policies.POLICY1.allowed_peer_cipher_suite_3", "GCM-AES-XPN-128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "policies.POLICY1.allowed_peer_cipher_suite_4", "GCM-AES-XPN-256"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "policies.POLICY1.cipher_suite", "NoneOrEnforce-peer"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "policies.POLICY1.confidentiality_offset", "CONF-OFFSET-30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "policies.POLICY1.include_icv_indicator", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "policies.POLICY1.include_sci", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "policies.POLICY1.key_server_priority", "32"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "policies.POLICY1.lldp_bypass", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "policies.POLICY1.replay_window", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "policies.POLICY1.sak_expiry_time", "3600"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "policies.POLICY1.security_policy", "must-secure"))
+	if os.Getenv("MACSEC_INTERFACE") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "interfaces.eth1/30.fallback_keychain_name", "MACSEC_FALLBACK_KEYCHAIN1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "interfaces.eth1/30.keychain_name", "MACSEC_KEYCHAIN1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "interfaces.eth1/30.keychain_pki", "false"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_macsec.test", "interfaces.eth1/30.policy_name", "POLICY1"))
+	}
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccMACsecResourcePrerequisitesConfig + testAccMACsecResourceConfig_minimum(),
+		},
+		{
+			Config: testAccMACsecResourcePrerequisitesConfig + testAccMACsecResourceConfig_all() + testAccMACsecResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_macsec.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccMACsecResourceImportStateIdFunc("nxos_macsec.test"),
+		},
+		{
+			ResourceName:       "nxos_macsec.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccMACsecResourcePrerequisitesConfig + testAccMACsecResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccMACsecResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccMACsecResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_macsec.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccMACsecResourcePrerequisitesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccMACsecResourcePrerequisitesConfig + testAccMACsecResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosMACsecPrerequisitesConfig + testAccNxosMACsecConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_macsec.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosMACsecImportStateIdFunc("nxos_macsec.test"),
-			},
-			{
-				ResourceName:       "nxos_macsec.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosMACsecImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccMACsecResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -97,7 +145,7 @@ func nxosMACsecImportStateIdFunc(resourceName string) resource.ImportStateIdFunc
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
-const testAccNxosMACsecPrerequisitesConfig = `
+const testAccMACsecResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
   dn = "sys/fm/macsec"
   class_name = "fmMacsec"
@@ -144,7 +192,7 @@ resource "nxos_dme" "PreReq4" {
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosMACsecConfig_minimum() string {
+func testAccMACsecResourceConfig_minimum() string {
 	config := `resource "nxos_macsec" "test" {` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, ]` + "\n"
 	config += `}` + "\n"
@@ -154,7 +202,7 @@ func testAccNxosMACsecConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosMACsecConfig_all() string {
+func testAccMACsecResourceConfig_all() string {
 	config := `resource "nxos_macsec" "test" {` + "\n"
 	config += `	shutdown = false` + "\n"
 	config += `	policies = {` + "\n"
@@ -187,6 +235,14 @@ func testAccNxosMACsecConfig_all() string {
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, ]` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccMACsecResourceConfig_dataSource() string {
+	return `
+data "nxos_macsec" "test" {
+	depends_on = [nxos_macsec.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

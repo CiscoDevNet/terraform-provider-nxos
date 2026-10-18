@@ -34,7 +34,11 @@ import (
 // End of section. //template:end imports
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAcc
-func TestAccNxosFeature(t *testing.T) {
+// TestAccFeatureResource runs the whole lifecycle of the resource in a single test case, which leaves the device as
+// it found it: create the minimal configuration, add everything and read it with the data source, import, remove
+// everything again and destroy with the default delete deletion policy. With NXOS_TEST_DELETION_POLICIES set, it also
+// destroys the full configuration with the reset deletion policy and creates on top of what the reset left.
+func TestAccFeatureResource(t *testing.T) {
 	if os.Getenv("FEATURE") == "" {
 		t.Skip("skipping test, set environment variable FEATURE")
 	}
@@ -93,38 +97,116 @@ func TestAccNxosFeature(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "vpc", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "vtp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "feature_sets.fex.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "analytics", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "bash_shell", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "bfd", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "bgp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "dhcp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "eigrp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "epbr", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "evpn", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "grpc", "enabled"))
+	if os.Getenv("FEATURE_HMM") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "hmm", "enabled"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "hsrp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "interface_vlan", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "isis", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "lacp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "lldp", "enabled"))
+	if os.Getenv("FEATURE_MACSEC") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "macsec", "enabled"))
+	}
+	if os.Getenv("FEATURE_NETFLOW") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "netflow", "enabled"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "ngmvpn", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "ngoam", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "nv_overlay", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "ospf", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "ospfv3", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "pbr", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "pim", "enabled"))
+	if os.Getenv("FEATURE_POE") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "poe", "enabled"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "ptp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "pvlan", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "sflow", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "scp_server", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "security_group", "enabled"))
+	if os.Getenv("HYPERSHIELD") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "service_acceleration", "enabled"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "sftp_server", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "sla_responder", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "sla_sender", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "sla_twamp_server", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "ssh", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "tacacs", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "telemetry", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "telnet", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "udld", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "vn_segment", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "vpc", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "vtp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "feature_sets.fex.admin_state", "enabled"))
 	var tfVersion *goversion.Version
+	steps := []resource.TestStep{
+		{
+			Config: testAccFeatureResourceConfig_minimum(),
+		},
+		{
+			Config: testAccFeatureResourceConfig_all() + testAccFeatureResourceConfig_dataSource(),
+			Check:  resource.ComposeTestCheckFunc(checks...),
+		},
+		{
+			ResourceName:      "nxos_feature.test",
+			ImportState:       true,
+			ImportStateIdFunc: testAccFeatureResourceImportStateIdFunc("nxos_feature.test"),
+		},
+		{
+			ResourceName:       "nxos_feature.test",
+			ImportState:        true,
+			ImportStateKind:    resource.ImportBlockWithResourceIdentity,
+			ExpectNonEmptyPlan: true,
+			SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
+		},
+		{
+			// Removing everything but the required attributes deletes the emptied single child objects
+			Config: testAccFeatureResourceConfig_minimum(),
+		},
+	}
+	if testAccDeletionPolicyTests() {
+		steps = append(steps, []resource.TestStep{
+			{
+				Config: testAccWithDeletionPolicy(testAccFeatureResourceConfig_all(), "reset"),
+				Check:  resource.TestCheckResourceAttr("nxos_feature.test", "deletion_policy", "reset"),
+			},
+			{
+				// Removing the resource destroys it with the reset deletion policy
+				Config: testAccNoResourcesConfig,
+			},
+			{
+				// Create on top of what the reset left on the device
+				Config: testAccFeatureResourceConfig_minimum(),
+			},
+		}...)
+	}
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		TerraformVersionChecks: []tfversion.TerraformVersionCheck{
 			terraformVersionCapture{Version: &tfVersion},
 		},
-		Steps: []resource.TestStep{
-			{
-				Config: testAccNxosFeatureConfig_all(),
-				Check:  resource.ComposeTestCheckFunc(checks...),
-			},
-			{
-				ResourceName:      "nxos_feature.test",
-				ImportState:       true,
-				ImportStateIdFunc: nxosFeatureImportStateIdFunc("nxos_feature.test"),
-			},
-			{
-				ResourceName:       "nxos_feature.test",
-				ImportState:        true,
-				ImportStateKind:    resource.ImportBlockWithResourceIdentity,
-				ExpectNonEmptyPlan: true,
-				SkipFunc:           skipBelowTerraformVersion(&tfVersion, goversion.Must(goversion.NewVersion("1.12.0"))),
-			},
-		},
+		Steps: steps,
 	})
 }
 
 // End of section. //template:end testAcc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin importStateIdFunc
-func nxosFeatureImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
+func testAccFeatureResourceImportStateIdFunc(resourceName string) resource.ImportStateIdFunc {
 	return func(s *terraform.State) (string, error) {
 
 		return fmt.Sprintf(""), nil
@@ -138,7 +220,7 @@ func nxosFeatureImportStateIdFunc(resourceName string) resource.ImportStateIdFun
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
-func testAccNxosFeatureConfig_minimum() string {
+func testAccFeatureResourceConfig_minimum() string {
 	config := `resource "nxos_feature" "test" {` + "\n"
 	config += `}` + "\n"
 	return config
@@ -147,7 +229,7 @@ func testAccNxosFeatureConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccNxosFeatureConfig_all() string {
+func testAccFeatureResourceConfig_all() string {
 	config := `resource "nxos_feature" "test" {` + "\n"
 	config += `	analytics = "enabled"` + "\n"
 	config += `	bash_shell = "enabled"` + "\n"
@@ -209,6 +291,14 @@ func testAccNxosFeatureConfig_all() string {
 	config += `	}` + "\n"
 	config += `}` + "\n"
 	return config
+}
+
+func testAccFeatureResourceConfig_dataSource() string {
+	return `
+data "nxos_feature" "test" {
+	depends_on = [nxos_feature.test]
+}
+`
 }
 
 // End of section. //template:end testAccConfigAll

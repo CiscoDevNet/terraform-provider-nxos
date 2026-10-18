@@ -184,6 +184,14 @@ var AnalyticsSubtreeClassMinVersions = map[string]string{}
 // AnalyticsMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var AnalyticsMinVersions = map[string]helpers.MinVersion{}
 
+// AnalyticsListClasses holds the list child classes of the resource.
+var AnalyticsListClasses = map[string]bool{"analyticsInst": true, "analyticsProfile": true, "analyticsEvents": true, "analyticsPolicy": true, "analyticsMatchAcl": true, "analyticsRecordP": true, "analyticsCollector": true, "analyticsMonitor": true, "analyticsCollectorBucket": true, "analyticsRsCollectorAtt": true, "analyticsFwdInstTarget": true}
+
+// getAnalyticsTree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getAnalyticsTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"analyticsInst", "analyticsProfile", "analyticsEvents", "analyticsPolicy", "analyticsMatchAcl", "analyticsRecordP", "analyticsCollector", "analyticsMonitor", "analyticsRsRecordPAtt", "analyticsCollectorBucket", "analyticsRsCollectorAtt", "analyticsTrafficAnalytics", "analyticsFwdInstTarget", "analyticsRsMonitorAtt", "analyticsRsProfAtt", "analyticsRsEventsAtt", "analyticsRsPolicyAtt"}, AnalyticsSubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -1623,7 +1631,544 @@ func (data Analytics) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, config Analytics, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data Analytics) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	for key, child := range data.Instances {
+		analyticsInstDn := dn + "/" + child.getRn(key)
+		dns[analyticsInstDn] = true
+		for key_, child_ := range child.Profiles {
+			analyticsProfileDn_ := analyticsInstDn + "/" + child_.getRn(key_)
+			dns[analyticsProfileDn_] = true
+		}
+		for key_, child_ := range child.Events {
+			analyticsEventsDn_ := analyticsInstDn + "/" + child_.getRn(key_)
+			dns[analyticsEventsDn_] = true
+		}
+		for key_, child_ := range child.Policies {
+			analyticsPolicyDn_ := analyticsInstDn + "/" + child_.getRn(key_)
+			dns[analyticsPolicyDn_] = true
+			for key__, child__ := range child_.MatchAcls {
+				analyticsMatchAclDn__ := analyticsPolicyDn_ + "/" + child__.getRn(key__)
+				dns[analyticsMatchAclDn__] = true
+			}
+		}
+		for key_, child_ := range child.Records {
+			analyticsRecordPDn_ := analyticsInstDn + "/" + child_.getRn(key_)
+			dns[analyticsRecordPDn_] = true
+		}
+		for key_, child_ := range child.Collectors {
+			analyticsCollectorDn_ := analyticsInstDn + "/" + child_.getRn(key_)
+			dns[analyticsCollectorDn_] = true
+		}
+		for key_, child_ := range child.Monitors {
+			analyticsMonitorDn_ := analyticsInstDn + "/" + child_.getRn(key_)
+			dns[analyticsMonitorDn_] = true
+			if !(child_.RecordTargetDn.IsNull()) {
+				analyticsRsRecordPAttDn__ := analyticsMonitorDn_ + "/" + "rtrecordPAtt"
+				dns[analyticsRsRecordPAttDn__] = true
+			}
+			for key__, child__ := range child_.CollectorBuckets {
+				analyticsCollectorBucketDn__ := analyticsMonitorDn_ + "/" + child__.getRn(key__)
+				dns[analyticsCollectorBucketDn__] = true
+				for key___, child___ := range child__.Collectors {
+					analyticsRsCollectorAttDn___ := analyticsCollectorBucketDn__ + "/" + child___.getRn(key___)
+					dns[analyticsRsCollectorAttDn___] = true
+				}
+			}
+		}
+		if !(child.TrafficAnalyticsDescription.IsNull() && child.TrafficAnalyticsInterfaceMode.IsNull() && child.TrafficAnalyticsName.IsNull() && child.TrafficAnalyticsServiceDatabaseSize.IsNull() && child.TrafficAnalyticsTroubleshootExportInterval.IsNull() && child.TrafficAnalyticsUdpPortList.IsNull()) {
+			analyticsTrafficAnalyticsDn_ := analyticsInstDn + "/" + "trafficanalytics"
+			dns[analyticsTrafficAnalyticsDn_] = true
+		}
+		for key_, child_ := range child.ForwardInstanceTargets {
+			analyticsFwdInstTargetDn_ := analyticsInstDn + "/" + child_.getRn(key_)
+			dns[analyticsFwdInstTargetDn_] = true
+			if !(child_.MonitorAttachmentTargetDn.IsNull()) {
+				analyticsRsMonitorAttDn__ := analyticsFwdInstTargetDn_ + "/" + "rtmonitorAtt"
+				dns[analyticsRsMonitorAttDn__] = true
+			}
+			if !(child_.ProfileAttachmentTargetDn.IsNull()) {
+				analyticsRsProfAttDn__ := analyticsFwdInstTargetDn_ + "/" + "rtprofAtt"
+				dns[analyticsRsProfAttDn__] = true
+			}
+			if !(child_.EventsAttachmentTargetDn.IsNull()) {
+				analyticsRsEventsAttDn__ := analyticsFwdInstTargetDn_ + "/" + "rteventsAtt"
+				dns[analyticsRsEventsAttDn__] = true
+			}
+			if !(child_.PolicyAttachmentTargetDn.IsNull()) {
+				analyticsRsPolicyAttDn__ := analyticsFwdInstTargetDn_ + "/" + "rtpolicyAtt"
+				dns[analyticsRsPolicyAttDn__] = true
+			}
+		}
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data Analytics) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "analyticsEntity.attributes", map[string]interface{}{})
+	}
+	for key, child := range data.Instances {
+		_ = child
+		analyticsInstRn := child.getRn(key)
+		analyticsInstDn := dn + "/" + analyticsInstRn
+		_ = analyticsInstDn
+		if !existed(analyticsInstDn) {
+			body, _ = sjson.Set(body, "analyticsEntity.children.-1.analyticsInst.attributes", map[string]interface{}{"rn": analyticsInstRn, "status": "deleted"})
+			continue
+		}
+		analyticsInstBody := ""
+		analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.attributes.rn", analyticsInstRn)
+		if !child.AdminState.IsNull() {
+			analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.CollectTunnelHeader.IsNull() {
+			analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.attributes.collectTunnelHeader", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Control.IsNull() {
+			analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.EnableAnalyticsSubmode.IsNull() {
+			analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.attributes.enableAnalyticsSubmode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.GeneveEnable.IsNull() {
+			analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.attributes.geneveEnable", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.Timeout.IsNull() {
+			analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.attributes.timeOut", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key_, child_ := range child.Profiles {
+			_ = child_
+			analyticsProfileRn_ := child_.getRn(key_)
+			analyticsProfileDn_ := analyticsInstDn + "/" + analyticsProfileRn_
+			_ = analyticsProfileDn_
+			if !existed(analyticsProfileDn_) {
+				analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.children.-1.analyticsProfile.attributes", map[string]interface{}{"rn": analyticsProfileRn_, "status": "deleted"})
+				continue
+			}
+			analyticsProfileBody_ := ""
+			analyticsProfileBody_, _ = sjson.Set(analyticsProfileBody_, "analyticsProfile.attributes.rn", analyticsProfileRn_)
+			if !child_.BurstIntervalShift.IsNull() {
+				analyticsProfileBody_, _ = sjson.Set(analyticsProfileBody_, "analyticsProfile.attributes.burstIntvlShift", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.CollectInterval.IsNull() {
+				analyticsProfileBody_, _ = sjson.Set(analyticsProfileBody_, "analyticsProfile.attributes.collectIntvl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Description.IsNull() {
+				analyticsProfileBody_, _ = sjson.Set(analyticsProfileBody_, "analyticsProfile.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.IpPacketIdShift.IsNull() {
+				analyticsProfileBody_, _ = sjson.Set(analyticsProfileBody_, "analyticsProfile.attributes.ipPktIdShift", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Mtu.IsNull() {
+				analyticsProfileBody_, _ = sjson.Set(analyticsProfileBody_, "analyticsProfile.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.SequenceNumberGuessThresholdHigh.IsNull() {
+				analyticsProfileBody_, _ = sjson.Set(analyticsProfileBody_, "analyticsProfile.attributes.seqNumGuessThreshHi", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.SequenceNumberGuessThresholdLow.IsNull() {
+				analyticsProfileBody_, _ = sjson.Set(analyticsProfileBody_, "analyticsProfile.attributes.seqNumGuessThreshLo", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.SourcePort.IsNull() {
+				analyticsProfileBody_, _ = sjson.Set(analyticsProfileBody_, "analyticsProfile.attributes.srcPort", "DME_UNSET_PROPERTY_MARKER")
+			}
+			analyticsInstBody, _ = sjson.SetRaw(analyticsInstBody, "analyticsInst.children.-1", analyticsProfileBody_)
+		}
+		for key_, child_ := range child.Events {
+			_ = child_
+			analyticsEventsRn_ := child_.getRn(key_)
+			analyticsEventsDn_ := analyticsInstDn + "/" + analyticsEventsRn_
+			_ = analyticsEventsDn_
+			if !existed(analyticsEventsDn_) {
+				analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.children.-1.analyticsEvents.attributes", map[string]interface{}{"rn": analyticsEventsRn_, "status": "deleted"})
+				continue
+			}
+			analyticsEventsBody_ := ""
+			analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.rn", analyticsEventsRn_)
+			if !child_.AclDrops.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.aclDrops", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.BlackHole.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.blackHole", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.BufferDrops.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.bufferDrops", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Description.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.EventExportMax.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.eventExportMax", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.ForwardDrops.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.fwdDrops", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.GroupDropEvents.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.groupDropEvents", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.GroupLatencyEvents.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.groupLatencyEvents", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.GroupPacketEvents.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.groupPacketEvents", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.IpDontFragment.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.ipDf", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.LatencyThreshold.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.latencyThreshold", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.LatencyThresholdUnit.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.latencyThresholdUnit", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.ReceiveWindowZero.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.receiveWindowZero", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Tos.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.tos", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.TosEnable.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.tosEnable", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.TtlMatchEnable.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.ttlMatchEnable", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.TtlMatchValue.IsNull() {
+				analyticsEventsBody_, _ = sjson.Set(analyticsEventsBody_, "analyticsEvents.attributes.ttlMatchValue", "DME_UNSET_PROPERTY_MARKER")
+			}
+			analyticsInstBody, _ = sjson.SetRaw(analyticsInstBody, "analyticsInst.children.-1", analyticsEventsBody_)
+		}
+		for key_, child_ := range child.Policies {
+			_ = child_
+			analyticsPolicyRn_ := child_.getRn(key_)
+			analyticsPolicyDn_ := analyticsInstDn + "/" + analyticsPolicyRn_
+			_ = analyticsPolicyDn_
+			if !existed(analyticsPolicyDn_) {
+				analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.children.-1.analyticsPolicy.attributes", map[string]interface{}{"rn": analyticsPolicyRn_, "status": "deleted"})
+				continue
+			}
+			analyticsPolicyBody_ := ""
+			analyticsPolicyBody_, _ = sjson.Set(analyticsPolicyBody_, "analyticsPolicy.attributes.rn", analyticsPolicyRn_)
+			if !child_.Description.IsNull() {
+				analyticsPolicyBody_, _ = sjson.Set(analyticsPolicyBody_, "analyticsPolicy.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			for key__, child__ := range child_.MatchAcls {
+				_ = child__
+				analyticsMatchAclRn__ := child__.getRn(key__)
+				analyticsMatchAclDn__ := analyticsPolicyDn_ + "/" + analyticsMatchAclRn__
+				_ = analyticsMatchAclDn__
+				if !existed(analyticsMatchAclDn__) {
+					analyticsPolicyBody_, _ = sjson.Set(analyticsPolicyBody_, "analyticsPolicy.children.-1.analyticsMatchAcl.attributes", map[string]interface{}{"rn": analyticsMatchAclRn__, "status": "deleted"})
+					continue
+				}
+				analyticsMatchAclBody__ := ""
+				analyticsMatchAclBody__, _ = sjson.Set(analyticsMatchAclBody__, "analyticsMatchAcl.attributes.rn", analyticsMatchAclRn__)
+				if !child__.AclName.IsNull() {
+					analyticsMatchAclBody__, _ = sjson.Set(analyticsMatchAclBody__, "analyticsMatchAcl.attributes.aclName", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.FilterType.IsNull() {
+					analyticsMatchAclBody__, _ = sjson.Set(analyticsMatchAclBody__, "analyticsMatchAcl.attributes.fltType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Description.IsNull() {
+					analyticsMatchAclBody__, _ = sjson.Set(analyticsMatchAclBody__, "analyticsMatchAcl.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				analyticsPolicyBody_, _ = sjson.SetRaw(analyticsPolicyBody_, "analyticsPolicy.children.-1", analyticsMatchAclBody__)
+			}
+			analyticsInstBody, _ = sjson.SetRaw(analyticsInstBody, "analyticsInst.children.-1", analyticsPolicyBody_)
+		}
+		for key_, child_ := range child.Records {
+			_ = child_
+			analyticsRecordPRn_ := child_.getRn(key_)
+			analyticsRecordPDn_ := analyticsInstDn + "/" + analyticsRecordPRn_
+			_ = analyticsRecordPDn_
+			if !existed(analyticsRecordPDn_) {
+				analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.children.-1.analyticsRecordP.attributes", map[string]interface{}{"rn": analyticsRecordPRn_, "status": "deleted"})
+				continue
+			}
+			analyticsRecordPBody_ := ""
+			analyticsRecordPBody_, _ = sjson.Set(analyticsRecordPBody_, "analyticsRecordP.attributes.rn", analyticsRecordPRn_)
+			if !child_.Collect.IsNull() {
+				analyticsRecordPBody_, _ = sjson.Set(analyticsRecordPBody_, "analyticsRecordP.attributes.collect", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Description.IsNull() {
+				analyticsRecordPBody_, _ = sjson.Set(analyticsRecordPBody_, "analyticsRecordP.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Match.IsNull() {
+				analyticsRecordPBody_, _ = sjson.Set(analyticsRecordPBody_, "analyticsRecordP.attributes.match", "DME_UNSET_PROPERTY_MARKER")
+			}
+			analyticsInstBody, _ = sjson.SetRaw(analyticsInstBody, "analyticsInst.children.-1", analyticsRecordPBody_)
+		}
+		for key_, child_ := range child.Collectors {
+			_ = child_
+			analyticsCollectorRn_ := child_.getRn(key_)
+			analyticsCollectorDn_ := analyticsInstDn + "/" + analyticsCollectorRn_
+			_ = analyticsCollectorDn_
+			if !existed(analyticsCollectorDn_) {
+				analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.children.-1.analyticsCollector.attributes", map[string]interface{}{"rn": analyticsCollectorRn_, "status": "deleted"})
+				continue
+			}
+			analyticsCollectorBody_ := ""
+			analyticsCollectorBody_, _ = sjson.Set(analyticsCollectorBody_, "analyticsCollector.attributes.rn", analyticsCollectorRn_)
+			if !child_.Description.IsNull() {
+				analyticsCollectorBody_, _ = sjson.Set(analyticsCollectorBody_, "analyticsCollector.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Dscp.IsNull() {
+				analyticsCollectorBody_, _ = sjson.Set(analyticsCollectorBody_, "analyticsCollector.attributes.dscp", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.DestinationAddress.IsNull() {
+				analyticsCollectorBody_, _ = sjson.Set(analyticsCollectorBody_, "analyticsCollector.attributes.dstAddr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.DestinationPort.IsNull() {
+				analyticsCollectorBody_, _ = sjson.Set(analyticsCollectorBody_, "analyticsCollector.attributes.dstPort", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.EventDestinationPort.IsNull() {
+				analyticsCollectorBody_, _ = sjson.Set(analyticsCollectorBody_, "analyticsCollector.attributes.eventDstPort", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.InbandInterface.IsNull() {
+				analyticsCollectorBody_, _ = sjson.Set(analyticsCollectorBody_, "analyticsCollector.attributes.inbandInterface", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.SourceAddress.IsNull() {
+				analyticsCollectorBody_, _ = sjson.Set(analyticsCollectorBody_, "analyticsCollector.attributes.srcAddr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.SourceInterface.IsNull() {
+				analyticsCollectorBody_, _ = sjson.Set(analyticsCollectorBody_, "analyticsCollector.attributes.srcIf", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.V9.IsNull() {
+				analyticsCollectorBody_, _ = sjson.Set(analyticsCollectorBody_, "analyticsCollector.attributes.v9", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Version.IsNull() {
+				analyticsCollectorBody_, _ = sjson.Set(analyticsCollectorBody_, "analyticsCollector.attributes.ver", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.VrfName.IsNull() {
+				analyticsCollectorBody_, _ = sjson.Set(analyticsCollectorBody_, "analyticsCollector.attributes.vrfName", "DME_UNSET_PROPERTY_MARKER")
+			}
+			analyticsInstBody, _ = sjson.SetRaw(analyticsInstBody, "analyticsInst.children.-1", analyticsCollectorBody_)
+		}
+		for key_, child_ := range child.Monitors {
+			_ = child_
+			analyticsMonitorRn_ := child_.getRn(key_)
+			analyticsMonitorDn_ := analyticsInstDn + "/" + analyticsMonitorRn_
+			_ = analyticsMonitorDn_
+			if !existed(analyticsMonitorDn_) {
+				analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.children.-1.analyticsMonitor.attributes", map[string]interface{}{"rn": analyticsMonitorRn_, "status": "deleted"})
+				continue
+			}
+			analyticsMonitorBody_ := ""
+			analyticsMonitorBody_, _ = sjson.Set(analyticsMonitorBody_, "analyticsMonitor.attributes.rn", analyticsMonitorRn_)
+			if !child_.Description.IsNull() {
+				analyticsMonitorBody_, _ = sjson.Set(analyticsMonitorBody_, "analyticsMonitor.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(child_.RecordTargetDn.IsNull()) {
+				analyticsRsRecordPAttRn__ := "rtrecordPAtt"
+				analyticsRsRecordPAttDn__ := analyticsMonitorDn_ + "/" + analyticsRsRecordPAttRn__
+				_ = analyticsRsRecordPAttDn__
+				if !existed(analyticsRsRecordPAttDn__) {
+					analyticsMonitorBody_, _ = sjson.Set(analyticsMonitorBody_, "analyticsMonitor.children.-1.analyticsRsRecordPAtt.attributes", map[string]interface{}{"rn": analyticsRsRecordPAttRn__, "status": "deleted"})
+				} else {
+					analyticsRsRecordPAttBody__ := ""
+					if !child_.RecordTargetDn.IsNull() {
+						analyticsRsRecordPAttBody__, _ = sjson.Set(analyticsRsRecordPAttBody__, "analyticsRsRecordPAtt.attributes.tDn", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if analyticsRsRecordPAttBody__ != "" {
+						analyticsRsRecordPAttBody__, _ = sjson.Set(analyticsRsRecordPAttBody__, "analyticsRsRecordPAtt.attributes.rn", analyticsRsRecordPAttRn__)
+						analyticsMonitorBody_, _ = sjson.SetRaw(analyticsMonitorBody_, "analyticsMonitor.children.-1", analyticsRsRecordPAttBody__)
+					}
+				}
+			}
+			for key__, child__ := range child_.CollectorBuckets {
+				_ = child__
+				analyticsCollectorBucketRn__ := child__.getRn(key__)
+				analyticsCollectorBucketDn__ := analyticsMonitorDn_ + "/" + analyticsCollectorBucketRn__
+				_ = analyticsCollectorBucketDn__
+				if !existed(analyticsCollectorBucketDn__) {
+					analyticsMonitorBody_, _ = sjson.Set(analyticsMonitorBody_, "analyticsMonitor.children.-1.analyticsCollectorBucket.attributes", map[string]interface{}{"rn": analyticsCollectorBucketRn__, "status": "deleted"})
+					continue
+				}
+				analyticsCollectorBucketBody__ := ""
+				analyticsCollectorBucketBody__, _ = sjson.Set(analyticsCollectorBucketBody__, "analyticsCollectorBucket.attributes.rn", analyticsCollectorBucketRn__)
+				if !child__.Description.IsNull() {
+					analyticsCollectorBucketBody__, _ = sjson.Set(analyticsCollectorBucketBody__, "analyticsCollectorBucket.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.HashHigh.IsNull() {
+					analyticsCollectorBucketBody__, _ = sjson.Set(analyticsCollectorBucketBody__, "analyticsCollectorBucket.attributes.hashHi", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.HashLow.IsNull() {
+					analyticsCollectorBucketBody__, _ = sjson.Set(analyticsCollectorBucketBody__, "analyticsCollectorBucket.attributes.hashLo", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key___, child___ := range child__.Collectors {
+					_ = child___
+					analyticsRsCollectorAttRn___ := child___.getRn(key___)
+					analyticsRsCollectorAttDn___ := analyticsCollectorBucketDn__ + "/" + analyticsRsCollectorAttRn___
+					_ = analyticsRsCollectorAttDn___
+					if !existed(analyticsRsCollectorAttDn___) {
+						analyticsCollectorBucketBody__, _ = sjson.Set(analyticsCollectorBucketBody__, "analyticsCollectorBucket.children.-1.analyticsRsCollectorAtt.attributes", map[string]interface{}{"rn": analyticsRsCollectorAttRn___, "status": "deleted"})
+						continue
+					}
+					analyticsRsCollectorAttBody___ := ""
+					analyticsRsCollectorAttBody___, _ = sjson.Set(analyticsRsCollectorAttBody___, "analyticsRsCollectorAtt.attributes.rn", analyticsRsCollectorAttRn___)
+					analyticsCollectorBucketBody__, _ = sjson.SetRaw(analyticsCollectorBucketBody__, "analyticsCollectorBucket.children.-1", analyticsRsCollectorAttBody___)
+				}
+				analyticsMonitorBody_, _ = sjson.SetRaw(analyticsMonitorBody_, "analyticsMonitor.children.-1", analyticsCollectorBucketBody__)
+			}
+			analyticsInstBody, _ = sjson.SetRaw(analyticsInstBody, "analyticsInst.children.-1", analyticsMonitorBody_)
+		}
+		if !(child.TrafficAnalyticsDescription.IsNull() && child.TrafficAnalyticsInterfaceMode.IsNull() && child.TrafficAnalyticsName.IsNull() && child.TrafficAnalyticsServiceDatabaseSize.IsNull() && child.TrafficAnalyticsTroubleshootExportInterval.IsNull() && child.TrafficAnalyticsUdpPortList.IsNull()) {
+			analyticsTrafficAnalyticsRn_ := "trafficanalytics"
+			analyticsTrafficAnalyticsDn_ := analyticsInstDn + "/" + analyticsTrafficAnalyticsRn_
+			_ = analyticsTrafficAnalyticsDn_
+			if !existed(analyticsTrafficAnalyticsDn_) {
+				analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.children.-1.analyticsTrafficAnalytics.attributes", map[string]interface{}{"rn": analyticsTrafficAnalyticsRn_, "status": "deleted"})
+			} else {
+				analyticsTrafficAnalyticsBody_ := ""
+				if !child.TrafficAnalyticsDescription.IsNull() {
+					analyticsTrafficAnalyticsBody_, _ = sjson.Set(analyticsTrafficAnalyticsBody_, "analyticsTrafficAnalytics.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.TrafficAnalyticsInterfaceMode.IsNull() {
+					analyticsTrafficAnalyticsBody_, _ = sjson.Set(analyticsTrafficAnalyticsBody_, "analyticsTrafficAnalytics.attributes.interfaceMode", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.TrafficAnalyticsName.IsNull() {
+					analyticsTrafficAnalyticsBody_, _ = sjson.Set(analyticsTrafficAnalyticsBody_, "analyticsTrafficAnalytics.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.TrafficAnalyticsServiceDatabaseSize.IsNull() {
+					analyticsTrafficAnalyticsBody_, _ = sjson.Set(analyticsTrafficAnalyticsBody_, "analyticsTrafficAnalytics.attributes.serviceDbSize", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.TrafficAnalyticsTroubleshootExportInterval.IsNull() {
+					analyticsTrafficAnalyticsBody_, _ = sjson.Set(analyticsTrafficAnalyticsBody_, "analyticsTrafficAnalytics.attributes.troubleshootExportInterval", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.TrafficAnalyticsUdpPortList.IsNull() {
+					analyticsTrafficAnalyticsBody_, _ = sjson.Set(analyticsTrafficAnalyticsBody_, "analyticsTrafficAnalytics.attributes.udpPortList", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if analyticsTrafficAnalyticsBody_ != "" {
+					analyticsTrafficAnalyticsBody_, _ = sjson.Set(analyticsTrafficAnalyticsBody_, "analyticsTrafficAnalytics.attributes.rn", analyticsTrafficAnalyticsRn_)
+					analyticsInstBody, _ = sjson.SetRaw(analyticsInstBody, "analyticsInst.children.-1", analyticsTrafficAnalyticsBody_)
+				}
+			}
+		}
+		for key_, child_ := range child.ForwardInstanceTargets {
+			_ = child_
+			analyticsFwdInstTargetRn_ := child_.getRn(key_)
+			analyticsFwdInstTargetDn_ := analyticsInstDn + "/" + analyticsFwdInstTargetRn_
+			_ = analyticsFwdInstTargetDn_
+			if !existed(analyticsFwdInstTargetDn_) {
+				analyticsInstBody, _ = sjson.Set(analyticsInstBody, "analyticsInst.children.-1.analyticsFwdInstTarget.attributes", map[string]interface{}{"rn": analyticsFwdInstTargetRn_, "status": "deleted"})
+				continue
+			}
+			analyticsFwdInstTargetBody_ := ""
+			analyticsFwdInstTargetBody_, _ = sjson.Set(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.attributes.rn", analyticsFwdInstTargetRn_)
+			if !child_.DefaultPolicy.IsNull() {
+				analyticsFwdInstTargetBody_, _ = sjson.Set(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.attributes.DefPolicy", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.CollectorId.IsNull() {
+				analyticsFwdInstTargetBody_, _ = sjson.Set(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.attributes.collectorId", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Direction.IsNull() {
+				analyticsFwdInstTargetBody_, _ = sjson.Set(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.attributes.dir", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.FilterType.IsNull() {
+				analyticsFwdInstTargetBody_, _ = sjson.Set(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.attributes.fltType", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.InstanceName.IsNull() {
+				analyticsFwdInstTargetBody_, _ = sjson.Set(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.attributes.instanceName", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.SwitchLatency.IsNull() {
+				analyticsFwdInstTargetBody_, _ = sjson.Set(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.attributes.switchLatency", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.SystemExporterId.IsNull() {
+				analyticsFwdInstTargetBody_, _ = sjson.Set(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.attributes.systemExporterId", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.TrafficAnalyticsEnabled.IsNull() {
+				analyticsFwdInstTargetBody_, _ = sjson.Set(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.attributes.trafficAnalytics", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(child_.MonitorAttachmentTargetDn.IsNull()) {
+				analyticsRsMonitorAttRn__ := "rtmonitorAtt"
+				analyticsRsMonitorAttDn__ := analyticsFwdInstTargetDn_ + "/" + analyticsRsMonitorAttRn__
+				_ = analyticsRsMonitorAttDn__
+				if !existed(analyticsRsMonitorAttDn__) {
+					analyticsFwdInstTargetBody_, _ = sjson.Set(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.children.-1.analyticsRsMonitorAtt.attributes", map[string]interface{}{"rn": analyticsRsMonitorAttRn__, "status": "deleted"})
+				} else {
+					analyticsRsMonitorAttBody__ := ""
+					if !child_.MonitorAttachmentTargetDn.IsNull() {
+						analyticsRsMonitorAttBody__, _ = sjson.Set(analyticsRsMonitorAttBody__, "analyticsRsMonitorAtt.attributes.tDn", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if analyticsRsMonitorAttBody__ != "" {
+						analyticsRsMonitorAttBody__, _ = sjson.Set(analyticsRsMonitorAttBody__, "analyticsRsMonitorAtt.attributes.rn", analyticsRsMonitorAttRn__)
+						analyticsFwdInstTargetBody_, _ = sjson.SetRaw(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.children.-1", analyticsRsMonitorAttBody__)
+					}
+				}
+			}
+			if !(child_.ProfileAttachmentTargetDn.IsNull()) {
+				analyticsRsProfAttRn__ := "rtprofAtt"
+				analyticsRsProfAttDn__ := analyticsFwdInstTargetDn_ + "/" + analyticsRsProfAttRn__
+				_ = analyticsRsProfAttDn__
+				if !existed(analyticsRsProfAttDn__) {
+					analyticsFwdInstTargetBody_, _ = sjson.Set(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.children.-1.analyticsRsProfAtt.attributes", map[string]interface{}{"rn": analyticsRsProfAttRn__, "status": "deleted"})
+				} else {
+					analyticsRsProfAttBody__ := ""
+					if !child_.ProfileAttachmentTargetDn.IsNull() {
+						analyticsRsProfAttBody__, _ = sjson.Set(analyticsRsProfAttBody__, "analyticsRsProfAtt.attributes.tDn", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if analyticsRsProfAttBody__ != "" {
+						analyticsRsProfAttBody__, _ = sjson.Set(analyticsRsProfAttBody__, "analyticsRsProfAtt.attributes.rn", analyticsRsProfAttRn__)
+						analyticsFwdInstTargetBody_, _ = sjson.SetRaw(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.children.-1", analyticsRsProfAttBody__)
+					}
+				}
+			}
+			if !(child_.EventsAttachmentTargetDn.IsNull()) {
+				analyticsRsEventsAttRn__ := "rteventsAtt"
+				analyticsRsEventsAttDn__ := analyticsFwdInstTargetDn_ + "/" + analyticsRsEventsAttRn__
+				_ = analyticsRsEventsAttDn__
+				if !existed(analyticsRsEventsAttDn__) {
+					analyticsFwdInstTargetBody_, _ = sjson.Set(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.children.-1.analyticsRsEventsAtt.attributes", map[string]interface{}{"rn": analyticsRsEventsAttRn__, "status": "deleted"})
+				} else {
+					analyticsRsEventsAttBody__ := ""
+					if !child_.EventsAttachmentTargetDn.IsNull() {
+						analyticsRsEventsAttBody__, _ = sjson.Set(analyticsRsEventsAttBody__, "analyticsRsEventsAtt.attributes.tDn", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if analyticsRsEventsAttBody__ != "" {
+						analyticsRsEventsAttBody__, _ = sjson.Set(analyticsRsEventsAttBody__, "analyticsRsEventsAtt.attributes.rn", analyticsRsEventsAttRn__)
+						analyticsFwdInstTargetBody_, _ = sjson.SetRaw(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.children.-1", analyticsRsEventsAttBody__)
+					}
+				}
+			}
+			if !(child_.PolicyAttachmentTargetDn.IsNull()) {
+				analyticsRsPolicyAttRn__ := "rtpolicyAtt"
+				analyticsRsPolicyAttDn__ := analyticsFwdInstTargetDn_ + "/" + analyticsRsPolicyAttRn__
+				_ = analyticsRsPolicyAttDn__
+				if !existed(analyticsRsPolicyAttDn__) {
+					analyticsFwdInstTargetBody_, _ = sjson.Set(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.children.-1.analyticsRsPolicyAtt.attributes", map[string]interface{}{"rn": analyticsRsPolicyAttRn__, "status": "deleted"})
+				} else {
+					analyticsRsPolicyAttBody__ := ""
+					if !child_.PolicyAttachmentTargetDn.IsNull() {
+						analyticsRsPolicyAttBody__, _ = sjson.Set(analyticsRsPolicyAttBody__, "analyticsRsPolicyAtt.attributes.tDn", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if analyticsRsPolicyAttBody__ != "" {
+						analyticsRsPolicyAttBody__, _ = sjson.Set(analyticsRsPolicyAttBody__, "analyticsRsPolicyAtt.attributes.rn", analyticsRsPolicyAttRn__)
+						analyticsFwdInstTargetBody_, _ = sjson.SetRaw(analyticsFwdInstTargetBody_, "analyticsFwdInstTarget.children.-1", analyticsRsPolicyAttBody__)
+					}
+				}
+			}
+			analyticsInstBody, _ = sjson.SetRaw(analyticsInstBody, "analyticsInst.children.-1", analyticsFwdInstTargetBody_)
+		}
+		body, _ = sjson.SetRaw(body, "analyticsEntity.children.-1", analyticsInstBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, config Analytics, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -1821,6 +2366,8 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 				stateChild := state.Instances[key]
 				_ = stateChild
 				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
 				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
 					if mv.Get("analyticsInst.attributes.mode").String() == key {
 						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
@@ -1957,6 +2504,8 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 								stateChild := stateChild.Policies[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("analyticsPolicy.attributes.name").String() == key {
 										if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
@@ -2070,6 +2619,8 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 								stateChild := stateChild.Monitors[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("analyticsMonitor.attributes.name").String() == key {
 										if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
@@ -2087,15 +2638,23 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 										}
 									}
 									if listChildPath_ != "" {
-										if !stateChild.RecordTargetDn.IsNull() && configChild.RecordTargetDn.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsRecordPAtt")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.RecordTargetDn.IsNull()) && (configChild.RecordTargetDn.IsNull()) && deleteEmptied(listChildDn_+"/rtrecordPAtt") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsRecordPAtt")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.RecordTargetDn.IsNull() && configChild.RecordTargetDn.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsRecordPAtt")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
 										for key := range stateChild.CollectorBuckets {
 											if configChild, ok := configChild.CollectorBuckets[key]; ok {
 												stateChild := stateChild.CollectorBuckets[key]
 												_ = stateChild
 												_ = configChild
+												listChildDn__ := listChildDn_ + "/" + stateChild.getRn(key)
+												_ = listChildDn__
 												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
 													if mv.Get("analyticsCollectorBucket.attributes.id").String() == key {
 														if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
@@ -2134,35 +2693,43 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 								}
 							}
 						}
-						if !stateChild.TrafficAnalyticsDescription.IsNull() && configChild.TrafficAnalyticsDescription.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.TrafficAnalyticsInterfaceMode.IsNull() && configChild.TrafficAnalyticsInterfaceMode.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interfaceMode", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.TrafficAnalyticsName.IsNull() && configChild.TrafficAnalyticsName.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.TrafficAnalyticsServiceDatabaseSize.IsNull() && configChild.TrafficAnalyticsServiceDatabaseSize.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"serviceDbSize", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.TrafficAnalyticsTroubleshootExportInterval.IsNull() && configChild.TrafficAnalyticsTroubleshootExportInterval.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"troubleshootExportInterval", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.TrafficAnalyticsUdpPortList.IsNull() && configChild.TrafficAnalyticsUdpPortList.IsNull() {
-							unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
-							body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"udpPortList", "DME_UNSET_PROPERTY_MARKER")
+						if deleteEmptied != nil && !(stateChild.TrafficAnalyticsDescription.IsNull() && stateChild.TrafficAnalyticsInterfaceMode.IsNull() && stateChild.TrafficAnalyticsName.IsNull() && stateChild.TrafficAnalyticsServiceDatabaseSize.IsNull() && stateChild.TrafficAnalyticsTroubleshootExportInterval.IsNull() && stateChild.TrafficAnalyticsUdpPortList.IsNull()) && (configChild.TrafficAnalyticsDescription.IsNull() && configChild.TrafficAnalyticsInterfaceMode.IsNull() && configChild.TrafficAnalyticsName.IsNull() && configChild.TrafficAnalyticsServiceDatabaseSize.IsNull() && configChild.TrafficAnalyticsTroubleshootExportInterval.IsNull() && configChild.TrafficAnalyticsUdpPortList.IsNull()) && deleteEmptied(listChildDn+"/trafficanalytics") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.TrafficAnalyticsDescription.IsNull() && configChild.TrafficAnalyticsDescription.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.TrafficAnalyticsInterfaceMode.IsNull() && configChild.TrafficAnalyticsInterfaceMode.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"interfaceMode", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.TrafficAnalyticsName.IsNull() && configChild.TrafficAnalyticsName.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.TrafficAnalyticsServiceDatabaseSize.IsNull() && configChild.TrafficAnalyticsServiceDatabaseSize.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"serviceDbSize", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.TrafficAnalyticsTroubleshootExportInterval.IsNull() && configChild.TrafficAnalyticsTroubleshootExportInterval.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"troubleshootExportInterval", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.TrafficAnalyticsUdpPortList.IsNull() && configChild.TrafficAnalyticsUdpPortList.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "analyticsTrafficAnalytics")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"udpPortList", "DME_UNSET_PROPERTY_MARKER")
+							}
 						}
 						for key := range stateChild.ForwardInstanceTargets {
 							if configChild, ok := configChild.ForwardInstanceTargets[key]; ok {
 								stateChild := stateChild.ForwardInstanceTargets[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("analyticsFwdInstTarget.attributes.id").String() == key {
 										if !stateChild.DefaultPolicy.IsNull() && configChild.DefaultPolicy.IsNull() {
@@ -2201,21 +2768,45 @@ func (data Analytics) toBodyWithDeletes(ctx context.Context, state Analytics, co
 										}
 									}
 									if listChildPath_ != "" {
-										if !stateChild.MonitorAttachmentTargetDn.IsNull() && configChild.MonitorAttachmentTargetDn.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsMonitorAtt")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.MonitorAttachmentTargetDn.IsNull()) && (configChild.MonitorAttachmentTargetDn.IsNull()) && deleteEmptied(listChildDn_+"/rtmonitorAtt") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsMonitorAtt")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.MonitorAttachmentTargetDn.IsNull() && configChild.MonitorAttachmentTargetDn.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsMonitorAtt")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.ProfileAttachmentTargetDn.IsNull() && configChild.ProfileAttachmentTargetDn.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsProfAtt")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.ProfileAttachmentTargetDn.IsNull()) && (configChild.ProfileAttachmentTargetDn.IsNull()) && deleteEmptied(listChildDn_+"/rtprofAtt") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsProfAtt")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.ProfileAttachmentTargetDn.IsNull() && configChild.ProfileAttachmentTargetDn.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsProfAtt")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.EventsAttachmentTargetDn.IsNull() && configChild.EventsAttachmentTargetDn.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsEventsAtt")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.EventsAttachmentTargetDn.IsNull()) && (configChild.EventsAttachmentTargetDn.IsNull()) && deleteEmptied(listChildDn_+"/rteventsAtt") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsEventsAtt")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.EventsAttachmentTargetDn.IsNull() && configChild.EventsAttachmentTargetDn.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsEventsAtt")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
-										if !stateChild.PolicyAttachmentTargetDn.IsNull() && configChild.PolicyAttachmentTargetDn.IsNull() {
-											unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsPolicyAtt")
-											body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+										if deleteEmptied != nil && !(stateChild.PolicyAttachmentTargetDn.IsNull()) && (configChild.PolicyAttachmentTargetDn.IsNull()) && deleteEmptied(listChildDn_+"/rtpolicyAtt") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsPolicyAtt")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.PolicyAttachmentTargetDn.IsNull() && configChild.PolicyAttachmentTargetDn.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "analyticsRsPolicyAtt")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tDn", "DME_UNSET_PROPERTY_MARKER")
+											}
 										}
 									}
 								}

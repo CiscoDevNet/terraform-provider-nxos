@@ -80,6 +80,14 @@ var PoESubtreeClassMinVersions = map[string]string{}
 // PoEMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var PoEMinVersions = map[string]helpers.MinVersion{}
 
+// PoEListClasses holds the list child classes of the resource.
+var PoEListClasses = map[string]bool{"poePhysIf": true}
+
+// getPoETree reads the object together with the subtree of all classes managed by the resource and the data source.
+func getPoETree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
+	return device.GetSubtree(ctx, dn, []string{"poeInst", "poeModLogLevel", "poePhysIf"}, PoESubtreeClassMinVersions)
+}
+
 // End of section. //template:end types
 
 // Section below is generated&owned by "gen/generator.go". //template:begin getPath
@@ -326,7 +334,110 @@ func (data PoE) toDeleteBody() nxos.Body {
 	return nxos.Body{Str: body}
 }
 
-func (data PoE) toBodyWithDeletes(ctx context.Context, state PoE, config PoE, importing bool) nxos.Body {
+// managedDns returns the DNs of the objects managed by the resource: the object itself, its single child objects
+// with configured attributes or children, and all list entries.
+func (data PoE) managedDns() map[string]bool {
+	dns := map[string]bool{}
+	dn := data.getDn()
+	dns[dn] = true
+	if !(data.InstanceAdminState.IsNull() && data.InstanceControl.IsNull()) {
+		poeInstDn := dn + "/" + "inst"
+		dns[poeInstDn] = true
+	}
+	if !(data.LoggingLevel.IsNull()) {
+		poeModLogLevelDn := dn + "/" + "modloglevel"
+		dns[poeModLogLevelDn] = true
+	}
+	for key, child := range data.Interfaces {
+		poePhysIfDn := dn + "/" + child.getRn(key)
+		dns[poePhysIfDn] = true
+	}
+	return dns
+}
+
+// toResetBody returns the body sent on destroy with the `reset` deletion policy. Managed objects that already existed
+// on the device before the resource managed them (preexisting) get their configured attributes reset, while the ones
+// created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
+// objects. Mandatory attributes and attributes that require a replacement identify their object and are left
+// unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+func (data PoE) toResetBody(preexisting map[string]bool) nxos.Body {
+	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
+	_ = existed
+	dn := data.getDn()
+	body := ""
+	if body == "" {
+		body, _ = sjson.Set(body, "poeEntity.attributes", map[string]interface{}{})
+	}
+	if !(data.InstanceAdminState.IsNull() && data.InstanceControl.IsNull()) {
+		poeInstRn := "inst"
+		poeInstDn := dn + "/" + poeInstRn
+		_ = poeInstDn
+		if !existed(poeInstDn) {
+			body, _ = sjson.Set(body, "poeEntity.children.-1.poeInst.attributes", map[string]interface{}{"rn": poeInstRn, "status": "deleted"})
+		} else {
+			poeInstBody := ""
+			if !data.InstanceAdminState.IsNull() {
+				poeInstBody, _ = sjson.Set(poeInstBody, "poeInst.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.InstanceControl.IsNull() {
+				poeInstBody, _ = sjson.Set(poeInstBody, "poeInst.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if poeInstBody != "" {
+				poeInstBody, _ = sjson.Set(poeInstBody, "poeInst.attributes.rn", poeInstRn)
+				body, _ = sjson.SetRaw(body, "poeEntity.children.-1", poeInstBody)
+			}
+		}
+	}
+	if !(data.LoggingLevel.IsNull()) {
+		poeModLogLevelRn := "modloglevel"
+		poeModLogLevelDn := dn + "/" + poeModLogLevelRn
+		_ = poeModLogLevelDn
+		if !existed(poeModLogLevelDn) {
+			body, _ = sjson.Set(body, "poeEntity.children.-1.poeModLogLevel.attributes", map[string]interface{}{"rn": poeModLogLevelRn, "status": "deleted"})
+		} else {
+			poeModLogLevelBody := ""
+			if !data.LoggingLevel.IsNull() {
+				poeModLogLevelBody, _ = sjson.Set(poeModLogLevelBody, "poeModLogLevel.attributes.loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if poeModLogLevelBody != "" {
+				poeModLogLevelBody, _ = sjson.Set(poeModLogLevelBody, "poeModLogLevel.attributes.rn", poeModLogLevelRn)
+				body, _ = sjson.SetRaw(body, "poeEntity.children.-1", poeModLogLevelBody)
+			}
+		}
+	}
+	for key, child := range data.Interfaces {
+		_ = child
+		poePhysIfRn := child.getRn(key)
+		poePhysIfDn := dn + "/" + poePhysIfRn
+		_ = poePhysIfDn
+		if !existed(poePhysIfDn) {
+			body, _ = sjson.Set(body, "poeEntity.children.-1.poePhysIf.attributes", map[string]interface{}{"rn": poePhysIfRn, "status": "deleted"})
+			continue
+		}
+		poePhysIfBody := ""
+		poePhysIfBody, _ = sjson.Set(poePhysIfBody, "poePhysIf.attributes.rn", poePhysIfRn)
+		if !child.MaxConsumption.IsNull() {
+			poePhysIfBody, _ = sjson.Set(poePhysIfBody, "poePhysIf.attributes.maxConsumption", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.PortDefaultConsumption.IsNull() {
+			poePhysIfBody, _ = sjson.Set(poePhysIfBody, "poePhysIf.attributes.portDefaultConsumption", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.PortMode.IsNull() {
+			poePhysIfBody, _ = sjson.Set(poePhysIfBody, "poePhysIf.attributes.portMode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.PortPolice.IsNull() {
+			poePhysIfBody, _ = sjson.Set(poePhysIfBody, "poePhysIf.attributes.portPolice", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.PortPriority.IsNull() {
+			poePhysIfBody, _ = sjson.Set(poePhysIfBody, "poePhysIf.attributes.portPriority", "DME_UNSET_PROPERTY_MARKER")
+		}
+		body, _ = sjson.SetRaw(body, "poeEntity.children.-1", poePhysIfBody)
+	}
+
+	return nxos.Body{Str: body}
+}
+
+func (data PoE) toBodyWithDeletes(ctx context.Context, state PoE, config PoE, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -346,17 +457,29 @@ func (data PoE) toBodyWithDeletes(ctx context.Context, state PoE, config PoE, im
 	if !importing {
 	}
 	if !importing {
-		if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "poeInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.InstanceAdminState.IsNull() && state.InstanceControl.IsNull()) && (config.InstanceAdminState.IsNull() && config.InstanceControl.IsNull()) && deleteEmptied(data.getDn()+"/inst") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "poeInst")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.InstanceAdminState.IsNull() && config.InstanceAdminState.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "poeInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.InstanceControl.IsNull() && config.InstanceControl.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "poeInst")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
-		if !state.InstanceControl.IsNull() && config.InstanceControl.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "poeInst")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !state.LoggingLevel.IsNull() && config.LoggingLevel.IsNull() {
-			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "poeModLogLevel")
-			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+		if deleteEmptied != nil && !(state.LoggingLevel.IsNull()) && (config.LoggingLevel.IsNull()) && deleteEmptied(data.getDn()+"/modloglevel") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "poeModLogLevel")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.LoggingLevel.IsNull() && config.LoggingLevel.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "poeModLogLevel")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loggingLevel", "DME_UNSET_PROPERTY_MARKER")
+			}
 		}
 		for key := range state.Interfaces {
 			if configChild, ok := config.Interfaces[key]; ok {

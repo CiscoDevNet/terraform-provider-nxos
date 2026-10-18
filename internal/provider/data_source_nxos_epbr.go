@@ -762,7 +762,8 @@ func (d *EPBRDataSource) Read(ctx context.Context, req datasource.ReadRequest, r
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to find device '%s' in provider configuration", config.Device.ValueString()))
 		return
 	}
-	res, err := device.GetSubtree(ctx, config.getDn(), []string{"epbrInst", "epbrService", "epbrProbe", "epbrSvcEndPoint", "epbrProbe", "epbrSvcEndPointReverse", "epbrProbe", "epbrSvcEndPointL2", "epbrProbe", "epbrSvcEndPointReverse", "epbrProbe", "epbrSvcEndPointDpu", "epbrFailoverGroup", "epbrFailoverServiceChain", "epbrServiceChain", "epbrEpbrMatchSeq", "epbrPolicyMap", "epbrEpbrMatch", "epbrEpbrMatchSeq", "epbrDom", "epbrInfraVlan", "epbrEpbrIntf"}, EPBRSubtreeClassMinVersions)
+
+	res, err := getEPBRTree(ctx, device, config.getDn())
 	if err != nil {
 		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to retrieve object, got error: %s", err))
 		return

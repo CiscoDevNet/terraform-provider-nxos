@@ -291,6 +291,52 @@ child_classes:
                 type: Bool
                 description: 'Do not process joins from unknown neighbors on this interface.'
                 example: false
+            child_classes:
+              - class_name: pimHelloTrP
+                doc_path: Layer%203/pim:HelloTrP/
+                rn: hello
+                type: single
+                tf_name: hello
+                description: 'PIM hello traffic policy configuration.'
+                attributes:
+                  - nxos_name: authKey
+                    tf_name: hello_authentication_key
+                    type: String
+                    write_only: true
+                    sensitive: true
+                    description: 'Authentication Key.'
+                    example: cisco123
+                  - nxos_name: authT
+                    tf_name: hello_authentication_type
+                    type: String
+                    description: 'Authentication Type.'
+                    enum_values:
+                      - none
+                      - ah-md5
+                    example: ah-md5
+                  - nxos_name: descr
+                    tf_name: hello_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My hello policy
+                  - nxos_name: helloItvl
+                    tf_name: hello_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 18724286
+                    description: 'Hello Interval.'
+                    example: 5000
+                  - nxos_name: keychain
+                    tf_name: hello_authentication_keychain
+                    type: String
+                    description: 'Name of the Keychain Used For Authentication.'
+                    example: KEYCHAIN1
+                    exclude_test: true
+                  - nxos_name: name
+                    tf_name: hello_name
+                    type: String
+                    description: 'Object name.'
+                    example: hello
           - class_name: pimSSMPatP
             doc_path: Layer%203/pim:SSMPatP/
             rn: ssm
@@ -411,6 +457,68 @@ child_classes:
                         type: Bool
                         description: 'Flag to override RP preference to use Static over Dynamic RP.'
                         example: true
+                  - class_name: pimRPGrpRange
+                    doc_path: Layer%203/pim:RPGrpRange/
+                    rn: range-%s
+                    type: list
+                    tf_name: group_ranges
+                    description: 'List of PIM Static RP group range configurations.'
+                    exclude_test: true
+                    attributes:
+                      - nxos_name: bidir
+                        tf_name: bidir
+                        type: String
+                        id: true
+                        description: 'BiDir Groups.'
+                        enum_values:
+                          - "no"
+                          - "yes"
+                        example: "no"
+                      - nxos_name: grpList
+                        tf_name: group_list_1
+                        type: String
+                        description: 'Group List.'
+                        example: 224.0.0.0/4
+                        exclude_test: true
+                      - nxos_name: grpList1
+                        tf_name: group_list_2
+                        type: String
+                        description: 'Group List.'
+                        example: 0.0.0.0
+                        exclude_test: true
+                      - nxos_name: grpList2
+                        tf_name: group_list_3
+                        type: String
+                        description: 'Group List.'
+                        example: 0.0.0.0
+                        exclude_test: true
+                      - nxos_name: grpList3
+                        tf_name: group_list_4
+                        type: String
+                        description: 'Group List.'
+                        example: 0.0.0.0
+                        exclude_test: true
+                      - nxos_name: override
+                        tf_name: override
+                        type: Bool
+                        description: 'Flag to override RP preference to use Static over Dynamic RP.'
+                        example: false
+                      - nxos_name: pfxList
+                        tf_name: prefix_list
+                        type: String
+                        description: 'Prefix List.'
+                        example: RP_PFX
+                        exclude_test: true
+                      - nxos_name: rtMap
+                        tf_name: route_map
+                        type: String
+                        description: 'Route Map.'
+                        example: RP_MAP
+                      - nxos_name: ssmNone
+                        tf_name: ssm_none
+                        type: Bool
+                        description: 'SSM None.'
+                        example: false
           - class_name: pimAcastRPFuncP
             doc_path: Layer%203/pim:AcastRPFuncP/
             rn: acastrpfunc
@@ -458,6 +566,666 @@ child_classes:
                     id: true
                     description: 'IP Address of node performing the function.'
                     example: 20.1.1.1/32
+          - class_name: pimASMPatP
+            doc_path: Layer%203/pim:ASMPatP/
+            rn: asm
+            type: single
+            tf_name: asm_policy
+            description: 'PIM Any Source Multicast (ASM) policy configuration.'
+            attributes:
+              - nxos_name: ctrl
+                tf_name: asm_policy_control
+                type: String
+                description: 'Controls.'
+                enum_values:
+                  - pre-build-spt
+                example: pre-build-spt
+                exclude_test: true
+              - nxos_name: descr
+                tf_name: asm_policy_description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: My ASM policy
+              - nxos_name: force
+                tf_name: pre_build_spt_force
+                type: Bool
+                description: 'force pre-build-spt.'
+                example: false
+              - nxos_name: name
+                tf_name: asm_policy_name
+                type: String
+                description: 'Object name.'
+                example: asm
+              - nxos_name: pfxList
+                tf_name: asm_policy_prefix_list
+                type: String
+                description: 'Prefix List.'
+                example: ASM_PFX
+                exclude_test: true
+              - nxos_name: preBuildSpt
+                tf_name: pre_build_spt
+                type: Bool
+                description: 'Pre-Build-SPT.'
+                example: true
+              - nxos_name: rtMap
+                tf_name: asm_policy_route_map
+                type: String
+                description: 'Route Map.'
+                example: ASM_MAP
+                exclude_test: true
+            child_classes:
+              - class_name: pimSharedRangeP
+                doc_path: Layer%203/pim:SharedRangeP/
+                rn: shared
+                type: single
+                tf_name: shared_tree
+                description: 'PIM shared tree only group range configuration.'
+                attributes:
+                  - nxos_name: grpList
+                    tf_name: shared_tree_group_list_1
+                    type: String
+                    description: 'Group List.'
+                    example: 224.0.0.0/4
+                    exclude_test: true
+                  - nxos_name: grpList1
+                    tf_name: shared_tree_group_list_2
+                    type: String
+                    description: 'Group List.'
+                    example: 0.0.0.0
+                    exclude_test: true
+                  - nxos_name: grpList2
+                    tf_name: shared_tree_group_list_3
+                    type: String
+                    description: 'Group List.'
+                    example: 0.0.0.0
+                    exclude_test: true
+                  - nxos_name: grpList3
+                    tf_name: shared_tree_group_list_4
+                    type: String
+                    description: 'Group List.'
+                    example: 0.0.0.0
+                    exclude_test: true
+                  - nxos_name: pfxList
+                    tf_name: shared_tree_prefix_list
+                    type: String
+                    description: 'Prefix List.'
+                    example: SHARED_PFX
+                    exclude_test: true
+                  - nxos_name: rtMap
+                    tf_name: shared_tree_route_map
+                    type: String
+                    description: 'Route Map.'
+                    example: SHARED_MAP
+                  - nxos_name: ssmNone
+                    tf_name: shared_tree_ssm_none
+                    type: Bool
+                    description: 'SSM None.'
+                    example: false
+                  - nxos_name: useSPTCommand
+                    tf_name: shared_tree_use_spt_threshold_command
+                    type: Bool
+                    description: 'Flag to use spt-threashold command.'
+                    example: true
+              - class_name: pimSGRangeExpP
+                doc_path: Layer%203/pim:SGRangeExpP/
+                rn: sgexp
+                type: single
+                tf_name: sg_expiry_timer
+                description: 'PIM (S,G) expiry timer configuration.'
+                attributes:
+                  - nxos_name: grpList
+                    tf_name: sg_expiry_timer_group_list_1
+                    type: String
+                    description: 'Group List.'
+                    example: 224.0.0.0/4
+                    exclude_test: true
+                  - nxos_name: grpList1
+                    tf_name: sg_expiry_timer_group_list_2
+                    type: String
+                    description: 'Group List.'
+                    example: 0.0.0.0
+                    exclude_test: true
+                  - nxos_name: grpList2
+                    tf_name: sg_expiry_timer_group_list_3
+                    type: String
+                    description: 'Group List.'
+                    example: 0.0.0.0
+                    exclude_test: true
+                  - nxos_name: grpList3
+                    tf_name: sg_expiry_timer_group_list_4
+                    type: String
+                    description: 'Group List.'
+                    example: 0.0.0.0
+                    exclude_test: true
+                  - nxos_name: pfxList
+                    tf_name: sg_expiry_timer_prefix_list
+                    type: String
+                    description: 'Prefix List.'
+                    example: SG_PFX
+                    exclude_test: true
+                  - nxos_name: rtMap
+                    tf_name: sg_expiry_timer_route_map
+                    type: String
+                    description: 'Route Map.'
+                    example: SG_MAP
+                    exclude_test: true
+                  - nxos_name: sgExpItvl
+                    tf_name: sg_expiry_timer
+                    type: Int64
+                    min_int: 180
+                    max_int: 604801
+                    description: '(S,G) Entry Expiry Timer.'
+                    example: 300
+                  - nxos_name: sparse
+                    tf_name: sg_expiry_timer_sparse
+                    type: Bool
+                    description: '(S,G) Entry Expiry Timer configured with sparse mode.'
+                    example: false
+                  - nxos_name: ssmNone
+                    tf_name: sg_expiry_timer_ssm_none
+                    type: Bool
+                    description: 'SSM None.'
+                    example: false
+              - class_name: pimRegTrP
+                doc_path: Layer%203/pim:RegTrP/
+                rn: reg
+                type: single
+                tf_name: register_policy
+                description: 'PIM register traffic policy configuration.'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: register_source_address
+                    type: String
+                    description: 'Source Address.'
+                    example: 10.1.1.1
+                    exclude_test: true
+                  - nxos_name: descr
+                    tf_name: register_policy_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My register policy
+                  - nxos_name: maxRate
+                    tf_name: register_policy_max_rate
+                    type: Int64
+                    min_int: 0
+                    max_int: 65535
+                    description: 'Maximum Rate.'
+                    example: 1000
+                  - nxos_name: name
+                    tf_name: register_policy_name
+                    type: String
+                    description: 'Object name.'
+                    example: register
+                  - nxos_name: pfxList
+                    tf_name: register_policy_prefix_list
+                    type: String
+                    description: 'Register Message Prefix List.'
+                    example: REG_PFX
+                    exclude_test: true
+                  - nxos_name: rtMap
+                    tf_name: register_policy_route_map
+                    type: String
+                    description: 'Register Message Route Map.'
+                    example: REG_MAP
+                  - nxos_name: srcIf
+                    tf_name: register_source_interface
+                    type: String
+                    description: 'Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                    example: eth1/10
+          - class_name: pimBSRP
+            doc_path: Layer%203/pim:BSRP/
+            rn: bsr
+            type: single
+            tf_name: bsr
+            description: 'PIM Bootstrap Router (BSR) configuration.'
+            attributes:
+              - nxos_name: ctrl
+                tf_name: bsr_control
+                type: String
+                description: 'Control.'
+                enum_values:
+                  - listen
+                  - forward
+                allow_non_enum_values: true
+                example: forward,listen
+              - nxos_name: descr
+                tf_name: bsr_description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: My BSR policy
+              - nxos_name: name
+                tf_name: bsr_name
+                type: String
+                description: 'Object name.'
+                example: bsr
+            child_classes:
+              - class_name: pimBSRFuncP
+                doc_path: Layer%203/pim:BSRFuncP/
+                rn: bsrfunc
+                type: single
+                tf_name: bsr_candidate
+                description: 'PIM BSR candidate configuration.'
+                attributes:
+                  - nxos_name: descr
+                    tf_name: bsr_candidate_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My BSR candidate
+                  - nxos_name: hashLen
+                    tf_name: bsr_candidate_hash_length
+                    type: Int64
+                    min_int: 0
+                    max_int: 65535
+                    description: 'Hash Mask Len.'
+                    example: 30
+                  - nxos_name: interval
+                    tf_name: bsr_candidate_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 65535
+                    description: 'Interval.'
+                    example: 30
+                  - nxos_name: name
+                    tf_name: bsr_candidate_name
+                    type: String
+                    description: 'Object name.'
+                    example: bsr-candidate
+                  - nxos_name: prio
+                    tf_name: bsr_candidate_priority
+                    type: Int64
+                    min_int: 1
+                    max_int: 255
+                    description: 'Priority.'
+                    example: 10
+                  - nxos_name: srcIf
+                    tf_name: bsr_candidate_source_interface
+                    type: String
+                    description: 'Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                    example: eth1/10
+              - class_name: pimRPFuncP
+                doc_path: Layer%203/pim:RPFuncP/
+                rn: rpfunc
+                type: single
+                tf_name: bsr_rp_candidate
+                description: 'PIM BSR RP candidate configuration.'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: bsr_rp_candidate_address
+                    type: String
+                    description: 'AutoRP Cand RP Address.'
+                    example: 10.1.1.1
+                    exclude_test: true
+                  - nxos_name: descr
+                    tf_name: bsr_rp_candidate_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My RP candidate
+                  - nxos_name: interval
+                    tf_name: bsr_rp_candidate_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 65535
+                    description: 'Interval.'
+                    example: 30
+                  - nxos_name: name
+                    tf_name: bsr_rp_candidate_name
+                    type: String
+                    description: 'Object name.'
+                    example: rp-candidate
+                  - nxos_name: prio
+                    tf_name: bsr_rp_candidate_priority
+                    type: Int64
+                    min_int: 0
+                    max_int: 255
+                    description: 'Priority.'
+                    example: 10
+                  - nxos_name: scope
+                    tf_name: bsr_rp_candidate_scope
+                    type: Int64
+                    min_int: 1
+                    max_int: 255
+                    description: 'Scope.'
+                    example: 16
+                    exclude_test: true
+                  - nxos_name: srcIf
+                    tf_name: bsr_rp_candidate_source_interface
+                    type: String
+                    description: 'Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                    example: eth1/10
+                  - nxos_name: useSendRPAnnCommand
+                    tf_name: bsr_rp_candidate_use_send_rp_announce_command
+                    type: Bool
+                    description: 'Flag to use send-rp-announce.'
+                    example: false
+                    exclude_test: true
+                child_classes:
+                  - class_name: pimRPGrpRange
+                    doc_path: Layer%203/pim:RPGrpRange/
+                    rn: range-%s
+                    type: list
+                    tf_name: bsr_rp_candidate_group_ranges
+                    description: 'List of PIM RP candidate group range configurations.'
+                    attributes:
+                      - nxos_name: bidir
+                        tf_name: bidir
+                        type: String
+                        id: true
+                        description: 'BiDir Groups.'
+                        enum_values:
+                          - "no"
+                          - "yes"
+                        example: "no"
+                      - nxos_name: grpList
+                        tf_name: group_list_1
+                        type: String
+                        description: 'Group List.'
+                        example: 239.0.0.0/8
+                      - nxos_name: grpList1
+                        tf_name: group_list_2
+                        type: String
+                        description: 'Group List.'
+                        example: 0.0.0.0
+                        exclude_test: true
+                      - nxos_name: grpList2
+                        tf_name: group_list_3
+                        type: String
+                        description: 'Group List.'
+                        example: 0.0.0.0
+                        exclude_test: true
+                      - nxos_name: grpList3
+                        tf_name: group_list_4
+                        type: String
+                        description: 'Group List.'
+                        example: 0.0.0.0
+                        exclude_test: true
+                      - nxos_name: override
+                        tf_name: override
+                        type: Bool
+                        description: 'Flag to override RP preference to use Static over Dynamic RP.'
+                        example: false
+                      - nxos_name: pfxList
+                        tf_name: prefix_list
+                        type: String
+                        description: 'Prefix List.'
+                        example: RP_PFX
+                        exclude_test: true
+                      - nxos_name: rtMap
+                        tf_name: route_map
+                        type: String
+                        description: 'Route Map.'
+                        example: RP_MAP
+                        exclude_test: true
+                      - nxos_name: ssmNone
+                        tf_name: ssm_none
+                        type: Bool
+                        description: 'SSM None.'
+                        example: false
+              - class_name: pimBSRFilterP
+                doc_path: Layer%203/pim:BSRFilterP/
+                rn: bsrfilter
+                type: single
+                tf_name: bsr_policy
+                description: 'PIM BSR candidate filter policy configuration.'
+                attributes:
+                  - nxos_name: descr
+                    tf_name: bsr_policy_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My policy
+                  - nxos_name: name
+                    tf_name: bsr_policy_name
+                    type: String
+                    description: 'Object name.'
+                    example: policy
+                  - nxos_name: rtMap
+                    tf_name: bsr_policy_route_map
+                    type: String
+                    description: 'Route Map.'
+                    example: BSR_POLICY
+              - class_name: pimRPFilterP
+                doc_path: Layer%203/pim:RPFilterP/
+                rn: rpfilter
+                type: single
+                tf_name: bsr_rp_candidate_policy
+                description: 'PIM BSR RP candidate filter policy configuration.'
+                attributes:
+                  - nxos_name: descr
+                    tf_name: bsr_rp_candidate_policy_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My policy
+                  - nxos_name: name
+                    tf_name: bsr_rp_candidate_policy_name
+                    type: String
+                    description: 'Object name.'
+                    example: policy
+                  - nxos_name: rtMap
+                    tf_name: bsr_rp_candidate_policy_route_map
+                    type: String
+                    description: 'Route Map.'
+                    example: BSR_RP_POLICY
+          - class_name: pimAutoRPP
+            doc_path: Layer%203/pim:AutoRPP/
+            rn: autorp
+            type: single
+            tf_name: auto_rp
+            description: 'PIM Auto-RP configuration.'
+            attributes:
+              - nxos_name: ctrl
+                tf_name: auto_rp_control
+                type: String
+                description: 'Control.'
+                enum_values:
+                  - listen
+                  - forward
+                allow_non_enum_values: true
+                example: forward,listen
+              - nxos_name: descr
+                tf_name: auto_rp_description
+                type: String
+                description: 'Description of the specified attribute.'
+                example: My Auto-RP policy
+              - nxos_name: name
+                tf_name: auto_rp_name
+                type: String
+                description: 'Object name.'
+                example: auto-rp
+            child_classes:
+              - class_name: pimMAFuncP
+                doc_path: Layer%203/pim:MAFuncP/
+                rn: mafunc
+                type: single
+                tf_name: auto_rp_mapping_agent
+                description: 'PIM Auto-RP mapping agent configuration.'
+                attributes:
+                  - nxos_name: descr
+                    tf_name: auto_rp_mapping_agent_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My mapping agent
+                  - nxos_name: name
+                    tf_name: auto_rp_mapping_agent_name
+                    type: String
+                    description: 'Object name.'
+                    example: mapping-agent
+                  - nxos_name: scope
+                    tf_name: auto_rp_mapping_agent_scope
+                    type: Int64
+                    min_int: 1
+                    max_int: 255
+                    description: 'Scope.'
+                    example: 16
+                  - nxos_name: srcIf
+                    tf_name: auto_rp_mapping_agent_source_interface
+                    type: String
+                    description: 'Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                    example: eth1/10
+                  - nxos_name: useSendRPDisCommand
+                    tf_name: auto_rp_mapping_agent_use_send_rp_discovery_command
+                    type: Bool
+                    description: 'Flag to use send-rp-discovery.'
+                    example: false
+              - class_name: pimRPFuncP
+                doc_path: Layer%203/pim:RPFuncP/
+                rn: rpfunc
+                type: single
+                tf_name: auto_rp_rp_candidate
+                description: 'PIM Auto-RP RP candidate configuration.'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: auto_rp_rp_candidate_address
+                    type: String
+                    description: 'AutoRP Cand RP Address.'
+                    example: 10.1.1.1
+                    exclude_test: true
+                  - nxos_name: descr
+                    tf_name: auto_rp_rp_candidate_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My RP candidate
+                  - nxos_name: interval
+                    tf_name: auto_rp_rp_candidate_interval
+                    type: Int64
+                    min_int: 1
+                    max_int: 65535
+                    description: 'Interval.'
+                    example: 30
+                  - nxos_name: name
+                    tf_name: auto_rp_rp_candidate_name
+                    type: String
+                    description: 'Object name.'
+                    example: rp-candidate
+                  - nxos_name: prio
+                    tf_name: auto_rp_rp_candidate_priority
+                    type: Int64
+                    min_int: 0
+                    max_int: 255
+                    description: 'Priority.'
+                    example: 10
+                    exclude_test: true
+                  - nxos_name: scope
+                    tf_name: auto_rp_rp_candidate_scope
+                    type: Int64
+                    min_int: 1
+                    max_int: 255
+                    description: 'Scope.'
+                    example: 16
+                  - nxos_name: srcIf
+                    tf_name: auto_rp_rp_candidate_source_interface
+                    type: String
+                    description: 'Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                    example: eth1/10
+                  - nxos_name: useSendRPAnnCommand
+                    tf_name: auto_rp_rp_candidate_use_send_rp_announce_command
+                    type: Bool
+                    description: 'Flag to use send-rp-announce.'
+                    example: false
+                child_classes:
+                  - class_name: pimRPGrpRange
+                    doc_path: Layer%203/pim:RPGrpRange/
+                    rn: range-%s
+                    type: list
+                    tf_name: auto_rp_rp_candidate_group_ranges
+                    description: 'List of PIM RP candidate group range configurations.'
+                    attributes:
+                      - nxos_name: bidir
+                        tf_name: bidir
+                        type: String
+                        id: true
+                        description: 'BiDir Groups.'
+                        enum_values:
+                          - "no"
+                          - "yes"
+                        example: "no"
+                      - nxos_name: grpList
+                        tf_name: group_list_1
+                        type: String
+                        description: 'Group List.'
+                        example: 239.0.0.0/8
+                      - nxos_name: grpList1
+                        tf_name: group_list_2
+                        type: String
+                        description: 'Group List.'
+                        example: 0.0.0.0
+                        exclude_test: true
+                      - nxos_name: grpList2
+                        tf_name: group_list_3
+                        type: String
+                        description: 'Group List.'
+                        example: 0.0.0.0
+                        exclude_test: true
+                      - nxos_name: grpList3
+                        tf_name: group_list_4
+                        type: String
+                        description: 'Group List.'
+                        example: 0.0.0.0
+                        exclude_test: true
+                      - nxos_name: override
+                        tf_name: override
+                        type: Bool
+                        description: 'Flag to override RP preference to use Static over Dynamic RP.'
+                        example: false
+                      - nxos_name: pfxList
+                        tf_name: prefix_list
+                        type: String
+                        description: 'Prefix List.'
+                        example: RP_PFX
+                        exclude_test: true
+                      - nxos_name: rtMap
+                        tf_name: route_map
+                        type: String
+                        description: 'Route Map.'
+                        example: RP_MAP
+                        exclude_test: true
+                      - nxos_name: ssmNone
+                        tf_name: ssm_none
+                        type: Bool
+                        description: 'SSM None.'
+                        example: false
+              - class_name: pimMAFilterP
+                doc_path: Layer%203/pim:MAFilterP/
+                rn: mafilter
+                type: single
+                tf_name: auto_rp_mapping_agent_policy
+                description: 'PIM Auto-RP mapping agent filter policy configuration.'
+                attributes:
+                  - nxos_name: descr
+                    tf_name: auto_rp_mapping_agent_policy_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My policy
+                  - nxos_name: name
+                    tf_name: auto_rp_mapping_agent_policy_name
+                    type: String
+                    description: 'Object name.'
+                    example: policy
+                  - nxos_name: rtMap
+                    tf_name: auto_rp_mapping_agent_policy_route_map
+                    type: String
+                    description: 'Route Map.'
+                    example: MA_POLICY
+              - class_name: pimRPFilterP
+                doc_path: Layer%203/pim:RPFilterP/
+                rn: rpfilter
+                type: single
+                tf_name: auto_rp_rp_candidate_policy
+                description: 'PIM Auto-RP RP candidate filter policy configuration.'
+                attributes:
+                  - nxos_name: descr
+                    tf_name: auto_rp_rp_candidate_policy_description
+                    type: String
+                    description: 'Description of the specified attribute.'
+                    example: My policy
+                  - nxos_name: name
+                    tf_name: auto_rp_rp_candidate_policy_name
+                    type: String
+                    description: 'Object name.'
+                    example: policy
+                  - nxos_name: rtMap
+                    tf_name: auto_rp_rp_candidate_policy_route_map
+                    type: String
+                    description: 'Route Map.'
+                    example: AUTO_RP_POLICY
 test_prerequisites:
   - dn: sys/intf/phys-[eth1/10]
     class_name: l1PhysIf
@@ -505,6 +1273,24 @@ additional_tests:
                 "226.0.0.0/24" = {
                   bidir    = true
                   override = true
+                }
+              }
+            }
+          }
+        }
+      }
+      depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1]
+    }
+  # static RP with a route-map based group range (mutually exclusive with group lists)
+  - |-
+    resource "nxos_pim" "test" {
+      vrfs = {
+        "default" = {
+          static_rps = {
+            "5.6.7.8" = {
+              group_ranges = {
+                "no" = {
+                  route_map = "RP_MAP"
                 }
               }
             }

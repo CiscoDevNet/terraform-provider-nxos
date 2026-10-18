@@ -1497,6 +1497,7 @@ func (data {{camelCase .Name}}) toResetBody(preexisting map[string]bool) nxos.Bo
 		{{- range .Children}}
 		{{- if eq .Type "list"}}
 		{{- if $deferEmptied}}
+		{
 		// NX-OS removes the parent once its last child is deleted, so a request that
 		// deletes all existing children and adds new ones fails. Defer those deletes.
 		deferChildDeletes{{$indexVar}} := false
@@ -1525,6 +1526,9 @@ func (data {{camelCase .Name}}) toResetBody(preexisting map[string]bool) nxos.Bo
 				body.Str, _ = sjson.SetRaw(body.Str, matchBodyPath{{$indexVar}}+".-1", deleteBody)
 			}
 		}
+		{{- if $deferEmptied}}
+		}
+		{{- end}}
 		{{- if .ChildClasses}}
 		{{- template "toBodyDeletedListChildTemplate" (makeMap "Children" .ChildClasses "StateListExpr" (printf "stateItem%s.%s" $indexVar (toGoName .TfName)) "PlanListExpr" (printf "planItem%s.%s" $indexVar (toGoName .TfName)) "ParentBodyPath" (printf "matchBodyPath%s" $indexVar) "IdAttributes" .Attributes "ClassName" .ClassName "DeferEmptied" .AutoDeleteOnEmpty "IndexVar" (printf "%s_" $indexVar))}}
 		{{- end}}

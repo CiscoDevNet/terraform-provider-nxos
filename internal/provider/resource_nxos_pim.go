@@ -70,7 +70,7 @@ func (r *PIMResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM (Protocol Independent Multicast) configuration on NX-OS devices, including per-VRF settings, interface configurations, and SSM (Source-Specific Multicast) policies.").AddApiDocumentation("pimEntity", "Layer%203/pim:Entity/", []string{"pimInst", "pimGl", "pimDom", "pimIf", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimAcastRPFuncP", "pimAcastRPPeer"}, []string{"Layer%203/pim:Inst/", "Layer%203/pim:Gl/", "Layer%203/pim:Dom/", "Layer%203/pim:If/", "Layer%203/pim:SSMPatP/", "Layer%203/pim:SSMRangeP/", "Layer%203/pim:StaticRPP/", "Layer%203/pim:StaticRP/", "Layer%203/pim:RPGrpList/", "Layer%203/pim:AcastRPFuncP/", "Layer%203/pim:AcastRPPeer/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the PIM (Protocol Independent Multicast) configuration on NX-OS devices, including per-VRF settings, interface configurations, and SSM (Source-Specific Multicast) policies.").AddApiDocumentation("pimEntity", "Layer%203/pim:Entity/", []string{"pimInst", "pimGl", "pimDom", "pimIf", "pimHelloTrP", "pimSSMPatP", "pimSSMRangeP", "pimStaticRPP", "pimStaticRP", "pimRPGrpList", "pimRPGrpRange", "pimAcastRPFuncP", "pimAcastRPPeer", "pimASMPatP", "pimSharedRangeP", "pimSGRangeExpP", "pimRegTrP", "pimBSRP", "pimBSRFuncP", "pimRPFuncP", "pimRPGrpRange", "pimBSRFilterP", "pimRPFilterP", "pimAutoRPP", "pimMAFuncP", "pimRPFuncP", "pimRPGrpRange", "pimMAFilterP", "pimRPFilterP"}, []string{"Layer%203/pim:Inst/", "Layer%203/pim:Gl/", "Layer%203/pim:Dom/", "Layer%203/pim:If/", "Layer%203/pim:HelloTrP/", "Layer%203/pim:SSMPatP/", "Layer%203/pim:SSMRangeP/", "Layer%203/pim:StaticRPP/", "Layer%203/pim:StaticRP/", "Layer%203/pim:RPGrpList/", "Layer%203/pim:RPGrpRange/", "Layer%203/pim:AcastRPFuncP/", "Layer%203/pim:AcastRPPeer/", "Layer%203/pim:ASMPatP/", "Layer%203/pim:SharedRangeP/", "Layer%203/pim:SGRangeExpP/", "Layer%203/pim:RegTrP/", "Layer%203/pim:BSRP/", "Layer%203/pim:BSRFuncP/", "Layer%203/pim:RPFuncP/", "Layer%203/pim:RPGrpRange/", "Layer%203/pim:BSRFilterP/", "Layer%203/pim:RPFilterP/", "Layer%203/pim:AutoRPP/", "Layer%203/pim:MAFuncP/", "Layer%203/pim:RPFuncP/", "Layer%203/pim:RPGrpRange/", "Layer%203/pim:MAFilterP/", "Layer%203/pim:RPFilterP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -314,6 +314,46 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 										MarkdownDescription: helpers.NewAttributeDescription("Do not process joins from unknown neighbors on this interface.").String,
 										Optional:            true,
 									},
+									"hello_authentication_key": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Authentication Key.").String,
+										Optional:            true,
+										Sensitive:           true,
+									},
+									"hello_authentication_key_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										WriteOnly:           true,
+										Optional:            true,
+									},
+									"hello_authentication_key_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
+										Optional:            true,
+									},
+									"hello_authentication_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Authentication Type.").AddStringEnumDescription("none", "ah-md5").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "ah-md5"),
+										},
+									},
+									"hello_description": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+										Optional:            true,
+									},
+									"hello_interval": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Hello Interval.").AddIntegerRangeDescription(1, 18724286).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 18724286),
+										},
+									},
+									"hello_authentication_keychain": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Name of the Keychain Used For Authentication.").String,
+										Optional:            true,
+									},
+									"hello_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+										Optional:            true,
+									},
 								},
 							},
 						},
@@ -382,6 +422,46 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 											},
 										},
 									},
+									"group_ranges": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of PIM Static RP group range configurations.\n  - Map key: `bidir` - BiDir Groups.\n  - Key choices: `no`, `yes`").String,
+										Optional:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"group_list_1": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+													Optional:            true,
+												},
+												"group_list_2": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+													Optional:            true,
+												},
+												"group_list_3": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+													Optional:            true,
+												},
+												"group_list_4": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+													Optional:            true,
+												},
+												"override": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Flag to override RP preference to use Static over Dynamic RP.").String,
+													Optional:            true,
+												},
+												"prefix_list": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Prefix List.").String,
+													Optional:            true,
+												},
+												"route_map": schema.StringAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("Route Map.").String,
+													Optional:            true,
+												},
+												"ssm_none": schema.BoolAttribute{
+													MarkdownDescription: helpers.NewAttributeDescription("SSM None.").String,
+													Optional:            true,
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -407,6 +487,429 @@ func (r *PIMResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{},
 							},
+						},
+						"asm_policy_control": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Controls.").AddStringEnumDescription("pre-build-spt").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("pre-build-spt"),
+							},
+						},
+						"asm_policy_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"pre_build_spt_force": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("force pre-build-spt.").String,
+							Optional:            true,
+						},
+						"asm_policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Optional:            true,
+						},
+						"asm_policy_prefix_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prefix List.").String,
+							Optional:            true,
+						},
+						"pre_build_spt": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Pre-Build-SPT.").String,
+							Optional:            true,
+						},
+						"asm_policy_route_map": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route Map.").String,
+							Optional:            true,
+						},
+						"shared_tree_group_list_1": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+							Optional:            true,
+						},
+						"shared_tree_group_list_2": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+							Optional:            true,
+						},
+						"shared_tree_group_list_3": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+							Optional:            true,
+						},
+						"shared_tree_group_list_4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+							Optional:            true,
+						},
+						"shared_tree_prefix_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prefix List.").String,
+							Optional:            true,
+						},
+						"shared_tree_route_map": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route Map.").String,
+							Optional:            true,
+						},
+						"shared_tree_ssm_none": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SSM None.").String,
+							Optional:            true,
+						},
+						"shared_tree_use_spt_threshold_command": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flag to use spt-threashold command.").String,
+							Optional:            true,
+						},
+						"sg_expiry_timer_group_list_1": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+							Optional:            true,
+						},
+						"sg_expiry_timer_group_list_2": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+							Optional:            true,
+						},
+						"sg_expiry_timer_group_list_3": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+							Optional:            true,
+						},
+						"sg_expiry_timer_group_list_4": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+							Optional:            true,
+						},
+						"sg_expiry_timer_prefix_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Prefix List.").String,
+							Optional:            true,
+						},
+						"sg_expiry_timer_route_map": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route Map.").String,
+							Optional:            true,
+						},
+						"sg_expiry_timer": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("(S,G) Entry Expiry Timer.").AddIntegerRangeDescription(180, 604801).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(180, 604801),
+							},
+						},
+						"sg_expiry_timer_sparse": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("(S,G) Entry Expiry Timer configured with sparse mode.").String,
+							Optional:            true,
+						},
+						"sg_expiry_timer_ssm_none": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SSM None.").String,
+							Optional:            true,
+						},
+						"register_source_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source Address.").String,
+							Optional:            true,
+						},
+						"register_policy_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"register_policy_max_rate": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Maximum Rate.").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"register_policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Optional:            true,
+						},
+						"register_policy_prefix_list": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Register Message Prefix List.").String,
+							Optional:            true,
+						},
+						"register_policy_route_map": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Register Message Route Map.").String,
+							Optional:            true,
+						},
+						"register_source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Optional:            true,
+						},
+						"bsr_control": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Control.").AddStringEnumDescription("listen", "forward").String,
+							Optional:            true,
+						},
+						"bsr_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"bsr_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Optional:            true,
+						},
+						"bsr_candidate_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"bsr_candidate_hash_length": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hash Mask Len.").AddIntegerRangeDescription(0, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 65535),
+							},
+						},
+						"bsr_candidate_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interval.").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"bsr_candidate_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Optional:            true,
+						},
+						"bsr_candidate_priority": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Priority.").AddIntegerRangeDescription(1, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 255),
+							},
+						},
+						"bsr_candidate_source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Optional:            true,
+						},
+						"bsr_rp_candidate_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("AutoRP Cand RP Address.").String,
+							Optional:            true,
+						},
+						"bsr_rp_candidate_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"bsr_rp_candidate_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interval.").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"bsr_rp_candidate_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Optional:            true,
+						},
+						"bsr_rp_candidate_priority": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Priority.").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"bsr_rp_candidate_scope": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Scope.").AddIntegerRangeDescription(1, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 255),
+							},
+						},
+						"bsr_rp_candidate_source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Optional:            true,
+						},
+						"bsr_rp_candidate_use_send_rp_announce_command": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flag to use send-rp-announce.").String,
+							Optional:            true,
+						},
+						"bsr_rp_candidate_group_ranges": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of PIM RP candidate group range configurations.\n  - Map key: `bidir` - BiDir Groups.\n  - Key choices: `no`, `yes`").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_list_1": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+										Optional:            true,
+									},
+									"group_list_2": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+										Optional:            true,
+									},
+									"group_list_3": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+										Optional:            true,
+									},
+									"group_list_4": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+										Optional:            true,
+									},
+									"override": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Flag to override RP preference to use Static over Dynamic RP.").String,
+										Optional:            true,
+									},
+									"prefix_list": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Prefix List.").String,
+										Optional:            true,
+									},
+									"route_map": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Route Map.").String,
+										Optional:            true,
+									},
+									"ssm_none": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("SSM None.").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+						"bsr_policy_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"bsr_policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Optional:            true,
+						},
+						"bsr_policy_route_map": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route Map.").String,
+							Optional:            true,
+						},
+						"bsr_rp_candidate_policy_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"bsr_rp_candidate_policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Optional:            true,
+						},
+						"bsr_rp_candidate_policy_route_map": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route Map.").String,
+							Optional:            true,
+						},
+						"auto_rp_control": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Control.").AddStringEnumDescription("listen", "forward").String,
+							Optional:            true,
+						},
+						"auto_rp_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"auto_rp_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Optional:            true,
+						},
+						"auto_rp_mapping_agent_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"auto_rp_mapping_agent_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Optional:            true,
+						},
+						"auto_rp_mapping_agent_scope": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Scope.").AddIntegerRangeDescription(1, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 255),
+							},
+						},
+						"auto_rp_mapping_agent_source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Optional:            true,
+						},
+						"auto_rp_mapping_agent_use_send_rp_discovery_command": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flag to use send-rp-discovery.").String,
+							Optional:            true,
+						},
+						"auto_rp_rp_candidate_address": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("AutoRP Cand RP Address.").String,
+							Optional:            true,
+						},
+						"auto_rp_rp_candidate_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"auto_rp_rp_candidate_interval": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Interval.").AddIntegerRangeDescription(1, 65535).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 65535),
+							},
+						},
+						"auto_rp_rp_candidate_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Optional:            true,
+						},
+						"auto_rp_rp_candidate_priority": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Priority.").AddIntegerRangeDescription(0, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 255),
+							},
+						},
+						"auto_rp_rp_candidate_scope": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Scope.").AddIntegerRangeDescription(1, 255).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 255),
+							},
+						},
+						"auto_rp_rp_candidate_source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Source Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+							Optional:            true,
+						},
+						"auto_rp_rp_candidate_use_send_rp_announce_command": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Flag to use send-rp-announce.").String,
+							Optional:            true,
+						},
+						"auto_rp_rp_candidate_group_ranges": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of PIM RP candidate group range configurations.\n  - Map key: `bidir` - BiDir Groups.\n  - Key choices: `no`, `yes`").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"group_list_1": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+										Optional:            true,
+									},
+									"group_list_2": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+										Optional:            true,
+									},
+									"group_list_3": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+										Optional:            true,
+									},
+									"group_list_4": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Group List.").String,
+										Optional:            true,
+									},
+									"override": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Flag to override RP preference to use Static over Dynamic RP.").String,
+										Optional:            true,
+									},
+									"prefix_list": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Prefix List.").String,
+										Optional:            true,
+									},
+									"route_map": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Route Map.").String,
+										Optional:            true,
+									},
+									"ssm_none": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("SSM None.").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+						"auto_rp_mapping_agent_policy_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"auto_rp_mapping_agent_policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Optional:            true,
+						},
+						"auto_rp_mapping_agent_policy_route_map": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route Map.").String,
+							Optional:            true,
+						},
+						"auto_rp_rp_candidate_policy_description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"auto_rp_rp_candidate_policy_name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Object name.").String,
+							Optional:            true,
+						},
+						"auto_rp_rp_candidate_policy_route_map": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Route Map.").String,
+							Optional:            true,
 						},
 					},
 				},

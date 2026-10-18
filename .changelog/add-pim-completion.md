@@ -1,0 +1,4 @@
+- Add PIM hello configuration (`hello_interval`, `hello_authentication_type`, `hello_authentication_key`, etc.) to `interfaces` of `nxos_pim` resource and data source
+- Add PIM static RP route-map and prefix-list group ranges (`group_ranges`) to `static_rps` of `nxos_pim` resource and data source
+- Add PIM ASM configuration (`pre_build_spt`, shared tree (`spt-threshold infinity`), (S,G) expiry timer and register policy (`register-source`)) to `vrfs` of `nxos_pim` resource and data source
+- Add PIM BSR and Auto-RP configuration (candidate BSR, candidate RP, mapping agent and filter policies) to `vrfs` of `nxos_pim` resource and data source

@@ -77,6 +77,7 @@ child_classes:
                   - "pltfm_config"
                   - "lacp"
                   - "otm"
+                  - "pim"
                 example: "spanning-tree"
               - nxos_name: severityLevel
                 tf_name: level

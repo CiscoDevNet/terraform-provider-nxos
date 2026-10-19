@@ -1,0 +1,1 @@
+- Add `pim` to the facility names of `nxos_logging` resource and data source

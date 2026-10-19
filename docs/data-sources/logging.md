@@ -47,7 +47,7 @@ data "nxos_logging" "example" {
 - `console_severity` (String) The minimum severity level of the messages to be displayed.
 - `facilities` (Attributes Map) List of logging facilities.
   - Map key: `name` - Facility Name of individual processes subscribed for logging level.
-  - Key choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp`, `otm` (see [below for nested schema](#nestedatt--facilities))
+  - Key choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp`, `otm`, `pim` (see [below for nested schema](#nestedatt--facilities))
 - `file_admin_state` (String) The administrative state of the local file.
 - `file_description` (String) Description of the specified attribute.
 - `file_name` (String) Object name.

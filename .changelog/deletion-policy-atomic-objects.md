@@ -1,1 +1,0 @@
-- With the `reset` and `retain` deletion policies, delete the ethernet segment of a port-channel in `nxos_port_channel_interface` once all of its attributes are removed, if the resource created it, instead of failing to reset it; an ethernet segment that already existed is left unchanged with a warning, also when the resource is destroyed with the `reset` policy

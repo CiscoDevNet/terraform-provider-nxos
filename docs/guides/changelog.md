@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.20.3
+
+- Allow an empty `control` value in `nxos_igmp` resource to remove `ip igmp ha-stateful`
+
 ## 0.20.2
 
 - Add `pim` to the facility names of `nxos_logging` resource and data source

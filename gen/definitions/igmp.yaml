@@ -50,6 +50,7 @@ child_classes:
         description: 'The control state.'
         enum_values:
           - stateful-ha
+          - ''
         example: stateful-ha
       - nxos_name: flushRoute
         tf_name: flush_routes
@@ -468,10 +469,12 @@ test_prerequisites:
         value: eth1/11
       - name: layer
         value: Layer3
-# Route map based joins and static OIFs, which cannot be combined with individual join groups / static OIFs on the same interface
+# Route map based joins and static OIFs, which cannot be combined with individual join groups / static OIFs on the same interface.
+# Also clears the control state, which the main test sets to `stateful-ha`.
 additional_tests:
   - |-
     resource "nxos_igmp" "test" {
+      control = ""
       vrfs = {
         "default" = {
           interfaces = {

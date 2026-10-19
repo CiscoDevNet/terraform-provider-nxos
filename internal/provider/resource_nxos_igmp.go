@@ -117,10 +117,10 @@ func (r *IGMPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 				},
 			},
 			"control": schema.StringAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha").String,
+				MarkdownDescription: helpers.NewAttributeDescription("The control state.").AddStringEnumDescription("stateful-ha", "").String,
 				Optional:            true,
 				Validators: []validator.String{
-					stringvalidator.OneOf("stateful-ha"),
+					stringvalidator.OneOf("stateful-ha", ""),
 				},
 			},
 			"flush_routes": schema.BoolAttribute{

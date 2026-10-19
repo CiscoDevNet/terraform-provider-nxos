@@ -312,6 +312,7 @@ data "nxos_igmp" "test" {
 
 const testAccIGMPResourceConfigAdditional0 = `
 resource "nxos_igmp" "test" {
+  control = ""
   vrfs = {
     "default" = {
       interfaces = {

@@ -1,0 +1,1 @@
+- Allow an empty `control` value in `nxos_igmp` resource to remove `ip igmp ha-stateful`

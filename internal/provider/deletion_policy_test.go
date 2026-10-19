@@ -131,6 +131,117 @@ func TestNxos_DeletionPolicyUpdateBody(t *testing.T) {
 	}
 }
 
+// An ethernet segment, an atomic object that cannot be reset, configured on an existing port-channel.
+var testDeletionPolicyAtomic = PortChannelInterface{
+	PortChannelInterfaces: map[string]PortChannelInterfacePortChannelInterfaces{
+		"po1": {EthernetSegmentType: types.StringValue("native"), EthernetSegmentIdentifier: types.StringValue("0011.2233.4455.6677.8899")},
+	},
+}
+
+func TestNxos_DeletionPolicyAtomicResetBody(t *testing.T) {
+	cases := []struct {
+		name        string
+		preexisting map[string]bool
+		kept        []string
+		expected    string
+	}{
+		{
+			// The ethernet segment created by the resource is deleted, the existing port-channel stays
+			name:        "created",
+			preexisting: map[string]bool{"sys/intf": true, "sys/intf/aggr-[po1]": true},
+			expected:    `{"interfaceEntity":{"attributes":{},"children":[{"pcAggrIf":{"attributes":{"rn":"aggr-[po1]"},"children":[{"nvoEtherSeg":{"attributes":{"rn":"ethernetsegment","status":"deleted"}}}]}}]}}`,
+		},
+		{
+			// The ethernet segment existed before, it cannot be reset and is left unchanged
+			name:        "preexisting",
+			preexisting: map[string]bool{"sys/intf": true, "sys/intf/aggr-[po1]": true, "sys/intf/aggr-[po1]/ethernetsegment": true},
+			kept:        []string{"sys/intf/aggr-[po1]/ethernetsegment"},
+			expected:    `{"interfaceEntity":{"attributes":{},"children":[{"pcAggrIf":{"attributes":{"rn":"aggr-[po1]"}}}]}}`,
+		},
+		{
+			// Without a record all objects are treated as preexisting
+			name:        "not recorded",
+			preexisting: nil,
+			kept:        []string{"sys/intf/aggr-[po1]/ethernetsegment"},
+			expected:    `{"interfaceEntity":{"attributes":{},"children":[{"pcAggrIf":{"attributes":{"rn":"aggr-[po1]"}}}]}}`,
+		},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			var kept []string
+			if out := testDeletionPolicyAtomic.toResetBody(c.preexisting, func(dn string) { kept = append(kept, dn) }).Str; out != c.expected {
+				t.Fatalf("Error matching output and expected:\n%s\nvs\n%s", out, c.expected)
+			}
+			if fmt.Sprint(kept) != fmt.Sprint(c.kept) {
+				t.Fatalf("Error matching kept objects and expected: %v vs %v", kept, c.kept)
+			}
+		})
+	}
+}
+
+func TestNxos_DeletionPolicyAtomicUpdateBody(t *testing.T) {
+	emptied := PortChannelInterface{PortChannelInterfaces: map[string]PortChannelInterfacePortChannelInterfaces{"po1": {}}}
+	changed := PortChannelInterface{PortChannelInterfaces: map[string]PortChannelInterfacePortChannelInterfaces{
+		"po1": {EthernetSegmentType: types.StringValue("native"), EthernetSegmentSystemMac: types.StringValue("00:00:11:11:22:22")},
+	}}
+	deleteAll := func(string) bool { return true }
+	keepAll := func(string) bool { return false }
+
+	cases := []struct {
+		name          string
+		plan          PortChannelInterface
+		deleteEmptied func(dn string) bool
+		atomicEmptied func(dn string) bool
+		checked       []string
+		expected      string
+	}{
+		{
+			name:          "emptied with delete policy",
+			plan:          emptied,
+			deleteEmptied: deleteAll,
+			checked:       []string{"sys/intf/aggr-[po1]/ethernetsegment"},
+			expected:      `{"interfaceEntity":{"attributes":{},"children":[{"pcAggrIf":{"attributes":{"id":"po1"},"children":[{"nvoEtherSeg":{"attributes":{"status":"deleted"}}}]}}]}}`,
+		},
+		{
+			name:          "emptied and created by the resource with reset or retain policy",
+			plan:          emptied,
+			atomicEmptied: deleteAll,
+			checked:       []string{"sys/intf/aggr-[po1]/ethernetsegment"},
+			expected:      `{"interfaceEntity":{"attributes":{},"children":[{"pcAggrIf":{"attributes":{"id":"po1"},"children":[{"nvoEtherSeg":{"attributes":{"status":"deleted"}}}]}}]}}`,
+		},
+		{
+			name:          "emptied and preexisting with reset or retain policy",
+			plan:          emptied,
+			atomicEmptied: keepAll,
+			checked:       []string{"sys/intf/aggr-[po1]/ethernetsegment"},
+			expected:      `{"interfaceEntity":{"attributes":{},"children":[{"pcAggrIf":{"attributes":{"id":"po1"}}}]}}`,
+		},
+		{
+			name:          "partially removed",
+			plan:          changed,
+			atomicEmptied: deleteAll,
+			expected:      `{"interfaceEntity":{"attributes":{},"children":[{"pcAggrIf":{"attributes":{"id":"po1"},"children":[{"nvoEtherSeg":{"attributes":{"esType":"native","sysMac":"00:00:11:11:22:22","esi":"DME_UNSET_PROPERTY_MARKER"}}}]}}]}}`,
+		},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			var checked []string
+			record := func(f func(dn string) bool) func(dn string) bool {
+				if f == nil {
+					return nil
+				}
+				return func(dn string) bool { checked = append(checked, dn); return f(dn) }
+			}
+			if out := c.plan.toBodyWithDeletes(context.Background(), testDeletionPolicyAtomic, c.plan, false, record(c.deleteEmptied), record(c.atomicEmptied)).Str; out != c.expected {
+				t.Fatalf("Error matching output and expected:\n%s\nvs\n%s", out, c.expected)
+			}
+			if fmt.Sprint(checked) != fmt.Sprint(c.checked) {
+				t.Fatalf("Error matching checked objects and expected: %v vs %v", checked, c.checked)
+			}
+		})
+	}
+}
+
 const testAccDeletionPolicyUnmanagedConfig = `
 resource "nxos_dme" "unmanaged" {
   dn         = "sys/rpm/pfxlistv4-[PL_UNMANAGED]"

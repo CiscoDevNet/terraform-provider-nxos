@@ -528,6 +528,21 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 		for dn := range helpers.FilterExisting(added, tree.Dns()) {
 			preexisting[dn] = true
 		}
+		{{- if hasAtomic .ChildClasses}}
+		// With the reset and retain policies, objects of atomic classes cannot be reset, so once emptied they are
+		// deleted if the resource created them, and left unchanged if they existed before
+		var atomicEmptied func(dn string) bool
+		if !deletePolicy && removed {
+			existedBefore := maps.Clone(preexisting)
+			atomicEmptied = func(dn string) bool {
+				if !existedBefore[dn] {
+					return true
+				}
+				resp.Diagnostics.AddWarning("Object left unchanged", fmt.Sprintf("%s existed before it was managed by this resource and cannot be reset, so it was left unchanged on the device. Delete it manually, or use the `delete` deletion policy, to remove it.", dn))
+				return false
+			}
+		}
+		{{- end}}
 		// Objects no longer managed are forgotten, they are deleted or reset by this update
 		preexisting = helpers.FilterExisting(preexisting, planDns)
 		// With the delete policy, single child objects without configured attributes or children are deleted,
@@ -537,7 +552,7 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 			deleteEmptied = func(dn string) bool { return !tree.HasUnmanagedEntries(dn, stateDns, {{camelCase .Name}}ListClasses) }
 		}
 		{{- if hasAutoDeleteOnEmpty .ChildClasses}}
-		body, deferred := plan.toBodyWithDeletes(ctx, state.{{camelCase .Name}}, config.{{camelCase .Name}}, imp, deleteEmptied, true)
+		body, deferred := plan.toBodyWithDeletes(ctx, state.{{camelCase .Name}}, config.{{camelCase .Name}}, imp, deleteEmptied{{if hasAtomic .ChildClasses}}, atomicEmptied{{end}}, true)
 		resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), body.Str, {{camelCase .Name}}MinVersions)...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -548,7 +563,7 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 			return
 		}
 		if deferred {
-			body, _ = plan.toBodyWithDeletes(ctx, state.{{camelCase .Name}}, config.{{camelCase .Name}}, imp, deleteEmptied, false)
+			body, _ = plan.toBodyWithDeletes(ctx, state.{{camelCase .Name}}, config.{{camelCase .Name}}, imp, deleteEmptied{{if hasAtomic .ChildClasses}}, atomicEmptied{{end}}, false)
 			_, err = {{if hasSeparateRequest .}}helpers.PostSeparate(device.Client, plan.getDn(), body.Str, {{camelCase .Name}}SeparateRequest){{else}}device.Client.Post(plan.getDn(), body.Str){{end}}
 			if err != nil {
 				resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Failed to update object, got error: %s", err))
@@ -556,7 +571,7 @@ func (r *{{camelCase .Name}}Resource) Update(ctx context.Context, req resource.U
 			}
 		}
 		{{- else}}
-		body := plan.toBodyWithDeletes(ctx, state.{{camelCase .Name}}, config.{{camelCase .Name}}, imp, deleteEmptied)
+		body := plan.toBodyWithDeletes(ctx, state.{{camelCase .Name}}, config.{{camelCase .Name}}, imp, deleteEmptied{{if hasAtomic .ChildClasses}}, atomicEmptied{{end}})
 		resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), body.Str, {{camelCase .Name}}MinVersions)...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -616,7 +631,13 @@ func (r *{{camelCase .Name}}Resource) Delete(ctx context.Context, req resource.D
 			if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 				return
 			}
+			{{- if hasAtomic .ChildClasses}}
+			body = state.toResetBody(preexisting, func(dn string) {
+				resp.Diagnostics.AddWarning("Object left unchanged", fmt.Sprintf("%s existed before it was managed by this resource and cannot be reset, so it was left unchanged on the device. Delete it manually, or use the `delete` deletion policy, to remove it.", dn))
+			})
+			{{- else}}
 			body = state.toResetBody(preexisting)
+			{{- end}}
 		}
 		if len(body.Str) > 0 {
 			_, err := {{if separateRequestAttributes .}}helpers.PostSeparate(device.Client, state.getDn(), body.Str, helpers.SeparateRequest{Attributes: {{camelCase .Name}}SeparateRequest.Attributes, Keys: {{camelCase .Name}}SeparateRequest.Keys}){{else}}device.Client.Post(state.getDn(), body.Str){{end}}

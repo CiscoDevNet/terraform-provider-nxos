@@ -152,6 +152,7 @@ type YamlConfigChildClass struct {
 	Mandatory         bool                   `yaml:"mandatory"`
 	NoDelete          bool                   `yaml:"no_delete"`
 	KeepOnDestroy     bool                   `yaml:"keep_on_destroy"`
+	Atomic            bool                   `yaml:"atomic"`
 	StatusReplace     bool                   `yaml:"status_replace"`
 	AutoDeleteOnEmpty bool                   `yaml:"auto_delete_on_empty"`
 	SeparateRequest   bool                   `yaml:"separate_request"`
@@ -427,6 +428,7 @@ var functions = template.FuncMap{
 	"needsPlanItem":             NeedsPlanItem,
 	"hasAutoDeleteOnEmpty":      HasAutoDeleteOnEmpty,
 	"hasKeepOnDestroy":          HasKeepOnDestroy,
+	"hasAtomic":                 HasAtomic,
 	"separateRequestClasses":    SeparateRequestClasses,
 	"separateRequestAttributes": SeparateRequestAttributes,
 	"hasSeparateRequest":        HasSeparateRequest,
@@ -511,6 +513,16 @@ func HasAutoDeleteOnEmpty(children []YamlConfigChildClass) bool {
 func HasKeepOnDestroy(children []YamlConfigChildClass) bool {
 	for _, c := range children {
 		if c.KeepOnDestroy || HasKeepOnDestroy(c.ChildClasses) {
+			return true
+		}
+	}
+	return false
+}
+
+// HasAtomic returns true if any of the child classes, or their child classes, has atomic set.
+func HasAtomic(children []YamlConfigChildClass) bool {
+	for _, c := range children {
+		if c.Atomic || HasAtomic(c.ChildClasses) {
 			return true
 		}
 	}
@@ -846,6 +858,17 @@ func MapKeyDescription(attrs []YamlConfigAttribute) string {
 	return sb.String()
 }
 
+// validateAtomic rejects atomic child classes that cannot be deleted on their own: atomic objects are single
+// objects with a static RN, attributes of their own and no child classes, that are deleted on destroy.
+func validateAtomic(children []YamlConfigChildClass) {
+	for _, c := range children {
+		if c.Atomic && (c.Type != "single" || c.NoDelete || c.KeepOnDestroy || len(c.ChildClasses) > 0 || RnHasDynamicSegment(c.Rn) || allAttributesHaveValue(c.Attributes)) {
+			log.Fatalf("atomic class %s must be a single class with a static rn and attributes of its own, without child classes, no_delete or keep_on_destroy", c.ClassName)
+		}
+		validateAtomic(c.ChildClasses)
+	}
+}
+
 // buildTfChildClasses builds the TfChildClasses list by promoting children
 // of auto-hidden classes (single-type classes where all attributes have a value).
 func buildTfChildClasses(children []YamlConfigChildClass) []YamlConfigChildClass {
@@ -1017,6 +1040,7 @@ func main() {
 
 	for i := range configs {
 		processMinVersions(&configs[i])
+		validateAtomic(configs[i].ChildClasses)
 		configs[i].TfChildClasses = buildTfChildClasses(configs[i].ChildClasses)
 		buildChildTfChildClasses(configs[i].ChildClasses)
 	}

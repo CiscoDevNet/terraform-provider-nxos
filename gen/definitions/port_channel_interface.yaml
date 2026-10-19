@@ -485,6 +485,7 @@ child_classes:
         doc_path: Network%20Virtualization/nvo:EtherSeg/
         rn: ethernetsegment
         type: single
+        atomic: true
         tf_name: ethernet_segment
         description: 'Ethernet Segment for Port Channel.'
         attributes:

@@ -1062,6 +1062,19 @@ func (r *PortChannelInterfaceResource) Update(ctx context.Context, req resource.
 		for dn := range helpers.FilterExisting(added, tree.Dns()) {
 			preexisting[dn] = true
 		}
+		// With the reset and retain policies, objects of atomic classes cannot be reset, so once emptied they are
+		// deleted if the resource created them, and left unchanged if they existed before
+		var atomicEmptied func(dn string) bool
+		if !deletePolicy && removed {
+			existedBefore := maps.Clone(preexisting)
+			atomicEmptied = func(dn string) bool {
+				if !existedBefore[dn] {
+					return true
+				}
+				resp.Diagnostics.AddWarning("Object left unchanged", fmt.Sprintf("%s existed before it was managed by this resource and cannot be reset, so it was left unchanged on the device. Delete it manually, or use the `delete` deletion policy, to remove it.", dn))
+				return false
+			}
+		}
 		// Objects no longer managed are forgotten, they are deleted or reset by this update
 		preexisting = helpers.FilterExisting(preexisting, planDns)
 		// With the delete policy, single child objects without configured attributes or children are deleted,
@@ -1070,7 +1083,7 @@ func (r *PortChannelInterfaceResource) Update(ctx context.Context, req resource.
 		if deletePolicy && removed {
 			deleteEmptied = func(dn string) bool { return !tree.HasUnmanagedEntries(dn, stateDns, PortChannelInterfaceListClasses) }
 		}
-		body := plan.toBodyWithDeletes(ctx, state.PortChannelInterface, config.PortChannelInterface, imp, deleteEmptied)
+		body := plan.toBodyWithDeletes(ctx, state.PortChannelInterface, config.PortChannelInterface, imp, deleteEmptied, atomicEmptied)
 		resp.Diagnostics.Append(helpers.CheckMinVersion(ctx, device.Client, plan.Device.ValueString(), body.Str, PortChannelInterfaceMinVersions)...)
 		if resp.Diagnostics.HasError() {
 			return
@@ -1129,7 +1142,9 @@ func (r *PortChannelInterfaceResource) Delete(ctx context.Context, req resource.
 			if resp.Diagnostics.Append(diags...); resp.Diagnostics.HasError() {
 				return
 			}
-			body = state.toResetBody(preexisting)
+			body = state.toResetBody(preexisting, func(dn string) {
+				resp.Diagnostics.AddWarning("Object left unchanged", fmt.Sprintf("%s existed before it was managed by this resource and cannot be reset, so it was left unchanged on the device. Delete it manually, or use the `delete` deletion policy, to remove it.", dn))
+			})
 		}
 		if len(body.Str) > 0 {
 			_, err := device.Client.Post(state.getDn(), body.Str)

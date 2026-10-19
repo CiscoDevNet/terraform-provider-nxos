@@ -1292,6 +1292,7 @@ func (data {{camelCase .Name}}) managedDns() map[string]bool {
          - KeepOnDestroy children: skipped, they stay on the device unchanged
          - Single children without configured attributes or children: skipped
          - NoDelete children: never deleted, always reset
+         - Atomic children: deleted if created by the resource, otherwise left unchanged and reported to kept
        Context: map with:
          "Children" ([]YamlConfigChildClass)
          "DataVar" (string) - Go expression holding the data of the parent (e.g. "data", "child_")
@@ -1326,6 +1327,14 @@ func (data {{camelCase .Name}}) managedDns() map[string]bool {
 		{{- else}}
 		{
 		{{- end}}
+			{{- if .Atomic}}
+			// Atomic objects cannot be reset, the ones that already existed are left unchanged
+			if kept != nil {
+				kept({{$dnVar}})
+			}
+		}
+	}
+			{{- else}}
 			{{$childBodyVar}} := ""
 			{{- range .Attributes}}
 			{{- if and (not .Id) (eq .Value "") (not .Mandatory) (not .RequiresReplace)}}
@@ -1343,6 +1352,7 @@ func (data {{camelCase .Name}}) managedDns() map[string]bool {
 			}
 		}
 	}
+			{{- end}}
 {{- else if eq .Type "list"}}
 	for key{{$level}}, child{{$level}} := range {{$dataVar}}.{{toGoName .TfName}} {
 		_ = child{{$level}}
@@ -1383,7 +1393,12 @@ func (data {{camelCase .Name}}) managedDns() map[string]bool {
 // created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
 // objects. Mandatory attributes and attributes that require a replacement identify their object and are left
 // unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
+{{- if hasAtomic .ChildClasses}}
+// Objects of atomic classes cannot be reset, so the preexisting ones are left unchanged and passed to kept.
+func (data {{camelCase .Name}}) toResetBody(preexisting map[string]bool, kept func(dn string)) nxos.Body {
+{{- else}}
 func (data {{camelCase .Name}}) toResetBody(preexisting map[string]bool) nxos.Body {
+{{- end}}
 	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
 	_ = existed
 	dn := data.getDn()
@@ -1615,7 +1630,9 @@ func (data {{camelCase .Name}}) toResetBody(preexisting map[string]bool) nxos.Bo
 {{- /* With the delete policy, a single child object that had configured attributes or children and has
        none anymore is deleted, if nothing else is configured below it on the device (deleteEmptied), it
        can be deleted and it does not hold objects that are kept on destroy. Containers without attributes
-       of their own stay. ParentDn is empty below objects with a dynamic RN, which are never deleted. */}}
+       of their own stay. ParentDn is empty below objects with a dynamic RN, which are never deleted. 
+       With the reset and retain policies, an emptied object of an atomic class is deleted or left unchanged
+       as decided by atomicEmptied, as its attributes cannot be reset. */}}
 {{- $ownAttributes := false}}
 {{- range .Attributes}}{{if eq .Value ""}}{{$ownAttributes = true}}{{end}}{{end}}
 {{- $deletable := and $parentDn $ownAttributes (not .NoDelete) (not (rnHasDynamicSegment .Rn)) (not (hasKeepOnDestroy .ChildClasses))}}
@@ -1626,6 +1643,15 @@ func (data {{camelCase .Name}}) toResetBody(preexisting map[string]bool) nxos.Bo
 		deletePath := helpers.EnsureChildPath(&body.Str, {{$ensurePathExpr}}, "{{$childClassName}}")
 		body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
 		body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+	{{- if .Atomic}}
+	} else if atomicEmptied != nil && !{{singleEmptyExpr $stateVar .}} && {{singleEmptyExpr $configVar .}} {
+		// Atomic objects cannot be reset: they are deleted if the resource created them, and left unchanged otherwise
+		if atomicEmptied({{$childDn}}) {
+			deletePath := helpers.EnsureChildPath(&body.Str, {{$ensurePathExpr}}, "{{$childClassName}}")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		}
+	{{- end}}
 	} else {
 {{- end}}
 {{- range .Attributes}}
@@ -1696,10 +1722,14 @@ func (data {{camelCase .Name}}) toResetBody(preexisting map[string]bool) nxos.Bo
 // toBodyWithDeletes returns the update body. With deferEmptied set, deletes of children that would
 // leave an auto_delete_on_empty parent without children are left out and deferred is true, so the
 // caller can send them in a second request after the new children have been created.
-func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}, config {{camelCase .Name}}, importing bool, deleteEmptied func(dn string) bool, deferEmptied bool) (body nxos.Body, deferred bool) {
+func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}, config {{camelCase .Name}}, importing bool, deleteEmptied func(dn string) bool{{if hasAtomic .ChildClasses}}, atomicEmptied func(dn string) bool{{end}}, deferEmptied bool) (body nxos.Body, deferred bool) {
 	body = data.toBody(config)
 {{- else -}}
-func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}, config {{camelCase .Name}}, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
+{{- if hasAtomic .ChildClasses}}
+// toBodyWithDeletes returns the update body. With the reset and retain policies, atomicEmptied decides whether an
+// object of an atomic class whose last attribute was removed is deleted (true) or left unchanged (false).
+{{- end}}
+func (data {{camelCase .Name}}) toBodyWithDeletes(ctx context.Context, state {{camelCase .Name}}, config {{camelCase .Name}}, importing bool, deleteEmptied func(dn string) bool{{if hasAtomic .ChildClasses}}, atomicEmptied func(dn string) bool{{end}}) nxos.Body {
 	body := data.toBody(config)
 {{- end}}
 	{{- if .ChildClasses}}

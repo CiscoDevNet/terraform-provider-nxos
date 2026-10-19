@@ -1943,7 +1943,8 @@ func (data PortChannelInterface) managedDns() map[string]bool {
 // created by the resource are deleted. Configuration not managed by Terraform stays in place, except below deleted
 // objects. Mandatory attributes and attributes that require a replacement identify their object and are left
 // unchanged. A nil preexisting map means nothing was recorded, in which case all objects are treated as preexisting.
-func (data PortChannelInterface) toResetBody(preexisting map[string]bool) nxos.Body {
+// Objects of atomic classes cannot be reset, so the preexisting ones are left unchanged and passed to kept.
+func (data PortChannelInterface) toResetBody(preexisting map[string]bool, kept func(dn string)) nxos.Body {
 	existed := func(dn string) bool { return preexisting == nil || preexisting[dn] }
 	_ = existed
 	dn := data.getDn()
@@ -2178,31 +2179,9 @@ func (data PortChannelInterface) toResetBody(preexisting map[string]bool) nxos.B
 			if !existed(nvoEtherSegDn_) {
 				pcAggrIfBody, _ = sjson.Set(pcAggrIfBody, "pcAggrIf.children.-1.nvoEtherSeg.attributes", map[string]interface{}{"rn": nvoEtherSegRn_, "status": "deleted"})
 			} else {
-				nvoEtherSegBody_ := ""
-				if !child.EthernetSegmentType.IsNull() {
-					nvoEtherSegBody_, _ = sjson.Set(nvoEtherSegBody_, "nvoEtherSeg.attributes.esType", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !child.EthernetSegmentIdentifier.IsNull() {
-					nvoEtherSegBody_, _ = sjson.Set(nvoEtherSegBody_, "nvoEtherSeg.attributes.esi", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !child.EthernetSegmentLocalIdentifier.IsNull() {
-					nvoEtherSegBody_, _ = sjson.Set(nvoEtherSegBody_, "nvoEtherSeg.attributes.localIdentifier", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !child.EthernetSegmentLocalIdentifierInherit.IsNull() {
-					nvoEtherSegBody_, _ = sjson.Set(nvoEtherSegBody_, "nvoEtherSeg.attributes.localIdentifierInherit", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !child.EthernetSegmentSystemMac.IsNull() {
-					nvoEtherSegBody_, _ = sjson.Set(nvoEtherSegBody_, "nvoEtherSeg.attributes.sysMac", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !child.EthernetSegmentSystemMacInherit.IsNull() {
-					nvoEtherSegBody_, _ = sjson.Set(nvoEtherSegBody_, "nvoEtherSeg.attributes.sysMacInherit", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if !child.EthernetSegmentTag.IsNull() {
-					nvoEtherSegBody_, _ = sjson.Set(nvoEtherSegBody_, "nvoEtherSeg.attributes.tag", "DME_UNSET_PROPERTY_MARKER")
-				}
-				if nvoEtherSegBody_ != "" {
-					nvoEtherSegBody_, _ = sjson.Set(nvoEtherSegBody_, "nvoEtherSeg.attributes.rn", nvoEtherSegRn_)
-					pcAggrIfBody, _ = sjson.SetRaw(pcAggrIfBody, "pcAggrIf.children.-1", nvoEtherSegBody_)
+				// Atomic objects cannot be reset, the ones that already existed are left unchanged
+				if kept != nil {
+					kept(nvoEtherSegDn_)
 				}
 			}
 		}
@@ -2508,7 +2487,9 @@ func (data PortChannelInterface) toResetBody(preexisting map[string]bool) nxos.B
 	return nxos.Body{Str: body}
 }
 
-func (data PortChannelInterface) toBodyWithDeletes(ctx context.Context, state PortChannelInterface, config PortChannelInterface, importing bool, deleteEmptied func(dn string) bool) nxos.Body {
+// toBodyWithDeletes returns the update body. With the reset and retain policies, atomicEmptied decides whether an
+// object of an atomic class whose last attribute was removed is deleted (true) or left unchanged (false).
+func (data PortChannelInterface) toBodyWithDeletes(ctx context.Context, state PortChannelInterface, config PortChannelInterface, importing bool, deleteEmptied func(dn string) bool, atomicEmptied func(dn string) bool) nxos.Body {
 	body := data.toBody(config)
 	bodyPath := data.getClassName() + ".children"
 	_ = bodyPath
@@ -2786,6 +2767,13 @@ func (data PortChannelInterface) toBodyWithDeletes(ctx context.Context, state Po
 							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEtherSeg")
 							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
 							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else if atomicEmptied != nil && !(stateChild.EthernetSegmentType.IsNull() && stateChild.EthernetSegmentIdentifier.IsNull() && stateChild.EthernetSegmentLocalIdentifier.IsNull() && stateChild.EthernetSegmentLocalIdentifierInherit.IsNull() && stateChild.EthernetSegmentSystemMac.IsNull() && stateChild.EthernetSegmentSystemMacInherit.IsNull() && stateChild.EthernetSegmentTag.IsNull()) && (configChild.EthernetSegmentType.IsNull() && configChild.EthernetSegmentIdentifier.IsNull() && configChild.EthernetSegmentLocalIdentifier.IsNull() && configChild.EthernetSegmentLocalIdentifierInherit.IsNull() && configChild.EthernetSegmentSystemMac.IsNull() && configChild.EthernetSegmentSystemMacInherit.IsNull() && configChild.EthernetSegmentTag.IsNull()) {
+							// Atomic objects cannot be reset: they are deleted if the resource created them, and left unchanged otherwise
+							if atomicEmptied(listChildDn + "/ethernetsegment") {
+								deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEtherSeg")
+								body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+								body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+							}
 						} else {
 							if !stateChild.EthernetSegmentType.IsNull() && configChild.EthernetSegmentType.IsNull() {
 								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "nvoEtherSeg")

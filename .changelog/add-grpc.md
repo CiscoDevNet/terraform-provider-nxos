@@ -1,2 +1,0 @@
-- Add gRPC agent and gNMI configuration (`grpc_*` attributes) to `nxos_system` resource and data source
-- Add `netconf`, `openconfig` and `restconf` attributes to `nxos_feature` resource and data source

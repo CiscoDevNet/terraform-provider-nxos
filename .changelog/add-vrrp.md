@@ -1,3 +1,0 @@
-- Add `nxos_vrrp` resource and data source
-- Add `nxos_vrrpv3` resource and data source
-- Add `vrrp` and `vrrpv3` attributes to `nxos_feature` resource and data source

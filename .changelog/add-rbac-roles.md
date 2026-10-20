@@ -1,1 +1,0 @@
-- Add RBAC custom roles (`roles`) with rules and VLAN, interface and VRF policies, and role feature groups (`role_feature_groups`) to `nxos_user_management` resource and data source

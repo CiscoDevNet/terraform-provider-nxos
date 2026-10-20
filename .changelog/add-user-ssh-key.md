@@ -1,1 +1,0 @@
-- Add user SSH public key configuration (`ssh_key`, `ssh_key_description`, `ssh_key_owner_key` and `ssh_key_owner_tag` attributes) to `users` of `nxos_user_management` resource and data source

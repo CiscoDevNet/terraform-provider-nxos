@@ -1,2 +1,0 @@
-- Add MST configuration (region name, revision, timers and `mst_instances`) to `nxos_spanning_tree` resource and data source
-- Add per-interface `mst_instances` (cost and port priority) to `nxos_spanning_tree` resource and data source

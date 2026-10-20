@@ -1,1 +1,0 @@
-- Add login protection configuration (`login_block_time`, `login_attempts`, `login_attempts_window` and `login_access_list` attributes) to `nxos_user_management` resource and data source

@@ -1,3 +1,33 @@
+## 0.21.0
+
+- Add global multihop session parameters to `nxos_bfd` resource and data source
+- Add `static_route_bfd_sessions` to `nxos_ipv4` and `nxos_ipv6` resources and data sources
+- Add custom CoPP configuration (`copp_class_maps`, `copp_policy_maps` and `copp_service_policies`), including ACL, exception and protocol matches, policers, set CoS and drop logging, to `nxos_system` resource and data source
+- Add hardware rate-limiter configuration (`hardware_rate_limiters`) to `nxos_platform` resource and data source
+- Add DHCP snooping VLANs and interfaces (`snooping_vlans`, `snooping_interfaces`), Dynamic ARP Inspection VLANs and interfaces (`dai_vlans`, `dai_interfaces`), IP Source Guard interfaces and excluded VLANs (`ip_source_guard_interfaces`, `ip_source_guard_excluded_vlans`) and static IP source bindings (`ip_source_bindings`) to `nxos_dhcp` resource and data source
+- Add extended and large community lists (`extended_community_lists` and `large_community_lists` attributes) to `nxos_route_policy` resource and data source
+- Add route map extended and large community match and set configuration (`match_extended_community_*`, `match_large_community_*`, `set_large_community_*`, `set_extended_community_list_*` and `set_large_community_list_*` attributes) to `nxos_route_policy` resource and data source
+- Add route map `set extcommunity` generic, cost, color, bandwidth and EVPN RMAC configuration (`set_extended_community_*` attributes) to `nxos_route_policy` resource and data source
+- Add `dot1x`, `nat`, `port_security`, `scheduler` and `tunnel` attributes to `nxos_feature` resource and data source
+- Add gRPC agent and gNMI configuration (`grpc_*` attributes) to `nxos_system` resource and data source
+- Add `netconf`, `openconfig` and `restconf` attributes to `nxos_feature` resource and data source
+- Add classic key `accept-lifetime` and `send-lifetime` (`accept_lifetime_*` and `send_lifetime_*` attributes) to `keys` of `nxos_keychain` resource and data source
+- Add `rate_limit` attribute to `nxos_logging` resource and data source
+- Allow any facility name in `facilities` of `nxos_logging` resource and data source
+- Add login protection configuration (`login_block_time`, `login_attempts`, `login_attempts_window` and `login_access_list` attributes) to `nxos_user_management` resource and data source
+- Add PKI key pairs (`pki_key_pairs`) and trustpoints (`pki_trustpoints`) to `nxos_user_management` resource and data source
+- Add RBAC custom roles (`roles`) with rules and VLAN, interface and VRF policies, and role feature groups (`role_feature_groups`) to `nxos_user_management` resource and data source
+- Add PBR `set vrf` (`set_vrf`) to `route_maps` entries of `nxos_route_policy` resource and data source
+- Add MST configuration (region name, revision, timers and `mst_instances`) to `nxos_spanning_tree` resource and data source
+- Add per-interface `mst_instances` (cost and port priority) to `nxos_spanning_tree` resource and data source
+- Add global certificate configuration (`certificate_*` attributes) and destination profile compression, gRPC deadline, node ID, retry and source interface (`destination_profile_*` attributes) to `nxos_telemetry` resource and data source
+- Add certificate, chunking, compression, maximum message size, source interface and VRF configuration to `destination_groups` of `nxos_telemetry` resource and data source
+- Add user SSH public key configuration (`ssh_key`, `ssh_key_description`, `ssh_key_owner_key` and `ssh_key_owner_tag` attributes) to `users` of `nxos_user_management` resource and data source
+- Add `nxos_vrrp` resource and data source
+- Add `nxos_vrrpv3` resource and data source
+- Add `vrrp` and `vrrpv3` attributes to `nxos_feature` resource and data source
+- BREAKING CHANGE: Remove `management_interfaces` attribute from `nxos_system` resource and data source, use the `nxos_management_interface` resource instead, which manages the same objects and also supports VRF membership
+
 ## 0.20.3
 
 - Allow an empty `control` value in `nxos_igmp` resource to remove `ip igmp ha-stateful`

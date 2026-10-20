@@ -1,1 +1,0 @@
-- Add `dot1x`, `nat`, `port_security`, `scheduler` and `tunnel` attributes to `nxos_feature` resource and data source

@@ -1,1 +1,0 @@
-- Add PKI key pairs (`pki_key_pairs`) and trustpoints (`pki_trustpoints`) to `nxos_user_management` resource and data source

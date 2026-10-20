@@ -66,6 +66,7 @@ func TestAccLoggingResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "console_severity", "warnings"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "origin_id_type", "string"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "origin_id_value", "SWITCH1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_logging.test", "rate_limit", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "facilities.spanning-tree.level", "information"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "file_admin_state", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "file_description", "syslog file"))
@@ -91,6 +92,7 @@ func TestAccLoggingResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "console_severity", "warnings"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "origin_id_type", "string"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "origin_id_value", "SWITCH1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_logging.test", "rate_limit", "disabled"))
 	var tfVersion *goversion.Version
 	steps := []resource.TestStep{
 		{
@@ -206,6 +208,7 @@ func testAccLoggingResourceConfig_all() string {
 	config += `	console_severity = "warnings"` + "\n"
 	config += `	origin_id_type = "string"` + "\n"
 	config += `	origin_id_value = "SWITCH1"` + "\n"
+	config += `	rate_limit = "disabled"` + "\n"
 	config += `}` + "\n"
 	return config
 }

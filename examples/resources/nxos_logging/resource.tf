@@ -34,4 +34,5 @@ resource "nxos_logging" "example" {
   console_severity             = "warnings"
   origin_id_type               = "string"
   origin_id_value              = "SWITCH1"
+  rate_limit                   = "disabled"
 }

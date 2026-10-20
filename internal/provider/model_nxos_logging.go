@@ -59,6 +59,7 @@ type Logging struct {
 	ConsoleSeverity           types.String                         `tfsdk:"console_severity"`
 	OriginIdType              types.String                         `tfsdk:"origin_id_type"`
 	OriginIdValue             types.String                         `tfsdk:"origin_id_value"`
+	RateLimit                 types.String                         `tfsdk:"rate_limit"`
 }
 
 type LoggingFacilities struct {
@@ -108,7 +109,7 @@ var LoggingListClasses = map[string]bool{"loggingFacility": true, "syslogRemoteD
 
 // getLoggingTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getLoggingTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"loggingLogging", "loggingLogLevel", "loggingFacility", "syslogSyslog", "syslogFile", "syslogRemoteDest", "syslogSourceInterface", "syslogTimeStamp", "syslogTermMonitor", "syslogConsole", "syslogOriginid"}, LoggingSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"loggingLogging", "loggingLogLevel", "loggingFacility", "syslogSyslog", "syslogFile", "syslogRemoteDest", "syslogSourceInterface", "syslogTimeStamp", "syslogTermMonitor", "syslogConsole", "syslogOriginid", "syslogLoggingRateLimit"}, LoggingSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -303,6 +304,13 @@ func (data Logging) toBody(config Logging) nxos.Body {
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogOriginid.attributes", attrs)
 		}
+		attrs = "{}"
+		if !data.RateLimit.IsUnknown() && !data.RateLimit.IsNull() && !config.RateLimit.IsNull() {
+			attrs, _ = sjson.Set(attrs, "ratelimit", data.RateLimit.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.syslogLoggingRateLimit.attributes", attrs)
+		}
 		childBody = body
 		body = prevBody
 		if parentAttrs != "{}" || gjson.Get(childBody, "syslogSyslog.children").Exists() {
@@ -494,6 +502,20 @@ func (data *Logging) fromBody(res gjson.Result) {
 			)
 			data.OriginIdType = types.StringValue(rsyslogOriginid.Get("syslogOriginid.attributes.idtype").String())
 			data.OriginIdValue = types.StringValue(rsyslogOriginid.Get("syslogOriginid.attributes.idvalue").String())
+		}
+		{
+			var rsyslogLoggingRateLimit gjson.Result
+			rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("syslogLoggingRateLimit.attributes.rn").String()
+					if rnValue == "loggingratelimit" {
+						rsyslogLoggingRateLimit = v
+						return false
+					}
+					return true
+				},
+			)
+			data.RateLimit = types.StringValue(rsyslogLoggingRateLimit.Get("syslogLoggingRateLimit.attributes.ratelimit").String())
 		}
 	}
 }
@@ -775,6 +797,24 @@ func (data *Logging) updateFromBody(res gjson.Result) {
 			data.OriginIdValue = types.StringNull()
 		}
 	}
+	{
+		var rsyslogLoggingRateLimit gjson.Result
+		rsyslogSyslog.Get("syslogSyslog.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("syslogLoggingRateLimit.attributes.rn").String()
+				if rnValue == "loggingratelimit" {
+					rsyslogLoggingRateLimit = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.RateLimit.IsNull() {
+			data.RateLimit = types.StringValue(rsyslogLoggingRateLimit.Get("syslogLoggingRateLimit.attributes.ratelimit").String())
+		} else {
+			data.RateLimit = types.StringNull()
+		}
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -848,6 +888,7 @@ func (data Logging) toDeleteBody() nxos.Body {
 		hasNestedChildren = true
 		hasNestedChildren = true
 		hasNestedChildren = true
+		hasNestedChildren = true
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".syslogSyslog"
@@ -899,6 +940,12 @@ func (data Logging) toDeleteBody() nxos.Body {
 				deleteBody, _ = sjson.Set(deleteBody, "syslogOriginid.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
+			{
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "syslogLoggingRateLimit.attributes.rn", "loggingratelimit")
+				deleteBody, _ = sjson.Set(deleteBody, "syslogLoggingRateLimit.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
 		}
 	}
 
@@ -923,7 +970,7 @@ func (data Logging) managedDns() map[string]bool {
 			}
 		}
 	}
-	if !((data.FileAdminState.IsNull() && data.FileDescription.IsNull() && data.FileName.IsNull() && data.FilePersistentThreshold.IsNull() && data.FileSeverity.IsNull() && data.FileSize.IsNull()) && len(data.RemoteDestinations) == 0 && (data.SourceInterfaceAdminState.IsNull() && data.SourceInterfaceName.IsNull()) && (data.TimestampFormat.IsNull()) && (data.MonitorAdminState.IsNull() && data.MonitorSeverity.IsNull()) && (data.ConsoleAdminState.IsNull() && data.ConsoleSeverity.IsNull()) && (data.OriginIdType.IsNull() && data.OriginIdValue.IsNull())) {
+	if !((data.FileAdminState.IsNull() && data.FileDescription.IsNull() && data.FileName.IsNull() && data.FilePersistentThreshold.IsNull() && data.FileSeverity.IsNull() && data.FileSize.IsNull()) && len(data.RemoteDestinations) == 0 && (data.SourceInterfaceAdminState.IsNull() && data.SourceInterfaceName.IsNull()) && (data.TimestampFormat.IsNull()) && (data.MonitorAdminState.IsNull() && data.MonitorSeverity.IsNull()) && (data.ConsoleAdminState.IsNull() && data.ConsoleSeverity.IsNull()) && (data.OriginIdType.IsNull() && data.OriginIdValue.IsNull()) && (data.RateLimit.IsNull())) {
 		syslogSyslogDn := dn + "/" + "syslog"
 		dns[syslogSyslogDn] = true
 		if !(data.FileAdminState.IsNull() && data.FileDescription.IsNull() && data.FileName.IsNull() && data.FilePersistentThreshold.IsNull() && data.FileSeverity.IsNull() && data.FileSize.IsNull()) {
@@ -953,6 +1000,10 @@ func (data Logging) managedDns() map[string]bool {
 		if !(data.OriginIdType.IsNull() && data.OriginIdValue.IsNull()) {
 			syslogOriginidDn := syslogSyslogDn + "/" + "originid"
 			dns[syslogOriginidDn] = true
+		}
+		if !(data.RateLimit.IsNull()) {
+			syslogLoggingRateLimitDn := syslogSyslogDn + "/" + "loggingratelimit"
+			dns[syslogLoggingRateLimitDn] = true
 		}
 	}
 	return dns
@@ -1013,7 +1064,7 @@ func (data Logging) toResetBody(preexisting map[string]bool) nxos.Body {
 			}
 		}
 	}
-	if !((data.FileAdminState.IsNull() && data.FileDescription.IsNull() && data.FileName.IsNull() && data.FilePersistentThreshold.IsNull() && data.FileSeverity.IsNull() && data.FileSize.IsNull()) && len(data.RemoteDestinations) == 0 && (data.SourceInterfaceAdminState.IsNull() && data.SourceInterfaceName.IsNull()) && (data.TimestampFormat.IsNull()) && (data.MonitorAdminState.IsNull() && data.MonitorSeverity.IsNull()) && (data.ConsoleAdminState.IsNull() && data.ConsoleSeverity.IsNull()) && (data.OriginIdType.IsNull() && data.OriginIdValue.IsNull())) {
+	if !((data.FileAdminState.IsNull() && data.FileDescription.IsNull() && data.FileName.IsNull() && data.FilePersistentThreshold.IsNull() && data.FileSeverity.IsNull() && data.FileSize.IsNull()) && len(data.RemoteDestinations) == 0 && (data.SourceInterfaceAdminState.IsNull() && data.SourceInterfaceName.IsNull()) && (data.TimestampFormat.IsNull()) && (data.MonitorAdminState.IsNull() && data.MonitorSeverity.IsNull()) && (data.ConsoleAdminState.IsNull() && data.ConsoleSeverity.IsNull()) && (data.OriginIdType.IsNull() && data.OriginIdValue.IsNull()) && (data.RateLimit.IsNull())) {
 		syslogSyslogRn := "syslog"
 		syslogSyslogDn := dn + "/" + syslogSyslogRn
 		_ = syslogSyslogDn
@@ -1185,6 +1236,23 @@ func (data Logging) toResetBody(preexisting map[string]bool) nxos.Body {
 					if syslogOriginidBody != "" {
 						syslogOriginidBody, _ = sjson.Set(syslogOriginidBody, "syslogOriginid.attributes.rn", syslogOriginidRn)
 						syslogSyslogBody, _ = sjson.SetRaw(syslogSyslogBody, "syslogSyslog.children.-1", syslogOriginidBody)
+					}
+				}
+			}
+			if !(data.RateLimit.IsNull()) {
+				syslogLoggingRateLimitRn := "loggingratelimit"
+				syslogLoggingRateLimitDn := syslogSyslogDn + "/" + syslogLoggingRateLimitRn
+				_ = syslogLoggingRateLimitDn
+				if !existed(syslogLoggingRateLimitDn) {
+					syslogSyslogBody, _ = sjson.Set(syslogSyslogBody, "syslogSyslog.children.-1.syslogLoggingRateLimit.attributes", map[string]interface{}{"rn": syslogLoggingRateLimitRn, "status": "deleted"})
+				} else {
+					syslogLoggingRateLimitBody := ""
+					if !data.RateLimit.IsNull() {
+						syslogLoggingRateLimitBody, _ = sjson.Set(syslogLoggingRateLimitBody, "syslogLoggingRateLimit.attributes.ratelimit", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if syslogLoggingRateLimitBody != "" {
+						syslogLoggingRateLimitBody, _ = sjson.Set(syslogLoggingRateLimitBody, "syslogLoggingRateLimit.attributes.rn", syslogLoggingRateLimitRn)
+						syslogSyslogBody, _ = sjson.SetRaw(syslogSyslogBody, "syslogSyslog.children.-1", syslogLoggingRateLimitBody)
 					}
 				}
 			}
@@ -1376,6 +1444,16 @@ func (data Logging) toBodyWithDeletes(ctx context.Context, state Logging, config
 			if !state.OriginIdValue.IsNull() && config.OriginIdValue.IsNull() {
 				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogOriginid")
 				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"idvalue", "DME_UNSET_PROPERTY_MARKER")
+			}
+		}
+		if deleteEmptied != nil && !(state.RateLimit.IsNull()) && (config.RateLimit.IsNull()) && deleteEmptied(data.getDn()+"/syslog"+"/loggingratelimit") {
+			deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogLoggingRateLimit")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.RateLimit.IsNull() && config.RateLimit.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "syslogSyslog")+".children", "syslogLoggingRateLimit")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ratelimit", "DME_UNSET_PROPERTY_MARKER")
 			}
 		}
 	}

@@ -70,7 +70,7 @@ func (r *LoggingResource) Metadata(ctx context.Context, req resource.MetadataReq
 func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the logging configuration on NX-OS devices, including global severity levels, per-facility logging settings, syslog file, remote destinations, source interface, timestamp, terminal monitor, console, and origin ID.").AddApiDocumentation("topSystem", "", []string{"loggingLogging", "loggingLogLevel", "loggingFacility", "syslogSyslog", "syslogFile", "syslogRemoteDest", "syslogSourceInterface", "syslogTimeStamp", "syslogTermMonitor", "syslogConsole", "syslogOriginid"}, []string{"System/logging:Logging/", "System/logging:LogLevel/", "System/logging:Facility/", "System/syslog:Syslog/", "System/syslog:File/", "System/syslog:RemoteDest/", "System/syslog:SourceInterface/", "System/syslog:TimeStamp/", "System/syslog:TermMonitor/", "System/syslog:Console/", "System/syslog:Originid/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the logging configuration on NX-OS devices, including global severity levels, per-facility logging settings, syslog file, remote destinations, source interface, timestamp, terminal monitor, console, and origin ID.").AddApiDocumentation("topSystem", "", []string{"loggingLogging", "loggingLogLevel", "loggingFacility", "syslogSyslog", "syslogFile", "syslogRemoteDest", "syslogSourceInterface", "syslogTimeStamp", "syslogTermMonitor", "syslogConsole", "syslogOriginid", "syslogLoggingRateLimit"}, []string{"System/logging:Logging/", "System/logging:LogLevel/", "System/logging:Facility/", "System/syslog:Syslog/", "System/syslog:File/", "System/syslog:RemoteDest/", "System/syslog:SourceInterface/", "System/syslog:TimeStamp/", "System/syslog:TermMonitor/", "System/syslog:Console/", "System/syslog:Originid/", "System/syslog:LoggingRateLimit/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -106,7 +106,7 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 				},
 			},
 			"facilities": schema.MapNestedAttribute{
-				MarkdownDescription: helpers.NewAttributeDescription("List of logging facilities.\n  - Map key: `name` - Facility Name of individual processes subscribed for logging level.\n  - Key choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp`, `otm`, `pim`").String,
+				MarkdownDescription: helpers.NewAttributeDescription("List of logging facilities.\n  - Map key: `name` - Facility Name of individual processes subscribed for logging level.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
@@ -271,6 +271,13 @@ func (r *LoggingResource) Schema(ctx context.Context, req resource.SchemaRequest
 			"origin_id_value": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("OriginId value for Hostname, IP or String.").String,
 				Optional:            true,
+			},
+			"rate_limit": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("rate-limit of syslog messages.").AddStringEnumDescription("disabled", "enabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disabled", "enabled"),
+				},
 			},
 		},
 	}

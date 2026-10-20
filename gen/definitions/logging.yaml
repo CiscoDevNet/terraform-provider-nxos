@@ -58,26 +58,6 @@ child_classes:
                 type: String
                 id: true
                 description: "Facility Name of individual processes subscribed for logging level."
-                enum_values:
-                  - "spanning-tree"
-                  - "session-mgr"
-                  - "radius"
-                  - "security"
-                  - "plugin"
-                  - "cdp"
-                  - "bootvar"
-                  - "aaa"
-                  - "interface-vlan"
-                  - "vshd"
-                  - "cfs"
-                  - "monitor"
-                  - "ntp"
-                  - "acllog"
-                  - "track"
-                  - "pltfm_config"
-                  - "lacp"
-                  - "otm"
-                  - "pim"
                 example: "spanning-tree"
               - nxos_name: severityLevel
                 tf_name: level
@@ -367,3 +347,18 @@ child_classes:
             type: String
             description: 'OriginId value for Hostname, IP or String.'
             example: "SWITCH1"
+      - class_name: syslogLoggingRateLimit
+        doc_path: System/syslog:LoggingRateLimit/
+        rn: loggingratelimit
+        type: single
+        tf_name: rate_limit
+        description: 'Logging rate limit.'
+        attributes:
+          - nxos_name: ratelimit
+            tf_name: rate_limit
+            type: String
+            description: 'rate-limit of syslog messages.'
+            enum_values:
+              - "disabled"
+              - "enabled"
+            example: "disabled"

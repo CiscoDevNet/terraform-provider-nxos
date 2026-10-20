@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This data source can read the logging configuration on NX-OS devices, including global severity levels, per-facility logging settings, syslog file, remote destinations, source interface, timestamp, terminal monitor, console, and origin ID.
   API Documentation
-  loggingLogging https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/logging:Logging/loggingLogLevel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/logging:LogLevel/loggingFacility https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/logging:Facility/syslogSyslog https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:Syslog/syslogFile https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:File/syslogRemoteDest https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:RemoteDest/syslogSourceInterface https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:SourceInterface/syslogTimeStamp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:TimeStamp/syslogTermMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:TermMonitor/syslogConsole https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:Console/syslogOriginid https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:Originid/
+  loggingLogging https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/logging:Logging/loggingLogLevel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/logging:LogLevel/loggingFacility https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/logging:Facility/syslogSyslog https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:Syslog/syslogFile https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:File/syslogRemoteDest https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:RemoteDest/syslogSourceInterface https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:SourceInterface/syslogTimeStamp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:TimeStamp/syslogTermMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:TermMonitor/syslogConsole https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:Console/syslogOriginid https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:Originid/syslogLoggingRateLimit https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:LoggingRateLimit/
 ---
 
 # nxos_logging (Data Source)
@@ -25,6 +25,7 @@ This data source can read the logging configuration on NX-OS devices, including 
 - [syslogTermMonitor](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:TermMonitor/)
 - [syslogConsole](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:Console/)
 - [syslogOriginid](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:Originid/)
+- [syslogLoggingRateLimit](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/syslog:LoggingRateLimit/)
 
 ## Example Usage
 
@@ -46,8 +47,7 @@ data "nxos_logging" "example" {
 - `console_admin_state` (String) The administrative state of the console terminal.
 - `console_severity` (String) The minimum severity level of the messages to be displayed.
 - `facilities` (Attributes Map) List of logging facilities.
-  - Map key: `name` - Facility Name of individual processes subscribed for logging level.
-  - Key choices: `spanning-tree`, `session-mgr`, `radius`, `security`, `plugin`, `cdp`, `bootvar`, `aaa`, `interface-vlan`, `vshd`, `cfs`, `monitor`, `ntp`, `acllog`, `track`, `pltfm_config`, `lacp`, `otm`, `pim` (see [below for nested schema](#nestedatt--facilities))
+  - Map key: `name` - Facility Name of individual processes subscribed for logging level. (see [below for nested schema](#nestedatt--facilities))
 - `file_admin_state` (String) The administrative state of the local file.
 - `file_description` (String) Description of the specified attribute.
 - `file_name` (String) Object name.
@@ -60,6 +60,7 @@ data "nxos_logging" "example" {
 - `monitor_severity` (String) Severity.
 - `origin_id_type` (String) OriginId type for Hostname, IP or String.
 - `origin_id_value` (String) OriginId value for Hostname, IP or String.
+- `rate_limit` (String) rate-limit of syslog messages.
 - `remote_destinations` (Attributes Map) List of syslog remote destination hosts.
   - Map key: `host` - Hostname or IP for export destination. (see [below for nested schema](#nestedatt--remote_destinations))
 - `source_interface_admin_state` (String) The destination policy administrative state.

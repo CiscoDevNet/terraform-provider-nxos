@@ -1,0 +1,2 @@
+- Add `rate_limit` attribute to `nxos_logging` resource and data source
+- Allow any facility name in `facilities` of `nxos_logging` resource and data source

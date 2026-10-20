@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This resource can manage the IPv6 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.
   API Documentation
-  ipv6Entity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Entity/ipv6Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Inst/ipv6Dom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Dom/ipv6Route https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Route/ipv6Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Nexthop/ipv6If https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:If/ipv6Addr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Addr/
+  ipv6Entity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Entity/ipv6Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Inst/ipv6Dom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Dom/ipv6Route https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Route/ipv6Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Nexthop/ipv6RtStaticBfd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:RtStaticBfd/ipv6If https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:If/ipv6Addr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Addr/
 ---
 
 # nxos_ipv6 (Resource)
@@ -19,6 +19,7 @@ This resource can manage the IPv6 configuration on NX-OS devices, including per-
 - [ipv6Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Dom/)
 - [ipv6Route](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Route/)
 - [ipv6Nexthop](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Nexthop/)
+- [ipv6RtStaticBfd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:RtStaticBfd/)
 - [ipv6If](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:If/)
 - [ipv6Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv6:Addr/)
 
@@ -52,6 +53,9 @@ resource "nxos_ipv6" "example" {
             }
           }
         }
+      }
+      static_route_bfd_sessions = {
+        "eth1/10;2001:db8::2" = {}
       }
       interfaces = {
         "eth1/10" = {
@@ -114,6 +118,10 @@ Optional:
 
 - `interfaces` (Attributes Map) List of IPv6 interfaces.
   - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `static_route_bfd_sessions` (Attributes Map) List of IPv6 static route BFD sessions.
+  - Map key format: `<interface_id>;<next_hop>`
+  - Key component `interface_id`: Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.
+  - Key component `next_hop`: Nexthop Address. (see [below for nested schema](#nestedatt--vrfs--static_route_bfd_sessions))
 - `static_routes` (Attributes Map) List of IPv6 static routes.
   - Map key: `prefix` - Prefix. (see [below for nested schema](#nestedatt--vrfs--static_routes))
 
@@ -157,6 +165,10 @@ Optional:
   - Choices: `enabled`, `disabled`
 - `vpc_peer` (String) VPC Peer.
 
+
+
+<a id="nestedatt--vrfs--static_route_bfd_sessions"></a>
+### Nested Schema for `vrfs.static_route_bfd_sessions`
 
 
 <a id="nestedatt--vrfs--static_routes"></a>

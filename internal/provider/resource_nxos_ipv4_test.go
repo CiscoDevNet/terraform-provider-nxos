@@ -186,12 +186,21 @@ func testAccIPv4ResourceImportStateIdFunc(resourceName string) resource.ImportSt
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIPv4ResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
+  dn = "sys/fm/bfd"
+  class_name = "fmBfd"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq1" {
   dn = "sys/inst-VRF1"
   class_name = "l3Inst"
   delete = false
 }
 
-resource "nxos_dme" "PreReq1" {
+resource "nxos_dme" "PreReq2" {
   dn = "sys/intf/phys-[eth1/10]"
   class_name = "l1PhysIf"
   content = {
@@ -199,7 +208,7 @@ resource "nxos_dme" "PreReq1" {
   }
 }
 
-resource "nxos_dme" "PreReq2" {
+resource "nxos_dme" "PreReq3" {
   dn = "sys/track/object-10"
   class_name = "trackObject"
   content = {
@@ -215,7 +224,7 @@ resource "nxos_dme" "PreReq2" {
       }
     },
   ]
-  depends_on = [nxos_dme.PreReq1, ]
+  depends_on = [nxos_dme.PreReq2, ]
 }
 
 `
@@ -225,7 +234,7 @@ resource "nxos_dme" "PreReq2" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccIPv4ResourceConfig_minimum() string {
 	config := `resource "nxos_ipv4" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -273,6 +282,10 @@ func testAccIPv4ResourceConfig_all() string {
 	config += `					}` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
+	config += `			static_route_bfd_sessions = {` + "\n"
+	config += `				"eth1/10;10.99.1.2" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
 	config += `			interfaces = {` + "\n"
 	config += `				"eth1/10" = {` + "\n"
 	config += `					drop_glean = "disabled"` + "\n"
@@ -295,7 +308,7 @@ func testAccIPv4ResourceConfig_all() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

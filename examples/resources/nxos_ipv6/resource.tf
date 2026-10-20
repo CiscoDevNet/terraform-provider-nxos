@@ -26,6 +26,9 @@ resource "nxos_ipv6" "example" {
           }
         }
       }
+      static_route_bfd_sessions = {
+        "eth1/10;2001:db8::2" = {}
+      }
       interfaces = {
         "eth1/10" = {
           auto_configuration         = "disabled"

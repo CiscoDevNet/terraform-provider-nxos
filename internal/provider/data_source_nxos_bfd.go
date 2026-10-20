@@ -56,7 +56,7 @@ func (d *BFDDataSource) Metadata(_ context.Context, req datasource.MetadataReque
 func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BFD configuration on NX-OS devices, including BFD instance settings, interface-level keepalive policies, and authentication settings.").AddApiDocumentation("bfdEntity", "Routing%20and%20Forwarding/bfd:Entity/", []string{"bfdInst", "bfdKaP", "bfdIf", "bfdIfKaP", "bfdAuthP"}, []string{"Routing%20and%20Forwarding/bfd:Inst/", "Routing%20and%20Forwarding/bfd:KaP/", "Routing%20and%20Forwarding/bfd:If/", "Routing%20and%20Forwarding/bfd:IfKaP/", "Routing%20and%20Forwarding/bfd:AuthP/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the BFD configuration on NX-OS devices, including BFD instance settings, interface-level keepalive policies, and authentication settings.").AddApiDocumentation("bfdEntity", "Routing%20and%20Forwarding/bfd:Entity/", []string{"bfdInst", "bfdKaP", "bfdMhop", "bfdIf", "bfdIfKaP", "bfdAuthP"}, []string{"Routing%20and%20Forwarding/bfd:Inst/", "Routing%20and%20Forwarding/bfd:KaP/", "Routing%20and%20Forwarding/bfd:Mhop/", "Routing%20and%20Forwarding/bfd:If/", "Routing%20and%20Forwarding/bfd:IfKaP/", "Routing%20and%20Forwarding/bfd:AuthP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -109,6 +109,18 @@ func (d *BFDDataSource) Schema(ctx context.Context, req datasource.SchemaRequest
 			},
 			"min_transmit_interval": schema.Int64Attribute{
 				MarkdownDescription: "Desired Minimum TX Interval. This is the minimum interval, in ms, that the system would like to use when transmitting BFD control packets.",
+				Computed:            true,
+			},
+			"multihop_detect_multiplier": schema.Int64Attribute{
+				MarkdownDescription: "Detection Multiplier.",
+				Computed:            true,
+			},
+			"multihop_min_receive_interval": schema.Int64Attribute{
+				MarkdownDescription: "Required Minimum RX Interval.",
+				Computed:            true,
+			},
+			"multihop_min_transmit_interval": schema.Int64Attribute{
+				MarkdownDescription: "Desired Minimum TX Interval.",
 				Computed:            true,
 			},
 			"interfaces": schema.MapNestedAttribute{

@@ -37,6 +37,9 @@ resource "nxos_ipv4" "example" {
           }
         }
       }
+      static_route_bfd_sessions = {
+        "eth1/10;10.99.1.2" = {}
+      }
       interfaces = {
         "eth1/10" = {
           drop_glean             = "disabled"

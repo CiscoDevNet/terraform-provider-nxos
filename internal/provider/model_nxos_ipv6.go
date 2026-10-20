@@ -52,8 +52,9 @@ type IPv6 struct {
 }
 
 type IPv6Vrfs struct {
-	StaticRoutes map[string]IPv6VrfsStaticRoutes `tfsdk:"static_routes"`
-	Interfaces   map[string]IPv6VrfsInterfaces   `tfsdk:"interfaces"`
+	StaticRoutes           map[string]IPv6VrfsStaticRoutes           `tfsdk:"static_routes"`
+	StaticRouteBfdSessions map[string]IPv6VrfsStaticRouteBfdSessions `tfsdk:"static_route_bfd_sessions"`
+	Interfaces             map[string]IPv6VrfsInterfaces             `tfsdk:"interfaces"`
 }
 
 type IPv6VrfsStaticRoutes struct {
@@ -71,6 +72,9 @@ type IPv6VrfsStaticRoutesNextHops struct {
 	Tag                  types.Int64  `tfsdk:"tag"`
 	Name                 types.String `tfsdk:"name"`
 	RewriteEncapsulation types.String `tfsdk:"rewrite_encapsulation"`
+}
+
+type IPv6VrfsStaticRouteBfdSessions struct {
 }
 
 type IPv6VrfsInterfaces struct {
@@ -121,11 +125,11 @@ var IPv6SubtreeClassMinVersions = map[string]string{}
 var IPv6MinVersions = map[string]helpers.MinVersion{}
 
 // IPv6ListClasses holds the list child classes of the resource.
-var IPv6ListClasses = map[string]bool{"ipv6Dom": true, "ipv6Route": true, "ipv6Nexthop": true, "ipv6If": true, "ipv6Addr": true}
+var IPv6ListClasses = map[string]bool{"ipv6Dom": true, "ipv6Route": true, "ipv6Nexthop": true, "ipv6RtStaticBfd": true, "ipv6If": true, "ipv6Addr": true}
 
 // getIPv6Tree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getIPv6Tree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"ipv6Inst", "ipv6Dom", "ipv6Route", "ipv6Nexthop", "ipv6If", "ipv6Addr"}, IPv6SubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"ipv6Inst", "ipv6Dom", "ipv6Route", "ipv6Nexthop", "ipv6RtStaticBfd", "ipv6If", "ipv6Addr"}, IPv6SubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -147,6 +151,11 @@ func (data IPv6VrfsStaticRoutes) getRn(key string) string {
 func (data IPv6VrfsStaticRoutesNextHops) getRn(key string) string {
 	keyParts := strings.SplitN(key, ";", 3)
 	return fmt.Sprintf("nh-[%s]-addr-[%s]-vrf-[%s]", keyParts[0], keyParts[1], keyParts[2])
+}
+
+func (data IPv6VrfsStaticRouteBfdSessions) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 2)
+	return fmt.Sprintf("rtstaticbfd-interface-[%s]-nexthop-[%s]", keyParts[0], keyParts[1])
 }
 
 func (data IPv6VrfsInterfaces) getRn(key string) string {
@@ -265,6 +274,16 @@ func (data IPv6) toBody(config IPv6) nxos.Body {
 							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipv6Nexthop.attributes", attrs)
 						}
 					}
+				}
+				for key := range child.StaticRouteBfdSessions {
+					configChild, configChildOk := configChild.StaticRouteBfdSessions[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					keyParts := strings.SplitN(key, ";", 2)
+					attrs, _ = sjson.Set(attrs, "intf", keyParts[0])
+					attrs, _ = sjson.Set(attrs, "nexthop", keyParts[1])
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipv6RtStaticBfd.attributes", attrs)
 				}
 				for key, child := range child.Interfaces {
 					configChild, configChildOk := configChild.Interfaces[key]
@@ -411,6 +430,24 @@ func (data *IPv6) fromBody(res gjson.Result) {
 													child.StaticRoutes = make(map[string]IPv6VrfsStaticRoutes)
 												}
 												child.StaticRoutes[nestedMapKey] = nestedChildipv6Route
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "ipv6RtStaticBfd" {
+												var nestedChildipv6RtStaticBfd IPv6VrfsStaticRouteBfdSessions
+												nestedMapKey := nestedValue.Get("attributes.intf").String() + ";" + nestedValue.Get("attributes.nexthop").String()
+												if child.StaticRouteBfdSessions == nil {
+													child.StaticRouteBfdSessions = make(map[string]IPv6VrfsStaticRouteBfdSessions)
+												}
+												child.StaticRouteBfdSessions[nestedMapKey] = nestedChildipv6RtStaticBfd
 											}
 											return true
 										},
@@ -637,6 +674,26 @@ func (data *IPv6) updateFromBody(res gjson.Result) {
 			}
 			item.StaticRoutes[nc] = ncItem
 		}
+		for nc := range item.StaticRouteBfdSessions {
+			ncItem := item.StaticRouteBfdSessions[nc]
+			keyParts := strings.SplitN(nc, ";", 2)
+			var ripv6RtStaticBfd gjson.Result
+			ripv6Dom.Get("ipv6Dom.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("ipv6RtStaticBfd.attributes.intf").String() == keyParts[0] &&
+						v.Get("ipv6RtStaticBfd.attributes.nexthop").String() == keyParts[1] {
+						ripv6RtStaticBfd = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ripv6RtStaticBfd.Exists() {
+				delete(item.StaticRouteBfdSessions, nc)
+				continue
+			}
+			item.StaticRouteBfdSessions[nc] = ncItem
+		}
 		for nc := range item.Interfaces {
 			ncItem := item.Interfaces[nc]
 			var ripv6If gjson.Result
@@ -827,6 +884,12 @@ func (data IPv6) managedDns() map[string]bool {
 					dns[ipv6NexthopDn__] = true
 				}
 			}
+			for key_, child_ := range child.StaticRouteBfdSessions {
+				keyParts := strings.SplitN(key_, ";", 2)
+				_ = keyParts
+				ipv6RtStaticBfdDn_ := ipv6DomDn + "/" + child_.getRn(key_)
+				dns[ipv6RtStaticBfdDn_] = true
+			}
 			for key_, child_ := range child.Interfaces {
 				ipv6IfDn_ := ipv6DomDn + "/" + child_.getRn(key_)
 				dns[ipv6IfDn_] = true
@@ -948,6 +1011,21 @@ func (data IPv6) toResetBody(preexisting map[string]bool) nxos.Body {
 						ipv6RouteBody_, _ = sjson.SetRaw(ipv6RouteBody_, "ipv6Route.children.-1", ipv6NexthopBody__)
 					}
 					ipv6DomBody, _ = sjson.SetRaw(ipv6DomBody, "ipv6Dom.children.-1", ipv6RouteBody_)
+				}
+				for key_, child_ := range child.StaticRouteBfdSessions {
+					_ = child_
+					keyParts := strings.SplitN(key_, ";", 2)
+					_ = keyParts
+					ipv6RtStaticBfdRn_ := child_.getRn(key_)
+					ipv6RtStaticBfdDn_ := ipv6DomDn + "/" + ipv6RtStaticBfdRn_
+					_ = ipv6RtStaticBfdDn_
+					if !existed(ipv6RtStaticBfdDn_) {
+						ipv6DomBody, _ = sjson.Set(ipv6DomBody, "ipv6Dom.children.-1.ipv6RtStaticBfd.attributes", map[string]interface{}{"rn": ipv6RtStaticBfdRn_, "status": "deleted"})
+						continue
+					}
+					ipv6RtStaticBfdBody_ := ""
+					ipv6RtStaticBfdBody_, _ = sjson.Set(ipv6RtStaticBfdBody_, "ipv6RtStaticBfd.attributes.rn", ipv6RtStaticBfdRn_)
+					ipv6DomBody, _ = sjson.SetRaw(ipv6DomBody, "ipv6Dom.children.-1", ipv6RtStaticBfdBody_)
 				}
 				for key_, child_ := range child.Interfaces {
 					_ = child_
@@ -1093,6 +1171,15 @@ func (data IPv6) toBodyWithDeletes(ctx context.Context, state IPv6, config IPv6,
 						deleteBody, _ = sjson.Set(deleteBody, "ipv6Nexthop.attributes.status", "deleted")
 						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 					}
+				}
+			}
+			for stateChildKey := range stateItemdi.StaticRouteBfdSessions {
+				if _, found := planItemdi.StaticRouteBfdSessions[stateChildKey]; !found {
+					stateChild := stateItemdi.StaticRouteBfdSessions[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ipv6RtStaticBfd.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ipv6RtStaticBfd.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 				}
 			}
 			for stateChildKey := range stateItemdi.Interfaces {
@@ -1248,6 +1335,13 @@ func (data IPv6) toBodyWithDeletes(ctx context.Context, state IPv6, config IPv6,
 										}
 									}
 								}
+							}
+						}
+						for key := range stateChild.StaticRouteBfdSessions {
+							if configChild, ok := configChild.StaticRouteBfdSessions[key]; ok {
+								stateChild := stateChild.StaticRouteBfdSessions[key]
+								_ = stateChild
+								_ = configChild
 							}
 						}
 						for key := range stateChild.Interfaces {

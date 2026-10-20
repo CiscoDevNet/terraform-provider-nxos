@@ -70,7 +70,7 @@ func (r *BFDResource) Metadata(ctx context.Context, req resource.MetadataRequest
 func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BFD configuration on NX-OS devices, including BFD instance settings, interface-level keepalive policies, and authentication settings.").AddApiDocumentation("bfdEntity", "Routing%20and%20Forwarding/bfd:Entity/", []string{"bfdInst", "bfdKaP", "bfdIf", "bfdIfKaP", "bfdAuthP"}, []string{"Routing%20and%20Forwarding/bfd:Inst/", "Routing%20and%20Forwarding/bfd:KaP/", "Routing%20and%20Forwarding/bfd:If/", "Routing%20and%20Forwarding/bfd:IfKaP/", "Routing%20and%20Forwarding/bfd:AuthP/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the BFD configuration on NX-OS devices, including BFD instance settings, interface-level keepalive policies, and authentication settings.").AddApiDocumentation("bfdEntity", "Routing%20and%20Forwarding/bfd:Entity/", []string{"bfdInst", "bfdKaP", "bfdMhop", "bfdIf", "bfdIfKaP", "bfdAuthP"}, []string{"Routing%20and%20Forwarding/bfd:Inst/", "Routing%20and%20Forwarding/bfd:KaP/", "Routing%20and%20Forwarding/bfd:Mhop/", "Routing%20and%20Forwarding/bfd:If/", "Routing%20and%20Forwarding/bfd:IfKaP/", "Routing%20and%20Forwarding/bfd:AuthP/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -160,6 +160,27 @@ func (r *BFDResource) Schema(ctx context.Context, req resource.SchemaRequest, re
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(10, 999),
+				},
+			},
+			"multihop_detect_multiplier": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Detection Multiplier.").AddIntegerRangeDescription(1, 50).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(1, 50),
+				},
+			},
+			"multihop_min_receive_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Required Minimum RX Interval.").AddIntegerRangeDescription(250, 999).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(250, 999),
+				},
+			},
+			"multihop_min_transmit_interval": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Desired Minimum TX Interval.").AddIntegerRangeDescription(250, 999).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(250, 999),
 				},
 			},
 			"interfaces": schema.MapNestedAttribute{

@@ -164,6 +164,15 @@ func testAccIPv6ResourceImportStateIdFunc(resourceName string) resource.ImportSt
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
 const testAccIPv6ResourcePrerequisitesConfig = `
 resource "nxos_dme" "PreReq0" {
+  dn = "sys/fm/bfd"
+  class_name = "fmBfd"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq1" {
   dn = "sys/intf/phys-[eth1/10]"
   class_name = "l1PhysIf"
   content = {
@@ -171,7 +180,7 @@ resource "nxos_dme" "PreReq0" {
   }
 }
 
-resource "nxos_dme" "PreReq1" {
+resource "nxos_dme" "PreReq2" {
   dn = "sys/track/object-10"
   class_name = "trackObject"
   content = {
@@ -187,7 +196,7 @@ resource "nxos_dme" "PreReq1" {
       }
     },
   ]
-  depends_on = [nxos_dme.PreReq0, ]
+  depends_on = [nxos_dme.PreReq1, ]
 }
 
 `
@@ -197,7 +206,7 @@ resource "nxos_dme" "PreReq1" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccIPv6ResourceConfig_minimum() string {
 	config := `resource "nxos_ipv6" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -234,6 +243,10 @@ func testAccIPv6ResourceConfig_all() string {
 	config += `					}` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
+	config += `			static_route_bfd_sessions = {` + "\n"
+	config += `				"eth1/10;2001:db8::2" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
 	config += `			interfaces = {` + "\n"
 	config += `				"eth1/10" = {` + "\n"
 	config += `					auto_configuration = "disabled"` + "\n"
@@ -256,7 +269,7 @@ func testAccIPv6ResourceConfig_all() string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -1,0 +1,2 @@
+- Add global multihop session parameters to `nxos_bfd` resource and data source
+- Add `static_route_bfd_sessions` to `nxos_ipv4` and `nxos_ipv6` resources and data sources

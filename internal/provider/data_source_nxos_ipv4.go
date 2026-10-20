@@ -56,7 +56,7 @@ func (d *IPv4DataSource) Metadata(_ context.Context, req datasource.MetadataRequ
 func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.").AddApiDocumentation("ipv4Entity", "Layer%203/ipv4:Entity/", []string{"ipv4Inst", "ipv4IPLoadSharing", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, []string{"Layer%203/ipv4:Inst/", "Layer%203/ipv4:IPLoadSharing/", "Layer%203/ipv4:Dom/", "Layer%203/ipv4:Route/", "Layer%203/ipv4:Nexthop/", "Layer%203/ipv4:If/", "Layer%203/ipv4:Addr/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.").AddApiDocumentation("ipv4Entity", "Layer%203/ipv4:Entity/", []string{"ipv4Inst", "ipv4IPLoadSharing", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4RtStaticBfd", "ipv4If", "ipv4Addr"}, []string{"Layer%203/ipv4:Inst/", "Layer%203/ipv4:IPLoadSharing/", "Layer%203/ipv4:Dom/", "Layer%203/ipv4:Route/", "Layer%203/ipv4:Nexthop/", "Layer%203/ipv4:RtStaticBfd/", "Layer%203/ipv4:If/", "Layer%203/ipv4:Addr/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -222,6 +222,13 @@ func (d *IPv4DataSource) Schema(ctx context.Context, req datasource.SchemaReques
 										},
 									},
 								},
+							},
+						},
+						"static_route_bfd_sessions": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 static route BFD sessions.\n  - Map key format: `<interface_id>;<next_hop>`\n  - Key component `interface_id`: Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.\n  - Key component `next_hop`: Nexthop Address.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
 							},
 						},
 						"interfaces": schema.MapNestedAttribute{

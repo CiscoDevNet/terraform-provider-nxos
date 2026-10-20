@@ -356,6 +356,25 @@ child_classes:
                     type: String
                     description: 'Rewrite Encapsulation.'
                     example: unknown
+          - class_name: ipv4RtStaticBfd
+            doc_path: Layer%203/ipv4:RtStaticBfd/
+            rn: rtstaticbfd-interface-[%s]-nexthop-[%s]
+            type: list
+            tf_name: static_route_bfd_sessions
+            description: 'List of IPv4 static route BFD sessions.'
+            attributes:
+              - nxos_name: intf
+                tf_name: interface_id
+                type: String
+                id: true
+                description: 'Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.'
+                example: eth1/10
+              - nxos_name: nexthop
+                tf_name: next_hop
+                type: String
+                id: true
+                description: 'Nexthop Address.'
+                example: '10.99.1.2'
           - class_name: ipv4If
             doc_path: Layer%203/ipv4:If/
             rn: if-[%s]
@@ -473,6 +492,12 @@ child_classes:
                     description: 'VPC Peer.'
                     example: '10.0.0.1/30'
 test_prerequisites:
+  - dn: sys/fm/bfd
+    class_name: fmBfd
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
   - dn: sys/inst-VRF1
     class_name: l3Inst
     no_delete: true
@@ -483,7 +508,7 @@ test_prerequisites:
         value: Layer3
   - dn: sys/track/object-10
     class_name: trackObject
-    dependencies: [1]
+    dependencies: [2]
     attributes:
       - name: id
         value: 10

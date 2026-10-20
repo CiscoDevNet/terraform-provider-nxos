@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This data source can read the BFD configuration on NX-OS devices, including BFD instance settings, interface-level keepalive policies, and authentication settings.
   API Documentation
-  bfdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:Entity/bfdInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:Inst/bfdKaP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:KaP/bfdIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:If/bfdIfKaP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:IfKaP/bfdAuthP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:AuthP/
+  bfdEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:Entity/bfdInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:Inst/bfdKaP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:KaP/bfdMhop https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:Mhop/bfdIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:If/bfdIfKaP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:IfKaP/bfdAuthP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:AuthP/
 ---
 
 # nxos_bfd (Data Source)
@@ -17,6 +17,7 @@ This data source can read the BFD configuration on NX-OS devices, including BFD 
 - [bfdEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:Entity/)
 - [bfdInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:Inst/)
 - [bfdKaP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:KaP/)
+- [bfdMhop](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:Mhop/)
 - [bfdIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:If/)
 - [bfdIfKaP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:IfKaP/)
 - [bfdAuthP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bfd:AuthP/)
@@ -49,6 +50,9 @@ data "nxos_bfd" "example" {
   - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--interfaces))
 - `min_receive_interval` (Number) Required Minimum RX Interval. This is the minimum interval, in ms, between received BFD control packets that this system is capable of supporting.
 - `min_transmit_interval` (Number) Desired Minimum TX Interval. This is the minimum interval, in ms, that the system would like to use when transmitting BFD control packets.
+- `multihop_detect_multiplier` (Number) Detection Multiplier.
+- `multihop_min_receive_interval` (Number) Required Minimum RX Interval.
+- `multihop_min_transmit_interval` (Number) Desired Minimum TX Interval.
 - `slow_interval` (Number) Slow timer Interval.
 - `startup_interval` (Number) Startup timer Interval.
 

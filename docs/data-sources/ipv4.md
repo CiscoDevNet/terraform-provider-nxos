@@ -5,7 +5,7 @@ subcategory: "Routing"
 description: |-
   This data source can read the IPv4 configuration on NX-OS devices, including per-VRF static routes with next hops and interface addresses.
   API Documentation
-  ipv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Entity/ipv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Inst/ipv4IPLoadSharing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:IPLoadSharing/ipv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Dom/ipv4Route https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Route/ipv4Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Nexthop/ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:If/ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Addr/
+  ipv4Entity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Entity/ipv4Inst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Inst/ipv4IPLoadSharing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:IPLoadSharing/ipv4Dom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Dom/ipv4Route https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Route/ipv4Nexthop https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Nexthop/ipv4RtStaticBfd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:RtStaticBfd/ipv4If https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:If/ipv4Addr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Addr/
 ---
 
 # nxos_ipv4 (Data Source)
@@ -20,6 +20,7 @@ This data source can read the IPv4 configuration on NX-OS devices, including per
 - [ipv4Dom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Dom/)
 - [ipv4Route](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Route/)
 - [ipv4Nexthop](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Nexthop/)
+- [ipv4RtStaticBfd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:RtStaticBfd/)
 - [ipv4If](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:If/)
 - [ipv4Addr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/ipv4:Addr/)
 
@@ -74,6 +75,10 @@ Read-Only:
 - `icmp_errors_source_interface` (String) ICMP errors source-interface.
 - `interfaces` (Attributes Map) List of IPv4 interfaces.
   - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--vrfs--interfaces))
+- `static_route_bfd_sessions` (Attributes Map) List of IPv4 static route BFD sessions.
+  - Map key format: `<interface_id>;<next_hop>`
+  - Key component `interface_id`: Interface. Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.
+  - Key component `next_hop`: Nexthop Address. (see [below for nested schema](#nestedatt--vrfs--static_route_bfd_sessions))
 - `static_routes` (Attributes Map) List of IPv4 static routes.
   - Map key: `prefix` - Prefix. (see [below for nested schema](#nestedatt--vrfs--static_routes))
 
@@ -103,6 +108,10 @@ Read-Only:
 - `use_bia` (String) Use Interface MAC Address.
 - `vpc_peer` (String) VPC Peer.
 
+
+
+<a id="nestedatt--vrfs--static_route_bfd_sessions"></a>
+### Nested Schema for `vrfs.static_route_bfd_sessions`
 
 
 <a id="nestedatt--vrfs--static_routes"></a>

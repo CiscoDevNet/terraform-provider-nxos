@@ -67,10 +67,11 @@ type IPv4 struct {
 }
 
 type IPv4Vrfs struct {
-	AutoDiscard               types.String                    `tfsdk:"auto_discard"`
-	IcmpErrorsSourceInterface types.String                    `tfsdk:"icmp_errors_source_interface"`
-	StaticRoutes              map[string]IPv4VrfsStaticRoutes `tfsdk:"static_routes"`
-	Interfaces                map[string]IPv4VrfsInterfaces   `tfsdk:"interfaces"`
+	AutoDiscard               types.String                              `tfsdk:"auto_discard"`
+	IcmpErrorsSourceInterface types.String                              `tfsdk:"icmp_errors_source_interface"`
+	StaticRoutes              map[string]IPv4VrfsStaticRoutes           `tfsdk:"static_routes"`
+	StaticRouteBfdSessions    map[string]IPv4VrfsStaticRouteBfdSessions `tfsdk:"static_route_bfd_sessions"`
+	Interfaces                map[string]IPv4VrfsInterfaces             `tfsdk:"interfaces"`
 }
 
 type IPv4VrfsStaticRoutes struct {
@@ -88,6 +89,9 @@ type IPv4VrfsStaticRoutesNextHops struct {
 	Tag                  types.Int64  `tfsdk:"tag"`
 	Name                 types.String `tfsdk:"name"`
 	RewriteEncapsulation types.String `tfsdk:"rewrite_encapsulation"`
+}
+
+type IPv4VrfsStaticRouteBfdSessions struct {
 }
 
 type IPv4VrfsInterfaces struct {
@@ -136,11 +140,11 @@ var IPv4SubtreeClassMinVersions = map[string]string{}
 var IPv4MinVersions = map[string]helpers.MinVersion{}
 
 // IPv4ListClasses holds the list child classes of the resource.
-var IPv4ListClasses = map[string]bool{"ipv4Dom": true, "ipv4Route": true, "ipv4Nexthop": true, "ipv4If": true, "ipv4Addr": true}
+var IPv4ListClasses = map[string]bool{"ipv4Dom": true, "ipv4Route": true, "ipv4Nexthop": true, "ipv4RtStaticBfd": true, "ipv4If": true, "ipv4Addr": true}
 
 // getIPv4Tree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getIPv4Tree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"ipv4Inst", "ipv4IPLoadSharing", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4If", "ipv4Addr"}, IPv4SubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"ipv4Inst", "ipv4IPLoadSharing", "ipv4Dom", "ipv4Route", "ipv4Nexthop", "ipv4RtStaticBfd", "ipv4If", "ipv4Addr"}, IPv4SubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -162,6 +166,11 @@ func (data IPv4VrfsStaticRoutes) getRn(key string) string {
 func (data IPv4VrfsStaticRoutesNextHops) getRn(key string) string {
 	keyParts := strings.SplitN(key, ";", 3)
 	return fmt.Sprintf("nh-[%s]-addr-[%s]-vrf-[%s]", keyParts[0], keyParts[1], keyParts[2])
+}
+
+func (data IPv4VrfsStaticRouteBfdSessions) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 2)
+	return fmt.Sprintf("rtstaticbfd-interface-[%s]-nexthop-[%s]", keyParts[0], keyParts[1])
 }
 
 func (data IPv4VrfsInterfaces) getRn(key string) string {
@@ -336,6 +345,16 @@ func (data IPv4) toBody(config IPv4) nxos.Body {
 						}
 					}
 				}
+				for key := range child.StaticRouteBfdSessions {
+					configChild, configChildOk := configChild.StaticRouteBfdSessions[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					keyParts := strings.SplitN(key, ";", 2)
+					attrs, _ = sjson.Set(attrs, "intf", keyParts[0])
+					attrs, _ = sjson.Set(attrs, "nexthop", keyParts[1])
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.ipv4RtStaticBfd.attributes", attrs)
+				}
 				for key, child := range child.Interfaces {
 					configChild, configChildOk := configChild.Interfaces[key]
 					_ = configChild
@@ -505,6 +524,24 @@ func (data *IPv4) fromBody(res gjson.Result) {
 													child.StaticRoutes = make(map[string]IPv4VrfsStaticRoutes)
 												}
 												child.StaticRoutes[nestedMapKey] = nestedChildipv4Route
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "ipv4RtStaticBfd" {
+												var nestedChildipv4RtStaticBfd IPv4VrfsStaticRouteBfdSessions
+												nestedMapKey := nestedValue.Get("attributes.intf").String() + ";" + nestedValue.Get("attributes.nexthop").String()
+												if child.StaticRouteBfdSessions == nil {
+													child.StaticRouteBfdSessions = make(map[string]IPv4VrfsStaticRouteBfdSessions)
+												}
+												child.StaticRouteBfdSessions[nestedMapKey] = nestedChildipv4RtStaticBfd
 											}
 											return true
 										},
@@ -827,6 +864,26 @@ func (data *IPv4) updateFromBody(res gjson.Result) {
 			}
 			item.StaticRoutes[nc] = ncItem
 		}
+		for nc := range item.StaticRouteBfdSessions {
+			ncItem := item.StaticRouteBfdSessions[nc]
+			keyParts := strings.SplitN(nc, ";", 2)
+			var ripv4RtStaticBfd gjson.Result
+			ripv4Dom.Get("ipv4Dom.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("ipv4RtStaticBfd.attributes.intf").String() == keyParts[0] &&
+						v.Get("ipv4RtStaticBfd.attributes.nexthop").String() == keyParts[1] {
+						ripv4RtStaticBfd = v
+						return false
+					}
+					return true
+				},
+			)
+			if !ripv4RtStaticBfd.Exists() {
+				delete(item.StaticRouteBfdSessions, nc)
+				continue
+			}
+			item.StaticRouteBfdSessions[nc] = ncItem
+		}
 		for nc := range item.Interfaces {
 			ncItem := item.Interfaces[nc]
 			var ripv4If gjson.Result
@@ -1030,6 +1087,12 @@ func (data IPv4) managedDns() map[string]bool {
 					dns[ipv4NexthopDn__] = true
 				}
 			}
+			for key_, child_ := range child.StaticRouteBfdSessions {
+				keyParts := strings.SplitN(key_, ";", 2)
+				_ = keyParts
+				ipv4RtStaticBfdDn_ := ipv4DomDn + "/" + child_.getRn(key_)
+				dns[ipv4RtStaticBfdDn_] = true
+			}
 			for key_, child_ := range child.Interfaces {
 				ipv4IfDn_ := ipv4DomDn + "/" + child_.getRn(key_)
 				dns[ipv4IfDn_] = true
@@ -1217,6 +1280,21 @@ func (data IPv4) toResetBody(preexisting map[string]bool) nxos.Body {
 					}
 					ipv4DomBody, _ = sjson.SetRaw(ipv4DomBody, "ipv4Dom.children.-1", ipv4RouteBody_)
 				}
+				for key_, child_ := range child.StaticRouteBfdSessions {
+					_ = child_
+					keyParts := strings.SplitN(key_, ";", 2)
+					_ = keyParts
+					ipv4RtStaticBfdRn_ := child_.getRn(key_)
+					ipv4RtStaticBfdDn_ := ipv4DomDn + "/" + ipv4RtStaticBfdRn_
+					_ = ipv4RtStaticBfdDn_
+					if !existed(ipv4RtStaticBfdDn_) {
+						ipv4DomBody, _ = sjson.Set(ipv4DomBody, "ipv4Dom.children.-1.ipv4RtStaticBfd.attributes", map[string]interface{}{"rn": ipv4RtStaticBfdRn_, "status": "deleted"})
+						continue
+					}
+					ipv4RtStaticBfdBody_ := ""
+					ipv4RtStaticBfdBody_, _ = sjson.Set(ipv4RtStaticBfdBody_, "ipv4RtStaticBfd.attributes.rn", ipv4RtStaticBfdRn_)
+					ipv4DomBody, _ = sjson.SetRaw(ipv4DomBody, "ipv4Dom.children.-1", ipv4RtStaticBfdBody_)
+				}
 				for key_, child_ := range child.Interfaces {
 					_ = child_
 					ipv4IfRn_ := child_.getRn(key_)
@@ -1355,6 +1433,15 @@ func (data IPv4) toBodyWithDeletes(ctx context.Context, state IPv4, config IPv4,
 						deleteBody, _ = sjson.Set(deleteBody, "ipv4Nexthop.attributes.status", "deleted")
 						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 					}
+				}
+			}
+			for stateChildKey := range stateItemdi.StaticRouteBfdSessions {
+				if _, found := planItemdi.StaticRouteBfdSessions[stateChildKey]; !found {
+					stateChild := stateItemdi.StaticRouteBfdSessions[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "ipv4RtStaticBfd.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "ipv4RtStaticBfd.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 				}
 			}
 			for stateChildKey := range stateItemdi.Interfaces {
@@ -1586,6 +1673,13 @@ func (data IPv4) toBodyWithDeletes(ctx context.Context, state IPv4, config IPv4,
 										}
 									}
 								}
+							}
+						}
+						for key := range stateChild.StaticRouteBfdSessions {
+							if configChild, ok := configChild.StaticRouteBfdSessions[key]; ok {
+								stateChild := stateChild.StaticRouteBfdSessions[key]
+								_ = stateChild
+								_ = configChild
 							}
 						}
 						for key := range stateChild.Interfaces {

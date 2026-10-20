@@ -103,6 +103,37 @@ child_classes:
             max_int: 999
             description: 'Desired Minimum TX Interval. This is the minimum interval, in ms, that the system would like to use when transmitting BFD control packets.'
             example: 100
+      - class_name: bfdMhop
+        doc_path: Routing%20and%20Forwarding/bfd:Mhop/
+        rn: mhop
+        type: single
+        tf_name: multihop
+        description: 'BFD global multihop session parameters.'
+        attributes:
+          - nxos_name: detectMult
+            tf_name: multihop_detect_multiplier
+            type: Int64
+            min_int: 1
+            max_int: 50
+            description: 'Detection Multiplier.'
+            exclude_test: true
+            example: 4
+          - nxos_name: minRxIntvl
+            tf_name: multihop_min_receive_interval
+            type: Int64
+            min_int: 250
+            max_int: 999
+            description: 'Required Minimum RX Interval.'
+            exclude_test: true
+            example: 300
+          - nxos_name: minTxIntvl
+            tf_name: multihop_min_transmit_interval
+            type: Int64
+            min_int: 250
+            max_int: 999
+            description: 'Desired Minimum TX Interval.'
+            exclude_test: true
+            example: 300
       - class_name: bfdIf
         doc_path: Routing%20and%20Forwarding/bfd:If/
         rn: if-[%s]

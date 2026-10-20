@@ -38,20 +38,23 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type BFD struct {
-	Device              types.String             `tfsdk:"device"`
-	Dn                  types.String             `tfsdk:"id"`
-	AdminState          types.String             `tfsdk:"admin_state"`
-	InstanceAdminState  types.String             `tfsdk:"instance_admin_state"`
-	InstanceControl     types.String             `tfsdk:"instance_control"`
-	EchoInterface       types.String             `tfsdk:"echo_interface"`
-	HardwareOffload     types.String             `tfsdk:"hardware_offload"`
-	SlowInterval        types.Int64              `tfsdk:"slow_interval"`
-	StartupInterval     types.Int64              `tfsdk:"startup_interval"`
-	DetectMultiplier    types.Int64              `tfsdk:"detect_multiplier"`
-	EchoReceiveInterval types.Int64              `tfsdk:"echo_receive_interval"`
-	MinReceiveInterval  types.Int64              `tfsdk:"min_receive_interval"`
-	MinTransmitInterval types.Int64              `tfsdk:"min_transmit_interval"`
-	Interfaces          map[string]BFDInterfaces `tfsdk:"interfaces"`
+	Device                      types.String             `tfsdk:"device"`
+	Dn                          types.String             `tfsdk:"id"`
+	AdminState                  types.String             `tfsdk:"admin_state"`
+	InstanceAdminState          types.String             `tfsdk:"instance_admin_state"`
+	InstanceControl             types.String             `tfsdk:"instance_control"`
+	EchoInterface               types.String             `tfsdk:"echo_interface"`
+	HardwareOffload             types.String             `tfsdk:"hardware_offload"`
+	SlowInterval                types.Int64              `tfsdk:"slow_interval"`
+	StartupInterval             types.Int64              `tfsdk:"startup_interval"`
+	DetectMultiplier            types.Int64              `tfsdk:"detect_multiplier"`
+	EchoReceiveInterval         types.Int64              `tfsdk:"echo_receive_interval"`
+	MinReceiveInterval          types.Int64              `tfsdk:"min_receive_interval"`
+	MinTransmitInterval         types.Int64              `tfsdk:"min_transmit_interval"`
+	MultihopDetectMultiplier    types.Int64              `tfsdk:"multihop_detect_multiplier"`
+	MultihopMinReceiveInterval  types.Int64              `tfsdk:"multihop_min_receive_interval"`
+	MultihopMinTransmitInterval types.Int64              `tfsdk:"multihop_min_transmit_interval"`
+	Interfaces                  map[string]BFDInterfaces `tfsdk:"interfaces"`
 }
 
 type BFDInterfaces struct {
@@ -110,7 +113,7 @@ var BFDListClasses = map[string]bool{"bfdIf": true}
 
 // getBFDTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getBFDTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"bfdInst", "bfdKaP", "bfdIf", "bfdIfKaP", "bfdAuthP"}, BFDSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"bfdInst", "bfdKaP", "bfdMhop", "bfdIf", "bfdIfKaP", "bfdAuthP"}, BFDSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -184,6 +187,19 @@ func (data BFD) toBody(config BFD) nxos.Body {
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bfdKaP.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.MultihopDetectMultiplier.IsUnknown() && !data.MultihopDetectMultiplier.IsNull() && !config.MultihopDetectMultiplier.IsNull() {
+			attrs, _ = sjson.Set(attrs, "detectMult", strconv.FormatInt(data.MultihopDetectMultiplier.ValueInt64(), 10))
+		}
+		if !data.MultihopMinReceiveInterval.IsUnknown() && !data.MultihopMinReceiveInterval.IsNull() && !config.MultihopMinReceiveInterval.IsNull() {
+			attrs, _ = sjson.Set(attrs, "minRxIntvl", strconv.FormatInt(data.MultihopMinReceiveInterval.ValueInt64(), 10))
+		}
+		if !data.MultihopMinTransmitInterval.IsUnknown() && !data.MultihopMinTransmitInterval.IsNull() && !config.MultihopMinTransmitInterval.IsNull() {
+			attrs, _ = sjson.Set(attrs, "minTxIntvl", strconv.FormatInt(data.MultihopMinTransmitInterval.ValueInt64(), 10))
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bfdMhop.attributes", attrs)
 		}
 		for key, child := range data.Interfaces {
 			configChild, configChildOk := config.Interfaces[key]
@@ -314,6 +330,22 @@ func (data *BFD) fromBody(res gjson.Result) {
 			data.EchoReceiveInterval = types.Int64Value(rbfdKaP.Get("bfdKaP.attributes.echoRxIntvl").Int())
 			data.MinReceiveInterval = types.Int64Value(rbfdKaP.Get("bfdKaP.attributes.minRxIntvl").Int())
 			data.MinTransmitInterval = types.Int64Value(rbfdKaP.Get("bfdKaP.attributes.minTxIntvl").Int())
+		}
+		{
+			var rbfdMhop gjson.Result
+			rbfdInst.Get("bfdInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("bfdMhop.attributes.rn").String()
+					if rnValue == "mhop" {
+						rbfdMhop = v
+						return false
+					}
+					return true
+				},
+			)
+			data.MultihopDetectMultiplier = types.Int64Value(rbfdMhop.Get("bfdMhop.attributes.detectMult").Int())
+			data.MultihopMinReceiveInterval = types.Int64Value(rbfdMhop.Get("bfdMhop.attributes.minRxIntvl").Int())
+			data.MultihopMinTransmitInterval = types.Int64Value(rbfdMhop.Get("bfdMhop.attributes.minTxIntvl").Int())
 		}
 		rbfdInst.Get("bfdInst.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -462,6 +494,34 @@ func (data *BFD) updateFromBody(res gjson.Result) {
 			data.MinTransmitInterval = types.Int64Null()
 		}
 	}
+	{
+		var rbfdMhop gjson.Result
+		rbfdInst.Get("bfdInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("bfdMhop.attributes.rn").String()
+				if rnValue == "mhop" {
+					rbfdMhop = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.MultihopDetectMultiplier.IsNull() {
+			data.MultihopDetectMultiplier = types.Int64Value(rbfdMhop.Get("bfdMhop.attributes.detectMult").Int())
+		} else {
+			data.MultihopDetectMultiplier = types.Int64Null()
+		}
+		if !data.MultihopMinReceiveInterval.IsNull() {
+			data.MultihopMinReceiveInterval = types.Int64Value(rbfdMhop.Get("bfdMhop.attributes.minRxIntvl").Int())
+		} else {
+			data.MultihopMinReceiveInterval = types.Int64Null()
+		}
+		if !data.MultihopMinTransmitInterval.IsNull() {
+			data.MultihopMinTransmitInterval = types.Int64Value(rbfdMhop.Get("bfdMhop.attributes.minTxIntvl").Int())
+		} else {
+			data.MultihopMinTransmitInterval = types.Int64Null()
+		}
+	}
 	for key, item := range data.Interfaces {
 		var rbfdIf gjson.Result
 		rbfdInst.Get("bfdInst.children").ForEach(
@@ -604,12 +664,16 @@ func (data BFD) managedDns() map[string]bool {
 	dns := map[string]bool{}
 	dn := data.getDn()
 	dns[dn] = true
-	if !(data.InstanceAdminState.IsNull() && data.InstanceControl.IsNull() && data.EchoInterface.IsNull() && data.HardwareOffload.IsNull() && data.SlowInterval.IsNull() && data.StartupInterval.IsNull() && (data.DetectMultiplier.IsNull() && data.EchoReceiveInterval.IsNull() && data.MinReceiveInterval.IsNull() && data.MinTransmitInterval.IsNull()) && len(data.Interfaces) == 0) {
+	if !(data.InstanceAdminState.IsNull() && data.InstanceControl.IsNull() && data.EchoInterface.IsNull() && data.HardwareOffload.IsNull() && data.SlowInterval.IsNull() && data.StartupInterval.IsNull() && (data.DetectMultiplier.IsNull() && data.EchoReceiveInterval.IsNull() && data.MinReceiveInterval.IsNull() && data.MinTransmitInterval.IsNull()) && (data.MultihopDetectMultiplier.IsNull() && data.MultihopMinReceiveInterval.IsNull() && data.MultihopMinTransmitInterval.IsNull()) && len(data.Interfaces) == 0) {
 		bfdInstDn := dn + "/" + "inst"
 		dns[bfdInstDn] = true
 		if !(data.DetectMultiplier.IsNull() && data.EchoReceiveInterval.IsNull() && data.MinReceiveInterval.IsNull() && data.MinTransmitInterval.IsNull()) {
 			bfdKaPDn := bfdInstDn + "/" + "ka"
 			dns[bfdKaPDn] = true
+		}
+		if !(data.MultihopDetectMultiplier.IsNull() && data.MultihopMinReceiveInterval.IsNull() && data.MultihopMinTransmitInterval.IsNull()) {
+			bfdMhopDn := bfdInstDn + "/" + "mhop"
+			dns[bfdMhopDn] = true
 		}
 		for key, child := range data.Interfaces {
 			bfdIfDn := bfdInstDn + "/" + child.getRn(key)
@@ -646,7 +710,7 @@ func (data BFD) toResetBody(preexisting map[string]bool) nxos.Body {
 	if body == "" {
 		body, _ = sjson.Set(body, "bfdEntity.attributes", map[string]interface{}{})
 	}
-	if !(data.InstanceAdminState.IsNull() && data.InstanceControl.IsNull() && data.EchoInterface.IsNull() && data.HardwareOffload.IsNull() && data.SlowInterval.IsNull() && data.StartupInterval.IsNull() && (data.DetectMultiplier.IsNull() && data.EchoReceiveInterval.IsNull() && data.MinReceiveInterval.IsNull() && data.MinTransmitInterval.IsNull()) && len(data.Interfaces) == 0) {
+	if !(data.InstanceAdminState.IsNull() && data.InstanceControl.IsNull() && data.EchoInterface.IsNull() && data.HardwareOffload.IsNull() && data.SlowInterval.IsNull() && data.StartupInterval.IsNull() && (data.DetectMultiplier.IsNull() && data.EchoReceiveInterval.IsNull() && data.MinReceiveInterval.IsNull() && data.MinTransmitInterval.IsNull()) && (data.MultihopDetectMultiplier.IsNull() && data.MultihopMinReceiveInterval.IsNull() && data.MultihopMinTransmitInterval.IsNull()) && len(data.Interfaces) == 0) {
 		bfdInstRn := "inst"
 		bfdInstDn := dn + "/" + bfdInstRn
 		_ = bfdInstDn
@@ -695,6 +759,29 @@ func (data BFD) toResetBody(preexisting map[string]bool) nxos.Body {
 					if bfdKaPBody != "" {
 						bfdKaPBody, _ = sjson.Set(bfdKaPBody, "bfdKaP.attributes.rn", bfdKaPRn)
 						bfdInstBody, _ = sjson.SetRaw(bfdInstBody, "bfdInst.children.-1", bfdKaPBody)
+					}
+				}
+			}
+			if !(data.MultihopDetectMultiplier.IsNull() && data.MultihopMinReceiveInterval.IsNull() && data.MultihopMinTransmitInterval.IsNull()) {
+				bfdMhopRn := "mhop"
+				bfdMhopDn := bfdInstDn + "/" + bfdMhopRn
+				_ = bfdMhopDn
+				if !existed(bfdMhopDn) {
+					bfdInstBody, _ = sjson.Set(bfdInstBody, "bfdInst.children.-1.bfdMhop.attributes", map[string]interface{}{"rn": bfdMhopRn, "status": "deleted"})
+				} else {
+					bfdMhopBody := ""
+					if !data.MultihopDetectMultiplier.IsNull() {
+						bfdMhopBody, _ = sjson.Set(bfdMhopBody, "bfdMhop.attributes.detectMult", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.MultihopMinReceiveInterval.IsNull() {
+						bfdMhopBody, _ = sjson.Set(bfdMhopBody, "bfdMhop.attributes.minRxIntvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.MultihopMinTransmitInterval.IsNull() {
+						bfdMhopBody, _ = sjson.Set(bfdMhopBody, "bfdMhop.attributes.minTxIntvl", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if bfdMhopBody != "" {
+						bfdMhopBody, _ = sjson.Set(bfdMhopBody, "bfdMhop.attributes.rn", bfdMhopRn)
+						bfdInstBody, _ = sjson.SetRaw(bfdInstBody, "bfdInst.children.-1", bfdMhopBody)
 					}
 				}
 			}
@@ -841,7 +928,7 @@ func (data BFD) toBodyWithDeletes(ctx context.Context, state BFD, config BFD, im
 		}
 	}
 	if !importing {
-		if deleteEmptied != nil && !(state.InstanceAdminState.IsNull() && state.InstanceControl.IsNull() && state.EchoInterface.IsNull() && state.HardwareOffload.IsNull() && state.SlowInterval.IsNull() && state.StartupInterval.IsNull() && (state.DetectMultiplier.IsNull() && state.EchoReceiveInterval.IsNull() && state.MinReceiveInterval.IsNull() && state.MinTransmitInterval.IsNull()) && len(state.Interfaces) == 0) && (config.InstanceAdminState.IsNull() && config.InstanceControl.IsNull() && config.EchoInterface.IsNull() && config.HardwareOffload.IsNull() && config.SlowInterval.IsNull() && config.StartupInterval.IsNull() && (config.DetectMultiplier.IsNull() && config.EchoReceiveInterval.IsNull() && config.MinReceiveInterval.IsNull() && config.MinTransmitInterval.IsNull()) && len(config.Interfaces) == 0) && deleteEmptied(data.getDn()+"/inst") {
+		if deleteEmptied != nil && !(state.InstanceAdminState.IsNull() && state.InstanceControl.IsNull() && state.EchoInterface.IsNull() && state.HardwareOffload.IsNull() && state.SlowInterval.IsNull() && state.StartupInterval.IsNull() && (state.DetectMultiplier.IsNull() && state.EchoReceiveInterval.IsNull() && state.MinReceiveInterval.IsNull() && state.MinTransmitInterval.IsNull()) && (state.MultihopDetectMultiplier.IsNull() && state.MultihopMinReceiveInterval.IsNull() && state.MultihopMinTransmitInterval.IsNull()) && len(state.Interfaces) == 0) && (config.InstanceAdminState.IsNull() && config.InstanceControl.IsNull() && config.EchoInterface.IsNull() && config.HardwareOffload.IsNull() && config.SlowInterval.IsNull() && config.StartupInterval.IsNull() && (config.DetectMultiplier.IsNull() && config.EchoReceiveInterval.IsNull() && config.MinReceiveInterval.IsNull() && config.MinTransmitInterval.IsNull()) && (config.MultihopDetectMultiplier.IsNull() && config.MultihopMinReceiveInterval.IsNull() && config.MultihopMinTransmitInterval.IsNull()) && len(config.Interfaces) == 0) && deleteEmptied(data.getDn()+"/inst") {
 			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "bfdInst")
 			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
 			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
@@ -889,6 +976,24 @@ func (data BFD) toBodyWithDeletes(ctx context.Context, state BFD, config BFD, im
 				}
 				if !state.MinTransmitInterval.IsNull() && config.MinTransmitInterval.IsNull() {
 					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "bfdInst")+".children", "bfdKaP")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"minTxIntvl", "DME_UNSET_PROPERTY_MARKER")
+				}
+			}
+			if deleteEmptied != nil && !(state.MultihopDetectMultiplier.IsNull() && state.MultihopMinReceiveInterval.IsNull() && state.MultihopMinTransmitInterval.IsNull()) && (config.MultihopDetectMultiplier.IsNull() && config.MultihopMinReceiveInterval.IsNull() && config.MultihopMinTransmitInterval.IsNull()) && deleteEmptied(data.getDn()+"/inst"+"/mhop") {
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "bfdInst")+".children", "bfdMhop")
+				body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+			} else {
+				if !state.MultihopDetectMultiplier.IsNull() && config.MultihopDetectMultiplier.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "bfdInst")+".children", "bfdMhop")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"detectMult", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.MultihopMinReceiveInterval.IsNull() && config.MultihopMinReceiveInterval.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "bfdInst")+".children", "bfdMhop")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"minRxIntvl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !state.MultihopMinTransmitInterval.IsNull() && config.MultihopMinTransmitInterval.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "bfdInst")+".children", "bfdMhop")
 					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"minTxIntvl", "DME_UNSET_PROPERTY_MARKER")
 				}
 			}

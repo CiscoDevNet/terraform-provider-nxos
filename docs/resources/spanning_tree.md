@@ -5,7 +5,7 @@ subcategory: "Switching"
 description: |-
   This resource can manage the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.
   API Documentation
-  stpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Entity/stpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Inst/stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:If/stpVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Vlan/
+  stpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Entity/stpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Inst/stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:If/stpMstCfg https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:MstCfg/stpVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Vlan/stpMstEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:MstEntity/stpMstDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:MstDom/
 ---
 
 # nxos_spanning_tree (Resource)
@@ -17,7 +17,10 @@ This resource can manage the Spanning Tree configuration on NX-OS devices, inclu
 - [stpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Entity/)
 - [stpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Inst/)
 - [stpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:If/)
+- [stpMstCfg](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:MstCfg/)
 - [stpVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Vlan/)
+- [stpMstEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:MstEntity/)
+- [stpMstDom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:MstDom/)
 
 ## Example Usage
 
@@ -47,6 +50,12 @@ resource "nxos_spanning_tree" "example" {
       linecard_issu             = "auto"
       prestandard_configuration = "enabled"
       simulate_pvst             = "enabled"
+      mst_instances = {
+        "1" = {
+          cost     = 100
+          priority = 64
+        }
+      }
     }
   }
   vlans = {
@@ -57,6 +66,21 @@ resource "nxos_spanning_tree" "example" {
       hello_time   = 5
       max_age      = 25
       priority     = "4096"
+    }
+  }
+  mst_forward_time  = 20
+  mst_hello_time    = 5
+  mst_max_age       = 25
+  mst_maximum_hops  = 30
+  mst_region_name   = "REGION1"
+  mst_revision      = 5
+  mst_simulate_pvst = "disabled"
+  mst_instances = {
+    "1" = {
+      config_state = "enabled"
+      priority     = 4096
+      root         = "secondary"
+      vlan_range   = "10-20"
     }
   }
 }
@@ -90,6 +114,22 @@ resource "nxos_spanning_tree" "example" {
   - Choices: `enabled`, `disabled`
 - `mode` (String) Spanning tree mode.
   - Choices: `mst`, `pvrst`
+- `mst_forward_time` (Number) STP forward delay.
+  - Range: `4`-`30`
+- `mst_hello_time` (Number) STP Hello interval.
+  - Range: `1`-`10`
+- `mst_instances` (Attributes Map) List of Multiple Spanning Tree (MST) instances.
+  - Map key: `instance_id` - Id.
+  - Key range: `0`-`4094` (see [below for nested schema](#nestedatt--mst_instances))
+- `mst_max_age` (Number) STP max age interval.
+  - Range: `6`-`40`
+- `mst_maximum_hops` (Number) STP mst max hops.
+  - Range: `1`-`255`
+- `mst_region_name` (String) Region Name.
+- `mst_revision` (Number) Region Revision.
+  - Range: `0`-`65535`
+- `mst_simulate_pvst` (String) spanning tree simulation.
+  - Choices: `enabled`, `disabled`
 - `pathcost_option` (String) Spanning tree pathcost options.
   - Choices: `auto`, `short`, `long`
 - `vlans` (Attributes Map) Per-VLAN Spanning Tree configuration.
@@ -122,12 +162,46 @@ Optional:
   - Choices: `auto`, `p2p`, `shared`
 - `mode` (String) Port mode.
   - Choices: `default`, `edge`, `network`, `normal`, `trunk`
+- `mst_instances` (Attributes Map) List of per-MST instance interface configurations.
+  - Map key: `instance_id` - Mst Instance Id.
+  - Key range: `0`-`4094` (see [below for nested schema](#nestedatt--interfaces--mst_instances))
 - `prestandard_configuration` (String) Port mst prestd.
   - Choices: `enabled`, `disabled`
 - `priority` (Number) Port Priority.
   - Range: `0`-`224`
 - `simulate_pvst` (String) Port simulate pvst.
   - Choices: `default`, `enabled`, `disabled`
+
+<a id="nestedatt--interfaces--mst_instances"></a>
+### Nested Schema for `interfaces.mst_instances`
+
+Optional:
+
+- `cost` (Number) Port Path Cost.
+  - Range: `0`-`200000000`
+- `priority` (Number) Port Priority.
+  - Range: `0`-`224`
+
+
+
+<a id="nestedatt--mst_instances"></a>
+### Nested Schema for `mst_instances`
+
+Optional:
+
+- `config_state` (String) Instance config State.
+  - Choices: `enabled`, `disabled`
+- `diameter` (Number) Network Diameter.
+  - Range: `2`-`7`
+- `priority` (Number) Bridge Priority.
+  - Range: `0`-`61440`
+- `root` (String) Root Options.
+  - Choices: `primary`, `secondary`
+- `root_mode` (String) Bridge Root Config mode.
+  - Choices: `disabled`, `enabled`
+- `root_type` (String) Bridge Root Type.
+  - Choices: `none`, `primary`, `secondary`
+- `vlan_range` (String) Vlan Range Bitmap.
 
 
 <a id="nestedatt--vlans"></a>

@@ -5,7 +5,7 @@ subcategory: "Switching"
 description: |-
   This data source can read the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.
   API Documentation
-  stpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Entity/stpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Inst/stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:If/stpVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Vlan/
+  stpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Entity/stpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Inst/stpIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:If/stpMstCfg https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:MstCfg/stpVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Vlan/stpMstEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:MstEntity/stpMstDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:MstDom/
 ---
 
 # nxos_spanning_tree (Data Source)
@@ -17,7 +17,10 @@ This data source can read the Spanning Tree configuration on NX-OS devices, incl
 - [stpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Entity/)
 - [stpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Inst/)
 - [stpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:If/)
+- [stpMstCfg](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:MstCfg/)
 - [stpVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:Vlan/)
+- [stpMstEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:MstEntity/)
+- [stpMstDom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/stp:MstDom/)
 
 ## Example Usage
 
@@ -47,6 +50,16 @@ data "nxos_spanning_tree" "example" {
 - `linecard_issu` (String) Linecard ISSU type.
 - `loopguard` (String) Enable loop guard on all ports.
 - `mode` (String) Spanning tree mode.
+- `mst_forward_time` (Number) STP forward delay.
+- `mst_hello_time` (Number) STP Hello interval.
+- `mst_instances` (Attributes Map) List of Multiple Spanning Tree (MST) instances.
+  - Map key: `instance_id` - Id.
+  - Key range: `0`-`4094` (see [below for nested schema](#nestedatt--mst_instances))
+- `mst_max_age` (Number) STP max age interval.
+- `mst_maximum_hops` (Number) STP mst max hops.
+- `mst_region_name` (String) Region Name.
+- `mst_revision` (Number) Region Revision.
+- `mst_simulate_pvst` (String) spanning tree simulation.
 - `pathcost_option` (String) Spanning tree pathcost options.
 - `vlans` (Attributes Map) Per-VLAN Spanning Tree configuration.
   - Map key: `vlan_id` - Access Encapsulation.
@@ -66,9 +79,35 @@ Read-Only:
 - `linecard_issu` (String) Port lc issu.
 - `link_type` (String) Link Type.
 - `mode` (String) Port mode.
+- `mst_instances` (Attributes Map) List of per-MST instance interface configurations.
+  - Map key: `instance_id` - Mst Instance Id.
+  - Key range: `0`-`4094` (see [below for nested schema](#nestedatt--interfaces--mst_instances))
 - `prestandard_configuration` (String) Port mst prestd.
 - `priority` (Number) Port Priority.
 - `simulate_pvst` (String) Port simulate pvst.
+
+<a id="nestedatt--interfaces--mst_instances"></a>
+### Nested Schema for `interfaces.mst_instances`
+
+Read-Only:
+
+- `cost` (Number) Port Path Cost.
+- `priority` (Number) Port Priority.
+
+
+
+<a id="nestedatt--mst_instances"></a>
+### Nested Schema for `mst_instances`
+
+Read-Only:
+
+- `config_state` (String) Instance config State.
+- `diameter` (Number) Network Diameter.
+- `priority` (Number) Bridge Priority.
+- `root` (String) Root Options.
+- `root_mode` (String) Bridge Root Config mode.
+- `root_type` (String) Bridge Root Type.
+- `vlan_range` (String) Vlan Range Bitmap.
 
 
 <a id="nestedatt--vlans"></a>

@@ -23,6 +23,12 @@ resource "nxos_spanning_tree" "example" {
       linecard_issu             = "auto"
       prestandard_configuration = "enabled"
       simulate_pvst             = "enabled"
+      mst_instances = {
+        "1" = {
+          cost     = 100
+          priority = 64
+        }
+      }
     }
   }
   vlans = {
@@ -33,6 +39,21 @@ resource "nxos_spanning_tree" "example" {
       hello_time   = 5
       max_age      = 25
       priority     = "4096"
+    }
+  }
+  mst_forward_time  = 20
+  mst_hello_time    = 5
+  mst_max_age       = 25
+  mst_maximum_hops  = 30
+  mst_region_name   = "REGION1"
+  mst_revision      = 5
+  mst_simulate_pvst = "disabled"
+  mst_instances = {
+    "1" = {
+      config_state = "enabled"
+      priority     = 4096
+      root         = "secondary"
+      vlan_range   = "10-20"
     }
   }
 }

@@ -222,6 +222,36 @@ child_classes:
               - disabled
             description: "Port simulate pvst."
             example: enabled
+        child_classes:
+          - class_name: stpMstCfg
+            rn: mst-%v
+            type: list
+            tf_name: mst_instances
+            description: 'List of per-MST instance interface configurations.'
+            doc_path: Discovery%20Protocols/stp:MstCfg/
+            attributes:
+              - nxos_name: mstId
+                tf_name: instance_id
+                type: Int64
+                id: true
+                min_int: 0
+                max_int: 4094
+                description: "Mst Instance Id."
+                example: 1
+              - nxos_name: cost
+                tf_name: cost
+                type: Int64
+                min_int: 0
+                max_int: 200000000
+                description: "Port Path Cost."
+                example: 100
+              - nxos_name: priority
+                tf_name: priority
+                type: Int64
+                min_int: 0
+                max_int: 224
+                description: "Port Priority."
+                example: 64
       - class_name: stpVlan
         rn: vlan-[%v]
         type: list
@@ -321,6 +351,133 @@ child_classes:
               - secondary
             description: "Bridge Root Type."
             example: primary
+      - class_name: stpMstEntity
+        rn: mstent
+        type: single
+        no_delete: true
+        tf_name: mst_entity
+        description: 'Multiple Spanning Tree (MST) configuration.'
+        doc_path: Discovery%20Protocols/stp:MstEntity/
+        attributes:
+          - nxos_name: fwdTime
+            tf_name: mst_forward_time
+            type: Int64
+            min_int: 4
+            max_int: 30
+            description: "STP forward delay."
+            example: 20
+          - nxos_name: helloTime
+            tf_name: mst_hello_time
+            type: Int64
+            min_int: 1
+            max_int: 10
+            description: "STP Hello interval."
+            example: 5
+          - nxos_name: maxAge
+            tf_name: mst_max_age
+            type: Int64
+            min_int: 6
+            max_int: 40
+            description: "STP max age interval."
+            example: 25
+          - nxos_name: maxHops
+            tf_name: mst_maximum_hops
+            type: Int64
+            min_int: 1
+            max_int: 255
+            description: "STP mst max hops."
+            example: 30
+          - nxos_name: regName
+            tf_name: mst_region_name
+            type: String
+            description: "Region Name."
+            example: REGION1
+          - nxos_name: rev
+            tf_name: mst_revision
+            type: Int64
+            min_int: 0
+            max_int: 65535
+            description: "Region Revision."
+            example: 5
+          - nxos_name: simulate
+            tf_name: mst_simulate_pvst
+            type: String
+            enum_values:
+              - enabled
+              - disabled
+            description: "spanning tree simulation."
+            example: disabled
+        child_classes:
+          - class_name: stpMstDom
+            rn: mst-%v
+            type: list
+            tf_name: mst_instances
+            description: 'List of Multiple Spanning Tree (MST) instances.'
+            doc_path: Discovery%20Protocols/stp:MstDom/
+            attributes:
+              - nxos_name: id
+                tf_name: instance_id
+                type: Int64
+                id: true
+                min_int: 0
+                max_int: 4094
+                description: "Id."
+                example: 1
+              - nxos_name: cfgSt
+                tf_name: config_state
+                type: String
+                enum_values:
+                  - enabled
+                  - disabled
+                description: "Instance config State."
+                example: enabled
+              - nxos_name: diameter
+                tf_name: diameter
+                type: Int64
+                exclude_test: true
+                min_int: 2
+                max_int: 7
+                description: "Network Diameter."
+                example: 3
+              - nxos_name: priority
+                tf_name: priority
+                type: Int64
+                min_int: 0
+                max_int: 61440
+                description: "Bridge Priority."
+                example: 4096
+              - nxos_name: root
+                tf_name: root
+                type: String
+                enum_values:
+                  - primary
+                  - secondary
+                description: "Root Options."
+                example: secondary
+              - nxos_name: rootMode
+                tf_name: root_mode
+                type: String
+                exclude_test: true
+                enum_values:
+                  - disabled
+                  - enabled
+                description: "Bridge Root Config mode."
+                example: enabled
+              - nxos_name: rootType
+                tf_name: root_type
+                type: String
+                exclude_test: true
+                enum_values:
+                  - none
+                  - primary
+                  - secondary
+                description: "Bridge Root Type."
+                example: primary
+              - nxos_name: vlanRange
+                tf_name: vlan_range
+                type: String
+                description: "Vlan Range Bitmap."
+                example: "10-20"
 test_prerequisites:
   - dn: sys/intf/phys-[eth1/9]
     class_name: l1PhysIf

@@ -61,12 +61,25 @@ func TestAccSpanningTreeResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.linecard_issu", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.prestandard_configuration", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.simulate_pvst", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.mst_instances.1.cost", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "interfaces.eth1/9.mst_instances.1.priority", "64"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "vlans.100.admin_state", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "vlans.100.diameter", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "vlans.100.forward_time", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "vlans.100.hello_time", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "vlans.100.max_age", "25"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "vlans.100.priority", "4096"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mst_forward_time", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mst_hello_time", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mst_max_age", "25"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mst_maximum_hops", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mst_region_name", "REGION1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mst_revision", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mst_simulate_pvst", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mst_instances.1.config_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mst_instances.1.priority", "4096"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mst_instances.1.root", "secondary"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_spanning_tree.test", "mst_instances.1.vlan_range", "10-20"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "instance_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "bridge_assurance", "disabled"))
@@ -89,12 +102,25 @@ func TestAccSpanningTreeResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.linecard_issu", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.prestandard_configuration", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.simulate_pvst", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.mst_instances.1.cost", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "interfaces.eth1/9.mst_instances.1.priority", "64"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.admin_state", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.diameter", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.forward_time", "20"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.hello_time", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.max_age", "25"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "vlans.100.priority", "4096"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mst_forward_time", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mst_hello_time", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mst_max_age", "25"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mst_maximum_hops", "30"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mst_region_name", "REGION1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mst_revision", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mst_simulate_pvst", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mst_instances.1.config_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mst_instances.1.priority", "4096"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mst_instances.1.root", "secondary"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_spanning_tree.test", "mst_instances.1.vlan_range", "10-20"))
 	var tfVersion *goversion.Version
 	steps := []resource.TestStep{
 		{
@@ -210,6 +236,12 @@ func testAccSpanningTreeResourceConfig_all() string {
 	config += `			linecard_issu = "auto"` + "\n"
 	config += `			prestandard_configuration = "enabled"` + "\n"
 	config += `			simulate_pvst = "enabled"` + "\n"
+	config += `			mst_instances = {` + "\n"
+	config += `				"1" = {` + "\n"
+	config += `					cost = 100` + "\n"
+	config += `					priority = 64` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	vlans = {` + "\n"
@@ -220,6 +252,21 @@ func testAccSpanningTreeResourceConfig_all() string {
 	config += `			hello_time = 5` + "\n"
 	config += `			max_age = 25` + "\n"
 	config += `			priority = "4096"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	mst_forward_time = 20` + "\n"
+	config += `	mst_hello_time = 5` + "\n"
+	config += `	mst_max_age = 25` + "\n"
+	config += `	mst_maximum_hops = 30` + "\n"
+	config += `	mst_region_name = "REGION1"` + "\n"
+	config += `	mst_revision = 5` + "\n"
+	config += `	mst_simulate_pvst = "disabled"` + "\n"
+	config += `	mst_instances = {` + "\n"
+	config += `		"1" = {` + "\n"
+	config += `			config_state = "enabled"` + "\n"
+	config += `			priority = 4096` + "\n"
+	config += `			root = "secondary"` + "\n"
+	config += `			vlan_range = "10-20"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"

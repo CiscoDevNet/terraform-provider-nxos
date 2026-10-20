@@ -56,7 +56,7 @@ func (d *SpanningTreeDataSource) Metadata(_ context.Context, req datasource.Meta
 func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.").AddApiDocumentation("stpEntity", "Discovery%20Protocols/stp:Entity/", []string{"stpInst", "stpIf", "stpVlan"}, []string{"Discovery%20Protocols/stp:Inst/", "Discovery%20Protocols/stp:If/", "Discovery%20Protocols/stp:Vlan/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the Spanning Tree configuration on NX-OS devices, including per-interface settings such as BPDU filter, BPDU guard, cost, guard mode, and port priority.").AddApiDocumentation("stpEntity", "Discovery%20Protocols/stp:Entity/", []string{"stpInst", "stpIf", "stpMstCfg", "stpVlan", "stpMstEntity", "stpMstDom"}, []string{"Discovery%20Protocols/stp:Inst/", "Discovery%20Protocols/stp:If/", "Discovery%20Protocols/stp:MstCfg/", "Discovery%20Protocols/stp:Vlan/", "Discovery%20Protocols/stp:MstEntity/", "Discovery%20Protocols/stp:MstDom/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -160,6 +160,22 @@ func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.Sche
 							MarkdownDescription: "Port simulate pvst.",
 							Computed:            true,
 						},
+						"mst_instances": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of per-MST instance interface configurations.\n  - Map key: `instance_id` - Mst Instance Id.\n  - Key range: `0`-`4094`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"cost": schema.Int64Attribute{
+										MarkdownDescription: "Port Path Cost.",
+										Computed:            true,
+									},
+									"priority": schema.Int64Attribute{
+										MarkdownDescription: "Port Priority.",
+										Computed:            true,
+									},
+								},
+							},
+						},
 					},
 				},
 			},
@@ -202,6 +218,70 @@ func (d *SpanningTreeDataSource) Schema(ctx context.Context, req datasource.Sche
 						},
 						"root_type": schema.StringAttribute{
 							MarkdownDescription: "Bridge Root Type.",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"mst_forward_time": schema.Int64Attribute{
+				MarkdownDescription: "STP forward delay.",
+				Computed:            true,
+			},
+			"mst_hello_time": schema.Int64Attribute{
+				MarkdownDescription: "STP Hello interval.",
+				Computed:            true,
+			},
+			"mst_max_age": schema.Int64Attribute{
+				MarkdownDescription: "STP max age interval.",
+				Computed:            true,
+			},
+			"mst_maximum_hops": schema.Int64Attribute{
+				MarkdownDescription: "STP mst max hops.",
+				Computed:            true,
+			},
+			"mst_region_name": schema.StringAttribute{
+				MarkdownDescription: "Region Name.",
+				Computed:            true,
+			},
+			"mst_revision": schema.Int64Attribute{
+				MarkdownDescription: "Region Revision.",
+				Computed:            true,
+			},
+			"mst_simulate_pvst": schema.StringAttribute{
+				MarkdownDescription: "spanning tree simulation.",
+				Computed:            true,
+			},
+			"mst_instances": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of Multiple Spanning Tree (MST) instances.\n  - Map key: `instance_id` - Id.\n  - Key range: `0`-`4094`").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"config_state": schema.StringAttribute{
+							MarkdownDescription: "Instance config State.",
+							Computed:            true,
+						},
+						"diameter": schema.Int64Attribute{
+							MarkdownDescription: "Network Diameter.",
+							Computed:            true,
+						},
+						"priority": schema.Int64Attribute{
+							MarkdownDescription: "Bridge Priority.",
+							Computed:            true,
+						},
+						"root": schema.StringAttribute{
+							MarkdownDescription: "Root Options.",
+							Computed:            true,
+						},
+						"root_mode": schema.StringAttribute{
+							MarkdownDescription: "Bridge Root Config mode.",
+							Computed:            true,
+						},
+						"root_type": schema.StringAttribute{
+							MarkdownDescription: "Bridge Root Type.",
+							Computed:            true,
+						},
+						"vlan_range": schema.StringAttribute{
+							MarkdownDescription: "Vlan Range Bitmap.",
 							Computed:            true,
 						},
 					},

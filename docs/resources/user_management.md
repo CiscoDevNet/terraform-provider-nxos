@@ -223,6 +223,23 @@ resource "nxos_user_management" "example" {
   default_accounting_owner_tag      = "tag1"
   default_accounting_provider_group = "TACACS_GROUP1"
   default_accounting_realm          = "tacacs"
+  pki_key_pairs = {
+    "tf-key" = {
+      description = "Terraform key pair"
+      key_type    = "Type_ECC"
+      modulus     = "mod384"
+      exportable  = true
+    }
+  }
+  pki_trustpoints = {
+    "tf-trustpoint" = {
+      description      = "Terraform trustpoint"
+      enrollment_type  = "terminal"
+      key_pair         = "tf-key"
+      key_type         = "Type_ECC"
+      revocation_check = "crl-none"
+    }
+  }
 }
 ```
 
@@ -334,6 +351,10 @@ resource "nxos_user_management" "example" {
   - Choices: `no`, `yes`
 - `password_warning_time` (Number) Warning time of user passphrase (in days).
   - Range: `0`-`99999`
+- `pki_key_pairs` (Attributes Map) List of PKI key pairs (`crypto key generate`). Key pairs cannot be modified once generated, they have to be deleted and recreated.
+  - Map key: `name` - Key pair label. (see [below for nested schema](#nestedatt--pki_key_pairs))
+- `pki_trustpoints` (Attributes Map) List of PKI trustpoints (`crypto ca trustpoint`).
+  - Map key: `name` - Trustpoint name. (see [below for nested schema](#nestedatt--pki_trustpoints))
 - `post_login_banner_description` (String) Description of the specified attribute.
 - `post_login_banner_message` (String) A message displayed in the banner.
 - `post_login_banner_name` (String) Object name.
@@ -428,6 +449,36 @@ Optional:
 - `provider_group_6` (String) Provider Group.
 - `provider_group_7` (String) Provider Group.
 - `provider_group_8` (String) Provider Group.
+
+
+<a id="nestedatt--pki_key_pairs"></a>
+### Nested Schema for `pki_key_pairs`
+
+Optional:
+
+- `description` (String) Description of the specified attribute.
+- `exportable` (Boolean) Generate the key pair as exportable.
+- `key_type` (String) Key pair type.
+  - Choices: `Type_RSA`, `Type_ECC`
+- `modulus` (String) Key pair modulus (key size in bits).
+  - Choices: `mod224`, `mod384`, `mod512`, `mod521`, `mod768`, `mod1024`, `mod1536`, `mod2048`, `mod3072`, `mod4096`
+
+
+<a id="nestedatt--pki_trustpoints"></a>
+### Nested Schema for `pki_trustpoints`
+
+Optional:
+
+- `ca_bundle` (String) Label of the CA certificate bundle associated with the trustpoint.
+- `description` (String) Description of the specified attribute.
+- `enrollment_type` (String) Certificate enrollment type.
+  - Choices: `none`, `terminal`
+- `key_pair` (String) Label of the key pair associated with the trustpoint.
+- `key_type` (String) Type of the key pair associated with the trustpoint.
+  - Choices: `Type_RSA`, `Type_ECC`
+- `ocsp_url` (String) OCSP server URL. Requires the trustpoint CA to be authenticated.
+- `revocation_check` (String) Certificate revocation check methods, in order of preference.
+  - Choices: `crl`, `ocsp`, `none`, `crl-none`, `crl-ocsp`, `ocsp-crl`, `crl-ocsp-none`, `ocsp-crl-none`
 
 
 <a id="nestedatt--radius_provider_groups"></a>

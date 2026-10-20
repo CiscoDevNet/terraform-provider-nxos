@@ -124,6 +124,10 @@ data "nxos_user_management" "example" {
 - `password_secure_mode` (String) Password secure-mode.
 - `password_strength_check` (String) The password strength check, which specifies if the system enforces the strength of the user password.
 - `password_warning_time` (Number) Warning time of user passphrase (in days).
+- `pki_key_pairs` (Attributes Map) List of PKI key pairs (`crypto key generate`). Key pairs cannot be modified once generated, they have to be deleted and recreated.
+  - Map key: `name` - Key pair label. (see [below for nested schema](#nestedatt--pki_key_pairs))
+- `pki_trustpoints` (Attributes Map) List of PKI trustpoints (`crypto ca trustpoint`).
+  - Map key: `name` - Trustpoint name. (see [below for nested schema](#nestedatt--pki_trustpoints))
 - `post_login_banner_description` (String) Description of the specified attribute.
 - `post_login_banner_message` (String) A message displayed in the banner.
 - `post_login_banner_name` (String) Object name.
@@ -200,6 +204,31 @@ Read-Only:
 - `provider_group_6` (String) Provider Group.
 - `provider_group_7` (String) Provider Group.
 - `provider_group_8` (String) Provider Group.
+
+
+<a id="nestedatt--pki_key_pairs"></a>
+### Nested Schema for `pki_key_pairs`
+
+Read-Only:
+
+- `description` (String) Description of the specified attribute.
+- `exportable` (Boolean) Generate the key pair as exportable.
+- `key_type` (String) Key pair type.
+- `modulus` (String) Key pair modulus (key size in bits).
+
+
+<a id="nestedatt--pki_trustpoints"></a>
+### Nested Schema for `pki_trustpoints`
+
+Read-Only:
+
+- `ca_bundle` (String) Label of the CA certificate bundle associated with the trustpoint.
+- `description` (String) Description of the specified attribute.
+- `enrollment_type` (String) Certificate enrollment type.
+- `key_pair` (String) Label of the key pair associated with the trustpoint.
+- `key_type` (String) Type of the key pair associated with the trustpoint.
+- `ocsp_url` (String) OCSP server URL. Requires the trustpoint CA to be authenticated.
+- `revocation_check` (String) Certificate revocation check methods, in order of preference.
 
 
 <a id="nestedatt--radius_provider_groups"></a>

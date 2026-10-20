@@ -1235,6 +1235,81 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 					stringvalidator.OneOf("local", "radius", "tacacs", "ldap"),
 				},
 			},
+			"pki_key_pairs": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of PKI key pairs (`crypto key generate`). Key pairs cannot be modified once generated, they have to be deleted and recreated.\n  - Map key: `name` - Key pair label.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"key_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Key pair type.").AddStringEnumDescription("Type_RSA", "Type_ECC").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("Type_RSA", "Type_ECC"),
+							},
+						},
+						"modulus": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Key pair modulus (key size in bits).").AddStringEnumDescription("mod224", "mod384", "mod512", "mod521", "mod768", "mod1024", "mod1536", "mod2048", "mod3072", "mod4096").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("mod224", "mod384", "mod512", "mod521", "mod768", "mod1024", "mod1536", "mod2048", "mod3072", "mod4096"),
+							},
+						},
+						"exportable": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Generate the key pair as exportable.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"pki_trustpoints": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of PKI trustpoints (`crypto ca trustpoint`).\n  - Map key: `name` - Trustpoint name.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"enrollment_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Certificate enrollment type.").AddStringEnumDescription("none", "terminal").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("none", "terminal"),
+							},
+						},
+						"key_pair": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Label of the key pair associated with the trustpoint.").String,
+							Optional:            true,
+						},
+						"key_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Type of the key pair associated with the trustpoint.").AddStringEnumDescription("Type_RSA", "Type_ECC").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("Type_RSA", "Type_ECC"),
+							},
+						},
+						"revocation_check": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Certificate revocation check methods, in order of preference.").AddStringEnumDescription("crl", "ocsp", "none", "crl-none", "crl-ocsp", "ocsp-crl", "crl-ocsp-none", "ocsp-crl-none").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("crl", "ocsp", "none", "crl-none", "crl-ocsp", "ocsp-crl", "crl-ocsp-none", "ocsp-crl-none"),
+							},
+						},
+						"ocsp_url": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("OCSP server URL. Requires the trustpoint CA to be authenticated.").String,
+							Optional:            true,
+						},
+						"ca_bundle": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Label of the CA certificate bundle associated with the trustpoint.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }

@@ -183,4 +183,21 @@ resource "nxos_user_management" "example" {
   default_accounting_owner_tag      = "tag1"
   default_accounting_provider_group = "TACACS_GROUP1"
   default_accounting_realm          = "tacacs"
+  pki_key_pairs = {
+    "tf-key" = {
+      description = "Terraform key pair"
+      key_type    = "Type_ECC"
+      modulus     = "mod384"
+      exportable  = true
+    }
+  }
+  pki_trustpoints = {
+    "tf-trustpoint" = {
+      description      = "Terraform trustpoint"
+      enrollment_type  = "terminal"
+      key_pair         = "tf-key"
+      key_type         = "Type_ECC"
+      revocation_check = "crl-none"
+    }
+  }
 }

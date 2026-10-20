@@ -187,6 +187,15 @@ func TestAccUserManagementResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_accounting_owner_tag", "tag1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_accounting_provider_group", "TACACS_GROUP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "default_accounting_realm", "tacacs"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "pki_key_pairs.tf-key.description", "Terraform key pair"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "pki_key_pairs.tf-key.key_type", "Type_ECC"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "pki_key_pairs.tf-key.modulus", "mod384"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "pki_key_pairs.tf-key.exportable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "pki_trustpoints.tf-trustpoint.description", "Terraform trustpoint"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "pki_trustpoints.tf-trustpoint.enrollment_type", "terminal"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "pki_trustpoints.tf-trustpoint.key_pair", "tf-key"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "pki_trustpoints.tf-trustpoint.key_type", "Type_ECC"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "pki_trustpoints.tf-trustpoint.revocation_check", "crl-none"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "alphabet_sequence", "3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "description", "User management policy"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "keyboard_sequence", "3"))
@@ -327,6 +336,15 @@ func TestAccUserManagementResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_owner_tag", "tag1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_provider_group", "TACACS_GROUP1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "default_accounting_realm", "tacacs"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pki_key_pairs.tf-key.description", "Terraform key pair"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pki_key_pairs.tf-key.key_type", "Type_ECC"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pki_key_pairs.tf-key.modulus", "mod384"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pki_key_pairs.tf-key.exportable", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pki_trustpoints.tf-trustpoint.description", "Terraform trustpoint"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pki_trustpoints.tf-trustpoint.enrollment_type", "terminal"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pki_trustpoints.tf-trustpoint.key_pair", "tf-key"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pki_trustpoints.tf-trustpoint.key_type", "Type_ECC"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "pki_trustpoints.tf-trustpoint.revocation_check", "crl-none"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	steps := []resource.TestStep{
@@ -628,6 +646,23 @@ func testAccUserManagementResourceConfig_all(includeWriteOnly bool) string {
 	config += `	default_accounting_owner_tag = "tag1"` + "\n"
 	config += `	default_accounting_provider_group = "TACACS_GROUP1"` + "\n"
 	config += `	default_accounting_realm = "tacacs"` + "\n"
+	config += `	pki_key_pairs = {` + "\n"
+	config += `		"tf-key" = {` + "\n"
+	config += `			description = "Terraform key pair"` + "\n"
+	config += `			key_type = "Type_ECC"` + "\n"
+	config += `			modulus = "mod384"` + "\n"
+	config += `			exportable = true` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	pki_trustpoints = {` + "\n"
+	config += `		"tf-trustpoint" = {` + "\n"
+	config += `			description = "Terraform trustpoint"` + "\n"
+	config += `			enrollment_type = "terminal"` + "\n"
+	config += `			key_pair = "tf-key"` + "\n"
+	config += `			key_type = "Type_ECC"` + "\n"
+	config += `			revocation_check = "crl-none"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, ]` + "\n"
 	config += `}` + "\n"
 	return config

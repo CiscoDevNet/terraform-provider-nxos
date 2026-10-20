@@ -987,6 +987,66 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 				MarkdownDescription: "Realm.",
 				Computed:            true,
 			},
+			"pki_key_pairs": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of PKI key pairs (`crypto key generate`). Key pairs cannot be modified once generated, they have to be deleted and recreated.\n  - Map key: `name` - Key pair label.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"key_type": schema.StringAttribute{
+							MarkdownDescription: "Key pair type.",
+							Computed:            true,
+						},
+						"modulus": schema.StringAttribute{
+							MarkdownDescription: "Key pair modulus (key size in bits).",
+							Computed:            true,
+						},
+						"exportable": schema.BoolAttribute{
+							MarkdownDescription: "Generate the key pair as exportable.",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"pki_trustpoints": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of PKI trustpoints (`crypto ca trustpoint`).\n  - Map key: `name` - Trustpoint name.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"enrollment_type": schema.StringAttribute{
+							MarkdownDescription: "Certificate enrollment type.",
+							Computed:            true,
+						},
+						"key_pair": schema.StringAttribute{
+							MarkdownDescription: "Label of the key pair associated with the trustpoint.",
+							Computed:            true,
+						},
+						"key_type": schema.StringAttribute{
+							MarkdownDescription: "Type of the key pair associated with the trustpoint.",
+							Computed:            true,
+						},
+						"revocation_check": schema.StringAttribute{
+							MarkdownDescription: "Certificate revocation check methods, in order of preference.",
+							Computed:            true,
+						},
+						"ocsp_url": schema.StringAttribute{
+							MarkdownDescription: "OCSP server URL. Requires the trustpoint CA to be authenticated.",
+							Computed:            true,
+						},
+						"ca_bundle": schema.StringAttribute{
+							MarkdownDescription: "Label of the CA certificate bundle associated with the trustpoint.",
+							Computed:            true,
+						},
+					},
+				},
+			},
 		},
 	}
 }

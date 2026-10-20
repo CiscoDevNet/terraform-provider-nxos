@@ -162,6 +162,8 @@ type UserManagement struct {
 	DefaultAccountingProviderGroup7          types.String                                   `tfsdk:"default_accounting_provider_group_7"`
 	DefaultAccountingProviderGroup8          types.String                                   `tfsdk:"default_accounting_provider_group_8"`
 	DefaultAccountingRealm                   types.String                                   `tfsdk:"default_accounting_realm"`
+	PkiKeyPairs                              map[string]UserManagementPkiKeyPairs           `tfsdk:"pki_key_pairs"`
+	PkiTrustpoints                           map[string]UserManagementPkiTrustpoints        `tfsdk:"pki_trustpoints"`
 }
 
 type UserManagementUsers struct {
@@ -288,6 +290,23 @@ type UserManagementDefaultAuthorizations struct {
 	ProviderGroup8          types.String `tfsdk:"provider_group_8"`
 }
 
+type UserManagementPkiKeyPairs struct {
+	Description types.String `tfsdk:"description"`
+	KeyType     types.String `tfsdk:"key_type"`
+	Modulus     types.String `tfsdk:"modulus"`
+	Exportable  types.Bool   `tfsdk:"exportable"`
+}
+
+type UserManagementPkiTrustpoints struct {
+	Description     types.String `tfsdk:"description"`
+	EnrollmentType  types.String `tfsdk:"enrollment_type"`
+	KeyPair         types.String `tfsdk:"key_pair"`
+	KeyType         types.String `tfsdk:"key_type"`
+	RevocationCheck types.String `tfsdk:"revocation_check"`
+	OcspUrl         types.String `tfsdk:"ocsp_url"`
+	CaBundle        types.String `tfsdk:"ca_bundle"`
+}
+
 type UserManagementIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -315,11 +334,11 @@ var UserManagementSubtreeClassMinVersions = map[string]string{}
 var UserManagementMinVersions = map[string]helpers.MinVersion{}
 
 // UserManagementListClasses holds the list child classes of the resource.
-var UserManagementListClasses = map[string]bool{"aaaUser": true, "aaaUserRole": true, "aaaTacacsPlusProvider": true, "aaaTacacsPlusProviderGroup": true, "aaaProviderRef": true, "aaaRadiusProvider": true, "aaaRadiusProviderGroup": true, "aaaDefaultAuthor": true}
+var UserManagementListClasses = map[string]bool{"aaaUser": true, "aaaUserRole": true, "aaaTacacsPlusProvider": true, "aaaTacacsPlusProviderGroup": true, "aaaProviderRef": true, "aaaRadiusProvider": true, "aaaRadiusProviderGroup": true, "aaaDefaultAuthor": true, "pkiKeyRing": true, "pkiTP": true}
 
 // getUserManagementTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getUserManagementTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, UserManagementSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc", "pkiEp", "pkiKeyRing", "pkiTP"}, UserManagementSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -364,6 +383,14 @@ func (data UserManagementRadiusProviderGroupsServers) getRn(key string) string {
 
 func (data UserManagementDefaultAuthorizations) getRn(key string) string {
 	return fmt.Sprintf("defaultauthor-[%s]", key)
+}
+
+func (data UserManagementPkiKeyPairs) getRn(key string) string {
+	return fmt.Sprintf("keyring-[%s]", key)
+}
+
+func (data UserManagementPkiTrustpoints) getRn(key string) string {
+	return fmt.Sprintf("tp-[%s]", key)
 }
 
 func (data UserManagement) getClassName() string {
@@ -1153,6 +1180,71 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
+	{
+		attrs = "{}"
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "pkiEp.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "pkiEp.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		for key, child := range data.PkiKeyPairs {
+			configChild, configChildOk := config.PkiKeyPairs[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "name", key)
+			if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+			}
+			if configChildOk && !child.KeyType.IsUnknown() && !child.KeyType.IsNull() && !configChild.KeyType.IsNull() {
+				attrs, _ = sjson.Set(attrs, "keytype", child.KeyType.ValueString())
+			}
+			if configChildOk && !child.Modulus.IsUnknown() && !child.Modulus.IsNull() && !configChild.Modulus.IsNull() {
+				attrs, _ = sjson.Set(attrs, "modulus", child.Modulus.ValueString())
+			}
+			if configChildOk && !child.Exportable.IsUnknown() && !child.Exportable.IsNull() && !configChild.Exportable.IsNull() {
+				attrs, _ = sjson.Set(attrs, "exportable", strconv.FormatBool(child.Exportable.ValueBool()))
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pkiKeyRing.attributes", attrs)
+		}
+		for key, child := range data.PkiTrustpoints {
+			configChild, configChildOk := config.PkiTrustpoints[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "name", key)
+			if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+			}
+			if configChildOk && !child.EnrollmentType.IsUnknown() && !child.EnrollmentType.IsNull() && !configChild.EnrollmentType.IsNull() {
+				attrs, _ = sjson.Set(attrs, "enrollmentType", child.EnrollmentType.ValueString())
+			}
+			if configChildOk && !child.KeyPair.IsUnknown() && !child.KeyPair.IsNull() && !configChild.KeyPair.IsNull() {
+				attrs, _ = sjson.Set(attrs, "keyLabel", child.KeyPair.ValueString())
+			}
+			if configChildOk && !child.KeyType.IsUnknown() && !child.KeyType.IsNull() && !configChild.KeyType.IsNull() {
+				attrs, _ = sjson.Set(attrs, "keyType", child.KeyType.ValueString())
+			}
+			if configChildOk && !child.RevocationCheck.IsUnknown() && !child.RevocationCheck.IsNull() && !configChild.RevocationCheck.IsNull() {
+				attrs, _ = sjson.Set(attrs, "revokeCheckConf", child.RevocationCheck.ValueString())
+			}
+			if configChildOk && !child.OcspUrl.IsUnknown() && !child.OcspUrl.IsNull() && !configChild.OcspUrl.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ocspUrl", child.OcspUrl.ValueString())
+			}
+			if configChildOk && !child.CaBundle.IsUnknown() && !child.CaBundle.IsNull() && !configChild.CaBundle.IsNull() {
+				attrs, _ = sjson.Set(attrs, "cabundleLabel", child.CaBundle.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.pkiTP.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "pkiEp.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -1631,6 +1723,66 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 			data.DefaultAccountingProviderGroup8 = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.providerGroup8").String())
 			data.DefaultAccountingRealm = types.StringValue(raaaDefaultAcc.Get("aaaDefaultAcc.attributes.realm").String())
 		}
+	}
+	{
+		var rpkiEp gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("pkiEp.attributes.rn").String()
+				if rnValue == "pkiext" {
+					rpkiEp = v
+					return false
+				}
+				return true
+			},
+		)
+		rpkiEp.Get("pkiEp.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "pkiKeyRing" {
+							var child UserManagementPkiKeyPairs
+							child.Description = types.StringValue(value.Get("attributes.descr").String())
+							child.KeyType = types.StringValue(value.Get("attributes.keytype").String())
+							child.Modulus = types.StringValue(value.Get("attributes.modulus").String())
+							child.Exportable = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.exportable").String()))
+							mapKey := value.Get("attributes.name").String()
+							if data.PkiKeyPairs == nil {
+								data.PkiKeyPairs = make(map[string]UserManagementPkiKeyPairs)
+							}
+							data.PkiKeyPairs[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rpkiEp.Get("pkiEp.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "pkiTP" {
+							var child UserManagementPkiTrustpoints
+							child.Description = types.StringValue(value.Get("attributes.descr").String())
+							child.EnrollmentType = types.StringValue(value.Get("attributes.enrollmentType").String())
+							child.KeyPair = types.StringValue(value.Get("attributes.keyLabel").String())
+							child.KeyType = types.StringValue(value.Get("attributes.keyType").String())
+							child.RevocationCheck = types.StringValue(value.Get("attributes.revokeCheckConf").String())
+							child.OcspUrl = types.StringValue(value.Get("attributes.ocspUrl").String())
+							child.CaBundle = types.StringValue(value.Get("attributes.cabundleLabel").String())
+							mapKey := value.Get("attributes.name").String()
+							if data.PkiTrustpoints == nil {
+								data.PkiTrustpoints = make(map[string]UserManagementPkiTrustpoints)
+							}
+							data.PkiTrustpoints[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
 	}
 }
 
@@ -2805,6 +2957,106 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 			data.DefaultAccountingRealm = types.StringNull()
 		}
 	}
+	var rpkiEp gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("pkiEp.attributes.rn").String()
+			if rnValue == "pkiext" {
+				rpkiEp = v
+				return false
+			}
+			return true
+		},
+	)
+	for key, item := range data.PkiKeyPairs {
+		var rpkiKeyRing gjson.Result
+		rpkiEp.Get("pkiEp.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("pkiKeyRing.attributes.name").String() == key {
+					rpkiKeyRing = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rpkiKeyRing.Exists() {
+			delete(data.PkiKeyPairs, key)
+			continue
+		}
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(rpkiKeyRing.Get("pkiKeyRing.attributes.descr").String())
+		} else {
+			item.Description = types.StringNull()
+		}
+		if !item.KeyType.IsNull() {
+			item.KeyType = types.StringValue(rpkiKeyRing.Get("pkiKeyRing.attributes.keytype").String())
+		} else {
+			item.KeyType = types.StringNull()
+		}
+		if !item.Modulus.IsNull() {
+			item.Modulus = types.StringValue(rpkiKeyRing.Get("pkiKeyRing.attributes.modulus").String())
+		} else {
+			item.Modulus = types.StringNull()
+		}
+		if !item.Exportable.IsNull() {
+			item.Exportable = types.BoolValue(helpers.ParseNxosBoolean(rpkiKeyRing.Get("pkiKeyRing.attributes.exportable").String()))
+		} else {
+			item.Exportable = types.BoolNull()
+		}
+		data.PkiKeyPairs[key] = item
+	}
+	for key, item := range data.PkiTrustpoints {
+		var rpkiTP gjson.Result
+		rpkiEp.Get("pkiEp.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("pkiTP.attributes.name").String() == key {
+					rpkiTP = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rpkiTP.Exists() {
+			delete(data.PkiTrustpoints, key)
+			continue
+		}
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(rpkiTP.Get("pkiTP.attributes.descr").String())
+		} else {
+			item.Description = types.StringNull()
+		}
+		if !item.EnrollmentType.IsNull() {
+			item.EnrollmentType = types.StringValue(rpkiTP.Get("pkiTP.attributes.enrollmentType").String())
+		} else {
+			item.EnrollmentType = types.StringNull()
+		}
+		if !item.KeyPair.IsNull() {
+			item.KeyPair = types.StringValue(rpkiTP.Get("pkiTP.attributes.keyLabel").String())
+		} else {
+			item.KeyPair = types.StringNull()
+		}
+		if !item.KeyType.IsNull() {
+			item.KeyType = types.StringValue(rpkiTP.Get("pkiTP.attributes.keyType").String())
+		} else {
+			item.KeyType = types.StringNull()
+		}
+		if !item.RevocationCheck.IsNull() {
+			item.RevocationCheck = types.StringValue(rpkiTP.Get("pkiTP.attributes.revokeCheckConf").String())
+		} else {
+			item.RevocationCheck = types.StringNull()
+		}
+		if !item.OcspUrl.IsNull() {
+			item.OcspUrl = types.StringValue(rpkiTP.Get("pkiTP.attributes.ocspUrl").String())
+		} else {
+			item.OcspUrl = types.StringNull()
+		}
+		if !item.CaBundle.IsNull() {
+			item.CaBundle = types.StringValue(rpkiTP.Get("pkiTP.attributes.cabundleLabel").String())
+		} else {
+			item.CaBundle = types.StringNull()
+		}
+		data.PkiTrustpoints[key] = item
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -3303,6 +3555,38 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 			}
 		}
 	}
+	{
+		childBody := ""
+		hasNestedChildren := false
+		if len(data.PkiKeyPairs) > 0 {
+			hasNestedChildren = true
+		}
+		if len(data.PkiTrustpoints) > 0 {
+			hasNestedChildren = true
+		}
+		if childBody != "" || hasNestedChildren {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".pkiEp"
+			if childBody == "" {
+				childBody = "{}"
+			}
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			nestedChildrenPath := childBodyPath + ".children"
+			_ = nestedChildrenPath
+			for key, child := range data.PkiKeyPairs {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "pkiKeyRing.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "pkiKeyRing.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			for key, child := range data.PkiTrustpoints {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "pkiTP.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "pkiTP.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -3387,6 +3671,18 @@ func (data UserManagement) managedDns() map[string]bool {
 		if !(data.DefaultAccountingMethodNone.IsNull() && data.DefaultAccountingDescription.IsNull() && data.DefaultAccountingLocalRbac.IsNull() && data.DefaultAccountingOwnerKey.IsNull() && data.DefaultAccountingOwnerTag.IsNull() && data.DefaultAccountingProviderGroup.IsNull() && data.DefaultAccountingProviderGroup2.IsNull() && data.DefaultAccountingProviderGroup3.IsNull() && data.DefaultAccountingProviderGroup4.IsNull() && data.DefaultAccountingProviderGroup5.IsNull() && data.DefaultAccountingProviderGroup6.IsNull() && data.DefaultAccountingProviderGroup7.IsNull() && data.DefaultAccountingProviderGroup8.IsNull() && data.DefaultAccountingRealm.IsNull()) {
 			aaaDefaultAccDn := aaaAuthRealmDn + "/" + "defaultacc"
 			dns[aaaDefaultAccDn] = true
+		}
+	}
+	if !(len(data.PkiKeyPairs) == 0 && len(data.PkiTrustpoints) == 0) {
+		pkiEpDn := dn + "/" + "pkiext"
+		dns[pkiEpDn] = true
+		for key, child := range data.PkiKeyPairs {
+			pkiKeyRingDn := pkiEpDn + "/" + child.getRn(key)
+			dns[pkiKeyRingDn] = true
+		}
+		for key, child := range data.PkiTrustpoints {
+			pkiTPDn := pkiEpDn + "/" + child.getRn(key)
+			dns[pkiTPDn] = true
 		}
 	}
 	return dns
@@ -4222,6 +4518,77 @@ func (data UserManagement) toResetBody(preexisting map[string]bool) nxos.Body {
 			}
 		}
 	}
+	if !(len(data.PkiKeyPairs) == 0 && len(data.PkiTrustpoints) == 0) {
+		pkiEpRn := "pkiext"
+		pkiEpDn := dn + "/" + pkiEpRn
+		_ = pkiEpDn
+		{
+			pkiEpBody := ""
+			for key, child := range data.PkiKeyPairs {
+				_ = child
+				pkiKeyRingRn := child.getRn(key)
+				pkiKeyRingDn := pkiEpDn + "/" + pkiKeyRingRn
+				_ = pkiKeyRingDn
+				if !existed(pkiKeyRingDn) {
+					pkiEpBody, _ = sjson.Set(pkiEpBody, "pkiEp.children.-1.pkiKeyRing.attributes", map[string]interface{}{"rn": pkiKeyRingRn, "status": "deleted"})
+					continue
+				}
+				pkiKeyRingBody := ""
+				pkiKeyRingBody, _ = sjson.Set(pkiKeyRingBody, "pkiKeyRing.attributes.rn", pkiKeyRingRn)
+				if !child.Description.IsNull() {
+					pkiKeyRingBody, _ = sjson.Set(pkiKeyRingBody, "pkiKeyRing.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.KeyType.IsNull() {
+					pkiKeyRingBody, _ = sjson.Set(pkiKeyRingBody, "pkiKeyRing.attributes.keytype", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Modulus.IsNull() {
+					pkiKeyRingBody, _ = sjson.Set(pkiKeyRingBody, "pkiKeyRing.attributes.modulus", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Exportable.IsNull() {
+					pkiKeyRingBody, _ = sjson.Set(pkiKeyRingBody, "pkiKeyRing.attributes.exportable", "DME_UNSET_PROPERTY_MARKER")
+				}
+				pkiEpBody, _ = sjson.SetRaw(pkiEpBody, "pkiEp.children.-1", pkiKeyRingBody)
+			}
+			for key, child := range data.PkiTrustpoints {
+				_ = child
+				pkiTPRn := child.getRn(key)
+				pkiTPDn := pkiEpDn + "/" + pkiTPRn
+				_ = pkiTPDn
+				if !existed(pkiTPDn) {
+					pkiEpBody, _ = sjson.Set(pkiEpBody, "pkiEp.children.-1.pkiTP.attributes", map[string]interface{}{"rn": pkiTPRn, "status": "deleted"})
+					continue
+				}
+				pkiTPBody := ""
+				pkiTPBody, _ = sjson.Set(pkiTPBody, "pkiTP.attributes.rn", pkiTPRn)
+				if !child.Description.IsNull() {
+					pkiTPBody, _ = sjson.Set(pkiTPBody, "pkiTP.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.EnrollmentType.IsNull() {
+					pkiTPBody, _ = sjson.Set(pkiTPBody, "pkiTP.attributes.enrollmentType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.KeyPair.IsNull() {
+					pkiTPBody, _ = sjson.Set(pkiTPBody, "pkiTP.attributes.keyLabel", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.KeyType.IsNull() {
+					pkiTPBody, _ = sjson.Set(pkiTPBody, "pkiTP.attributes.keyType", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.RevocationCheck.IsNull() {
+					pkiTPBody, _ = sjson.Set(pkiTPBody, "pkiTP.attributes.revokeCheckConf", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.OcspUrl.IsNull() {
+					pkiTPBody, _ = sjson.Set(pkiTPBody, "pkiTP.attributes.ocspUrl", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.CaBundle.IsNull() {
+					pkiTPBody, _ = sjson.Set(pkiTPBody, "pkiTP.attributes.cabundleLabel", "DME_UNSET_PROPERTY_MARKER")
+				}
+				pkiEpBody, _ = sjson.SetRaw(pkiEpBody, "pkiEp.children.-1", pkiTPBody)
+			}
+			if pkiEpBody != "" {
+				pkiEpBody, _ = sjson.Set(pkiEpBody, "pkiEp.attributes.rn", pkiEpRn)
+				body, _ = sjson.SetRaw(body, "aaaUserEp.children.-1", pkiEpBody)
+			}
+		}
+	}
 
 	return nxos.Body{Str: body}
 }
@@ -4379,6 +4746,26 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 				deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.providerGroup7", "DME_UNSET_PROPERTY_MARKER")
 				deleteBody, _ = sjson.Set(deleteBody, "aaaDefaultAuthor.attributes.providerGroup8", "DME_UNSET_PROPERTY_MARKER")
 				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaAuthRealm") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.PkiKeyPairs {
+			if _, found := data.PkiKeyPairs[stateKey]; !found {
+				stateChild := state.PkiKeyPairs[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "pkiKeyRing.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "pkiKeyRing.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "pkiEp") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.PkiTrustpoints {
+			if _, found := data.PkiTrustpoints[stateKey]; !found {
+				stateChild := state.PkiTrustpoints[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "pkiTP.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "pkiTP.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "pkiEp") + ".children"
 				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
@@ -5158,6 +5545,63 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 		if !state.DefaultAccountingRealm.IsNull() && config.DefaultAccountingRealm.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "aaaAuthRealm")+".children", "aaaDefaultAcc")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"realm", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.PkiKeyPairs {
+			if configChild, ok := config.PkiKeyPairs[key]; ok {
+				stateChild := state.PkiKeyPairs[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pkiEp")+".children").Array() {
+					if mv.Get("pkiKeyRing.attributes.name").String() == key {
+						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pkiEp")+".children"+"."+strconv.Itoa(mi)+".pkiKeyRing.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.KeyType.IsNull() && configChild.KeyType.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pkiEp")+".children"+"."+strconv.Itoa(mi)+".pkiKeyRing.attributes."+"keytype", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Modulus.IsNull() && configChild.Modulus.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pkiEp")+".children"+"."+strconv.Itoa(mi)+".pkiKeyRing.attributes."+"modulus", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Exportable.IsNull() && configChild.Exportable.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pkiEp")+".children"+"."+strconv.Itoa(mi)+".pkiKeyRing.attributes."+"exportable", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
+		}
+		for key := range state.PkiTrustpoints {
+			if configChild, ok := config.PkiTrustpoints[key]; ok {
+				stateChild := state.PkiTrustpoints[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pkiEp")+".children").Array() {
+					if mv.Get("pkiTP.attributes.name").String() == key {
+						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pkiEp")+".children"+"."+strconv.Itoa(mi)+".pkiTP.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.EnrollmentType.IsNull() && configChild.EnrollmentType.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pkiEp")+".children"+"."+strconv.Itoa(mi)+".pkiTP.attributes."+"enrollmentType", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.KeyPair.IsNull() && configChild.KeyPair.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pkiEp")+".children"+"."+strconv.Itoa(mi)+".pkiTP.attributes."+"keyLabel", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.KeyType.IsNull() && configChild.KeyType.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pkiEp")+".children"+"."+strconv.Itoa(mi)+".pkiTP.attributes."+"keyType", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.RevocationCheck.IsNull() && configChild.RevocationCheck.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pkiEp")+".children"+"."+strconv.Itoa(mi)+".pkiTP.attributes."+"revokeCheckConf", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.OcspUrl.IsNull() && configChild.OcspUrl.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pkiEp")+".children"+"."+strconv.Itoa(mi)+".pkiTP.attributes."+"ocspUrl", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.CaBundle.IsNull() && configChild.CaBundle.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "pkiEp")+".children"+"."+strconv.Itoa(mi)+".pkiTP.attributes."+"cabundleLabel", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
 		}
 	}
 

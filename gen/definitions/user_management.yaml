@@ -1455,6 +1455,121 @@ child_classes:
               - ldap
             description: "Realm."
             example: "tacacs"
+  - class_name: pkiEp
+    rn: pkiext
+    type: single
+    no_delete: true
+    child_classes:
+      - class_name: pkiKeyRing
+        rn: keyring-[%s]
+        type: list
+        tf_name: pki_key_pairs
+        description: 'List of PKI key pairs (`crypto key generate`). Key pairs cannot be modified once generated, they have to be deleted and recreated.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Key pair label.'
+            example: tf-key
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'Terraform key pair'
+          - nxos_name: keytype
+            tf_name: key_type
+            type: String
+            enum_values:
+              - Type_RSA
+              - Type_ECC
+            description: 'Key pair type.'
+            example: Type_ECC
+          - nxos_name: modulus
+            tf_name: modulus
+            type: String
+            enum_values:
+              - mod224
+              - mod384
+              - mod512
+              - mod521
+              - mod768
+              - mod1024
+              - mod1536
+              - mod2048
+              - mod3072
+              - mod4096
+            description: 'Key pair modulus (key size in bits).'
+            example: mod384
+          - nxos_name: exportable
+            tf_name: exportable
+            type: Bool
+            description: 'Generate the key pair as exportable.'
+            example: true
+      - class_name: pkiTP
+        rn: tp-[%s]
+        type: list
+        tf_name: pki_trustpoints
+        description: 'List of PKI trustpoints (`crypto ca trustpoint`).'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Trustpoint name.'
+            example: tf-trustpoint
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: 'Terraform trustpoint'
+          - nxos_name: enrollmentType
+            tf_name: enrollment_type
+            type: String
+            enum_values:
+              - none
+              - terminal
+            description: 'Certificate enrollment type.'
+            example: terminal
+          - nxos_name: keyLabel
+            tf_name: key_pair
+            type: String
+            description: 'Label of the key pair associated with the trustpoint.'
+            example: tf-key
+          - nxos_name: keyType
+            tf_name: key_type
+            type: String
+            enum_values:
+              - Type_RSA
+              - Type_ECC
+            description: 'Type of the key pair associated with the trustpoint.'
+            example: Type_ECC
+          - nxos_name: revokeCheckConf
+            tf_name: revocation_check
+            type: String
+            enum_values:
+              - crl
+              - ocsp
+              - none
+              - crl-none
+              - crl-ocsp
+              - ocsp-crl
+              - crl-ocsp-none
+              - ocsp-crl-none
+            description: 'Certificate revocation check methods, in order of preference.'
+            example: crl-none
+          - nxos_name: ocspUrl
+            tf_name: ocsp_url
+            type: String
+            description: 'OCSP server URL. Requires the trustpoint CA to be authenticated.'
+            example: 'http://10.1.1.1:80'
+            exclude_test: true
+          - nxos_name: cabundleLabel
+            tf_name: ca_bundle
+            type: String
+            description: 'Label of the CA certificate bundle associated with the trustpoint.'
+            example: tf-bundle
+            exclude_test: true
 test_prerequisites:
   - dn: sys/fm/tacacsplus
     class_name: fmTacacsplus

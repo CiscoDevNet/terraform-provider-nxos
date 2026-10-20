@@ -92,6 +92,21 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+      - class_name: fmDot1x
+        rn: dot1x
+        type: single
+        no_delete: true
+        description: '802.1X feature configuration.'
+        doc_path: Feature%20Management/fm:Dot1x/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: dot1x
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmEigrp
         rn: eigrp
         type: single
@@ -268,6 +283,21 @@ child_classes:
         attributes:
           - nxos_name: adminSt
             tf_name: msdp
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+      - class_name: fmNat
+        rn: nat
+        type: single
+        no_delete: true
+        description: 'NAT feature configuration.'
+        doc_path: Feature%20Management/fm:Nat/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: nat
             type: String
             description: 'Administrative state.'
             enum_values:
@@ -458,6 +488,21 @@ child_classes:
               - disabled
             example: enabled
             test_tags: [FEATURE_POE]
+      - class_name: fmPortSec
+        rn: portsec
+        type: single
+        no_delete: true
+        description: 'Port Security feature configuration.'
+        doc_path: Feature%20Management/fm:PortSec/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: port_security
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmPtp
         rn: ptp
         type: single
@@ -512,6 +557,21 @@ child_classes:
         attributes:
           - nxos_name: adminSt
             tf_name: sflow
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+      - class_name: fmScheduler
+        rn: scheduler
+        type: single
+        no_delete: true
+        description: 'Scheduler feature configuration.'
+        doc_path: Feature%20Management/fm:Scheduler/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: scheduler
             type: String
             description: 'Administrative state.'
             enum_values:
@@ -678,6 +738,21 @@ child_classes:
         attributes:
           - nxos_name: adminSt
             tf_name: telnet
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+      - class_name: fmTunnelif
+        rn: tunnelif
+        type: single
+        no_delete: true
+        description: 'Tunnel interface feature configuration.'
+        doc_path: Feature%20Management/fm:Tunnelif/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: tunnel
             type: String
             description: 'Administrative state.'
             enum_values:

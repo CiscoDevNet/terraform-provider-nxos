@@ -39,20 +39,35 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type Telemetry struct {
-	Device                       types.String                          `tfsdk:"device"`
-	Dn                           types.String                          `tfsdk:"id"`
-	AdminState                   types.String                          `tfsdk:"admin_state"`
-	BatchDmeEvents               types.Bool                            `tfsdk:"batch_dme_events"`
-	MergeSubscriptions           types.Bool                            `tfsdk:"merge_subscriptions"`
-	DestinationProfileAdminState types.String                          `tfsdk:"destination_profile_admin_state"`
-	DestinationProfileVrf        types.String                          `tfsdk:"destination_profile_vrf"`
-	DestinationGroups            map[string]TelemetryDestinationGroups `tfsdk:"destination_groups"`
-	SensorGroups                 map[string]TelemetrySensorGroups      `tfsdk:"sensor_groups"`
-	Subscriptions                map[string]TelemetrySubscriptions     `tfsdk:"subscriptions"`
+	Device                            types.String                          `tfsdk:"device"`
+	Dn                                types.String                          `tfsdk:"id"`
+	AdminState                        types.String                          `tfsdk:"admin_state"`
+	BatchDmeEvents                    types.Bool                            `tfsdk:"batch_dme_events"`
+	MergeSubscriptions                types.Bool                            `tfsdk:"merge_subscriptions"`
+	CertificateFilename               types.String                          `tfsdk:"certificate_filename"`
+	CertificateHostname               types.String                          `tfsdk:"certificate_hostname"`
+	CertificateTrustpoint             types.String                          `tfsdk:"certificate_trustpoint"`
+	DestinationProfileAdminState      types.String                          `tfsdk:"destination_profile_admin_state"`
+	DestinationProfileVrf             types.String                          `tfsdk:"destination_profile_vrf"`
+	DestinationProfileCompression     types.String                          `tfsdk:"destination_profile_compression"`
+	DestinationProfileGrpcDeadline    types.Int64                           `tfsdk:"destination_profile_grpc_deadline"`
+	DestinationProfileNodeId          types.String                          `tfsdk:"destination_profile_node_id"`
+	DestinationProfileRetrySize       types.Int64                           `tfsdk:"destination_profile_retry_size"`
+	DestinationProfileSourceInterface types.String                          `tfsdk:"destination_profile_source_interface"`
+	DestinationGroups                 map[string]TelemetryDestinationGroups `tfsdk:"destination_groups"`
+	SensorGroups                      map[string]TelemetrySensorGroups      `tfsdk:"sensor_groups"`
+	Subscriptions                     map[string]TelemetrySubscriptions     `tfsdk:"subscriptions"`
 }
 
 type TelemetryDestinationGroups struct {
-	Destinations map[string]TelemetryDestinationGroupsDestinations `tfsdk:"destinations"`
+	CertificateFilename types.String                                      `tfsdk:"certificate_filename"`
+	CertificateHostname types.String                                      `tfsdk:"certificate_hostname"`
+	ChunkingSize        types.Int64                                       `tfsdk:"chunking_size"`
+	Compression         types.String                                      `tfsdk:"compression"`
+	MaxMessageSize      types.Int64                                       `tfsdk:"max_message_size"`
+	SourceInterface     types.String                                      `tfsdk:"source_interface"`
+	Vrf                 types.String                                      `tfsdk:"vrf"`
+	Destinations        map[string]TelemetryDestinationGroupsDestinations `tfsdk:"destinations"`
 }
 
 type TelemetryDestinationGroupsDestinations struct {
@@ -116,7 +131,7 @@ var TelemetryListClasses = map[string]bool{"telemetryDestGroup": true, "telemetr
 
 // getTelemetryTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getTelemetryTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"telemetryDestProfile", "telemetryDestOptVrf", "telemetryDestGroup", "telemetryDest", "telemetrySensorGroup", "telemetrySensorPath", "telemetrySubscription", "telemetryRsSensorGroupRel", "telemetryRsDestGroupRel"}, TelemetrySubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"telemetryCertificate", "telemetryDestProfile", "telemetryDestOptVrf", "telemetryDestOptCompression", "telemetryDestOptGrpcDeadline", "telemetryDestOptNodeId", "telemetryDestOptRetry", "telemetryDestOptSourceInterface", "telemetryDestGroup", "telemetryDestGrpOptCertificate", "telemetryDestGrpOptChunking", "telemetryDestGrpOptCompression", "telemetryDestGrpOptMaxMessage", "telemetryDestGrpOptSourceInterface", "telemetryDestGrpOptVrf", "telemetryDest", "telemetrySensorGroup", "telemetrySensorPath", "telemetrySubscription", "telemetryRsSensorGroupRel", "telemetryRsDestGroupRel"}, TelemetrySubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -178,6 +193,19 @@ func (data Telemetry) toBody(config Telemetry) nxos.Body {
 	}
 	var attrs string
 	childrenPath := data.getClassName() + ".children"
+	attrs = "{}"
+	if !data.CertificateFilename.IsUnknown() && !data.CertificateFilename.IsNull() && !config.CertificateFilename.IsNull() {
+		attrs, _ = sjson.Set(attrs, "filename", data.CertificateFilename.ValueString())
+	}
+	if !data.CertificateHostname.IsUnknown() && !data.CertificateHostname.IsNull() && !config.CertificateHostname.IsNull() {
+		attrs, _ = sjson.Set(attrs, "hostname", data.CertificateHostname.ValueString())
+	}
+	if !data.CertificateTrustpoint.IsUnknown() && !data.CertificateTrustpoint.IsNull() && !config.CertificateTrustpoint.IsNull() {
+		attrs, _ = sjson.Set(attrs, "trustpoint", data.CertificateTrustpoint.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.telemetryCertificate.attributes", attrs)
+	}
 	{
 		attrs = "{}"
 		if !data.DestinationProfileAdminState.IsUnknown() && !data.DestinationProfileAdminState.IsNull() && !config.DestinationProfileAdminState.IsNull() {
@@ -198,6 +226,41 @@ func (data Telemetry) toBody(config Telemetry) nxos.Body {
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestOptVrf.attributes", attrs)
 		}
+		attrs = "{}"
+		if !data.DestinationProfileCompression.IsUnknown() && !data.DestinationProfileCompression.IsNull() && !config.DestinationProfileCompression.IsNull() {
+			attrs, _ = sjson.Set(attrs, "name", data.DestinationProfileCompression.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestOptCompression.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.DestinationProfileGrpcDeadline.IsUnknown() && !data.DestinationProfileGrpcDeadline.IsNull() && !config.DestinationProfileGrpcDeadline.IsNull() {
+			attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(data.DestinationProfileGrpcDeadline.ValueInt64(), 10))
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestOptGrpcDeadline.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.DestinationProfileNodeId.IsUnknown() && !data.DestinationProfileNodeId.IsNull() && !config.DestinationProfileNodeId.IsNull() {
+			attrs, _ = sjson.Set(attrs, "name", data.DestinationProfileNodeId.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestOptNodeId.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.DestinationProfileRetrySize.IsUnknown() && !data.DestinationProfileRetrySize.IsNull() && !config.DestinationProfileRetrySize.IsNull() {
+			attrs, _ = sjson.Set(attrs, "size", strconv.FormatInt(data.DestinationProfileRetrySize.ValueInt64(), 10))
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestOptRetry.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.DestinationProfileSourceInterface.IsUnknown() && !data.DestinationProfileSourceInterface.IsNull() && !config.DestinationProfileSourceInterface.IsNull() {
+			attrs, _ = sjson.Set(attrs, "name", data.DestinationProfileSourceInterface.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestOptSourceInterface.attributes", attrs)
+		}
 		childBody = body
 		body = prevBody
 		if parentAttrs != "{}" || gjson.Get(childBody, "telemetryDestProfile.children").Exists() {
@@ -215,6 +278,51 @@ func (data Telemetry) toBody(config Telemetry) nxos.Body {
 			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
 			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".telemetryDestGroup.children"
 			_ = nestedChildrenPath
+			attrs = "{}"
+			if !child.CertificateFilename.IsUnknown() && !child.CertificateFilename.IsNull() && !configChild.CertificateFilename.IsNull() {
+				attrs, _ = sjson.Set(attrs, "filename", child.CertificateFilename.ValueString())
+			}
+			if !child.CertificateHostname.IsUnknown() && !child.CertificateHostname.IsNull() && !configChild.CertificateHostname.IsNull() {
+				attrs, _ = sjson.Set(attrs, "hostname", child.CertificateHostname.ValueString())
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestGrpOptCertificate.attributes", attrs)
+			}
+			attrs = "{}"
+			if !child.ChunkingSize.IsUnknown() && !child.ChunkingSize.IsNull() && !configChild.ChunkingSize.IsNull() {
+				attrs, _ = sjson.Set(attrs, "chunkSize", strconv.FormatInt(child.ChunkingSize.ValueInt64(), 10))
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestGrpOptChunking.attributes", attrs)
+			}
+			attrs = "{}"
+			if !child.Compression.IsUnknown() && !child.Compression.IsNull() && !configChild.Compression.IsNull() {
+				attrs, _ = sjson.Set(attrs, "name", child.Compression.ValueString())
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestGrpOptCompression.attributes", attrs)
+			}
+			attrs = "{}"
+			if !child.MaxMessageSize.IsUnknown() && !child.MaxMessageSize.IsNull() && !configChild.MaxMessageSize.IsNull() {
+				attrs, _ = sjson.Set(attrs, "messageSize", strconv.FormatInt(child.MaxMessageSize.ValueInt64(), 10))
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestGrpOptMaxMessage.attributes", attrs)
+			}
+			attrs = "{}"
+			if !child.SourceInterface.IsUnknown() && !child.SourceInterface.IsNull() && !configChild.SourceInterface.IsNull() {
+				attrs, _ = sjson.Set(attrs, "name", child.SourceInterface.ValueString())
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestGrpOptSourceInterface.attributes", attrs)
+			}
+			attrs = "{}"
+			if !child.Vrf.IsUnknown() && !child.Vrf.IsNull() && !configChild.Vrf.IsNull() {
+				attrs, _ = sjson.Set(attrs, "name", child.Vrf.ValueString())
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestGrpOptVrf.attributes", attrs)
+			}
 			for key, child := range child.Destinations {
 				configChild, configChildOk := configChild.Destinations[key]
 				_ = configChild
@@ -317,6 +425,22 @@ func (data *Telemetry) fromBody(res gjson.Result) {
 	data.BatchDmeEvents = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.batchDmeEvt").String()))
 	data.MergeSubscriptions = types.BoolValue(helpers.ParseNxosBoolean(res.Get(data.getClassName() + ".attributes.mergeSubs").String()))
 	{
+		var rtelemetryCertificate gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("telemetryCertificate.attributes.rn").String()
+				if rnValue == "certificate" {
+					rtelemetryCertificate = v
+					return false
+				}
+				return true
+			},
+		)
+		data.CertificateFilename = types.StringValue(rtelemetryCertificate.Get("telemetryCertificate.attributes.filename").String())
+		data.CertificateHostname = types.StringValue(rtelemetryCertificate.Get("telemetryCertificate.attributes.hostname").String())
+		data.CertificateTrustpoint = types.StringValue(rtelemetryCertificate.Get("telemetryCertificate.attributes.trustpoint").String())
+	}
+	{
 		var rtelemetryDestProfile gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -343,6 +467,76 @@ func (data *Telemetry) fromBody(res gjson.Result) {
 			)
 			data.DestinationProfileVrf = types.StringValue(rtelemetryDestOptVrf.Get("telemetryDestOptVrf.attributes.name").String())
 		}
+		{
+			var rtelemetryDestOptCompression gjson.Result
+			rtelemetryDestProfile.Get("telemetryDestProfile.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("telemetryDestOptCompression.attributes.rn").String()
+					if rnValue == "compression" {
+						rtelemetryDestOptCompression = v
+						return false
+					}
+					return true
+				},
+			)
+			data.DestinationProfileCompression = types.StringValue(rtelemetryDestOptCompression.Get("telemetryDestOptCompression.attributes.name").String())
+		}
+		{
+			var rtelemetryDestOptGrpcDeadline gjson.Result
+			rtelemetryDestProfile.Get("telemetryDestProfile.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("telemetryDestOptGrpcDeadline.attributes.rn").String()
+					if rnValue == "deadline" {
+						rtelemetryDestOptGrpcDeadline = v
+						return false
+					}
+					return true
+				},
+			)
+			data.DestinationProfileGrpcDeadline = types.Int64Value(rtelemetryDestOptGrpcDeadline.Get("telemetryDestOptGrpcDeadline.attributes.timeout").Int())
+		}
+		{
+			var rtelemetryDestOptNodeId gjson.Result
+			rtelemetryDestProfile.Get("telemetryDestProfile.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("telemetryDestOptNodeId.attributes.rn").String()
+					if rnValue == "nodeid" {
+						rtelemetryDestOptNodeId = v
+						return false
+					}
+					return true
+				},
+			)
+			data.DestinationProfileNodeId = types.StringValue(rtelemetryDestOptNodeId.Get("telemetryDestOptNodeId.attributes.name").String())
+		}
+		{
+			var rtelemetryDestOptRetry gjson.Result
+			rtelemetryDestProfile.Get("telemetryDestProfile.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("telemetryDestOptRetry.attributes.rn").String()
+					if rnValue == "retry" {
+						rtelemetryDestOptRetry = v
+						return false
+					}
+					return true
+				},
+			)
+			data.DestinationProfileRetrySize = types.Int64Value(rtelemetryDestOptRetry.Get("telemetryDestOptRetry.attributes.size").Int())
+		}
+		{
+			var rtelemetryDestOptSourceInterface gjson.Result
+			rtelemetryDestProfile.Get("telemetryDestProfile.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("telemetryDestOptSourceInterface.attributes.rn").String()
+					if rnValue == "sourceinterface" {
+						rtelemetryDestOptSourceInterface = v
+						return false
+					}
+					return true
+				},
+			)
+			data.DestinationProfileSourceInterface = types.StringValue(rtelemetryDestOptSourceInterface.Get("telemetryDestOptSourceInterface.attributes.name").String())
+		}
 	}
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -351,6 +545,91 @@ func (data *Telemetry) fromBody(res gjson.Result) {
 					if classname.String() == "telemetryDestGroup" {
 						var child TelemetryDestinationGroups
 						mapKey := value.Get("attributes.id").String()
+						{
+							var rtelemetryDestGrpOptCertificate gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("telemetryDestGrpOptCertificate.attributes.rn").String()
+									if rnValue == "certificate" {
+										rtelemetryDestGrpOptCertificate = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.CertificateFilename = types.StringValue(rtelemetryDestGrpOptCertificate.Get("telemetryDestGrpOptCertificate.attributes.filename").String())
+							child.CertificateHostname = types.StringValue(rtelemetryDestGrpOptCertificate.Get("telemetryDestGrpOptCertificate.attributes.hostname").String())
+						}
+						{
+							var rtelemetryDestGrpOptChunking gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("telemetryDestGrpOptChunking.attributes.rn").String()
+									if rnValue == "chunking" {
+										rtelemetryDestGrpOptChunking = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.ChunkingSize = types.Int64Value(rtelemetryDestGrpOptChunking.Get("telemetryDestGrpOptChunking.attributes.chunkSize").Int())
+						}
+						{
+							var rtelemetryDestGrpOptCompression gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("telemetryDestGrpOptCompression.attributes.rn").String()
+									if rnValue == "compression" {
+										rtelemetryDestGrpOptCompression = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.Compression = types.StringValue(rtelemetryDestGrpOptCompression.Get("telemetryDestGrpOptCompression.attributes.name").String())
+						}
+						{
+							var rtelemetryDestGrpOptMaxMessage gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("telemetryDestGrpOptMaxMessage.attributes.rn").String()
+									if rnValue == "message" {
+										rtelemetryDestGrpOptMaxMessage = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.MaxMessageSize = types.Int64Value(rtelemetryDestGrpOptMaxMessage.Get("telemetryDestGrpOptMaxMessage.attributes.messageSize").Int())
+						}
+						{
+							var rtelemetryDestGrpOptSourceInterface gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("telemetryDestGrpOptSourceInterface.attributes.rn").String()
+									if rnValue == "sourceinterface" {
+										rtelemetryDestGrpOptSourceInterface = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.SourceInterface = types.StringValue(rtelemetryDestGrpOptSourceInterface.Get("telemetryDestGrpOptSourceInterface.attributes.name").String())
+						}
+						{
+							var rtelemetryDestGrpOptVrf gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("telemetryDestGrpOptVrf.attributes.rn").String()
+									if rnValue == "vrf" {
+										rtelemetryDestGrpOptVrf = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.Vrf = types.StringValue(rtelemetryDestGrpOptVrf.Get("telemetryDestGrpOptVrf.attributes.name").String())
+						}
 						value.Get("children").ForEach(
 							func(_, nestedV gjson.Result) bool {
 								nestedV.ForEach(
@@ -501,6 +780,32 @@ func (data *Telemetry) updateFromBody(res gjson.Result) {
 	} else {
 		data.MergeSubscriptions = types.BoolNull()
 	}
+	var rtelemetryCertificate gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("telemetryCertificate.attributes.rn").String()
+			if rnValue == "certificate" {
+				rtelemetryCertificate = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.CertificateFilename.IsNull() {
+		data.CertificateFilename = types.StringValue(rtelemetryCertificate.Get("telemetryCertificate.attributes.filename").String())
+	} else {
+		data.CertificateFilename = types.StringNull()
+	}
+	if !data.CertificateHostname.IsNull() {
+		data.CertificateHostname = types.StringValue(rtelemetryCertificate.Get("telemetryCertificate.attributes.hostname").String())
+	} else {
+		data.CertificateHostname = types.StringNull()
+	}
+	if !data.CertificateTrustpoint.IsNull() {
+		data.CertificateTrustpoint = types.StringValue(rtelemetryCertificate.Get("telemetryCertificate.attributes.trustpoint").String())
+	} else {
+		data.CertificateTrustpoint = types.StringNull()
+	}
 	var rtelemetryDestProfile gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -535,6 +840,96 @@ func (data *Telemetry) updateFromBody(res gjson.Result) {
 			data.DestinationProfileVrf = types.StringNull()
 		}
 	}
+	{
+		var rtelemetryDestOptCompression gjson.Result
+		rtelemetryDestProfile.Get("telemetryDestProfile.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("telemetryDestOptCompression.attributes.rn").String()
+				if rnValue == "compression" {
+					rtelemetryDestOptCompression = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.DestinationProfileCompression.IsNull() {
+			data.DestinationProfileCompression = types.StringValue(rtelemetryDestOptCompression.Get("telemetryDestOptCompression.attributes.name").String())
+		} else {
+			data.DestinationProfileCompression = types.StringNull()
+		}
+	}
+	{
+		var rtelemetryDestOptGrpcDeadline gjson.Result
+		rtelemetryDestProfile.Get("telemetryDestProfile.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("telemetryDestOptGrpcDeadline.attributes.rn").String()
+				if rnValue == "deadline" {
+					rtelemetryDestOptGrpcDeadline = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.DestinationProfileGrpcDeadline.IsNull() {
+			data.DestinationProfileGrpcDeadline = types.Int64Value(rtelemetryDestOptGrpcDeadline.Get("telemetryDestOptGrpcDeadline.attributes.timeout").Int())
+		} else {
+			data.DestinationProfileGrpcDeadline = types.Int64Null()
+		}
+	}
+	{
+		var rtelemetryDestOptNodeId gjson.Result
+		rtelemetryDestProfile.Get("telemetryDestProfile.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("telemetryDestOptNodeId.attributes.rn").String()
+				if rnValue == "nodeid" {
+					rtelemetryDestOptNodeId = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.DestinationProfileNodeId.IsNull() {
+			data.DestinationProfileNodeId = types.StringValue(rtelemetryDestOptNodeId.Get("telemetryDestOptNodeId.attributes.name").String())
+		} else {
+			data.DestinationProfileNodeId = types.StringNull()
+		}
+	}
+	{
+		var rtelemetryDestOptRetry gjson.Result
+		rtelemetryDestProfile.Get("telemetryDestProfile.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("telemetryDestOptRetry.attributes.rn").String()
+				if rnValue == "retry" {
+					rtelemetryDestOptRetry = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.DestinationProfileRetrySize.IsNull() {
+			data.DestinationProfileRetrySize = types.Int64Value(rtelemetryDestOptRetry.Get("telemetryDestOptRetry.attributes.size").Int())
+		} else {
+			data.DestinationProfileRetrySize = types.Int64Null()
+		}
+	}
+	{
+		var rtelemetryDestOptSourceInterface gjson.Result
+		rtelemetryDestProfile.Get("telemetryDestProfile.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("telemetryDestOptSourceInterface.attributes.rn").String()
+				if rnValue == "sourceinterface" {
+					rtelemetryDestOptSourceInterface = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.DestinationProfileSourceInterface.IsNull() {
+			data.DestinationProfileSourceInterface = types.StringValue(rtelemetryDestOptSourceInterface.Get("telemetryDestOptSourceInterface.attributes.name").String())
+		} else {
+			data.DestinationProfileSourceInterface = types.StringNull()
+		}
+	}
 	for key, item := range data.DestinationGroups {
 		var rtelemetryDestGroup gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -549,6 +944,119 @@ func (data *Telemetry) updateFromBody(res gjson.Result) {
 		if !rtelemetryDestGroup.Exists() {
 			delete(data.DestinationGroups, key)
 			continue
+		}
+		{
+			var rtelemetryDestGrpOptCertificate gjson.Result
+			rtelemetryDestGroup.Get("telemetryDestGroup.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("telemetryDestGrpOptCertificate.attributes.rn").String()
+					if rnValue == "certificate" {
+						rtelemetryDestGrpOptCertificate = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.CertificateFilename.IsNull() {
+				item.CertificateFilename = types.StringValue(rtelemetryDestGrpOptCertificate.Get("telemetryDestGrpOptCertificate.attributes.filename").String())
+			} else {
+				item.CertificateFilename = types.StringNull()
+			}
+			if !item.CertificateHostname.IsNull() {
+				item.CertificateHostname = types.StringValue(rtelemetryDestGrpOptCertificate.Get("telemetryDestGrpOptCertificate.attributes.hostname").String())
+			} else {
+				item.CertificateHostname = types.StringNull()
+			}
+		}
+		{
+			var rtelemetryDestGrpOptChunking gjson.Result
+			rtelemetryDestGroup.Get("telemetryDestGroup.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("telemetryDestGrpOptChunking.attributes.rn").String()
+					if rnValue == "chunking" {
+						rtelemetryDestGrpOptChunking = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.ChunkingSize.IsNull() {
+				item.ChunkingSize = types.Int64Value(rtelemetryDestGrpOptChunking.Get("telemetryDestGrpOptChunking.attributes.chunkSize").Int())
+			} else {
+				item.ChunkingSize = types.Int64Null()
+			}
+		}
+		{
+			var rtelemetryDestGrpOptCompression gjson.Result
+			rtelemetryDestGroup.Get("telemetryDestGroup.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("telemetryDestGrpOptCompression.attributes.rn").String()
+					if rnValue == "compression" {
+						rtelemetryDestGrpOptCompression = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.Compression.IsNull() {
+				item.Compression = types.StringValue(rtelemetryDestGrpOptCompression.Get("telemetryDestGrpOptCompression.attributes.name").String())
+			} else {
+				item.Compression = types.StringNull()
+			}
+		}
+		{
+			var rtelemetryDestGrpOptMaxMessage gjson.Result
+			rtelemetryDestGroup.Get("telemetryDestGroup.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("telemetryDestGrpOptMaxMessage.attributes.rn").String()
+					if rnValue == "message" {
+						rtelemetryDestGrpOptMaxMessage = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.MaxMessageSize.IsNull() {
+				item.MaxMessageSize = types.Int64Value(rtelemetryDestGrpOptMaxMessage.Get("telemetryDestGrpOptMaxMessage.attributes.messageSize").Int())
+			} else {
+				item.MaxMessageSize = types.Int64Null()
+			}
+		}
+		{
+			var rtelemetryDestGrpOptSourceInterface gjson.Result
+			rtelemetryDestGroup.Get("telemetryDestGroup.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("telemetryDestGrpOptSourceInterface.attributes.rn").String()
+					if rnValue == "sourceinterface" {
+						rtelemetryDestGrpOptSourceInterface = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.SourceInterface.IsNull() {
+				item.SourceInterface = types.StringValue(rtelemetryDestGrpOptSourceInterface.Get("telemetryDestGrpOptSourceInterface.attributes.name").String())
+			} else {
+				item.SourceInterface = types.StringNull()
+			}
+		}
+		{
+			var rtelemetryDestGrpOptVrf gjson.Result
+			rtelemetryDestGroup.Get("telemetryDestGroup.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("telemetryDestGrpOptVrf.attributes.rn").String()
+					if rnValue == "vrf" {
+						rtelemetryDestGrpOptVrf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.Vrf.IsNull() {
+				item.Vrf = types.StringValue(rtelemetryDestGrpOptVrf.Get("telemetryDestGrpOptVrf.attributes.name").String())
+			} else {
+				item.Vrf = types.StringNull()
+			}
 		}
 		for nc := range item.Destinations {
 			ncItem := item.Destinations[nc]
@@ -728,6 +1236,12 @@ func (data Telemetry) toDeleteBody() nxos.Body {
 	childrenPath := data.getClassName() + ".children"
 	{
 		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "telemetryCertificate.attributes.rn", "certificate")
+		deleteBody, _ = sjson.Set(deleteBody, "telemetryCertificate.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+	{
+		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "telemetryDestProfile.attributes.rn", "destprof")
 		deleteBody, _ = sjson.Set(deleteBody, "telemetryDestProfile.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
@@ -760,17 +1274,65 @@ func (data Telemetry) managedDns() map[string]bool {
 	dns := map[string]bool{}
 	dn := data.getDn()
 	dns[dn] = true
-	if !(data.DestinationProfileAdminState.IsNull() && (data.DestinationProfileVrf.IsNull())) {
+	if !(data.CertificateFilename.IsNull() && data.CertificateHostname.IsNull() && data.CertificateTrustpoint.IsNull()) {
+		telemetryCertificateDn := dn + "/" + "certificate"
+		dns[telemetryCertificateDn] = true
+	}
+	if !(data.DestinationProfileAdminState.IsNull() && (data.DestinationProfileVrf.IsNull()) && (data.DestinationProfileCompression.IsNull()) && (data.DestinationProfileGrpcDeadline.IsNull()) && (data.DestinationProfileNodeId.IsNull()) && (data.DestinationProfileRetrySize.IsNull()) && (data.DestinationProfileSourceInterface.IsNull())) {
 		telemetryDestProfileDn := dn + "/" + "destprof"
 		dns[telemetryDestProfileDn] = true
 		if !(data.DestinationProfileVrf.IsNull()) {
 			telemetryDestOptVrfDn := telemetryDestProfileDn + "/" + "vrf"
 			dns[telemetryDestOptVrfDn] = true
 		}
+		if !(data.DestinationProfileCompression.IsNull()) {
+			telemetryDestOptCompressionDn := telemetryDestProfileDn + "/" + "compression"
+			dns[telemetryDestOptCompressionDn] = true
+		}
+		if !(data.DestinationProfileGrpcDeadline.IsNull()) {
+			telemetryDestOptGrpcDeadlineDn := telemetryDestProfileDn + "/" + "deadline"
+			dns[telemetryDestOptGrpcDeadlineDn] = true
+		}
+		if !(data.DestinationProfileNodeId.IsNull()) {
+			telemetryDestOptNodeIdDn := telemetryDestProfileDn + "/" + "nodeid"
+			dns[telemetryDestOptNodeIdDn] = true
+		}
+		if !(data.DestinationProfileRetrySize.IsNull()) {
+			telemetryDestOptRetryDn := telemetryDestProfileDn + "/" + "retry"
+			dns[telemetryDestOptRetryDn] = true
+		}
+		if !(data.DestinationProfileSourceInterface.IsNull()) {
+			telemetryDestOptSourceInterfaceDn := telemetryDestProfileDn + "/" + "sourceinterface"
+			dns[telemetryDestOptSourceInterfaceDn] = true
+		}
 	}
 	for key, child := range data.DestinationGroups {
 		telemetryDestGroupDn := dn + "/" + child.getRn(key)
 		dns[telemetryDestGroupDn] = true
+		if !(child.CertificateFilename.IsNull() && child.CertificateHostname.IsNull()) {
+			telemetryDestGrpOptCertificateDn_ := telemetryDestGroupDn + "/" + "certificate"
+			dns[telemetryDestGrpOptCertificateDn_] = true
+		}
+		if !(child.ChunkingSize.IsNull()) {
+			telemetryDestGrpOptChunkingDn_ := telemetryDestGroupDn + "/" + "chunking"
+			dns[telemetryDestGrpOptChunkingDn_] = true
+		}
+		if !(child.Compression.IsNull()) {
+			telemetryDestGrpOptCompressionDn_ := telemetryDestGroupDn + "/" + "compression"
+			dns[telemetryDestGrpOptCompressionDn_] = true
+		}
+		if !(child.MaxMessageSize.IsNull()) {
+			telemetryDestGrpOptMaxMessageDn_ := telemetryDestGroupDn + "/" + "message"
+			dns[telemetryDestGrpOptMaxMessageDn_] = true
+		}
+		if !(child.SourceInterface.IsNull()) {
+			telemetryDestGrpOptSourceInterfaceDn_ := telemetryDestGroupDn + "/" + "sourceinterface"
+			dns[telemetryDestGrpOptSourceInterfaceDn_] = true
+		}
+		if !(child.Vrf.IsNull()) {
+			telemetryDestGrpOptVrfDn_ := telemetryDestGroupDn + "/" + "vrf"
+			dns[telemetryDestGrpOptVrfDn_] = true
+		}
 		for key_, child_ := range child.Destinations {
 			keyParts := strings.SplitN(key_, ";", 2)
 			_ = keyParts
@@ -823,7 +1385,30 @@ func (data Telemetry) toResetBody(preexisting map[string]bool) nxos.Body {
 	if body == "" {
 		body, _ = sjson.Set(body, "telemetryEntity.attributes", map[string]interface{}{})
 	}
-	if !(data.DestinationProfileAdminState.IsNull() && (data.DestinationProfileVrf.IsNull())) {
+	if !(data.CertificateFilename.IsNull() && data.CertificateHostname.IsNull() && data.CertificateTrustpoint.IsNull()) {
+		telemetryCertificateRn := "certificate"
+		telemetryCertificateDn := dn + "/" + telemetryCertificateRn
+		_ = telemetryCertificateDn
+		if !existed(telemetryCertificateDn) {
+			body, _ = sjson.Set(body, "telemetryEntity.children.-1.telemetryCertificate.attributes", map[string]interface{}{"rn": telemetryCertificateRn, "status": "deleted"})
+		} else {
+			telemetryCertificateBody := ""
+			if !data.CertificateFilename.IsNull() {
+				telemetryCertificateBody, _ = sjson.Set(telemetryCertificateBody, "telemetryCertificate.attributes.filename", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CertificateHostname.IsNull() {
+				telemetryCertificateBody, _ = sjson.Set(telemetryCertificateBody, "telemetryCertificate.attributes.hostname", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.CertificateTrustpoint.IsNull() {
+				telemetryCertificateBody, _ = sjson.Set(telemetryCertificateBody, "telemetryCertificate.attributes.trustpoint", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if telemetryCertificateBody != "" {
+				telemetryCertificateBody, _ = sjson.Set(telemetryCertificateBody, "telemetryCertificate.attributes.rn", telemetryCertificateRn)
+				body, _ = sjson.SetRaw(body, "telemetryEntity.children.-1", telemetryCertificateBody)
+			}
+		}
+	}
+	if !(data.DestinationProfileAdminState.IsNull() && (data.DestinationProfileVrf.IsNull()) && (data.DestinationProfileCompression.IsNull()) && (data.DestinationProfileGrpcDeadline.IsNull()) && (data.DestinationProfileNodeId.IsNull()) && (data.DestinationProfileRetrySize.IsNull()) && (data.DestinationProfileSourceInterface.IsNull())) {
 		telemetryDestProfileRn := "destprof"
 		telemetryDestProfileDn := dn + "/" + telemetryDestProfileRn
 		_ = telemetryDestProfileDn
@@ -851,6 +1436,91 @@ func (data Telemetry) toResetBody(preexisting map[string]bool) nxos.Body {
 					}
 				}
 			}
+			if !(data.DestinationProfileCompression.IsNull()) {
+				telemetryDestOptCompressionRn := "compression"
+				telemetryDestOptCompressionDn := telemetryDestProfileDn + "/" + telemetryDestOptCompressionRn
+				_ = telemetryDestOptCompressionDn
+				if !existed(telemetryDestOptCompressionDn) {
+					telemetryDestProfileBody, _ = sjson.Set(telemetryDestProfileBody, "telemetryDestProfile.children.-1.telemetryDestOptCompression.attributes", map[string]interface{}{"rn": telemetryDestOptCompressionRn, "status": "deleted"})
+				} else {
+					telemetryDestOptCompressionBody := ""
+					if !data.DestinationProfileCompression.IsNull() {
+						telemetryDestOptCompressionBody, _ = sjson.Set(telemetryDestOptCompressionBody, "telemetryDestOptCompression.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if telemetryDestOptCompressionBody != "" {
+						telemetryDestOptCompressionBody, _ = sjson.Set(telemetryDestOptCompressionBody, "telemetryDestOptCompression.attributes.rn", telemetryDestOptCompressionRn)
+						telemetryDestProfileBody, _ = sjson.SetRaw(telemetryDestProfileBody, "telemetryDestProfile.children.-1", telemetryDestOptCompressionBody)
+					}
+				}
+			}
+			if !(data.DestinationProfileGrpcDeadline.IsNull()) {
+				telemetryDestOptGrpcDeadlineRn := "deadline"
+				telemetryDestOptGrpcDeadlineDn := telemetryDestProfileDn + "/" + telemetryDestOptGrpcDeadlineRn
+				_ = telemetryDestOptGrpcDeadlineDn
+				if !existed(telemetryDestOptGrpcDeadlineDn) {
+					telemetryDestProfileBody, _ = sjson.Set(telemetryDestProfileBody, "telemetryDestProfile.children.-1.telemetryDestOptGrpcDeadline.attributes", map[string]interface{}{"rn": telemetryDestOptGrpcDeadlineRn, "status": "deleted"})
+				} else {
+					telemetryDestOptGrpcDeadlineBody := ""
+					if !data.DestinationProfileGrpcDeadline.IsNull() {
+						telemetryDestOptGrpcDeadlineBody, _ = sjson.Set(telemetryDestOptGrpcDeadlineBody, "telemetryDestOptGrpcDeadline.attributes.timeout", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if telemetryDestOptGrpcDeadlineBody != "" {
+						telemetryDestOptGrpcDeadlineBody, _ = sjson.Set(telemetryDestOptGrpcDeadlineBody, "telemetryDestOptGrpcDeadline.attributes.rn", telemetryDestOptGrpcDeadlineRn)
+						telemetryDestProfileBody, _ = sjson.SetRaw(telemetryDestProfileBody, "telemetryDestProfile.children.-1", telemetryDestOptGrpcDeadlineBody)
+					}
+				}
+			}
+			if !(data.DestinationProfileNodeId.IsNull()) {
+				telemetryDestOptNodeIdRn := "nodeid"
+				telemetryDestOptNodeIdDn := telemetryDestProfileDn + "/" + telemetryDestOptNodeIdRn
+				_ = telemetryDestOptNodeIdDn
+				if !existed(telemetryDestOptNodeIdDn) {
+					telemetryDestProfileBody, _ = sjson.Set(telemetryDestProfileBody, "telemetryDestProfile.children.-1.telemetryDestOptNodeId.attributes", map[string]interface{}{"rn": telemetryDestOptNodeIdRn, "status": "deleted"})
+				} else {
+					telemetryDestOptNodeIdBody := ""
+					if !data.DestinationProfileNodeId.IsNull() {
+						telemetryDestOptNodeIdBody, _ = sjson.Set(telemetryDestOptNodeIdBody, "telemetryDestOptNodeId.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if telemetryDestOptNodeIdBody != "" {
+						telemetryDestOptNodeIdBody, _ = sjson.Set(telemetryDestOptNodeIdBody, "telemetryDestOptNodeId.attributes.rn", telemetryDestOptNodeIdRn)
+						telemetryDestProfileBody, _ = sjson.SetRaw(telemetryDestProfileBody, "telemetryDestProfile.children.-1", telemetryDestOptNodeIdBody)
+					}
+				}
+			}
+			if !(data.DestinationProfileRetrySize.IsNull()) {
+				telemetryDestOptRetryRn := "retry"
+				telemetryDestOptRetryDn := telemetryDestProfileDn + "/" + telemetryDestOptRetryRn
+				_ = telemetryDestOptRetryDn
+				if !existed(telemetryDestOptRetryDn) {
+					telemetryDestProfileBody, _ = sjson.Set(telemetryDestProfileBody, "telemetryDestProfile.children.-1.telemetryDestOptRetry.attributes", map[string]interface{}{"rn": telemetryDestOptRetryRn, "status": "deleted"})
+				} else {
+					telemetryDestOptRetryBody := ""
+					if !data.DestinationProfileRetrySize.IsNull() {
+						telemetryDestOptRetryBody, _ = sjson.Set(telemetryDestOptRetryBody, "telemetryDestOptRetry.attributes.size", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if telemetryDestOptRetryBody != "" {
+						telemetryDestOptRetryBody, _ = sjson.Set(telemetryDestOptRetryBody, "telemetryDestOptRetry.attributes.rn", telemetryDestOptRetryRn)
+						telemetryDestProfileBody, _ = sjson.SetRaw(telemetryDestProfileBody, "telemetryDestProfile.children.-1", telemetryDestOptRetryBody)
+					}
+				}
+			}
+			if !(data.DestinationProfileSourceInterface.IsNull()) {
+				telemetryDestOptSourceInterfaceRn := "sourceinterface"
+				telemetryDestOptSourceInterfaceDn := telemetryDestProfileDn + "/" + telemetryDestOptSourceInterfaceRn
+				_ = telemetryDestOptSourceInterfaceDn
+				if !existed(telemetryDestOptSourceInterfaceDn) {
+					telemetryDestProfileBody, _ = sjson.Set(telemetryDestProfileBody, "telemetryDestProfile.children.-1.telemetryDestOptSourceInterface.attributes", map[string]interface{}{"rn": telemetryDestOptSourceInterfaceRn, "status": "deleted"})
+				} else {
+					telemetryDestOptSourceInterfaceBody := ""
+					if !data.DestinationProfileSourceInterface.IsNull() {
+						telemetryDestOptSourceInterfaceBody, _ = sjson.Set(telemetryDestOptSourceInterfaceBody, "telemetryDestOptSourceInterface.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if telemetryDestOptSourceInterfaceBody != "" {
+						telemetryDestOptSourceInterfaceBody, _ = sjson.Set(telemetryDestOptSourceInterfaceBody, "telemetryDestOptSourceInterface.attributes.rn", telemetryDestOptSourceInterfaceRn)
+						telemetryDestProfileBody, _ = sjson.SetRaw(telemetryDestProfileBody, "telemetryDestProfile.children.-1", telemetryDestOptSourceInterfaceBody)
+					}
+				}
+			}
 			if telemetryDestProfileBody != "" {
 				telemetryDestProfileBody, _ = sjson.Set(telemetryDestProfileBody, "telemetryDestProfile.attributes.rn", telemetryDestProfileRn)
 				body, _ = sjson.SetRaw(body, "telemetryEntity.children.-1", telemetryDestProfileBody)
@@ -868,6 +1538,111 @@ func (data Telemetry) toResetBody(preexisting map[string]bool) nxos.Body {
 		}
 		telemetryDestGroupBody := ""
 		telemetryDestGroupBody, _ = sjson.Set(telemetryDestGroupBody, "telemetryDestGroup.attributes.rn", telemetryDestGroupRn)
+		if !(child.CertificateFilename.IsNull() && child.CertificateHostname.IsNull()) {
+			telemetryDestGrpOptCertificateRn_ := "certificate"
+			telemetryDestGrpOptCertificateDn_ := telemetryDestGroupDn + "/" + telemetryDestGrpOptCertificateRn_
+			_ = telemetryDestGrpOptCertificateDn_
+			if !existed(telemetryDestGrpOptCertificateDn_) {
+				telemetryDestGroupBody, _ = sjson.Set(telemetryDestGroupBody, "telemetryDestGroup.children.-1.telemetryDestGrpOptCertificate.attributes", map[string]interface{}{"rn": telemetryDestGrpOptCertificateRn_, "status": "deleted"})
+			} else {
+				telemetryDestGrpOptCertificateBody_ := ""
+				if !child.CertificateFilename.IsNull() {
+					telemetryDestGrpOptCertificateBody_, _ = sjson.Set(telemetryDestGrpOptCertificateBody_, "telemetryDestGrpOptCertificate.attributes.filename", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.CertificateHostname.IsNull() {
+					telemetryDestGrpOptCertificateBody_, _ = sjson.Set(telemetryDestGrpOptCertificateBody_, "telemetryDestGrpOptCertificate.attributes.hostname", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if telemetryDestGrpOptCertificateBody_ != "" {
+					telemetryDestGrpOptCertificateBody_, _ = sjson.Set(telemetryDestGrpOptCertificateBody_, "telemetryDestGrpOptCertificate.attributes.rn", telemetryDestGrpOptCertificateRn_)
+					telemetryDestGroupBody, _ = sjson.SetRaw(telemetryDestGroupBody, "telemetryDestGroup.children.-1", telemetryDestGrpOptCertificateBody_)
+				}
+			}
+		}
+		if !(child.ChunkingSize.IsNull()) {
+			telemetryDestGrpOptChunkingRn_ := "chunking"
+			telemetryDestGrpOptChunkingDn_ := telemetryDestGroupDn + "/" + telemetryDestGrpOptChunkingRn_
+			_ = telemetryDestGrpOptChunkingDn_
+			if !existed(telemetryDestGrpOptChunkingDn_) {
+				telemetryDestGroupBody, _ = sjson.Set(telemetryDestGroupBody, "telemetryDestGroup.children.-1.telemetryDestGrpOptChunking.attributes", map[string]interface{}{"rn": telemetryDestGrpOptChunkingRn_, "status": "deleted"})
+			} else {
+				telemetryDestGrpOptChunkingBody_ := ""
+				if !child.ChunkingSize.IsNull() {
+					telemetryDestGrpOptChunkingBody_, _ = sjson.Set(telemetryDestGrpOptChunkingBody_, "telemetryDestGrpOptChunking.attributes.chunkSize", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if telemetryDestGrpOptChunkingBody_ != "" {
+					telemetryDestGrpOptChunkingBody_, _ = sjson.Set(telemetryDestGrpOptChunkingBody_, "telemetryDestGrpOptChunking.attributes.rn", telemetryDestGrpOptChunkingRn_)
+					telemetryDestGroupBody, _ = sjson.SetRaw(telemetryDestGroupBody, "telemetryDestGroup.children.-1", telemetryDestGrpOptChunkingBody_)
+				}
+			}
+		}
+		if !(child.Compression.IsNull()) {
+			telemetryDestGrpOptCompressionRn_ := "compression"
+			telemetryDestGrpOptCompressionDn_ := telemetryDestGroupDn + "/" + telemetryDestGrpOptCompressionRn_
+			_ = telemetryDestGrpOptCompressionDn_
+			if !existed(telemetryDestGrpOptCompressionDn_) {
+				telemetryDestGroupBody, _ = sjson.Set(telemetryDestGroupBody, "telemetryDestGroup.children.-1.telemetryDestGrpOptCompression.attributes", map[string]interface{}{"rn": telemetryDestGrpOptCompressionRn_, "status": "deleted"})
+			} else {
+				telemetryDestGrpOptCompressionBody_ := ""
+				if !child.Compression.IsNull() {
+					telemetryDestGrpOptCompressionBody_, _ = sjson.Set(telemetryDestGrpOptCompressionBody_, "telemetryDestGrpOptCompression.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if telemetryDestGrpOptCompressionBody_ != "" {
+					telemetryDestGrpOptCompressionBody_, _ = sjson.Set(telemetryDestGrpOptCompressionBody_, "telemetryDestGrpOptCompression.attributes.rn", telemetryDestGrpOptCompressionRn_)
+					telemetryDestGroupBody, _ = sjson.SetRaw(telemetryDestGroupBody, "telemetryDestGroup.children.-1", telemetryDestGrpOptCompressionBody_)
+				}
+			}
+		}
+		if !(child.MaxMessageSize.IsNull()) {
+			telemetryDestGrpOptMaxMessageRn_ := "message"
+			telemetryDestGrpOptMaxMessageDn_ := telemetryDestGroupDn + "/" + telemetryDestGrpOptMaxMessageRn_
+			_ = telemetryDestGrpOptMaxMessageDn_
+			if !existed(telemetryDestGrpOptMaxMessageDn_) {
+				telemetryDestGroupBody, _ = sjson.Set(telemetryDestGroupBody, "telemetryDestGroup.children.-1.telemetryDestGrpOptMaxMessage.attributes", map[string]interface{}{"rn": telemetryDestGrpOptMaxMessageRn_, "status": "deleted"})
+			} else {
+				telemetryDestGrpOptMaxMessageBody_ := ""
+				if !child.MaxMessageSize.IsNull() {
+					telemetryDestGrpOptMaxMessageBody_, _ = sjson.Set(telemetryDestGrpOptMaxMessageBody_, "telemetryDestGrpOptMaxMessage.attributes.messageSize", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if telemetryDestGrpOptMaxMessageBody_ != "" {
+					telemetryDestGrpOptMaxMessageBody_, _ = sjson.Set(telemetryDestGrpOptMaxMessageBody_, "telemetryDestGrpOptMaxMessage.attributes.rn", telemetryDestGrpOptMaxMessageRn_)
+					telemetryDestGroupBody, _ = sjson.SetRaw(telemetryDestGroupBody, "telemetryDestGroup.children.-1", telemetryDestGrpOptMaxMessageBody_)
+				}
+			}
+		}
+		if !(child.SourceInterface.IsNull()) {
+			telemetryDestGrpOptSourceInterfaceRn_ := "sourceinterface"
+			telemetryDestGrpOptSourceInterfaceDn_ := telemetryDestGroupDn + "/" + telemetryDestGrpOptSourceInterfaceRn_
+			_ = telemetryDestGrpOptSourceInterfaceDn_
+			if !existed(telemetryDestGrpOptSourceInterfaceDn_) {
+				telemetryDestGroupBody, _ = sjson.Set(telemetryDestGroupBody, "telemetryDestGroup.children.-1.telemetryDestGrpOptSourceInterface.attributes", map[string]interface{}{"rn": telemetryDestGrpOptSourceInterfaceRn_, "status": "deleted"})
+			} else {
+				telemetryDestGrpOptSourceInterfaceBody_ := ""
+				if !child.SourceInterface.IsNull() {
+					telemetryDestGrpOptSourceInterfaceBody_, _ = sjson.Set(telemetryDestGrpOptSourceInterfaceBody_, "telemetryDestGrpOptSourceInterface.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if telemetryDestGrpOptSourceInterfaceBody_ != "" {
+					telemetryDestGrpOptSourceInterfaceBody_, _ = sjson.Set(telemetryDestGrpOptSourceInterfaceBody_, "telemetryDestGrpOptSourceInterface.attributes.rn", telemetryDestGrpOptSourceInterfaceRn_)
+					telemetryDestGroupBody, _ = sjson.SetRaw(telemetryDestGroupBody, "telemetryDestGroup.children.-1", telemetryDestGrpOptSourceInterfaceBody_)
+				}
+			}
+		}
+		if !(child.Vrf.IsNull()) {
+			telemetryDestGrpOptVrfRn_ := "vrf"
+			telemetryDestGrpOptVrfDn_ := telemetryDestGroupDn + "/" + telemetryDestGrpOptVrfRn_
+			_ = telemetryDestGrpOptVrfDn_
+			if !existed(telemetryDestGrpOptVrfDn_) {
+				telemetryDestGroupBody, _ = sjson.Set(telemetryDestGroupBody, "telemetryDestGroup.children.-1.telemetryDestGrpOptVrf.attributes", map[string]interface{}{"rn": telemetryDestGrpOptVrfRn_, "status": "deleted"})
+			} else {
+				telemetryDestGrpOptVrfBody_ := ""
+				if !child.Vrf.IsNull() {
+					telemetryDestGrpOptVrfBody_, _ = sjson.Set(telemetryDestGrpOptVrfBody_, "telemetryDestGrpOptVrf.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if telemetryDestGrpOptVrfBody_ != "" {
+					telemetryDestGrpOptVrfBody_, _ = sjson.Set(telemetryDestGrpOptVrfBody_, "telemetryDestGrpOptVrf.attributes.rn", telemetryDestGrpOptVrfRn_)
+					telemetryDestGroupBody, _ = sjson.SetRaw(telemetryDestGroupBody, "telemetryDestGroup.children.-1", telemetryDestGrpOptVrfBody_)
+				}
+			}
+		}
 		for key_, child_ := range child.Destinations {
 			_ = child_
 			keyParts := strings.SplitN(key_, ";", 2)
@@ -1117,7 +1892,25 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 		}
 	}
 	if !importing {
-		if deleteEmptied != nil && !(state.DestinationProfileAdminState.IsNull() && (state.DestinationProfileVrf.IsNull())) && (config.DestinationProfileAdminState.IsNull() && (config.DestinationProfileVrf.IsNull())) && deleteEmptied(data.getDn()+"/destprof") {
+		if deleteEmptied != nil && !(state.CertificateFilename.IsNull() && state.CertificateHostname.IsNull() && state.CertificateTrustpoint.IsNull()) && (config.CertificateFilename.IsNull() && config.CertificateHostname.IsNull() && config.CertificateTrustpoint.IsNull()) && deleteEmptied(data.getDn()+"/certificate") {
+			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryCertificate")
+			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+		} else {
+			if !state.CertificateFilename.IsNull() && config.CertificateFilename.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryCertificate")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"filename", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.CertificateHostname.IsNull() && config.CertificateHostname.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryCertificate")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"hostname", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !state.CertificateTrustpoint.IsNull() && config.CertificateTrustpoint.IsNull() {
+				unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryCertificate")
+				body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"trustpoint", "DME_UNSET_PROPERTY_MARKER")
+			}
+		}
+		if deleteEmptied != nil && !(state.DestinationProfileAdminState.IsNull() && (state.DestinationProfileVrf.IsNull()) && (state.DestinationProfileCompression.IsNull()) && (state.DestinationProfileGrpcDeadline.IsNull()) && (state.DestinationProfileNodeId.IsNull()) && (state.DestinationProfileRetrySize.IsNull()) && (state.DestinationProfileSourceInterface.IsNull())) && (config.DestinationProfileAdminState.IsNull() && (config.DestinationProfileVrf.IsNull()) && (config.DestinationProfileCompression.IsNull()) && (config.DestinationProfileGrpcDeadline.IsNull()) && (config.DestinationProfileNodeId.IsNull()) && (config.DestinationProfileRetrySize.IsNull()) && (config.DestinationProfileSourceInterface.IsNull())) && deleteEmptied(data.getDn()+"/destprof") {
 			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")
 			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
 			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
@@ -1133,6 +1926,56 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 			} else {
 				if !state.DestinationProfileVrf.IsNull() && config.DestinationProfileVrf.IsNull() {
 					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptVrf")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+				}
+			}
+			if deleteEmptied != nil && !(state.DestinationProfileCompression.IsNull()) && (config.DestinationProfileCompression.IsNull()) && deleteEmptied(data.getDn()+"/destprof"+"/compression") {
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptCompression")
+				body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+			} else {
+				if !state.DestinationProfileCompression.IsNull() && config.DestinationProfileCompression.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptCompression")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+				}
+			}
+			if deleteEmptied != nil && !(state.DestinationProfileGrpcDeadline.IsNull()) && (config.DestinationProfileGrpcDeadline.IsNull()) && deleteEmptied(data.getDn()+"/destprof"+"/deadline") {
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptGrpcDeadline")
+				body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+			} else {
+				if !state.DestinationProfileGrpcDeadline.IsNull() && config.DestinationProfileGrpcDeadline.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptGrpcDeadline")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
+				}
+			}
+			if deleteEmptied != nil && !(state.DestinationProfileNodeId.IsNull()) && (config.DestinationProfileNodeId.IsNull()) && deleteEmptied(data.getDn()+"/destprof"+"/nodeid") {
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptNodeId")
+				body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+			} else {
+				if !state.DestinationProfileNodeId.IsNull() && config.DestinationProfileNodeId.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptNodeId")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+				}
+			}
+			if deleteEmptied != nil && !(state.DestinationProfileRetrySize.IsNull()) && (config.DestinationProfileRetrySize.IsNull()) && deleteEmptied(data.getDn()+"/destprof"+"/retry") {
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptRetry")
+				body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+			} else {
+				if !state.DestinationProfileRetrySize.IsNull() && config.DestinationProfileRetrySize.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptRetry")
+					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"size", "DME_UNSET_PROPERTY_MARKER")
+				}
+			}
+			if deleteEmptied != nil && !(state.DestinationProfileSourceInterface.IsNull()) && (config.DestinationProfileSourceInterface.IsNull()) && deleteEmptied(data.getDn()+"/destprof"+"/sourceinterface") {
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptSourceInterface")
+				body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+			} else {
+				if !state.DestinationProfileSourceInterface.IsNull() && config.DestinationProfileSourceInterface.IsNull() {
+					unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "telemetryDestProfile")+".children", "telemetryDestOptSourceInterface")
 					body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
 				}
 			}
@@ -1153,6 +1996,70 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 						}
 					}
 					if listChildPath != "" {
+						if deleteEmptied != nil && !(stateChild.CertificateFilename.IsNull() && stateChild.CertificateHostname.IsNull()) && (configChild.CertificateFilename.IsNull() && configChild.CertificateHostname.IsNull()) && deleteEmptied(listChildDn+"/certificate") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "telemetryDestGrpOptCertificate")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.CertificateFilename.IsNull() && configChild.CertificateFilename.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "telemetryDestGrpOptCertificate")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"filename", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.CertificateHostname.IsNull() && configChild.CertificateHostname.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "telemetryDestGrpOptCertificate")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"hostname", "DME_UNSET_PROPERTY_MARKER")
+							}
+						}
+						if deleteEmptied != nil && !(stateChild.ChunkingSize.IsNull()) && (configChild.ChunkingSize.IsNull()) && deleteEmptied(listChildDn+"/chunking") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "telemetryDestGrpOptChunking")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.ChunkingSize.IsNull() && configChild.ChunkingSize.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "telemetryDestGrpOptChunking")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"chunkSize", "DME_UNSET_PROPERTY_MARKER")
+							}
+						}
+						if deleteEmptied != nil && !(stateChild.Compression.IsNull()) && (configChild.Compression.IsNull()) && deleteEmptied(listChildDn+"/compression") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "telemetryDestGrpOptCompression")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.Compression.IsNull() && configChild.Compression.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "telemetryDestGrpOptCompression")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
+						}
+						if deleteEmptied != nil && !(stateChild.MaxMessageSize.IsNull()) && (configChild.MaxMessageSize.IsNull()) && deleteEmptied(listChildDn+"/message") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "telemetryDestGrpOptMaxMessage")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.MaxMessageSize.IsNull() && configChild.MaxMessageSize.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "telemetryDestGrpOptMaxMessage")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"messageSize", "DME_UNSET_PROPERTY_MARKER")
+							}
+						}
+						if deleteEmptied != nil && !(stateChild.SourceInterface.IsNull()) && (configChild.SourceInterface.IsNull()) && deleteEmptied(listChildDn+"/sourceinterface") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "telemetryDestGrpOptSourceInterface")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.SourceInterface.IsNull() && configChild.SourceInterface.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "telemetryDestGrpOptSourceInterface")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
+						}
+						if deleteEmptied != nil && !(stateChild.Vrf.IsNull()) && (configChild.Vrf.IsNull()) && deleteEmptied(listChildDn+"/vrf") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "telemetryDestGrpOptVrf")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.Vrf.IsNull() && configChild.Vrf.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "telemetryDestGrpOptVrf")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+							}
+						}
 						for key := range stateChild.Destinations {
 							if configChild, ok := configChild.Destinations[key]; ok {
 								stateChild := stateChild.Destinations[key]

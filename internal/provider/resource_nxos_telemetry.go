@@ -70,7 +70,7 @@ func (r *TelemetryResource) Metadata(ctx context.Context, req resource.MetadataR
 func (r *TelemetryResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.").AddApiDocumentation("telemetryEntity", "Streaming%20Telemetry/telemetry:Entity/", []string{"telemetryDestProfile", "telemetryDestOptVrf", "telemetryDestGroup", "telemetryDest", "telemetrySensorGroup", "telemetrySensorPath", "telemetrySubscription", "telemetryRsSensorGroupRel", "telemetryRsDestGroupRel"}, []string{"Streaming%20Telemetry/telemetry:DestProfile/", "Streaming%20Telemetry/telemetry:DestOptVrf/", "Streaming%20Telemetry/telemetry:DestGroup/", "Streaming%20Telemetry/telemetry:Dest/", "Streaming%20Telemetry/telemetry:SensorGroup/", "Streaming%20Telemetry/telemetry:SensorPath/", "Streaming%20Telemetry/telemetry:Subscription/", "Streaming%20Telemetry/telemetry:RsSensorGroupRel/", "Streaming%20Telemetry/telemetry:RsDestGroupRel/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.").AddApiDocumentation("telemetryEntity", "Streaming%20Telemetry/telemetry:Entity/", []string{"telemetryCertificate", "telemetryDestProfile", "telemetryDestOptVrf", "telemetryDestOptCompression", "telemetryDestOptGrpcDeadline", "telemetryDestOptNodeId", "telemetryDestOptRetry", "telemetryDestOptSourceInterface", "telemetryDestGroup", "telemetryDestGrpOptCertificate", "telemetryDestGrpOptChunking", "telemetryDestGrpOptCompression", "telemetryDestGrpOptMaxMessage", "telemetryDestGrpOptSourceInterface", "telemetryDestGrpOptVrf", "telemetryDest", "telemetrySensorGroup", "telemetrySensorPath", "telemetrySubscription", "telemetryRsSensorGroupRel", "telemetryRsDestGroupRel"}, []string{"Streaming%20Telemetry/telemetry:Certificate/", "Streaming%20Telemetry/telemetry:DestProfile/", "Streaming%20Telemetry/telemetry:DestOptVrf/", "Streaming%20Telemetry/telemetry:DestOptCompression/", "Streaming%20Telemetry/telemetry:DestOptGrpcDeadline/", "Streaming%20Telemetry/telemetry:DestOptNodeId/", "Streaming%20Telemetry/telemetry:DestOptRetry/", "Streaming%20Telemetry/telemetry:DestOptSourceInterface/", "Streaming%20Telemetry/telemetry:DestGroup/", "Streaming%20Telemetry/telemetry:DestGrpOptCertificate/", "Streaming%20Telemetry/telemetry:DestGrpOptChunking/", "Streaming%20Telemetry/telemetry:DestGrpOptCompression/", "Streaming%20Telemetry/telemetry:DestGrpOptMaxMessage/", "Streaming%20Telemetry/telemetry:DestGrpOptSourceInterface/", "Streaming%20Telemetry/telemetry:DestGrpOptVrf/", "Streaming%20Telemetry/telemetry:Dest/", "Streaming%20Telemetry/telemetry:SensorGroup/", "Streaming%20Telemetry/telemetry:SensorPath/", "Streaming%20Telemetry/telemetry:Subscription/", "Streaming%20Telemetry/telemetry:RsSensorGroupRel/", "Streaming%20Telemetry/telemetry:RsDestGroupRel/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -106,6 +106,18 @@ func (r *TelemetryResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("Subscriptions merging enabled or disabled.").String,
 				Optional:            true,
 			},
+			"certificate_filename": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of the .pem certificate file.").String,
+				Optional:            true,
+			},
+			"certificate_hostname": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Hostname associated with the certificate.").String,
+				Optional:            true,
+			},
+			"certificate_trustpoint": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Name of the certificate trustpoint.").String,
+				Optional:            true,
+			},
 			"destination_profile_admin_state": schema.StringAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Admin state.").AddStringEnumDescription("enabled").String,
 				Optional:            true,
@@ -117,11 +129,77 @@ func (r *TelemetryResource) Schema(ctx context.Context, req resource.SchemaReque
 				MarkdownDescription: helpers.NewAttributeDescription("VRF name.").String,
 				Optional:            true,
 			},
+			"destination_profile_compression": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Compression name.").AddStringEnumDescription("disabled", "gzip").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("disabled", "gzip"),
+				},
+			},
+			"destination_profile_grpc_deadline": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Deadline timeout value (in secondes).").AddIntegerRangeDescription(30, 120).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(30, 120),
+				},
+			},
+			"destination_profile_node_id": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("NodeID name.").String,
+				Optional:            true,
+			},
+			"destination_profile_retry_size": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Send retry buffer size (in MB).").AddIntegerRangeDescription(10, 1500).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(10, 1500),
+				},
+			},
+			"destination_profile_source_interface": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Source interface name.").String,
+				Optional:            true,
+			},
 			"destination_groups": schema.MapNestedAttribute{
 				MarkdownDescription: helpers.NewAttributeDescription("Destination Group.\n  - Map key: `id` - Destination group ID.").String,
 				Optional:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
+						"certificate_filename": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Name of the .pem certificate file.").String,
+							Optional:            true,
+						},
+						"certificate_hostname": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Hostname associated with the certificate.").String,
+							Optional:            true,
+						},
+						"chunking_size": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Chunking size in kbytes.").AddIntegerRangeDescription(64, 4096).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(64, 4096),
+							},
+						},
+						"compression": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Destination-group Compression name.").AddStringEnumDescription("disabled", "gzip").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("disabled", "gzip"),
+							},
+						},
+						"max_message_size": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Message size in kbytes.").AddIntegerRangeDescription(12288, 32768).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(12288, 32768),
+							},
+						},
+						"source_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Destination-group source interface.").String,
+							Optional:            true,
+						},
+						"vrf": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Destination-group VRF name.").String,
+							Optional:            true,
+						},
 						"destinations": schema.MapNestedAttribute{
 							MarkdownDescription: helpers.NewAttributeDescription("Destination.\n  - Map key format: `<address>;<port>`\n  - Key component `address`: Destination IP address.\n  - Key component `port`: Destination port number. Range: `0`-`65535`.").String,
 							Optional:            true,

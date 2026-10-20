@@ -1,11 +1,20 @@
 resource "nxos_telemetry" "example" {
-  admin_state                     = "enabled"
-  batch_dme_events                = false
-  merge_subscriptions             = true
-  destination_profile_admin_state = "enabled"
-  destination_profile_vrf         = "management"
+  admin_state                       = "enabled"
+  batch_dme_events                  = false
+  merge_subscriptions               = true
+  destination_profile_admin_state   = "enabled"
+  destination_profile_vrf           = "management"
+  destination_profile_compression   = "gzip"
+  destination_profile_grpc_deadline = 60
+  destination_profile_node_id       = "leaf1"
+  destination_profile_retry_size    = 100
   destination_groups = {
     "1" = {
+      chunking_size    = 128
+      compression      = "gzip"
+      max_message_size = 16384
+      source_interface = "lo0"
+      vrf              = "default"
       destinations = {
         "192.168.1.1;50001" = {
           encoding = "GPB"

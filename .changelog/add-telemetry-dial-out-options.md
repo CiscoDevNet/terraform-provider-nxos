@@ -1,0 +1,2 @@
+- Add global certificate configuration (`certificate_*` attributes) and destination profile compression, gRPC deadline, node ID, retry and source interface (`destination_profile_*` attributes) to `nxos_telemetry` resource and data source
+- Add certificate, chunking, compression, maximum message size, source interface and VRF configuration to `destination_groups` of `nxos_telemetry` resource and data source

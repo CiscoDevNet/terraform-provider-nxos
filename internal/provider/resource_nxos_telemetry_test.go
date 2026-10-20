@@ -44,6 +44,15 @@ func TestAccTelemetryResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "merge_subscriptions", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_profile_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_profile_vrf", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_profile_compression", "gzip"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_profile_grpc_deadline", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_profile_node_id", "leaf1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_profile_retry_size", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.chunking_size", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.compression", "gzip"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.max_message_size", "16384"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.vrf", "default"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.encoding", "GPB"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.node_id", "host1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.protocol", "gRPC"))
@@ -58,6 +67,15 @@ func TestAccTelemetryResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "merge_subscriptions", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_profile_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_profile_vrf", "management"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_profile_compression", "gzip"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_profile_grpc_deadline", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_profile_node_id", "leaf1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_profile_retry_size", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.chunking_size", "128"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.compression", "gzip"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.max_message_size", "16384"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.source_interface", "lo0"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.vrf", "default"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.encoding", "GPB"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.node_id", "host1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.protocol", "gRPC"))
@@ -164,8 +182,17 @@ func testAccTelemetryResourceConfig_all() string {
 	config += `	merge_subscriptions = true` + "\n"
 	config += `	destination_profile_admin_state = "enabled"` + "\n"
 	config += `	destination_profile_vrf = "management"` + "\n"
+	config += `	destination_profile_compression = "gzip"` + "\n"
+	config += `	destination_profile_grpc_deadline = 60` + "\n"
+	config += `	destination_profile_node_id = "leaf1"` + "\n"
+	config += `	destination_profile_retry_size = 100` + "\n"
 	config += `	destination_groups = {` + "\n"
 	config += `		"1" = {` + "\n"
+	config += `			chunking_size = 128` + "\n"
+	config += `			compression = "gzip"` + "\n"
+	config += `			max_message_size = 16384` + "\n"
+	config += `			source_interface = "lo0"` + "\n"
+	config += `			vrf = "default"` + "\n"
 	config += `			destinations = {` + "\n"
 	config += `				"192.168.1.1;50001" = {` + "\n"
 	config += `					encoding = "GPB"` + "\n"

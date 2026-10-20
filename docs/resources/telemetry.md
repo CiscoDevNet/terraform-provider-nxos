@@ -5,7 +5,7 @@ subcategory: "Monitoring"
 description: |-
   This resource can manage the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.
   API Documentation
-  telemetryEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Entity/telemetryDestProfile https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestProfile/telemetryDestOptVrf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptVrf/telemetryDestGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGroup/telemetryDest https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Dest/telemetrySensorGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:SensorGroup/telemetrySensorPath https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:SensorPath/telemetrySubscription https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Subscription/telemetryRsSensorGroupRel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:RsSensorGroupRel/telemetryRsDestGroupRel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:RsDestGroupRel/
+  telemetryEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Entity/telemetryCertificate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Certificate/telemetryDestProfile https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestProfile/telemetryDestOptVrf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptVrf/telemetryDestOptCompression https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptCompression/telemetryDestOptGrpcDeadline https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptGrpcDeadline/telemetryDestOptNodeId https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptNodeId/telemetryDestOptRetry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptRetry/telemetryDestOptSourceInterface https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptSourceInterface/telemetryDestGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGroup/telemetryDestGrpOptCertificate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGrpOptCertificate/telemetryDestGrpOptChunking https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGrpOptChunking/telemetryDestGrpOptCompression https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGrpOptCompression/telemetryDestGrpOptMaxMessage https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGrpOptMaxMessage/telemetryDestGrpOptSourceInterface https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGrpOptSourceInterface/telemetryDestGrpOptVrf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGrpOptVrf/telemetryDest https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Dest/telemetrySensorGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:SensorGroup/telemetrySensorPath https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:SensorPath/telemetrySubscription https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Subscription/telemetryRsSensorGroupRel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:RsSensorGroupRel/telemetryRsDestGroupRel https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:RsDestGroupRel/
 ---
 
 # nxos_telemetry (Resource)
@@ -15,9 +15,21 @@ This resource can manage the streaming telemetry configuration on NX-OS devices,
 ### API Documentation
 
 - [telemetryEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Entity/)
+- [telemetryCertificate](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Certificate/)
 - [telemetryDestProfile](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestProfile/)
 - [telemetryDestOptVrf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptVrf/)
+- [telemetryDestOptCompression](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptCompression/)
+- [telemetryDestOptGrpcDeadline](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptGrpcDeadline/)
+- [telemetryDestOptNodeId](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptNodeId/)
+- [telemetryDestOptRetry](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptRetry/)
+- [telemetryDestOptSourceInterface](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestOptSourceInterface/)
 - [telemetryDestGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGroup/)
+- [telemetryDestGrpOptCertificate](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGrpOptCertificate/)
+- [telemetryDestGrpOptChunking](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGrpOptChunking/)
+- [telemetryDestGrpOptCompression](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGrpOptCompression/)
+- [telemetryDestGrpOptMaxMessage](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGrpOptMaxMessage/)
+- [telemetryDestGrpOptSourceInterface](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGrpOptSourceInterface/)
+- [telemetryDestGrpOptVrf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGrpOptVrf/)
 - [telemetryDest](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Dest/)
 - [telemetrySensorGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:SensorGroup/)
 - [telemetrySensorPath](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:SensorPath/)
@@ -29,13 +41,22 @@ This resource can manage the streaming telemetry configuration on NX-OS devices,
 
 ```terraform
 resource "nxos_telemetry" "example" {
-  admin_state                     = "enabled"
-  batch_dme_events                = false
-  merge_subscriptions             = true
-  destination_profile_admin_state = "enabled"
-  destination_profile_vrf         = "management"
+  admin_state                       = "enabled"
+  batch_dme_events                  = false
+  merge_subscriptions               = true
+  destination_profile_admin_state   = "enabled"
+  destination_profile_vrf           = "management"
+  destination_profile_compression   = "gzip"
+  destination_profile_grpc_deadline = 60
+  destination_profile_node_id       = "leaf1"
+  destination_profile_retry_size    = 100
   destination_groups = {
     "1" = {
+      chunking_size    = 128
+      compression      = "gzip"
+      max_message_size = 16384
+      source_interface = "lo0"
+      vrf              = "default"
       destinations = {
         "192.168.1.1;50001" = {
           encoding = "GPB"
@@ -81,12 +102,23 @@ resource "nxos_telemetry" "example" {
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`
 - `batch_dme_events` (Boolean) DME events batching is enabled or disabled.
+- `certificate_filename` (String) Name of the .pem certificate file.
+- `certificate_hostname` (String) Hostname associated with the certificate.
+- `certificate_trustpoint` (String) Name of the certificate trustpoint.
 - `deletion_policy` (String) What happens on the device when objects managed by the resource are removed. `delete` deletes the object on destroy, including any configuration not managed by Terraform, and deletes single child objects once none of their attributes are configured anymore, unless the device holds other entries below them. `reset` deletes the objects created by the resource on destroy, resets the managed attributes of the objects that already existed and leaves configuration not managed by Terraform in place. `retain` leaves the device unchanged on destroy and only removes the resource from the state. Overrides the `deletion_policy` of the provider, which defaults to `delete`. See the [Deletion Policy](../guides/deletion_policy) guide for details.
   - Choices: `delete`, `reset`, `retain`
 - `destination_groups` (Attributes Map) Destination Group.
   - Map key: `id` - Destination group ID. (see [below for nested schema](#nestedatt--destination_groups))
 - `destination_profile_admin_state` (String) Admin state.
   - Choices: `enabled`
+- `destination_profile_compression` (String) Compression name.
+  - Choices: `disabled`, `gzip`
+- `destination_profile_grpc_deadline` (Number) Deadline timeout value (in secondes).
+  - Range: `30`-`120`
+- `destination_profile_node_id` (String) NodeID name.
+- `destination_profile_retry_size` (Number) Send retry buffer size (in MB).
+  - Range: `10`-`1500`
+- `destination_profile_source_interface` (String) Source interface name.
 - `destination_profile_vrf` (String) VRF name.
 - `device` (String) A device name from the provider configuration.
 - `merge_subscriptions` (Boolean) Subscriptions merging enabled or disabled.
@@ -105,10 +137,20 @@ resource "nxos_telemetry" "example" {
 
 Optional:
 
+- `certificate_filename` (String) Name of the .pem certificate file.
+- `certificate_hostname` (String) Hostname associated with the certificate.
+- `chunking_size` (Number) Chunking size in kbytes.
+  - Range: `64`-`4096`
+- `compression` (String) Destination-group Compression name.
+  - Choices: `disabled`, `gzip`
 - `destinations` (Attributes Map) Destination.
   - Map key format: `<address>;<port>`
   - Key component `address`: Destination IP address.
   - Key component `port`: Destination port number. Range: `0`-`65535`. (see [below for nested schema](#nestedatt--destination_groups--destinations))
+- `max_message_size` (Number) Message size in kbytes.
+  - Range: `12288`-`32768`
+- `source_interface` (String) Destination-group source interface.
+- `vrf` (String) Destination-group VRF name.
 
 <a id="nestedatt--destination_groups--destinations"></a>
 ### Nested Schema for `destination_groups.destinations`

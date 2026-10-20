@@ -26,6 +26,29 @@ attributes:
     description: 'Subscriptions merging enabled or disabled.'
     example: true
 child_classes:
+  - class_name: telemetryCertificate
+    rn: certificate
+    type: single
+    tf_name: certificate
+    description: 'Global telemetry certificate.'
+    exclude_test: true
+    doc_path: Streaming%20Telemetry/telemetry:Certificate/
+    attributes:
+      - nxos_name: filename
+        tf_name: certificate_filename
+        type: String
+        description: 'Name of the .pem certificate file.'
+        example: '/bootflash/telemetry.pem'
+      - nxos_name: hostname
+        tf_name: certificate_hostname
+        type: String
+        description: 'Hostname associated with the certificate.'
+        example: 'collector.example.com'
+      - nxos_name: trustpoint
+        tf_name: certificate_trustpoint
+        type: String
+        description: 'Name of the certificate trustpoint.'
+        example: 'TP1'
   - class_name: telemetryDestProfile
     rn: destprof
     type: single
@@ -53,6 +76,74 @@ child_classes:
             type: String
             description: 'VRF name.'
             example: management
+      - class_name: telemetryDestOptCompression
+        rn: compression
+        type: single
+        tf_name: compression
+        description: 'Destination option for compression.'
+        doc_path: Streaming%20Telemetry/telemetry:DestOptCompression/
+        attributes:
+          - nxos_name: name
+            tf_name: destination_profile_compression
+            type: String
+            description: 'Compression name.'
+            enum_values:
+              - disabled
+              - gzip
+            example: gzip
+      - class_name: telemetryDestOptGrpcDeadline
+        rn: deadline
+        type: single
+        tf_name: grpc_deadline
+        description: 'Destination option for gRPC deadline.'
+        doc_path: Streaming%20Telemetry/telemetry:DestOptGrpcDeadline/
+        attributes:
+          - nxos_name: timeout
+            tf_name: destination_profile_grpc_deadline
+            type: Int64
+            min_int: 30
+            max_int: 120
+            description: 'Deadline timeout value (in secondes).'
+            example: 60
+      - class_name: telemetryDestOptNodeId
+        rn: nodeid
+        type: single
+        tf_name: node_id
+        description: 'Destination option for node ID.'
+        doc_path: Streaming%20Telemetry/telemetry:DestOptNodeId/
+        attributes:
+          - nxos_name: name
+            tf_name: destination_profile_node_id
+            type: String
+            description: 'NodeID name.'
+            example: 'leaf1'
+      - class_name: telemetryDestOptRetry
+        rn: retry
+        type: single
+        tf_name: retry
+        description: 'Destination option for retry.'
+        doc_path: Streaming%20Telemetry/telemetry:DestOptRetry/
+        attributes:
+          - nxos_name: size
+            tf_name: destination_profile_retry_size
+            type: Int64
+            min_int: 10
+            max_int: 1500
+            description: 'Send retry buffer size (in MB).'
+            example: 100
+      - class_name: telemetryDestOptSourceInterface
+        rn: sourceinterface
+        type: single
+        tf_name: source_interface
+        description: 'Destination option for source interface.'
+        doc_path: Streaming%20Telemetry/telemetry:DestOptSourceInterface/
+        attributes:
+          - nxos_name: name
+            tf_name: destination_profile_source_interface
+            type: String
+            description: 'Source interface name.'
+            example: 'mgmt0'
+            exclude_test: true
   - class_name: telemetryDestGroup
     rn: dest-[%s]
     type: list
@@ -67,6 +158,91 @@ child_classes:
         description: 'Destination group ID.'
         example: '1'
     child_classes:
+      - class_name: telemetryDestGrpOptCertificate
+        rn: certificate
+        type: single
+        tf_name: certificate
+        description: 'Destination group option for certificate.'
+        exclude_test: true
+        doc_path: Streaming%20Telemetry/telemetry:DestGrpOptCertificate/
+        attributes:
+          - nxos_name: filename
+            tf_name: certificate_filename
+            type: String
+            description: 'Name of the .pem certificate file.'
+            example: '/bootflash/collector.pem'
+          - nxos_name: hostname
+            tf_name: certificate_hostname
+            type: String
+            description: 'Hostname associated with the certificate.'
+            example: 'collector.example.com'
+      - class_name: telemetryDestGrpOptChunking
+        rn: chunking
+        type: single
+        tf_name: chunking
+        description: 'Destination group option for chunking.'
+        doc_path: Streaming%20Telemetry/telemetry:DestGrpOptChunking/
+        attributes:
+          - nxos_name: chunkSize
+            tf_name: chunking_size
+            type: Int64
+            min_int: 64
+            max_int: 4096
+            description: 'Chunking size in kbytes.'
+            example: 128
+      - class_name: telemetryDestGrpOptCompression
+        rn: compression
+        type: single
+        tf_name: compression
+        description: 'Destination group option for compression.'
+        doc_path: Streaming%20Telemetry/telemetry:DestGrpOptCompression/
+        attributes:
+          - nxos_name: name
+            tf_name: compression
+            type: String
+            description: 'Destination-group Compression name.'
+            enum_values:
+              - disabled
+              - gzip
+            example: gzip
+      - class_name: telemetryDestGrpOptMaxMessage
+        rn: message
+        type: single
+        tf_name: max_message
+        description: 'Destination group option for maximum message size.'
+        doc_path: Streaming%20Telemetry/telemetry:DestGrpOptMaxMessage/
+        attributes:
+          - nxos_name: messageSize
+            tf_name: max_message_size
+            type: Int64
+            min_int: 12288
+            max_int: 32768
+            description: 'Message size in kbytes.'
+            example: 16384
+      - class_name: telemetryDestGrpOptSourceInterface
+        rn: sourceinterface
+        type: single
+        tf_name: source_interface
+        description: 'Destination group option for source interface.'
+        doc_path: Streaming%20Telemetry/telemetry:DestGrpOptSourceInterface/
+        attributes:
+          - nxos_name: name
+            tf_name: source_interface
+            type: String
+            description: 'Destination-group source interface.'
+            example: 'lo0'
+      - class_name: telemetryDestGrpOptVrf
+        rn: vrf
+        type: single
+        tf_name: vrf
+        description: 'Destination group option for VRF.'
+        doc_path: Streaming%20Telemetry/telemetry:DestGrpOptVrf/
+        attributes:
+          - nxos_name: name
+            tf_name: vrf
+            type: String
+            description: 'Destination-group VRF name.'
+            example: default
       - class_name: telemetryDest
         rn: addr-[%s]-port-[%d]
         type: list

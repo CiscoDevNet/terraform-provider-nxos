@@ -453,6 +453,8 @@ func (p *NxosProvider) Resources(ctx context.Context) []func() resource.Resource
 		NewUserManagementResource,
 		NewVPCResource,
 		NewVRFResource,
+		NewVRRPResource,
+		NewVRRPv3Resource,
 		NewVTPResource,
 	}
 }
@@ -514,6 +516,8 @@ func (p *NxosProvider) DataSources(ctx context.Context) []func() datasource.Data
 		NewUserManagementDataSource,
 		NewVPCDataSource,
 		NewVRFDataSource,
+		NewVRRPDataSource,
+		NewVRRPv3DataSource,
 		NewVTPDataSource,
 	}
 }

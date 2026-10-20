@@ -1,0 +1,259 @@
+---
+name: VRRP
+class_name: vrrpEntity
+dn: sys/vrrp
+ds_description: This data source can read the VRRP (Virtual Router Redundancy Protocol) version 2 configuration on NX-OS devices, including VRRP interfaces and group settings such as addresses, priority, preemption, authentication, BFD and object tracking.
+res_description: This resource can manage the VRRP (Virtual Router Redundancy Protocol) version 2 configuration on NX-OS devices, including VRRP interfaces and group settings such as addresses, priority, preemption, authentication, BFD and object tracking.
+doc_path: Routing%20and%20Forwarding/vrrp:Entity/
+doc_category: Routing
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'The administrative state of the object or policy.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+child_classes:
+  - class_name: vrrpInst
+    doc_path: Routing%20and%20Forwarding/vrrp:Inst/
+    rn: inst
+    type: single
+    tf_name: instance
+    description: 'VRRP instance configuration.'
+    attributes:
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: ctrl
+        tf_name: control
+        type: String
+        description: 'The control state.'
+        enum_values:
+          - stateful-ha
+        example: stateful-ha
+    child_classes:
+      - class_name: vrrpInterface
+        doc_path: Routing%20and%20Forwarding/vrrp:Interface/
+        rn: if-[%s]
+        type: list
+        tf_name: interfaces
+        description: 'List of VRRP interfaces.'
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+            example: vlan10
+          - nxos_name: adminSt
+            tf_name: admin_state
+            type: String
+            description: 'The administrative state of the object or policy.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description.'
+            example: My VRRP interface
+          - nxos_name: name
+            tf_name: name
+            type: String
+            description: 'The name of the object.'
+            example: myVrrpIf
+        child_classes:
+          - class_name: vrrpId
+            doc_path: Routing%20and%20Forwarding/vrrp:Id/
+            rn: id-%v
+            type: list
+            tf_name: groups
+            description: 'List of VRRP groups.'
+            attributes:
+              - nxos_name: id
+                tf_name: group_id
+                type: Int64
+                id: true
+                min_int: 1
+                max_int: 255
+                description: 'VRRP Id.'
+                example: 10
+              - nxos_name: adminSt
+                tf_name: admin_state
+                type: String
+                description: 'Admin state.'
+                enum_values:
+                  - disabled
+                  - enabled
+                example: enabled
+              - nxos_name: advIntvl
+                tf_name: advertisement_interval
+                type: Int64
+                min_int: 1
+                max_int: 255
+                description: 'Advertisement Interval.'
+                example: 5
+              - nxos_name: authText
+                tf_name: authentication_text
+                type: String
+                write_only: true
+                sensitive: true
+                description: 'Authentication Text.'
+                example: cisco
+              - nxos_name: authType
+                tf_name: authentication_type
+                type: String
+                description: 'Authentication Type.'
+                enum_values:
+                  - none
+                  - simple
+                example: simple
+              - nxos_name: bfdPeerAddr
+                tf_name: bfd_peer_address
+                type: String
+                description: 'BFD Peer address.'
+                example: 10.1.1.5
+              - nxos_name: fwdLwrThrld
+                tf_name: forwarding_lower_threshold
+                type: Int64
+                min_int: 1
+                max_int: 254
+                description: 'Fowarding Lower Threshold.'
+                example: 10
+              - nxos_name: fwdUprThrld
+                tf_name: forwarding_upper_threshold
+                type: Int64
+                min_int: 0
+                max_int: 254
+                description: 'Forwarding Upper Threshold.'
+                example: 100
+              - nxos_name: preempt
+                tf_name: preempt
+                type: String
+                description: 'Preempt.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: disabled
+              - nxos_name: priCfg
+                tf_name: priority
+                type: Int64
+                min_int: 1
+                max_int: 254
+                description: 'Configured Priority.'
+                example: 110
+              - nxos_name: primary
+                tf_name: primary_address
+                type: String
+                description: 'primary IP address.'
+                example: 10.1.1.1
+            child_classes:
+              - class_name: vrrpSecondary
+                doc_path: Routing%20and%20Forwarding/vrrp:Secondary/
+                rn: secondary-[%s]
+                type: list
+                tf_name: secondary_addresses
+                description: 'List of secondary addresses of the VRRP group.'
+                attributes:
+                  - nxos_name: secondary
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'Secondary IP address for the VRRP Router.'
+                    example: 10.1.1.3
+              - class_name: vrrpTrack
+                doc_path: Routing%20and%20Forwarding/vrrp:Track/
+                rn: track
+                type: single
+                tf_name: track
+                description: 'VRRP track objects.'
+                child_classes:
+                  - class_name: vrrpObjectTrack
+                    doc_path: Routing%20and%20Forwarding/vrrp:ObjectTrack/
+                    rn: track-%v
+                    type: list
+                    tf_name: tracked_objects
+                    description: 'List of objects tracked by the VRRP group.'
+                    attributes:
+                      - nxos_name: id
+                        tf_name: id
+                        type: Int64
+                        id: true
+                        min_int: 1
+                        max_int: 512
+                        description: 'Track Id to be tracked.'
+                        example: 10
+                      - nxos_name: decrementPriority
+                        tf_name: decrement_priority
+                        type: Int64
+                        min_int: 1
+                        max_int: 254
+                        description: 'Value to be decremented from priority when tracked object is down.'
+                        example: 20
+                  - class_name: vrrpNativeTrack
+                    doc_path: Routing%20and%20Forwarding/vrrp:NativeTrack/
+                    rn: nativeTrack
+                    type: single
+                    tf_name: native_track
+                    description: 'VRRP native interface tracking. Mutually exclusive with object tracking.'
+                    exclude_test: true
+                    attributes:
+                      - nxos_name: id
+                        tf_name: track_interface
+                        type: String
+                        description: 'Interface to be tracked by this VRRP instance Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+                        example: eth1/10
+                      - nxos_name: priority
+                        tf_name: track_priority
+                        type: Int64
+                        min_int: 1
+                        max_int: 254
+                        description: 'VRRP Priority when track is down.'
+                        example: 50
+test_prerequisites:
+  - dn: sys/fm/vrrp
+    class_name: fmVrrp
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/bfd
+    class_name: fmBfd
+    no_delete: true
+    dependencies: [0]
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/ifvlan
+    class_name: fmInterfaceVlan
+    dependencies: [1]
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/intf/svi-[vlan10]
+    class_name: sviIf
+    dependencies: [2]
+    attributes:
+      - name: id
+        value: vlan10
+  - dn: sys/track/object-10
+    class_name: trackObject
+    attributes:
+      - name: id
+        value: 10
+    children:
+      - rn: if
+        class_name: trackIf
+        attributes:
+          - name: id
+            value: vlan10
+          - name: protocolType
+            value: line-protocol
+    dependencies: [3]

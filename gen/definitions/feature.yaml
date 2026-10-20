@@ -729,6 +729,38 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+      - class_name: fmVrrp
+        rn: vrrp
+        type: single
+        no_delete: true
+        exclude_test: true
+        description: 'VRRP feature configuration. Mutually exclusive with VRRPv3.'
+        doc_path: Feature%20Management/fm:Vrrp/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: vrrp
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+      - class_name: fmVrrpv3
+        rn: vrrpv3
+        type: single
+        no_delete: true
+        exclude_test: true
+        description: 'VRRPv3 feature configuration. Mutually exclusive with VRRP.'
+        doc_path: Feature%20Management/fm:Vrrpv3/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: vrrpv3
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmVtp
         rn: vtp
         type: single

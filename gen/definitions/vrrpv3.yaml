@@ -1,0 +1,280 @@
+---
+name: VRRPv3
+class_name: vrrpv3Entity
+dn: sys/vrrpv3
+ds_description: This data source can read the VRRPv3 (Virtual Router Redundancy Protocol version 3) configuration on NX-OS devices, including VRRPv3 interfaces, IPv4 and IPv6 groups with settings such as addresses, priority, preemption, timers and object tracking, and VRRS pathways.
+res_description: This resource can manage the VRRPv3 (Virtual Router Redundancy Protocol version 3) configuration on NX-OS devices, including VRRPv3 interfaces, IPv4 and IPv6 groups with settings such as addresses, priority, preemption, timers and object tracking, and VRRS pathways.
+doc_path: Network%20Virtualization/vrrpv3:Entity/
+doc_category: Routing
+child_classes:
+  - class_name: vrrpv3Inst
+    doc_path: Network%20Virtualization/vrrpv3:Inst/
+    rn: inst
+    type: single
+    tf_name: instance
+    description: 'VRRPv3 instance configuration.'
+    attributes:
+      - nxos_name: adminSt
+        tf_name: admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+    child_classes:
+      - class_name: vrrpv3Interface
+        doc_path: Network%20Virtualization/vrrpv3:Interface/
+        rn: if-[%s]
+        type: list
+        tf_name: interfaces
+        description: 'List of VRRPv3 interfaces.'
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+            example: vlan10
+          - nxos_name: delayIntfMin
+            tf_name: delay_minimum
+            type: Int64
+            min_int: 0
+            max_int: 3600
+            description: 'Delay in seconds, to start VRRPv3 state machine after receiving interface moving to Up state.'
+            example: 5
+          - nxos_name: delayReload
+            tf_name: reload_delay
+            type: Int64
+            min_int: 0
+            max_int: 3600
+            description: 'Delay in seconds, to start VRRPv3 state machine after the system-reload.'
+            example: 10
+        child_classes:
+          - class_name: vrrpv3Vr
+            doc_path: Network%20Virtualization/vrrpv3:Vr/
+            rn: id-%v-%s
+            type: list
+            tf_name: groups
+            description: 'List of VRRPv3 groups.'
+            attributes:
+              - nxos_name: id
+                tf_name: group_id
+                type: Int64
+                id: true
+                min_int: 1
+                max_int: 255
+                description: 'VRRPv3 Virtual Router Id.'
+                example: 20
+              - nxos_name: af
+                tf_name: address_family
+                type: String
+                id: true
+                description: 'Virtual Router Address Family.'
+                enum_values:
+                  - ipv4
+                  - ipv6
+                example: ipv4
+              - nxos_name: adminSt
+                tf_name: admin_state
+                type: String
+                description: 'Admin state.'
+                enum_values:
+                  - enabled
+                  - disabled
+                example: enabled
+              - nxos_name: advIntvl
+                tf_name: advertisement_interval
+                type: Int64
+                min_int: 100
+                max_int: 40950
+                description: 'Advertisement Interval.'
+                example: 2000
+              - nxos_name: decrTrackPrio
+                tf_name: decrement_track_priority
+                type: Int64
+                min_int: 1
+                max_int: 254
+                description: 'Priority to be decremented when tracked object is down. Default value is 10.'
+                example: 20
+              - nxos_name: ip
+                tf_name: primary_address
+                type: String
+                description: 'primary IP address.'
+                example: 10.1.1.10
+              - nxos_name: matchAddr
+                tf_name: match_address
+                type: String
+                description: 'Enables matching of secondary addresses in the vrrpv3 advertisement packet against the configured vrrpv3 secondary addresses.'
+                enum_values:
+                  - disabled
+                  - enabled
+                example: disabled
+              - nxos_name: name
+                tf_name: description
+                type: String
+                description: 'Virtual Router Description.'
+                example: My VRRPv3 group
+              - nxos_name: preempt
+                tf_name: preempt
+                type: String
+                description: 'Preempt.'
+                enum_values:
+                  - disabled
+                  - enabled
+                example: disabled
+              - nxos_name: preemptDelayMin
+                tf_name: preempt_delay_minimum
+                type: Int64
+                min_int: 0
+                max_int: 3600
+                description: 'Miminum delay before preempt.'
+                example: 10
+              - nxos_name: priCfg
+                tf_name: priority
+                type: Int64
+                min_int: 1
+                max_int: 254
+                description: 'Configured Priority.'
+                example: 120
+              - nxos_name: vrrpv2CompatMode
+                tf_name: vrrpv2_compatibility_mode
+                type: String
+                description: 'vrrpv2 compatibility mode.'
+                enum_values:
+                  - disabled
+                  - enabled
+                example: enabled
+            child_classes:
+              - class_name: vrrpv3Addr
+                doc_path: Network%20Virtualization/vrrpv3:Addr/
+                rn: addr-[%s]
+                type: list
+                tf_name: secondary_addresses
+                description: 'List of secondary addresses of the VRRPv3 group.'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'IP address.'
+                    example: 10.1.1.11
+              - class_name: vrrpv3ObjectTrack
+                doc_path: Network%20Virtualization/vrrpv3:ObjectTrack/
+                rn: track-%v
+                type: list
+                tf_name: tracked_objects
+                description: 'List of objects tracked by the VRRPv3 group.'
+                attributes:
+                  - nxos_name: id
+                    tf_name: id
+                    type: Int64
+                    id: true
+                    min_int: 1
+                    max_int: 512
+                    description: 'Object Id to be tracked.'
+                    example: 10
+                  - nxos_name: decrPrio
+                    tf_name: decrement_priority
+                    type: Int64
+                    min_int: 1
+                    max_int: 254
+                    description: 'Priority to be decremented when tracked object is down. Default value is 10.'
+                    example: 30
+              - class_name: vrrpv3VrrsLeader
+                doc_path: Network%20Virtualization/vrrpv3:VrrsLeader/
+                rn: leader-%s
+                type: list
+                tf_name: vrrs_leaders
+                description: 'List of VRRS tags for which the VRRPv3 group is leader.'
+                attributes:
+                  - nxos_name: tag
+                    tf_name: tag
+                    type: String
+                    id: true
+                    description: 'VRRS tag for which group is leader.'
+                    example: myLeader
+          - class_name: vrrpv3VrrsPathway
+            doc_path: Network%20Virtualization/vrrpv3:VrrsPathway/
+            rn: vrrs-pw-%s
+            type: list
+            tf_name: vrrs_pathways
+            description: 'List of VRRS pathways.'
+            attributes:
+              - nxos_name: tag
+                tf_name: tag
+                type: String
+                id: true
+                description: 'Name of vrrs tag which pathway will follow.'
+                example: myPathway
+              - nxos_name: adminSt
+                tf_name: admin_state
+                type: String
+                description: 'Administrative state for vrrs pathway.'
+                enum_values:
+                  - disabled
+                  - enabled
+                example: enabled
+              - nxos_name: description
+                tf_name: description
+                type: String
+                description: 'Description string for vrrs pathway.'
+                example: My pathway
+              - nxos_name: mac
+                tf_name: mac_address
+                type: String
+                description: 'Configured virtual MAC address for the Pathway.'
+                example: 00:00:11:11:22:22
+              - nxos_name: macAdvIntvl
+                tf_name: mac_advertisement_interval
+                type: Int64
+                min_int: 1
+                max_int: 300
+                description: 'Interval in seconds, between virtual MAC unsolicited advertisements.'
+                example: 20
+            child_classes:
+              - class_name: vrrpv3PwAddr
+                doc_path: Network%20Virtualization/vrrpv3:PwAddr/
+                rn: addr-[%s]
+                type: list
+                tf_name: addresses
+                description: 'List of addresses of the VRRS pathway.'
+                attributes:
+                  - nxos_name: addr
+                    tf_name: address
+                    type: String
+                    id: true
+                    description: 'IPvX address for vrrs pathway.'
+                    example: 10.1.1.20
+test_prerequisites:
+  - dn: sys/fm/vrrpv3
+    class_name: fmVrrpv3
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/ifvlan
+    class_name: fmInterfaceVlan
+    dependencies: [0]
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/intf/svi-[vlan10]
+    class_name: sviIf
+    dependencies: [1]
+    attributes:
+      - name: id
+        value: vlan10
+  - dn: sys/track/object-10
+    class_name: trackObject
+    attributes:
+      - name: id
+        value: 10
+    children:
+      - rn: if
+        class_name: trackIf
+        attributes:
+          - name: id
+            value: vlan10
+          - name: protocolType
+            value: line-protocol
+    dependencies: [2]

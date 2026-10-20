@@ -64,6 +64,8 @@ type UserManagement struct {
 	PostLoginBannerMessage                   types.String                                   `tfsdk:"post_login_banner_message"`
 	PostLoginBannerOwnerTag                  types.String                                   `tfsdk:"post_login_banner_owner_tag"`
 	Users                                    map[string]UserManagementUsers                 `tfsdk:"users"`
+	RoleFeatureGroups                        map[string]UserManagementRoleFeatureGroups     `tfsdk:"role_feature_groups"`
+	Roles                                    map[string]UserManagementRoles                 `tfsdk:"roles"`
 	TacacsDeadtime                           types.Int64                                    `tfsdk:"tacacs_deadtime"`
 	TacacsDescription                        types.String                                   `tfsdk:"tacacs_description"`
 	TacacsKey                                types.String                                   `tfsdk:"tacacs_key"`
@@ -191,6 +193,41 @@ type UserManagementUsers struct {
 type UserManagementUsersRoles struct {
 	Description   types.String `tfsdk:"description"`
 	PrivilegeType types.String `tfsdk:"privilege_type"`
+}
+
+type UserManagementRoleFeatureGroups struct {
+	Features map[string]UserManagementRoleFeatureGroupsFeatures `tfsdk:"features"`
+}
+
+type UserManagementRoleFeatureGroupsFeatures struct {
+}
+
+type UserManagementRoles struct {
+	Description         types.String                                      `tfsdk:"description"`
+	DenyInterface       types.String                                      `tfsdk:"deny_interface"`
+	DenyVlan            types.String                                      `tfsdk:"deny_vlan"`
+	DenyVrf             types.String                                      `tfsdk:"deny_vrf"`
+	Rules               map[string]UserManagementRolesRules               `tfsdk:"rules"`
+	PermittedVlans      map[string]UserManagementRolesPermittedVlans      `tfsdk:"permitted_vlans"`
+	PermittedInterfaces map[string]UserManagementRolesPermittedInterfaces `tfsdk:"permitted_interfaces"`
+	PermittedVrfs       map[string]UserManagementRolesPermittedVrfs       `tfsdk:"permitted_vrfs"`
+}
+
+type UserManagementRolesRules struct {
+	Permission types.String `tfsdk:"permission"`
+	Access     types.String `tfsdk:"access"`
+	Command    types.String `tfsdk:"command"`
+	Scope      types.String `tfsdk:"scope"`
+	ScopeName  types.String `tfsdk:"scope_name"`
+}
+
+type UserManagementRolesPermittedVlans struct {
+}
+
+type UserManagementRolesPermittedInterfaces struct {
+}
+
+type UserManagementRolesPermittedVrfs struct {
 }
 
 type UserManagementTacacsProviders struct {
@@ -334,11 +371,11 @@ var UserManagementSubtreeClassMinVersions = map[string]string{}
 var UserManagementMinVersions = map[string]helpers.MinVersion{}
 
 // UserManagementListClasses holds the list child classes of the resource.
-var UserManagementListClasses = map[string]bool{"aaaUser": true, "aaaUserRole": true, "aaaTacacsPlusProvider": true, "aaaTacacsPlusProviderGroup": true, "aaaProviderRef": true, "aaaRadiusProvider": true, "aaaRadiusProviderGroup": true, "aaaDefaultAuthor": true, "pkiKeyRing": true, "pkiTP": true}
+var UserManagementListClasses = map[string]bool{"aaaUser": true, "aaaUserRole": true, "aaaRoleFeatureGroup": true, "aaaFeatureName": true, "aaaRole": true, "aaaRoleRule": true, "aaaPermitVlan": true, "aaaPermitIntf": true, "aaaPermitVrf": true, "aaaTacacsPlusProvider": true, "aaaTacacsPlusProviderGroup": true, "aaaProviderRef": true, "aaaRadiusProvider": true, "aaaRadiusProviderGroup": true, "aaaDefaultAuthor": true, "pkiKeyRing": true, "pkiTP": true}
 
 // getUserManagementTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getUserManagementTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc", "pkiEp", "pkiKeyRing", "pkiTP"}, UserManagementSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaRoleFeatureGroup", "aaaFeatureName", "aaaRole", "aaaRoleRule", "aaaPermitVlan", "aaaPermitIntf", "aaaPermitVrf", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc", "pkiEp", "pkiKeyRing", "pkiTP"}, UserManagementSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -355,6 +392,34 @@ func (data UserManagementUsers) getRn(key string) string {
 
 func (data UserManagementUsersRoles) getRn(key string) string {
 	return fmt.Sprintf("role-[%s]", key)
+}
+
+func (data UserManagementRoleFeatureGroups) getRn(key string) string {
+	return fmt.Sprintf("rolefeaturegroup-%s", key)
+}
+
+func (data UserManagementRoleFeatureGroupsFeatures) getRn(key string) string {
+	return fmt.Sprintf("featurename-%s", key)
+}
+
+func (data UserManagementRoles) getRn(key string) string {
+	return fmt.Sprintf("role-[%s]", key)
+}
+
+func (data UserManagementRolesRules) getRn(key string) string {
+	return fmt.Sprintf("rule-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data UserManagementRolesPermittedVlans) getRn(key string) string {
+	return fmt.Sprintf("permitvlan-[%s]", key)
+}
+
+func (data UserManagementRolesPermittedInterfaces) getRn(key string) string {
+	return fmt.Sprintf("permitintf-[%s]", key)
+}
+
+func (data UserManagementRolesPermittedVrfs) getRn(key string) string {
+	return fmt.Sprintf("permitvrf-%s", key)
 }
 
 func (data UserManagementTacacsProviders) getRn(key string) string {
@@ -574,6 +639,99 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 				if parentAttrs != "{}" || gjson.Get(childBody, "aaaUserDomain.children").Exists() {
 					body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 				}
+			}
+		}
+	}
+	for key, child := range data.RoleFeatureGroups {
+		configChild, configChildOk := config.RoleFeatureGroups[key]
+		_ = configChild
+		_ = configChildOk
+		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "groupName", key)
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.aaaRoleFeatureGroup.attributes", attrs)
+		{
+			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
+			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".aaaRoleFeatureGroup.children"
+			_ = nestedChildrenPath
+			for key := range child.Features {
+				configChild, configChildOk := configChild.Features[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "name", key)
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaFeatureName.attributes", attrs)
+			}
+		}
+	}
+	for key, child := range data.Roles {
+		configChild, configChildOk := config.Roles[key]
+		_ = configChild
+		_ = configChildOk
+		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "name", key)
+		if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+		}
+		if configChildOk && !child.DenyInterface.IsUnknown() && !child.DenyInterface.IsNull() && !configChild.DenyInterface.IsNull() {
+			attrs, _ = sjson.Set(attrs, "denyIntf", child.DenyInterface.ValueString())
+		}
+		if configChildOk && !child.DenyVlan.IsUnknown() && !child.DenyVlan.IsNull() && !configChild.DenyVlan.IsNull() {
+			attrs, _ = sjson.Set(attrs, "denyVLAN", child.DenyVlan.ValueString())
+		}
+		if configChildOk && !child.DenyVrf.IsUnknown() && !child.DenyVrf.IsNull() && !configChild.DenyVrf.IsNull() {
+			attrs, _ = sjson.Set(attrs, "denyVRF", child.DenyVrf.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.aaaRole.attributes", attrs)
+		{
+			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
+			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".aaaRole.children"
+			_ = nestedChildrenPath
+			for key, child := range child.Rules {
+				configChild, configChildOk := configChild.Rules[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "ruleNumber", key)
+				if configChildOk && !child.Permission.IsUnknown() && !child.Permission.IsNull() && !configChild.Permission.IsNull() {
+					attrs, _ = sjson.Set(attrs, "permission", child.Permission.ValueString())
+				}
+				if configChildOk && !child.Access.IsUnknown() && !child.Access.IsNull() && !configChild.Access.IsNull() {
+					attrs, _ = sjson.Set(attrs, "ruleAccess", child.Access.ValueString())
+				}
+				if configChildOk && !child.Command.IsUnknown() && !child.Command.IsNull() && !configChild.Command.IsNull() {
+					attrs, _ = sjson.Set(attrs, "cmdStr", child.Command.ValueString())
+				}
+				if configChildOk && !child.Scope.IsUnknown() && !child.Scope.IsNull() && !configChild.Scope.IsNull() {
+					attrs, _ = sjson.Set(attrs, "ruleScope", child.Scope.ValueString())
+				}
+				if configChildOk && !child.ScopeName.IsUnknown() && !child.ScopeName.IsNull() && !configChild.ScopeName.IsNull() {
+					attrs, _ = sjson.Set(attrs, "scopeEntity", child.ScopeName.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaRoleRule.attributes", attrs)
+			}
+			for key := range child.PermittedVlans {
+				configChild, configChildOk := configChild.PermittedVlans[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "vlanRange", key)
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaPermitVlan.attributes", attrs)
+			}
+			for key := range child.PermittedInterfaces {
+				configChild, configChildOk := configChild.PermittedInterfaces[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "ifName", key)
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaPermitIntf.attributes", attrs)
+			}
+			for key := range child.PermittedVrfs {
+				configChild, configChildOk := configChild.PermittedVrfs[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "vrfName", key)
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaPermitVrf.attributes", attrs)
 			}
 		}
 	}
@@ -1368,6 +1526,141 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 			return true
 		},
 	)
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "aaaRoleFeatureGroup" {
+						var child UserManagementRoleFeatureGroups
+						mapKey := value.Get("attributes.groupName").String()
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "aaaFeatureName" {
+											var nestedChildaaaFeatureName UserManagementRoleFeatureGroupsFeatures
+											nestedMapKey := nestedValue.Get("attributes.name").String()
+											if child.Features == nil {
+												child.Features = make(map[string]UserManagementRoleFeatureGroupsFeatures)
+											}
+											child.Features[nestedMapKey] = nestedChildaaaFeatureName
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						if data.RoleFeatureGroups == nil {
+							data.RoleFeatureGroups = make(map[string]UserManagementRoleFeatureGroups)
+						}
+						data.RoleFeatureGroups[mapKey] = child
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "aaaRole" {
+						var child UserManagementRoles
+						child.Description = types.StringValue(value.Get("attributes.descr").String())
+						child.DenyInterface = types.StringValue(value.Get("attributes.denyIntf").String())
+						child.DenyVlan = types.StringValue(value.Get("attributes.denyVLAN").String())
+						child.DenyVrf = types.StringValue(value.Get("attributes.denyVRF").String())
+						mapKey := value.Get("attributes.name").String()
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "aaaRoleRule" {
+											var nestedChildaaaRoleRule UserManagementRolesRules
+											nestedChildaaaRoleRule.Permission = types.StringValue(nestedValue.Get("attributes.permission").String())
+											nestedChildaaaRoleRule.Access = types.StringValue(nestedValue.Get("attributes.ruleAccess").String())
+											nestedChildaaaRoleRule.Command = types.StringValue(nestedValue.Get("attributes.cmdStr").String())
+											nestedChildaaaRoleRule.Scope = types.StringValue(nestedValue.Get("attributes.ruleScope").String())
+											nestedChildaaaRoleRule.ScopeName = types.StringValue(nestedValue.Get("attributes.scopeEntity").String())
+											nestedMapKey := nestedValue.Get("attributes.ruleNumber").String()
+											if child.Rules == nil {
+												child.Rules = make(map[string]UserManagementRolesRules)
+											}
+											child.Rules[nestedMapKey] = nestedChildaaaRoleRule
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "aaaPermitVlan" {
+											var nestedChildaaaPermitVlan UserManagementRolesPermittedVlans
+											nestedMapKey := nestedValue.Get("attributes.vlanRange").String()
+											if child.PermittedVlans == nil {
+												child.PermittedVlans = make(map[string]UserManagementRolesPermittedVlans)
+											}
+											child.PermittedVlans[nestedMapKey] = nestedChildaaaPermitVlan
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "aaaPermitIntf" {
+											var nestedChildaaaPermitIntf UserManagementRolesPermittedInterfaces
+											nestedMapKey := nestedValue.Get("attributes.ifName").String()
+											if child.PermittedInterfaces == nil {
+												child.PermittedInterfaces = make(map[string]UserManagementRolesPermittedInterfaces)
+											}
+											child.PermittedInterfaces[nestedMapKey] = nestedChildaaaPermitIntf
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "aaaPermitVrf" {
+											var nestedChildaaaPermitVrf UserManagementRolesPermittedVrfs
+											nestedMapKey := nestedValue.Get("attributes.vrfName").String()
+											if child.PermittedVrfs == nil {
+												child.PermittedVrfs = make(map[string]UserManagementRolesPermittedVrfs)
+											}
+											child.PermittedVrfs[nestedMapKey] = nestedChildaaaPermitVrf
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						if data.Roles == nil {
+							data.Roles = make(map[string]UserManagementRoles)
+						}
+						data.Roles[mapKey] = child
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
 	{
 		var raaaTacacsPlusEp gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -2055,6 +2348,175 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 			}
 		}
 		data.Users[key] = item
+	}
+	for key, item := range data.RoleFeatureGroups {
+		var raaaRoleFeatureGroup gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("aaaRoleFeatureGroup.attributes.groupName").String() == key {
+					raaaRoleFeatureGroup = v
+					return false
+				}
+				return true
+			},
+		)
+		if !raaaRoleFeatureGroup.Exists() {
+			delete(data.RoleFeatureGroups, key)
+			continue
+		}
+		for nc := range item.Features {
+			ncItem := item.Features[nc]
+			var raaaFeatureName gjson.Result
+			raaaRoleFeatureGroup.Get("aaaRoleFeatureGroup.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("aaaFeatureName.attributes.name").String() == nc {
+						raaaFeatureName = v
+						return false
+					}
+					return true
+				},
+			)
+			if !raaaFeatureName.Exists() {
+				delete(item.Features, nc)
+				continue
+			}
+			item.Features[nc] = ncItem
+		}
+		data.RoleFeatureGroups[key] = item
+	}
+	for key, item := range data.Roles {
+		var raaaRole gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("aaaRole.attributes.name").String() == key {
+					raaaRole = v
+					return false
+				}
+				return true
+			},
+		)
+		if !raaaRole.Exists() {
+			delete(data.Roles, key)
+			continue
+		}
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(raaaRole.Get("aaaRole.attributes.descr").String())
+		} else {
+			item.Description = types.StringNull()
+		}
+		if !item.DenyInterface.IsNull() {
+			item.DenyInterface = types.StringValue(raaaRole.Get("aaaRole.attributes.denyIntf").String())
+		} else {
+			item.DenyInterface = types.StringNull()
+		}
+		if !item.DenyVlan.IsNull() {
+			item.DenyVlan = types.StringValue(raaaRole.Get("aaaRole.attributes.denyVLAN").String())
+		} else {
+			item.DenyVlan = types.StringNull()
+		}
+		if !item.DenyVrf.IsNull() {
+			item.DenyVrf = types.StringValue(raaaRole.Get("aaaRole.attributes.denyVRF").String())
+		} else {
+			item.DenyVrf = types.StringNull()
+		}
+		for nc := range item.Rules {
+			ncItem := item.Rules[nc]
+			var raaaRoleRule gjson.Result
+			raaaRole.Get("aaaRole.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("aaaRoleRule.attributes.ruleNumber").String() == nc {
+						raaaRoleRule = v
+						return false
+					}
+					return true
+				},
+			)
+			if !raaaRoleRule.Exists() {
+				delete(item.Rules, nc)
+				continue
+			}
+			if !ncItem.Permission.IsNull() {
+				ncItem.Permission = types.StringValue(raaaRoleRule.Get("aaaRoleRule.attributes.permission").String())
+			} else {
+				ncItem.Permission = types.StringNull()
+			}
+			if !ncItem.Access.IsNull() {
+				ncItem.Access = types.StringValue(raaaRoleRule.Get("aaaRoleRule.attributes.ruleAccess").String())
+			} else {
+				ncItem.Access = types.StringNull()
+			}
+			if !ncItem.Command.IsNull() {
+				ncItem.Command = types.StringValue(raaaRoleRule.Get("aaaRoleRule.attributes.cmdStr").String())
+			} else {
+				ncItem.Command = types.StringNull()
+			}
+			if !ncItem.Scope.IsNull() {
+				ncItem.Scope = types.StringValue(raaaRoleRule.Get("aaaRoleRule.attributes.ruleScope").String())
+			} else {
+				ncItem.Scope = types.StringNull()
+			}
+			if !ncItem.ScopeName.IsNull() {
+				ncItem.ScopeName = types.StringValue(raaaRoleRule.Get("aaaRoleRule.attributes.scopeEntity").String())
+			} else {
+				ncItem.ScopeName = types.StringNull()
+			}
+			item.Rules[nc] = ncItem
+		}
+		for nc := range item.PermittedVlans {
+			ncItem := item.PermittedVlans[nc]
+			var raaaPermitVlan gjson.Result
+			raaaRole.Get("aaaRole.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("aaaPermitVlan.attributes.vlanRange").String() == nc {
+						raaaPermitVlan = v
+						return false
+					}
+					return true
+				},
+			)
+			if !raaaPermitVlan.Exists() {
+				delete(item.PermittedVlans, nc)
+				continue
+			}
+			item.PermittedVlans[nc] = ncItem
+		}
+		for nc := range item.PermittedInterfaces {
+			ncItem := item.PermittedInterfaces[nc]
+			var raaaPermitIntf gjson.Result
+			raaaRole.Get("aaaRole.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("aaaPermitIntf.attributes.ifName").String() == nc {
+						raaaPermitIntf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !raaaPermitIntf.Exists() {
+				delete(item.PermittedInterfaces, nc)
+				continue
+			}
+			item.PermittedInterfaces[nc] = ncItem
+		}
+		for nc := range item.PermittedVrfs {
+			ncItem := item.PermittedVrfs[nc]
+			var raaaPermitVrf gjson.Result
+			raaaRole.Get("aaaRole.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("aaaPermitVrf.attributes.vrfName").String() == nc {
+						raaaPermitVrf = v
+						return false
+					}
+					return true
+				},
+			)
+			if !raaaPermitVrf.Exists() {
+				delete(item.PermittedVrfs, nc)
+				continue
+			}
+			item.PermittedVrfs[nc] = ncItem
+		}
+		data.Roles[key] = item
 	}
 	var raaaTacacsPlusEp gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
@@ -3160,6 +3622,18 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 		deleteBody, _ = sjson.Set(deleteBody, "aaaUser.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
+	for key, child := range data.RoleFeatureGroups {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "aaaRoleFeatureGroup.attributes.rn", child.getRn(key))
+		deleteBody, _ = sjson.Set(deleteBody, "aaaRoleFeatureGroup.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
+	for key, child := range data.Roles {
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "aaaRole.attributes.rn", child.getRn(key))
+		deleteBody, _ = sjson.Set(deleteBody, "aaaRole.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
+	}
 	{
 		childBody := ""
 		if !data.TacacsDeadtime.IsNull() {
@@ -3617,6 +4091,34 @@ func (data UserManagement) managedDns() map[string]bool {
 			}
 		}
 	}
+	for key, child := range data.RoleFeatureGroups {
+		aaaRoleFeatureGroupDn := dn + "/" + child.getRn(key)
+		dns[aaaRoleFeatureGroupDn] = true
+		for key_, child_ := range child.Features {
+			aaaFeatureNameDn_ := aaaRoleFeatureGroupDn + "/" + child_.getRn(key_)
+			dns[aaaFeatureNameDn_] = true
+		}
+	}
+	for key, child := range data.Roles {
+		aaaRoleDn := dn + "/" + child.getRn(key)
+		dns[aaaRoleDn] = true
+		for key_, child_ := range child.Rules {
+			aaaRoleRuleDn_ := aaaRoleDn + "/" + child_.getRn(key_)
+			dns[aaaRoleRuleDn_] = true
+		}
+		for key_, child_ := range child.PermittedVlans {
+			aaaPermitVlanDn_ := aaaRoleDn + "/" + child_.getRn(key_)
+			dns[aaaPermitVlanDn_] = true
+		}
+		for key_, child_ := range child.PermittedInterfaces {
+			aaaPermitIntfDn_ := aaaRoleDn + "/" + child_.getRn(key_)
+			dns[aaaPermitIntfDn_] = true
+		}
+		for key_, child_ := range child.PermittedVrfs {
+			aaaPermitVrfDn_ := aaaRoleDn + "/" + child_.getRn(key_)
+			dns[aaaPermitVrfDn_] = true
+		}
+	}
 	if !(data.TacacsDeadtime.IsNull() && data.TacacsDescription.IsNull() && data.TacacsKey.IsNull() && data.TacacsKeyEncryption.IsNull() && data.TacacsLoggingLevel.IsNull() && data.TacacsName.IsNull() && data.TacacsOwnerKey.IsNull() && data.TacacsOwnerTag.IsNull() && data.TacacsRetries.IsNull() && data.TacacsSourceInterface.IsNull() && data.TacacsTimeout.IsNull() && len(data.TacacsProviders) == 0 && len(data.TacacsProviderGroups) == 0) {
 		aaaTacacsPlusEpDn := dn + "/" + "tacacsext"
 		dns[aaaTacacsPlusEpDn] = true
@@ -3887,6 +4389,124 @@ func (data UserManagement) toResetBody(preexisting map[string]bool) nxos.Body {
 			}
 		}
 		body, _ = sjson.SetRaw(body, "aaaUserEp.children.-1", aaaUserBody)
+	}
+	for key, child := range data.RoleFeatureGroups {
+		_ = child
+		aaaRoleFeatureGroupRn := child.getRn(key)
+		aaaRoleFeatureGroupDn := dn + "/" + aaaRoleFeatureGroupRn
+		_ = aaaRoleFeatureGroupDn
+		if !existed(aaaRoleFeatureGroupDn) {
+			body, _ = sjson.Set(body, "aaaUserEp.children.-1.aaaRoleFeatureGroup.attributes", map[string]interface{}{"rn": aaaRoleFeatureGroupRn, "status": "deleted"})
+			continue
+		}
+		aaaRoleFeatureGroupBody := ""
+		aaaRoleFeatureGroupBody, _ = sjson.Set(aaaRoleFeatureGroupBody, "aaaRoleFeatureGroup.attributes.rn", aaaRoleFeatureGroupRn)
+		for key_, child_ := range child.Features {
+			_ = child_
+			aaaFeatureNameRn_ := child_.getRn(key_)
+			aaaFeatureNameDn_ := aaaRoleFeatureGroupDn + "/" + aaaFeatureNameRn_
+			_ = aaaFeatureNameDn_
+			if !existed(aaaFeatureNameDn_) {
+				aaaRoleFeatureGroupBody, _ = sjson.Set(aaaRoleFeatureGroupBody, "aaaRoleFeatureGroup.children.-1.aaaFeatureName.attributes", map[string]interface{}{"rn": aaaFeatureNameRn_, "status": "deleted"})
+				continue
+			}
+			aaaFeatureNameBody_ := ""
+			aaaFeatureNameBody_, _ = sjson.Set(aaaFeatureNameBody_, "aaaFeatureName.attributes.rn", aaaFeatureNameRn_)
+			aaaRoleFeatureGroupBody, _ = sjson.SetRaw(aaaRoleFeatureGroupBody, "aaaRoleFeatureGroup.children.-1", aaaFeatureNameBody_)
+		}
+		body, _ = sjson.SetRaw(body, "aaaUserEp.children.-1", aaaRoleFeatureGroupBody)
+	}
+	for key, child := range data.Roles {
+		_ = child
+		aaaRoleRn := child.getRn(key)
+		aaaRoleDn := dn + "/" + aaaRoleRn
+		_ = aaaRoleDn
+		if !existed(aaaRoleDn) {
+			body, _ = sjson.Set(body, "aaaUserEp.children.-1.aaaRole.attributes", map[string]interface{}{"rn": aaaRoleRn, "status": "deleted"})
+			continue
+		}
+		aaaRoleBody := ""
+		aaaRoleBody, _ = sjson.Set(aaaRoleBody, "aaaRole.attributes.rn", aaaRoleRn)
+		if !child.Description.IsNull() {
+			aaaRoleBody, _ = sjson.Set(aaaRoleBody, "aaaRole.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DenyInterface.IsNull() {
+			aaaRoleBody, _ = sjson.Set(aaaRoleBody, "aaaRole.attributes.denyIntf", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DenyVlan.IsNull() {
+			aaaRoleBody, _ = sjson.Set(aaaRoleBody, "aaaRole.attributes.denyVLAN", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !child.DenyVrf.IsNull() {
+			aaaRoleBody, _ = sjson.Set(aaaRoleBody, "aaaRole.attributes.denyVRF", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key_, child_ := range child.Rules {
+			_ = child_
+			aaaRoleRuleRn_ := child_.getRn(key_)
+			aaaRoleRuleDn_ := aaaRoleDn + "/" + aaaRoleRuleRn_
+			_ = aaaRoleRuleDn_
+			if !existed(aaaRoleRuleDn_) {
+				aaaRoleBody, _ = sjson.Set(aaaRoleBody, "aaaRole.children.-1.aaaRoleRule.attributes", map[string]interface{}{"rn": aaaRoleRuleRn_, "status": "deleted"})
+				continue
+			}
+			aaaRoleRuleBody_ := ""
+			aaaRoleRuleBody_, _ = sjson.Set(aaaRoleRuleBody_, "aaaRoleRule.attributes.rn", aaaRoleRuleRn_)
+			if !child_.Permission.IsNull() {
+				aaaRoleRuleBody_, _ = sjson.Set(aaaRoleRuleBody_, "aaaRoleRule.attributes.permission", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Access.IsNull() {
+				aaaRoleRuleBody_, _ = sjson.Set(aaaRoleRuleBody_, "aaaRoleRule.attributes.ruleAccess", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Command.IsNull() {
+				aaaRoleRuleBody_, _ = sjson.Set(aaaRoleRuleBody_, "aaaRoleRule.attributes.cmdStr", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Scope.IsNull() {
+				aaaRoleRuleBody_, _ = sjson.Set(aaaRoleRuleBody_, "aaaRoleRule.attributes.ruleScope", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.ScopeName.IsNull() {
+				aaaRoleRuleBody_, _ = sjson.Set(aaaRoleRuleBody_, "aaaRoleRule.attributes.scopeEntity", "DME_UNSET_PROPERTY_MARKER")
+			}
+			aaaRoleBody, _ = sjson.SetRaw(aaaRoleBody, "aaaRole.children.-1", aaaRoleRuleBody_)
+		}
+		for key_, child_ := range child.PermittedVlans {
+			_ = child_
+			aaaPermitVlanRn_ := child_.getRn(key_)
+			aaaPermitVlanDn_ := aaaRoleDn + "/" + aaaPermitVlanRn_
+			_ = aaaPermitVlanDn_
+			if !existed(aaaPermitVlanDn_) {
+				aaaRoleBody, _ = sjson.Set(aaaRoleBody, "aaaRole.children.-1.aaaPermitVlan.attributes", map[string]interface{}{"rn": aaaPermitVlanRn_, "status": "deleted"})
+				continue
+			}
+			aaaPermitVlanBody_ := ""
+			aaaPermitVlanBody_, _ = sjson.Set(aaaPermitVlanBody_, "aaaPermitVlan.attributes.rn", aaaPermitVlanRn_)
+			aaaRoleBody, _ = sjson.SetRaw(aaaRoleBody, "aaaRole.children.-1", aaaPermitVlanBody_)
+		}
+		for key_, child_ := range child.PermittedInterfaces {
+			_ = child_
+			aaaPermitIntfRn_ := child_.getRn(key_)
+			aaaPermitIntfDn_ := aaaRoleDn + "/" + aaaPermitIntfRn_
+			_ = aaaPermitIntfDn_
+			if !existed(aaaPermitIntfDn_) {
+				aaaRoleBody, _ = sjson.Set(aaaRoleBody, "aaaRole.children.-1.aaaPermitIntf.attributes", map[string]interface{}{"rn": aaaPermitIntfRn_, "status": "deleted"})
+				continue
+			}
+			aaaPermitIntfBody_ := ""
+			aaaPermitIntfBody_, _ = sjson.Set(aaaPermitIntfBody_, "aaaPermitIntf.attributes.rn", aaaPermitIntfRn_)
+			aaaRoleBody, _ = sjson.SetRaw(aaaRoleBody, "aaaRole.children.-1", aaaPermitIntfBody_)
+		}
+		for key_, child_ := range child.PermittedVrfs {
+			_ = child_
+			aaaPermitVrfRn_ := child_.getRn(key_)
+			aaaPermitVrfDn_ := aaaRoleDn + "/" + aaaPermitVrfRn_
+			_ = aaaPermitVrfDn_
+			if !existed(aaaPermitVrfDn_) {
+				aaaRoleBody, _ = sjson.Set(aaaRoleBody, "aaaRole.children.-1.aaaPermitVrf.attributes", map[string]interface{}{"rn": aaaPermitVrfRn_, "status": "deleted"})
+				continue
+			}
+			aaaPermitVrfBody_ := ""
+			aaaPermitVrfBody_, _ = sjson.Set(aaaPermitVrfBody_, "aaaPermitVrf.attributes.rn", aaaPermitVrfRn_)
+			aaaRoleBody, _ = sjson.SetRaw(aaaRoleBody, "aaaRole.children.-1", aaaPermitVrfBody_)
+		}
+		body, _ = sjson.SetRaw(body, "aaaUserEp.children.-1", aaaRoleBody)
 	}
 	if !(data.TacacsDeadtime.IsNull() && data.TacacsDescription.IsNull() && data.TacacsKey.IsNull() && data.TacacsKeyEncryption.IsNull() && data.TacacsLoggingLevel.IsNull() && data.TacacsName.IsNull() && data.TacacsOwnerKey.IsNull() && data.TacacsOwnerTag.IsNull() && data.TacacsRetries.IsNull() && data.TacacsSourceInterface.IsNull() && data.TacacsTimeout.IsNull() && len(data.TacacsProviders) == 0 && len(data.TacacsProviderGroups) == 0) {
 		aaaTacacsPlusEpRn := "tacacsext"
@@ -4635,6 +5255,105 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 				}
 			}
 		}
+		for stateKey := range state.RoleFeatureGroups {
+			if _, found := data.RoleFeatureGroups[stateKey]; !found {
+				stateChild := state.RoleFeatureGroups[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "aaaRoleFeatureGroup.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "aaaRoleFeatureGroup.attributes.status", "deleted")
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for di := range state.RoleFeatureGroups {
+			if _, found := data.RoleFeatureGroups[di]; !found {
+				continue
+			}
+			stateItemdi := state.RoleFeatureGroups[di]
+			planItemdi := data.RoleFeatureGroups[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("aaaRoleFeatureGroup.attributes.groupName").String() == di {
+					matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".aaaRoleFeatureGroup.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.Features {
+				if _, found := planItemdi.Features[stateChildKey]; !found {
+					stateChild := stateItemdi.Features[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "aaaFeatureName.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "aaaFeatureName.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+		}
+		for stateKey := range state.Roles {
+			if _, found := data.Roles[stateKey]; !found {
+				stateChild := state.Roles[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "aaaRole.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "aaaRole.attributes.status", "deleted")
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for di := range state.Roles {
+			if _, found := data.Roles[di]; !found {
+				continue
+			}
+			stateItemdi := state.Roles[di]
+			planItemdi := data.Roles[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("aaaRole.attributes.name").String() == di {
+					matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".aaaRole.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.Rules {
+				if _, found := planItemdi.Rules[stateChildKey]; !found {
+					stateChild := stateItemdi.Rules[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "aaaRoleRule.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "aaaRoleRule.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.PermittedVlans {
+				if _, found := planItemdi.PermittedVlans[stateChildKey]; !found {
+					stateChild := stateItemdi.PermittedVlans[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "aaaPermitVlan.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "aaaPermitVlan.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.PermittedInterfaces {
+				if _, found := planItemdi.PermittedInterfaces[stateChildKey]; !found {
+					stateChild := stateItemdi.PermittedInterfaces[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "aaaPermitIntf.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "aaaPermitIntf.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.PermittedVrfs {
+				if _, found := planItemdi.PermittedVrfs[stateChildKey]; !found {
+					stateChild := stateItemdi.PermittedVrfs[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "aaaPermitVrf.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "aaaPermitVrf.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+		}
 		for stateKey := range state.TacacsProviders {
 			if _, found := data.TacacsProviders[stateKey]; !found {
 				stateChild := state.TacacsProviders[stateKey]
@@ -4932,6 +5651,118 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 										break
 									}
 								}
+							}
+						}
+					}
+				}
+			}
+		}
+		for key := range state.RoleFeatureGroups {
+			if configChild, ok := config.RoleFeatureGroups[key]; ok {
+				stateChild := state.RoleFeatureGroups[key]
+				_ = stateChild
+				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+						if mv.Get("aaaRoleFeatureGroup.attributes.groupName").String() == key {
+							listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".aaaRoleFeatureGroup.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						for key := range stateChild.Features {
+							if configChild, ok := configChild.Features[key]; ok {
+								stateChild := stateChild.Features[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+					}
+				}
+			}
+		}
+		for key := range state.Roles {
+			if configChild, ok := config.Roles[key]; ok {
+				stateChild := state.Roles[key]
+				_ = stateChild
+				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("aaaRole.attributes.name").String() == key {
+						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".aaaRole.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.DenyInterface.IsNull() && configChild.DenyInterface.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".aaaRole.attributes."+"denyIntf", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.DenyVlan.IsNull() && configChild.DenyVlan.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".aaaRole.attributes."+"denyVLAN", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.DenyVrf.IsNull() && configChild.DenyVrf.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".aaaRole.attributes."+"denyVRF", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+						if mv.Get("aaaRole.attributes.name").String() == key {
+							listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".aaaRole.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						for key := range stateChild.Rules {
+							if configChild, ok := configChild.Rules[key]; ok {
+								stateChild := stateChild.Rules[key]
+								_ = stateChild
+								_ = configChild
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("aaaRoleRule.attributes.ruleNumber").String() == key {
+										if !stateChild.Permission.IsNull() && configChild.Permission.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".aaaRoleRule.attributes."+"permission", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Access.IsNull() && configChild.Access.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".aaaRoleRule.attributes."+"ruleAccess", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Command.IsNull() && configChild.Command.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".aaaRoleRule.attributes."+"cmdStr", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Scope.IsNull() && configChild.Scope.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".aaaRoleRule.attributes."+"ruleScope", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.ScopeName.IsNull() && configChild.ScopeName.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".aaaRoleRule.attributes."+"scopeEntity", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+							}
+						}
+						for key := range stateChild.PermittedVlans {
+							if configChild, ok := configChild.PermittedVlans[key]; ok {
+								stateChild := stateChild.PermittedVlans[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.PermittedInterfaces {
+							if configChild, ok := configChild.PermittedInterfaces[key]; ok {
+								stateChild := stateChild.PermittedInterfaces[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.PermittedVrfs {
+							if configChild, ok := configChild.PermittedVrfs[key]; ok {
+								stateChild := stateChild.PermittedVrfs[key]
+								_ = stateChild
+								_ = configChild
 							}
 						}
 					}

@@ -70,7 +70,7 @@ func (r *UserManagementResource) Metadata(ctx context.Context, req resource.Meta
 func (r *UserManagementResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.").AddApiDocumentation("aaaUserEp", "Security%20and%20Policing/aaa:UserEp/", []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner/", "Security%20and%20Policing/aaa:PostLoginBanner/", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/", "Security%20and%20Policing/aaa:TacacsPlusEp/", "Security%20and%20Policing/aaa:TacacsPlusProvider/", "Security%20and%20Policing/aaa:TacacsPlusProviderGroup/", "Security%20and%20Policing/aaa:ProviderRef/", "Security%20and%20Policing/aaa:RadiusEp/", "Security%20and%20Policing/aaa:RadiusServerMonitor/", "Security%20and%20Policing/aaa:RadiusProvider/", "Security%20and%20Policing/aaa:RadiusProviderGroup/", "Security%20and%20Policing/aaa:ProviderRef/", "Security%20and%20Policing/aaa:AuthRealm/", "Security%20and%20Policing/aaa:DefaultAuth/", "Security%20and%20Policing/aaa:ConsoleAuth/", "Security%20and%20Policing/aaa:DefaultAuthor/", "Security%20and%20Policing/aaa:DefaultAcc/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.").AddApiDocumentation("aaaUserEp", "Security%20and%20Policing/aaa:UserEp/", []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaRoleFeatureGroup", "aaaFeatureName", "aaaRole", "aaaRoleRule", "aaaPermitVlan", "aaaPermitIntf", "aaaPermitVrf", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner/", "Security%20and%20Policing/aaa:PostLoginBanner/", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/", "Security%20and%20Policing/aaa:RoleFeatureGroup/", "Security%20and%20Policing/aaa:FeatureName/", "Security%20and%20Policing/aaa:Role/", "Security%20and%20Policing/aaa:RoleRule/", "Security%20and%20Policing/aaa:PermitVlan/", "Security%20and%20Policing/aaa:PermitIntf/", "Security%20and%20Policing/aaa:PermitVrf/", "Security%20and%20Policing/aaa:TacacsPlusEp/", "Security%20and%20Policing/aaa:TacacsPlusProvider/", "Security%20and%20Policing/aaa:TacacsPlusProviderGroup/", "Security%20and%20Policing/aaa:ProviderRef/", "Security%20and%20Policing/aaa:RadiusEp/", "Security%20and%20Policing/aaa:RadiusServerMonitor/", "Security%20and%20Policing/aaa:RadiusProvider/", "Security%20and%20Policing/aaa:RadiusProviderGroup/", "Security%20and%20Policing/aaa:ProviderRef/", "Security%20and%20Policing/aaa:AuthRealm/", "Security%20and%20Policing/aaa:DefaultAuth/", "Security%20and%20Policing/aaa:ConsoleAuth/", "Security%20and%20Policing/aaa:DefaultAuthor/", "Security%20and%20Policing/aaa:DefaultAcc/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -339,6 +339,112 @@ func (r *UserManagementResource) Schema(ctx context.Context, req resource.Schema
 										},
 									},
 								},
+							},
+						},
+					},
+				},
+			},
+			"role_feature_groups": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of role feature groups.\n  - Map key: `name` - Enter feature-group name.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"features": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of features of the feature group.\n  - Map key: `name` - Enter the feature name.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+					},
+				},
+			},
+			"roles": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of user roles.\n  - Map key: `name` - Object name.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"description": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Description of the specified attribute.").String,
+							Optional:            true,
+						},
+						"deny_interface": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Deny all interfaces except allowed ones.").AddStringEnumDescription("no", "yes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("no", "yes"),
+							},
+						},
+						"deny_vlan": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Deny all VLAN except allowed ones.").AddStringEnumDescription("no", "yes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("no", "yes"),
+							},
+						},
+						"deny_vrf": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Deny all VRF except allowed ones.").AddStringEnumDescription("no", "yes").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("no", "yes"),
+							},
+						},
+						"rules": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of role rules.\n  - Map key: `number` - Role Rule number.\n  - Key range: `1`-`256`").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"permission": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Permission type permit or deny.").AddStringEnumDescription("none", "permit", "deny").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "permit", "deny"),
+										},
+									},
+									"access": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Rule access type command or read or read-write.").AddStringEnumDescription("none", "read", "read-write", "command").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "read", "read-write", "command"),
+										},
+									},
+									"command": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Allowed command string pattern.").String,
+										Optional:            true,
+									},
+									"scope": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Role Rule scope feature or feature-group or OID.").AddStringEnumDescription("none", "feature", "feature-group", "oid").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("none", "feature", "feature-group", "oid"),
+										},
+									},
+									"scope_name": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Allowed scope string.").String,
+										Optional:            true,
+									},
+								},
+							},
+						},
+						"permitted_vlans": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of VLANs accessible by the role.\n  - Map key: `vlan` - Enter the vlan range.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"permitted_interfaces": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of interfaces accessible by the role.\n  - Map key: `interface_id` - Enter the interface range.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"permitted_vrfs": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of VRFs accessible by the role.\n  - Map key: `vrf` - Enter the vrf name to access the role.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
 							},
 						},
 					},

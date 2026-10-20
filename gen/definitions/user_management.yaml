@@ -334,6 +334,175 @@ child_classes:
                   - "writePriv"
                 description: "The privilege type for a user role."
                 example: "readPriv"
+  - class_name: aaaRoleFeatureGroup
+    doc_path: Security%20and%20Policing/aaa:RoleFeatureGroup/
+    rn: rolefeaturegroup-%s
+    type: list
+    tf_name: role_feature_groups
+    description: 'List of role feature groups.'
+    attributes:
+      - nxos_name: groupName
+        tf_name: name
+        type: String
+        id: true
+        description: 'Enter feature-group name.'
+        example: tf-group
+    child_classes:
+      - class_name: aaaFeatureName
+        doc_path: Security%20and%20Policing/aaa:FeatureName/
+        rn: featurename-%s
+        type: list
+        tf_name: features
+        description: 'List of features of the feature group.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Enter the feature name.'
+            example: snmp
+  - class_name: aaaRole
+    doc_path: Security%20and%20Policing/aaa:Role/
+    rn: role-[%s]
+    type: list
+    tf_name: roles
+    description: 'List of user roles.'
+    attributes:
+      - nxos_name: name
+        tf_name: name
+        type: String
+        id: true
+        description: 'Object name.'
+        example: tf-role
+      - nxos_name: descr
+        tf_name: description
+        type: String
+        description: 'Description of the specified attribute.'
+        example: 'Terraform role'
+      - nxos_name: denyIntf
+        tf_name: deny_interface
+        type: String
+        enum_values:
+          - "no"
+          - "yes"
+        description: 'Deny all interfaces except allowed ones.'
+        example: "yes"
+      - nxos_name: denyVLAN
+        tf_name: deny_vlan
+        type: String
+        enum_values:
+          - "no"
+          - "yes"
+        description: 'Deny all VLAN except allowed ones.'
+        example: "yes"
+      - nxos_name: denyVRF
+        tf_name: deny_vrf
+        type: String
+        enum_values:
+          - "no"
+          - "yes"
+        description: 'Deny all VRF except allowed ones.'
+        example: "yes"
+    child_classes:
+      - class_name: aaaRoleRule
+        doc_path: Security%20and%20Policing/aaa:RoleRule/
+        rn: rule-%v
+        type: list
+        tf_name: rules
+        description: 'List of role rules.'
+        attributes:
+          - nxos_name: ruleNumber
+            tf_name: number
+            type: Int64
+            id: true
+            min_int: 1
+            max_int: 256
+            description: 'Role Rule number.'
+            example: 10
+          - nxos_name: permission
+            tf_name: permission
+            type: String
+            enum_values:
+              - none
+              - permit
+              - deny
+            description: 'Permission type permit or deny.'
+            example: permit
+          - nxos_name: ruleAccess
+            tf_name: access
+            type: String
+            enum_values:
+              - none
+              - read
+              - read-write
+              - command
+            description: 'Rule access type command or read or read-write.'
+            example: read-write
+          - nxos_name: cmdStr
+            tf_name: command
+            type: String
+            description: 'Allowed command string pattern.'
+            example: 'reload *'
+            exclude_test: true
+          - nxos_name: ruleScope
+            tf_name: scope
+            type: String
+            enum_values:
+              - none
+              - feature
+              - feature-group
+              - oid
+            description: 'Role Rule scope feature or feature-group or OID.'
+            example: feature-group
+          - nxos_name: scopeEntity
+            tf_name: scope_name
+            type: String
+            description: 'Allowed scope string.'
+            example: tf-group
+        example_entries:
+          - number: 20
+            permission: deny
+            access: command
+            command: 'reload *'
+      - class_name: aaaPermitVlan
+        doc_path: Security%20and%20Policing/aaa:PermitVlan/
+        rn: permitvlan-[%s]
+        type: list
+        tf_name: permitted_vlans
+        description: 'List of VLANs accessible by the role.'
+        attributes:
+          - nxos_name: vlanRange
+            tf_name: vlan
+            type: String
+            id: true
+            description: 'Enter the vlan range.'
+            example: vlan-100
+      - class_name: aaaPermitIntf
+        doc_path: Security%20and%20Policing/aaa:PermitIntf/
+        rn: permitintf-[%s]
+        type: list
+        tf_name: permitted_interfaces
+        description: 'List of interfaces accessible by the role.'
+        attributes:
+          - nxos_name: ifName
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Enter the interface range.'
+            example: eth1/10
+      - class_name: aaaPermitVrf
+        doc_path: Security%20and%20Policing/aaa:PermitVrf/
+        rn: permitvrf-%s
+        type: list
+        tf_name: permitted_vrfs
+        description: 'List of VRFs accessible by the role.'
+        attributes:
+          - nxos_name: vrfName
+            tf_name: vrf
+            type: String
+            id: true
+            description: 'Enter the vrf name to access the role.'
+            example: VRF1
   - class_name: aaaTacacsPlusEp
     doc_path: Security%20and%20Policing/aaa:TacacsPlusEp/
     rn: tacacsext

@@ -42,6 +42,43 @@ resource "nxos_user_management" "example" {
       }
     }
   }
+  role_feature_groups = {
+    "tf-group" = {
+      features = {
+        "snmp" = {}
+      }
+    }
+  }
+  roles = {
+    "tf-role" = {
+      description    = "Terraform role"
+      deny_interface = "yes"
+      deny_vlan      = "yes"
+      deny_vrf       = "yes"
+      rules = {
+        "10" = {
+          permission = "permit"
+          access     = "read-write"
+          scope      = "feature-group"
+          scope_name = "tf-group"
+        }
+        "20" = {
+          permission = "deny"
+          access     = "command"
+          command    = "reload *"
+        }
+      }
+      permitted_vlans = {
+        "vlan-100" = {}
+      }
+      permitted_interfaces = {
+        "eth1/10" = {}
+      }
+      permitted_vrfs = {
+        "VRF1" = {}
+      }
+    }
+  }
   tacacs_deadtime         = 5
   tacacs_description      = "TACACS+ settings"
   tacacs_owner_key        = "owner1"

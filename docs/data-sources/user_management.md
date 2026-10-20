@@ -5,7 +5,7 @@ subcategory: "Security"
 description: |-
   This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.
   API Documentation
-  aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:UserEp/aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:PreLoginBanner/aaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:PostLoginBanner/aaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:UserRole/aaaTacacsPlusEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/aaaTacacsPlusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/aaaTacacsPlusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/aaaProviderRef https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:ProviderRef/aaaRadiusEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusEp/aaaRadiusServerMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusServerMonitor/aaaRadiusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusProvider/aaaRadiusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusProviderGroup/aaaProviderRef https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:ProviderRef/aaaAuthRealm https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:AuthRealm/aaaDefaultAuth https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:DefaultAuth/aaaConsoleAuth https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:ConsoleAuth/aaaDefaultAuthor https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:DefaultAuthor/aaaDefaultAcc https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:DefaultAcc/
+  aaaUserEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:UserEp/aaaPreLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:PreLoginBanner/aaaPostLoginBanner https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:PostLoginBanner/aaaUser https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:User/aaaUserDomain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:UserDomain/aaaUserRole https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:UserRole/aaaRoleFeatureGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RoleFeatureGroup/aaaFeatureName https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:FeatureName/aaaRole https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:Role/aaaRoleRule https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RoleRule/aaaPermitVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:PermitVlan/aaaPermitIntf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:PermitIntf/aaaPermitVrf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:PermitVrf/aaaTacacsPlusEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/aaaTacacsPlusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/aaaTacacsPlusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/aaaProviderRef https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:ProviderRef/aaaRadiusEp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusEp/aaaRadiusServerMonitor https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusServerMonitor/aaaRadiusProvider https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusProvider/aaaRadiusProviderGroup https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RadiusProviderGroup/aaaProviderRef https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:ProviderRef/aaaAuthRealm https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:AuthRealm/aaaDefaultAuth https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:DefaultAuth/aaaConsoleAuth https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:ConsoleAuth/aaaDefaultAuthor https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:DefaultAuthor/aaaDefaultAcc https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:DefaultAcc/
 ---
 
 # nxos_user_management (Data Source)
@@ -20,6 +20,13 @@ This data source can read the user management configuration on NX-OS devices, in
 - [aaaUser](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:User/)
 - [aaaUserDomain](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:UserDomain/)
 - [aaaUserRole](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:UserRole/)
+- [aaaRoleFeatureGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RoleFeatureGroup/)
+- [aaaFeatureName](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:FeatureName/)
+- [aaaRole](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:Role/)
+- [aaaRoleRule](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:RoleRule/)
+- [aaaPermitVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:PermitVlan/)
+- [aaaPermitIntf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:PermitIntf/)
+- [aaaPermitVrf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:PermitVrf/)
 - [aaaTacacsPlusEp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusEp/)
 - [aaaTacacsPlusProvider](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusProvider/)
 - [aaaTacacsPlusProviderGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/aaa:TacacsPlusProviderGroup/)
@@ -165,6 +172,10 @@ data "nxos_user_management" "example" {
 - `radius_secure_mode` (String) Global RADIUS server secure mode.
 - `radius_source_interface` (String) Source Interface.
 - `radius_timeout` (Number) The amount of time between authentication attempts.
+- `role_feature_groups` (Attributes Map) List of role feature groups.
+  - Map key: `name` - Enter feature-group name. (see [below for nested schema](#nestedatt--role_feature_groups))
+- `roles` (Attributes Map) List of user roles.
+  - Map key: `name` - Object name. (see [below for nested schema](#nestedatt--roles))
 - `service_password_recovery` (String) Service Password Recovery.
 - `tacacs_deadtime` (Number) Duration for which non-reachable server is skipped.
 - `tacacs_description` (String) Description of the specified attribute.
@@ -285,6 +296,63 @@ Read-Only:
 - `tls_client_trustpoint` (String) Client trustpoint name.
 - `tls_idle_timeout` (Number) TLS Timeout in seconds.
 - `use_type` (String) Usage for the radius server.
+
+
+<a id="nestedatt--role_feature_groups"></a>
+### Nested Schema for `role_feature_groups`
+
+Read-Only:
+
+- `features` (Attributes Map) List of features of the feature group.
+  - Map key: `name` - Enter the feature name. (see [below for nested schema](#nestedatt--role_feature_groups--features))
+
+<a id="nestedatt--role_feature_groups--features"></a>
+### Nested Schema for `role_feature_groups.features`
+
+
+
+<a id="nestedatt--roles"></a>
+### Nested Schema for `roles`
+
+Read-Only:
+
+- `deny_interface` (String) Deny all interfaces except allowed ones.
+- `deny_vlan` (String) Deny all VLAN except allowed ones.
+- `deny_vrf` (String) Deny all VRF except allowed ones.
+- `description` (String) Description of the specified attribute.
+- `permitted_interfaces` (Attributes Map) List of interfaces accessible by the role.
+  - Map key: `interface_id` - Enter the interface range. (see [below for nested schema](#nestedatt--roles--permitted_interfaces))
+- `permitted_vlans` (Attributes Map) List of VLANs accessible by the role.
+  - Map key: `vlan` - Enter the vlan range. (see [below for nested schema](#nestedatt--roles--permitted_vlans))
+- `permitted_vrfs` (Attributes Map) List of VRFs accessible by the role.
+  - Map key: `vrf` - Enter the vrf name to access the role. (see [below for nested schema](#nestedatt--roles--permitted_vrfs))
+- `rules` (Attributes Map) List of role rules.
+  - Map key: `number` - Role Rule number.
+  - Key range: `1`-`256` (see [below for nested schema](#nestedatt--roles--rules))
+
+<a id="nestedatt--roles--permitted_interfaces"></a>
+### Nested Schema for `roles.permitted_interfaces`
+
+
+<a id="nestedatt--roles--permitted_vlans"></a>
+### Nested Schema for `roles.permitted_vlans`
+
+
+<a id="nestedatt--roles--permitted_vrfs"></a>
+### Nested Schema for `roles.permitted_vrfs`
+
+
+<a id="nestedatt--roles--rules"></a>
+### Nested Schema for `roles.rules`
+
+Read-Only:
+
+- `access` (String) Rule access type command or read or read-write.
+- `command` (String) Allowed command string pattern.
+- `permission` (String) Permission type permit or deny.
+- `scope` (String) Role Rule scope feature or feature-group or OID.
+- `scope_name` (String) Allowed scope string.
+
 
 
 <a id="nestedatt--tacacs_provider_groups"></a>

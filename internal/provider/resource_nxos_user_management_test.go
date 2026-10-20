@@ -74,6 +74,17 @@ func TestAccUserManagementResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.user1.shell_type", "shellvsh"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.user1.roles.network-operator.description", "Operator role"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.user1.roles.network-operator.privilege_type", "readPriv"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "roles.tf-role.description", "Terraform role"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "roles.tf-role.deny_interface", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "roles.tf-role.deny_vlan", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "roles.tf-role.deny_vrf", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "roles.tf-role.rules.10.permission", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "roles.tf-role.rules.10.access", "read-write"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "roles.tf-role.rules.10.scope", "feature-group"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "roles.tf-role.rules.10.scope_name", "tf-group"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "roles.tf-role.rules.20.permission", "deny"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "roles.tf-role.rules.20.access", "command"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "roles.tf-role.rules.20.command", "reload *"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_deadtime", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_description", "TACACS+ settings"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "tacacs_owner_key", "owner1"))
@@ -231,6 +242,17 @@ func TestAccUserManagementResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.shell_type", "shellvsh"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.roles.network-operator.description", "Operator role"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.roles.network-operator.privilege_type", "readPriv"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "roles.tf-role.description", "Terraform role"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "roles.tf-role.deny_interface", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "roles.tf-role.deny_vlan", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "roles.tf-role.deny_vrf", "yes"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "roles.tf-role.rules.10.permission", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "roles.tf-role.rules.10.access", "read-write"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "roles.tf-role.rules.10.scope", "feature-group"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "roles.tf-role.rules.10.scope_name", "tf-group"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "roles.tf-role.rules.20.permission", "deny"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "roles.tf-role.rules.20.access", "command"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "roles.tf-role.rules.20.command", "reload *"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_deadtime", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_description", "TACACS+ settings"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "tacacs_owner_key", "owner1"))
@@ -477,6 +499,47 @@ func testAccUserManagementResourceConfig_all(includeWriteOnly bool) string {
 	config += `				"network-operator" = {` + "\n"
 	config += `					description = "Operator role"` + "\n"
 	config += `					privilege_type = "readPriv"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	role_feature_groups = {` + "\n"
+	config += `		"tf-group" = {` + "\n"
+	config += `			features = {` + "\n"
+	config += `				"snmp" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	roles = {` + "\n"
+	config += `		"tf-role" = {` + "\n"
+	config += `			description = "Terraform role"` + "\n"
+	config += `			deny_interface = "yes"` + "\n"
+	config += `			deny_vlan = "yes"` + "\n"
+	config += `			deny_vrf = "yes"` + "\n"
+	config += `			rules = {` + "\n"
+	config += `				"10" = {` + "\n"
+	config += `					permission = "permit"` + "\n"
+	config += `					access = "read-write"` + "\n"
+	config += `					scope = "feature-group"` + "\n"
+	config += `					scope_name = "tf-group"` + "\n"
+	config += `				}` + "\n"
+	config += `				"20" = {` + "\n"
+	config += `					permission = "deny"` + "\n"
+	config += `					access = "command"` + "\n"
+	config += `					command = "reload *"` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			permitted_vlans = {` + "\n"
+	config += `				"vlan-100" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			permitted_interfaces = {` + "\n"
+	config += `				"eth1/10" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			permitted_vrfs = {` + "\n"
+	config += `				"VRF1" = {` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

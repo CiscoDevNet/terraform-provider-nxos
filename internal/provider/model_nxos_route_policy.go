@@ -148,6 +148,7 @@ type RoutePolicyRouteMapsEntries struct {
 	MatchRouteTypes                         map[string]RoutePolicyRouteMapsEntriesMatchRouteTypes                      `tfsdk:"match_route_types"`
 	SetNextHops                             map[string]RoutePolicyRouteMapsEntriesSetNextHops                          `tfsdk:"set_next_hops"`
 	SetInterfaces                           map[string]RoutePolicyRouteMapsEntriesSetInterfaces                        `tfsdk:"set_interfaces"`
+	SetVrf                                  types.String                                                               `tfsdk:"set_vrf"`
 }
 
 type RoutePolicyRouteMapsEntriesMatchRoutePrefixLists struct {
@@ -267,7 +268,7 @@ var RoutePolicyListClasses = map[string]bool{"rtpfxRuleV4": true, "rtpfxEntry": 
 
 // getRoutePolicyTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getRoutePolicyTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"rtpfxRuleV4", "rtpfxEntry", "rtpfxRuleV6", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapSetPolicyTag", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapRsRtDstAccAtt", "rtmapMatchRtDstV6", "rtmapRsRtDstV6AccAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag", "rtmapSetMetric", "rtmapSetMetricType", "rtmapSetNhPeerAddr", "rtmapSetPref", "rtmapSetPathSelection", "rtmapSetEvpn", "rtmapMatchRtNh", "rtmapRsRtNhAtt", "rtmapMatchRegComm", "rtmapRsRegCommAtt", "rtmapMatchAsPathAccessList", "rtmapRsRtAsPathAccAtt", "rtmapMatchAsnAsPathAccessList", "rtmapRsRtAsnAsPathAccAtt", "rtmapSetPrepend", "rtmapSetPrependLastAs", "rtmapSetRtTag", "rtmapSetWeight", "rtmapSetOrigin", "rtmapSetRttComm", "rtextcomItem", "rtmapSetCommList", "rtmapMatchRtIf", "rtmapMatchRtType", "rtmapSetNh", "rtmapSetIntf", "rtregcomRule", "rtregcomEntry", "rtregcomItem", "rtlistRule", "rtlistEntry", "rpmInst", "rpmRpmIf", "rpmRpmv6If"}, RoutePolicySubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"rtpfxRuleV4", "rtpfxEntry", "rtpfxRuleV6", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapSetPolicyTag", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapRsRtDstAccAtt", "rtmapMatchRtDstV6", "rtmapRsRtDstV6AccAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag", "rtmapSetMetric", "rtmapSetMetricType", "rtmapSetNhPeerAddr", "rtmapSetPref", "rtmapSetPathSelection", "rtmapSetEvpn", "rtmapMatchRtNh", "rtmapRsRtNhAtt", "rtmapMatchRegComm", "rtmapRsRegCommAtt", "rtmapMatchAsPathAccessList", "rtmapRsRtAsPathAccAtt", "rtmapMatchAsnAsPathAccessList", "rtmapRsRtAsnAsPathAccAtt", "rtmapSetPrepend", "rtmapSetPrependLastAs", "rtmapSetRtTag", "rtmapSetWeight", "rtmapSetOrigin", "rtmapSetRttComm", "rtextcomItem", "rtmapSetCommList", "rtmapMatchRtIf", "rtmapMatchRtType", "rtmapSetNh", "rtmapSetIntf", "rtmapSetVrf", "rtregcomRule", "rtregcomEntry", "rtregcomItem", "rtlistRule", "rtlistEntry", "rpmInst", "rpmRpmIf", "rpmRpmv6If"}, RoutePolicySubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -964,6 +965,13 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 						attrs = "{}"
 						attrs, _ = sjson.Set(attrs, "if", key)
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetIntf.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.SetVrf.IsUnknown() && !child.SetVrf.IsNull() && !configChild.SetVrf.IsNull() {
+						attrs, _ = sjson.Set(attrs, "vrfName", child.SetVrf.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetVrf.attributes", attrs)
 					}
 				}
 			}
@@ -1779,6 +1787,20 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 													return true
 												},
 											)
+											{
+												var rrtmapSetVrf gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetVrf.attributes.rn").String()
+														if rnValue == "svrf" {
+															rrtmapSetVrf = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetVrf = types.StringValue(rrtmapSetVrf.Get("rtmapSetVrf.attributes.vrfName").String())
+											}
 											if child.Entries == nil {
 												child.Entries = make(map[string]RoutePolicyRouteMapsEntries)
 											}
@@ -2918,6 +2940,24 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 				}
 				ncItem.SetInterfaces[nc_] = nc_Item
 			}
+			{
+				var rrtmapSetVrf gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetVrf.attributes.rn").String()
+						if rnValue == "svrf" {
+							rrtmapSetVrf = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetVrf.IsNull() {
+					ncItem.SetVrf = types.StringValue(rrtmapSetVrf.Get("rtmapSetVrf.attributes.vrfName").String())
+				} else {
+					ncItem.SetVrf = types.StringNull()
+				}
+			}
 			item.Entries[nc] = ncItem
 		}
 		data.RouteMaps[key] = item
@@ -3317,6 +3357,10 @@ func (data RoutePolicy) managedDns() map[string]bool {
 			for key__, child__ := range child_.SetInterfaces {
 				rtmapSetIntfDn__ := rtmapEntryDn_ + "/" + child__.getRn(key__)
 				dns[rtmapSetIntfDn__] = true
+			}
+			if !(child_.SetVrf.IsNull()) {
+				rtmapSetVrfDn__ := rtmapEntryDn_ + "/" + "svrf"
+				dns[rtmapSetVrfDn__] = true
 			}
 		}
 	}
@@ -4129,6 +4173,23 @@ func (data RoutePolicy) toResetBody(preexisting map[string]bool) nxos.Body {
 				rtmapSetIntfBody__ := ""
 				rtmapSetIntfBody__, _ = sjson.Set(rtmapSetIntfBody__, "rtmapSetIntf.attributes.rn", rtmapSetIntfRn__)
 				rtmapEntryBody_, _ = sjson.SetRaw(rtmapEntryBody_, "rtmapEntry.children.-1", rtmapSetIntfBody__)
+			}
+			if !(child_.SetVrf.IsNull()) {
+				rtmapSetVrfRn__ := "svrf"
+				rtmapSetVrfDn__ := rtmapEntryDn_ + "/" + rtmapSetVrfRn__
+				_ = rtmapSetVrfDn__
+				if !existed(rtmapSetVrfDn__) {
+					rtmapEntryBody_, _ = sjson.Set(rtmapEntryBody_, "rtmapEntry.children.-1.rtmapSetVrf.attributes", map[string]interface{}{"rn": rtmapSetVrfRn__, "status": "deleted"})
+				} else {
+					rtmapSetVrfBody__ := ""
+					if !child_.SetVrf.IsNull() {
+						rtmapSetVrfBody__, _ = sjson.Set(rtmapSetVrfBody__, "rtmapSetVrf.attributes.vrfName", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if rtmapSetVrfBody__ != "" {
+						rtmapSetVrfBody__, _ = sjson.Set(rtmapSetVrfBody__, "rtmapSetVrf.attributes.rn", rtmapSetVrfRn__)
+						rtmapEntryBody_, _ = sjson.SetRaw(rtmapEntryBody_, "rtmapEntry.children.-1", rtmapSetVrfBody__)
+					}
+				}
 			}
 			rtmapRuleBody, _ = sjson.SetRaw(rtmapRuleBody, "rtmapRule.children.-1", rtmapEntryBody_)
 		}
@@ -5233,6 +5294,16 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 												stateChild := stateChild.SetInterfaces[key]
 												_ = stateChild
 												_ = configChild
+											}
+										}
+										if deleteEmptied != nil && !(stateChild.SetVrf.IsNull()) && (configChild.SetVrf.IsNull()) && deleteEmptied(listChildDn_+"/svrf") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetVrf")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetVrf.IsNull() && configChild.SetVrf.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetVrf")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"vrfName", "DME_UNSET_PROPERTY_MARKER")
 											}
 										}
 									}

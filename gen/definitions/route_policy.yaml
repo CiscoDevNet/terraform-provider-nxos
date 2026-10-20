@@ -973,6 +973,19 @@ child_classes:
                 id: true
                 description: 'set interface for route-map. Must match first field in the output of `show intf brief`. Example: `null0` or `vlan100`.'
                 example: null0
+          - class_name: rtmapSetVrf
+            doc_path: Routing%20and%20Forwarding/rtmap:SetVrf/
+            rn: svrf
+            type: single
+            tf_name: set_vrf
+            description: 'Set VRF for PBR.'
+            exclude_test: true
+            attributes:
+              - nxos_name: vrfName
+                tf_name: set_vrf
+                type: String
+                description: 'Set VRF Name for PBR redirection.'
+                example: VRF1
   - class_name: rtregcomRule
     doc_path: Routing%20and%20Forwarding/rtregcom:Rule/
     rn: rtregcom-[%s]

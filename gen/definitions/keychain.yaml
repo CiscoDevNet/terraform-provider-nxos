@@ -82,6 +82,223 @@ child_classes:
                 example: secret_password
                 write_only: true
                 sensitive: true
+            child_classes:
+              - class_name: kcmgrAcceptlifetime
+                doc_path: Security%20and%20Policing/kcmgr:Acceptlifetime/
+                rn: acceptlifetime
+                type: single
+                tf_name: accept_lifetime
+                description: 'Key accept lifetime.'
+                attributes:
+                  - nxos_name: duration
+                    tf_name: accept_lifetime_duration
+                    type: Int64
+                    description: 'duration period of lifetime.'
+                    min_int: 0
+                    max_int: 2147483646
+                    example: 86400
+                    exclude_test: true
+                  - nxos_name: endDay
+                    tf_name: accept_lifetime_end_day
+                    type: Int64
+                    description: 'Ending date of lifetime for the keychain.'
+                    min_int: 0
+                    max_int: 31
+                    example: 31
+                  - nxos_name: endMonth
+                    tf_name: accept_lifetime_end_month
+                    type: String
+                    description: 'Ending month of lifetime for the keychain.'
+                    enum_values:
+                      - Unspecified
+                      - Jan
+                      - Feb
+                      - Mar
+                      - Apr
+                      - May
+                      - Jun
+                      - Jul
+                      - Aug
+                      - Sep
+                      - Oct
+                      - Nov
+                      - Dec
+                    example: Dec
+                  - nxos_name: endTime
+                    tf_name: accept_lifetime_end_time
+                    type: String
+                    description: 'HH:MM:SS End Time of lifetime.'
+                    example: '23:59:59'
+                  - nxos_name: endYear
+                    tf_name: accept_lifetime_end_year
+                    type: Int64
+                    description: 'Ending Year of lifetime for the keychain.'
+                    min_int: 0
+                    max_int: 2035
+                    example: 2035
+                  - nxos_name: infinite
+                    tf_name: accept_lifetime_infinite
+                    type: String
+                    description: 'Lifetime has no endtime.'
+                    enum_values:
+                      - disabled
+                      - enabled
+                    example: enabled
+                    exclude_test: true
+                  - nxos_name: local
+                    tf_name: accept_lifetime_local
+                    type: String
+                    description: 'local timezone notification.'
+                    enum_values:
+                      - unspecified
+                      - local
+                    example: local
+                  - nxos_name: startDay
+                    tf_name: accept_lifetime_start_day
+                    type: Int64
+                    description: 'starting Day of Lifetime for the keychain.'
+                    min_int: 0
+                    max_int: 31
+                    example: 1
+                  - nxos_name: startMonth
+                    tf_name: accept_lifetime_start_month
+                    type: String
+                    description: 'starting month of Lifetime for the keychain.'
+                    enum_values:
+                      - Unspecified
+                      - Jan
+                      - Feb
+                      - Mar
+                      - Apr
+                      - May
+                      - Jun
+                      - Jul
+                      - Aug
+                      - Sep
+                      - Oct
+                      - Nov
+                      - Dec
+                    example: Jan
+                  - nxos_name: startTime
+                    tf_name: accept_lifetime_start_time
+                    type: String
+                    description: 'HH:MM:SS Start Time of lifetime.'
+                    example: '00:00:00'
+                  - nxos_name: startYear
+                    tf_name: accept_lifetime_start_year
+                    type: Int64
+                    description: 'starting Year of Lifetime for the keychain.'
+                    min_int: 0
+                    max_int: 2035
+                    example: 2025
+              - class_name: kcmgrSendlifetime
+                doc_path: Security%20and%20Policing/kcmgr:Sendlifetime/
+                rn: sendlifetime
+                type: single
+                tf_name: send_lifetime
+                description: 'Key send lifetime.'
+                attributes:
+                  - nxos_name: duration
+                    tf_name: send_lifetime_duration
+                    type: Int64
+                    description: 'duration period of lifetime.'
+                    min_int: 0
+                    max_int: 2147483646
+                    example: 86400
+                    exclude_test: true
+                  - nxos_name: endDay
+                    tf_name: send_lifetime_end_day
+                    type: Int64
+                    description: 'Ending date of lifetime for the keychain.'
+                    min_int: 0
+                    max_int: 31
+                    example: 31
+                  - nxos_name: endMonth
+                    tf_name: send_lifetime_end_month
+                    type: String
+                    description: 'Ending month of lifetime for the keychain.'
+                    enum_values:
+                      - Unspecified
+                      - Jan
+                      - Feb
+                      - Mar
+                      - Apr
+                      - May
+                      - Jun
+                      - Jul
+                      - Aug
+                      - Sep
+                      - Oct
+                      - Nov
+                      - Dec
+                    example: Dec
+                  - nxos_name: endTime
+                    tf_name: send_lifetime_end_time
+                    type: String
+                    description: 'HH:MM:SS End Time of lifetime.'
+                    example: '23:59:59'
+                  - nxos_name: endYear
+                    tf_name: send_lifetime_end_year
+                    type: Int64
+                    description: 'Ending Year of lifetime for the keychain.'
+                    min_int: 0
+                    max_int: 2035
+                    example: 2035
+                  - nxos_name: infinite
+                    tf_name: send_lifetime_infinite
+                    type: String
+                    description: 'Lifetime has no endtime.'
+                    enum_values:
+                      - disabled
+                      - enabled
+                    example: enabled
+                    exclude_test: true
+                  - nxos_name: local
+                    tf_name: send_lifetime_local
+                    type: String
+                    description: 'local timezone notification.'
+                    enum_values:
+                      - unspecified
+                      - local
+                    example: local
+                  - nxos_name: startDay
+                    tf_name: send_lifetime_start_day
+                    type: Int64
+                    description: 'starting Day of Lifetime for the keychain.'
+                    min_int: 0
+                    max_int: 31
+                    example: 1
+                  - nxos_name: startMonth
+                    tf_name: send_lifetime_start_month
+                    type: String
+                    description: 'starting month of Lifetime for the keychain.'
+                    enum_values:
+                      - Unspecified
+                      - Jan
+                      - Feb
+                      - Mar
+                      - Apr
+                      - May
+                      - Jun
+                      - Jul
+                      - Aug
+                      - Sep
+                      - Oct
+                      - Nov
+                      - Dec
+                    example: Jan
+                  - nxos_name: startTime
+                    tf_name: send_lifetime_start_time
+                    type: String
+                    description: 'HH:MM:SS Start Time of lifetime.'
+                    example: '00:00:00'
+                  - nxos_name: startYear
+                    tf_name: send_lifetime_start_year
+                    type: Int64
+                    description: 'starting Year of Lifetime for the keychain.'
+                    min_int: 0
+                    max_int: 2035
+                    example: 2025
       - class_name: kcmgrMacsecKeychain
         doc_path: Security%20and%20Policing/kcmgr:MacsecKeychain/
         rn: macseckeychain-[%s]

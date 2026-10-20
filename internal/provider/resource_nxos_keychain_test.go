@@ -42,6 +42,24 @@ func TestAccKeychainResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.cryptographic_algorithm", "AES"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.key_string", "secret_password"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_end_day", "31"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_end_month", "Dec"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_end_time", "23:59:59"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_end_year", "2035"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_local", "local"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_start_day", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_start_month", "Jan"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_start_time", "00:00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_start_year", "2025"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_end_day", "31"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_end_month", "Dec"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_end_time", "23:59:59"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_end_year", "2035"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_local", "local"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_start_day", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_start_month", "Jan"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_start_time", "00:00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_start_year", "2025"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.cryptographic_algorithm", "AES_256_CMAC"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.key_hex_string", "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_day", "31"))
@@ -56,6 +74,24 @@ func TestAccKeychainResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_keychain.test", "macsec_psk_no_show", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.cryptographic_algorithm", "AES"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_end_day", "31"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_end_month", "Dec"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_end_time", "23:59:59"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_end_year", "2035"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_local", "local"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_start_day", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_start_month", "Jan"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_start_time", "00:00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.accept_lifetime_start_year", "2025"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_end_day", "31"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_end_month", "Dec"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_end_time", "23:59:59"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_end_year", "2035"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_local", "local"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_start_day", "1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_start_month", "Jan"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_start_time", "00:00:00"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "keychains.KEYCHAIN1.keys.1.send_lifetime_start_year", "2025"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.cryptographic_algorithm", "AES_256_CMAC"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_day", "31"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_keychain.test", "macsec_keychains.MACSEC_KEYCHAIN1.keys.1000.end_month", "Dec"))
@@ -173,6 +209,24 @@ func testAccKeychainResourceConfig_all(includeWriteOnly bool) string {
 	} else {
 		config += `					key_string = "secret_password"` + "\n"
 	}
+	config += `					accept_lifetime_end_day = 31` + "\n"
+	config += `					accept_lifetime_end_month = "Dec"` + "\n"
+	config += `					accept_lifetime_end_time = "23:59:59"` + "\n"
+	config += `					accept_lifetime_end_year = 2035` + "\n"
+	config += `					accept_lifetime_local = "local"` + "\n"
+	config += `					accept_lifetime_start_day = 1` + "\n"
+	config += `					accept_lifetime_start_month = "Jan"` + "\n"
+	config += `					accept_lifetime_start_time = "00:00:00"` + "\n"
+	config += `					accept_lifetime_start_year = 2025` + "\n"
+	config += `					send_lifetime_end_day = 31` + "\n"
+	config += `					send_lifetime_end_month = "Dec"` + "\n"
+	config += `					send_lifetime_end_time = "23:59:59"` + "\n"
+	config += `					send_lifetime_end_year = 2035` + "\n"
+	config += `					send_lifetime_local = "local"` + "\n"
+	config += `					send_lifetime_start_day = 1` + "\n"
+	config += `					send_lifetime_start_month = "Jan"` + "\n"
+	config += `					send_lifetime_start_time = "00:00:00"` + "\n"
+	config += `					send_lifetime_start_year = 2025` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
 	config += `		}` + "\n"

@@ -4,8 +4,26 @@ resource "nxos_keychain" "example" {
     "KEYCHAIN1" = {
       keys = {
         "1" = {
-          cryptographic_algorithm = "AES"
-          key_string              = "secret_password"
+          cryptographic_algorithm     = "AES"
+          key_string                  = "secret_password"
+          accept_lifetime_end_day     = 31
+          accept_lifetime_end_month   = "Dec"
+          accept_lifetime_end_time    = "23:59:59"
+          accept_lifetime_end_year    = 2035
+          accept_lifetime_local       = "local"
+          accept_lifetime_start_day   = 1
+          accept_lifetime_start_month = "Jan"
+          accept_lifetime_start_time  = "00:00:00"
+          accept_lifetime_start_year  = 2025
+          send_lifetime_end_day       = 31
+          send_lifetime_end_month     = "Dec"
+          send_lifetime_end_time      = "23:59:59"
+          send_lifetime_end_year      = 2035
+          send_lifetime_local         = "local"
+          send_lifetime_start_day     = 1
+          send_lifetime_start_month   = "Jan"
+          send_lifetime_start_time    = "00:00:00"
+          send_lifetime_start_year    = 2025
         }
       }
     }

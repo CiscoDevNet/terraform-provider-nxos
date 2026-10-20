@@ -5,7 +5,7 @@ subcategory: "Security"
 description: |-
   This data source can read the keychain configuration on NX-OS devices, including keychains and their associated key entries.
   API Documentation
-  kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Entity/kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Key/kcmgrMacsecKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeychain/kcmgrMacsecKeyId https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeyId/kcmgrMacsecSendlifetime https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecSendlifetime/kcmgrMacsecpsk https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Macsecpsk/
+  kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Entity/kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Key/kcmgrAcceptlifetime https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Acceptlifetime/kcmgrSendlifetime https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Sendlifetime/kcmgrMacsecKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeychain/kcmgrMacsecKeyId https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeyId/kcmgrMacsecSendlifetime https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecSendlifetime/kcmgrMacsecpsk https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Macsecpsk/
 ---
 
 # nxos_keychain (Data Source)
@@ -18,6 +18,8 @@ This data source can read the keychain configuration on NX-OS devices, including
 - [kcmgrKeychains](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Keychains/)
 - [kcmgrClassicKeychain](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/)
 - [kcmgrKey](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Key/)
+- [kcmgrAcceptlifetime](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Acceptlifetime/)
+- [kcmgrSendlifetime](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Sendlifetime/)
 - [kcmgrMacsecKeychain](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeychain/)
 - [kcmgrMacsecKeyId](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeyId/)
 - [kcmgrMacsecSendlifetime](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecSendlifetime/)
@@ -61,11 +63,33 @@ Read-Only:
 
 Read-Only:
 
+- `accept_lifetime_duration` (Number) duration period of lifetime.
+- `accept_lifetime_end_day` (Number) Ending date of lifetime for the keychain.
+- `accept_lifetime_end_month` (String) Ending month of lifetime for the keychain.
+- `accept_lifetime_end_time` (String) HH:MM:SS End Time of lifetime.
+- `accept_lifetime_end_year` (Number) Ending Year of lifetime for the keychain.
+- `accept_lifetime_infinite` (String) Lifetime has no endtime.
+- `accept_lifetime_local` (String) local timezone notification.
+- `accept_lifetime_start_day` (Number) starting Day of Lifetime for the keychain.
+- `accept_lifetime_start_month` (String) starting month of Lifetime for the keychain.
+- `accept_lifetime_start_time` (String) HH:MM:SS Start Time of lifetime.
+- `accept_lifetime_start_year` (Number) starting Year of Lifetime for the keychain.
 - `cryptographic_algorithm` (String) Cryptographic Algorithm used in key.
 - `encryption_type` (String) Encryption type value based on user input.
 - `key_string` (String, Sensitive) keyString provided by user for the keychain.
 - `key_string_wo` (String) The write-only value of the attribute.
 - `key_string_wo_version` (Number) The write-only version of the attribute.
+- `send_lifetime_duration` (Number) duration period of lifetime.
+- `send_lifetime_end_day` (Number) Ending date of lifetime for the keychain.
+- `send_lifetime_end_month` (String) Ending month of lifetime for the keychain.
+- `send_lifetime_end_time` (String) HH:MM:SS End Time of lifetime.
+- `send_lifetime_end_year` (Number) Ending Year of lifetime for the keychain.
+- `send_lifetime_infinite` (String) Lifetime has no endtime.
+- `send_lifetime_local` (String) local timezone notification.
+- `send_lifetime_start_day` (Number) starting Day of Lifetime for the keychain.
+- `send_lifetime_start_month` (String) starting month of Lifetime for the keychain.
+- `send_lifetime_start_time` (String) HH:MM:SS Start Time of lifetime.
+- `send_lifetime_start_year` (Number) starting Year of Lifetime for the keychain.
 
 
 

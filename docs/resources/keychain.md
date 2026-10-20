@@ -5,7 +5,7 @@ subcategory: "Security"
 description: |-
   This resource can manage the keychain configuration on NX-OS devices, including keychains and their associated key entries.
   API Documentation
-  kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Entity/kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Key/kcmgrMacsecKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeychain/kcmgrMacsecKeyId https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeyId/kcmgrMacsecSendlifetime https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecSendlifetime/kcmgrMacsecpsk https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Macsecpsk/
+  kcmgrEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Entity/kcmgrKeychains https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Keychains/kcmgrClassicKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/kcmgrKey https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Key/kcmgrAcceptlifetime https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Acceptlifetime/kcmgrSendlifetime https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Sendlifetime/kcmgrMacsecKeychain https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeychain/kcmgrMacsecKeyId https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeyId/kcmgrMacsecSendlifetime https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecSendlifetime/kcmgrMacsecpsk https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Macsecpsk/
 ---
 
 # nxos_keychain (Resource)
@@ -18,6 +18,8 @@ This resource can manage the keychain configuration on NX-OS devices, including 
 - [kcmgrKeychains](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Keychains/)
 - [kcmgrClassicKeychain](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:ClassicKeychain/)
 - [kcmgrKey](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Key/)
+- [kcmgrAcceptlifetime](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Acceptlifetime/)
+- [kcmgrSendlifetime](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:Sendlifetime/)
 - [kcmgrMacsecKeychain](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeychain/)
 - [kcmgrMacsecKeyId](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecKeyId/)
 - [kcmgrMacsecSendlifetime](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/kcmgr:MacsecSendlifetime/)
@@ -32,8 +34,26 @@ resource "nxos_keychain" "example" {
     "KEYCHAIN1" = {
       keys = {
         "1" = {
-          cryptographic_algorithm = "AES"
-          key_string              = "secret_password"
+          cryptographic_algorithm     = "AES"
+          key_string                  = "secret_password"
+          accept_lifetime_end_day     = 31
+          accept_lifetime_end_month   = "Dec"
+          accept_lifetime_end_time    = "23:59:59"
+          accept_lifetime_end_year    = 2035
+          accept_lifetime_local       = "local"
+          accept_lifetime_start_day   = 1
+          accept_lifetime_start_month = "Jan"
+          accept_lifetime_start_time  = "00:00:00"
+          accept_lifetime_start_year  = 2025
+          send_lifetime_end_day       = 31
+          send_lifetime_end_month     = "Dec"
+          send_lifetime_end_time      = "23:59:59"
+          send_lifetime_end_year      = 2035
+          send_lifetime_local         = "local"
+          send_lifetime_start_day     = 1
+          send_lifetime_start_month   = "Jan"
+          send_lifetime_start_time    = "00:00:00"
+          send_lifetime_start_year    = 2025
         }
       }
     }
@@ -96,6 +116,26 @@ Optional:
 
 Optional:
 
+- `accept_lifetime_duration` (Number) duration period of lifetime.
+  - Range: `0`-`2147483646`
+- `accept_lifetime_end_day` (Number) Ending date of lifetime for the keychain.
+  - Range: `0`-`31`
+- `accept_lifetime_end_month` (String) Ending month of lifetime for the keychain.
+  - Choices: `Unspecified`, `Jan`, `Feb`, `Mar`, `Apr`, `May`, `Jun`, `Jul`, `Aug`, `Sep`, `Oct`, `Nov`, `Dec`
+- `accept_lifetime_end_time` (String) HH:MM:SS End Time of lifetime.
+- `accept_lifetime_end_year` (Number) Ending Year of lifetime for the keychain.
+  - Range: `0`-`2035`
+- `accept_lifetime_infinite` (String) Lifetime has no endtime.
+  - Choices: `disabled`, `enabled`
+- `accept_lifetime_local` (String) local timezone notification.
+  - Choices: `unspecified`, `local`
+- `accept_lifetime_start_day` (Number) starting Day of Lifetime for the keychain.
+  - Range: `0`-`31`
+- `accept_lifetime_start_month` (String) starting month of Lifetime for the keychain.
+  - Choices: `Unspecified`, `Jan`, `Feb`, `Mar`, `Apr`, `May`, `Jun`, `Jul`, `Aug`, `Sep`, `Oct`, `Nov`, `Dec`
+- `accept_lifetime_start_time` (String) HH:MM:SS Start Time of lifetime.
+- `accept_lifetime_start_year` (Number) starting Year of Lifetime for the keychain.
+  - Range: `0`-`2035`
 - `cryptographic_algorithm` (String) Cryptographic Algorithm used in key.
   - Choices: `NONE`, `MD5`, `HMAC-SHA-1`, `HMAC-SHA-256`, `HMAC-SHA-384`, `HMAC-SHA-512`, `3DES`, `AES`
 - `encryption_type` (String) Encryption type value based on user input.
@@ -103,6 +143,26 @@ Optional:
 - `key_string` (String, Sensitive) keyString provided by user for the keychain.
 - `key_string_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
 - `key_string_wo_version` (Number) The write-only version of the attribute.
+- `send_lifetime_duration` (Number) duration period of lifetime.
+  - Range: `0`-`2147483646`
+- `send_lifetime_end_day` (Number) Ending date of lifetime for the keychain.
+  - Range: `0`-`31`
+- `send_lifetime_end_month` (String) Ending month of lifetime for the keychain.
+  - Choices: `Unspecified`, `Jan`, `Feb`, `Mar`, `Apr`, `May`, `Jun`, `Jul`, `Aug`, `Sep`, `Oct`, `Nov`, `Dec`
+- `send_lifetime_end_time` (String) HH:MM:SS End Time of lifetime.
+- `send_lifetime_end_year` (Number) Ending Year of lifetime for the keychain.
+  - Range: `0`-`2035`
+- `send_lifetime_infinite` (String) Lifetime has no endtime.
+  - Choices: `disabled`, `enabled`
+- `send_lifetime_local` (String) local timezone notification.
+  - Choices: `unspecified`, `local`
+- `send_lifetime_start_day` (Number) starting Day of Lifetime for the keychain.
+  - Range: `0`-`31`
+- `send_lifetime_start_month` (String) starting month of Lifetime for the keychain.
+  - Choices: `Unspecified`, `Jan`, `Feb`, `Mar`, `Apr`, `May`, `Jun`, `Jul`, `Aug`, `Sep`, `Oct`, `Nov`, `Dec`
+- `send_lifetime_start_time` (String) HH:MM:SS Start Time of lifetime.
+- `send_lifetime_start_year` (Number) starting Year of Lifetime for the keychain.
+  - Range: `0`-`2035`
 
 
 

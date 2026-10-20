@@ -70,7 +70,7 @@ func (r *KeychainResource) Metadata(ctx context.Context, req resource.MetadataRe
 func (r *KeychainResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the keychain configuration on NX-OS devices, including keychains and their associated key entries.").AddApiDocumentation("kcmgrEntity", "Security%20and%20Policing/kcmgr:Entity/", []string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey", "kcmgrMacsecKeychain", "kcmgrMacsecKeyId", "kcmgrMacsecSendlifetime", "kcmgrMacsecpsk"}, []string{"Security%20and%20Policing/kcmgr:Keychains/", "Security%20and%20Policing/kcmgr:ClassicKeychain/", "Security%20and%20Policing/kcmgr:Key/", "Security%20and%20Policing/kcmgr:MacsecKeychain/", "Security%20and%20Policing/kcmgr:MacsecKeyId/", "Security%20and%20Policing/kcmgr:MacsecSendlifetime/", "Security%20and%20Policing/kcmgr:Macsecpsk/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the keychain configuration on NX-OS devices, including keychains and their associated key entries.").AddApiDocumentation("kcmgrEntity", "Security%20and%20Policing/kcmgr:Entity/", []string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey", "kcmgrAcceptlifetime", "kcmgrSendlifetime", "kcmgrMacsecKeychain", "kcmgrMacsecKeyId", "kcmgrMacsecSendlifetime", "kcmgrMacsecpsk"}, []string{"Security%20and%20Policing/kcmgr:Keychains/", "Security%20and%20Policing/kcmgr:ClassicKeychain/", "Security%20and%20Policing/kcmgr:Key/", "Security%20and%20Policing/kcmgr:Acceptlifetime/", "Security%20and%20Policing/kcmgr:Sendlifetime/", "Security%20and%20Policing/kcmgr:MacsecKeychain/", "Security%20and%20Policing/kcmgr:MacsecKeyId/", "Security%20and%20Policing/kcmgr:MacsecSendlifetime/", "Security%20and%20Policing/kcmgr:Macsecpsk/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -135,6 +135,148 @@ func (r *KeychainResource) Schema(ctx context.Context, req resource.SchemaReques
 									"key_string_wo_version": schema.Int64Attribute{
 										MarkdownDescription: "The write-only version of the attribute.",
 										Optional:            true,
+									},
+									"accept_lifetime_duration": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("duration period of lifetime.").AddIntegerRangeDescription(0, 2147483646).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 2147483646),
+										},
+									},
+									"accept_lifetime_end_day": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Ending date of lifetime for the keychain.").AddIntegerRangeDescription(0, 31).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 31),
+										},
+									},
+									"accept_lifetime_end_month": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Ending month of lifetime for the keychain.").AddStringEnumDescription("Unspecified", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("Unspecified", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
+										},
+									},
+									"accept_lifetime_end_time": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("HH:MM:SS End Time of lifetime.").String,
+										Optional:            true,
+									},
+									"accept_lifetime_end_year": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Ending Year of lifetime for the keychain.").AddIntegerRangeDescription(0, 2035).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 2035),
+										},
+									},
+									"accept_lifetime_infinite": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Lifetime has no endtime.").AddStringEnumDescription("disabled", "enabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("disabled", "enabled"),
+										},
+									},
+									"accept_lifetime_local": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("local timezone notification.").AddStringEnumDescription("unspecified", "local").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("unspecified", "local"),
+										},
+									},
+									"accept_lifetime_start_day": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("starting Day of Lifetime for the keychain.").AddIntegerRangeDescription(0, 31).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 31),
+										},
+									},
+									"accept_lifetime_start_month": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("starting month of Lifetime for the keychain.").AddStringEnumDescription("Unspecified", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("Unspecified", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
+										},
+									},
+									"accept_lifetime_start_time": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("HH:MM:SS Start Time of lifetime.").String,
+										Optional:            true,
+									},
+									"accept_lifetime_start_year": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("starting Year of Lifetime for the keychain.").AddIntegerRangeDescription(0, 2035).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 2035),
+										},
+									},
+									"send_lifetime_duration": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("duration period of lifetime.").AddIntegerRangeDescription(0, 2147483646).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 2147483646),
+										},
+									},
+									"send_lifetime_end_day": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Ending date of lifetime for the keychain.").AddIntegerRangeDescription(0, 31).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 31),
+										},
+									},
+									"send_lifetime_end_month": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Ending month of lifetime for the keychain.").AddStringEnumDescription("Unspecified", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("Unspecified", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
+										},
+									},
+									"send_lifetime_end_time": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("HH:MM:SS End Time of lifetime.").String,
+										Optional:            true,
+									},
+									"send_lifetime_end_year": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Ending Year of lifetime for the keychain.").AddIntegerRangeDescription(0, 2035).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 2035),
+										},
+									},
+									"send_lifetime_infinite": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Lifetime has no endtime.").AddStringEnumDescription("disabled", "enabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("disabled", "enabled"),
+										},
+									},
+									"send_lifetime_local": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("local timezone notification.").AddStringEnumDescription("unspecified", "local").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("unspecified", "local"),
+										},
+									},
+									"send_lifetime_start_day": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("starting Day of Lifetime for the keychain.").AddIntegerRangeDescription(0, 31).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 31),
+										},
+									},
+									"send_lifetime_start_month": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("starting month of Lifetime for the keychain.").AddStringEnumDescription("Unspecified", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("Unspecified", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
+										},
+									},
+									"send_lifetime_start_time": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("HH:MM:SS Start Time of lifetime.").String,
+										Optional:            true,
+									},
+									"send_lifetime_start_year": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("starting Year of Lifetime for the keychain.").AddIntegerRangeDescription(0, 2035).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 2035),
+										},
 									},
 								},
 							},

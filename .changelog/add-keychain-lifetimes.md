@@ -1,0 +1,1 @@
+- Add classic key `accept-lifetime` and `send-lifetime` (`accept_lifetime_*` and `send_lifetime_*` attributes) to `keys` of `nxos_keychain` resource and data source

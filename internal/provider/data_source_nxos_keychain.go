@@ -56,7 +56,7 @@ func (d *KeychainDataSource) Metadata(_ context.Context, req datasource.Metadata
 func (d *KeychainDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the keychain configuration on NX-OS devices, including keychains and their associated key entries.").AddApiDocumentation("kcmgrEntity", "Security%20and%20Policing/kcmgr:Entity/", []string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey", "kcmgrMacsecKeychain", "kcmgrMacsecKeyId", "kcmgrMacsecSendlifetime", "kcmgrMacsecpsk"}, []string{"Security%20and%20Policing/kcmgr:Keychains/", "Security%20and%20Policing/kcmgr:ClassicKeychain/", "Security%20and%20Policing/kcmgr:Key/", "Security%20and%20Policing/kcmgr:MacsecKeychain/", "Security%20and%20Policing/kcmgr:MacsecKeyId/", "Security%20and%20Policing/kcmgr:MacsecSendlifetime/", "Security%20and%20Policing/kcmgr:Macsecpsk/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the keychain configuration on NX-OS devices, including keychains and their associated key entries.").AddApiDocumentation("kcmgrEntity", "Security%20and%20Policing/kcmgr:Entity/", []string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey", "kcmgrAcceptlifetime", "kcmgrSendlifetime", "kcmgrMacsecKeychain", "kcmgrMacsecKeyId", "kcmgrMacsecSendlifetime", "kcmgrMacsecpsk"}, []string{"Security%20and%20Policing/kcmgr:Keychains/", "Security%20and%20Policing/kcmgr:ClassicKeychain/", "Security%20and%20Policing/kcmgr:Key/", "Security%20and%20Policing/kcmgr:Acceptlifetime/", "Security%20and%20Policing/kcmgr:Sendlifetime/", "Security%20and%20Policing/kcmgr:MacsecKeychain/", "Security%20and%20Policing/kcmgr:MacsecKeyId/", "Security%20and%20Policing/kcmgr:MacsecSendlifetime/", "Security%20and%20Policing/kcmgr:Macsecpsk/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -100,6 +100,94 @@ func (d *KeychainDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 									},
 									"key_string_wo_version": schema.Int64Attribute{
 										MarkdownDescription: "The write-only version of the attribute.",
+										Computed:            true,
+									},
+									"accept_lifetime_duration": schema.Int64Attribute{
+										MarkdownDescription: "duration period of lifetime.",
+										Computed:            true,
+									},
+									"accept_lifetime_end_day": schema.Int64Attribute{
+										MarkdownDescription: "Ending date of lifetime for the keychain.",
+										Computed:            true,
+									},
+									"accept_lifetime_end_month": schema.StringAttribute{
+										MarkdownDescription: "Ending month of lifetime for the keychain.",
+										Computed:            true,
+									},
+									"accept_lifetime_end_time": schema.StringAttribute{
+										MarkdownDescription: "HH:MM:SS End Time of lifetime.",
+										Computed:            true,
+									},
+									"accept_lifetime_end_year": schema.Int64Attribute{
+										MarkdownDescription: "Ending Year of lifetime for the keychain.",
+										Computed:            true,
+									},
+									"accept_lifetime_infinite": schema.StringAttribute{
+										MarkdownDescription: "Lifetime has no endtime.",
+										Computed:            true,
+									},
+									"accept_lifetime_local": schema.StringAttribute{
+										MarkdownDescription: "local timezone notification.",
+										Computed:            true,
+									},
+									"accept_lifetime_start_day": schema.Int64Attribute{
+										MarkdownDescription: "starting Day of Lifetime for the keychain.",
+										Computed:            true,
+									},
+									"accept_lifetime_start_month": schema.StringAttribute{
+										MarkdownDescription: "starting month of Lifetime for the keychain.",
+										Computed:            true,
+									},
+									"accept_lifetime_start_time": schema.StringAttribute{
+										MarkdownDescription: "HH:MM:SS Start Time of lifetime.",
+										Computed:            true,
+									},
+									"accept_lifetime_start_year": schema.Int64Attribute{
+										MarkdownDescription: "starting Year of Lifetime for the keychain.",
+										Computed:            true,
+									},
+									"send_lifetime_duration": schema.Int64Attribute{
+										MarkdownDescription: "duration period of lifetime.",
+										Computed:            true,
+									},
+									"send_lifetime_end_day": schema.Int64Attribute{
+										MarkdownDescription: "Ending date of lifetime for the keychain.",
+										Computed:            true,
+									},
+									"send_lifetime_end_month": schema.StringAttribute{
+										MarkdownDescription: "Ending month of lifetime for the keychain.",
+										Computed:            true,
+									},
+									"send_lifetime_end_time": schema.StringAttribute{
+										MarkdownDescription: "HH:MM:SS End Time of lifetime.",
+										Computed:            true,
+									},
+									"send_lifetime_end_year": schema.Int64Attribute{
+										MarkdownDescription: "Ending Year of lifetime for the keychain.",
+										Computed:            true,
+									},
+									"send_lifetime_infinite": schema.StringAttribute{
+										MarkdownDescription: "Lifetime has no endtime.",
+										Computed:            true,
+									},
+									"send_lifetime_local": schema.StringAttribute{
+										MarkdownDescription: "local timezone notification.",
+										Computed:            true,
+									},
+									"send_lifetime_start_day": schema.Int64Attribute{
+										MarkdownDescription: "starting Day of Lifetime for the keychain.",
+										Computed:            true,
+									},
+									"send_lifetime_start_month": schema.StringAttribute{
+										MarkdownDescription: "starting month of Lifetime for the keychain.",
+										Computed:            true,
+									},
+									"send_lifetime_start_time": schema.StringAttribute{
+										MarkdownDescription: "HH:MM:SS Start Time of lifetime.",
+										Computed:            true,
+									},
+									"send_lifetime_start_year": schema.Int64Attribute{
+										MarkdownDescription: "starting Year of Lifetime for the keychain.",
 										Computed:            true,
 									},
 								},

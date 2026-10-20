@@ -51,11 +51,33 @@ type KeychainKeychains struct {
 }
 
 type KeychainKeychainsKeys struct {
-	CryptographicAlgorithm types.String `tfsdk:"cryptographic_algorithm"`
-	EncryptionType         types.String `tfsdk:"encryption_type"`
-	KeyString              types.String `tfsdk:"key_string"`
-	KeyStringWo            types.String `tfsdk:"key_string_wo"`
-	KeyStringWoVersion     types.Int64  `tfsdk:"key_string_wo_version"`
+	CryptographicAlgorithm   types.String `tfsdk:"cryptographic_algorithm"`
+	EncryptionType           types.String `tfsdk:"encryption_type"`
+	KeyString                types.String `tfsdk:"key_string"`
+	KeyStringWo              types.String `tfsdk:"key_string_wo"`
+	KeyStringWoVersion       types.Int64  `tfsdk:"key_string_wo_version"`
+	AcceptLifetimeDuration   types.Int64  `tfsdk:"accept_lifetime_duration"`
+	AcceptLifetimeEndDay     types.Int64  `tfsdk:"accept_lifetime_end_day"`
+	AcceptLifetimeEndMonth   types.String `tfsdk:"accept_lifetime_end_month"`
+	AcceptLifetimeEndTime    types.String `tfsdk:"accept_lifetime_end_time"`
+	AcceptLifetimeEndYear    types.Int64  `tfsdk:"accept_lifetime_end_year"`
+	AcceptLifetimeInfinite   types.String `tfsdk:"accept_lifetime_infinite"`
+	AcceptLifetimeLocal      types.String `tfsdk:"accept_lifetime_local"`
+	AcceptLifetimeStartDay   types.Int64  `tfsdk:"accept_lifetime_start_day"`
+	AcceptLifetimeStartMonth types.String `tfsdk:"accept_lifetime_start_month"`
+	AcceptLifetimeStartTime  types.String `tfsdk:"accept_lifetime_start_time"`
+	AcceptLifetimeStartYear  types.Int64  `tfsdk:"accept_lifetime_start_year"`
+	SendLifetimeDuration     types.Int64  `tfsdk:"send_lifetime_duration"`
+	SendLifetimeEndDay       types.Int64  `tfsdk:"send_lifetime_end_day"`
+	SendLifetimeEndMonth     types.String `tfsdk:"send_lifetime_end_month"`
+	SendLifetimeEndTime      types.String `tfsdk:"send_lifetime_end_time"`
+	SendLifetimeEndYear      types.Int64  `tfsdk:"send_lifetime_end_year"`
+	SendLifetimeInfinite     types.String `tfsdk:"send_lifetime_infinite"`
+	SendLifetimeLocal        types.String `tfsdk:"send_lifetime_local"`
+	SendLifetimeStartDay     types.Int64  `tfsdk:"send_lifetime_start_day"`
+	SendLifetimeStartMonth   types.String `tfsdk:"send_lifetime_start_month"`
+	SendLifetimeStartTime    types.String `tfsdk:"send_lifetime_start_time"`
+	SendLifetimeStartYear    types.Int64  `tfsdk:"send_lifetime_start_year"`
 }
 
 type KeychainMacsecKeychains struct {
@@ -112,7 +134,7 @@ var KeychainListClasses = map[string]bool{"kcmgrClassicKeychain": true, "kcmgrKe
 
 // getKeychainTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getKeychainTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey", "kcmgrMacsecKeychain", "kcmgrMacsecKeyId", "kcmgrMacsecSendlifetime", "kcmgrMacsecpsk"}, KeychainSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"kcmgrKeychains", "kcmgrClassicKeychain", "kcmgrKey", "kcmgrAcceptlifetime", "kcmgrSendlifetime", "kcmgrMacsecKeychain", "kcmgrMacsecKeyId", "kcmgrMacsecSendlifetime", "kcmgrMacsecpsk"}, KeychainSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -194,6 +216,85 @@ func (data Keychain) toBody(config Keychain) nxos.Body {
 						attrs, _ = sjson.Set(attrs, "keyString", child.KeyString.ValueString())
 					}
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.kcmgrKey.attributes", attrs)
+					{
+						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".kcmgrKey.children"
+						_ = nestedChildrenPath
+						attrs = "{}"
+						if !child.AcceptLifetimeDuration.IsUnknown() && !child.AcceptLifetimeDuration.IsNull() && !configChild.AcceptLifetimeDuration.IsNull() {
+							attrs, _ = sjson.Set(attrs, "duration", strconv.FormatInt(child.AcceptLifetimeDuration.ValueInt64(), 10))
+						}
+						if !child.AcceptLifetimeEndDay.IsUnknown() && !child.AcceptLifetimeEndDay.IsNull() && !configChild.AcceptLifetimeEndDay.IsNull() {
+							attrs, _ = sjson.Set(attrs, "endDay", strconv.FormatInt(child.AcceptLifetimeEndDay.ValueInt64(), 10))
+						}
+						if !child.AcceptLifetimeEndMonth.IsUnknown() && !child.AcceptLifetimeEndMonth.IsNull() && !configChild.AcceptLifetimeEndMonth.IsNull() {
+							attrs, _ = sjson.Set(attrs, "endMonth", child.AcceptLifetimeEndMonth.ValueString())
+						}
+						if !child.AcceptLifetimeEndTime.IsUnknown() && !child.AcceptLifetimeEndTime.IsNull() && !configChild.AcceptLifetimeEndTime.IsNull() {
+							attrs, _ = sjson.Set(attrs, "endTime", child.AcceptLifetimeEndTime.ValueString())
+						}
+						if !child.AcceptLifetimeEndYear.IsUnknown() && !child.AcceptLifetimeEndYear.IsNull() && !configChild.AcceptLifetimeEndYear.IsNull() {
+							attrs, _ = sjson.Set(attrs, "endYear", strconv.FormatInt(child.AcceptLifetimeEndYear.ValueInt64(), 10))
+						}
+						if !child.AcceptLifetimeInfinite.IsUnknown() && !child.AcceptLifetimeInfinite.IsNull() && !configChild.AcceptLifetimeInfinite.IsNull() {
+							attrs, _ = sjson.Set(attrs, "infinite", child.AcceptLifetimeInfinite.ValueString())
+						}
+						if !child.AcceptLifetimeLocal.IsUnknown() && !child.AcceptLifetimeLocal.IsNull() && !configChild.AcceptLifetimeLocal.IsNull() {
+							attrs, _ = sjson.Set(attrs, "local", child.AcceptLifetimeLocal.ValueString())
+						}
+						if !child.AcceptLifetimeStartDay.IsUnknown() && !child.AcceptLifetimeStartDay.IsNull() && !configChild.AcceptLifetimeStartDay.IsNull() {
+							attrs, _ = sjson.Set(attrs, "startDay", strconv.FormatInt(child.AcceptLifetimeStartDay.ValueInt64(), 10))
+						}
+						if !child.AcceptLifetimeStartMonth.IsUnknown() && !child.AcceptLifetimeStartMonth.IsNull() && !configChild.AcceptLifetimeStartMonth.IsNull() {
+							attrs, _ = sjson.Set(attrs, "startMonth", child.AcceptLifetimeStartMonth.ValueString())
+						}
+						if !child.AcceptLifetimeStartTime.IsUnknown() && !child.AcceptLifetimeStartTime.IsNull() && !configChild.AcceptLifetimeStartTime.IsNull() {
+							attrs, _ = sjson.Set(attrs, "startTime", child.AcceptLifetimeStartTime.ValueString())
+						}
+						if !child.AcceptLifetimeStartYear.IsUnknown() && !child.AcceptLifetimeStartYear.IsNull() && !configChild.AcceptLifetimeStartYear.IsNull() {
+							attrs, _ = sjson.Set(attrs, "startYear", strconv.FormatInt(child.AcceptLifetimeStartYear.ValueInt64(), 10))
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.kcmgrAcceptlifetime.attributes", attrs)
+						}
+						attrs = "{}"
+						if !child.SendLifetimeDuration.IsUnknown() && !child.SendLifetimeDuration.IsNull() && !configChild.SendLifetimeDuration.IsNull() {
+							attrs, _ = sjson.Set(attrs, "duration", strconv.FormatInt(child.SendLifetimeDuration.ValueInt64(), 10))
+						}
+						if !child.SendLifetimeEndDay.IsUnknown() && !child.SendLifetimeEndDay.IsNull() && !configChild.SendLifetimeEndDay.IsNull() {
+							attrs, _ = sjson.Set(attrs, "endDay", strconv.FormatInt(child.SendLifetimeEndDay.ValueInt64(), 10))
+						}
+						if !child.SendLifetimeEndMonth.IsUnknown() && !child.SendLifetimeEndMonth.IsNull() && !configChild.SendLifetimeEndMonth.IsNull() {
+							attrs, _ = sjson.Set(attrs, "endMonth", child.SendLifetimeEndMonth.ValueString())
+						}
+						if !child.SendLifetimeEndTime.IsUnknown() && !child.SendLifetimeEndTime.IsNull() && !configChild.SendLifetimeEndTime.IsNull() {
+							attrs, _ = sjson.Set(attrs, "endTime", child.SendLifetimeEndTime.ValueString())
+						}
+						if !child.SendLifetimeEndYear.IsUnknown() && !child.SendLifetimeEndYear.IsNull() && !configChild.SendLifetimeEndYear.IsNull() {
+							attrs, _ = sjson.Set(attrs, "endYear", strconv.FormatInt(child.SendLifetimeEndYear.ValueInt64(), 10))
+						}
+						if !child.SendLifetimeInfinite.IsUnknown() && !child.SendLifetimeInfinite.IsNull() && !configChild.SendLifetimeInfinite.IsNull() {
+							attrs, _ = sjson.Set(attrs, "infinite", child.SendLifetimeInfinite.ValueString())
+						}
+						if !child.SendLifetimeLocal.IsUnknown() && !child.SendLifetimeLocal.IsNull() && !configChild.SendLifetimeLocal.IsNull() {
+							attrs, _ = sjson.Set(attrs, "local", child.SendLifetimeLocal.ValueString())
+						}
+						if !child.SendLifetimeStartDay.IsUnknown() && !child.SendLifetimeStartDay.IsNull() && !configChild.SendLifetimeStartDay.IsNull() {
+							attrs, _ = sjson.Set(attrs, "startDay", strconv.FormatInt(child.SendLifetimeStartDay.ValueInt64(), 10))
+						}
+						if !child.SendLifetimeStartMonth.IsUnknown() && !child.SendLifetimeStartMonth.IsNull() && !configChild.SendLifetimeStartMonth.IsNull() {
+							attrs, _ = sjson.Set(attrs, "startMonth", child.SendLifetimeStartMonth.ValueString())
+						}
+						if !child.SendLifetimeStartTime.IsUnknown() && !child.SendLifetimeStartTime.IsNull() && !configChild.SendLifetimeStartTime.IsNull() {
+							attrs, _ = sjson.Set(attrs, "startTime", child.SendLifetimeStartTime.ValueString())
+						}
+						if !child.SendLifetimeStartYear.IsUnknown() && !child.SendLifetimeStartYear.IsNull() && !configChild.SendLifetimeStartYear.IsNull() {
+							attrs, _ = sjson.Set(attrs, "startYear", strconv.FormatInt(child.SendLifetimeStartYear.ValueInt64(), 10))
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.kcmgrSendlifetime.attributes", attrs)
+						}
+					}
 				}
 			}
 		}
@@ -321,6 +422,54 @@ func (data *Keychain) fromBody(res gjson.Result) {
 												var nestedChildkcmgrKey KeychainKeychainsKeys
 												nestedChildkcmgrKey.CryptographicAlgorithm = types.StringValue(nestedValue.Get("attributes.cryptoAlgo").String())
 												nestedMapKey := nestedValue.Get("attributes.keyId").String()
+												{
+													var rkcmgrAcceptlifetime gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("kcmgrAcceptlifetime.attributes.rn").String()
+															if rnValue == "acceptlifetime" {
+																rkcmgrAcceptlifetime = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChildkcmgrKey.AcceptLifetimeDuration = types.Int64Value(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.duration").Int())
+													nestedChildkcmgrKey.AcceptLifetimeEndDay = types.Int64Value(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.endDay").Int())
+													nestedChildkcmgrKey.AcceptLifetimeEndMonth = types.StringValue(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.endMonth").String())
+													nestedChildkcmgrKey.AcceptLifetimeEndTime = types.StringValue(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.endTime").String())
+													nestedChildkcmgrKey.AcceptLifetimeEndYear = types.Int64Value(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.endYear").Int())
+													nestedChildkcmgrKey.AcceptLifetimeInfinite = types.StringValue(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.infinite").String())
+													nestedChildkcmgrKey.AcceptLifetimeLocal = types.StringValue(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.local").String())
+													nestedChildkcmgrKey.AcceptLifetimeStartDay = types.Int64Value(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.startDay").Int())
+													nestedChildkcmgrKey.AcceptLifetimeStartMonth = types.StringValue(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.startMonth").String())
+													nestedChildkcmgrKey.AcceptLifetimeStartTime = types.StringValue(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.startTime").String())
+													nestedChildkcmgrKey.AcceptLifetimeStartYear = types.Int64Value(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.startYear").Int())
+												}
+												{
+													var rkcmgrSendlifetime gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("kcmgrSendlifetime.attributes.rn").String()
+															if rnValue == "sendlifetime" {
+																rkcmgrSendlifetime = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChildkcmgrKey.SendLifetimeDuration = types.Int64Value(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.duration").Int())
+													nestedChildkcmgrKey.SendLifetimeEndDay = types.Int64Value(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.endDay").Int())
+													nestedChildkcmgrKey.SendLifetimeEndMonth = types.StringValue(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.endMonth").String())
+													nestedChildkcmgrKey.SendLifetimeEndTime = types.StringValue(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.endTime").String())
+													nestedChildkcmgrKey.SendLifetimeEndYear = types.Int64Value(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.endYear").Int())
+													nestedChildkcmgrKey.SendLifetimeInfinite = types.StringValue(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.infinite").String())
+													nestedChildkcmgrKey.SendLifetimeLocal = types.StringValue(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.local").String())
+													nestedChildkcmgrKey.SendLifetimeStartDay = types.Int64Value(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.startDay").Int())
+													nestedChildkcmgrKey.SendLifetimeStartMonth = types.StringValue(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.startMonth").String())
+													nestedChildkcmgrKey.SendLifetimeStartTime = types.StringValue(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.startTime").String())
+													nestedChildkcmgrKey.SendLifetimeStartYear = types.Int64Value(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.startYear").Int())
+												}
 												if child.Keys == nil {
 													child.Keys = make(map[string]KeychainKeychainsKeys)
 												}
@@ -477,6 +626,142 @@ func (data *Keychain) updateFromBody(res gjson.Result) {
 				ncItem.CryptographicAlgorithm = types.StringValue(rkcmgrKey.Get("kcmgrKey.attributes.cryptoAlgo").String())
 			} else {
 				ncItem.CryptographicAlgorithm = types.StringNull()
+			}
+			{
+				var rkcmgrAcceptlifetime gjson.Result
+				rkcmgrKey.Get("kcmgrKey.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("kcmgrAcceptlifetime.attributes.rn").String()
+						if rnValue == "acceptlifetime" {
+							rkcmgrAcceptlifetime = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.AcceptLifetimeDuration.IsNull() {
+					ncItem.AcceptLifetimeDuration = types.Int64Value(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.duration").Int())
+				} else {
+					ncItem.AcceptLifetimeDuration = types.Int64Null()
+				}
+				if !ncItem.AcceptLifetimeEndDay.IsNull() {
+					ncItem.AcceptLifetimeEndDay = types.Int64Value(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.endDay").Int())
+				} else {
+					ncItem.AcceptLifetimeEndDay = types.Int64Null()
+				}
+				if !ncItem.AcceptLifetimeEndMonth.IsNull() {
+					ncItem.AcceptLifetimeEndMonth = types.StringValue(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.endMonth").String())
+				} else {
+					ncItem.AcceptLifetimeEndMonth = types.StringNull()
+				}
+				if !ncItem.AcceptLifetimeEndTime.IsNull() {
+					ncItem.AcceptLifetimeEndTime = types.StringValue(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.endTime").String())
+				} else {
+					ncItem.AcceptLifetimeEndTime = types.StringNull()
+				}
+				if !ncItem.AcceptLifetimeEndYear.IsNull() {
+					ncItem.AcceptLifetimeEndYear = types.Int64Value(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.endYear").Int())
+				} else {
+					ncItem.AcceptLifetimeEndYear = types.Int64Null()
+				}
+				if !ncItem.AcceptLifetimeInfinite.IsNull() {
+					ncItem.AcceptLifetimeInfinite = types.StringValue(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.infinite").String())
+				} else {
+					ncItem.AcceptLifetimeInfinite = types.StringNull()
+				}
+				if !ncItem.AcceptLifetimeLocal.IsNull() {
+					ncItem.AcceptLifetimeLocal = types.StringValue(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.local").String())
+				} else {
+					ncItem.AcceptLifetimeLocal = types.StringNull()
+				}
+				if !ncItem.AcceptLifetimeStartDay.IsNull() {
+					ncItem.AcceptLifetimeStartDay = types.Int64Value(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.startDay").Int())
+				} else {
+					ncItem.AcceptLifetimeStartDay = types.Int64Null()
+				}
+				if !ncItem.AcceptLifetimeStartMonth.IsNull() {
+					ncItem.AcceptLifetimeStartMonth = types.StringValue(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.startMonth").String())
+				} else {
+					ncItem.AcceptLifetimeStartMonth = types.StringNull()
+				}
+				if !ncItem.AcceptLifetimeStartTime.IsNull() {
+					ncItem.AcceptLifetimeStartTime = types.StringValue(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.startTime").String())
+				} else {
+					ncItem.AcceptLifetimeStartTime = types.StringNull()
+				}
+				if !ncItem.AcceptLifetimeStartYear.IsNull() {
+					ncItem.AcceptLifetimeStartYear = types.Int64Value(rkcmgrAcceptlifetime.Get("kcmgrAcceptlifetime.attributes.startYear").Int())
+				} else {
+					ncItem.AcceptLifetimeStartYear = types.Int64Null()
+				}
+			}
+			{
+				var rkcmgrSendlifetime gjson.Result
+				rkcmgrKey.Get("kcmgrKey.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("kcmgrSendlifetime.attributes.rn").String()
+						if rnValue == "sendlifetime" {
+							rkcmgrSendlifetime = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SendLifetimeDuration.IsNull() {
+					ncItem.SendLifetimeDuration = types.Int64Value(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.duration").Int())
+				} else {
+					ncItem.SendLifetimeDuration = types.Int64Null()
+				}
+				if !ncItem.SendLifetimeEndDay.IsNull() {
+					ncItem.SendLifetimeEndDay = types.Int64Value(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.endDay").Int())
+				} else {
+					ncItem.SendLifetimeEndDay = types.Int64Null()
+				}
+				if !ncItem.SendLifetimeEndMonth.IsNull() {
+					ncItem.SendLifetimeEndMonth = types.StringValue(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.endMonth").String())
+				} else {
+					ncItem.SendLifetimeEndMonth = types.StringNull()
+				}
+				if !ncItem.SendLifetimeEndTime.IsNull() {
+					ncItem.SendLifetimeEndTime = types.StringValue(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.endTime").String())
+				} else {
+					ncItem.SendLifetimeEndTime = types.StringNull()
+				}
+				if !ncItem.SendLifetimeEndYear.IsNull() {
+					ncItem.SendLifetimeEndYear = types.Int64Value(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.endYear").Int())
+				} else {
+					ncItem.SendLifetimeEndYear = types.Int64Null()
+				}
+				if !ncItem.SendLifetimeInfinite.IsNull() {
+					ncItem.SendLifetimeInfinite = types.StringValue(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.infinite").String())
+				} else {
+					ncItem.SendLifetimeInfinite = types.StringNull()
+				}
+				if !ncItem.SendLifetimeLocal.IsNull() {
+					ncItem.SendLifetimeLocal = types.StringValue(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.local").String())
+				} else {
+					ncItem.SendLifetimeLocal = types.StringNull()
+				}
+				if !ncItem.SendLifetimeStartDay.IsNull() {
+					ncItem.SendLifetimeStartDay = types.Int64Value(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.startDay").Int())
+				} else {
+					ncItem.SendLifetimeStartDay = types.Int64Null()
+				}
+				if !ncItem.SendLifetimeStartMonth.IsNull() {
+					ncItem.SendLifetimeStartMonth = types.StringValue(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.startMonth").String())
+				} else {
+					ncItem.SendLifetimeStartMonth = types.StringNull()
+				}
+				if !ncItem.SendLifetimeStartTime.IsNull() {
+					ncItem.SendLifetimeStartTime = types.StringValue(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.startTime").String())
+				} else {
+					ncItem.SendLifetimeStartTime = types.StringNull()
+				}
+				if !ncItem.SendLifetimeStartYear.IsNull() {
+					ncItem.SendLifetimeStartYear = types.Int64Value(rkcmgrSendlifetime.Get("kcmgrSendlifetime.attributes.startYear").Int())
+				} else {
+					ncItem.SendLifetimeStartYear = types.Int64Null()
+				}
 			}
 			item.Keys[nc] = ncItem
 		}
@@ -636,6 +921,14 @@ func (data Keychain) managedDns() map[string]bool {
 			for key_, child_ := range child.Keys {
 				kcmgrKeyDn_ := kcmgrClassicKeychainDn + "/" + child_.getRn(key_)
 				dns[kcmgrKeyDn_] = true
+				if !(child_.AcceptLifetimeDuration.IsNull() && child_.AcceptLifetimeEndDay.IsNull() && child_.AcceptLifetimeEndMonth.IsNull() && child_.AcceptLifetimeEndTime.IsNull() && child_.AcceptLifetimeEndYear.IsNull() && child_.AcceptLifetimeInfinite.IsNull() && child_.AcceptLifetimeLocal.IsNull() && child_.AcceptLifetimeStartDay.IsNull() && child_.AcceptLifetimeStartMonth.IsNull() && child_.AcceptLifetimeStartTime.IsNull() && child_.AcceptLifetimeStartYear.IsNull()) {
+					kcmgrAcceptlifetimeDn__ := kcmgrKeyDn_ + "/" + "acceptlifetime"
+					dns[kcmgrAcceptlifetimeDn__] = true
+				}
+				if !(child_.SendLifetimeDuration.IsNull() && child_.SendLifetimeEndDay.IsNull() && child_.SendLifetimeEndMonth.IsNull() && child_.SendLifetimeEndTime.IsNull() && child_.SendLifetimeEndYear.IsNull() && child_.SendLifetimeInfinite.IsNull() && child_.SendLifetimeLocal.IsNull() && child_.SendLifetimeStartDay.IsNull() && child_.SendLifetimeStartMonth.IsNull() && child_.SendLifetimeStartTime.IsNull() && child_.SendLifetimeStartYear.IsNull()) {
+					kcmgrSendlifetimeDn__ := kcmgrKeyDn_ + "/" + "sendlifetime"
+					dns[kcmgrSendlifetimeDn__] = true
+				}
 			}
 		}
 		for key, child := range data.MacsecKeychains {
@@ -715,6 +1008,100 @@ func (data Keychain) toResetBody(preexisting map[string]bool) nxos.Body {
 					}
 					if !child_.KeyString.IsNull() {
 						kcmgrKeyBody_, _ = sjson.Set(kcmgrKeyBody_, "kcmgrKey.attributes.keyString", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !(child_.AcceptLifetimeDuration.IsNull() && child_.AcceptLifetimeEndDay.IsNull() && child_.AcceptLifetimeEndMonth.IsNull() && child_.AcceptLifetimeEndTime.IsNull() && child_.AcceptLifetimeEndYear.IsNull() && child_.AcceptLifetimeInfinite.IsNull() && child_.AcceptLifetimeLocal.IsNull() && child_.AcceptLifetimeStartDay.IsNull() && child_.AcceptLifetimeStartMonth.IsNull() && child_.AcceptLifetimeStartTime.IsNull() && child_.AcceptLifetimeStartYear.IsNull()) {
+						kcmgrAcceptlifetimeRn__ := "acceptlifetime"
+						kcmgrAcceptlifetimeDn__ := kcmgrKeyDn_ + "/" + kcmgrAcceptlifetimeRn__
+						_ = kcmgrAcceptlifetimeDn__
+						if !existed(kcmgrAcceptlifetimeDn__) {
+							kcmgrKeyBody_, _ = sjson.Set(kcmgrKeyBody_, "kcmgrKey.children.-1.kcmgrAcceptlifetime.attributes", map[string]interface{}{"rn": kcmgrAcceptlifetimeRn__, "status": "deleted"})
+						} else {
+							kcmgrAcceptlifetimeBody__ := ""
+							if !child_.AcceptLifetimeDuration.IsNull() {
+								kcmgrAcceptlifetimeBody__, _ = sjson.Set(kcmgrAcceptlifetimeBody__, "kcmgrAcceptlifetime.attributes.duration", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.AcceptLifetimeEndDay.IsNull() {
+								kcmgrAcceptlifetimeBody__, _ = sjson.Set(kcmgrAcceptlifetimeBody__, "kcmgrAcceptlifetime.attributes.endDay", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.AcceptLifetimeEndMonth.IsNull() {
+								kcmgrAcceptlifetimeBody__, _ = sjson.Set(kcmgrAcceptlifetimeBody__, "kcmgrAcceptlifetime.attributes.endMonth", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.AcceptLifetimeEndTime.IsNull() {
+								kcmgrAcceptlifetimeBody__, _ = sjson.Set(kcmgrAcceptlifetimeBody__, "kcmgrAcceptlifetime.attributes.endTime", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.AcceptLifetimeEndYear.IsNull() {
+								kcmgrAcceptlifetimeBody__, _ = sjson.Set(kcmgrAcceptlifetimeBody__, "kcmgrAcceptlifetime.attributes.endYear", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.AcceptLifetimeInfinite.IsNull() {
+								kcmgrAcceptlifetimeBody__, _ = sjson.Set(kcmgrAcceptlifetimeBody__, "kcmgrAcceptlifetime.attributes.infinite", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.AcceptLifetimeLocal.IsNull() {
+								kcmgrAcceptlifetimeBody__, _ = sjson.Set(kcmgrAcceptlifetimeBody__, "kcmgrAcceptlifetime.attributes.local", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.AcceptLifetimeStartDay.IsNull() {
+								kcmgrAcceptlifetimeBody__, _ = sjson.Set(kcmgrAcceptlifetimeBody__, "kcmgrAcceptlifetime.attributes.startDay", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.AcceptLifetimeStartMonth.IsNull() {
+								kcmgrAcceptlifetimeBody__, _ = sjson.Set(kcmgrAcceptlifetimeBody__, "kcmgrAcceptlifetime.attributes.startMonth", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.AcceptLifetimeStartTime.IsNull() {
+								kcmgrAcceptlifetimeBody__, _ = sjson.Set(kcmgrAcceptlifetimeBody__, "kcmgrAcceptlifetime.attributes.startTime", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.AcceptLifetimeStartYear.IsNull() {
+								kcmgrAcceptlifetimeBody__, _ = sjson.Set(kcmgrAcceptlifetimeBody__, "kcmgrAcceptlifetime.attributes.startYear", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if kcmgrAcceptlifetimeBody__ != "" {
+								kcmgrAcceptlifetimeBody__, _ = sjson.Set(kcmgrAcceptlifetimeBody__, "kcmgrAcceptlifetime.attributes.rn", kcmgrAcceptlifetimeRn__)
+								kcmgrKeyBody_, _ = sjson.SetRaw(kcmgrKeyBody_, "kcmgrKey.children.-1", kcmgrAcceptlifetimeBody__)
+							}
+						}
+					}
+					if !(child_.SendLifetimeDuration.IsNull() && child_.SendLifetimeEndDay.IsNull() && child_.SendLifetimeEndMonth.IsNull() && child_.SendLifetimeEndTime.IsNull() && child_.SendLifetimeEndYear.IsNull() && child_.SendLifetimeInfinite.IsNull() && child_.SendLifetimeLocal.IsNull() && child_.SendLifetimeStartDay.IsNull() && child_.SendLifetimeStartMonth.IsNull() && child_.SendLifetimeStartTime.IsNull() && child_.SendLifetimeStartYear.IsNull()) {
+						kcmgrSendlifetimeRn__ := "sendlifetime"
+						kcmgrSendlifetimeDn__ := kcmgrKeyDn_ + "/" + kcmgrSendlifetimeRn__
+						_ = kcmgrSendlifetimeDn__
+						if !existed(kcmgrSendlifetimeDn__) {
+							kcmgrKeyBody_, _ = sjson.Set(kcmgrKeyBody_, "kcmgrKey.children.-1.kcmgrSendlifetime.attributes", map[string]interface{}{"rn": kcmgrSendlifetimeRn__, "status": "deleted"})
+						} else {
+							kcmgrSendlifetimeBody__ := ""
+							if !child_.SendLifetimeDuration.IsNull() {
+								kcmgrSendlifetimeBody__, _ = sjson.Set(kcmgrSendlifetimeBody__, "kcmgrSendlifetime.attributes.duration", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.SendLifetimeEndDay.IsNull() {
+								kcmgrSendlifetimeBody__, _ = sjson.Set(kcmgrSendlifetimeBody__, "kcmgrSendlifetime.attributes.endDay", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.SendLifetimeEndMonth.IsNull() {
+								kcmgrSendlifetimeBody__, _ = sjson.Set(kcmgrSendlifetimeBody__, "kcmgrSendlifetime.attributes.endMonth", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.SendLifetimeEndTime.IsNull() {
+								kcmgrSendlifetimeBody__, _ = sjson.Set(kcmgrSendlifetimeBody__, "kcmgrSendlifetime.attributes.endTime", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.SendLifetimeEndYear.IsNull() {
+								kcmgrSendlifetimeBody__, _ = sjson.Set(kcmgrSendlifetimeBody__, "kcmgrSendlifetime.attributes.endYear", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.SendLifetimeInfinite.IsNull() {
+								kcmgrSendlifetimeBody__, _ = sjson.Set(kcmgrSendlifetimeBody__, "kcmgrSendlifetime.attributes.infinite", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.SendLifetimeLocal.IsNull() {
+								kcmgrSendlifetimeBody__, _ = sjson.Set(kcmgrSendlifetimeBody__, "kcmgrSendlifetime.attributes.local", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.SendLifetimeStartDay.IsNull() {
+								kcmgrSendlifetimeBody__, _ = sjson.Set(kcmgrSendlifetimeBody__, "kcmgrSendlifetime.attributes.startDay", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.SendLifetimeStartMonth.IsNull() {
+								kcmgrSendlifetimeBody__, _ = sjson.Set(kcmgrSendlifetimeBody__, "kcmgrSendlifetime.attributes.startMonth", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.SendLifetimeStartTime.IsNull() {
+								kcmgrSendlifetimeBody__, _ = sjson.Set(kcmgrSendlifetimeBody__, "kcmgrSendlifetime.attributes.startTime", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.SendLifetimeStartYear.IsNull() {
+								kcmgrSendlifetimeBody__, _ = sjson.Set(kcmgrSendlifetimeBody__, "kcmgrSendlifetime.attributes.startYear", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if kcmgrSendlifetimeBody__ != "" {
+								kcmgrSendlifetimeBody__, _ = sjson.Set(kcmgrSendlifetimeBody__, "kcmgrSendlifetime.attributes.rn", kcmgrSendlifetimeRn__)
+								kcmgrKeyBody_, _ = sjson.SetRaw(kcmgrKeyBody_, "kcmgrKey.children.-1", kcmgrSendlifetimeBody__)
+							}
+						}
 					}
 					kcmgrClassicKeychainBody, _ = sjson.SetRaw(kcmgrClassicKeychainBody, "kcmgrClassicKeychain.children.-1", kcmgrKeyBody_)
 				}
@@ -867,6 +1254,21 @@ func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, conf
 					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 				}
 			}
+			for di_ := range stateItemdi.Keys {
+				if _, found := planItemdi.Keys[di_]; !found {
+					continue
+				}
+				matchBodyPathdi_ := ""
+				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+					if mv.Get("kcmgrKey.attributes.keyId").String() == di_ {
+						matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".kcmgrKey.children"
+						break
+					}
+				}
+				if matchBodyPathdi_ == "" {
+					continue
+				}
+			}
 		}
 		for stateKey := range state.MacsecKeychains {
 			if _, found := data.MacsecKeychains[stateKey]; !found {
@@ -948,12 +1350,125 @@ func (data Keychain) toBodyWithDeletes(ctx context.Context, state Keychain, conf
 								stateChild := stateChild.Keys[key]
 								_ = stateChild
 								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
 								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
 									if mv.Get("kcmgrKey.attributes.keyId").String() == key {
 										if !stateChild.CryptographicAlgorithm.IsNull() && configChild.CryptographicAlgorithm.IsNull() {
 											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".kcmgrKey.attributes."+"cryptoAlgo", "DME_UNSET_PROPERTY_MARKER")
 										}
 										break
+									}
+								}
+								{
+									listChildPath_ := ""
+									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+										if mv.Get("kcmgrKey.attributes.keyId").String() == key {
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".kcmgrKey.children"
+											break
+										}
+									}
+									if listChildPath_ != "" {
+										if deleteEmptied != nil && !(stateChild.AcceptLifetimeDuration.IsNull() && stateChild.AcceptLifetimeEndDay.IsNull() && stateChild.AcceptLifetimeEndMonth.IsNull() && stateChild.AcceptLifetimeEndTime.IsNull() && stateChild.AcceptLifetimeEndYear.IsNull() && stateChild.AcceptLifetimeInfinite.IsNull() && stateChild.AcceptLifetimeLocal.IsNull() && stateChild.AcceptLifetimeStartDay.IsNull() && stateChild.AcceptLifetimeStartMonth.IsNull() && stateChild.AcceptLifetimeStartTime.IsNull() && stateChild.AcceptLifetimeStartYear.IsNull()) && (configChild.AcceptLifetimeDuration.IsNull() && configChild.AcceptLifetimeEndDay.IsNull() && configChild.AcceptLifetimeEndMonth.IsNull() && configChild.AcceptLifetimeEndTime.IsNull() && configChild.AcceptLifetimeEndYear.IsNull() && configChild.AcceptLifetimeInfinite.IsNull() && configChild.AcceptLifetimeLocal.IsNull() && configChild.AcceptLifetimeStartDay.IsNull() && configChild.AcceptLifetimeStartMonth.IsNull() && configChild.AcceptLifetimeStartTime.IsNull() && configChild.AcceptLifetimeStartYear.IsNull()) && deleteEmptied(listChildDn_+"/acceptlifetime") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrAcceptlifetime")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.AcceptLifetimeDuration.IsNull() && configChild.AcceptLifetimeDuration.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrAcceptlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"duration", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AcceptLifetimeEndDay.IsNull() && configChild.AcceptLifetimeEndDay.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrAcceptlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endDay", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AcceptLifetimeEndMonth.IsNull() && configChild.AcceptLifetimeEndMonth.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrAcceptlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endMonth", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AcceptLifetimeEndTime.IsNull() && configChild.AcceptLifetimeEndTime.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrAcceptlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endTime", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AcceptLifetimeEndYear.IsNull() && configChild.AcceptLifetimeEndYear.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrAcceptlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endYear", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AcceptLifetimeInfinite.IsNull() && configChild.AcceptLifetimeInfinite.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrAcceptlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"infinite", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AcceptLifetimeLocal.IsNull() && configChild.AcceptLifetimeLocal.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrAcceptlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"local", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AcceptLifetimeStartDay.IsNull() && configChild.AcceptLifetimeStartDay.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrAcceptlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startDay", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AcceptLifetimeStartMonth.IsNull() && configChild.AcceptLifetimeStartMonth.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrAcceptlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startMonth", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AcceptLifetimeStartTime.IsNull() && configChild.AcceptLifetimeStartTime.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrAcceptlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startTime", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.AcceptLifetimeStartYear.IsNull() && configChild.AcceptLifetimeStartYear.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrAcceptlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startYear", "DME_UNSET_PROPERTY_MARKER")
+											}
+										}
+										if deleteEmptied != nil && !(stateChild.SendLifetimeDuration.IsNull() && stateChild.SendLifetimeEndDay.IsNull() && stateChild.SendLifetimeEndMonth.IsNull() && stateChild.SendLifetimeEndTime.IsNull() && stateChild.SendLifetimeEndYear.IsNull() && stateChild.SendLifetimeInfinite.IsNull() && stateChild.SendLifetimeLocal.IsNull() && stateChild.SendLifetimeStartDay.IsNull() && stateChild.SendLifetimeStartMonth.IsNull() && stateChild.SendLifetimeStartTime.IsNull() && stateChild.SendLifetimeStartYear.IsNull()) && (configChild.SendLifetimeDuration.IsNull() && configChild.SendLifetimeEndDay.IsNull() && configChild.SendLifetimeEndMonth.IsNull() && configChild.SendLifetimeEndTime.IsNull() && configChild.SendLifetimeEndYear.IsNull() && configChild.SendLifetimeInfinite.IsNull() && configChild.SendLifetimeLocal.IsNull() && configChild.SendLifetimeStartDay.IsNull() && configChild.SendLifetimeStartMonth.IsNull() && configChild.SendLifetimeStartTime.IsNull() && configChild.SendLifetimeStartYear.IsNull()) && deleteEmptied(listChildDn_+"/sendlifetime") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrSendlifetime")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SendLifetimeDuration.IsNull() && configChild.SendLifetimeDuration.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"duration", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SendLifetimeEndDay.IsNull() && configChild.SendLifetimeEndDay.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endDay", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SendLifetimeEndMonth.IsNull() && configChild.SendLifetimeEndMonth.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endMonth", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SendLifetimeEndTime.IsNull() && configChild.SendLifetimeEndTime.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endTime", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SendLifetimeEndYear.IsNull() && configChild.SendLifetimeEndYear.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"endYear", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SendLifetimeInfinite.IsNull() && configChild.SendLifetimeInfinite.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"infinite", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SendLifetimeLocal.IsNull() && configChild.SendLifetimeLocal.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"local", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SendLifetimeStartDay.IsNull() && configChild.SendLifetimeStartDay.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startDay", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SendLifetimeStartMonth.IsNull() && configChild.SendLifetimeStartMonth.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startMonth", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SendLifetimeStartTime.IsNull() && configChild.SendLifetimeStartTime.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startTime", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SendLifetimeStartYear.IsNull() && configChild.SendLifetimeStartYear.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "kcmgrSendlifetime")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"startYear", "DME_UNSET_PROPERTY_MARKER")
+											}
+										}
 									}
 								}
 							}

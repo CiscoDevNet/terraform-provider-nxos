@@ -635,6 +635,25 @@ resource "nxos_dme" "PreReq1" {
   depends_on = [nxos_dme.PreReq0, ]
 }
 
+resource "nxos_dme" "PreReq2" {
+  dn = "sys/fm/nvo"
+  class_name = "fmNvo"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq3" {
+  dn = "sys/fm/evpn"
+  class_name = "fmEvpn"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+  depends_on = [nxos_dme.PreReq2, ]
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -642,7 +661,7 @@ resource "nxos_dme" "PreReq1" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccBGPResourceConfig_minimum() string {
 	config := `resource "nxos_bgp" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -1023,7 +1042,7 @@ func testAccBGPResourceConfig_all(includeWriteOnly bool) string {
 	config += `			}` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

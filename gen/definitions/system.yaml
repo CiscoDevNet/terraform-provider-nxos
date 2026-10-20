@@ -3,8 +3,8 @@ name: System
 class_name: topSystem
 dn: sys
 no_delete: true
-ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, L2RIB duplicate MAC detection settings, and NGOAM (VXLAN OAM) install ACL and loop detection settings.
-res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, L2RIB duplicate MAC detection settings, and NGOAM (VXLAN OAM) install ACL and loop detection settings.
+ds_description: This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, gRPC agent and gNMI settings, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, L2RIB duplicate MAC detection settings, and NGOAM (VXLAN OAM) install ACL and loop detection settings.
+res_description: This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, gRPC agent and gNMI settings, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, L2RIB duplicate MAC detection settings, and NGOAM (VXLAN OAM) install ACL and loop detection settings.
 doc_path: System/top:System/
 doc_category: System
 attributes:
@@ -2463,6 +2463,88 @@ child_classes:
         description: 'SUDI support for nginx.'
         example: false
         exclude_test: true
+  - class_name: grpcInst
+    rn: grpc
+    type: single
+    no_delete: true
+    tf_name: grpc
+    description: 'gRPC agent configuration.'
+    doc_path: Network%20Management/grpc:Inst/
+    attributes:
+      - nxos_name: cert
+        tf_name: grpc_certificate
+        type: String
+        description: 'Specifies the certificate to be used for TLS authentication.'
+        example: grpc_trustpoint
+      - nxos_name: certClientRoot
+        tf_name: grpc_client_root_certificate
+        type: String
+        description: 'Specifies the root certificate to be used for client TLS authentication.'
+        example: grpc_root_trustpoint
+      - nxos_name: port
+        tf_name: grpc_port
+        type: Int64
+        min_int: 1024
+        max_int: 65535
+        description: 'Specifies the port number on which the grpc Agent listens.'
+        example: 50052
+      - nxos_name: useVrf
+        tf_name: grpc_vrf
+        type: String
+        description: 'Vrf to be used for grpc communication.'
+        example: default
+    child_classes:
+      - class_name: grpcGnmi
+        rn: gnmi
+        type: single
+        no_delete: true
+        tf_name: gnmi
+        description: 'gNMI configuration.'
+        doc_path: Network%20Management/grpc:Gnmi/
+        attributes:
+          - nxos_name: filterFile
+            tf_name: grpc_gnmi_filter_file
+            type: String
+            description: 'Name of the JSON filter file in the <filename>-<version>.json format. This will be applied only to BYTES encoding format.'
+            example: filter-1.0.json
+            exclude_test: true
+          - nxos_name: filterMd5Hash
+            tf_name: grpc_gnmi_filter_md5_hash
+            type: String
+            description: 'MD5 hash value of the associated JSON filter file. This should be either 0 or 32 characters in length.'
+            example: 0123456789abcdef0123456789abcdef
+            exclude_test: true
+          - nxos_name: keepAliveTimeout
+            tf_name: grpc_gnmi_keepalive_timeout
+            type: Int64
+            min_int: 600
+            max_int: 86400
+            description: 'Specifies grpc keepAlive timeout.'
+            example: 900
+          - nxos_name: maxCalls
+            tf_name: grpc_gnmi_max_concurrent_calls
+            type: Int64
+            min_int: 1
+            max_int: 16
+            description: 'Specifies the maximum number of concurrent calls to gnmi.'
+            example: 12
+          - nxos_name: mergeSubs
+            tf_name: grpc_gnmi_merge_subscriptions
+            type: Bool
+            description: 'Merge subscriptions for a sensor path.'
+            example: true
+          - nxos_name: minSampleInterval
+            tf_name: grpc_gnmi_min_sample_interval
+            type: Int64
+            min_int: 1
+            max_int: 65535
+            description: 'Specifies the minimum sample interval, measured in units of seconds.'
+            example: 20
+          - nxos_name: subsQueryCondition
+            tf_name: grpc_gnmi_subscription_query_condition
+            type: String
+            description: 'The condition(s) for retrieving notifications. Comma-separated list of categories, e.g. `keep-data-timestamp` to use the timestamp at which the data was generated instead of the collection time.'
+            example: keep-data-timestamp
   - class_name: imBreakout
     rn: breakout
     type: single
@@ -3337,6 +3419,12 @@ test_prerequisites:
         value: enabled
   - dn: sys/fm/ifvlan
     class_name: fmInterfaceVlan
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/grpc
+    class_name: fmGrpc
     no_delete: true
     attributes:
       - name: adminSt

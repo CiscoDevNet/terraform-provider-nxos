@@ -31,6 +31,7 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+            test_tags: [FEATURE_ANALYTICS]
       - class_name: fmBashShell
         rn: bashshell
         type: single
@@ -273,6 +274,21 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+      - class_name: fmNetconf
+        rn: netconf
+        type: single
+        no_delete: true
+        description: 'NETCONF feature configuration.'
+        doc_path: Feature%20Management/fm:Netconf/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: netconf
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmNetflow
         rn: netflow
         type: single
@@ -351,6 +367,21 @@ child_classes:
             example: enabled
             exclude_test: true
             delete_value: enabled
+      - class_name: fmOpenConfig
+        rn: openconfig
+        type: single
+        no_delete: true
+        description: 'OpenConfig feature configuration.'
+        doc_path: Feature%20Management/fm:OpenConfig/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: openconfig
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmOspf
         rn: ospf
         type: single
@@ -451,6 +482,21 @@ child_classes:
         attributes:
           - nxos_name: adminSt
             tf_name: pvlan
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+      - class_name: fmRestconf
+        rn: restconf
+        type: single
+        no_delete: true
+        description: 'RESTCONF feature configuration.'
+        doc_path: Feature%20Management/fm:Restconf/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: restconf
             type: String
             description: 'Administrative state.'
             enum_values:

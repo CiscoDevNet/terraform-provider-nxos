@@ -43,7 +43,9 @@ func TestAccFeatureResource(t *testing.T) {
 		t.Skip("skipping test, set environment variable FEATURE")
 	}
 	var checks []resource.TestCheckFunc
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "analytics", "enabled"))
+	if os.Getenv("FEATURE_ANALYTICS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "analytics", "enabled"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "bash_shell", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "bfd", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "bgp", "enabled"))
@@ -64,12 +66,14 @@ func TestAccFeatureResource(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "macsec", "enabled"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "msdp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "netconf", "enabled"))
 	if os.Getenv("FEATURE_NETFLOW") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "netflow", "enabled"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "ngmvpn", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "ngoam", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "nv_overlay", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "openconfig", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "ospf", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "ospfv3", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "pbr", "enabled"))
@@ -79,6 +83,7 @@ func TestAccFeatureResource(t *testing.T) {
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "ptp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "pvlan", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "restconf", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "sflow", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "scp_server", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "security_group", "enabled"))
@@ -98,7 +103,9 @@ func TestAccFeatureResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "vpc", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "vtp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "feature_sets.fex.admin_state", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "analytics", "enabled"))
+	if os.Getenv("FEATURE_ANALYTICS") != "" {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "analytics", "enabled"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "bash_shell", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "bfd", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "bgp", "enabled"))
@@ -119,12 +126,14 @@ func TestAccFeatureResource(t *testing.T) {
 		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "macsec", "enabled"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "msdp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "netconf", "enabled"))
 	if os.Getenv("FEATURE_NETFLOW") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "netflow", "enabled"))
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "ngmvpn", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "ngoam", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "nv_overlay", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "openconfig", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "ospf", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "ospfv3", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "pbr", "enabled"))
@@ -134,6 +143,7 @@ func TestAccFeatureResource(t *testing.T) {
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "ptp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "pvlan", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "restconf", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "sflow", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "scp_server", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "security_group", "enabled"))
@@ -233,7 +243,9 @@ func testAccFeatureResourceConfig_minimum() string {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
 func testAccFeatureResourceConfig_all() string {
 	config := `resource "nxos_feature" "test" {` + "\n"
-	config += `	analytics = "enabled"` + "\n"
+	if os.Getenv("FEATURE_ANALYTICS") != "" {
+		config += `	analytics = "enabled"` + "\n"
+	}
 	config += `	bash_shell = "enabled"` + "\n"
 	config += `	bfd = "enabled"` + "\n"
 	config += `	bgp = "enabled"` + "\n"
@@ -254,12 +266,14 @@ func testAccFeatureResourceConfig_all() string {
 		config += `	macsec = "enabled"` + "\n"
 	}
 	config += `	msdp = "enabled"` + "\n"
+	config += `	netconf = "enabled"` + "\n"
 	if os.Getenv("FEATURE_NETFLOW") != "" {
 		config += `	netflow = "enabled"` + "\n"
 	}
 	config += `	ngmvpn = "enabled"` + "\n"
 	config += `	ngoam = "enabled"` + "\n"
 	config += `	nv_overlay = "enabled"` + "\n"
+	config += `	openconfig = "enabled"` + "\n"
 	config += `	ospf = "enabled"` + "\n"
 	config += `	ospfv3 = "enabled"` + "\n"
 	config += `	pbr = "enabled"` + "\n"
@@ -269,6 +283,7 @@ func testAccFeatureResourceConfig_all() string {
 	}
 	config += `	ptp = "enabled"` + "\n"
 	config += `	pvlan = "enabled"` + "\n"
+	config += `	restconf = "enabled"` + "\n"
 	config += `	sflow = "enabled"` + "\n"
 	config += `	scp_server = "enabled"` + "\n"
 	config += `	security_group = "enabled"` + "\n"

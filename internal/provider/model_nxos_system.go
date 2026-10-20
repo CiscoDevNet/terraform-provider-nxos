@@ -213,6 +213,17 @@ type System struct {
 	NxapiSslCiphersWeak                           types.Bool                                    `tfsdk:"nxapi_ssl_ciphers_weak"`
 	NxapiClientCertificateAuthentication          types.String                                  `tfsdk:"nxapi_client_certificate_authentication"`
 	NxapiSudi                                     types.Bool                                    `tfsdk:"nxapi_sudi"`
+	GrpcCertificate                               types.String                                  `tfsdk:"grpc_certificate"`
+	GrpcClientRootCertificate                     types.String                                  `tfsdk:"grpc_client_root_certificate"`
+	GrpcPort                                      types.Int64                                   `tfsdk:"grpc_port"`
+	GrpcVrf                                       types.String                                  `tfsdk:"grpc_vrf"`
+	GrpcGnmiFilterFile                            types.String                                  `tfsdk:"grpc_gnmi_filter_file"`
+	GrpcGnmiFilterMd5Hash                         types.String                                  `tfsdk:"grpc_gnmi_filter_md5_hash"`
+	GrpcGnmiKeepaliveTimeout                      types.Int64                                   `tfsdk:"grpc_gnmi_keepalive_timeout"`
+	GrpcGnmiMaxConcurrentCalls                    types.Int64                                   `tfsdk:"grpc_gnmi_max_concurrent_calls"`
+	GrpcGnmiMergeSubscriptions                    types.Bool                                    `tfsdk:"grpc_gnmi_merge_subscriptions"`
+	GrpcGnmiMinSampleInterval                     types.Int64                                   `tfsdk:"grpc_gnmi_min_sample_interval"`
+	GrpcGnmiSubscriptionQueryCondition            types.String                                  `tfsdk:"grpc_gnmi_subscription_query_condition"`
 	BreakoutModules                               map[string]SystemBreakoutModules              `tfsdk:"breakout_modules"`
 	ServiceInstances                              map[string]SystemServiceInstances             `tfsdk:"service_instances"`
 	SshAdminState                                 types.String                                  `tfsdk:"ssh_admin_state"`
@@ -523,7 +534,7 @@ var SystemListClasses = map[string]bool{"ethpmEvent": true, "arpVpcDom": true, "
 
 // getSystemTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getSystemTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"ethpmEntity", "ethpmInst", "ethpmErrDisRecover", "ethpmEvent", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "dnsProvider", "dnsDomExt", "dnsHost", "dnsIpv4Host", "dnsIpv6Host", "dnsVrf", "dnsDom", "dnsProvider", "dnsDomExt", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "lacpEntity", "lacpInst", "lacpIf", "l2Macs", "l2Static", "l2StaticEntry", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "ipqosEntity", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi", "ngmvpnEntity", "ngmvpnInst", "ngmvpnDom", "l2ribEntity", "l2ribInst", "l2ribEvpnMACmob", "ngoamEntity", "ngoamInstallAcl", "ngoamLoopDetection"}, SystemSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"ethpmEntity", "ethpmInst", "ethpmErrDisRecover", "ethpmEvent", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "dnsProvider", "dnsDomExt", "dnsHost", "dnsIpv4Host", "dnsIpv6Host", "dnsVrf", "dnsDom", "dnsProvider", "dnsDomExt", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "lacpEntity", "lacpInst", "lacpIf", "l2Macs", "l2Static", "l2StaticEntry", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "ipqosEntity", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "grpcInst", "grpcGnmi", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi", "ngmvpnEntity", "ngmvpnInst", "ngmvpnDom", "l2ribEntity", "l2ribInst", "l2ribEvpnMACmob", "ngoamEntity", "ngoamInstallAcl", "ngoamLoopDetection"}, SystemSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -2200,6 +2211,59 @@ func (data System) toBody(config System) nxos.Body {
 	}
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.nxapiInst.attributes", attrs)
+	}
+	{
+		attrs = "{}"
+		if !data.GrpcCertificate.IsUnknown() && !data.GrpcCertificate.IsNull() && !config.GrpcCertificate.IsNull() {
+			attrs, _ = sjson.Set(attrs, "cert", data.GrpcCertificate.ValueString())
+		}
+		if !data.GrpcClientRootCertificate.IsUnknown() && !data.GrpcClientRootCertificate.IsNull() && !config.GrpcClientRootCertificate.IsNull() {
+			attrs, _ = sjson.Set(attrs, "certClientRoot", data.GrpcClientRootCertificate.ValueString())
+		}
+		if !data.GrpcPort.IsUnknown() && !data.GrpcPort.IsNull() && !config.GrpcPort.IsNull() {
+			attrs, _ = sjson.Set(attrs, "port", strconv.FormatInt(data.GrpcPort.ValueInt64(), 10))
+		}
+		if !data.GrpcVrf.IsUnknown() && !data.GrpcVrf.IsNull() && !config.GrpcVrf.IsNull() {
+			attrs, _ = sjson.Set(attrs, "useVrf", data.GrpcVrf.ValueString())
+		}
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "grpcInst.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "grpcInst.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		attrs = "{}"
+		if !data.GrpcGnmiFilterFile.IsUnknown() && !data.GrpcGnmiFilterFile.IsNull() && !config.GrpcGnmiFilterFile.IsNull() {
+			attrs, _ = sjson.Set(attrs, "filterFile", data.GrpcGnmiFilterFile.ValueString())
+		}
+		if !data.GrpcGnmiFilterMd5Hash.IsUnknown() && !data.GrpcGnmiFilterMd5Hash.IsNull() && !config.GrpcGnmiFilterMd5Hash.IsNull() {
+			attrs, _ = sjson.Set(attrs, "filterMd5Hash", data.GrpcGnmiFilterMd5Hash.ValueString())
+		}
+		if !data.GrpcGnmiKeepaliveTimeout.IsUnknown() && !data.GrpcGnmiKeepaliveTimeout.IsNull() && !config.GrpcGnmiKeepaliveTimeout.IsNull() {
+			attrs, _ = sjson.Set(attrs, "keepAliveTimeout", strconv.FormatInt(data.GrpcGnmiKeepaliveTimeout.ValueInt64(), 10))
+		}
+		if !data.GrpcGnmiMaxConcurrentCalls.IsUnknown() && !data.GrpcGnmiMaxConcurrentCalls.IsNull() && !config.GrpcGnmiMaxConcurrentCalls.IsNull() {
+			attrs, _ = sjson.Set(attrs, "maxCalls", strconv.FormatInt(data.GrpcGnmiMaxConcurrentCalls.ValueInt64(), 10))
+		}
+		if !data.GrpcGnmiMergeSubscriptions.IsUnknown() && !data.GrpcGnmiMergeSubscriptions.IsNull() && !config.GrpcGnmiMergeSubscriptions.IsNull() {
+			attrs, _ = sjson.Set(attrs, "mergeSubs", strconv.FormatBool(data.GrpcGnmiMergeSubscriptions.ValueBool()))
+		}
+		if !data.GrpcGnmiMinSampleInterval.IsUnknown() && !data.GrpcGnmiMinSampleInterval.IsNull() && !config.GrpcGnmiMinSampleInterval.IsNull() {
+			attrs, _ = sjson.Set(attrs, "minSampleInterval", strconv.FormatInt(data.GrpcGnmiMinSampleInterval.ValueInt64(), 10))
+		}
+		if !data.GrpcGnmiSubscriptionQueryCondition.IsUnknown() && !data.GrpcGnmiSubscriptionQueryCondition.IsNull() && !config.GrpcGnmiSubscriptionQueryCondition.IsNull() {
+			attrs, _ = sjson.Set(attrs, "subsQueryCondition", data.GrpcGnmiSubscriptionQueryCondition.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.grpcGnmi.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "grpcInst.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
 	}
 	{
 		attrs = "{}"
@@ -4159,6 +4223,43 @@ func (data *System) fromBody(res gjson.Result) {
 		data.NxapiSslCiphersWeak = types.BoolValue(helpers.ParseNxosBoolean(rnxapiInst.Get("nxapiInst.attributes.sslCiphersWeak").String()))
 		data.NxapiClientCertificateAuthentication = types.StringValue(rnxapiInst.Get("nxapiInst.attributes.clientCertAuth").String())
 		data.NxapiSudi = types.BoolValue(helpers.ParseNxosBoolean(rnxapiInst.Get("nxapiInst.attributes.sudi").String()))
+	}
+	{
+		var rgrpcInst gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("grpcInst.attributes.rn").String()
+				if rnValue == "grpc" {
+					rgrpcInst = v
+					return false
+				}
+				return true
+			},
+		)
+		data.GrpcCertificate = types.StringValue(rgrpcInst.Get("grpcInst.attributes.cert").String())
+		data.GrpcClientRootCertificate = types.StringValue(rgrpcInst.Get("grpcInst.attributes.certClientRoot").String())
+		data.GrpcPort = types.Int64Value(rgrpcInst.Get("grpcInst.attributes.port").Int())
+		data.GrpcVrf = types.StringValue(rgrpcInst.Get("grpcInst.attributes.useVrf").String())
+		{
+			var rgrpcGnmi gjson.Result
+			rgrpcInst.Get("grpcInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("grpcGnmi.attributes.rn").String()
+					if rnValue == "gnmi" {
+						rgrpcGnmi = v
+						return false
+					}
+					return true
+				},
+			)
+			data.GrpcGnmiFilterFile = types.StringValue(rgrpcGnmi.Get("grpcGnmi.attributes.filterFile").String())
+			data.GrpcGnmiFilterMd5Hash = types.StringValue(rgrpcGnmi.Get("grpcGnmi.attributes.filterMd5Hash").String())
+			data.GrpcGnmiKeepaliveTimeout = types.Int64Value(rgrpcGnmi.Get("grpcGnmi.attributes.keepAliveTimeout").Int())
+			data.GrpcGnmiMaxConcurrentCalls = types.Int64Value(rgrpcGnmi.Get("grpcGnmi.attributes.maxCalls").Int())
+			data.GrpcGnmiMergeSubscriptions = types.BoolValue(helpers.ParseNxosBoolean(rgrpcGnmi.Get("grpcGnmi.attributes.mergeSubs").String()))
+			data.GrpcGnmiMinSampleInterval = types.Int64Value(rgrpcGnmi.Get("grpcGnmi.attributes.minSampleInterval").Int())
+			data.GrpcGnmiSubscriptionQueryCondition = types.StringValue(rgrpcGnmi.Get("grpcGnmi.attributes.subsQueryCondition").String())
+		}
 	}
 	{
 		var rimBreakout gjson.Result
@@ -7039,6 +7140,85 @@ func (data *System) updateFromBody(res gjson.Result) {
 	} else {
 		data.NxapiSudi = types.BoolNull()
 	}
+	var rgrpcInst gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("grpcInst.attributes.rn").String()
+			if rnValue == "grpc" {
+				rgrpcInst = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.GrpcCertificate.IsNull() {
+		data.GrpcCertificate = types.StringValue(rgrpcInst.Get("grpcInst.attributes.cert").String())
+	} else {
+		data.GrpcCertificate = types.StringNull()
+	}
+	if !data.GrpcClientRootCertificate.IsNull() {
+		data.GrpcClientRootCertificate = types.StringValue(rgrpcInst.Get("grpcInst.attributes.certClientRoot").String())
+	} else {
+		data.GrpcClientRootCertificate = types.StringNull()
+	}
+	if !data.GrpcPort.IsNull() {
+		data.GrpcPort = types.Int64Value(rgrpcInst.Get("grpcInst.attributes.port").Int())
+	} else {
+		data.GrpcPort = types.Int64Null()
+	}
+	if !data.GrpcVrf.IsNull() {
+		data.GrpcVrf = types.StringValue(rgrpcInst.Get("grpcInst.attributes.useVrf").String())
+	} else {
+		data.GrpcVrf = types.StringNull()
+	}
+	{
+		var rgrpcGnmi gjson.Result
+		rgrpcInst.Get("grpcInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("grpcGnmi.attributes.rn").String()
+				if rnValue == "gnmi" {
+					rgrpcGnmi = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.GrpcGnmiFilterFile.IsNull() {
+			data.GrpcGnmiFilterFile = types.StringValue(rgrpcGnmi.Get("grpcGnmi.attributes.filterFile").String())
+		} else {
+			data.GrpcGnmiFilterFile = types.StringNull()
+		}
+		if !data.GrpcGnmiFilterMd5Hash.IsNull() {
+			data.GrpcGnmiFilterMd5Hash = types.StringValue(rgrpcGnmi.Get("grpcGnmi.attributes.filterMd5Hash").String())
+		} else {
+			data.GrpcGnmiFilterMd5Hash = types.StringNull()
+		}
+		if !data.GrpcGnmiKeepaliveTimeout.IsNull() {
+			data.GrpcGnmiKeepaliveTimeout = types.Int64Value(rgrpcGnmi.Get("grpcGnmi.attributes.keepAliveTimeout").Int())
+		} else {
+			data.GrpcGnmiKeepaliveTimeout = types.Int64Null()
+		}
+		if !data.GrpcGnmiMaxConcurrentCalls.IsNull() {
+			data.GrpcGnmiMaxConcurrentCalls = types.Int64Value(rgrpcGnmi.Get("grpcGnmi.attributes.maxCalls").Int())
+		} else {
+			data.GrpcGnmiMaxConcurrentCalls = types.Int64Null()
+		}
+		if !data.GrpcGnmiMergeSubscriptions.IsNull() {
+			data.GrpcGnmiMergeSubscriptions = types.BoolValue(helpers.ParseNxosBoolean(rgrpcGnmi.Get("grpcGnmi.attributes.mergeSubs").String()))
+		} else {
+			data.GrpcGnmiMergeSubscriptions = types.BoolNull()
+		}
+		if !data.GrpcGnmiMinSampleInterval.IsNull() {
+			data.GrpcGnmiMinSampleInterval = types.Int64Value(rgrpcGnmi.Get("grpcGnmi.attributes.minSampleInterval").Int())
+		} else {
+			data.GrpcGnmiMinSampleInterval = types.Int64Null()
+		}
+		if !data.GrpcGnmiSubscriptionQueryCondition.IsNull() {
+			data.GrpcGnmiSubscriptionQueryCondition = types.StringValue(rgrpcGnmi.Get("grpcGnmi.attributes.subsQueryCondition").String())
+		} else {
+			data.GrpcGnmiSubscriptionQueryCondition = types.StringNull()
+		}
+	}
 	var rimBreakout gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -9160,6 +9340,67 @@ func (data System) toDeleteBody() nxos.Body {
 	}
 	{
 		childBody := ""
+		if !data.GrpcCertificate.IsNull() {
+			childBody, _ = sjson.Set(childBody, "cert", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.GrpcClientRootCertificate.IsNull() {
+			childBody, _ = sjson.Set(childBody, "certClientRoot", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.GrpcPort.IsNull() {
+			childBody, _ = sjson.Set(childBody, "port", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.GrpcVrf.IsNull() {
+			childBody, _ = sjson.Set(childBody, "useVrf", "DME_UNSET_PROPERTY_MARKER")
+		}
+		hasAttributes := childBody != ""
+		siblingsPath := childrenPath
+		childIndex := len(gjson.Get(body, siblingsPath).Array())
+		entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+		childBodyPath := entryPath + ".grpcInst"
+		if childBody == "" {
+			childBody = "{}"
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			if !data.GrpcGnmiFilterFile.IsNull() {
+				childBody, _ = sjson.Set(childBody, "filterFile", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.GrpcGnmiFilterMd5Hash.IsNull() {
+				childBody, _ = sjson.Set(childBody, "filterMd5Hash", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.GrpcGnmiKeepaliveTimeout.IsNull() {
+				childBody, _ = sjson.Set(childBody, "keepAliveTimeout", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.GrpcGnmiMaxConcurrentCalls.IsNull() {
+				childBody, _ = sjson.Set(childBody, "maxCalls", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.GrpcGnmiMergeSubscriptions.IsNull() {
+				childBody, _ = sjson.Set(childBody, "mergeSubs", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.GrpcGnmiMinSampleInterval.IsNull() {
+				childBody, _ = sjson.Set(childBody, "minSampleInterval", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.GrpcGnmiSubscriptionQueryCondition.IsNull() {
+				childBody, _ = sjson.Set(childBody, "subsQueryCondition", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".grpcGnmi"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
+		}
+		if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+			body, _ = sjson.Delete(body, entryPath)
+			if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+				body, _ = sjson.Delete(body, siblingsPath)
+			}
+		}
+	}
+	{
+		childBody := ""
 		hasNestedChildren := false
 		if len(data.BreakoutModules) > 0 {
 			hasNestedChildren = true
@@ -9840,6 +10081,14 @@ func (data System) managedDns() map[string]bool {
 	if !(data.NxapiVrf.IsNull() && data.NxapiHttpPort.IsNull() && data.NxapiHttpsPort.IsNull() && data.NxapiIdleTimeout.IsNull() && data.NxapiCertificateEnable.IsNull() && data.NxapiCertificateFile.IsNull() && data.NxapiKeyFile.IsNull() && data.NxapiEncryptedKeyPassphrase.IsNull() && data.NxapiTrustpoint.IsNull() && data.NxapiSslProtocols.IsNull() && data.NxapiSslCiphersWeak.IsNull() && data.NxapiClientCertificateAuthentication.IsNull() && data.NxapiSudi.IsNull()) {
 		nxapiInstDn := dn + "/" + "nxapi"
 		dns[nxapiInstDn] = true
+	}
+	if !(data.GrpcCertificate.IsNull() && data.GrpcClientRootCertificate.IsNull() && data.GrpcPort.IsNull() && data.GrpcVrf.IsNull() && (data.GrpcGnmiFilterFile.IsNull() && data.GrpcGnmiFilterMd5Hash.IsNull() && data.GrpcGnmiKeepaliveTimeout.IsNull() && data.GrpcGnmiMaxConcurrentCalls.IsNull() && data.GrpcGnmiMergeSubscriptions.IsNull() && data.GrpcGnmiMinSampleInterval.IsNull() && data.GrpcGnmiSubscriptionQueryCondition.IsNull())) {
+		grpcInstDn := dn + "/" + "grpc"
+		dns[grpcInstDn] = true
+		if !(data.GrpcGnmiFilterFile.IsNull() && data.GrpcGnmiFilterMd5Hash.IsNull() && data.GrpcGnmiKeepaliveTimeout.IsNull() && data.GrpcGnmiMaxConcurrentCalls.IsNull() && data.GrpcGnmiMergeSubscriptions.IsNull() && data.GrpcGnmiMinSampleInterval.IsNull() && data.GrpcGnmiSubscriptionQueryCondition.IsNull()) {
+			grpcGnmiDn := grpcInstDn + "/" + "gnmi"
+			dns[grpcGnmiDn] = true
+		}
 	}
 	if !(len(data.BreakoutModules) == 0) {
 		imBreakoutDn := dn + "/" + "breakout"
@@ -11634,6 +11883,63 @@ func (data System) toResetBody(preexisting map[string]bool) nxos.Body {
 			if nxapiInstBody != "" {
 				nxapiInstBody, _ = sjson.Set(nxapiInstBody, "nxapiInst.attributes.rn", nxapiInstRn)
 				body, _ = sjson.SetRaw(body, "topSystem.children.-1", nxapiInstBody)
+			}
+		}
+	}
+	if !(data.GrpcCertificate.IsNull() && data.GrpcClientRootCertificate.IsNull() && data.GrpcPort.IsNull() && data.GrpcVrf.IsNull() && (data.GrpcGnmiFilterFile.IsNull() && data.GrpcGnmiFilterMd5Hash.IsNull() && data.GrpcGnmiKeepaliveTimeout.IsNull() && data.GrpcGnmiMaxConcurrentCalls.IsNull() && data.GrpcGnmiMergeSubscriptions.IsNull() && data.GrpcGnmiMinSampleInterval.IsNull() && data.GrpcGnmiSubscriptionQueryCondition.IsNull())) {
+		grpcInstRn := "grpc"
+		grpcInstDn := dn + "/" + grpcInstRn
+		_ = grpcInstDn
+		{
+			grpcInstBody := ""
+			if !data.GrpcCertificate.IsNull() {
+				grpcInstBody, _ = sjson.Set(grpcInstBody, "grpcInst.attributes.cert", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.GrpcClientRootCertificate.IsNull() {
+				grpcInstBody, _ = sjson.Set(grpcInstBody, "grpcInst.attributes.certClientRoot", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.GrpcPort.IsNull() {
+				grpcInstBody, _ = sjson.Set(grpcInstBody, "grpcInst.attributes.port", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.GrpcVrf.IsNull() {
+				grpcInstBody, _ = sjson.Set(grpcInstBody, "grpcInst.attributes.useVrf", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(data.GrpcGnmiFilterFile.IsNull() && data.GrpcGnmiFilterMd5Hash.IsNull() && data.GrpcGnmiKeepaliveTimeout.IsNull() && data.GrpcGnmiMaxConcurrentCalls.IsNull() && data.GrpcGnmiMergeSubscriptions.IsNull() && data.GrpcGnmiMinSampleInterval.IsNull() && data.GrpcGnmiSubscriptionQueryCondition.IsNull()) {
+				grpcGnmiRn := "gnmi"
+				grpcGnmiDn := grpcInstDn + "/" + grpcGnmiRn
+				_ = grpcGnmiDn
+				{
+					grpcGnmiBody := ""
+					if !data.GrpcGnmiFilterFile.IsNull() {
+						grpcGnmiBody, _ = sjson.Set(grpcGnmiBody, "grpcGnmi.attributes.filterFile", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.GrpcGnmiFilterMd5Hash.IsNull() {
+						grpcGnmiBody, _ = sjson.Set(grpcGnmiBody, "grpcGnmi.attributes.filterMd5Hash", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.GrpcGnmiKeepaliveTimeout.IsNull() {
+						grpcGnmiBody, _ = sjson.Set(grpcGnmiBody, "grpcGnmi.attributes.keepAliveTimeout", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.GrpcGnmiMaxConcurrentCalls.IsNull() {
+						grpcGnmiBody, _ = sjson.Set(grpcGnmiBody, "grpcGnmi.attributes.maxCalls", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.GrpcGnmiMergeSubscriptions.IsNull() {
+						grpcGnmiBody, _ = sjson.Set(grpcGnmiBody, "grpcGnmi.attributes.mergeSubs", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.GrpcGnmiMinSampleInterval.IsNull() {
+						grpcGnmiBody, _ = sjson.Set(grpcGnmiBody, "grpcGnmi.attributes.minSampleInterval", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.GrpcGnmiSubscriptionQueryCondition.IsNull() {
+						grpcGnmiBody, _ = sjson.Set(grpcGnmiBody, "grpcGnmi.attributes.subsQueryCondition", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if grpcGnmiBody != "" {
+						grpcGnmiBody, _ = sjson.Set(grpcGnmiBody, "grpcGnmi.attributes.rn", grpcGnmiRn)
+						grpcInstBody, _ = sjson.SetRaw(grpcInstBody, "grpcInst.children.-1", grpcGnmiBody)
+					}
+				}
+			}
+			if grpcInstBody != "" {
+				grpcInstBody, _ = sjson.Set(grpcInstBody, "grpcInst.attributes.rn", grpcInstRn)
+				body, _ = sjson.SetRaw(body, "topSystem.children.-1", grpcInstBody)
 			}
 		}
 	}
@@ -14020,6 +14326,50 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 		if !state.NxapiSudi.IsNull() && config.NxapiSudi.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "nxapiInst")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"sudi", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.GrpcCertificate.IsNull() && config.GrpcCertificate.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "grpcInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"cert", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.GrpcClientRootCertificate.IsNull() && config.GrpcClientRootCertificate.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "grpcInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"certClientRoot", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.GrpcPort.IsNull() && config.GrpcPort.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "grpcInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"port", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.GrpcVrf.IsNull() && config.GrpcVrf.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "grpcInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"useVrf", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.GrpcGnmiFilterFile.IsNull() && config.GrpcGnmiFilterFile.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "grpcInst")+".children", "grpcGnmi")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"filterFile", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.GrpcGnmiFilterMd5Hash.IsNull() && config.GrpcGnmiFilterMd5Hash.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "grpcInst")+".children", "grpcGnmi")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"filterMd5Hash", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.GrpcGnmiKeepaliveTimeout.IsNull() && config.GrpcGnmiKeepaliveTimeout.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "grpcInst")+".children", "grpcGnmi")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"keepAliveTimeout", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.GrpcGnmiMaxConcurrentCalls.IsNull() && config.GrpcGnmiMaxConcurrentCalls.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "grpcInst")+".children", "grpcGnmi")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"maxCalls", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.GrpcGnmiMergeSubscriptions.IsNull() && config.GrpcGnmiMergeSubscriptions.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "grpcInst")+".children", "grpcGnmi")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"mergeSubs", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.GrpcGnmiMinSampleInterval.IsNull() && config.GrpcGnmiMinSampleInterval.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "grpcInst")+".children", "grpcGnmi")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"minSampleInterval", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.GrpcGnmiSubscriptionQueryCondition.IsNull() && config.GrpcGnmiSubscriptionQueryCondition.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "grpcInst")+".children", "grpcGnmi")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"subsQueryCondition", "DME_UNSET_PROPERTY_MARKER")
 		}
 		for key := range state.BreakoutModules {
 			if configChild, ok := config.BreakoutModules[key]; ok {

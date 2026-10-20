@@ -57,11 +57,13 @@ type Feature struct {
 	Lldp                types.String                  `tfsdk:"lldp"`
 	Macsec              types.String                  `tfsdk:"macsec"`
 	Msdp                types.String                  `tfsdk:"msdp"`
+	Netconf             types.String                  `tfsdk:"netconf"`
 	Netflow             types.String                  `tfsdk:"netflow"`
 	Ngmvpn              types.String                  `tfsdk:"ngmvpn"`
 	Ngoam               types.String                  `tfsdk:"ngoam"`
 	NvOverlay           types.String                  `tfsdk:"nv_overlay"`
 	Nxapi               types.String                  `tfsdk:"nxapi"`
+	Openconfig          types.String                  `tfsdk:"openconfig"`
 	Ospf                types.String                  `tfsdk:"ospf"`
 	Ospfv3              types.String                  `tfsdk:"ospfv3"`
 	Pbr                 types.String                  `tfsdk:"pbr"`
@@ -69,6 +71,7 @@ type Feature struct {
 	Poe                 types.String                  `tfsdk:"poe"`
 	Ptp                 types.String                  `tfsdk:"ptp"`
 	Pvlan               types.String                  `tfsdk:"pvlan"`
+	Restconf            types.String                  `tfsdk:"restconf"`
 	Sflow               types.String                  `tfsdk:"sflow"`
 	ScpServer           types.String                  `tfsdk:"scp_server"`
 	SecurityGroup       types.String                  `tfsdk:"security_group"`
@@ -123,7 +126,7 @@ var FeatureListClasses = map[string]bool{"fsetFeatureSet": true}
 
 // getFeatureTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getFeatureTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"fmEntity", "fmAnalytics", "fmBashShell", "fmBfd", "fmBgp", "fmDhcp", "fmEigrp", "fmEpbr", "fmEvpn", "fmGrpc", "fmHmm", "fmHsrp", "fmInterfaceVlan", "fmIsis", "fmLacp", "fmLldp", "fmMacsec", "fmMsdp", "fmNetflow", "fmNgmvpn", "fmNgoam", "fmNvo", "fmNxapi", "fmOspf", "fmOspfv3", "fmPbr", "fmPim", "fmPoe", "fmPtp", "fmPvlan", "fmSflow", "fmScpServer", "fmSecurityGroup", "fmServiceAcceleration", "fmSftpServer", "fmSlaResponder", "fmSlaSender", "fmSlaTwampServer", "fmSsh", "fmTacacsplus", "fmTelemetry", "fmTelnet", "fmUdld", "fmVnSegment", "fmVpc", "fmVtp", "fsetFeatureSet"}, FeatureSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"fmEntity", "fmAnalytics", "fmBashShell", "fmBfd", "fmBgp", "fmDhcp", "fmEigrp", "fmEpbr", "fmEvpn", "fmGrpc", "fmHmm", "fmHsrp", "fmInterfaceVlan", "fmIsis", "fmLacp", "fmLldp", "fmMacsec", "fmMsdp", "fmNetconf", "fmNetflow", "fmNgmvpn", "fmNgoam", "fmNvo", "fmNxapi", "fmOpenConfig", "fmOspf", "fmOspfv3", "fmPbr", "fmPim", "fmPoe", "fmPtp", "fmPvlan", "fmRestconf", "fmSflow", "fmScpServer", "fmSecurityGroup", "fmServiceAcceleration", "fmSftpServer", "fmSlaResponder", "fmSlaSender", "fmSlaTwampServer", "fmSsh", "fmTacacsplus", "fmTelemetry", "fmTelnet", "fmUdld", "fmVnSegment", "fmVpc", "fmVtp", "fsetFeatureSet"}, FeatureSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -281,6 +284,13 @@ func (data Feature) toBody(config Feature) nxos.Body {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmMsdp.attributes", attrs)
 		}
 		attrs = "{}"
+		if !data.Netconf.IsUnknown() && !data.Netconf.IsNull() && !config.Netconf.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.Netconf.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmNetconf.attributes", attrs)
+		}
+		attrs = "{}"
 		if !data.Netflow.IsUnknown() && !data.Netflow.IsNull() && !config.Netflow.IsNull() {
 			attrs, _ = sjson.Set(attrs, "adminSt", data.Netflow.ValueString())
 		}
@@ -314,6 +324,13 @@ func (data Feature) toBody(config Feature) nxos.Body {
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmNxapi.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.Openconfig.IsUnknown() && !data.Openconfig.IsNull() && !config.Openconfig.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.Openconfig.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmOpenConfig.attributes", attrs)
 		}
 		attrs = "{}"
 		if !data.Ospf.IsUnknown() && !data.Ospf.IsNull() && !config.Ospf.IsNull() {
@@ -363,6 +380,13 @@ func (data Feature) toBody(config Feature) nxos.Body {
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmPvlan.attributes", attrs)
+		}
+		attrs = "{}"
+		if !data.Restconf.IsUnknown() && !data.Restconf.IsNull() && !config.Restconf.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.Restconf.ValueString())
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.fmRestconf.attributes", attrs)
 		}
 		attrs = "{}"
 		if !data.Sflow.IsUnknown() && !data.Sflow.IsNull() && !config.Sflow.IsNull() {
@@ -753,6 +777,20 @@ func (data *Feature) fromBody(res gjson.Result) {
 			data.Msdp = types.StringValue(rfmMsdp.Get("fmMsdp.attributes.adminSt").String())
 		}
 		{
+			var rfmNetconf gjson.Result
+			rfmEntity.Get("fmEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("fmNetconf.attributes.rn").String()
+					if rnValue == "netconf" {
+						rfmNetconf = v
+						return false
+					}
+					return true
+				},
+			)
+			data.Netconf = types.StringValue(rfmNetconf.Get("fmNetconf.attributes.adminSt").String())
+		}
+		{
 			var rfmNetflow gjson.Result
 			rfmEntity.Get("fmEntity.children").ForEach(
 				func(_, v gjson.Result) bool {
@@ -821,6 +859,20 @@ func (data *Feature) fromBody(res gjson.Result) {
 				},
 			)
 			data.Nxapi = types.StringValue(rfmNxapi.Get("fmNxapi.attributes.adminSt").String())
+		}
+		{
+			var rfmOpenConfig gjson.Result
+			rfmEntity.Get("fmEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("fmOpenConfig.attributes.rn").String()
+					if rnValue == "openconfig" {
+						rfmOpenConfig = v
+						return false
+					}
+					return true
+				},
+			)
+			data.Openconfig = types.StringValue(rfmOpenConfig.Get("fmOpenConfig.attributes.adminSt").String())
 		}
 		{
 			var rfmOspf gjson.Result
@@ -919,6 +971,20 @@ func (data *Feature) fromBody(res gjson.Result) {
 				},
 			)
 			data.Pvlan = types.StringValue(rfmPvlan.Get("fmPvlan.attributes.adminSt").String())
+		}
+		{
+			var rfmRestconf gjson.Result
+			rfmEntity.Get("fmEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("fmRestconf.attributes.rn").String()
+					if rnValue == "restconf" {
+						rfmRestconf = v
+						return false
+					}
+					return true
+				},
+			)
+			data.Restconf = types.StringValue(rfmRestconf.Get("fmRestconf.attributes.adminSt").String())
 		}
 		{
 			var rfmSflow gjson.Result
@@ -1489,6 +1555,24 @@ func (data *Feature) updateFromBody(res gjson.Result) {
 		}
 	}
 	{
+		var rfmNetconf gjson.Result
+		rfmEntity.Get("fmEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("fmNetconf.attributes.rn").String()
+				if rnValue == "netconf" {
+					rfmNetconf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Netconf.IsNull() {
+			data.Netconf = types.StringValue(rfmNetconf.Get("fmNetconf.attributes.adminSt").String())
+		} else {
+			data.Netconf = types.StringNull()
+		}
+	}
+	{
 		var rfmNetflow gjson.Result
 		rfmEntity.Get("fmEntity.children").ForEach(
 			func(_, v gjson.Result) bool {
@@ -1576,6 +1660,24 @@ func (data *Feature) updateFromBody(res gjson.Result) {
 			data.Nxapi = types.StringValue(rfmNxapi.Get("fmNxapi.attributes.adminSt").String())
 		} else {
 			data.Nxapi = types.StringNull()
+		}
+	}
+	{
+		var rfmOpenConfig gjson.Result
+		rfmEntity.Get("fmEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("fmOpenConfig.attributes.rn").String()
+				if rnValue == "openconfig" {
+					rfmOpenConfig = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Openconfig.IsNull() {
+			data.Openconfig = types.StringValue(rfmOpenConfig.Get("fmOpenConfig.attributes.adminSt").String())
+		} else {
+			data.Openconfig = types.StringNull()
 		}
 	}
 	{
@@ -1702,6 +1804,24 @@ func (data *Feature) updateFromBody(res gjson.Result) {
 			data.Pvlan = types.StringValue(rfmPvlan.Get("fmPvlan.attributes.adminSt").String())
 		} else {
 			data.Pvlan = types.StringNull()
+		}
+	}
+	{
+		var rfmRestconf gjson.Result
+		rfmEntity.Get("fmEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("fmRestconf.attributes.rn").String()
+				if rnValue == "restconf" {
+					rfmRestconf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.Restconf.IsNull() {
+			data.Restconf = types.StringValue(rfmRestconf.Get("fmRestconf.attributes.adminSt").String())
+		} else {
+			data.Restconf = types.StringNull()
 		}
 	}
 	{
@@ -2228,6 +2348,17 @@ func (data Feature) toDeleteBody() nxos.Body {
 		}
 		{
 			childBody := ""
+			if !data.Netconf.IsNull() {
+				childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".fmNetconf"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
+		}
+		{
+			childBody := ""
 			if !data.Netflow.IsNull() {
 				childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 			}
@@ -2278,6 +2409,17 @@ func (data Feature) toDeleteBody() nxos.Body {
 			if childBody != "" {
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".fmNxapi"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
+		}
+		{
+			childBody := ""
+			if !data.Openconfig.IsNull() {
+				childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".fmOpenConfig"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			}
 		}
@@ -2355,6 +2497,17 @@ func (data Feature) toDeleteBody() nxos.Body {
 			if childBody != "" {
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".fmPvlan"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
+		}
+		{
+			childBody := ""
+			if !data.Restconf.IsNull() {
+				childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".fmRestconf"
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			}
 		}
@@ -2557,7 +2710,7 @@ func (data Feature) managedDns() map[string]bool {
 	dns := map[string]bool{}
 	dn := data.getDn()
 	dns[dn] = true
-	if !((data.Analytics.IsNull()) && (data.BashShell.IsNull()) && (data.Bfd.IsNull()) && (data.Bgp.IsNull()) && (data.Dhcp.IsNull()) && (data.Eigrp.IsNull()) && (data.Epbr.IsNull()) && (data.Evpn.IsNull()) && (data.Grpc.IsNull()) && (data.Hmm.IsNull()) && (data.Hsrp.IsNull()) && (data.InterfaceVlan.IsNull()) && (data.Isis.IsNull()) && (data.Lacp.IsNull()) && (data.Lldp.IsNull()) && (data.Macsec.IsNull()) && (data.Msdp.IsNull()) && (data.Netflow.IsNull()) && (data.Ngmvpn.IsNull()) && (data.Ngoam.IsNull()) && (data.NvOverlay.IsNull()) && (data.Nxapi.IsNull()) && (data.Ospf.IsNull()) && (data.Ospfv3.IsNull()) && (data.Pbr.IsNull()) && (data.Pim.IsNull()) && (data.Poe.IsNull()) && (data.Ptp.IsNull()) && (data.Pvlan.IsNull()) && (data.Sflow.IsNull()) && (data.ScpServer.IsNull()) && (data.SecurityGroup.IsNull()) && (data.ServiceAcceleration.IsNull()) && (data.SftpServer.IsNull()) && (data.SlaResponder.IsNull()) && (data.SlaSender.IsNull()) && (data.SlaTwampServer.IsNull()) && (data.Ssh.IsNull()) && (data.Tacacs.IsNull()) && (data.Telemetry.IsNull()) && (data.Telnet.IsNull()) && (data.Udld.IsNull()) && (data.VnSegment.IsNull()) && (data.Vpc.IsNull()) && (data.Vtp.IsNull())) {
+	if !((data.Analytics.IsNull()) && (data.BashShell.IsNull()) && (data.Bfd.IsNull()) && (data.Bgp.IsNull()) && (data.Dhcp.IsNull()) && (data.Eigrp.IsNull()) && (data.Epbr.IsNull()) && (data.Evpn.IsNull()) && (data.Grpc.IsNull()) && (data.Hmm.IsNull()) && (data.Hsrp.IsNull()) && (data.InterfaceVlan.IsNull()) && (data.Isis.IsNull()) && (data.Lacp.IsNull()) && (data.Lldp.IsNull()) && (data.Macsec.IsNull()) && (data.Msdp.IsNull()) && (data.Netconf.IsNull()) && (data.Netflow.IsNull()) && (data.Ngmvpn.IsNull()) && (data.Ngoam.IsNull()) && (data.NvOverlay.IsNull()) && (data.Nxapi.IsNull()) && (data.Openconfig.IsNull()) && (data.Ospf.IsNull()) && (data.Ospfv3.IsNull()) && (data.Pbr.IsNull()) && (data.Pim.IsNull()) && (data.Poe.IsNull()) && (data.Ptp.IsNull()) && (data.Pvlan.IsNull()) && (data.Restconf.IsNull()) && (data.Sflow.IsNull()) && (data.ScpServer.IsNull()) && (data.SecurityGroup.IsNull()) && (data.ServiceAcceleration.IsNull()) && (data.SftpServer.IsNull()) && (data.SlaResponder.IsNull()) && (data.SlaSender.IsNull()) && (data.SlaTwampServer.IsNull()) && (data.Ssh.IsNull()) && (data.Tacacs.IsNull()) && (data.Telemetry.IsNull()) && (data.Telnet.IsNull()) && (data.Udld.IsNull()) && (data.VnSegment.IsNull()) && (data.Vpc.IsNull()) && (data.Vtp.IsNull())) {
 		fmEntityDn := dn + "/" + "fm"
 		dns[fmEntityDn] = true
 		if !(data.Analytics.IsNull()) {
@@ -2628,6 +2781,10 @@ func (data Feature) managedDns() map[string]bool {
 			fmMsdpDn := fmEntityDn + "/" + "msdp"
 			dns[fmMsdpDn] = true
 		}
+		if !(data.Netconf.IsNull()) {
+			fmNetconfDn := fmEntityDn + "/" + "netconf"
+			dns[fmNetconfDn] = true
+		}
 		if !(data.Netflow.IsNull()) {
 			fmNetflowDn := fmEntityDn + "/" + "netflow"
 			dns[fmNetflowDn] = true
@@ -2647,6 +2804,10 @@ func (data Feature) managedDns() map[string]bool {
 		if !(data.Nxapi.IsNull()) {
 			fmNxapiDn := fmEntityDn + "/" + "nxapi"
 			dns[fmNxapiDn] = true
+		}
+		if !(data.Openconfig.IsNull()) {
+			fmOpenConfigDn := fmEntityDn + "/" + "openconfig"
+			dns[fmOpenConfigDn] = true
 		}
 		if !(data.Ospf.IsNull()) {
 			fmOspfDn := fmEntityDn + "/" + "ospf"
@@ -2675,6 +2836,10 @@ func (data Feature) managedDns() map[string]bool {
 		if !(data.Pvlan.IsNull()) {
 			fmPvlanDn := fmEntityDn + "/" + "pvlan"
 			dns[fmPvlanDn] = true
+		}
+		if !(data.Restconf.IsNull()) {
+			fmRestconfDn := fmEntityDn + "/" + "restconf"
+			dns[fmRestconfDn] = true
 		}
 		if !(data.Sflow.IsNull()) {
 			fmSflowDn := fmEntityDn + "/" + "sflow"
@@ -2761,7 +2926,7 @@ func (data Feature) toResetBody(preexisting map[string]bool) nxos.Body {
 	if body == "" {
 		body, _ = sjson.Set(body, "topSystem.attributes", map[string]interface{}{})
 	}
-	if !((data.Analytics.IsNull()) && (data.BashShell.IsNull()) && (data.Bfd.IsNull()) && (data.Bgp.IsNull()) && (data.Dhcp.IsNull()) && (data.Eigrp.IsNull()) && (data.Epbr.IsNull()) && (data.Evpn.IsNull()) && (data.Grpc.IsNull()) && (data.Hmm.IsNull()) && (data.Hsrp.IsNull()) && (data.InterfaceVlan.IsNull()) && (data.Isis.IsNull()) && (data.Lacp.IsNull()) && (data.Lldp.IsNull()) && (data.Macsec.IsNull()) && (data.Msdp.IsNull()) && (data.Netflow.IsNull()) && (data.Ngmvpn.IsNull()) && (data.Ngoam.IsNull()) && (data.NvOverlay.IsNull()) && (data.Nxapi.IsNull()) && (data.Ospf.IsNull()) && (data.Ospfv3.IsNull()) && (data.Pbr.IsNull()) && (data.Pim.IsNull()) && (data.Poe.IsNull()) && (data.Ptp.IsNull()) && (data.Pvlan.IsNull()) && (data.Sflow.IsNull()) && (data.ScpServer.IsNull()) && (data.SecurityGroup.IsNull()) && (data.ServiceAcceleration.IsNull()) && (data.SftpServer.IsNull()) && (data.SlaResponder.IsNull()) && (data.SlaSender.IsNull()) && (data.SlaTwampServer.IsNull()) && (data.Ssh.IsNull()) && (data.Tacacs.IsNull()) && (data.Telemetry.IsNull()) && (data.Telnet.IsNull()) && (data.Udld.IsNull()) && (data.VnSegment.IsNull()) && (data.Vpc.IsNull()) && (data.Vtp.IsNull())) {
+	if !((data.Analytics.IsNull()) && (data.BashShell.IsNull()) && (data.Bfd.IsNull()) && (data.Bgp.IsNull()) && (data.Dhcp.IsNull()) && (data.Eigrp.IsNull()) && (data.Epbr.IsNull()) && (data.Evpn.IsNull()) && (data.Grpc.IsNull()) && (data.Hmm.IsNull()) && (data.Hsrp.IsNull()) && (data.InterfaceVlan.IsNull()) && (data.Isis.IsNull()) && (data.Lacp.IsNull()) && (data.Lldp.IsNull()) && (data.Macsec.IsNull()) && (data.Msdp.IsNull()) && (data.Netconf.IsNull()) && (data.Netflow.IsNull()) && (data.Ngmvpn.IsNull()) && (data.Ngoam.IsNull()) && (data.NvOverlay.IsNull()) && (data.Nxapi.IsNull()) && (data.Openconfig.IsNull()) && (data.Ospf.IsNull()) && (data.Ospfv3.IsNull()) && (data.Pbr.IsNull()) && (data.Pim.IsNull()) && (data.Poe.IsNull()) && (data.Ptp.IsNull()) && (data.Pvlan.IsNull()) && (data.Restconf.IsNull()) && (data.Sflow.IsNull()) && (data.ScpServer.IsNull()) && (data.SecurityGroup.IsNull()) && (data.ServiceAcceleration.IsNull()) && (data.SftpServer.IsNull()) && (data.SlaResponder.IsNull()) && (data.SlaSender.IsNull()) && (data.SlaTwampServer.IsNull()) && (data.Ssh.IsNull()) && (data.Tacacs.IsNull()) && (data.Telemetry.IsNull()) && (data.Telnet.IsNull()) && (data.Udld.IsNull()) && (data.VnSegment.IsNull()) && (data.Vpc.IsNull()) && (data.Vtp.IsNull())) {
 		fmEntityRn := "fm"
 		fmEntityDn := dn + "/" + fmEntityRn
 		_ = fmEntityDn
@@ -3022,6 +3187,21 @@ func (data Feature) toResetBody(preexisting map[string]bool) nxos.Body {
 					}
 				}
 			}
+			if !(data.Netconf.IsNull()) {
+				fmNetconfRn := "netconf"
+				fmNetconfDn := fmEntityDn + "/" + fmNetconfRn
+				_ = fmNetconfDn
+				{
+					fmNetconfBody := ""
+					if !data.Netconf.IsNull() {
+						fmNetconfBody, _ = sjson.Set(fmNetconfBody, "fmNetconf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmNetconfBody != "" {
+						fmNetconfBody, _ = sjson.Set(fmNetconfBody, "fmNetconf.attributes.rn", fmNetconfRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmNetconfBody)
+					}
+				}
+			}
 			if !(data.Netflow.IsNull()) {
 				fmNetflowRn := "netflow"
 				fmNetflowDn := fmEntityDn + "/" + fmNetflowRn
@@ -3094,6 +3274,21 @@ func (data Feature) toResetBody(preexisting map[string]bool) nxos.Body {
 					if fmNxapiBody != "" {
 						fmNxapiBody, _ = sjson.Set(fmNxapiBody, "fmNxapi.attributes.rn", fmNxapiRn)
 						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmNxapiBody)
+					}
+				}
+			}
+			if !(data.Openconfig.IsNull()) {
+				fmOpenConfigRn := "openconfig"
+				fmOpenConfigDn := fmEntityDn + "/" + fmOpenConfigRn
+				_ = fmOpenConfigDn
+				{
+					fmOpenConfigBody := ""
+					if !data.Openconfig.IsNull() {
+						fmOpenConfigBody, _ = sjson.Set(fmOpenConfigBody, "fmOpenConfig.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmOpenConfigBody != "" {
+						fmOpenConfigBody, _ = sjson.Set(fmOpenConfigBody, "fmOpenConfig.attributes.rn", fmOpenConfigRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmOpenConfigBody)
 					}
 				}
 			}
@@ -3199,6 +3394,21 @@ func (data Feature) toResetBody(preexisting map[string]bool) nxos.Body {
 					if fmPvlanBody != "" {
 						fmPvlanBody, _ = sjson.Set(fmPvlanBody, "fmPvlan.attributes.rn", fmPvlanRn)
 						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmPvlanBody)
+					}
+				}
+			}
+			if !(data.Restconf.IsNull()) {
+				fmRestconfRn := "restconf"
+				fmRestconfDn := fmEntityDn + "/" + fmRestconfRn
+				_ = fmRestconfDn
+				{
+					fmRestconfBody := ""
+					if !data.Restconf.IsNull() {
+						fmRestconfBody, _ = sjson.Set(fmRestconfBody, "fmRestconf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if fmRestconfBody != "" {
+						fmRestconfBody, _ = sjson.Set(fmRestconfBody, "fmRestconf.attributes.rn", fmRestconfRn)
+						fmEntityBody, _ = sjson.SetRaw(fmEntityBody, "fmEntity.children.-1", fmRestconfBody)
 					}
 				}
 			}
@@ -3556,6 +3766,10 @@ func (data Feature) toBodyWithDeletes(ctx context.Context, state Feature, config
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmMsdp")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
+		if !state.Netconf.IsNull() && config.Netconf.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmNetconf")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
 		if !state.Netflow.IsNull() && config.Netflow.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmNetflow")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
@@ -3575,6 +3789,10 @@ func (data Feature) toBodyWithDeletes(ctx context.Context, state Feature, config
 		if !state.Nxapi.IsNull() && config.Nxapi.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmNxapi")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "enabled")
+		}
+		if !state.Openconfig.IsNull() && config.Openconfig.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmOpenConfig")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !state.Ospf.IsNull() && config.Ospf.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmOspf")
@@ -3602,6 +3820,10 @@ func (data Feature) toBodyWithDeletes(ctx context.Context, state Feature, config
 		}
 		if !state.Pvlan.IsNull() && config.Pvlan.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmPvlan")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.Restconf.IsNull() && config.Restconf.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "fmEntity")+".children", "fmRestconf")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !state.Sflow.IsNull() && config.Sflow.IsNull() {

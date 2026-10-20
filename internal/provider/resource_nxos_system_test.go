@@ -223,6 +223,15 @@ func TestAccSystemResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "icam_scale_info_threshold", "70"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "icam_scale_configuration", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "icam_scale_warning_threshold", "85"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "grpc_certificate", "grpc_trustpoint"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "grpc_client_root_certificate", "grpc_root_trustpoint"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "grpc_port", "50052"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "grpc_vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "grpc_gnmi_keepalive_timeout", "900"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "grpc_gnmi_max_concurrent_calls", "12"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "grpc_gnmi_merge_subscriptions", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "grpc_gnmi_min_sample_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "grpc_gnmi_subscription_query_condition", "keep-data-timestamp"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "breakout_modules.1.front_panel_ports.49.breakout_map", "10g-4x"))
 	if os.Getenv("HYPERSHIELD") != "" {
 		if os.Getenv("HYPERSHIELD") != "" {
@@ -488,6 +497,15 @@ func TestAccSystemResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "icam_scale_info_threshold", "70"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "icam_scale_configuration", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "icam_scale_warning_threshold", "85"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "grpc_certificate", "grpc_trustpoint"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "grpc_client_root_certificate", "grpc_root_trustpoint"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "grpc_port", "50052"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "grpc_vrf", "default"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "grpc_gnmi_keepalive_timeout", "900"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "grpc_gnmi_max_concurrent_calls", "12"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "grpc_gnmi_merge_subscriptions", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "grpc_gnmi_min_sample_interval", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "grpc_gnmi_subscription_query_condition", "keep-data-timestamp"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "breakout_modules.1.front_panel_ports.49.breakout_map", "10g-4x"))
 	if os.Getenv("HYPERSHIELD") != "" {
 		if os.Getenv("HYPERSHIELD") != "" {
@@ -654,6 +672,15 @@ resource "nxos_dme" "PreReq2" {
 }
 
 resource "nxos_dme" "PreReq3" {
+  dn = "sys/fm/grpc"
+  class_name = "fmGrpc"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq4" {
   dn = "sys/bd/bd-[vlan-100]"
   class_name = "l2BD"
   content = {
@@ -661,7 +688,7 @@ resource "nxos_dme" "PreReq3" {
   }
 }
 
-resource "nxos_dme" "PreReq4" {
+resource "nxos_dme" "PreReq5" {
   dn = "sys/bd/bd-[vlan-101]"
   class_name = "l2BD"
   content = {
@@ -669,7 +696,7 @@ resource "nxos_dme" "PreReq4" {
   }
 }
 
-resource "nxos_dme" "PreReq5" {
+resource "nxos_dme" "PreReq6" {
   dn = "sys/bd/bd-[vlan-102]"
   class_name = "l2BD"
   content = {
@@ -677,7 +704,7 @@ resource "nxos_dme" "PreReq5" {
   }
 }
 
-resource "nxos_dme" "PreReq6" {
+resource "nxos_dme" "PreReq7" {
   dn = "sys/intf/svi-[vlan100]"
   class_name = "sviIf"
   content = {
@@ -686,7 +713,7 @@ resource "nxos_dme" "PreReq6" {
   depends_on = [nxos_dme.PreReq2, nxos_dme.PreReq3, ]
 }
 
-resource "nxos_dme" "PreReq7" {
+resource "nxos_dme" "PreReq8" {
   dn = "sys/intf/phys-[eth1/9]"
   class_name = "l1PhysIf"
   content = {
@@ -694,7 +721,7 @@ resource "nxos_dme" "PreReq7" {
   }
 }
 
-resource "nxos_dme" "PreReq8" {
+resource "nxos_dme" "PreReq9" {
   dn = "sys/fm/pvlan"
   class_name = "fmPvlan"
   content = {
@@ -703,7 +730,7 @@ resource "nxos_dme" "PreReq8" {
   depends_on = [nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, ]
 }
 
-resource "nxos_dme" "PreReq9" {
+resource "nxos_dme" "PreReq10" {
   dn = "sys/fm/lacp"
   class_name = "fmLacp"
   delete = false
@@ -712,7 +739,7 @@ resource "nxos_dme" "PreReq9" {
   }
 }
 
-resource "nxos_dme" "PreReq10" {
+resource "nxos_dme" "PreReq11" {
   dn = "sys/fm/ngmvpn"
   class_name = "fmNgmvpn"
   content = {
@@ -720,7 +747,7 @@ resource "nxos_dme" "PreReq10" {
   }
 }
 
-resource "nxos_dme" "PreReq11" {
+resource "nxos_dme" "PreReq12" {
   dn = "sys/fm/ngoam"
   class_name = "fmNgoam"
   content = {
@@ -728,7 +755,7 @@ resource "nxos_dme" "PreReq11" {
   }
 }
 
-resource "nxos_dme" "PreReq12" {
+resource "nxos_dme" "PreReq13" {
   dn = "sys/inst-VRF1"
   class_name = "l3Inst"
   delete = false
@@ -741,7 +768,7 @@ resource "nxos_dme" "PreReq12" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccSystemResourceConfig_minimum() string {
 	config := `resource "nxos_system" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, nxos_dme.PreReq13, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -998,6 +1025,15 @@ func testAccSystemResourceConfig_all(includeWriteOnly bool) string {
 	config += `	icam_scale_info_threshold = 70` + "\n"
 	config += `	icam_scale_configuration = true` + "\n"
 	config += `	icam_scale_warning_threshold = 85` + "\n"
+	config += `	grpc_certificate = "grpc_trustpoint"` + "\n"
+	config += `	grpc_client_root_certificate = "grpc_root_trustpoint"` + "\n"
+	config += `	grpc_port = 50052` + "\n"
+	config += `	grpc_vrf = "default"` + "\n"
+	config += `	grpc_gnmi_keepalive_timeout = 900` + "\n"
+	config += `	grpc_gnmi_max_concurrent_calls = 12` + "\n"
+	config += `	grpc_gnmi_merge_subscriptions = true` + "\n"
+	config += `	grpc_gnmi_min_sample_interval = 20` + "\n"
+	config += `	grpc_gnmi_subscription_query_condition = "keep-data-timestamp"` + "\n"
 	config += `	breakout_modules = {` + "\n"
 	config += `		"1" = {` + "\n"
 	config += `			front_panel_ports = {` + "\n"
@@ -1139,7 +1175,7 @@ func testAccSystemResourceConfig_all(includeWriteOnly bool) string {
 	config += `	l2rib_duplicate_mac_recovery_retry_count = 5` + "\n"
 	config += `	l2rib_duplicate_mac_recovery_timeout = 60` + "\n"
 	config += `	ngoam_install_acl = true` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, nxos_dme.PreReq13, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

@@ -1,0 +1,3 @@
+- Add extended and large community lists (`extended_community_lists` and `large_community_lists` attributes) to `nxos_route_policy` resource and data source
+- Add route map extended and large community match and set configuration (`match_extended_community_*`, `match_large_community_*`, `set_large_community_*`, `set_extended_community_list_*` and `set_large_community_list_*` attributes) to `nxos_route_policy` resource and data source
+- Add route map `set extcommunity` generic, cost, color, bandwidth and EVPN RMAC configuration (`set_extended_community_*` attributes) to `nxos_route_policy` resource and data source

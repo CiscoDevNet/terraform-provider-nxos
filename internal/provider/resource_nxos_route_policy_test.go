@@ -74,6 +74,8 @@ func TestAccRoutePolicyResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_regular_community_additive", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_regular_community_no_community", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_regular_community_criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_large_community_additive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_large_community_no_community", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_is_bgp", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_delay", "10"))
@@ -90,6 +92,8 @@ func TestAccRoutePolicyResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_local_preference", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_path_selection_advertise", "ps-all"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.match_regular_community_criteria", "exact"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.match_extended_community_criteria", "exact"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.match_large_community_criteria", "exact"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_as_path_prepend", "65001 65001"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_as_path_prepend_last_as", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_tag", "12345"))
@@ -98,11 +102,30 @@ func TestAccRoutePolicyResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_origin", "egp"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_route_target_additive", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_route_target_criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_additive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_no_community", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_scope", "transitive"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_costs.pre-bestpath;10.cost", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_costs.pre-bestpath;10.criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_color", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_color_only_flag", "01"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_rmac", "00:11:22:33:44:55"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_community_list_delete", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_community_list_name", "COMMUNITY_LIST1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_community_list_criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_list_delete", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_list_name", "EXT_COMMUNITY_LIST1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_list_criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_large_community_list_delete", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_large_community_list_name", "LARGE_COMMUNITY_LIST1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "community_lists.COMMUNITY_LIST1.mode", "standard"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "community_lists.COMMUNITY_LIST1.entries.10.action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "extended_community_lists.EXT_COMMUNITY_LIST1.mode", "standard"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "extended_community_lists.EXT_COMMUNITY_LIST1.entries.10.action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "extended_community_lists.EXT_COMMUNITY_LIST1.entries.10.items.transitive;route-target:as2-nn2:65000:100.type", "rttarget"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "large_community_lists.LARGE_COMMUNITY_LIST1.entries.10.action", "permit"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "as_path_access_lists.AS_PATH_LIST1.entries.10.action", "deny"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "as_path_access_lists.AS_PATH_LIST1.entries.10.regex", "_65110_"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_route_policy.test", "ipv4_policy_interfaces.vlan10.route_map_name", "PBR_ROUTE_MAP_V4"))
@@ -141,6 +164,8 @@ func TestAccRoutePolicyResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_regular_community_additive", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_regular_community_no_community", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_regular_community_criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_large_community_additive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_large_community_no_community", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_is_bgp", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_metric_delay", "10"))
@@ -157,6 +182,8 @@ func TestAccRoutePolicyResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_local_preference", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_path_selection_advertise", "ps-all"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.match_regular_community_criteria", "exact"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.match_extended_community_criteria", "exact"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.match_large_community_criteria", "exact"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_as_path_prepend", "65001 65001"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_as_path_prepend_last_as", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_tag", "12345"))
@@ -165,11 +192,30 @@ func TestAccRoutePolicyResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_origin", "egp"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_route_target_additive", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_route_target_criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_additive", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_no_community", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_scope", "transitive"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_costs.pre-bestpath;10.cost", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_costs.pre-bestpath;10.criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_color", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_color_only_flag", "01"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_bandwidth", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_rmac", "00:11:22:33:44:55"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_community_list_delete", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_community_list_name", "COMMUNITY_LIST1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_community_list_criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_list_delete", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_list_name", "EXT_COMMUNITY_LIST1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_extended_community_list_criteria", "none"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_large_community_list_delete", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "route_maps.ROUTE_MAP1.entries.10.set_large_community_list_name", "LARGE_COMMUNITY_LIST1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "community_lists.COMMUNITY_LIST1.mode", "standard"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "community_lists.COMMUNITY_LIST1.entries.10.action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "extended_community_lists.EXT_COMMUNITY_LIST1.mode", "standard"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "extended_community_lists.EXT_COMMUNITY_LIST1.entries.10.action", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "extended_community_lists.EXT_COMMUNITY_LIST1.entries.10.items.transitive;route-target:as2-nn2:65000:100.type", "rttarget"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "large_community_lists.LARGE_COMMUNITY_LIST1.entries.10.action", "permit"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "as_path_access_lists.AS_PATH_LIST1.entries.10.action", "deny"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "as_path_access_lists.AS_PATH_LIST1.entries.10.regex", "_65110_"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_route_policy.test", "ipv4_policy_interfaces.vlan10.route_map_name", "PBR_ROUTE_MAP_V4"))
@@ -373,6 +419,12 @@ func testAccRoutePolicyResourceConfig_all() string {
 	config += `						"regular:as2-nn2:65001:123" = {` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
+	config += `					set_large_community_additive = "enabled"` + "\n"
+	config += `					set_large_community_no_community = "disabled"` + "\n"
+	config += `					set_large_community_items = {` + "\n"
+	config += `						"large:xx-yy-zz:65000:5:5" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
 	config += `					match_tags = {` + "\n"
 	config += `						"12345" = {` + "\n"
 	config += `						}` + "\n"
@@ -401,6 +453,16 @@ func testAccRoutePolicyResourceConfig_all() string {
 	config += `						"sys/rpm/rtregcom-[COMMUNITY_LIST1]" = {` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
+	config += `					match_extended_community_criteria = "exact"` + "\n"
+	config += `					match_extended_community_lists = {` + "\n"
+	config += `						"sys/rpm/rtextcom-[EXT_COMMUNITY_LIST1]" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					match_large_community_criteria = "exact"` + "\n"
+	config += `					match_large_community_lists = {` + "\n"
+	config += `						"sys/rpm/rtlargecom-[LARGE_COMMUNITY_LIST1]" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
 	config += `					match_as_path_lists = {` + "\n"
 	config += `						"sys/rpm/accesslist-[AS_PATH_LIST1]" = {` + "\n"
 	config += `						}` + "\n"
@@ -421,9 +483,32 @@ func testAccRoutePolicyResourceConfig_all() string {
 	config += `						"transitive;route-target:as2-nn2:65001:100" = {` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
+	config += `					set_extended_community_additive = "enabled"` + "\n"
+	config += `					set_extended_community_no_community = "disabled"` + "\n"
+	config += `					set_extended_community_scope = "transitive"` + "\n"
+	config += `					set_extended_community_criteria = "none"` + "\n"
+	config += `					set_extended_community_items = {` + "\n"
+	config += `						"transitive;extended:as2-nn2:65000:100" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					set_extended_community_costs = {` + "\n"
+	config += `						"pre-bestpath;10" = {` + "\n"
+	config += `							cost = 100` + "\n"
+	config += `							criteria = "none"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					set_extended_community_color = 200` + "\n"
+	config += `					set_extended_community_color_only_flag = "01"` + "\n"
+	config += `					set_extended_community_bandwidth = 1000` + "\n"
+	config += `					set_extended_community_rmac = "00:11:22:33:44:55"` + "\n"
 	config += `					set_community_list_delete = "enabled"` + "\n"
 	config += `					set_community_list_name = "COMMUNITY_LIST1"` + "\n"
 	config += `					set_community_list_criteria = "none"` + "\n"
+	config += `					set_extended_community_list_delete = "enabled"` + "\n"
+	config += `					set_extended_community_list_name = "EXT_COMMUNITY_LIST1"` + "\n"
+	config += `					set_extended_community_list_criteria = "none"` + "\n"
+	config += `					set_large_community_list_delete = "enabled"` + "\n"
+	config += `					set_large_community_list_name = "LARGE_COMMUNITY_LIST1"` + "\n"
 	config += `					match_interfaces = {` + "\n"
 	config += `						"eth1/1" = {` + "\n"
 	config += `						}` + "\n"
@@ -444,6 +529,38 @@ func testAccRoutePolicyResourceConfig_all() string {
 	config += `					action = "permit"` + "\n"
 	config += `					items = {` + "\n"
 	config += `						"regular:as2-nn2:65001:123" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	extended_community_lists = {` + "\n"
+	config += `		"EXT_COMMUNITY_LIST1" = {` + "\n"
+	config += `			mode = "standard"` + "\n"
+	config += `			entries = {` + "\n"
+	config += `				"10" = {` + "\n"
+	config += `					action = "permit"` + "\n"
+	config += `					items = {` + "\n"
+	config += `						"transitive;route-target:as2-nn2:65000:100" = {` + "\n"
+	config += `							type = "rttarget"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					rmacs = {` + "\n"
+	config += `						"00:11:22:33:44:55" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	large_community_lists = {` + "\n"
+	config += `		"LARGE_COMMUNITY_LIST1" = {` + "\n"
+	config += `			entries = {` + "\n"
+	config += `				"10" = {` + "\n"
+	config += `					action = "permit"` + "\n"
+	config += `					items = {` + "\n"
+	config += `						"large:xx-yy-zz:65000:1:1" = {` + "\n"
 	config += `						}` + "\n"
 	config += `					}` + "\n"
 	config += `				}` + "\n"

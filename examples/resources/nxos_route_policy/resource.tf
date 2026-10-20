@@ -64,6 +64,11 @@ resource "nxos_route_policy" "example" {
             "regular:as2-nn2:65001:123" = {
             }
           }
+          set_large_community_additive     = "enabled"
+          set_large_community_no_community = "disabled"
+          set_large_community_items = {
+            "large:xx-yy-zz:65000:5:5" = {}
+          }
           match_tags = {
             "12345" = {}
           }
@@ -89,6 +94,14 @@ resource "nxos_route_policy" "example" {
           match_regular_community_lists = {
             "sys/rpm/rtregcom-[COMMUNITY_LIST1]" = {}
           }
+          match_extended_community_criteria = "exact"
+          match_extended_community_lists = {
+            "sys/rpm/rtextcom-[EXT_COMMUNITY_LIST1]" = {}
+          }
+          match_large_community_criteria = "exact"
+          match_large_community_lists = {
+            "sys/rpm/rtlargecom-[LARGE_COMMUNITY_LIST1]" = {}
+          }
           match_as_path_lists = {
             "sys/rpm/accesslist-[AS_PATH_LIST1]" = {}
           }
@@ -106,9 +119,31 @@ resource "nxos_route_policy" "example" {
           set_extended_community_route_target_items = {
             "transitive;route-target:as2-nn2:65001:100" = {}
           }
-          set_community_list_delete   = "enabled"
-          set_community_list_name     = "COMMUNITY_LIST1"
-          set_community_list_criteria = "none"
+          set_extended_community_additive     = "enabled"
+          set_extended_community_no_community = "disabled"
+          set_extended_community_scope        = "transitive"
+          set_extended_community_criteria     = "none"
+          set_extended_community_items = {
+            "transitive;extended:as2-nn2:65000:100" = {}
+          }
+          set_extended_community_costs = {
+            "pre-bestpath;10" = {
+              cost     = 100
+              criteria = "none"
+            }
+          }
+          set_extended_community_color           = 200
+          set_extended_community_color_only_flag = "01"
+          set_extended_community_bandwidth       = 1000
+          set_extended_community_rmac            = "00:11:22:33:44:55"
+          set_community_list_delete              = "enabled"
+          set_community_list_name                = "COMMUNITY_LIST1"
+          set_community_list_criteria            = "none"
+          set_extended_community_list_delete     = "enabled"
+          set_extended_community_list_name       = "EXT_COMMUNITY_LIST1"
+          set_extended_community_list_criteria   = "none"
+          set_large_community_list_delete        = "enabled"
+          set_large_community_list_name          = "LARGE_COMMUNITY_LIST1"
           match_interfaces = {
             "eth1/1" = {}
           }
@@ -128,6 +163,36 @@ resource "nxos_route_policy" "example" {
           items = {
             "regular:as2-nn2:65001:123" = {
             }
+          }
+        }
+      }
+    }
+  }
+  extended_community_lists = {
+    "EXT_COMMUNITY_LIST1" = {
+      mode = "standard"
+      entries = {
+        "10" = {
+          action = "permit"
+          items = {
+            "transitive;route-target:as2-nn2:65000:100" = {
+              type = "rttarget"
+            }
+          }
+          rmacs = {
+            "00:11:22:33:44:55" = {}
+          }
+        }
+      }
+    }
+  }
+  large_community_lists = {
+    "LARGE_COMMUNITY_LIST1" = {
+      entries = {
+        "10" = {
+          action = "permit"
+          items = {
+            "large:xx-yy-zz:65000:1:1" = {}
           }
         }
       }

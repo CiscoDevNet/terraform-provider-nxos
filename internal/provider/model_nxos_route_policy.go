@@ -39,16 +39,18 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type RoutePolicy struct {
-	Device               types.String                               `tfsdk:"device"`
-	Dn                   types.String                               `tfsdk:"id"`
-	AdminState           types.String                               `tfsdk:"admin_state"`
-	Ipv4PrefixLists      map[string]RoutePolicyIpv4PrefixLists      `tfsdk:"ipv4_prefix_lists"`
-	Ipv6PrefixLists      map[string]RoutePolicyIpv6PrefixLists      `tfsdk:"ipv6_prefix_lists"`
-	RouteMaps            map[string]RoutePolicyRouteMaps            `tfsdk:"route_maps"`
-	CommunityLists       map[string]RoutePolicyCommunityLists       `tfsdk:"community_lists"`
-	AsPathAccessLists    map[string]RoutePolicyAsPathAccessLists    `tfsdk:"as_path_access_lists"`
-	Ipv4PolicyInterfaces map[string]RoutePolicyIpv4PolicyInterfaces `tfsdk:"ipv4_policy_interfaces"`
-	Ipv6PolicyInterfaces map[string]RoutePolicyIpv6PolicyInterfaces `tfsdk:"ipv6_policy_interfaces"`
+	Device                 types.String                                 `tfsdk:"device"`
+	Dn                     types.String                                 `tfsdk:"id"`
+	AdminState             types.String                                 `tfsdk:"admin_state"`
+	Ipv4PrefixLists        map[string]RoutePolicyIpv4PrefixLists        `tfsdk:"ipv4_prefix_lists"`
+	Ipv6PrefixLists        map[string]RoutePolicyIpv6PrefixLists        `tfsdk:"ipv6_prefix_lists"`
+	RouteMaps              map[string]RoutePolicyRouteMaps              `tfsdk:"route_maps"`
+	CommunityLists         map[string]RoutePolicyCommunityLists         `tfsdk:"community_lists"`
+	ExtendedCommunityLists map[string]RoutePolicyExtendedCommunityLists `tfsdk:"extended_community_lists"`
+	LargeCommunityLists    map[string]RoutePolicyLargeCommunityLists    `tfsdk:"large_community_lists"`
+	AsPathAccessLists      map[string]RoutePolicyAsPathAccessLists      `tfsdk:"as_path_access_lists"`
+	Ipv4PolicyInterfaces   map[string]RoutePolicyIpv4PolicyInterfaces   `tfsdk:"ipv4_policy_interfaces"`
+	Ipv6PolicyInterfaces   map[string]RoutePolicyIpv6PolicyInterfaces   `tfsdk:"ipv6_policy_interfaces"`
 }
 
 type RoutePolicyIpv4PrefixLists struct {
@@ -109,6 +111,9 @@ type RoutePolicyRouteMapsEntries struct {
 	SetRegularCommunityNoCommunity          types.String                                                               `tfsdk:"set_regular_community_no_community"`
 	SetRegularCommunityCriteria             types.String                                                               `tfsdk:"set_regular_community_criteria"`
 	SetRegularCommunityItems                map[string]RoutePolicyRouteMapsEntriesSetRegularCommunityItems             `tfsdk:"set_regular_community_items"`
+	SetLargeCommunityAdditive               types.String                                                               `tfsdk:"set_large_community_additive"`
+	SetLargeCommunityNoCommunity            types.String                                                               `tfsdk:"set_large_community_no_community"`
+	SetLargeCommunityItems                  map[string]RoutePolicyRouteMapsEntriesSetLargeCommunityItems               `tfsdk:"set_large_community_items"`
 	MatchTags                               map[string]RoutePolicyRouteMapsEntriesMatchTags                            `tfsdk:"match_tags"`
 	SetMetricIsBgp                          types.Bool                                                                 `tfsdk:"set_metric_is_bgp"`
 	SetMetric                               types.String                                                               `tfsdk:"set_metric"`
@@ -130,6 +135,10 @@ type RoutePolicyRouteMapsEntries struct {
 	MatchNextHopPrefixLists                 map[string]RoutePolicyRouteMapsEntriesMatchNextHopPrefixLists              `tfsdk:"match_next_hop_prefix_lists"`
 	MatchRegularCommunityCriteria           types.String                                                               `tfsdk:"match_regular_community_criteria"`
 	MatchRegularCommunityLists              map[string]RoutePolicyRouteMapsEntriesMatchRegularCommunityLists           `tfsdk:"match_regular_community_lists"`
+	MatchExtendedCommunityCriteria          types.String                                                               `tfsdk:"match_extended_community_criteria"`
+	MatchExtendedCommunityLists             map[string]RoutePolicyRouteMapsEntriesMatchExtendedCommunityLists          `tfsdk:"match_extended_community_lists"`
+	MatchLargeCommunityCriteria             types.String                                                               `tfsdk:"match_large_community_criteria"`
+	MatchLargeCommunityLists                map[string]RoutePolicyRouteMapsEntriesMatchLargeCommunityLists             `tfsdk:"match_large_community_lists"`
 	MatchAsPathLists                        map[string]RoutePolicyRouteMapsEntriesMatchAsPathLists                     `tfsdk:"match_as_path_lists"`
 	MatchAsNumberAsPathLists                map[string]RoutePolicyRouteMapsEntriesMatchAsNumberAsPathLists             `tfsdk:"match_as_number_as_path_lists"`
 	SetAsPathPrepend                        types.String                                                               `tfsdk:"set_as_path_prepend"`
@@ -141,9 +150,24 @@ type RoutePolicyRouteMapsEntries struct {
 	SetExtendedCommunityRouteTargetAdditive types.String                                                               `tfsdk:"set_extended_community_route_target_additive"`
 	SetExtendedCommunityRouteTargetCriteria types.String                                                               `tfsdk:"set_extended_community_route_target_criteria"`
 	SetExtendedCommunityRouteTargetItems    map[string]RoutePolicyRouteMapsEntriesSetExtendedCommunityRouteTargetItems `tfsdk:"set_extended_community_route_target_items"`
+	SetExtendedCommunityAdditive            types.String                                                               `tfsdk:"set_extended_community_additive"`
+	SetExtendedCommunityNoCommunity         types.String                                                               `tfsdk:"set_extended_community_no_community"`
+	SetExtendedCommunityScope               types.String                                                               `tfsdk:"set_extended_community_scope"`
+	SetExtendedCommunityCriteria            types.String                                                               `tfsdk:"set_extended_community_criteria"`
+	SetExtendedCommunityItems               map[string]RoutePolicyRouteMapsEntriesSetExtendedCommunityItems            `tfsdk:"set_extended_community_items"`
+	SetExtendedCommunityCosts               map[string]RoutePolicyRouteMapsEntriesSetExtendedCommunityCosts            `tfsdk:"set_extended_community_costs"`
+	SetExtendedCommunityColor               types.Int64                                                                `tfsdk:"set_extended_community_color"`
+	SetExtendedCommunityColorOnlyFlag       types.String                                                               `tfsdk:"set_extended_community_color_only_flag"`
+	SetExtendedCommunityBandwidth           types.Int64                                                                `tfsdk:"set_extended_community_bandwidth"`
+	SetExtendedCommunityRmac                types.String                                                               `tfsdk:"set_extended_community_rmac"`
 	SetCommunityListDelete                  types.String                                                               `tfsdk:"set_community_list_delete"`
 	SetCommunityListName                    types.String                                                               `tfsdk:"set_community_list_name"`
 	SetCommunityListCriteria                types.String                                                               `tfsdk:"set_community_list_criteria"`
+	SetExtendedCommunityListDelete          types.String                                                               `tfsdk:"set_extended_community_list_delete"`
+	SetExtendedCommunityListName            types.String                                                               `tfsdk:"set_extended_community_list_name"`
+	SetExtendedCommunityListCriteria        types.String                                                               `tfsdk:"set_extended_community_list_criteria"`
+	SetLargeCommunityListDelete             types.String                                                               `tfsdk:"set_large_community_list_delete"`
+	SetLargeCommunityListName               types.String                                                               `tfsdk:"set_large_community_list_name"`
 	MatchInterfaces                         map[string]RoutePolicyRouteMapsEntriesMatchInterfaces                      `tfsdk:"match_interfaces"`
 	MatchRouteTypes                         map[string]RoutePolicyRouteMapsEntriesMatchRouteTypes                      `tfsdk:"match_route_types"`
 	SetNextHops                             map[string]RoutePolicyRouteMapsEntriesSetNextHops                          `tfsdk:"set_next_hops"`
@@ -165,6 +189,9 @@ type RoutePolicyRouteMapsEntriesSetRegularCommunityItems struct {
 	Name        types.String `tfsdk:"name"`
 }
 
+type RoutePolicyRouteMapsEntriesSetLargeCommunityItems struct {
+}
+
 type RoutePolicyRouteMapsEntriesMatchTags struct {
 }
 
@@ -174,6 +201,12 @@ type RoutePolicyRouteMapsEntriesMatchNextHopPrefixLists struct {
 type RoutePolicyRouteMapsEntriesMatchRegularCommunityLists struct {
 }
 
+type RoutePolicyRouteMapsEntriesMatchExtendedCommunityLists struct {
+}
+
+type RoutePolicyRouteMapsEntriesMatchLargeCommunityLists struct {
+}
+
 type RoutePolicyRouteMapsEntriesMatchAsPathLists struct {
 }
 
@@ -181,6 +214,14 @@ type RoutePolicyRouteMapsEntriesMatchAsNumberAsPathLists struct {
 }
 
 type RoutePolicyRouteMapsEntriesSetExtendedCommunityRouteTargetItems struct {
+}
+
+type RoutePolicyRouteMapsEntriesSetExtendedCommunityItems struct {
+}
+
+type RoutePolicyRouteMapsEntriesSetExtendedCommunityCosts struct {
+	Cost     types.Int64  `tfsdk:"cost"`
+	Criteria types.String `tfsdk:"criteria"`
 }
 
 type RoutePolicyRouteMapsEntriesMatchInterfaces struct {
@@ -215,6 +256,38 @@ type RoutePolicyCommunityListsEntries struct {
 type RoutePolicyCommunityListsEntriesItems struct {
 	Description types.String `tfsdk:"description"`
 	Name        types.String `tfsdk:"name"`
+}
+
+type RoutePolicyExtendedCommunityLists struct {
+	Mode    types.String                                        `tfsdk:"mode"`
+	Entries map[string]RoutePolicyExtendedCommunityListsEntries `tfsdk:"entries"`
+}
+
+type RoutePolicyExtendedCommunityListsEntries struct {
+	Action types.String                                             `tfsdk:"action"`
+	Regex  types.String                                             `tfsdk:"regex"`
+	Items  map[string]RoutePolicyExtendedCommunityListsEntriesItems `tfsdk:"items"`
+	Rmacs  map[string]RoutePolicyExtendedCommunityListsEntriesRmacs `tfsdk:"rmacs"`
+}
+
+type RoutePolicyExtendedCommunityListsEntriesItems struct {
+	Type types.String `tfsdk:"type"`
+}
+
+type RoutePolicyExtendedCommunityListsEntriesRmacs struct {
+}
+
+type RoutePolicyLargeCommunityLists struct {
+	Entries map[string]RoutePolicyLargeCommunityListsEntries `tfsdk:"entries"`
+}
+
+type RoutePolicyLargeCommunityListsEntries struct {
+	Action types.String                                          `tfsdk:"action"`
+	Regex  types.String                                          `tfsdk:"regex"`
+	Items  map[string]RoutePolicyLargeCommunityListsEntriesItems `tfsdk:"items"`
+}
+
+type RoutePolicyLargeCommunityListsEntriesItems struct {
 }
 
 type RoutePolicyAsPathAccessLists struct {
@@ -264,11 +337,11 @@ var RoutePolicySubtreeClassMinVersions = map[string]string{}
 var RoutePolicyMinVersions = map[string]helpers.MinVersion{}
 
 // RoutePolicyListClasses holds the list child classes of the resource.
-var RoutePolicyListClasses = map[string]bool{"rtpfxRuleV4": true, "rtpfxEntry": true, "rtpfxRuleV6": true, "rtmapRule": true, "rtmapEntry": true, "rtmapRsRtDstAtt": true, "rtmapRsRtDstAccAtt": true, "rtmapRsRtDstV6AccAtt": true, "rtregcomItem": true, "rtmapMatchRtTag": true, "rtmapRsRtNhAtt": true, "rtmapRsRegCommAtt": true, "rtmapRsRtAsPathAccAtt": true, "rtmapRsRtAsnAsPathAccAtt": true, "rtextcomItem": true, "rtmapMatchRtIf": true, "rtmapMatchRtType": true, "rtmapSetNh": true, "rtmapSetIntf": true, "rtregcomRule": true, "rtregcomEntry": true, "rtlistRule": true, "rtlistEntry": true, "rpmRpmIf": true, "rpmRpmv6If": true}
+var RoutePolicyListClasses = map[string]bool{"rtpfxRuleV4": true, "rtpfxEntry": true, "rtpfxRuleV6": true, "rtmapRule": true, "rtmapEntry": true, "rtmapRsRtDstAtt": true, "rtmapRsRtDstAccAtt": true, "rtmapRsRtDstV6AccAtt": true, "rtregcomItem": true, "rtlargecomItem": true, "rtmapMatchRtTag": true, "rtmapRsRtNhAtt": true, "rtmapRsRegCommAtt": true, "rtmapRsExtCommAtt": true, "rtmapRsLargeCommAtt": true, "rtmapRsRtAsPathAccAtt": true, "rtmapRsRtAsnAsPathAccAtt": true, "rtextcomItem": true, "rtmapSetExtCommCost": true, "rtmapMatchRtIf": true, "rtmapMatchRtType": true, "rtmapSetNh": true, "rtmapSetIntf": true, "rtregcomRule": true, "rtregcomEntry": true, "rtextcomRule": true, "rtextcomEntry": true, "rtextcomExtRmac": true, "rtlargecomRule": true, "rtlargecomEntry": true, "rtlistRule": true, "rtlistEntry": true, "rpmRpmIf": true, "rpmRpmv6If": true}
 
 // getRoutePolicyTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getRoutePolicyTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"rtpfxRuleV4", "rtpfxEntry", "rtpfxRuleV6", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapSetPolicyTag", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapRsRtDstAccAtt", "rtmapMatchRtDstV6", "rtmapRsRtDstV6AccAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapMatchRtTag", "rtmapSetMetric", "rtmapSetMetricType", "rtmapSetNhPeerAddr", "rtmapSetPref", "rtmapSetPathSelection", "rtmapSetEvpn", "rtmapMatchRtNh", "rtmapRsRtNhAtt", "rtmapMatchRegComm", "rtmapRsRegCommAtt", "rtmapMatchAsPathAccessList", "rtmapRsRtAsPathAccAtt", "rtmapMatchAsnAsPathAccessList", "rtmapRsRtAsnAsPathAccAtt", "rtmapSetPrepend", "rtmapSetPrependLastAs", "rtmapSetRtTag", "rtmapSetWeight", "rtmapSetOrigin", "rtmapSetRttComm", "rtextcomItem", "rtmapSetCommList", "rtmapMatchRtIf", "rtmapMatchRtType", "rtmapSetNh", "rtmapSetIntf", "rtmapSetVrf", "rtregcomRule", "rtregcomEntry", "rtregcomItem", "rtlistRule", "rtlistEntry", "rpmInst", "rpmRpmIf", "rpmRpmv6If"}, RoutePolicySubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"rtpfxRuleV4", "rtpfxEntry", "rtpfxRuleV6", "rtpfxEntry", "rtmapRule", "rtmapEntry", "rtmapSetPolicyTag", "rtmapMatchRtDst", "rtmapRsRtDstAtt", "rtmapRsRtDstAccAtt", "rtmapMatchRtDstV6", "rtmapRsRtDstV6AccAtt", "rtmapSetRegComm", "rtregcomItem", "rtmapSetLargeComm", "rtlargecomItem", "rtmapMatchRtTag", "rtmapSetMetric", "rtmapSetMetricType", "rtmapSetNhPeerAddr", "rtmapSetPref", "rtmapSetPathSelection", "rtmapSetEvpn", "rtmapMatchRtNh", "rtmapRsRtNhAtt", "rtmapMatchRegComm", "rtmapRsRegCommAtt", "rtmapMatchExtComm", "rtmapRsExtCommAtt", "rtmapMatchLargeComm", "rtmapRsLargeCommAtt", "rtmapMatchAsPathAccessList", "rtmapRsRtAsPathAccAtt", "rtmapMatchAsnAsPathAccessList", "rtmapRsRtAsnAsPathAccAtt", "rtmapSetPrepend", "rtmapSetPrependLastAs", "rtmapSetRtTag", "rtmapSetWeight", "rtmapSetOrigin", "rtmapSetRttComm", "rtextcomItem", "rtmapSetExtComm", "rtextcomItem", "rtmapSetExtCommCost", "rtmapSetExtCommColor", "rtmapSetExtCommBandwidth", "rtmapSetExtCommRmac", "rtmapSetCommList", "rtmapSetExtCommList", "rtmapSetLargeCommList", "rtmapMatchRtIf", "rtmapMatchRtType", "rtmapSetNh", "rtmapSetIntf", "rtmapSetVrf", "rtregcomRule", "rtregcomEntry", "rtregcomItem", "rtextcomRule", "rtextcomEntry", "rtextcomItem", "rtextcomExtRmac", "rtlargecomRule", "rtlargecomEntry", "rtlargecomItem", "rtlistRule", "rtlistEntry", "rpmInst", "rpmRpmIf", "rpmRpmv6If"}, RoutePolicySubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -319,6 +392,10 @@ func (data RoutePolicyRouteMapsEntriesSetRegularCommunityItems) getRn(key string
 	return fmt.Sprintf("item-%s", key)
 }
 
+func (data RoutePolicyRouteMapsEntriesSetLargeCommunityItems) getRn(key string) string {
+	return fmt.Sprintf("item-[%s]", key)
+}
+
 func (data RoutePolicyRouteMapsEntriesMatchTags) getRn(key string) string {
 	return fmt.Sprintf("mrttag-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
 }
@@ -329,6 +406,14 @@ func (data RoutePolicyRouteMapsEntriesMatchNextHopPrefixLists) getRn(key string)
 
 func (data RoutePolicyRouteMapsEntriesMatchRegularCommunityLists) getRn(key string) string {
 	return fmt.Sprintf("rsregCommAtt-[%s]", key)
+}
+
+func (data RoutePolicyRouteMapsEntriesMatchExtendedCommunityLists) getRn(key string) string {
+	return fmt.Sprintf("rsextCommAtt-[%s]", key)
+}
+
+func (data RoutePolicyRouteMapsEntriesMatchLargeCommunityLists) getRn(key string) string {
+	return fmt.Sprintf("rslargeCommAtt-[%s]", key)
 }
 
 func (data RoutePolicyRouteMapsEntriesMatchAsPathLists) getRn(key string) string {
@@ -342,6 +427,16 @@ func (data RoutePolicyRouteMapsEntriesMatchAsNumberAsPathLists) getRn(key string
 func (data RoutePolicyRouteMapsEntriesSetExtendedCommunityRouteTargetItems) getRn(key string) string {
 	keyParts := strings.SplitN(key, ";", 2)
 	return fmt.Sprintf("item-%s-%s", keyParts[0], keyParts[1])
+}
+
+func (data RoutePolicyRouteMapsEntriesSetExtendedCommunityItems) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 2)
+	return fmt.Sprintf("item-[%s]-[%s]", keyParts[0], keyParts[1])
+}
+
+func (data RoutePolicyRouteMapsEntriesSetExtendedCommunityCosts) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 2)
+	return fmt.Sprintf("sextcommcost-[%s]-%v", keyParts[0], helpers.Must(strconv.ParseInt(keyParts[1], 10, 64)))
 }
 
 func (data RoutePolicyRouteMapsEntriesMatchInterfaces) getRn(key string) string {
@@ -370,6 +465,35 @@ func (data RoutePolicyCommunityListsEntries) getRn(key string) string {
 
 func (data RoutePolicyCommunityListsEntriesItems) getRn(key string) string {
 	return fmt.Sprintf("item-%s", key)
+}
+
+func (data RoutePolicyExtendedCommunityLists) getRn(key string) string {
+	return fmt.Sprintf("rtextcom-[%s]", key)
+}
+
+func (data RoutePolicyExtendedCommunityListsEntries) getRn(key string) string {
+	return fmt.Sprintf("ent-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data RoutePolicyExtendedCommunityListsEntriesItems) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 2)
+	return fmt.Sprintf("item-[%s]-[%s]", keyParts[0], keyParts[1])
+}
+
+func (data RoutePolicyExtendedCommunityListsEntriesRmacs) getRn(key string) string {
+	return fmt.Sprintf("extrmac-[%s]", key)
+}
+
+func (data RoutePolicyLargeCommunityLists) getRn(key string) string {
+	return fmt.Sprintf("rtlargecom-[%s]", key)
+}
+
+func (data RoutePolicyLargeCommunityListsEntries) getRn(key string) string {
+	return fmt.Sprintf("ent-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data RoutePolicyLargeCommunityListsEntriesItems) getRn(key string) string {
+	return fmt.Sprintf("item-[%s]", key)
 }
 
 func (data RoutePolicyAsPathAccessLists) getRn(key string) string {
@@ -663,6 +787,36 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 						}
 					}
+					{
+						attrs = "{}"
+						if !child.SetLargeCommunityAdditive.IsUnknown() && !child.SetLargeCommunityAdditive.IsNull() && !configChild.SetLargeCommunityAdditive.IsNull() {
+							attrs, _ = sjson.Set(attrs, "additive", child.SetLargeCommunityAdditive.ValueString())
+						}
+						if !child.SetLargeCommunityNoCommunity.IsUnknown() && !child.SetLargeCommunityNoCommunity.IsNull() && !configChild.SetLargeCommunityNoCommunity.IsNull() {
+							attrs, _ = sjson.Set(attrs, "noCommAttr", child.SetLargeCommunityNoCommunity.ValueString())
+						}
+						childBody := ""
+						childBody, _ = sjson.SetRaw(childBody, "rtmapSetLargeComm.attributes", attrs)
+						parentAttrs := attrs
+						parentPath := nestedChildrenPath
+						nestedChildrenPath := "rtmapSetLargeComm.children"
+						_ = nestedChildrenPath
+						prevBody := body
+						body = childBody
+						for key := range child.SetLargeCommunityItems {
+							configChild, configChildOk := configChild.SetLargeCommunityItems[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "community", key)
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtlargecomItem.attributes", attrs)
+						}
+						childBody = body
+						body = prevBody
+						if parentAttrs != "{}" || gjson.Get(childBody, "rtmapSetLargeComm.children").Exists() {
+							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+						}
+					}
 					for key := range child.MatchTags {
 						configChild, configChildOk := configChild.MatchTags[key]
 						_ = configChild
@@ -799,6 +953,60 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 					}
 					{
 						attrs = "{}"
+						if !child.MatchExtendedCommunityCriteria.IsUnknown() && !child.MatchExtendedCommunityCriteria.IsNull() && !configChild.MatchExtendedCommunityCriteria.IsNull() {
+							attrs, _ = sjson.Set(attrs, "criteria", child.MatchExtendedCommunityCriteria.ValueString())
+						}
+						childBody := ""
+						childBody, _ = sjson.SetRaw(childBody, "rtmapMatchExtComm.attributes", attrs)
+						parentAttrs := attrs
+						parentPath := nestedChildrenPath
+						nestedChildrenPath := "rtmapMatchExtComm.children"
+						_ = nestedChildrenPath
+						prevBody := body
+						body = childBody
+						for key := range child.MatchExtendedCommunityLists {
+							configChild, configChildOk := configChild.MatchExtendedCommunityLists[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "tDn", key)
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapRsExtCommAtt.attributes", attrs)
+						}
+						childBody = body
+						body = prevBody
+						if parentAttrs != "{}" || gjson.Get(childBody, "rtmapMatchExtComm.children").Exists() {
+							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+						}
+					}
+					{
+						attrs = "{}"
+						if !child.MatchLargeCommunityCriteria.IsUnknown() && !child.MatchLargeCommunityCriteria.IsNull() && !configChild.MatchLargeCommunityCriteria.IsNull() {
+							attrs, _ = sjson.Set(attrs, "criteria", child.MatchLargeCommunityCriteria.ValueString())
+						}
+						childBody := ""
+						childBody, _ = sjson.SetRaw(childBody, "rtmapMatchLargeComm.attributes", attrs)
+						parentAttrs := attrs
+						parentPath := nestedChildrenPath
+						nestedChildrenPath := "rtmapMatchLargeComm.children"
+						_ = nestedChildrenPath
+						prevBody := body
+						body = childBody
+						for key := range child.MatchLargeCommunityLists {
+							configChild, configChildOk := configChild.MatchLargeCommunityLists[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "tDn", key)
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapRsLargeCommAtt.attributes", attrs)
+						}
+						childBody = body
+						body = prevBody
+						if parentAttrs != "{}" || gjson.Get(childBody, "rtmapMatchLargeComm.children").Exists() {
+							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+						}
+					}
+					{
+						attrs = "{}"
 						childBody := ""
 						childBody, _ = sjson.SetRaw(childBody, "rtmapMatchAsPathAccessList.attributes", attrs)
 						parentAttrs := attrs
@@ -915,6 +1123,84 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 						}
 					}
+					{
+						attrs = "{}"
+						if !child.SetExtendedCommunityAdditive.IsUnknown() && !child.SetExtendedCommunityAdditive.IsNull() && !configChild.SetExtendedCommunityAdditive.IsNull() {
+							attrs, _ = sjson.Set(attrs, "additive", child.SetExtendedCommunityAdditive.ValueString())
+						}
+						if !child.SetExtendedCommunityNoCommunity.IsUnknown() && !child.SetExtendedCommunityNoCommunity.IsNull() && !configChild.SetExtendedCommunityNoCommunity.IsNull() {
+							attrs, _ = sjson.Set(attrs, "noCommAttr", child.SetExtendedCommunityNoCommunity.ValueString())
+						}
+						if !child.SetExtendedCommunityScope.IsUnknown() && !child.SetExtendedCommunityScope.IsNull() && !configChild.SetExtendedCommunityScope.IsNull() {
+							attrs, _ = sjson.Set(attrs, "scope", child.SetExtendedCommunityScope.ValueString())
+						}
+						if !child.SetExtendedCommunityCriteria.IsUnknown() && !child.SetExtendedCommunityCriteria.IsNull() && !configChild.SetExtendedCommunityCriteria.IsNull() {
+							attrs, _ = sjson.Set(attrs, "setCriteria", child.SetExtendedCommunityCriteria.ValueString())
+						}
+						childBody := ""
+						childBody, _ = sjson.SetRaw(childBody, "rtmapSetExtComm.attributes", attrs)
+						parentAttrs := attrs
+						parentPath := nestedChildrenPath
+						nestedChildrenPath := "rtmapSetExtComm.children"
+						_ = nestedChildrenPath
+						prevBody := body
+						body = childBody
+						for key := range child.SetExtendedCommunityItems {
+							configChild, configChildOk := configChild.SetExtendedCommunityItems[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							keyParts := strings.SplitN(key, ";", 2)
+							attrs, _ = sjson.Set(attrs, "scope", keyParts[0])
+							attrs, _ = sjson.Set(attrs, "community", keyParts[1])
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtextcomItem.attributes", attrs)
+						}
+						childBody = body
+						body = prevBody
+						if parentAttrs != "{}" || gjson.Get(childBody, "rtmapSetExtComm.children").Exists() {
+							body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+						}
+					}
+					for key, child := range child.SetExtendedCommunityCosts {
+						configChild, configChildOk := configChild.SetExtendedCommunityCosts[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						keyParts := strings.SplitN(key, ";", 2)
+						attrs, _ = sjson.Set(attrs, "commCrit", keyParts[0])
+						attrs, _ = sjson.Set(attrs, "commId", keyParts[1])
+						if configChildOk && !child.Cost.IsUnknown() && !child.Cost.IsNull() && !configChild.Cost.IsNull() {
+							attrs, _ = sjson.Set(attrs, "commValue", strconv.FormatInt(child.Cost.ValueInt64(), 10))
+						}
+						if configChildOk && !child.Criteria.IsUnknown() && !child.Criteria.IsNull() && !configChild.Criteria.IsNull() {
+							attrs, _ = sjson.Set(attrs, "setCriteria", child.Criteria.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetExtCommCost.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.SetExtendedCommunityColor.IsUnknown() && !child.SetExtendedCommunityColor.IsNull() && !configChild.SetExtendedCommunityColor.IsNull() {
+						attrs, _ = sjson.Set(attrs, "commValue", strconv.FormatInt(child.SetExtendedCommunityColor.ValueInt64(), 10))
+					}
+					if !child.SetExtendedCommunityColorOnlyFlag.IsUnknown() && !child.SetExtendedCommunityColorOnlyFlag.IsNull() && !configChild.SetExtendedCommunityColorOnlyFlag.IsNull() {
+						attrs, _ = sjson.Set(attrs, "coFlagValue", child.SetExtendedCommunityColorOnlyFlag.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetExtCommColor.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.SetExtendedCommunityBandwidth.IsUnknown() && !child.SetExtendedCommunityBandwidth.IsNull() && !configChild.SetExtendedCommunityBandwidth.IsNull() {
+						attrs, _ = sjson.Set(attrs, "bwValue", strconv.FormatInt(child.SetExtendedCommunityBandwidth.ValueInt64(), 10))
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetExtCommBandwidth.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.SetExtendedCommunityRmac.IsUnknown() && !child.SetExtendedCommunityRmac.IsNull() && !configChild.SetExtendedCommunityRmac.IsNull() {
+						attrs, _ = sjson.Set(attrs, "commRmac", child.SetExtendedCommunityRmac.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetExtCommRmac.attributes", attrs)
+					}
 					attrs = "{}"
 					if !child.SetCommunityListDelete.IsUnknown() && !child.SetCommunityListDelete.IsNull() && !configChild.SetCommunityListDelete.IsNull() {
 						attrs, _ = sjson.Set(attrs, "delete", child.SetCommunityListDelete.ValueString())
@@ -927,6 +1213,29 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 					}
 					if attrs != "{}" {
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetCommList.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.SetExtendedCommunityListDelete.IsUnknown() && !child.SetExtendedCommunityListDelete.IsNull() && !configChild.SetExtendedCommunityListDelete.IsNull() {
+						attrs, _ = sjson.Set(attrs, "delete", child.SetExtendedCommunityListDelete.ValueString())
+					}
+					if !child.SetExtendedCommunityListName.IsUnknown() && !child.SetExtendedCommunityListName.IsNull() && !configChild.SetExtendedCommunityListName.IsNull() {
+						attrs, _ = sjson.Set(attrs, "name", child.SetExtendedCommunityListName.ValueString())
+					}
+					if !child.SetExtendedCommunityListCriteria.IsUnknown() && !child.SetExtendedCommunityListCriteria.IsNull() && !configChild.SetExtendedCommunityListCriteria.IsNull() {
+						attrs, _ = sjson.Set(attrs, "setCriteria", child.SetExtendedCommunityListCriteria.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetExtCommList.attributes", attrs)
+					}
+					attrs = "{}"
+					if !child.SetLargeCommunityListDelete.IsUnknown() && !child.SetLargeCommunityListDelete.IsNull() && !configChild.SetLargeCommunityListDelete.IsNull() {
+						attrs, _ = sjson.Set(attrs, "delete", child.SetLargeCommunityListDelete.ValueString())
+					}
+					if !child.SetLargeCommunityListName.IsUnknown() && !child.SetLargeCommunityListName.IsNull() && !configChild.SetLargeCommunityListName.IsNull() {
+						attrs, _ = sjson.Set(attrs, "name", child.SetLargeCommunityListName.ValueString())
+					}
+					if attrs != "{}" {
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtmapSetLargeCommList.attributes", attrs)
 					}
 					for key := range child.MatchInterfaces {
 						configChild, configChildOk := configChild.MatchInterfaces[key]
@@ -1033,6 +1342,102 @@ func (data RoutePolicy) toBody(config RoutePolicy) nxos.Body {
 							attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
 						}
 						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtregcomItem.attributes", attrs)
+					}
+				}
+			}
+		}
+	}
+	for key, child := range data.ExtendedCommunityLists {
+		configChild, configChildOk := config.ExtendedCommunityLists[key]
+		_ = configChild
+		_ = configChildOk
+		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "name", key)
+		if configChildOk && !child.Mode.IsUnknown() && !child.Mode.IsNull() && !configChild.Mode.IsNull() {
+			attrs, _ = sjson.Set(attrs, "mode", child.Mode.ValueString())
+		}
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.rtextcomRule.attributes", attrs)
+		{
+			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
+			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtextcomRule.children"
+			_ = nestedChildrenPath
+			for key, child := range child.Entries {
+				configChild, configChildOk := configChild.Entries[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "order", key)
+				if configChildOk && !child.Action.IsUnknown() && !child.Action.IsNull() && !configChild.Action.IsNull() {
+					attrs, _ = sjson.Set(attrs, "action", child.Action.ValueString())
+				}
+				if configChildOk && !child.Regex.IsUnknown() && !child.Regex.IsNull() && !configChild.Regex.IsNull() {
+					attrs, _ = sjson.Set(attrs, "regex", child.Regex.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtextcomEntry.attributes", attrs)
+				{
+					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtextcomEntry.children"
+					_ = nestedChildrenPath
+					for key, child := range child.Items {
+						configChild, configChildOk := configChild.Items[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						keyParts := strings.SplitN(key, ";", 2)
+						attrs, _ = sjson.Set(attrs, "scope", keyParts[0])
+						attrs, _ = sjson.Set(attrs, "community", keyParts[1])
+						if configChildOk && !child.Type.IsUnknown() && !child.Type.IsNull() && !configChild.Type.IsNull() {
+							attrs, _ = sjson.Set(attrs, "type", child.Type.ValueString())
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtextcomItem.attributes", attrs)
+					}
+					for key := range child.Rmacs {
+						configChild, configChildOk := configChild.Rmacs[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "commRmac", key)
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtextcomExtRmac.attributes", attrs)
+					}
+				}
+			}
+		}
+	}
+	for key, child := range data.LargeCommunityLists {
+		configChild, configChildOk := config.LargeCommunityLists[key]
+		_ = configChild
+		_ = configChildOk
+		attrs = "{}"
+		attrs, _ = sjson.Set(attrs, "name", key)
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.rtlargecomRule.attributes", attrs)
+		{
+			nestedIndex := len(gjson.Get(body, childrenPath).Array()) - 1
+			nestedChildrenPath := childrenPath + "." + strconv.Itoa(nestedIndex) + ".rtlargecomRule.children"
+			_ = nestedChildrenPath
+			for key, child := range child.Entries {
+				configChild, configChildOk := configChild.Entries[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "order", key)
+				if configChildOk && !child.Action.IsUnknown() && !child.Action.IsNull() && !configChild.Action.IsNull() {
+					attrs, _ = sjson.Set(attrs, "action", child.Action.ValueString())
+				}
+				if configChildOk && !child.Regex.IsUnknown() && !child.Regex.IsNull() && !configChild.Regex.IsNull() {
+					attrs, _ = sjson.Set(attrs, "regex", child.Regex.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtlargecomEntry.attributes", attrs)
+				{
+					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".rtlargecomEntry.children"
+					_ = nestedChildrenPath
+					for key := range child.Items {
+						configChild, configChildOk := configChild.Items[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "community", key)
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.rtlargecomItem.attributes", attrs)
 					}
 				}
 			}
@@ -1355,6 +1760,39 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 													},
 												)
 											}
+											{
+												var rrtmapSetLargeComm gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetLargeComm.attributes.rn").String()
+														if rnValue == "slargecomm" {
+															rrtmapSetLargeComm = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetLargeCommunityAdditive = types.StringValue(rrtmapSetLargeComm.Get("rtmapSetLargeComm.attributes.additive").String())
+												nestedChildrtmapEntry.SetLargeCommunityNoCommunity = types.StringValue(rrtmapSetLargeComm.Get("rtmapSetLargeComm.attributes.noCommAttr").String())
+												rrtmapSetLargeComm.Get("rtmapSetLargeComm").Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "rtlargecomItem" {
+																	var nestedChildrtlargecomItem RoutePolicyRouteMapsEntriesSetLargeCommunityItems
+																	nestedMapKey := nestedValue.Get("attributes.community").String()
+																	if nestedChildrtmapEntry.SetLargeCommunityItems == nil {
+																		nestedChildrtmapEntry.SetLargeCommunityItems = make(map[string]RoutePolicyRouteMapsEntriesSetLargeCommunityItems)
+																	}
+																	nestedChildrtmapEntry.SetLargeCommunityItems[nestedMapKey] = nestedChildrtlargecomItem
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+											}
 											nestedValue.Get("children").ForEach(
 												func(_, nestedV gjson.Result) bool {
 													nestedV.ForEach(
@@ -1532,6 +1970,70 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 												)
 											}
 											{
+												var rrtmapMatchExtComm gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapMatchExtComm.attributes.rn").String()
+														if rnValue == "mextcomm" {
+															rrtmapMatchExtComm = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.MatchExtendedCommunityCriteria = types.StringValue(rrtmapMatchExtComm.Get("rtmapMatchExtComm.attributes.criteria").String())
+												rrtmapMatchExtComm.Get("rtmapMatchExtComm").Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "rtmapRsExtCommAtt" {
+																	var nestedChildrtmapRsExtCommAtt RoutePolicyRouteMapsEntriesMatchExtendedCommunityLists
+																	nestedMapKey := nestedValue.Get("attributes.tDn").String()
+																	if nestedChildrtmapEntry.MatchExtendedCommunityLists == nil {
+																		nestedChildrtmapEntry.MatchExtendedCommunityLists = make(map[string]RoutePolicyRouteMapsEntriesMatchExtendedCommunityLists)
+																	}
+																	nestedChildrtmapEntry.MatchExtendedCommunityLists[nestedMapKey] = nestedChildrtmapRsExtCommAtt
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+											}
+											{
+												var rrtmapMatchLargeComm gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapMatchLargeComm.attributes.rn").String()
+														if rnValue == "mlargecomm" {
+															rrtmapMatchLargeComm = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.MatchLargeCommunityCriteria = types.StringValue(rrtmapMatchLargeComm.Get("rtmapMatchLargeComm.attributes.criteria").String())
+												rrtmapMatchLargeComm.Get("rtmapMatchLargeComm").Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "rtmapRsLargeCommAtt" {
+																	var nestedChildrtmapRsLargeCommAtt RoutePolicyRouteMapsEntriesMatchLargeCommunityLists
+																	nestedMapKey := nestedValue.Get("attributes.tDn").String()
+																	if nestedChildrtmapEntry.MatchLargeCommunityLists == nil {
+																		nestedChildrtmapEntry.MatchLargeCommunityLists = make(map[string]RoutePolicyRouteMapsEntriesMatchLargeCommunityLists)
+																	}
+																	nestedChildrtmapEntry.MatchLargeCommunityLists[nestedMapKey] = nestedChildrtmapRsLargeCommAtt
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+											}
+											{
 												var rrtmapMatchAsPathAccessList gjson.Result
 												nestedValue.Get("children").ForEach(
 													func(_, nestedV gjson.Result) bool {
@@ -1698,6 +2200,104 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 												)
 											}
 											{
+												var rrtmapSetExtComm gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetExtComm.attributes.rn").String()
+														if rnValue == "sextcomm" {
+															rrtmapSetExtComm = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetExtendedCommunityAdditive = types.StringValue(rrtmapSetExtComm.Get("rtmapSetExtComm.attributes.additive").String())
+												nestedChildrtmapEntry.SetExtendedCommunityNoCommunity = types.StringValue(rrtmapSetExtComm.Get("rtmapSetExtComm.attributes.noCommAttr").String())
+												nestedChildrtmapEntry.SetExtendedCommunityScope = types.StringValue(rrtmapSetExtComm.Get("rtmapSetExtComm.attributes.scope").String())
+												nestedChildrtmapEntry.SetExtendedCommunityCriteria = types.StringValue(rrtmapSetExtComm.Get("rtmapSetExtComm.attributes.setCriteria").String())
+												rrtmapSetExtComm.Get("rtmapSetExtComm").Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "rtextcomItem" {
+																	var nestedChildrtextcomItem RoutePolicyRouteMapsEntriesSetExtendedCommunityItems
+																	nestedMapKey := nestedValue.Get("attributes.scope").String() + ";" + nestedValue.Get("attributes.community").String()
+																	if nestedChildrtmapEntry.SetExtendedCommunityItems == nil {
+																		nestedChildrtmapEntry.SetExtendedCommunityItems = make(map[string]RoutePolicyRouteMapsEntriesSetExtendedCommunityItems)
+																	}
+																	nestedChildrtmapEntry.SetExtendedCommunityItems[nestedMapKey] = nestedChildrtextcomItem
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+											}
+											nestedValue.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													nestedV.ForEach(
+														func(nestedClassname, nestedValue gjson.Result) bool {
+															if nestedClassname.String() == "rtmapSetExtCommCost" {
+																var nestedChildrtmapSetExtCommCost RoutePolicyRouteMapsEntriesSetExtendedCommunityCosts
+																nestedChildrtmapSetExtCommCost.Cost = types.Int64Value(nestedValue.Get("attributes.commValue").Int())
+																nestedChildrtmapSetExtCommCost.Criteria = types.StringValue(nestedValue.Get("attributes.setCriteria").String())
+																nestedMapKey := nestedValue.Get("attributes.commCrit").String() + ";" + nestedValue.Get("attributes.commId").String()
+																if nestedChildrtmapEntry.SetExtendedCommunityCosts == nil {
+																	nestedChildrtmapEntry.SetExtendedCommunityCosts = make(map[string]RoutePolicyRouteMapsEntriesSetExtendedCommunityCosts)
+																}
+																nestedChildrtmapEntry.SetExtendedCommunityCosts[nestedMapKey] = nestedChildrtmapSetExtCommCost
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
+											{
+												var rrtmapSetExtCommColor gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetExtCommColor.attributes.rn").String()
+														if rnValue == "sextcommcolor" {
+															rrtmapSetExtCommColor = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetExtendedCommunityColor = types.Int64Value(rrtmapSetExtCommColor.Get("rtmapSetExtCommColor.attributes.commValue").Int())
+												nestedChildrtmapEntry.SetExtendedCommunityColorOnlyFlag = types.StringValue(rrtmapSetExtCommColor.Get("rtmapSetExtCommColor.attributes.coFlagValue").String())
+											}
+											{
+												var rrtmapSetExtCommBandwidth gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetExtCommBandwidth.attributes.rn").String()
+														if rnValue == "sextcommbw" {
+															rrtmapSetExtCommBandwidth = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetExtendedCommunityBandwidth = types.Int64Value(rrtmapSetExtCommBandwidth.Get("rtmapSetExtCommBandwidth.attributes.bwValue").Int())
+											}
+											{
+												var rrtmapSetExtCommRmac gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetExtCommRmac.attributes.rn").String()
+														if rnValue == "sextcommrmac" {
+															rrtmapSetExtCommRmac = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetExtendedCommunityRmac = types.StringValue(rrtmapSetExtCommRmac.Get("rtmapSetExtCommRmac.attributes.commRmac").String())
+											}
+											{
 												var rrtmapSetCommList gjson.Result
 												nestedValue.Get("children").ForEach(
 													func(_, nestedV gjson.Result) bool {
@@ -1712,6 +2312,37 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 												nestedChildrtmapEntry.SetCommunityListDelete = types.StringValue(rrtmapSetCommList.Get("rtmapSetCommList.attributes.delete").String())
 												nestedChildrtmapEntry.SetCommunityListName = types.StringValue(rrtmapSetCommList.Get("rtmapSetCommList.attributes.name").String())
 												nestedChildrtmapEntry.SetCommunityListCriteria = types.StringValue(rrtmapSetCommList.Get("rtmapSetCommList.attributes.setCriteria").String())
+											}
+											{
+												var rrtmapSetExtCommList gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetExtCommList.attributes.rn").String()
+														if rnValue == "sextcommlist" {
+															rrtmapSetExtCommList = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetExtendedCommunityListDelete = types.StringValue(rrtmapSetExtCommList.Get("rtmapSetExtCommList.attributes.delete").String())
+												nestedChildrtmapEntry.SetExtendedCommunityListName = types.StringValue(rrtmapSetExtCommList.Get("rtmapSetExtCommList.attributes.name").String())
+												nestedChildrtmapEntry.SetExtendedCommunityListCriteria = types.StringValue(rrtmapSetExtCommList.Get("rtmapSetExtCommList.attributes.setCriteria").String())
+											}
+											{
+												var rrtmapSetLargeCommList gjson.Result
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														rnValue := nestedV.Get("rtmapSetLargeCommList.attributes.rn").String()
+														if rnValue == "slargecommlist" {
+															rrtmapSetLargeCommList = nestedV
+															return false
+														}
+														return true
+													},
+												)
+												nestedChildrtmapEntry.SetLargeCommunityListDelete = types.StringValue(rrtmapSetLargeCommList.Get("rtmapSetLargeCommList.attributes.delete").String())
+												nestedChildrtmapEntry.SetLargeCommunityListName = types.StringValue(rrtmapSetLargeCommList.Get("rtmapSetLargeCommList.attributes.name").String())
 											}
 											nestedValue.Get("children").ForEach(
 												func(_, nestedV gjson.Result) bool {
@@ -1879,6 +2510,138 @@ func (data *RoutePolicy) fromBody(res gjson.Result) {
 							data.CommunityLists = make(map[string]RoutePolicyCommunityLists)
 						}
 						data.CommunityLists[mapKey] = child
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "rtextcomRule" {
+						var child RoutePolicyExtendedCommunityLists
+						child.Mode = types.StringValue(value.Get("attributes.mode").String())
+						mapKey := value.Get("attributes.name").String()
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "rtextcomEntry" {
+											var nestedChildrtextcomEntry RoutePolicyExtendedCommunityListsEntries
+											nestedChildrtextcomEntry.Action = types.StringValue(nestedValue.Get("attributes.action").String())
+											nestedChildrtextcomEntry.Regex = types.StringValue(nestedValue.Get("attributes.regex").String())
+											nestedMapKey := nestedValue.Get("attributes.order").String()
+											nestedValue.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													nestedV.ForEach(
+														func(nestedClassname, nestedValue gjson.Result) bool {
+															if nestedClassname.String() == "rtextcomItem" {
+																var nestedChildrtextcomItem RoutePolicyExtendedCommunityListsEntriesItems
+																nestedChildrtextcomItem.Type = types.StringValue(nestedValue.Get("attributes.type").String())
+																nestedMapKey := nestedValue.Get("attributes.scope").String() + ";" + nestedValue.Get("attributes.community").String()
+																if nestedChildrtextcomEntry.Items == nil {
+																	nestedChildrtextcomEntry.Items = make(map[string]RoutePolicyExtendedCommunityListsEntriesItems)
+																}
+																nestedChildrtextcomEntry.Items[nestedMapKey] = nestedChildrtextcomItem
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
+											nestedValue.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													nestedV.ForEach(
+														func(nestedClassname, nestedValue gjson.Result) bool {
+															if nestedClassname.String() == "rtextcomExtRmac" {
+																var nestedChildrtextcomExtRmac RoutePolicyExtendedCommunityListsEntriesRmacs
+																nestedMapKey := nestedValue.Get("attributes.commRmac").String()
+																if nestedChildrtextcomEntry.Rmacs == nil {
+																	nestedChildrtextcomEntry.Rmacs = make(map[string]RoutePolicyExtendedCommunityListsEntriesRmacs)
+																}
+																nestedChildrtextcomEntry.Rmacs[nestedMapKey] = nestedChildrtextcomExtRmac
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
+											if child.Entries == nil {
+												child.Entries = make(map[string]RoutePolicyExtendedCommunityListsEntries)
+											}
+											child.Entries[nestedMapKey] = nestedChildrtextcomEntry
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						if data.ExtendedCommunityLists == nil {
+							data.ExtendedCommunityLists = make(map[string]RoutePolicyExtendedCommunityLists)
+						}
+						data.ExtendedCommunityLists[mapKey] = child
+					}
+					return true
+				},
+			)
+			return true
+		},
+	)
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			v.ForEach(
+				func(classname, value gjson.Result) bool {
+					if classname.String() == "rtlargecomRule" {
+						var child RoutePolicyLargeCommunityLists
+						mapKey := value.Get("attributes.name").String()
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "rtlargecomEntry" {
+											var nestedChildrtlargecomEntry RoutePolicyLargeCommunityListsEntries
+											nestedChildrtlargecomEntry.Action = types.StringValue(nestedValue.Get("attributes.action").String())
+											nestedChildrtlargecomEntry.Regex = types.StringValue(nestedValue.Get("attributes.regex").String())
+											nestedMapKey := nestedValue.Get("attributes.order").String()
+											nestedValue.Get("children").ForEach(
+												func(_, nestedV gjson.Result) bool {
+													nestedV.ForEach(
+														func(nestedClassname, nestedValue gjson.Result) bool {
+															if nestedClassname.String() == "rtlargecomItem" {
+																var nestedChildrtlargecomItem RoutePolicyLargeCommunityListsEntriesItems
+																nestedMapKey := nestedValue.Get("attributes.community").String()
+																if nestedChildrtlargecomEntry.Items == nil {
+																	nestedChildrtlargecomEntry.Items = make(map[string]RoutePolicyLargeCommunityListsEntriesItems)
+																}
+																nestedChildrtlargecomEntry.Items[nestedMapKey] = nestedChildrtlargecomItem
+															}
+															return true
+														},
+													)
+													return true
+												},
+											)
+											if child.Entries == nil {
+												child.Entries = make(map[string]RoutePolicyLargeCommunityListsEntries)
+											}
+											child.Entries[nestedMapKey] = nestedChildrtlargecomEntry
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						if data.LargeCommunityLists == nil {
+							data.LargeCommunityLists = make(map[string]RoutePolicyLargeCommunityLists)
+						}
+						data.LargeCommunityLists[mapKey] = child
 					}
 					return true
 				},
@@ -2382,6 +3145,47 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 					ncItem.SetRegularCommunityItems[nc_] = nc_Item
 				}
 			}
+			{
+				var rrtmapSetLargeComm gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetLargeComm.attributes.rn").String()
+						if rnValue == "slargecomm" {
+							rrtmapSetLargeComm = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetLargeCommunityAdditive.IsNull() {
+					ncItem.SetLargeCommunityAdditive = types.StringValue(rrtmapSetLargeComm.Get("rtmapSetLargeComm.attributes.additive").String())
+				} else {
+					ncItem.SetLargeCommunityAdditive = types.StringNull()
+				}
+				if !ncItem.SetLargeCommunityNoCommunity.IsNull() {
+					ncItem.SetLargeCommunityNoCommunity = types.StringValue(rrtmapSetLargeComm.Get("rtmapSetLargeComm.attributes.noCommAttr").String())
+				} else {
+					ncItem.SetLargeCommunityNoCommunity = types.StringNull()
+				}
+				for nc_ := range ncItem.SetLargeCommunityItems {
+					nc_Item := ncItem.SetLargeCommunityItems[nc_]
+					var rrtlargecomItem gjson.Result
+					rrtmapSetLargeComm.Get("rtmapSetLargeComm.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("rtlargecomItem.attributes.community").String() == nc_ {
+								rrtlargecomItem = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rrtlargecomItem.Exists() {
+						delete(ncItem.SetLargeCommunityItems, nc_)
+						continue
+					}
+					ncItem.SetLargeCommunityItems[nc_] = nc_Item
+				}
+			}
 			for nc_ := range ncItem.MatchTags {
 				nc_Item := ncItem.MatchTags[nc_]
 				var rrtmapMatchRtTag gjson.Result
@@ -2631,6 +3435,78 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 				}
 			}
 			{
+				var rrtmapMatchExtComm gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapMatchExtComm.attributes.rn").String()
+						if rnValue == "mextcomm" {
+							rrtmapMatchExtComm = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.MatchExtendedCommunityCriteria.IsNull() {
+					ncItem.MatchExtendedCommunityCriteria = types.StringValue(rrtmapMatchExtComm.Get("rtmapMatchExtComm.attributes.criteria").String())
+				} else {
+					ncItem.MatchExtendedCommunityCriteria = types.StringNull()
+				}
+				for nc_ := range ncItem.MatchExtendedCommunityLists {
+					nc_Item := ncItem.MatchExtendedCommunityLists[nc_]
+					var rrtmapRsExtCommAtt gjson.Result
+					rrtmapMatchExtComm.Get("rtmapMatchExtComm.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("rtmapRsExtCommAtt.attributes.tDn").String() == nc_ {
+								rrtmapRsExtCommAtt = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rrtmapRsExtCommAtt.Exists() {
+						delete(ncItem.MatchExtendedCommunityLists, nc_)
+						continue
+					}
+					ncItem.MatchExtendedCommunityLists[nc_] = nc_Item
+				}
+			}
+			{
+				var rrtmapMatchLargeComm gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapMatchLargeComm.attributes.rn").String()
+						if rnValue == "mlargecomm" {
+							rrtmapMatchLargeComm = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.MatchLargeCommunityCriteria.IsNull() {
+					ncItem.MatchLargeCommunityCriteria = types.StringValue(rrtmapMatchLargeComm.Get("rtmapMatchLargeComm.attributes.criteria").String())
+				} else {
+					ncItem.MatchLargeCommunityCriteria = types.StringNull()
+				}
+				for nc_ := range ncItem.MatchLargeCommunityLists {
+					nc_Item := ncItem.MatchLargeCommunityLists[nc_]
+					var rrtmapRsLargeCommAtt gjson.Result
+					rrtmapMatchLargeComm.Get("rtmapMatchLargeComm.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("rtmapRsLargeCommAtt.attributes.tDn").String() == nc_ {
+								rrtmapRsLargeCommAtt = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rrtmapRsLargeCommAtt.Exists() {
+						delete(ncItem.MatchLargeCommunityLists, nc_)
+						continue
+					}
+					ncItem.MatchLargeCommunityLists[nc_] = nc_Item
+				}
+			}
+			{
 				var rrtmapMatchAsPathAccessList gjson.Result
 				rrtmapEntry.Get("rtmapEntry.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -2831,6 +3707,148 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 				}
 			}
 			{
+				var rrtmapSetExtComm gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetExtComm.attributes.rn").String()
+						if rnValue == "sextcomm" {
+							rrtmapSetExtComm = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetExtendedCommunityAdditive.IsNull() {
+					ncItem.SetExtendedCommunityAdditive = types.StringValue(rrtmapSetExtComm.Get("rtmapSetExtComm.attributes.additive").String())
+				} else {
+					ncItem.SetExtendedCommunityAdditive = types.StringNull()
+				}
+				if !ncItem.SetExtendedCommunityNoCommunity.IsNull() {
+					ncItem.SetExtendedCommunityNoCommunity = types.StringValue(rrtmapSetExtComm.Get("rtmapSetExtComm.attributes.noCommAttr").String())
+				} else {
+					ncItem.SetExtendedCommunityNoCommunity = types.StringNull()
+				}
+				if !ncItem.SetExtendedCommunityScope.IsNull() {
+					ncItem.SetExtendedCommunityScope = types.StringValue(rrtmapSetExtComm.Get("rtmapSetExtComm.attributes.scope").String())
+				} else {
+					ncItem.SetExtendedCommunityScope = types.StringNull()
+				}
+				if !ncItem.SetExtendedCommunityCriteria.IsNull() {
+					ncItem.SetExtendedCommunityCriteria = types.StringValue(rrtmapSetExtComm.Get("rtmapSetExtComm.attributes.setCriteria").String())
+				} else {
+					ncItem.SetExtendedCommunityCriteria = types.StringNull()
+				}
+				for nc_ := range ncItem.SetExtendedCommunityItems {
+					nc_Item := ncItem.SetExtendedCommunityItems[nc_]
+					keyParts := strings.SplitN(nc_, ";", 2)
+					var rrtextcomItem gjson.Result
+					rrtmapSetExtComm.Get("rtmapSetExtComm.children").ForEach(
+						func(_, v gjson.Result) bool {
+							if v.Get("rtextcomItem.attributes.scope").String() == keyParts[0] &&
+								v.Get("rtextcomItem.attributes.community").String() == keyParts[1] {
+								rrtextcomItem = v
+								return false
+							}
+							return true
+						},
+					)
+					if !rrtextcomItem.Exists() {
+						delete(ncItem.SetExtendedCommunityItems, nc_)
+						continue
+					}
+					ncItem.SetExtendedCommunityItems[nc_] = nc_Item
+				}
+			}
+			for nc_ := range ncItem.SetExtendedCommunityCosts {
+				nc_Item := ncItem.SetExtendedCommunityCosts[nc_]
+				keyParts := strings.SplitN(nc_, ";", 2)
+				var rrtmapSetExtCommCost gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("rtmapSetExtCommCost.attributes.commCrit").String() == keyParts[0] &&
+							v.Get("rtmapSetExtCommCost.attributes.commId").String() == keyParts[1] {
+							rrtmapSetExtCommCost = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rrtmapSetExtCommCost.Exists() {
+					delete(ncItem.SetExtendedCommunityCosts, nc_)
+					continue
+				}
+				if !nc_Item.Cost.IsNull() {
+					nc_Item.Cost = types.Int64Value(rrtmapSetExtCommCost.Get("rtmapSetExtCommCost.attributes.commValue").Int())
+				} else {
+					nc_Item.Cost = types.Int64Null()
+				}
+				if !nc_Item.Criteria.IsNull() {
+					nc_Item.Criteria = types.StringValue(rrtmapSetExtCommCost.Get("rtmapSetExtCommCost.attributes.setCriteria").String())
+				} else {
+					nc_Item.Criteria = types.StringNull()
+				}
+				ncItem.SetExtendedCommunityCosts[nc_] = nc_Item
+			}
+			{
+				var rrtmapSetExtCommColor gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetExtCommColor.attributes.rn").String()
+						if rnValue == "sextcommcolor" {
+							rrtmapSetExtCommColor = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetExtendedCommunityColor.IsNull() {
+					ncItem.SetExtendedCommunityColor = types.Int64Value(rrtmapSetExtCommColor.Get("rtmapSetExtCommColor.attributes.commValue").Int())
+				} else {
+					ncItem.SetExtendedCommunityColor = types.Int64Null()
+				}
+				if !ncItem.SetExtendedCommunityColorOnlyFlag.IsNull() {
+					ncItem.SetExtendedCommunityColorOnlyFlag = types.StringValue(rrtmapSetExtCommColor.Get("rtmapSetExtCommColor.attributes.coFlagValue").String())
+				} else {
+					ncItem.SetExtendedCommunityColorOnlyFlag = types.StringNull()
+				}
+			}
+			{
+				var rrtmapSetExtCommBandwidth gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetExtCommBandwidth.attributes.rn").String()
+						if rnValue == "sextcommbw" {
+							rrtmapSetExtCommBandwidth = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetExtendedCommunityBandwidth.IsNull() {
+					ncItem.SetExtendedCommunityBandwidth = types.Int64Value(rrtmapSetExtCommBandwidth.Get("rtmapSetExtCommBandwidth.attributes.bwValue").Int())
+				} else {
+					ncItem.SetExtendedCommunityBandwidth = types.Int64Null()
+				}
+			}
+			{
+				var rrtmapSetExtCommRmac gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetExtCommRmac.attributes.rn").String()
+						if rnValue == "sextcommrmac" {
+							rrtmapSetExtCommRmac = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetExtendedCommunityRmac.IsNull() {
+					ncItem.SetExtendedCommunityRmac = types.StringValue(rrtmapSetExtCommRmac.Get("rtmapSetExtCommRmac.attributes.commRmac").String())
+				} else {
+					ncItem.SetExtendedCommunityRmac = types.StringNull()
+				}
+			}
+			{
 				var rrtmapSetCommList gjson.Result
 				rrtmapEntry.Get("rtmapEntry.children").ForEach(
 					func(_, v gjson.Result) bool {
@@ -2856,6 +3874,57 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 					ncItem.SetCommunityListCriteria = types.StringValue(rrtmapSetCommList.Get("rtmapSetCommList.attributes.setCriteria").String())
 				} else {
 					ncItem.SetCommunityListCriteria = types.StringNull()
+				}
+			}
+			{
+				var rrtmapSetExtCommList gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetExtCommList.attributes.rn").String()
+						if rnValue == "sextcommlist" {
+							rrtmapSetExtCommList = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetExtendedCommunityListDelete.IsNull() {
+					ncItem.SetExtendedCommunityListDelete = types.StringValue(rrtmapSetExtCommList.Get("rtmapSetExtCommList.attributes.delete").String())
+				} else {
+					ncItem.SetExtendedCommunityListDelete = types.StringNull()
+				}
+				if !ncItem.SetExtendedCommunityListName.IsNull() {
+					ncItem.SetExtendedCommunityListName = types.StringValue(rrtmapSetExtCommList.Get("rtmapSetExtCommList.attributes.name").String())
+				} else {
+					ncItem.SetExtendedCommunityListName = types.StringNull()
+				}
+				if !ncItem.SetExtendedCommunityListCriteria.IsNull() {
+					ncItem.SetExtendedCommunityListCriteria = types.StringValue(rrtmapSetExtCommList.Get("rtmapSetExtCommList.attributes.setCriteria").String())
+				} else {
+					ncItem.SetExtendedCommunityListCriteria = types.StringNull()
+				}
+			}
+			{
+				var rrtmapSetLargeCommList gjson.Result
+				rrtmapEntry.Get("rtmapEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("rtmapSetLargeCommList.attributes.rn").String()
+						if rnValue == "slargecommlist" {
+							rrtmapSetLargeCommList = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetLargeCommunityListDelete.IsNull() {
+					ncItem.SetLargeCommunityListDelete = types.StringValue(rrtmapSetLargeCommList.Get("rtmapSetLargeCommList.attributes.delete").String())
+				} else {
+					ncItem.SetLargeCommunityListDelete = types.StringNull()
+				}
+				if !ncItem.SetLargeCommunityListName.IsNull() {
+					ncItem.SetLargeCommunityListName = types.StringValue(rrtmapSetLargeCommList.Get("rtmapSetLargeCommList.attributes.name").String())
+				} else {
+					ncItem.SetLargeCommunityListName = types.StringNull()
 				}
 			}
 			for nc_ := range ncItem.MatchInterfaces {
@@ -3060,6 +4129,162 @@ func (data *RoutePolicy) updateFromBody(res gjson.Result) {
 		}
 		data.CommunityLists[key] = item
 	}
+	for key, item := range data.ExtendedCommunityLists {
+		var rrtextcomRule gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("rtextcomRule.attributes.name").String() == key {
+					rrtextcomRule = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rrtextcomRule.Exists() {
+			delete(data.ExtendedCommunityLists, key)
+			continue
+		}
+		if !item.Mode.IsNull() {
+			item.Mode = types.StringValue(rrtextcomRule.Get("rtextcomRule.attributes.mode").String())
+		} else {
+			item.Mode = types.StringNull()
+		}
+		for nc := range item.Entries {
+			ncItem := item.Entries[nc]
+			var rrtextcomEntry gjson.Result
+			rrtextcomRule.Get("rtextcomRule.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("rtextcomEntry.attributes.order").String() == nc {
+						rrtextcomEntry = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rrtextcomEntry.Exists() {
+				delete(item.Entries, nc)
+				continue
+			}
+			if !ncItem.Action.IsNull() {
+				ncItem.Action = types.StringValue(rrtextcomEntry.Get("rtextcomEntry.attributes.action").String())
+			} else {
+				ncItem.Action = types.StringNull()
+			}
+			if !ncItem.Regex.IsNull() {
+				ncItem.Regex = types.StringValue(rrtextcomEntry.Get("rtextcomEntry.attributes.regex").String())
+			} else {
+				ncItem.Regex = types.StringNull()
+			}
+			for nc_ := range ncItem.Items {
+				nc_Item := ncItem.Items[nc_]
+				keyParts := strings.SplitN(nc_, ";", 2)
+				var rrtextcomItem gjson.Result
+				rrtextcomEntry.Get("rtextcomEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("rtextcomItem.attributes.scope").String() == keyParts[0] &&
+							v.Get("rtextcomItem.attributes.community").String() == keyParts[1] {
+							rrtextcomItem = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rrtextcomItem.Exists() {
+					delete(ncItem.Items, nc_)
+					continue
+				}
+				if !nc_Item.Type.IsNull() {
+					nc_Item.Type = types.StringValue(rrtextcomItem.Get("rtextcomItem.attributes.type").String())
+				} else {
+					nc_Item.Type = types.StringNull()
+				}
+				ncItem.Items[nc_] = nc_Item
+			}
+			for nc_ := range ncItem.Rmacs {
+				nc_Item := ncItem.Rmacs[nc_]
+				var rrtextcomExtRmac gjson.Result
+				rrtextcomEntry.Get("rtextcomEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("rtextcomExtRmac.attributes.commRmac").String() == nc_ {
+							rrtextcomExtRmac = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rrtextcomExtRmac.Exists() {
+					delete(ncItem.Rmacs, nc_)
+					continue
+				}
+				ncItem.Rmacs[nc_] = nc_Item
+			}
+			item.Entries[nc] = ncItem
+		}
+		data.ExtendedCommunityLists[key] = item
+	}
+	for key, item := range data.LargeCommunityLists {
+		var rrtlargecomRule gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("rtlargecomRule.attributes.name").String() == key {
+					rrtlargecomRule = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rrtlargecomRule.Exists() {
+			delete(data.LargeCommunityLists, key)
+			continue
+		}
+		for nc := range item.Entries {
+			ncItem := item.Entries[nc]
+			var rrtlargecomEntry gjson.Result
+			rrtlargecomRule.Get("rtlargecomRule.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("rtlargecomEntry.attributes.order").String() == nc {
+						rrtlargecomEntry = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rrtlargecomEntry.Exists() {
+				delete(item.Entries, nc)
+				continue
+			}
+			if !ncItem.Action.IsNull() {
+				ncItem.Action = types.StringValue(rrtlargecomEntry.Get("rtlargecomEntry.attributes.action").String())
+			} else {
+				ncItem.Action = types.StringNull()
+			}
+			if !ncItem.Regex.IsNull() {
+				ncItem.Regex = types.StringValue(rrtlargecomEntry.Get("rtlargecomEntry.attributes.regex").String())
+			} else {
+				ncItem.Regex = types.StringNull()
+			}
+			for nc_ := range ncItem.Items {
+				nc_Item := ncItem.Items[nc_]
+				var rrtlargecomItem gjson.Result
+				rrtlargecomEntry.Get("rtlargecomEntry.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("rtlargecomItem.attributes.community").String() == nc_ {
+							rrtlargecomItem = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rrtlargecomItem.Exists() {
+					delete(ncItem.Items, nc_)
+					continue
+				}
+				ncItem.Items[nc_] = nc_Item
+			}
+			item.Entries[nc] = ncItem
+		}
+		data.LargeCommunityLists[key] = item
+	}
 	for key, item := range data.AsPathAccessLists {
 		var rrtlistRule gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -3248,6 +4473,14 @@ func (data RoutePolicy) managedDns() map[string]bool {
 					dns[rtregcomItemDn__] = true
 				}
 			}
+			if !(child_.SetLargeCommunityAdditive.IsNull() && child_.SetLargeCommunityNoCommunity.IsNull() && len(child_.SetLargeCommunityItems) == 0) {
+				rtmapSetLargeCommDn__ := rtmapEntryDn_ + "/" + "slargecomm"
+				dns[rtmapSetLargeCommDn__] = true
+				for key__, child__ := range child_.SetLargeCommunityItems {
+					rtlargecomItemDn__ := rtmapSetLargeCommDn__ + "/" + child__.getRn(key__)
+					dns[rtlargecomItemDn__] = true
+				}
+			}
 			for key__, child__ := range child_.MatchTags {
 				rtmapMatchRtTagDn__ := rtmapEntryDn_ + "/" + child__.getRn(key__)
 				dns[rtmapMatchRtTagDn__] = true
@@ -3290,6 +4523,22 @@ func (data RoutePolicy) managedDns() map[string]bool {
 				for key__, child__ := range child_.MatchRegularCommunityLists {
 					rtmapRsRegCommAttDn__ := rtmapMatchRegCommDn__ + "/" + child__.getRn(key__)
 					dns[rtmapRsRegCommAttDn__] = true
+				}
+			}
+			if !(child_.MatchExtendedCommunityCriteria.IsNull() && len(child_.MatchExtendedCommunityLists) == 0) {
+				rtmapMatchExtCommDn__ := rtmapEntryDn_ + "/" + "mextcomm"
+				dns[rtmapMatchExtCommDn__] = true
+				for key__, child__ := range child_.MatchExtendedCommunityLists {
+					rtmapRsExtCommAttDn__ := rtmapMatchExtCommDn__ + "/" + child__.getRn(key__)
+					dns[rtmapRsExtCommAttDn__] = true
+				}
+			}
+			if !(child_.MatchLargeCommunityCriteria.IsNull() && len(child_.MatchLargeCommunityLists) == 0) {
+				rtmapMatchLargeCommDn__ := rtmapEntryDn_ + "/" + "mlargecomm"
+				dns[rtmapMatchLargeCommDn__] = true
+				for key__, child__ := range child_.MatchLargeCommunityLists {
+					rtmapRsLargeCommAttDn__ := rtmapMatchLargeCommDn__ + "/" + child__.getRn(key__)
+					dns[rtmapRsLargeCommAttDn__] = true
 				}
 			}
 			if !(len(child_.MatchAsPathLists) == 0) {
@@ -3338,9 +4587,45 @@ func (data RoutePolicy) managedDns() map[string]bool {
 					dns[rtextcomItemDn__] = true
 				}
 			}
+			if !(child_.SetExtendedCommunityAdditive.IsNull() && child_.SetExtendedCommunityNoCommunity.IsNull() && child_.SetExtendedCommunityScope.IsNull() && child_.SetExtendedCommunityCriteria.IsNull() && len(child_.SetExtendedCommunityItems) == 0) {
+				rtmapSetExtCommDn__ := rtmapEntryDn_ + "/" + "sextcomm"
+				dns[rtmapSetExtCommDn__] = true
+				for key__, child__ := range child_.SetExtendedCommunityItems {
+					keyParts := strings.SplitN(key__, ";", 2)
+					_ = keyParts
+					rtextcomItemDn__ := rtmapSetExtCommDn__ + "/" + child__.getRn(key__)
+					dns[rtextcomItemDn__] = true
+				}
+			}
+			for key__, child__ := range child_.SetExtendedCommunityCosts {
+				keyParts := strings.SplitN(key__, ";", 2)
+				_ = keyParts
+				rtmapSetExtCommCostDn__ := rtmapEntryDn_ + "/" + child__.getRn(key__)
+				dns[rtmapSetExtCommCostDn__] = true
+			}
+			if !(child_.SetExtendedCommunityColor.IsNull() && child_.SetExtendedCommunityColorOnlyFlag.IsNull()) {
+				rtmapSetExtCommColorDn__ := rtmapEntryDn_ + "/" + "sextcommcolor"
+				dns[rtmapSetExtCommColorDn__] = true
+			}
+			if !(child_.SetExtendedCommunityBandwidth.IsNull()) {
+				rtmapSetExtCommBandwidthDn__ := rtmapEntryDn_ + "/" + "sextcommbw"
+				dns[rtmapSetExtCommBandwidthDn__] = true
+			}
+			if !(child_.SetExtendedCommunityRmac.IsNull()) {
+				rtmapSetExtCommRmacDn__ := rtmapEntryDn_ + "/" + "sextcommrmac"
+				dns[rtmapSetExtCommRmacDn__] = true
+			}
 			if !(child_.SetCommunityListDelete.IsNull() && child_.SetCommunityListName.IsNull() && child_.SetCommunityListCriteria.IsNull()) {
 				rtmapSetCommListDn__ := rtmapEntryDn_ + "/" + "scommlist"
 				dns[rtmapSetCommListDn__] = true
+			}
+			if !(child_.SetExtendedCommunityListDelete.IsNull() && child_.SetExtendedCommunityListName.IsNull() && child_.SetExtendedCommunityListCriteria.IsNull()) {
+				rtmapSetExtCommListDn__ := rtmapEntryDn_ + "/" + "sextcommlist"
+				dns[rtmapSetExtCommListDn__] = true
+			}
+			if !(child_.SetLargeCommunityListDelete.IsNull() && child_.SetLargeCommunityListName.IsNull()) {
+				rtmapSetLargeCommListDn__ := rtmapEntryDn_ + "/" + "slargecommlist"
+				dns[rtmapSetLargeCommListDn__] = true
 			}
 			for key__, child__ := range child_.MatchInterfaces {
 				rtmapMatchRtIfDn__ := rtmapEntryDn_ + "/" + child__.getRn(key__)
@@ -3373,6 +4658,36 @@ func (data RoutePolicy) managedDns() map[string]bool {
 			for key__, child__ := range child_.Items {
 				rtregcomItemDn__ := rtregcomEntryDn_ + "/" + child__.getRn(key__)
 				dns[rtregcomItemDn__] = true
+			}
+		}
+	}
+	for key, child := range data.ExtendedCommunityLists {
+		rtextcomRuleDn := dn + "/" + child.getRn(key)
+		dns[rtextcomRuleDn] = true
+		for key_, child_ := range child.Entries {
+			rtextcomEntryDn_ := rtextcomRuleDn + "/" + child_.getRn(key_)
+			dns[rtextcomEntryDn_] = true
+			for key__, child__ := range child_.Items {
+				keyParts := strings.SplitN(key__, ";", 2)
+				_ = keyParts
+				rtextcomItemDn__ := rtextcomEntryDn_ + "/" + child__.getRn(key__)
+				dns[rtextcomItemDn__] = true
+			}
+			for key__, child__ := range child_.Rmacs {
+				rtextcomExtRmacDn__ := rtextcomEntryDn_ + "/" + child__.getRn(key__)
+				dns[rtextcomExtRmacDn__] = true
+			}
+		}
+	}
+	for key, child := range data.LargeCommunityLists {
+		rtlargecomRuleDn := dn + "/" + child.getRn(key)
+		dns[rtlargecomRuleDn] = true
+		for key_, child_ := range child.Entries {
+			rtlargecomEntryDn_ := rtlargecomRuleDn + "/" + child_.getRn(key_)
+			dns[rtlargecomEntryDn_] = true
+			for key__, child__ := range child_.Items {
+				rtlargecomItemDn__ := rtlargecomEntryDn_ + "/" + child__.getRn(key__)
+				dns[rtlargecomItemDn__] = true
 			}
 		}
 	}
@@ -3711,6 +5026,39 @@ func (data RoutePolicy) toResetBody(preexisting map[string]bool) nxos.Body {
 					}
 				}
 			}
+			if !(child_.SetLargeCommunityAdditive.IsNull() && child_.SetLargeCommunityNoCommunity.IsNull() && len(child_.SetLargeCommunityItems) == 0) {
+				rtmapSetLargeCommRn__ := "slargecomm"
+				rtmapSetLargeCommDn__ := rtmapEntryDn_ + "/" + rtmapSetLargeCommRn__
+				_ = rtmapSetLargeCommDn__
+				if !existed(rtmapSetLargeCommDn__) {
+					rtmapEntryBody_, _ = sjson.Set(rtmapEntryBody_, "rtmapEntry.children.-1.rtmapSetLargeComm.attributes", map[string]interface{}{"rn": rtmapSetLargeCommRn__, "status": "deleted"})
+				} else {
+					rtmapSetLargeCommBody__ := ""
+					if !child_.SetLargeCommunityAdditive.IsNull() {
+						rtmapSetLargeCommBody__, _ = sjson.Set(rtmapSetLargeCommBody__, "rtmapSetLargeComm.attributes.additive", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SetLargeCommunityNoCommunity.IsNull() {
+						rtmapSetLargeCommBody__, _ = sjson.Set(rtmapSetLargeCommBody__, "rtmapSetLargeComm.attributes.noCommAttr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					for key__, child__ := range child_.SetLargeCommunityItems {
+						_ = child__
+						rtlargecomItemRn__ := child__.getRn(key__)
+						rtlargecomItemDn__ := rtmapSetLargeCommDn__ + "/" + rtlargecomItemRn__
+						_ = rtlargecomItemDn__
+						if !existed(rtlargecomItemDn__) {
+							rtmapSetLargeCommBody__, _ = sjson.Set(rtmapSetLargeCommBody__, "rtmapSetLargeComm.children.-1.rtlargecomItem.attributes", map[string]interface{}{"rn": rtlargecomItemRn__, "status": "deleted"})
+							continue
+						}
+						rtlargecomItemBody__ := ""
+						rtlargecomItemBody__, _ = sjson.Set(rtlargecomItemBody__, "rtlargecomItem.attributes.rn", rtlargecomItemRn__)
+						rtmapSetLargeCommBody__, _ = sjson.SetRaw(rtmapSetLargeCommBody__, "rtmapSetLargeComm.children.-1", rtlargecomItemBody__)
+					}
+					if rtmapSetLargeCommBody__ != "" {
+						rtmapSetLargeCommBody__, _ = sjson.Set(rtmapSetLargeCommBody__, "rtmapSetLargeComm.attributes.rn", rtmapSetLargeCommRn__)
+						rtmapEntryBody_, _ = sjson.SetRaw(rtmapEntryBody_, "rtmapEntry.children.-1", rtmapSetLargeCommBody__)
+					}
+				}
+			}
 			for key__, child__ := range child_.MatchTags {
 				_ = child__
 				rtmapMatchRtTagRn__ := child__.getRn(key__)
@@ -3916,6 +5264,66 @@ func (data RoutePolicy) toResetBody(preexisting map[string]bool) nxos.Body {
 					}
 				}
 			}
+			if !(child_.MatchExtendedCommunityCriteria.IsNull() && len(child_.MatchExtendedCommunityLists) == 0) {
+				rtmapMatchExtCommRn__ := "mextcomm"
+				rtmapMatchExtCommDn__ := rtmapEntryDn_ + "/" + rtmapMatchExtCommRn__
+				_ = rtmapMatchExtCommDn__
+				if !existed(rtmapMatchExtCommDn__) {
+					rtmapEntryBody_, _ = sjson.Set(rtmapEntryBody_, "rtmapEntry.children.-1.rtmapMatchExtComm.attributes", map[string]interface{}{"rn": rtmapMatchExtCommRn__, "status": "deleted"})
+				} else {
+					rtmapMatchExtCommBody__ := ""
+					if !child_.MatchExtendedCommunityCriteria.IsNull() {
+						rtmapMatchExtCommBody__, _ = sjson.Set(rtmapMatchExtCommBody__, "rtmapMatchExtComm.attributes.criteria", "DME_UNSET_PROPERTY_MARKER")
+					}
+					for key__, child__ := range child_.MatchExtendedCommunityLists {
+						_ = child__
+						rtmapRsExtCommAttRn__ := child__.getRn(key__)
+						rtmapRsExtCommAttDn__ := rtmapMatchExtCommDn__ + "/" + rtmapRsExtCommAttRn__
+						_ = rtmapRsExtCommAttDn__
+						if !existed(rtmapRsExtCommAttDn__) {
+							rtmapMatchExtCommBody__, _ = sjson.Set(rtmapMatchExtCommBody__, "rtmapMatchExtComm.children.-1.rtmapRsExtCommAtt.attributes", map[string]interface{}{"rn": rtmapRsExtCommAttRn__, "status": "deleted"})
+							continue
+						}
+						rtmapRsExtCommAttBody__ := ""
+						rtmapRsExtCommAttBody__, _ = sjson.Set(rtmapRsExtCommAttBody__, "rtmapRsExtCommAtt.attributes.rn", rtmapRsExtCommAttRn__)
+						rtmapMatchExtCommBody__, _ = sjson.SetRaw(rtmapMatchExtCommBody__, "rtmapMatchExtComm.children.-1", rtmapRsExtCommAttBody__)
+					}
+					if rtmapMatchExtCommBody__ != "" {
+						rtmapMatchExtCommBody__, _ = sjson.Set(rtmapMatchExtCommBody__, "rtmapMatchExtComm.attributes.rn", rtmapMatchExtCommRn__)
+						rtmapEntryBody_, _ = sjson.SetRaw(rtmapEntryBody_, "rtmapEntry.children.-1", rtmapMatchExtCommBody__)
+					}
+				}
+			}
+			if !(child_.MatchLargeCommunityCriteria.IsNull() && len(child_.MatchLargeCommunityLists) == 0) {
+				rtmapMatchLargeCommRn__ := "mlargecomm"
+				rtmapMatchLargeCommDn__ := rtmapEntryDn_ + "/" + rtmapMatchLargeCommRn__
+				_ = rtmapMatchLargeCommDn__
+				if !existed(rtmapMatchLargeCommDn__) {
+					rtmapEntryBody_, _ = sjson.Set(rtmapEntryBody_, "rtmapEntry.children.-1.rtmapMatchLargeComm.attributes", map[string]interface{}{"rn": rtmapMatchLargeCommRn__, "status": "deleted"})
+				} else {
+					rtmapMatchLargeCommBody__ := ""
+					if !child_.MatchLargeCommunityCriteria.IsNull() {
+						rtmapMatchLargeCommBody__, _ = sjson.Set(rtmapMatchLargeCommBody__, "rtmapMatchLargeComm.attributes.criteria", "DME_UNSET_PROPERTY_MARKER")
+					}
+					for key__, child__ := range child_.MatchLargeCommunityLists {
+						_ = child__
+						rtmapRsLargeCommAttRn__ := child__.getRn(key__)
+						rtmapRsLargeCommAttDn__ := rtmapMatchLargeCommDn__ + "/" + rtmapRsLargeCommAttRn__
+						_ = rtmapRsLargeCommAttDn__
+						if !existed(rtmapRsLargeCommAttDn__) {
+							rtmapMatchLargeCommBody__, _ = sjson.Set(rtmapMatchLargeCommBody__, "rtmapMatchLargeComm.children.-1.rtmapRsLargeCommAtt.attributes", map[string]interface{}{"rn": rtmapRsLargeCommAttRn__, "status": "deleted"})
+							continue
+						}
+						rtmapRsLargeCommAttBody__ := ""
+						rtmapRsLargeCommAttBody__, _ = sjson.Set(rtmapRsLargeCommAttBody__, "rtmapRsLargeCommAtt.attributes.rn", rtmapRsLargeCommAttRn__)
+						rtmapMatchLargeCommBody__, _ = sjson.SetRaw(rtmapMatchLargeCommBody__, "rtmapMatchLargeComm.children.-1", rtmapRsLargeCommAttBody__)
+					}
+					if rtmapMatchLargeCommBody__ != "" {
+						rtmapMatchLargeCommBody__, _ = sjson.Set(rtmapMatchLargeCommBody__, "rtmapMatchLargeComm.attributes.rn", rtmapMatchLargeCommRn__)
+						rtmapEntryBody_, _ = sjson.SetRaw(rtmapEntryBody_, "rtmapEntry.children.-1", rtmapMatchLargeCommBody__)
+					}
+				}
+			}
 			if !(len(child_.MatchAsPathLists) == 0) {
 				rtmapMatchAsPathAccessListRn__ := "mrtacclist"
 				rtmapMatchAsPathAccessListDn__ := rtmapEntryDn_ + "/" + rtmapMatchAsPathAccessListRn__
@@ -4093,6 +5501,122 @@ func (data RoutePolicy) toResetBody(preexisting map[string]bool) nxos.Body {
 					}
 				}
 			}
+			if !(child_.SetExtendedCommunityAdditive.IsNull() && child_.SetExtendedCommunityNoCommunity.IsNull() && child_.SetExtendedCommunityScope.IsNull() && child_.SetExtendedCommunityCriteria.IsNull() && len(child_.SetExtendedCommunityItems) == 0) {
+				rtmapSetExtCommRn__ := "sextcomm"
+				rtmapSetExtCommDn__ := rtmapEntryDn_ + "/" + rtmapSetExtCommRn__
+				_ = rtmapSetExtCommDn__
+				if !existed(rtmapSetExtCommDn__) {
+					rtmapEntryBody_, _ = sjson.Set(rtmapEntryBody_, "rtmapEntry.children.-1.rtmapSetExtComm.attributes", map[string]interface{}{"rn": rtmapSetExtCommRn__, "status": "deleted"})
+				} else {
+					rtmapSetExtCommBody__ := ""
+					if !child_.SetExtendedCommunityAdditive.IsNull() {
+						rtmapSetExtCommBody__, _ = sjson.Set(rtmapSetExtCommBody__, "rtmapSetExtComm.attributes.additive", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SetExtendedCommunityNoCommunity.IsNull() {
+						rtmapSetExtCommBody__, _ = sjson.Set(rtmapSetExtCommBody__, "rtmapSetExtComm.attributes.noCommAttr", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SetExtendedCommunityScope.IsNull() {
+						rtmapSetExtCommBody__, _ = sjson.Set(rtmapSetExtCommBody__, "rtmapSetExtComm.attributes.scope", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SetExtendedCommunityCriteria.IsNull() {
+						rtmapSetExtCommBody__, _ = sjson.Set(rtmapSetExtCommBody__, "rtmapSetExtComm.attributes.setCriteria", "DME_UNSET_PROPERTY_MARKER")
+					}
+					for key__, child__ := range child_.SetExtendedCommunityItems {
+						_ = child__
+						keyParts := strings.SplitN(key__, ";", 2)
+						_ = keyParts
+						rtextcomItemRn__ := child__.getRn(key__)
+						rtextcomItemDn__ := rtmapSetExtCommDn__ + "/" + rtextcomItemRn__
+						_ = rtextcomItemDn__
+						if !existed(rtextcomItemDn__) {
+							rtmapSetExtCommBody__, _ = sjson.Set(rtmapSetExtCommBody__, "rtmapSetExtComm.children.-1.rtextcomItem.attributes", map[string]interface{}{"rn": rtextcomItemRn__, "status": "deleted"})
+							continue
+						}
+						rtextcomItemBody__ := ""
+						rtextcomItemBody__, _ = sjson.Set(rtextcomItemBody__, "rtextcomItem.attributes.rn", rtextcomItemRn__)
+						rtmapSetExtCommBody__, _ = sjson.SetRaw(rtmapSetExtCommBody__, "rtmapSetExtComm.children.-1", rtextcomItemBody__)
+					}
+					if rtmapSetExtCommBody__ != "" {
+						rtmapSetExtCommBody__, _ = sjson.Set(rtmapSetExtCommBody__, "rtmapSetExtComm.attributes.rn", rtmapSetExtCommRn__)
+						rtmapEntryBody_, _ = sjson.SetRaw(rtmapEntryBody_, "rtmapEntry.children.-1", rtmapSetExtCommBody__)
+					}
+				}
+			}
+			for key__, child__ := range child_.SetExtendedCommunityCosts {
+				_ = child__
+				keyParts := strings.SplitN(key__, ";", 2)
+				_ = keyParts
+				rtmapSetExtCommCostRn__ := child__.getRn(key__)
+				rtmapSetExtCommCostDn__ := rtmapEntryDn_ + "/" + rtmapSetExtCommCostRn__
+				_ = rtmapSetExtCommCostDn__
+				if !existed(rtmapSetExtCommCostDn__) {
+					rtmapEntryBody_, _ = sjson.Set(rtmapEntryBody_, "rtmapEntry.children.-1.rtmapSetExtCommCost.attributes", map[string]interface{}{"rn": rtmapSetExtCommCostRn__, "status": "deleted"})
+					continue
+				}
+				rtmapSetExtCommCostBody__ := ""
+				rtmapSetExtCommCostBody__, _ = sjson.Set(rtmapSetExtCommCostBody__, "rtmapSetExtCommCost.attributes.rn", rtmapSetExtCommCostRn__)
+				if !child__.Cost.IsNull() {
+					rtmapSetExtCommCostBody__, _ = sjson.Set(rtmapSetExtCommCostBody__, "rtmapSetExtCommCost.attributes.commValue", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child__.Criteria.IsNull() {
+					rtmapSetExtCommCostBody__, _ = sjson.Set(rtmapSetExtCommCostBody__, "rtmapSetExtCommCost.attributes.setCriteria", "DME_UNSET_PROPERTY_MARKER")
+				}
+				rtmapEntryBody_, _ = sjson.SetRaw(rtmapEntryBody_, "rtmapEntry.children.-1", rtmapSetExtCommCostBody__)
+			}
+			if !(child_.SetExtendedCommunityColor.IsNull() && child_.SetExtendedCommunityColorOnlyFlag.IsNull()) {
+				rtmapSetExtCommColorRn__ := "sextcommcolor"
+				rtmapSetExtCommColorDn__ := rtmapEntryDn_ + "/" + rtmapSetExtCommColorRn__
+				_ = rtmapSetExtCommColorDn__
+				if !existed(rtmapSetExtCommColorDn__) {
+					rtmapEntryBody_, _ = sjson.Set(rtmapEntryBody_, "rtmapEntry.children.-1.rtmapSetExtCommColor.attributes", map[string]interface{}{"rn": rtmapSetExtCommColorRn__, "status": "deleted"})
+				} else {
+					rtmapSetExtCommColorBody__ := ""
+					if !child_.SetExtendedCommunityColor.IsNull() {
+						rtmapSetExtCommColorBody__, _ = sjson.Set(rtmapSetExtCommColorBody__, "rtmapSetExtCommColor.attributes.commValue", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SetExtendedCommunityColorOnlyFlag.IsNull() {
+						rtmapSetExtCommColorBody__, _ = sjson.Set(rtmapSetExtCommColorBody__, "rtmapSetExtCommColor.attributes.coFlagValue", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if rtmapSetExtCommColorBody__ != "" {
+						rtmapSetExtCommColorBody__, _ = sjson.Set(rtmapSetExtCommColorBody__, "rtmapSetExtCommColor.attributes.rn", rtmapSetExtCommColorRn__)
+						rtmapEntryBody_, _ = sjson.SetRaw(rtmapEntryBody_, "rtmapEntry.children.-1", rtmapSetExtCommColorBody__)
+					}
+				}
+			}
+			if !(child_.SetExtendedCommunityBandwidth.IsNull()) {
+				rtmapSetExtCommBandwidthRn__ := "sextcommbw"
+				rtmapSetExtCommBandwidthDn__ := rtmapEntryDn_ + "/" + rtmapSetExtCommBandwidthRn__
+				_ = rtmapSetExtCommBandwidthDn__
+				if !existed(rtmapSetExtCommBandwidthDn__) {
+					rtmapEntryBody_, _ = sjson.Set(rtmapEntryBody_, "rtmapEntry.children.-1.rtmapSetExtCommBandwidth.attributes", map[string]interface{}{"rn": rtmapSetExtCommBandwidthRn__, "status": "deleted"})
+				} else {
+					rtmapSetExtCommBandwidthBody__ := ""
+					if !child_.SetExtendedCommunityBandwidth.IsNull() {
+						rtmapSetExtCommBandwidthBody__, _ = sjson.Set(rtmapSetExtCommBandwidthBody__, "rtmapSetExtCommBandwidth.attributes.bwValue", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if rtmapSetExtCommBandwidthBody__ != "" {
+						rtmapSetExtCommBandwidthBody__, _ = sjson.Set(rtmapSetExtCommBandwidthBody__, "rtmapSetExtCommBandwidth.attributes.rn", rtmapSetExtCommBandwidthRn__)
+						rtmapEntryBody_, _ = sjson.SetRaw(rtmapEntryBody_, "rtmapEntry.children.-1", rtmapSetExtCommBandwidthBody__)
+					}
+				}
+			}
+			if !(child_.SetExtendedCommunityRmac.IsNull()) {
+				rtmapSetExtCommRmacRn__ := "sextcommrmac"
+				rtmapSetExtCommRmacDn__ := rtmapEntryDn_ + "/" + rtmapSetExtCommRmacRn__
+				_ = rtmapSetExtCommRmacDn__
+				if !existed(rtmapSetExtCommRmacDn__) {
+					rtmapEntryBody_, _ = sjson.Set(rtmapEntryBody_, "rtmapEntry.children.-1.rtmapSetExtCommRmac.attributes", map[string]interface{}{"rn": rtmapSetExtCommRmacRn__, "status": "deleted"})
+				} else {
+					rtmapSetExtCommRmacBody__ := ""
+					if !child_.SetExtendedCommunityRmac.IsNull() {
+						rtmapSetExtCommRmacBody__, _ = sjson.Set(rtmapSetExtCommRmacBody__, "rtmapSetExtCommRmac.attributes.commRmac", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if rtmapSetExtCommRmacBody__ != "" {
+						rtmapSetExtCommRmacBody__, _ = sjson.Set(rtmapSetExtCommRmacBody__, "rtmapSetExtCommRmac.attributes.rn", rtmapSetExtCommRmacRn__)
+						rtmapEntryBody_, _ = sjson.SetRaw(rtmapEntryBody_, "rtmapEntry.children.-1", rtmapSetExtCommRmacBody__)
+					}
+				}
+			}
 			if !(child_.SetCommunityListDelete.IsNull() && child_.SetCommunityListName.IsNull() && child_.SetCommunityListCriteria.IsNull()) {
 				rtmapSetCommListRn__ := "scommlist"
 				rtmapSetCommListDn__ := rtmapEntryDn_ + "/" + rtmapSetCommListRn__
@@ -4113,6 +5637,49 @@ func (data RoutePolicy) toResetBody(preexisting map[string]bool) nxos.Body {
 					if rtmapSetCommListBody__ != "" {
 						rtmapSetCommListBody__, _ = sjson.Set(rtmapSetCommListBody__, "rtmapSetCommList.attributes.rn", rtmapSetCommListRn__)
 						rtmapEntryBody_, _ = sjson.SetRaw(rtmapEntryBody_, "rtmapEntry.children.-1", rtmapSetCommListBody__)
+					}
+				}
+			}
+			if !(child_.SetExtendedCommunityListDelete.IsNull() && child_.SetExtendedCommunityListName.IsNull() && child_.SetExtendedCommunityListCriteria.IsNull()) {
+				rtmapSetExtCommListRn__ := "sextcommlist"
+				rtmapSetExtCommListDn__ := rtmapEntryDn_ + "/" + rtmapSetExtCommListRn__
+				_ = rtmapSetExtCommListDn__
+				if !existed(rtmapSetExtCommListDn__) {
+					rtmapEntryBody_, _ = sjson.Set(rtmapEntryBody_, "rtmapEntry.children.-1.rtmapSetExtCommList.attributes", map[string]interface{}{"rn": rtmapSetExtCommListRn__, "status": "deleted"})
+				} else {
+					rtmapSetExtCommListBody__ := ""
+					if !child_.SetExtendedCommunityListDelete.IsNull() {
+						rtmapSetExtCommListBody__, _ = sjson.Set(rtmapSetExtCommListBody__, "rtmapSetExtCommList.attributes.delete", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SetExtendedCommunityListName.IsNull() {
+						rtmapSetExtCommListBody__, _ = sjson.Set(rtmapSetExtCommListBody__, "rtmapSetExtCommList.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SetExtendedCommunityListCriteria.IsNull() {
+						rtmapSetExtCommListBody__, _ = sjson.Set(rtmapSetExtCommListBody__, "rtmapSetExtCommList.attributes.setCriteria", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if rtmapSetExtCommListBody__ != "" {
+						rtmapSetExtCommListBody__, _ = sjson.Set(rtmapSetExtCommListBody__, "rtmapSetExtCommList.attributes.rn", rtmapSetExtCommListRn__)
+						rtmapEntryBody_, _ = sjson.SetRaw(rtmapEntryBody_, "rtmapEntry.children.-1", rtmapSetExtCommListBody__)
+					}
+				}
+			}
+			if !(child_.SetLargeCommunityListDelete.IsNull() && child_.SetLargeCommunityListName.IsNull()) {
+				rtmapSetLargeCommListRn__ := "slargecommlist"
+				rtmapSetLargeCommListDn__ := rtmapEntryDn_ + "/" + rtmapSetLargeCommListRn__
+				_ = rtmapSetLargeCommListDn__
+				if !existed(rtmapSetLargeCommListDn__) {
+					rtmapEntryBody_, _ = sjson.Set(rtmapEntryBody_, "rtmapEntry.children.-1.rtmapSetLargeCommList.attributes", map[string]interface{}{"rn": rtmapSetLargeCommListRn__, "status": "deleted"})
+				} else {
+					rtmapSetLargeCommListBody__ := ""
+					if !child_.SetLargeCommunityListDelete.IsNull() {
+						rtmapSetLargeCommListBody__, _ = sjson.Set(rtmapSetLargeCommListBody__, "rtmapSetLargeCommList.attributes.delete", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !child_.SetLargeCommunityListName.IsNull() {
+						rtmapSetLargeCommListBody__, _ = sjson.Set(rtmapSetLargeCommListBody__, "rtmapSetLargeCommList.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if rtmapSetLargeCommListBody__ != "" {
+						rtmapSetLargeCommListBody__, _ = sjson.Set(rtmapSetLargeCommListBody__, "rtmapSetLargeCommList.attributes.rn", rtmapSetLargeCommListRn__)
+						rtmapEntryBody_, _ = sjson.SetRaw(rtmapEntryBody_, "rtmapEntry.children.-1", rtmapSetLargeCommListBody__)
 					}
 				}
 			}
@@ -4260,6 +5827,117 @@ func (data RoutePolicy) toResetBody(preexisting map[string]bool) nxos.Body {
 			rtregcomRuleBody, _ = sjson.SetRaw(rtregcomRuleBody, "rtregcomRule.children.-1", rtregcomEntryBody_)
 		}
 		body, _ = sjson.SetRaw(body, "rpmEntity.children.-1", rtregcomRuleBody)
+	}
+	for key, child := range data.ExtendedCommunityLists {
+		_ = child
+		rtextcomRuleRn := child.getRn(key)
+		rtextcomRuleDn := dn + "/" + rtextcomRuleRn
+		_ = rtextcomRuleDn
+		if !existed(rtextcomRuleDn) {
+			body, _ = sjson.Set(body, "rpmEntity.children.-1.rtextcomRule.attributes", map[string]interface{}{"rn": rtextcomRuleRn, "status": "deleted"})
+			continue
+		}
+		rtextcomRuleBody := ""
+		rtextcomRuleBody, _ = sjson.Set(rtextcomRuleBody, "rtextcomRule.attributes.rn", rtextcomRuleRn)
+		if !child.Mode.IsNull() {
+			rtextcomRuleBody, _ = sjson.Set(rtextcomRuleBody, "rtextcomRule.attributes.mode", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key_, child_ := range child.Entries {
+			_ = child_
+			rtextcomEntryRn_ := child_.getRn(key_)
+			rtextcomEntryDn_ := rtextcomRuleDn + "/" + rtextcomEntryRn_
+			_ = rtextcomEntryDn_
+			if !existed(rtextcomEntryDn_) {
+				rtextcomRuleBody, _ = sjson.Set(rtextcomRuleBody, "rtextcomRule.children.-1.rtextcomEntry.attributes", map[string]interface{}{"rn": rtextcomEntryRn_, "status": "deleted"})
+				continue
+			}
+			rtextcomEntryBody_ := ""
+			rtextcomEntryBody_, _ = sjson.Set(rtextcomEntryBody_, "rtextcomEntry.attributes.rn", rtextcomEntryRn_)
+			if !child_.Action.IsNull() {
+				rtextcomEntryBody_, _ = sjson.Set(rtextcomEntryBody_, "rtextcomEntry.attributes.action", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Regex.IsNull() {
+				rtextcomEntryBody_, _ = sjson.Set(rtextcomEntryBody_, "rtextcomEntry.attributes.regex", "DME_UNSET_PROPERTY_MARKER")
+			}
+			for key__, child__ := range child_.Items {
+				_ = child__
+				keyParts := strings.SplitN(key__, ";", 2)
+				_ = keyParts
+				rtextcomItemRn__ := child__.getRn(key__)
+				rtextcomItemDn__ := rtextcomEntryDn_ + "/" + rtextcomItemRn__
+				_ = rtextcomItemDn__
+				if !existed(rtextcomItemDn__) {
+					rtextcomEntryBody_, _ = sjson.Set(rtextcomEntryBody_, "rtextcomEntry.children.-1.rtextcomItem.attributes", map[string]interface{}{"rn": rtextcomItemRn__, "status": "deleted"})
+					continue
+				}
+				rtextcomItemBody__ := ""
+				rtextcomItemBody__, _ = sjson.Set(rtextcomItemBody__, "rtextcomItem.attributes.rn", rtextcomItemRn__)
+				if !child__.Type.IsNull() {
+					rtextcomItemBody__, _ = sjson.Set(rtextcomItemBody__, "rtextcomItem.attributes.type", "DME_UNSET_PROPERTY_MARKER")
+				}
+				rtextcomEntryBody_, _ = sjson.SetRaw(rtextcomEntryBody_, "rtextcomEntry.children.-1", rtextcomItemBody__)
+			}
+			for key__, child__ := range child_.Rmacs {
+				_ = child__
+				rtextcomExtRmacRn__ := child__.getRn(key__)
+				rtextcomExtRmacDn__ := rtextcomEntryDn_ + "/" + rtextcomExtRmacRn__
+				_ = rtextcomExtRmacDn__
+				if !existed(rtextcomExtRmacDn__) {
+					rtextcomEntryBody_, _ = sjson.Set(rtextcomEntryBody_, "rtextcomEntry.children.-1.rtextcomExtRmac.attributes", map[string]interface{}{"rn": rtextcomExtRmacRn__, "status": "deleted"})
+					continue
+				}
+				rtextcomExtRmacBody__ := ""
+				rtextcomExtRmacBody__, _ = sjson.Set(rtextcomExtRmacBody__, "rtextcomExtRmac.attributes.rn", rtextcomExtRmacRn__)
+				rtextcomEntryBody_, _ = sjson.SetRaw(rtextcomEntryBody_, "rtextcomEntry.children.-1", rtextcomExtRmacBody__)
+			}
+			rtextcomRuleBody, _ = sjson.SetRaw(rtextcomRuleBody, "rtextcomRule.children.-1", rtextcomEntryBody_)
+		}
+		body, _ = sjson.SetRaw(body, "rpmEntity.children.-1", rtextcomRuleBody)
+	}
+	for key, child := range data.LargeCommunityLists {
+		_ = child
+		rtlargecomRuleRn := child.getRn(key)
+		rtlargecomRuleDn := dn + "/" + rtlargecomRuleRn
+		_ = rtlargecomRuleDn
+		if !existed(rtlargecomRuleDn) {
+			body, _ = sjson.Set(body, "rpmEntity.children.-1.rtlargecomRule.attributes", map[string]interface{}{"rn": rtlargecomRuleRn, "status": "deleted"})
+			continue
+		}
+		rtlargecomRuleBody := ""
+		rtlargecomRuleBody, _ = sjson.Set(rtlargecomRuleBody, "rtlargecomRule.attributes.rn", rtlargecomRuleRn)
+		for key_, child_ := range child.Entries {
+			_ = child_
+			rtlargecomEntryRn_ := child_.getRn(key_)
+			rtlargecomEntryDn_ := rtlargecomRuleDn + "/" + rtlargecomEntryRn_
+			_ = rtlargecomEntryDn_
+			if !existed(rtlargecomEntryDn_) {
+				rtlargecomRuleBody, _ = sjson.Set(rtlargecomRuleBody, "rtlargecomRule.children.-1.rtlargecomEntry.attributes", map[string]interface{}{"rn": rtlargecomEntryRn_, "status": "deleted"})
+				continue
+			}
+			rtlargecomEntryBody_ := ""
+			rtlargecomEntryBody_, _ = sjson.Set(rtlargecomEntryBody_, "rtlargecomEntry.attributes.rn", rtlargecomEntryRn_)
+			if !child_.Action.IsNull() {
+				rtlargecomEntryBody_, _ = sjson.Set(rtlargecomEntryBody_, "rtlargecomEntry.attributes.action", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Regex.IsNull() {
+				rtlargecomEntryBody_, _ = sjson.Set(rtlargecomEntryBody_, "rtlargecomEntry.attributes.regex", "DME_UNSET_PROPERTY_MARKER")
+			}
+			for key__, child__ := range child_.Items {
+				_ = child__
+				rtlargecomItemRn__ := child__.getRn(key__)
+				rtlargecomItemDn__ := rtlargecomEntryDn_ + "/" + rtlargecomItemRn__
+				_ = rtlargecomItemDn__
+				if !existed(rtlargecomItemDn__) {
+					rtlargecomEntryBody_, _ = sjson.Set(rtlargecomEntryBody_, "rtlargecomEntry.children.-1.rtlargecomItem.attributes", map[string]interface{}{"rn": rtlargecomItemRn__, "status": "deleted"})
+					continue
+				}
+				rtlargecomItemBody__ := ""
+				rtlargecomItemBody__, _ = sjson.Set(rtlargecomItemBody__, "rtlargecomItem.attributes.rn", rtlargecomItemRn__)
+				rtlargecomEntryBody_, _ = sjson.SetRaw(rtlargecomEntryBody_, "rtlargecomEntry.children.-1", rtlargecomItemBody__)
+			}
+			rtlargecomRuleBody, _ = sjson.SetRaw(rtlargecomRuleBody, "rtlargecomRule.children.-1", rtlargecomEntryBody_)
+		}
+		body, _ = sjson.SetRaw(body, "rpmEntity.children.-1", rtlargecomRuleBody)
 	}
 	for key, child := range data.AsPathAccessLists {
 		_ = child
@@ -4520,6 +6198,16 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 						body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 					}
 				}
+				for stateKey := range stateItemdi_.SetLargeCommunityItems {
+					if _, found := planItemdi_.SetLargeCommunityItems[stateKey]; !found {
+						stateChild := stateItemdi_.SetLargeCommunityItems[stateKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtlargecomItem.attributes.rn", stateChild.getRn(stateKey))
+						deleteBody, _ = sjson.Set(deleteBody, "rtlargecomItem.attributes.status", "deleted")
+						deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi_, "rtmapSetLargeComm") + ".children"
+						body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+					}
+				}
 				for stateChildKey := range stateItemdi_.MatchTags {
 					if _, found := planItemdi_.MatchTags[stateChildKey]; !found {
 						stateChild := stateItemdi_.MatchTags[stateChildKey]
@@ -4546,6 +6234,26 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 						deleteBody, _ = sjson.Set(deleteBody, "rtmapRsRegCommAtt.attributes.rn", stateChild.getRn(stateKey))
 						deleteBody, _ = sjson.Set(deleteBody, "rtmapRsRegCommAtt.attributes.status", "deleted")
 						deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi_, "rtmapMatchRegComm") + ".children"
+						body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+					}
+				}
+				for stateKey := range stateItemdi_.MatchExtendedCommunityLists {
+					if _, found := planItemdi_.MatchExtendedCommunityLists[stateKey]; !found {
+						stateChild := stateItemdi_.MatchExtendedCommunityLists[stateKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapRsExtCommAtt.attributes.rn", stateChild.getRn(stateKey))
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapRsExtCommAtt.attributes.status", "deleted")
+						deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi_, "rtmapMatchExtComm") + ".children"
+						body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+					}
+				}
+				for stateKey := range stateItemdi_.MatchLargeCommunityLists {
+					if _, found := planItemdi_.MatchLargeCommunityLists[stateKey]; !found {
+						stateChild := stateItemdi_.MatchLargeCommunityLists[stateKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapRsLargeCommAtt.attributes.rn", stateChild.getRn(stateKey))
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapRsLargeCommAtt.attributes.status", "deleted")
+						deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi_, "rtmapMatchLargeComm") + ".children"
 						body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 					}
 				}
@@ -4577,6 +6285,25 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 						deleteBody, _ = sjson.Set(deleteBody, "rtextcomItem.attributes.status", "deleted")
 						deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi_, "rtmapSetRttComm") + ".children"
 						body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+					}
+				}
+				for stateKey := range stateItemdi_.SetExtendedCommunityItems {
+					if _, found := planItemdi_.SetExtendedCommunityItems[stateKey]; !found {
+						stateChild := stateItemdi_.SetExtendedCommunityItems[stateKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtextcomItem.attributes.rn", stateChild.getRn(stateKey))
+						deleteBody, _ = sjson.Set(deleteBody, "rtextcomItem.attributes.status", "deleted")
+						deletePath := helpers.EnsureChildPath(&body.Str, matchBodyPathdi_, "rtmapSetExtComm") + ".children"
+						body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+					}
+				}
+				for stateChildKey := range stateItemdi_.SetExtendedCommunityCosts {
+					if _, found := planItemdi_.SetExtendedCommunityCosts[stateChildKey]; !found {
+						stateChild := stateItemdi_.SetExtendedCommunityCosts[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapSetExtCommCost.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "rtmapSetExtCommCost.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 					}
 				}
 				for stateChildKey := range stateItemdi_.MatchInterfaces {
@@ -4674,6 +6401,139 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 						deleteBody := ""
 						deleteBody, _ = sjson.Set(deleteBody, "rtregcomItem.attributes.rn", stateChild.getRn(stateChildKey))
 						deleteBody, _ = sjson.Set(deleteBody, "rtregcomItem.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
+			}
+		}
+		for stateKey := range state.ExtendedCommunityLists {
+			if _, found := data.ExtendedCommunityLists[stateKey]; !found {
+				stateChild := state.ExtendedCommunityLists[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "rtextcomRule.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "rtextcomRule.attributes.status", "deleted")
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for di := range state.ExtendedCommunityLists {
+			if _, found := data.ExtendedCommunityLists[di]; !found {
+				continue
+			}
+			stateItemdi := state.ExtendedCommunityLists[di]
+			planItemdi := data.ExtendedCommunityLists[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("rtextcomRule.attributes.name").String() == di {
+					matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".rtextcomRule.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.Entries {
+				if _, found := planItemdi.Entries[stateChildKey]; !found {
+					stateChild := stateItemdi.Entries[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "rtextcomEntry.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "rtextcomEntry.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for di_ := range stateItemdi.Entries {
+				if _, found := planItemdi.Entries[di_]; !found {
+					continue
+				}
+				stateItemdi_ := stateItemdi.Entries[di_]
+				planItemdi_ := planItemdi.Entries[di_]
+				matchBodyPathdi_ := ""
+				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+					if mv.Get("rtextcomEntry.attributes.order").String() == di_ {
+						matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".rtextcomEntry.children"
+						break
+					}
+				}
+				if matchBodyPathdi_ == "" {
+					continue
+				}
+				for stateChildKey := range stateItemdi_.Items {
+					if _, found := planItemdi_.Items[stateChildKey]; !found {
+						stateChild := stateItemdi_.Items[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtextcomItem.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "rtextcomItem.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
+				for stateChildKey := range stateItemdi_.Rmacs {
+					if _, found := planItemdi_.Rmacs[stateChildKey]; !found {
+						stateChild := stateItemdi_.Rmacs[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtextcomExtRmac.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "rtextcomExtRmac.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
+			}
+		}
+		for stateKey := range state.LargeCommunityLists {
+			if _, found := data.LargeCommunityLists[stateKey]; !found {
+				stateChild := state.LargeCommunityLists[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "rtlargecomRule.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "rtlargecomRule.attributes.status", "deleted")
+				deletePath := bodyPath
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for di := range state.LargeCommunityLists {
+			if _, found := data.LargeCommunityLists[di]; !found {
+				continue
+			}
+			stateItemdi := state.LargeCommunityLists[di]
+			planItemdi := data.LargeCommunityLists[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+				if mv.Get("rtlargecomRule.attributes.name").String() == di {
+					matchBodyPathdi = bodyPath + "." + strconv.Itoa(mi) + ".rtlargecomRule.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.Entries {
+				if _, found := planItemdi.Entries[stateChildKey]; !found {
+					stateChild := stateItemdi.Entries[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "rtlargecomEntry.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "rtlargecomEntry.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for di_ := range stateItemdi.Entries {
+				if _, found := planItemdi.Entries[di_]; !found {
+					continue
+				}
+				stateItemdi_ := stateItemdi.Entries[di_]
+				planItemdi_ := planItemdi.Entries[di_]
+				matchBodyPathdi_ := ""
+				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+					if mv.Get("rtlargecomEntry.attributes.order").String() == di_ {
+						matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".rtlargecomEntry.children"
+						break
+					}
+				}
+				if matchBodyPathdi_ == "" {
+					continue
+				}
+				for stateChildKey := range stateItemdi_.Items {
+					if _, found := planItemdi_.Items[stateChildKey]; !found {
+						stateChild := stateItemdi_.Items[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "rtlargecomItem.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "rtlargecomItem.attributes.status", "deleted")
 						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
 					}
 				}
@@ -5015,6 +6875,27 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 												}
 											}
 										}
+										if deleteEmptied != nil && !(stateChild.SetLargeCommunityAdditive.IsNull() && stateChild.SetLargeCommunityNoCommunity.IsNull() && len(stateChild.SetLargeCommunityItems) == 0) && (configChild.SetLargeCommunityAdditive.IsNull() && configChild.SetLargeCommunityNoCommunity.IsNull() && len(configChild.SetLargeCommunityItems) == 0) && deleteEmptied(listChildDn_+"/slargecomm") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetLargeComm")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetLargeCommunityAdditive.IsNull() && configChild.SetLargeCommunityAdditive.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetLargeComm")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"additive", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SetLargeCommunityNoCommunity.IsNull() && configChild.SetLargeCommunityNoCommunity.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetLargeComm")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"noCommAttr", "DME_UNSET_PROPERTY_MARKER")
+											}
+											for key := range stateChild.SetLargeCommunityItems {
+												if configChild, ok := configChild.SetLargeCommunityItems[key]; ok {
+													stateChild := stateChild.SetLargeCommunityItems[key]
+													_ = stateChild
+													_ = configChild
+												}
+											}
+										}
 										for key := range stateChild.MatchTags {
 											if configChild, ok := configChild.MatchTags[key]; ok {
 												stateChild := stateChild.MatchTags[key]
@@ -5150,6 +7031,40 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 												}
 											}
 										}
+										if deleteEmptied != nil && !(stateChild.MatchExtendedCommunityCriteria.IsNull() && len(stateChild.MatchExtendedCommunityLists) == 0) && (configChild.MatchExtendedCommunityCriteria.IsNull() && len(configChild.MatchExtendedCommunityLists) == 0) && deleteEmptied(listChildDn_+"/mextcomm") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapMatchExtComm")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.MatchExtendedCommunityCriteria.IsNull() && configChild.MatchExtendedCommunityCriteria.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapMatchExtComm")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"criteria", "DME_UNSET_PROPERTY_MARKER")
+											}
+											for key := range stateChild.MatchExtendedCommunityLists {
+												if configChild, ok := configChild.MatchExtendedCommunityLists[key]; ok {
+													stateChild := stateChild.MatchExtendedCommunityLists[key]
+													_ = stateChild
+													_ = configChild
+												}
+											}
+										}
+										if deleteEmptied != nil && !(stateChild.MatchLargeCommunityCriteria.IsNull() && len(stateChild.MatchLargeCommunityLists) == 0) && (configChild.MatchLargeCommunityCriteria.IsNull() && len(configChild.MatchLargeCommunityLists) == 0) && deleteEmptied(listChildDn_+"/mlargecomm") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapMatchLargeComm")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.MatchLargeCommunityCriteria.IsNull() && configChild.MatchLargeCommunityCriteria.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapMatchLargeComm")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"criteria", "DME_UNSET_PROPERTY_MARKER")
+											}
+											for key := range stateChild.MatchLargeCommunityLists {
+												if configChild, ok := configChild.MatchLargeCommunityLists[key]; ok {
+													stateChild := stateChild.MatchLargeCommunityLists[key]
+													_ = stateChild
+													_ = configChild
+												}
+											}
+										}
 										for key := range stateChild.MatchAsPathLists {
 											if configChild, ok := configChild.MatchAsPathLists[key]; ok {
 												stateChild := stateChild.MatchAsPathLists[key]
@@ -5239,6 +7154,89 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 												}
 											}
 										}
+										if deleteEmptied != nil && !(stateChild.SetExtendedCommunityAdditive.IsNull() && stateChild.SetExtendedCommunityNoCommunity.IsNull() && stateChild.SetExtendedCommunityScope.IsNull() && stateChild.SetExtendedCommunityCriteria.IsNull() && len(stateChild.SetExtendedCommunityItems) == 0) && (configChild.SetExtendedCommunityAdditive.IsNull() && configChild.SetExtendedCommunityNoCommunity.IsNull() && configChild.SetExtendedCommunityScope.IsNull() && configChild.SetExtendedCommunityCriteria.IsNull() && len(configChild.SetExtendedCommunityItems) == 0) && deleteEmptied(listChildDn_+"/sextcomm") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtComm")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetExtendedCommunityAdditive.IsNull() && configChild.SetExtendedCommunityAdditive.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtComm")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"additive", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SetExtendedCommunityNoCommunity.IsNull() && configChild.SetExtendedCommunityNoCommunity.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtComm")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"noCommAttr", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SetExtendedCommunityScope.IsNull() && configChild.SetExtendedCommunityScope.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtComm")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"scope", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SetExtendedCommunityCriteria.IsNull() && configChild.SetExtendedCommunityCriteria.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtComm")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"setCriteria", "DME_UNSET_PROPERTY_MARKER")
+											}
+											for key := range stateChild.SetExtendedCommunityItems {
+												if configChild, ok := configChild.SetExtendedCommunityItems[key]; ok {
+													stateChild := stateChild.SetExtendedCommunityItems[key]
+													_ = stateChild
+													_ = configChild
+												}
+											}
+										}
+										for key := range stateChild.SetExtendedCommunityCosts {
+											if configChild, ok := configChild.SetExtendedCommunityCosts[key]; ok {
+												stateChild := stateChild.SetExtendedCommunityCosts[key]
+												_ = stateChild
+												_ = configChild
+												keyParts := strings.SplitN(key, ";", 2)
+												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
+													if mv.Get("rtmapSetExtCommCost.attributes.commCrit").String() == keyParts[0] &&
+														mv.Get("rtmapSetExtCommCost.attributes.commId").String() == keyParts[1] {
+														if !stateChild.Cost.IsNull() && configChild.Cost.IsNull() {
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".rtmapSetExtCommCost.attributes."+"commValue", "DME_UNSET_PROPERTY_MARKER")
+														}
+														if !stateChild.Criteria.IsNull() && configChild.Criteria.IsNull() {
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".rtmapSetExtCommCost.attributes."+"setCriteria", "DME_UNSET_PROPERTY_MARKER")
+														}
+														break
+													}
+												}
+											}
+										}
+										if deleteEmptied != nil && !(stateChild.SetExtendedCommunityColor.IsNull() && stateChild.SetExtendedCommunityColorOnlyFlag.IsNull()) && (configChild.SetExtendedCommunityColor.IsNull() && configChild.SetExtendedCommunityColorOnlyFlag.IsNull()) && deleteEmptied(listChildDn_+"/sextcommcolor") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtCommColor")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetExtendedCommunityColor.IsNull() && configChild.SetExtendedCommunityColor.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtCommColor")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"commValue", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SetExtendedCommunityColorOnlyFlag.IsNull() && configChild.SetExtendedCommunityColorOnlyFlag.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtCommColor")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"coFlagValue", "DME_UNSET_PROPERTY_MARKER")
+											}
+										}
+										if deleteEmptied != nil && !(stateChild.SetExtendedCommunityBandwidth.IsNull()) && (configChild.SetExtendedCommunityBandwidth.IsNull()) && deleteEmptied(listChildDn_+"/sextcommbw") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtCommBandwidth")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetExtendedCommunityBandwidth.IsNull() && configChild.SetExtendedCommunityBandwidth.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtCommBandwidth")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"bwValue", "DME_UNSET_PROPERTY_MARKER")
+											}
+										}
+										if deleteEmptied != nil && !(stateChild.SetExtendedCommunityRmac.IsNull()) && (configChild.SetExtendedCommunityRmac.IsNull()) && deleteEmptied(listChildDn_+"/sextcommrmac") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtCommRmac")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetExtendedCommunityRmac.IsNull() && configChild.SetExtendedCommunityRmac.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtCommRmac")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"commRmac", "DME_UNSET_PROPERTY_MARKER")
+											}
+										}
 										if deleteEmptied != nil && !(stateChild.SetCommunityListDelete.IsNull() && stateChild.SetCommunityListName.IsNull() && stateChild.SetCommunityListCriteria.IsNull()) && (configChild.SetCommunityListDelete.IsNull() && configChild.SetCommunityListName.IsNull() && configChild.SetCommunityListCriteria.IsNull()) && deleteEmptied(listChildDn_+"/scommlist") {
 											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetCommList")
 											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
@@ -5255,6 +7253,38 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 											if !stateChild.SetCommunityListCriteria.IsNull() && configChild.SetCommunityListCriteria.IsNull() {
 												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetCommList")
 												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"setCriteria", "DME_UNSET_PROPERTY_MARKER")
+											}
+										}
+										if deleteEmptied != nil && !(stateChild.SetExtendedCommunityListDelete.IsNull() && stateChild.SetExtendedCommunityListName.IsNull() && stateChild.SetExtendedCommunityListCriteria.IsNull()) && (configChild.SetExtendedCommunityListDelete.IsNull() && configChild.SetExtendedCommunityListName.IsNull() && configChild.SetExtendedCommunityListCriteria.IsNull()) && deleteEmptied(listChildDn_+"/sextcommlist") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtCommList")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetExtendedCommunityListDelete.IsNull() && configChild.SetExtendedCommunityListDelete.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtCommList")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delete", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SetExtendedCommunityListName.IsNull() && configChild.SetExtendedCommunityListName.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtCommList")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SetExtendedCommunityListCriteria.IsNull() && configChild.SetExtendedCommunityListCriteria.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetExtCommList")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"setCriteria", "DME_UNSET_PROPERTY_MARKER")
+											}
+										}
+										if deleteEmptied != nil && !(stateChild.SetLargeCommunityListDelete.IsNull() && stateChild.SetLargeCommunityListName.IsNull()) && (configChild.SetLargeCommunityListDelete.IsNull() && configChild.SetLargeCommunityListName.IsNull()) && deleteEmptied(listChildDn_+"/slargecommlist") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetLargeCommList")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetLargeCommunityListDelete.IsNull() && configChild.SetLargeCommunityListDelete.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetLargeCommList")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"delete", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SetLargeCommunityListName.IsNull() && configChild.SetLargeCommunityListName.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "rtmapSetLargeCommList")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
 											}
 										}
 										for key := range stateChild.MatchInterfaces {
@@ -5393,6 +7423,147 @@ func (data RoutePolicy) toBodyWithDeletes(ctx context.Context, state RoutePolicy
 														break
 													}
 												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		for key := range state.ExtendedCommunityLists {
+			if configChild, ok := config.ExtendedCommunityLists[key]; ok {
+				stateChild := state.ExtendedCommunityLists[key]
+				_ = stateChild
+				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
+				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+					if mv.Get("rtextcomRule.attributes.name").String() == key {
+						if !stateChild.Mode.IsNull() && configChild.Mode.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".rtextcomRule.attributes."+"mode", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+						if mv.Get("rtextcomRule.attributes.name").String() == key {
+							listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".rtextcomRule.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						for key := range stateChild.Entries {
+							if configChild, ok := configChild.Entries[key]; ok {
+								stateChild := stateChild.Entries[key]
+								_ = stateChild
+								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("rtextcomEntry.attributes.order").String() == key {
+										if !stateChild.Action.IsNull() && configChild.Action.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".rtextcomEntry.attributes."+"action", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Regex.IsNull() && configChild.Regex.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".rtextcomEntry.attributes."+"regex", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+								{
+									listChildPath_ := ""
+									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+										if mv.Get("rtextcomEntry.attributes.order").String() == key {
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".rtextcomEntry.children"
+											break
+										}
+									}
+									if listChildPath_ != "" {
+										for key := range stateChild.Items {
+											if configChild, ok := configChild.Items[key]; ok {
+												stateChild := stateChild.Items[key]
+												_ = stateChild
+												_ = configChild
+												keyParts := strings.SplitN(key, ";", 2)
+												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
+													if mv.Get("rtextcomItem.attributes.scope").String() == keyParts[0] &&
+														mv.Get("rtextcomItem.attributes.community").String() == keyParts[1] {
+														if !stateChild.Type.IsNull() && configChild.Type.IsNull() {
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".rtextcomItem.attributes."+"type", "DME_UNSET_PROPERTY_MARKER")
+														}
+														break
+													}
+												}
+											}
+										}
+										for key := range stateChild.Rmacs {
+											if configChild, ok := configChild.Rmacs[key]; ok {
+												stateChild := stateChild.Rmacs[key]
+												_ = stateChild
+												_ = configChild
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		for key := range state.LargeCommunityLists {
+			if configChild, ok := config.LargeCommunityLists[key]; ok {
+				stateChild := state.LargeCommunityLists[key]
+				_ = stateChild
+				_ = configChild
+				listChildDn := data.getDn() + "/" + stateChild.getRn(key)
+				_ = listChildDn
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
+						if mv.Get("rtlargecomRule.attributes.name").String() == key {
+							listChildPath = bodyPath + "." + strconv.Itoa(mi) + ".rtlargecomRule.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						for key := range stateChild.Entries {
+							if configChild, ok := configChild.Entries[key]; ok {
+								stateChild := stateChild.Entries[key]
+								_ = stateChild
+								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("rtlargecomEntry.attributes.order").String() == key {
+										if !stateChild.Action.IsNull() && configChild.Action.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".rtlargecomEntry.attributes."+"action", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Regex.IsNull() && configChild.Regex.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".rtlargecomEntry.attributes."+"regex", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+								{
+									listChildPath_ := ""
+									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+										if mv.Get("rtlargecomEntry.attributes.order").String() == key {
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".rtlargecomEntry.children"
+											break
+										}
+									}
+									if listChildPath_ != "" {
+										for key := range stateChild.Items {
+											if configChild, ok := configChild.Items[key]; ok {
+												stateChild := stateChild.Items[key]
+												_ = stateChild
+												_ = configChild
 											}
 										}
 									}

@@ -165,6 +165,38 @@ child_classes:
         type: String
         description: "A tag for enabling clients to add their own data. For example, to indicate who created this object."
         example: "tag1"
+  - class_name: aaaLoginProtection
+    doc_path: Security%20and%20Policing/aaa:LoginProtection/
+    rn: loginprotection
+    type: single
+    no_delete: true
+    attributes:
+      - nxos_name: loginBlockTimeOnDoSAttack
+        tf_name: login_block_time
+        type: Int64
+        min_int: 0
+        max_int: 65535
+        description: "System login block time in seconds."
+        example: 100
+      - nxos_name: loginAttempts
+        tf_name: login_attempts
+        type: Int64
+        min_int: 0
+        max_int: 65535
+        description: "System login fail attempts value."
+        example: 5
+      - nxos_name: loginAttemptsFailureThreshold
+        tf_name: login_attempts_window
+        type: Int64
+        min_int: 0
+        max_int: 65535
+        description: "System login watch period for fail attempts."
+        example: 60
+      - nxos_name: loginAccessList
+        tf_name: login_access_list
+        type: String
+        description: "Configuration for system login access list name."
+        example: "ACL1"
   - class_name: aaaUser
     doc_path: Security%20and%20Policing/aaa:User/
     rn: user-[%s]

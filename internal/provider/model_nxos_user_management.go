@@ -63,6 +63,10 @@ type UserManagement struct {
 	PostLoginBannerOwnerKey                  types.String                                   `tfsdk:"post_login_banner_owner_key"`
 	PostLoginBannerMessage                   types.String                                   `tfsdk:"post_login_banner_message"`
 	PostLoginBannerOwnerTag                  types.String                                   `tfsdk:"post_login_banner_owner_tag"`
+	LoginBlockTime                           types.Int64                                    `tfsdk:"login_block_time"`
+	LoginAttempts                            types.Int64                                    `tfsdk:"login_attempts"`
+	LoginAttemptsWindow                      types.Int64                                    `tfsdk:"login_attempts_window"`
+	LoginAccessList                          types.String                                   `tfsdk:"login_access_list"`
 	Users                                    map[string]UserManagementUsers                 `tfsdk:"users"`
 	RoleFeatureGroups                        map[string]UserManagementRoleFeatureGroups     `tfsdk:"role_feature_groups"`
 	Roles                                    map[string]UserManagementRoles                 `tfsdk:"roles"`
@@ -379,7 +383,7 @@ var UserManagementListClasses = map[string]bool{"aaaUser": true, "aaaUserRole": 
 
 // getUserManagementTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getUserManagementTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaSshAuth", "aaaRoleFeatureGroup", "aaaFeatureName", "aaaRole", "aaaRoleRule", "aaaPermitVlan", "aaaPermitIntf", "aaaPermitVrf", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc", "pkiEp", "pkiKeyRing", "pkiTP"}, UserManagementSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaLoginProtection", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaSshAuth", "aaaRoleFeatureGroup", "aaaFeatureName", "aaaRole", "aaaRoleRule", "aaaPermitVlan", "aaaPermitIntf", "aaaPermitVrf", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc", "pkiEp", "pkiKeyRing", "pkiTP"}, UserManagementSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -551,6 +555,22 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 	}
 	if attrs != "{}" {
 		body, _ = sjson.SetRaw(body, childrenPath+".-1.aaaPostLoginBanner.attributes", attrs)
+	}
+	attrs = "{}"
+	if !data.LoginBlockTime.IsUnknown() && !data.LoginBlockTime.IsNull() && !config.LoginBlockTime.IsNull() {
+		attrs, _ = sjson.Set(attrs, "loginBlockTimeOnDoSAttack", strconv.FormatInt(data.LoginBlockTime.ValueInt64(), 10))
+	}
+	if !data.LoginAttempts.IsUnknown() && !data.LoginAttempts.IsNull() && !config.LoginAttempts.IsNull() {
+		attrs, _ = sjson.Set(attrs, "loginAttempts", strconv.FormatInt(data.LoginAttempts.ValueInt64(), 10))
+	}
+	if !data.LoginAttemptsWindow.IsUnknown() && !data.LoginAttemptsWindow.IsNull() && !config.LoginAttemptsWindow.IsNull() {
+		attrs, _ = sjson.Set(attrs, "loginAttemptsFailureThreshold", strconv.FormatInt(data.LoginAttemptsWindow.ValueInt64(), 10))
+	}
+	if !data.LoginAccessList.IsUnknown() && !data.LoginAccessList.IsNull() && !config.LoginAccessList.IsNull() {
+		attrs, _ = sjson.Set(attrs, "loginAccessList", data.LoginAccessList.ValueString())
+	}
+	if attrs != "{}" {
+		body, _ = sjson.SetRaw(body, childrenPath+".-1.aaaLoginProtection.attributes", attrs)
 	}
 	for key, child := range data.Users {
 		configChild, configChildOk := config.Users[key]
@@ -1481,6 +1501,23 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 		data.PostLoginBannerMessage = types.StringValue(raaaPostLoginBanner.Get("aaaPostLoginBanner.attributes.message").String())
 		data.PostLoginBannerOwnerTag = types.StringValue(raaaPostLoginBanner.Get("aaaPostLoginBanner.attributes.ownerTag").String())
 	}
+	{
+		var raaaLoginProtection gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("aaaLoginProtection.attributes.rn").String()
+				if rnValue == "loginprotection" {
+					raaaLoginProtection = v
+					return false
+				}
+				return true
+			},
+		)
+		data.LoginBlockTime = types.Int64Value(raaaLoginProtection.Get("aaaLoginProtection.attributes.loginBlockTimeOnDoSAttack").Int())
+		data.LoginAttempts = types.Int64Value(raaaLoginProtection.Get("aaaLoginProtection.attributes.loginAttempts").Int())
+		data.LoginAttemptsWindow = types.Int64Value(raaaLoginProtection.Get("aaaLoginProtection.attributes.loginAttemptsFailureThreshold").Int())
+		data.LoginAccessList = types.StringValue(raaaLoginProtection.Get("aaaLoginProtection.attributes.loginAccessList").String())
+	}
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
 			v.ForEach(
@@ -2257,6 +2294,37 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 		data.PostLoginBannerOwnerTag = types.StringValue(raaaPostLoginBanner.Get("aaaPostLoginBanner.attributes.ownerTag").String())
 	} else {
 		data.PostLoginBannerOwnerTag = types.StringNull()
+	}
+	var raaaLoginProtection gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("aaaLoginProtection.attributes.rn").String()
+			if rnValue == "loginprotection" {
+				raaaLoginProtection = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.LoginBlockTime.IsNull() {
+		data.LoginBlockTime = types.Int64Value(raaaLoginProtection.Get("aaaLoginProtection.attributes.loginBlockTimeOnDoSAttack").Int())
+	} else {
+		data.LoginBlockTime = types.Int64Null()
+	}
+	if !data.LoginAttempts.IsNull() {
+		data.LoginAttempts = types.Int64Value(raaaLoginProtection.Get("aaaLoginProtection.attributes.loginAttempts").Int())
+	} else {
+		data.LoginAttempts = types.Int64Null()
+	}
+	if !data.LoginAttemptsWindow.IsNull() {
+		data.LoginAttemptsWindow = types.Int64Value(raaaLoginProtection.Get("aaaLoginProtection.attributes.loginAttemptsFailureThreshold").Int())
+	} else {
+		data.LoginAttemptsWindow = types.Int64Null()
+	}
+	if !data.LoginAccessList.IsNull() {
+		data.LoginAccessList = types.StringValue(raaaLoginProtection.Get("aaaLoginProtection.attributes.loginAccessList").String())
+	} else {
+		data.LoginAccessList = types.StringNull()
 	}
 	for key, item := range data.Users {
 		var raaaUser gjson.Result
@@ -3686,6 +3754,26 @@ func (data UserManagement) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 		}
 	}
+	{
+		childBody := ""
+		if !data.LoginBlockTime.IsNull() {
+			childBody, _ = sjson.Set(childBody, "loginBlockTimeOnDoSAttack", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.LoginAttempts.IsNull() {
+			childBody, _ = sjson.Set(childBody, "loginAttempts", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.LoginAttemptsWindow.IsNull() {
+			childBody, _ = sjson.Set(childBody, "loginAttemptsFailureThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !data.LoginAccessList.IsNull() {
+			childBody, _ = sjson.Set(childBody, "loginAccessList", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if childBody != "" {
+			childIndex := len(gjson.Get(body, childrenPath).Array())
+			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".aaaLoginProtection"
+			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		}
+	}
 	for key, child := range data.Users {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "aaaUser.attributes.rn", child.getRn(key))
@@ -4149,6 +4237,10 @@ func (data UserManagement) managedDns() map[string]bool {
 		aaaPostLoginBannerDn := dn + "/" + "postloginbanner"
 		dns[aaaPostLoginBannerDn] = true
 	}
+	if !(data.LoginBlockTime.IsNull() && data.LoginAttempts.IsNull() && data.LoginAttemptsWindow.IsNull() && data.LoginAccessList.IsNull()) {
+		aaaLoginProtectionDn := dn + "/" + "loginprotection"
+		dns[aaaLoginProtectionDn] = true
+	}
 	for key, child := range data.Users {
 		aaaUserDn := dn + "/" + child.getRn(key)
 		dns[aaaUserDn] = true
@@ -4367,6 +4459,30 @@ func (data UserManagement) toResetBody(preexisting map[string]bool) nxos.Body {
 			if aaaPostLoginBannerBody != "" {
 				aaaPostLoginBannerBody, _ = sjson.Set(aaaPostLoginBannerBody, "aaaPostLoginBanner.attributes.rn", aaaPostLoginBannerRn)
 				body, _ = sjson.SetRaw(body, "aaaUserEp.children.-1", aaaPostLoginBannerBody)
+			}
+		}
+	}
+	if !(data.LoginBlockTime.IsNull() && data.LoginAttempts.IsNull() && data.LoginAttemptsWindow.IsNull() && data.LoginAccessList.IsNull()) {
+		aaaLoginProtectionRn := "loginprotection"
+		aaaLoginProtectionDn := dn + "/" + aaaLoginProtectionRn
+		_ = aaaLoginProtectionDn
+		{
+			aaaLoginProtectionBody := ""
+			if !data.LoginBlockTime.IsNull() {
+				aaaLoginProtectionBody, _ = sjson.Set(aaaLoginProtectionBody, "aaaLoginProtection.attributes.loginBlockTimeOnDoSAttack", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LoginAttempts.IsNull() {
+				aaaLoginProtectionBody, _ = sjson.Set(aaaLoginProtectionBody, "aaaLoginProtection.attributes.loginAttempts", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LoginAttemptsWindow.IsNull() {
+				aaaLoginProtectionBody, _ = sjson.Set(aaaLoginProtectionBody, "aaaLoginProtection.attributes.loginAttemptsFailureThreshold", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.LoginAccessList.IsNull() {
+				aaaLoginProtectionBody, _ = sjson.Set(aaaLoginProtectionBody, "aaaLoginProtection.attributes.loginAccessList", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if aaaLoginProtectionBody != "" {
+				aaaLoginProtectionBody, _ = sjson.Set(aaaLoginProtectionBody, "aaaLoginProtection.attributes.rn", aaaLoginProtectionRn)
+				body, _ = sjson.SetRaw(body, "aaaUserEp.children.-1", aaaLoginProtectionBody)
 			}
 		}
 	}
@@ -5671,6 +5787,22 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 		if !state.PostLoginBannerOwnerTag.IsNull() && config.PostLoginBannerOwnerTag.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaPostLoginBanner")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ownerTag", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoginBlockTime.IsNull() && config.LoginBlockTime.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaLoginProtection")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loginBlockTimeOnDoSAttack", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoginAttempts.IsNull() && config.LoginAttempts.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaLoginProtection")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loginAttempts", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoginAttemptsWindow.IsNull() && config.LoginAttemptsWindow.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaLoginProtection")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loginAttemptsFailureThreshold", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.LoginAccessList.IsNull() && config.LoginAccessList.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "aaaLoginProtection")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"loginAccessList", "DME_UNSET_PROPERTY_MARKER")
 		}
 		for key := range state.Users {
 			if configChild, ok := config.Users[key]; ok {

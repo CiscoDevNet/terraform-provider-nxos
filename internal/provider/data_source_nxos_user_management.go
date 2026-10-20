@@ -56,7 +56,7 @@ func (d *UserManagementDataSource) Metadata(_ context.Context, req datasource.Me
 func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.").AddApiDocumentation("aaaUserEp", "Security%20and%20Policing/aaa:UserEp/", []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaSshAuth", "aaaRoleFeatureGroup", "aaaFeatureName", "aaaRole", "aaaRoleRule", "aaaPermitVlan", "aaaPermitIntf", "aaaPermitVrf", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner/", "Security%20and%20Policing/aaa:PostLoginBanner/", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/", "Security%20and%20Policing/aaa:SshAuth/", "Security%20and%20Policing/aaa:RoleFeatureGroup/", "Security%20and%20Policing/aaa:FeatureName/", "Security%20and%20Policing/aaa:Role/", "Security%20and%20Policing/aaa:RoleRule/", "Security%20and%20Policing/aaa:PermitVlan/", "Security%20and%20Policing/aaa:PermitIntf/", "Security%20and%20Policing/aaa:PermitVrf/", "Security%20and%20Policing/aaa:TacacsPlusEp/", "Security%20and%20Policing/aaa:TacacsPlusProvider/", "Security%20and%20Policing/aaa:TacacsPlusProviderGroup/", "Security%20and%20Policing/aaa:ProviderRef/", "Security%20and%20Policing/aaa:RadiusEp/", "Security%20and%20Policing/aaa:RadiusServerMonitor/", "Security%20and%20Policing/aaa:RadiusProvider/", "Security%20and%20Policing/aaa:RadiusProviderGroup/", "Security%20and%20Policing/aaa:ProviderRef/", "Security%20and%20Policing/aaa:AuthRealm/", "Security%20and%20Policing/aaa:DefaultAuth/", "Security%20and%20Policing/aaa:ConsoleAuth/", "Security%20and%20Policing/aaa:DefaultAuthor/", "Security%20and%20Policing/aaa:DefaultAcc/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the user management configuration on NX-OS devices, including local user accounts, passwords, and role assignments.").AddApiDocumentation("aaaUserEp", "Security%20and%20Policing/aaa:UserEp/", []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaLoginProtection", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaSshAuth", "aaaRoleFeatureGroup", "aaaFeatureName", "aaaRole", "aaaRoleRule", "aaaPermitVlan", "aaaPermitIntf", "aaaPermitVrf", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc"}, []string{"Security%20and%20Policing/aaa:PreLoginBanner/", "Security%20and%20Policing/aaa:PostLoginBanner/", "Security%20and%20Policing/aaa:LoginProtection/", "Security%20and%20Policing/aaa:User/", "Security%20and%20Policing/aaa:UserDomain/", "Security%20and%20Policing/aaa:UserRole/", "Security%20and%20Policing/aaa:SshAuth/", "Security%20and%20Policing/aaa:RoleFeatureGroup/", "Security%20and%20Policing/aaa:FeatureName/", "Security%20and%20Policing/aaa:Role/", "Security%20and%20Policing/aaa:RoleRule/", "Security%20and%20Policing/aaa:PermitVlan/", "Security%20and%20Policing/aaa:PermitIntf/", "Security%20and%20Policing/aaa:PermitVrf/", "Security%20and%20Policing/aaa:TacacsPlusEp/", "Security%20and%20Policing/aaa:TacacsPlusProvider/", "Security%20and%20Policing/aaa:TacacsPlusProviderGroup/", "Security%20and%20Policing/aaa:ProviderRef/", "Security%20and%20Policing/aaa:RadiusEp/", "Security%20and%20Policing/aaa:RadiusServerMonitor/", "Security%20and%20Policing/aaa:RadiusProvider/", "Security%20and%20Policing/aaa:RadiusProviderGroup/", "Security%20and%20Policing/aaa:ProviderRef/", "Security%20and%20Policing/aaa:AuthRealm/", "Security%20and%20Policing/aaa:DefaultAuth/", "Security%20and%20Policing/aaa:ConsoleAuth/", "Security%20and%20Policing/aaa:DefaultAuthor/", "Security%20and%20Policing/aaa:DefaultAcc/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -157,6 +157,22 @@ func (d *UserManagementDataSource) Schema(ctx context.Context, req datasource.Sc
 			},
 			"post_login_banner_owner_tag": schema.StringAttribute{
 				MarkdownDescription: "A tag for enabling clients to add their own data. For example, to indicate who created this object.",
+				Computed:            true,
+			},
+			"login_block_time": schema.Int64Attribute{
+				MarkdownDescription: "System login block time in seconds.",
+				Computed:            true,
+			},
+			"login_attempts": schema.Int64Attribute{
+				MarkdownDescription: "System login fail attempts value.",
+				Computed:            true,
+			},
+			"login_attempts_window": schema.Int64Attribute{
+				MarkdownDescription: "System login watch period for fail attempts.",
+				Computed:            true,
+			},
+			"login_access_list": schema.StringAttribute{
+				MarkdownDescription: "Configuration for system login access list name.",
 				Computed:            true,
 			},
 			"users": schema.MapNestedAttribute{

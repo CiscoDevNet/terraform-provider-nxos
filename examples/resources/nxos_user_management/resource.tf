@@ -20,6 +20,10 @@ resource "nxos_user_management" "example" {
   post_login_banner_owner_key   = "owner1"
   post_login_banner_message     = "Welcome to the system."
   post_login_banner_owner_tag   = "tag1"
+  login_block_time              = 100
+  login_attempts                = 5
+  login_attempts_window         = 60
+  login_access_list             = "ACL1"
   users = {
     "user1" = {
       account_status         = "active"

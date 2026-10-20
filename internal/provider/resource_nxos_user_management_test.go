@@ -60,6 +60,10 @@ func TestAccUserManagementResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "post_login_banner_owner_key", "owner1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "post_login_banner_message", "Welcome to the system."))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "post_login_banner_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "login_block_time", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "login_attempts", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "login_attempts_window", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "login_access_list", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.user1.account_status", "active"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.user1.allow_expired", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.user1.clear_password_history", "no"))
@@ -232,6 +236,10 @@ func TestAccUserManagementResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "post_login_banner_owner_key", "owner1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "post_login_banner_message", "Welcome to the system."))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "post_login_banner_owner_tag", "tag1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "login_block_time", "100"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "login_attempts", "5"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "login_attempts_window", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "login_access_list", "ACL1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.account_status", "active"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.allow_expired", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.clear_password_history", "no"))
@@ -489,6 +497,10 @@ func testAccUserManagementResourceConfig_all(includeWriteOnly bool) string {
 	config += `	post_login_banner_owner_key = "owner1"` + "\n"
 	config += `	post_login_banner_message = "Welcome to the system."` + "\n"
 	config += `	post_login_banner_owner_tag = "tag1"` + "\n"
+	config += `	login_block_time = 100` + "\n"
+	config += `	login_attempts = 5` + "\n"
+	config += `	login_attempts_window = 60` + "\n"
+	config += `	login_access_list = "ACL1"` + "\n"
 	config += `	users = {` + "\n"
 	config += `		"user1" = {` + "\n"
 	config += `			account_status = "active"` + "\n"

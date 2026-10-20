@@ -202,6 +202,11 @@ func TestAccSystemResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "cdp_interfaces.eth1/1.port_description", "My Port"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "copp_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "copp_rate_limiter", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "copp_class_maps.CP-CLASS1.match_type", "MatchAll"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "copp_class_maps.CP-CLASS1.exception_ip_option", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "copp_class_maps.CP-CLASS1.exception_ipv6_option", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "copp_policy_maps.CP-POLICY1.classes.CP-CLASS1.police.1000;pps;64;packets.conform_action", "transmit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "copp_policy_maps.CP-POLICY1.classes.CP-CLASS1.police.1000;pps;64;packets.violate_action", "drop"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "qos_mode", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "qos_statistics", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "console_exec_timeout", "30"))
@@ -466,6 +471,11 @@ func TestAccSystemResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "cdp_interfaces.eth1/1.port_description", "My Port"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "copp_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "copp_rate_limiter", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "copp_class_maps.CP-CLASS1.match_type", "MatchAll"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "copp_class_maps.CP-CLASS1.exception_ip_option", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "copp_class_maps.CP-CLASS1.exception_ipv6_option", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "copp_policy_maps.CP-POLICY1.classes.CP-CLASS1.police.1000;pps;64;packets.conform_action", "transmit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "copp_policy_maps.CP-POLICY1.classes.CP-CLASS1.police.1000;pps;64;packets.violate_action", "drop"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "qos_mode", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "qos_statistics", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "console_exec_timeout", "30"))
@@ -741,6 +751,14 @@ resource "nxos_dme" "PreReq13" {
   delete = false
 }
 
+resource "nxos_dme" "PreReq14" {
+  dn = "sys/acl/ipv4/name-[CP-ACL1]"
+  class_name = "ipv4aclACL"
+  content = {
+      name = "CP-ACL1"
+  }
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -748,7 +766,7 @@ resource "nxos_dme" "PreReq13" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccSystemResourceConfig_minimum() string {
 	config := `resource "nxos_system" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, nxos_dme.PreReq13, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, nxos_dme.PreReq13, nxos_dme.PreReq14, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -980,6 +998,59 @@ func testAccSystemResourceConfig_all(includeWriteOnly bool) string {
 	config += `	}` + "\n"
 	config += `	copp_admin_state = "enabled"` + "\n"
 	config += `	copp_rate_limiter = true` + "\n"
+	config += `	copp_class_maps = {` + "\n"
+	config += `		"CP-CLASS1" = {` + "\n"
+	config += `			match_type = "MatchAll"` + "\n"
+	config += `			access_groups = {` + "\n"
+	config += `				"CP-ACL1" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			exceptions = {` + "\n"
+	config += `				"glean" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			exception_ip_option = true` + "\n"
+	config += `			exception_ipv6_option = true` + "\n"
+	config += `			exception_ip_icmp = {` + "\n"
+	config += `				"redirect" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			exception_ipv6_icmp = {` + "\n"
+	config += `				"unreachable" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			exception_multicast = {` + "\n"
+	config += `				"dest-miss" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `			protocols = {` + "\n"
+	config += `				"arp" = {` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	copp_policy_maps = {` + "\n"
+	config += `		"CP-POLICY1" = {` + "\n"
+	config += `			classes = {` + "\n"
+	config += `				"CP-CLASS1" = {` + "\n"
+	config += `					police = {` + "\n"
+	config += `						"1000;pps;64;packets" = {` + "\n"
+	config += `							conform_action = "transmit"` + "\n"
+	config += `							violate_action = "drop"` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					set_cos = {` + "\n"
+	config += `						"5" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `					logging_drop = {` + "\n"
+	config += `						"1000;5" = {` + "\n"
+	config += `						}` + "\n"
+	config += `					}` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	qos_mode = true` + "\n"
 	config += `	qos_statistics = "disabled"` + "\n"
 	config += `	console_exec_timeout = 30` + "\n"
@@ -1141,7 +1212,7 @@ func testAccSystemResourceConfig_all(includeWriteOnly bool) string {
 	config += `	l2rib_duplicate_mac_recovery_retry_count = 5` + "\n"
 	config += `	l2rib_duplicate_mac_recovery_timeout = 60` + "\n"
 	config += `	ngoam_install_acl = true` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, nxos_dme.PreReq13, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, nxos_dme.PreReq13, nxos_dme.PreReq14, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

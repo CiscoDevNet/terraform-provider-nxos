@@ -2580,6 +2580,296 @@ child_classes:
         max_int: 10000
         example: 100
         exclude_test: true
+  - class_name: platformRateLimiterMod
+    doc_path: System/platform%3ARateLimiterMod/
+    rn: ratelimitermod-%v
+    type: list
+    tf_name: hardware_rate_limiters
+    no_delete: true
+    description: 'List of hardware rate-limiter configurations. Module `0` configures the global rate-limiters.'
+    attributes:
+      - nxos_name: module
+        tf_name: module
+        type: Int64
+        id: true
+        description: 'module number for which rate is being configured.'
+        min_int: 0
+        max_int: 4294967295
+        example: 0
+      - nxos_name: rate
+        tf_name: span_egress
+        type: Int64
+        description: 'rate value in kbit per sec.'
+        min_int: 0
+        max_int: 100000000
+        example: 1000
+      - nxos_name: rateacllog
+        tf_name: access_list_log
+        type: Int64
+        description: 'Packets copied to supervisor for access-list logging.'
+        min_int: 0
+        max_int: 40000
+        example: 200
+      - nxos_name: ratebfd
+        tf_name: bfd
+        type: Int64
+        description: 'BFD protocol traffic.'
+        min_int: 0
+        max_int: 8000000
+        example: 9000
+      - nxos_name: ratel3glean
+        tf_name: layer_3_glean
+        type: Int64
+        description: 'Glean traffic.'
+        min_int: 0
+        max_int: 8000000
+        example: 150
+      - nxos_name: ratel3mcastlgrp
+        tf_name: layer_3_multicast_local_groups
+        type: Int64
+        description: 'Multicast data packets punted for initiating SPT join.'
+        min_int: 0
+        max_int: 8000000
+        example: 2000
+      - nxos_name: ratesflow
+        tf_name: sflow
+        type: Int64
+        description: 'Inband SSX traffic.'
+        min_int: 0
+        max_int: 8000000
+        example: 30000
+      - nxos_name: ratespan
+        tf_name: span
+        type: Int64
+        description: 'SPAN traffic.'
+        min_int: 0
+        max_int: 8000000
+        example: 100
+      - nxos_name: ratefex
+        tf_name: fex
+        type: Int64
+        description: 'FEX traffic.'
+        min_int: 0
+        max_int: 8000000
+        example: 4000
+        exclude_test: true
+      - nxos_name: ratedot1x
+        tf_name: dot1x
+        type: Int64
+        description: 'DOT1X control traffic.'
+        min_int: 0
+        max_int: 8000000
+        example: 2000
+        exclude_test: true
+      - nxos_name: ratemdns
+        tf_name: mdns
+        type: Int64
+        description: 'MDNS traffic.'
+        min_int: 0
+        max_int: 8000000
+        example: 1000
+        exclude_test: true
+      - nxos_name: ratemplsoam
+        tf_name: mpls_oam
+        type: Int64
+        description: 'MPLS-OAM traffic.'
+        min_int: 0
+        max_int: 8000000
+        example: 200
+        exclude_test: true
+      - nxos_name: ratenetflow
+        tf_name: netflow
+        type: Int64
+        description: 'Inband Netflow traffic.'
+        min_int: 0
+        max_int: 8000000
+        example: 100000
+        exclude_test: true
+      - nxos_name: ratengoamsld
+        tf_name: ngoam_sld
+        type: Int64
+        description: 'NGOAM SLD traffic.'
+        min_int: 0
+        max_int: 8000000
+        example: 500
+        exclude_test: true
+      - nxos_name: ratessx
+        tf_name: ssx
+        type: Int64
+        description: 'Inband SSX traffic.'
+        min_int: 0
+        max_int: 8000000
+        example: 100000
+        exclude_test: true
+      - nxos_name: rateucsmgmt
+        tf_name: ucs_mgmt
+        type: Int64
+        description: 'Ucs Mgmt traffic.'
+        min_int: 0
+        max_int: 8000000
+        example: 11000
+        exclude_test: true
+      - nxos_name: ratevxlanoam
+        tf_name: vxlan_oam
+        type: Int64
+        description: 'VxLAN-OAM traffic.'
+        min_int: 0
+        max_int: 8000000
+        example: 900
+        exclude_test: true
+      - nxos_name: rate100methports
+        tf_name: ethports_100m
+        type: Int64
+        description: '100M-Ethports.'
+        min_int: 0
+        max_int: 8000000
+        example: 9000
+        exclude_test: true
+      - nxos_name: rateburst
+        tf_name: burst
+        type: Int64
+        description: 'value of burst size.'
+        min_int: 0
+        max_int: 10000
+        example: 10
+        exclude_test: true
+      - nxos_name: rateportstart
+        tf_name: port_start
+        type: Int64
+        description: 'Port start index.'
+        min_int: 1
+        max_int: 48
+        example: 1
+        exclude_test: true
+      - nxos_name: rateportend
+        tf_name: port_end
+        type: Int64
+        description: 'Port end index.'
+        min_int: 1
+        max_int: 48
+        example: 4
+        exclude_test: true
+  - class_name: platformHwRateLimiter
+    doc_path: System/platform%3AHwRateLimiter/
+    rn: hwratelimiter
+    type: single
+    tf_name: hardware_rate_limiter
+    no_delete: true
+    exclude_test: true
+    description: 'Hardware rate-limiter configuration for packets sent to the CPU.'
+    attributes:
+      - nxos_name: arpBurst
+        tf_name: hardware_rate_limiter_arp_burst
+        type: Int64
+        description: 'burst value in packets per sec.'
+        min_int: -1
+        max_int: 1023
+        example: 100
+      - nxos_name: arpRate
+        tf_name: hardware_rate_limiter_arp_rate
+        type: Int64
+        description: 'rate value in packets per sec.'
+        min_int: -1
+        max_int: 40000
+        example: 1000
+      - nxos_name: bpduBurst
+        tf_name: hardware_rate_limiter_bpdu_burst
+        type: Int64
+        description: 'burst value in packets per sec.'
+        min_int: -1
+        max_int: 1023
+        example: 200
+      - nxos_name: bpduRate
+        tf_name: hardware_rate_limiter_bpdu_rate
+        type: Int64
+        description: 'rate value in packets per sec.'
+        min_int: -1
+        max_int: 40000
+        example: 2000
+      - nxos_name: errorsBurst
+        tf_name: hardware_rate_limiter_errors_burst
+        type: Int64
+        description: 'burst value in packets per sec.'
+        min_int: -1
+        max_int: 1023
+        example: 30
+      - nxos_name: errorsRate
+        tf_name: hardware_rate_limiter_errors_rate
+        type: Int64
+        description: 'rate value in packets per sec.'
+        min_int: -1
+        max_int: 40000
+        example: 300
+      - nxos_name: fwdMissBurst
+        tf_name: hardware_rate_limiter_forward_miss_burst
+        type: Int64
+        description: 'burst value in packets per sec.'
+        min_int: -1
+        max_int: 1023
+        example: 40
+      - nxos_name: fwdMissRate
+        tf_name: hardware_rate_limiter_forward_miss_rate
+        type: Int64
+        description: 'rate value in packets per sec.'
+        min_int: -1
+        max_int: 40000
+        example: 400
+      - nxos_name: ipLocalBurst
+        tf_name: hardware_rate_limiter_ip_local_burst
+        type: Int64
+        description: 'burst value in packets per sec.'
+        min_int: -1
+        max_int: 1023
+        example: 500
+      - nxos_name: ipLocalRate
+        tf_name: hardware_rate_limiter_ip_local_rate
+        type: Int64
+        description: 'rate value in packets per sec.'
+        min_int: -1
+        max_int: 40000
+        example: 5000
+      - nxos_name: macLearnBurst
+        tf_name: hardware_rate_limiter_mac_learn_burst
+        type: Int64
+        description: 'burst value in packets per sec.'
+        min_int: -1
+        max_int: 1023
+        example: 60
+      - nxos_name: macLearnRate
+        tf_name: hardware_rate_limiter_mac_learn_rate
+        type: Int64
+        description: 'rate value in packets per sec.'
+        min_int: -1
+        max_int: 40000
+        example: 600
+      - nxos_name: macLocalBurst
+        tf_name: hardware_rate_limiter_mac_local_burst
+        type: Int64
+        description: 'burst value in packets per sec.'
+        min_int: -1
+        max_int: 1023
+        example: 70
+      - nxos_name: macLocalRate
+        tf_name: hardware_rate_limiter_mac_local_rate
+        type: Int64
+        description: 'rate value in packets per sec.'
+        min_int: -1
+        max_int: 40000
+        example: 700
+      - nxos_name: swfwdBurst
+        tf_name: hardware_rate_limiter_software_forward_burst
+        type: Int64
+        description: 'burst value in packets per sec.'
+        min_int: -1
+        max_int: 1023
+        example: 80
+      - nxos_name: swfwdRate
+        tf_name: hardware_rate_limiter_software_forward_rate
+        type: Int64
+        description: 'rate value in packets per sec.'
+        min_int: -1
+        max_int: 40000
+        example: 800
   - class_name: platformTcamTemplate
     doc_path: System/platform%3ATcamTemplate/
     rn: template-[%s]

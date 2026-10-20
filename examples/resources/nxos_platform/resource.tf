@@ -59,6 +59,17 @@ resource "nxos_platform" "example" {
   qos_pg_min_value                      = 5
   qos_pg_no_min                         = false
   qos_pg_share                          = "Disabled"
+  hardware_rate_limiters = {
+    "0" = {
+      span_egress                    = 1000
+      access_list_log                = 200
+      bfd                            = 9000
+      layer_3_glean                  = 150
+      layer_3_multicast_local_groups = 2000
+      sflow                          = 30000
+      span                           = 100
+    }
+  }
   tcam_templates = {
     "TPL1" = {
       reference_template = "l3"

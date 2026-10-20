@@ -56,7 +56,7 @@ func (d *SystemDataSource) Metadata(_ context.Context, req datasource.MetadataRe
 func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, gRPC agent and gNMI settings, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, L2RIB duplicate MAC detection settings, and NGOAM (VXLAN OAM) install ACL and loop detection settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "ethpmErrDisRecover", "ethpmEvent", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "dnsProvider", "dnsDomExt", "dnsHost", "dnsIpv4Host", "dnsIpv6Host", "dnsVrf", "dnsDom", "dnsProvider", "dnsDomExt", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "lacpEntity", "lacpInst", "lacpIf", "l2Macs", "l2Static", "l2StaticEntry", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "ipqosEntity", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "grpcInst", "grpcGnmi", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi", "ngmvpnEntity", "ngmvpnInst", "ngmvpnDom", "l2ribEntity", "l2ribInst", "l2ribEvpnMACmob", "ngoamEntity", "ngoamInstallAcl", "ngoamLoopDetection"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Interfaces/ethpm:ErrDisRecover/", "Interfaces/ethpm:Event/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "Discovery%20Protocols/nd%3AVpc/", "Discovery%20Protocols/nd%3AVpcDom/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "DNS/dns:Provider/", "DNS/dns:DomExt/", "DNS/dns:Host/", "DNS/dns:Ipv4Host/", "DNS/dns:Ipv6Host/", "DNS/dns:Vrf/", "DNS/dns:Dom/", "DNS/dns:Provider/", "DNS/dns:DomExt/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Fabric/cfs:Entity/", "Fabric/cfs:Inst/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "Link%20Aggregation/lacp:Entity/", "Link%20Aggregation/lacp:Inst/", "Link%20Aggregation/lacp:If/", "Layer%202/l2:Macs/", "Layer%202/l2:Static/", "Layer%202/l2:StaticEntry/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Discovery%20Protocols/cdp%3AEntity/", "Discovery%20Protocols/cdp%3AInst/", "Discovery%20Protocols/cdp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "Qos/ipqos%3AEntity/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/", "System/icam:Entity/", "System/icam:Inst/", "System/icam:Scale/", "System/nxapi:Inst/", "Network%20Management/grpc:Inst/", "Network%20Management/grpc:Gnmi/", "Interfaces/im:Breakout/", "Interfaces/im:Mod/", "Interfaces/im:FpP/", "Service%20Accelerated%20Switch/sas:Sas/", "Service%20Accelerated%20Switch/sas:Svc/", "Service%20Accelerated%20Switch/sas:SvcInstance/", "Service%20Accelerated%20Switch/sas:SController/", "Service%20Accelerated%20Switch/sas:FwSvcPolicy/", "Service%20Accelerated%20Switch/sas:IpVrf/", "Service%20Accelerated%20Switch/sas:Dom/", "Communication/comm:Entity/", "Communication/comm:Ssh/", "Communication/comm:SshKey/", "System/srcintf:Entity/", "System/srcintf:Ssh/", "System/srcintf:Ftp/", "Security%20and%20Policing/smartcard:PasswdEncrypt/", "Security%20and%20Policing/acllog:Entity/", "Security%20and%20Policing/acllog:Inst/", "Security%20and%20Policing/acllog:LogCache/", "Flow/span:ErspanOriginIp/", "Interfaces/ttag:TtagEntity/", "Interfaces/ttag:TtagIf/", "Layer%202/pvlan:PrivateVlan/", "Layer%202/pvlan:Vlan/", "Layer%202/pvlan:If/", "Layer%202/pvlan:Access/", "Layer%202/pvlan:AccessPromiscuous/", "Layer%202/pvlan:AccessSecondary/", "Layer%202/pvlan:Trunk/", "Layer%202/pvlan:TrunkPromiscuousTable/", "Layer%202/pvlan:TrunkPromiscuousEntry/", "Layer%202/pvlan:TrunkSecondaryTable/", "Layer%202/pvlan:TrunkSecondaryEntry/", "Layer%202/pvlan:Svi/", "Routing%20and%20Forwarding/ngmvpn:Entity/", "Routing%20and%20Forwarding/ngmvpn:Inst/", "Routing%20and%20Forwarding/ngmvpn:Dom/", "Routing%20and%20Forwarding/l2rib:Entity/", "Routing%20and%20Forwarding/l2rib:Inst/", "Routing%20and%20Forwarding/l2rib:EvpnMACmob/", "Network%20Virtualization/ngoam:Entity/", "Network%20Virtualization/ngoam:InstallAcl/", "Network%20Virtualization/ngoam:LoopDetection/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, gRPC agent and gNMI settings, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, L2RIB duplicate MAC detection settings, and NGOAM (VXLAN OAM) install ACL and loop detection settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "ethpmErrDisRecover", "ethpmEvent", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "dnsProvider", "dnsDomExt", "dnsHost", "dnsIpv4Host", "dnsIpv6Host", "dnsVrf", "dnsDom", "dnsProvider", "dnsDomExt", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "lacpEntity", "lacpInst", "lacpIf", "l2Macs", "l2Static", "l2StaticEntry", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "coppClass", "coppAcl", "coppExeOptions", "coppIp", "coppIpv6", "coppRdirect", "coppFcoe", "coppIpIcmp", "coppIpv6Icmp", "coppMulticast", "coppProtocol", "coppMPLSoption", "coppPolicy", "coppClassp", "coppPolicerAction", "coppSetCos", "coppSetDscp", "coppPolicerActionExc", "coppLogging", "coppService", "ipqosEntity", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "grpcInst", "grpcGnmi", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi", "ngmvpnEntity", "ngmvpnInst", "ngmvpnDom", "l2ribEntity", "l2ribInst", "l2ribEvpnMACmob", "ngoamEntity", "ngoamInstallAcl", "ngoamLoopDetection"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Interfaces/ethpm:ErrDisRecover/", "Interfaces/ethpm:Event/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "Discovery%20Protocols/nd%3AVpc/", "Discovery%20Protocols/nd%3AVpcDom/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "DNS/dns:Provider/", "DNS/dns:DomExt/", "DNS/dns:Host/", "DNS/dns:Ipv4Host/", "DNS/dns:Ipv6Host/", "DNS/dns:Vrf/", "DNS/dns:Dom/", "DNS/dns:Provider/", "DNS/dns:DomExt/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Fabric/cfs:Entity/", "Fabric/cfs:Inst/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "Link%20Aggregation/lacp:Entity/", "Link%20Aggregation/lacp:Inst/", "Link%20Aggregation/lacp:If/", "Layer%202/l2:Macs/", "Layer%202/l2:Static/", "Layer%202/l2:StaticEntry/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Discovery%20Protocols/cdp%3AEntity/", "Discovery%20Protocols/cdp%3AInst/", "Discovery%20Protocols/cdp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "Security%20and%20Policing/copp:Class/", "Security%20and%20Policing/copp:Acl/", "Security%20and%20Policing/copp:ExeOptions/", "Security%20and%20Policing/copp:Ip/", "Security%20and%20Policing/copp:Ipv6/", "Security%20and%20Policing/copp:Rdirect/", "Security%20and%20Policing/copp:Fcoe/", "Security%20and%20Policing/copp:IpIcmp/", "Security%20and%20Policing/copp:Ipv6Icmp/", "Security%20and%20Policing/copp:Multicast/", "Security%20and%20Policing/copp:Protocol/", "Security%20and%20Policing/copp:MPLSoption/", "Security%20and%20Policing/copp:Policy/", "Security%20and%20Policing/copp:Classp/", "Security%20and%20Policing/copp:PolicerAction/", "Security%20and%20Policing/copp:SetCos/", "Security%20and%20Policing/copp:SetDscp/", "Security%20and%20Policing/copp:PolicerActionExc/", "Security%20and%20Policing/copp:Logging/", "Security%20and%20Policing/copp:Service/", "Qos/ipqos%3AEntity/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/", "System/icam:Entity/", "System/icam:Inst/", "System/icam:Scale/", "System/nxapi:Inst/", "Network%20Management/grpc:Inst/", "Network%20Management/grpc:Gnmi/", "Interfaces/im:Breakout/", "Interfaces/im:Mod/", "Interfaces/im:FpP/", "Service%20Accelerated%20Switch/sas:Sas/", "Service%20Accelerated%20Switch/sas:Svc/", "Service%20Accelerated%20Switch/sas:SvcInstance/", "Service%20Accelerated%20Switch/sas:SController/", "Service%20Accelerated%20Switch/sas:FwSvcPolicy/", "Service%20Accelerated%20Switch/sas:IpVrf/", "Service%20Accelerated%20Switch/sas:Dom/", "Communication/comm:Entity/", "Communication/comm:Ssh/", "Communication/comm:SshKey/", "System/srcintf:Entity/", "System/srcintf:Ssh/", "System/srcintf:Ftp/", "Security%20and%20Policing/smartcard:PasswdEncrypt/", "Security%20and%20Policing/acllog:Entity/", "Security%20and%20Policing/acllog:Inst/", "Security%20and%20Policing/acllog:LogCache/", "Flow/span:ErspanOriginIp/", "Interfaces/ttag:TtagEntity/", "Interfaces/ttag:TtagIf/", "Layer%202/pvlan:PrivateVlan/", "Layer%202/pvlan:Vlan/", "Layer%202/pvlan:If/", "Layer%202/pvlan:Access/", "Layer%202/pvlan:AccessPromiscuous/", "Layer%202/pvlan:AccessSecondary/", "Layer%202/pvlan:Trunk/", "Layer%202/pvlan:TrunkPromiscuousTable/", "Layer%202/pvlan:TrunkPromiscuousEntry/", "Layer%202/pvlan:TrunkSecondaryTable/", "Layer%202/pvlan:TrunkSecondaryEntry/", "Layer%202/pvlan:Svi/", "Routing%20and%20Forwarding/ngmvpn:Entity/", "Routing%20and%20Forwarding/ngmvpn:Inst/", "Routing%20and%20Forwarding/ngmvpn:Dom/", "Routing%20and%20Forwarding/l2rib:Entity/", "Routing%20and%20Forwarding/l2rib:Inst/", "Routing%20and%20Forwarding/l2rib:EvpnMACmob/", "Network%20Virtualization/ngoam:Entity/", "Network%20Virtualization/ngoam:InstallAcl/", "Network%20Virtualization/ngoam:LoopDetection/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -1046,6 +1046,195 @@ func (d *SystemDataSource) Schema(ctx context.Context, req datasource.SchemaRequ
 			"copp_profile_type": schema.StringAttribute{
 				MarkdownDescription: "Profile type.",
 				Computed:            true,
+			},
+			"copp_class_maps": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of control plane class maps.\n  - Map key: `name` - Class-map name.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"match_type": schema.StringAttribute{
+							MarkdownDescription: "Match Option.",
+							Computed:            true,
+						},
+						"description": schema.StringAttribute{
+							MarkdownDescription: "Description of the specified attribute.",
+							Computed:            true,
+						},
+						"access_groups": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of ACLs to match.\n  - Map key: `name` - Acl name.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"exceptions": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of exceptions to match.\n  - Map key: `option` - Match options.\n  - Key choices: `Undefined`, `glean`, `mtu-failure`, `ttl-failure`, `nat-flow`, `sflow`, `mvpn`, `span`, `vxlan-stp`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"exception_ip_option": schema.BoolAttribute{
+							MarkdownDescription: "Ip Option.",
+							Computed:            true,
+						},
+						"exception_ipv6_option": schema.BoolAttribute{
+							MarkdownDescription: "Ip Option.",
+							Computed:            true,
+						},
+						"redirect": schema.StringAttribute{
+							MarkdownDescription: "Match redirect options.",
+							Computed:            true,
+						},
+						"exception_fcoe_fib_miss": schema.BoolAttribute{
+							MarkdownDescription: "fcoe-fib-miss.",
+							Computed:            true,
+						},
+						"exception_ip_icmp": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of IPv4 ICMP exceptions to match.\n  - Map key: `option` - icmp options.\n  - Key choices: `Undefined`, `redirect`, `unreachable`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"exception_ipv6_icmp": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of IPv6 ICMP exceptions to match.\n  - Map key: `option` - icmp options.\n  - Key choices: `Undefined`, `redirect`, `unreachable`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"exception_multicast": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of multicast exceptions to match.\n  - Map key: `option` - Multicast options.\n  - Key choices: `Undefined`, `dest-miss`, `rpf-failure`, `sg-rpf-failure`, `ipv6-dest-miss`, `ipv6-rpf-failure`, `ipv6-sg-rpf-failure`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{},
+							},
+						},
+						"protocols": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of protocols to match.\n  - Map key: `protocol` - Protocol List.\n  - Key choices: `bgp`, `ospf`, `cdp`, `traceroute`, `lldp`, `lacp`, `isis`, `arp`, `dhcp`, `igmp`, `icmp`, `zmq`, `mgmt`, `snmp`, `stp`, `bfd`, `pim`, `static`, `ifc`, `mpls`, `mplsexp6`, `mplsralert`").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"mpls_exp": schema.Int64Attribute{
+										MarkdownDescription: "Experimental value.",
+										Computed:            true,
+									},
+									"mpls_router_alert": schema.BoolAttribute{
+										MarkdownDescription: "router-alert.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"copp_policy_maps": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of control plane policy maps.\n  - Map key: `name` - Policy-map name.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"classes": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("List of policy map classes.\n  - Map key: `name` - Class name.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"insert_before": schema.StringAttribute{
+										MarkdownDescription: "Insert before Class name.",
+										Computed:            true,
+									},
+									"police": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of policers. Only a single policer can be configured per class.\n  - Map key format: `<cir_rate>;<cir_unit>;<bc_rate>;<bc_unit>`\n  - Key component `cir_rate`: Cir value. Range: `0`-`9223372036854775807`.\n  - Key component `cir_unit`: Cir rate. Choices: `Unknown`, `bps`, `pps`, `kbps`, `mbps`, `gbps`.\n  - Key component `bc_rate`: Burst count. Range: `0`-`4294967295`.\n  - Key component `bc_unit`: BC unit. Choices: `Unknown`, `bytes`, `kbytes`, `mbytes`, `packets`, `us`, `ms`.").String,
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"conform_action": schema.StringAttribute{
+													MarkdownDescription: "Conform Action.",
+													Computed:            true,
+												},
+												"violate_action": schema.StringAttribute{
+													MarkdownDescription: "Violate action.",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"set_cos": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of CoS values to set. Only a single CoS value can be configured per class.\n  - Map key: `cos` - Cos Value.\n  - Key range: `0`-`7`").String,
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{
+												"inner": schema.BoolAttribute{
+													MarkdownDescription: "Set cos inner.",
+													Computed:            true,
+												},
+											},
+										},
+									},
+									"set_dscp": schema.Int64Attribute{
+										MarkdownDescription: "Dscp Value.",
+										Computed:            true,
+									},
+									"set_dscp_tunnel": schema.BoolAttribute{
+										MarkdownDescription: "set dscp tunnel.",
+										Computed:            true,
+									},
+									"two_rate_police_cir_rate": schema.Int64Attribute{
+										MarkdownDescription: "Cir value.",
+										Computed:            true,
+									},
+									"two_rate_police_bc_rate": schema.Int64Attribute{
+										MarkdownDescription: "Burst count.",
+										Computed:            true,
+									},
+									"two_rate_police_bc_unit": schema.StringAttribute{
+										MarkdownDescription: "BC unit.",
+										Computed:            true,
+									},
+									"two_rate_police_pir_rate": schema.Int64Attribute{
+										MarkdownDescription: "Pir value.",
+										Computed:            true,
+									},
+									"two_rate_police_be_rate": schema.Int64Attribute{
+										MarkdownDescription: "Burst exceed.",
+										Computed:            true,
+									},
+									"two_rate_police_be_unit": schema.StringAttribute{
+										MarkdownDescription: "BE unit.",
+										Computed:            true,
+									},
+									"two_rate_police_conform_action": schema.StringAttribute{
+										MarkdownDescription: "Conform Action.",
+										Computed:            true,
+									},
+									"two_rate_police_exceed_action": schema.StringAttribute{
+										MarkdownDescription: "Exceed Action.",
+										Computed:            true,
+									},
+									"two_rate_police_violate_action": schema.StringAttribute{
+										MarkdownDescription: "Violate action.",
+										Computed:            true,
+									},
+									"logging_drop": schema.MapNestedAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("List of drop logging thresholds. Only a single threshold can be configured per class.\n  - Map key format: `<threshold>;<level>`\n  - Key component `threshold`: Logging Threshold. Range: `0`-`9223372036854775807`.\n  - Key component `level`: logging range. Range: `1`-`7`.").String,
+										Computed:            true,
+										NestedObject: schema.NestedAttributeObject{
+											Attributes: map[string]schema.Attribute{},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+			"copp_service_policies": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("Control plane input service policy. Only a single service policy can be configured, which replaces the CoPP profile. The service policy cannot be removed, configure `copp_profile_type` instead to revert to a predefined profile.\n  - Map key: `name` - Policy-map name.").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{},
+				},
 			},
 			"qos_dynamic_buffer_sharing": schema.BoolAttribute{
 				MarkdownDescription: "Globally enable/disable dynamic-buffer-sharing.",

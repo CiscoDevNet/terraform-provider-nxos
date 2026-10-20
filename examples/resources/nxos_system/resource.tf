@@ -235,8 +235,55 @@ resource "nxos_system" "example" {
       port_description = "My Port"
     }
   }
-  copp_admin_state                       = "enabled"
-  copp_rate_limiter                      = true
+  copp_admin_state  = "enabled"
+  copp_rate_limiter = true
+  copp_class_maps = {
+    "CP-CLASS1" = {
+      match_type = "MatchAll"
+      access_groups = {
+        "CP-ACL1" = {}
+      }
+      exceptions = {
+        "glean" = {}
+      }
+      exception_ip_option   = true
+      exception_ipv6_option = true
+      exception_ip_icmp = {
+        "redirect" = {}
+      }
+      exception_ipv6_icmp = {
+        "unreachable" = {}
+      }
+      exception_multicast = {
+        "dest-miss" = {}
+      }
+      protocols = {
+        "arp" = {
+        }
+      }
+    }
+  }
+  copp_policy_maps = {
+    "CP-POLICY1" = {
+      classes = {
+        "CP-CLASS1" = {
+          police = {
+            "1000;pps;64;packets" = {
+              conform_action = "transmit"
+              violate_action = "drop"
+            }
+          }
+          set_cos = {
+            "5" = {
+            }
+          }
+          logging_drop = {
+            "1000;5" = {}
+          }
+        }
+      }
+    }
+  }
   qos_mode                               = true
   qos_statistics                         = "disabled"
   console_exec_timeout                   = 30

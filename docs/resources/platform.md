@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.
   API Documentation
-  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/platformLoadBalance https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/platformDlbEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:DlbEntity/platformDlbStaticPinning https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:DlbStaticPinning/platformPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3APriorFlowCtrlWd/platformQos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AQos/platformTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamTemplate/platformUdfTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfTcamTemplate/platformUdfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfEntity/platformUdf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdf/
+  platformEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntity/platformTcamRegion https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegion/platformTcamRegionExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamRegionExtended/platformNVE https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ANVE/platformInfraVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AInfraVlan/platformEntityExtended https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AEntityExtended/platformLoadBalance https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:LoadBalance/platformDlbEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:DlbEntity/platformDlbStaticPinning https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:DlbStaticPinning/platformPriorFlowCtrlWd https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3APriorFlowCtrlWd/platformQos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AQos/platformRateLimiterMod https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ARateLimiterMod/platformHwRateLimiter https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AHwRateLimiter/platformTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamTemplate/platformUdfTcamTemplate https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfTcamTemplate/platformUdfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfEntity/platformUdf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdf/
 ---
 
 # nxos_platform (Resource)
@@ -25,6 +25,8 @@ This resource can manage the platform configuration on NX-OS devices, including 
 - [platformDlbStaticPinning](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform:DlbStaticPinning/)
 - [platformPriorFlowCtrlWd](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3APriorFlowCtrlWd/)
 - [platformQos](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AQos/)
+- [platformRateLimiterMod](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ARateLimiterMod/)
+- [platformHwRateLimiter](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AHwRateLimiter/)
 - [platformTcamTemplate](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3ATcamTemplate/)
 - [platformUdfTcamTemplate](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfTcamTemplate/)
 - [platformUdfEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/platform%3AUdfEntity/)
@@ -94,6 +96,17 @@ resource "nxos_platform" "example" {
   qos_pg_min_value                      = 5
   qos_pg_no_min                         = false
   qos_pg_share                          = "Disabled"
+  hardware_rate_limiters = {
+    "0" = {
+      span_egress                    = 1000
+      access_list_log                = 200
+      bfd                            = 9000
+      layer_3_glean                  = 150
+      layer_3_multicast_local_groups = 2000
+      sflow                          = 30000
+      span                           = 100
+    }
+  }
   tcam_templates = {
     "TPL1" = {
       reference_template = "l3"
@@ -254,6 +267,41 @@ resource "nxos_platform" "example" {
   - Choices: `disable`, `enable`
 - `hardware_lou_resource_threshold` (Number) Hardware Lou Resource Threshold value.
   - Range: `1`-`50`
+- `hardware_rate_limiter_arp_burst` (Number) burst value in packets per sec.
+  - Range: `-1`-`1023`
+- `hardware_rate_limiter_arp_rate` (Number) rate value in packets per sec.
+  - Range: `-1`-`40000`
+- `hardware_rate_limiter_bpdu_burst` (Number) burst value in packets per sec.
+  - Range: `-1`-`1023`
+- `hardware_rate_limiter_bpdu_rate` (Number) rate value in packets per sec.
+  - Range: `-1`-`40000`
+- `hardware_rate_limiter_errors_burst` (Number) burst value in packets per sec.
+  - Range: `-1`-`1023`
+- `hardware_rate_limiter_errors_rate` (Number) rate value in packets per sec.
+  - Range: `-1`-`40000`
+- `hardware_rate_limiter_forward_miss_burst` (Number) burst value in packets per sec.
+  - Range: `-1`-`1023`
+- `hardware_rate_limiter_forward_miss_rate` (Number) rate value in packets per sec.
+  - Range: `-1`-`40000`
+- `hardware_rate_limiter_ip_local_burst` (Number) burst value in packets per sec.
+  - Range: `-1`-`1023`
+- `hardware_rate_limiter_ip_local_rate` (Number) rate value in packets per sec.
+  - Range: `-1`-`40000`
+- `hardware_rate_limiter_mac_learn_burst` (Number) burst value in packets per sec.
+  - Range: `-1`-`1023`
+- `hardware_rate_limiter_mac_learn_rate` (Number) rate value in packets per sec.
+  - Range: `-1`-`40000`
+- `hardware_rate_limiter_mac_local_burst` (Number) burst value in packets per sec.
+  - Range: `-1`-`1023`
+- `hardware_rate_limiter_mac_local_rate` (Number) rate value in packets per sec.
+  - Range: `-1`-`40000`
+- `hardware_rate_limiter_software_forward_burst` (Number) burst value in packets per sec.
+  - Range: `-1`-`1023`
+- `hardware_rate_limiter_software_forward_rate` (Number) rate value in packets per sec.
+  - Range: `-1`-`40000`
+- `hardware_rate_limiters` (Attributes Map) List of hardware rate-limiter configurations. Module `0` configures the global rate-limiters.
+  - Map key: `module` - module number for which rate is being configured.
+  - Key range: `0`-`4294967295` (see [below for nested schema](#nestedatt--hardware_rate_limiters))
 - `high_multicast_priority` (String) high mcast priority.
   - Choices: `enabled`, `disabled`
 - `ingress_bd_ifacl_label_optimization` (String) To optimize the ingress QOS Ingress BD IFACL label size.
@@ -701,6 +749,53 @@ resource "nxos_platform" "example" {
 Optional:
 
 - `destination_interface` (String) Destination interface to Pair.
+
+
+<a id="nestedatt--hardware_rate_limiters"></a>
+### Nested Schema for `hardware_rate_limiters`
+
+Optional:
+
+- `access_list_log` (Number) Packets copied to supervisor for access-list logging.
+  - Range: `0`-`40000`
+- `bfd` (Number) BFD protocol traffic.
+  - Range: `0`-`8000000`
+- `burst` (Number) value of burst size.
+  - Range: `0`-`10000`
+- `dot1x` (Number) DOT1X control traffic.
+  - Range: `0`-`8000000`
+- `ethports_100m` (Number) 100M-Ethports.
+  - Range: `0`-`8000000`
+- `fex` (Number) FEX traffic.
+  - Range: `0`-`8000000`
+- `layer_3_glean` (Number) Glean traffic.
+  - Range: `0`-`8000000`
+- `layer_3_multicast_local_groups` (Number) Multicast data packets punted for initiating SPT join.
+  - Range: `0`-`8000000`
+- `mdns` (Number) MDNS traffic.
+  - Range: `0`-`8000000`
+- `mpls_oam` (Number) MPLS-OAM traffic.
+  - Range: `0`-`8000000`
+- `netflow` (Number) Inband Netflow traffic.
+  - Range: `0`-`8000000`
+- `ngoam_sld` (Number) NGOAM SLD traffic.
+  - Range: `0`-`8000000`
+- `port_end` (Number) Port end index.
+  - Range: `1`-`48`
+- `port_start` (Number) Port start index.
+  - Range: `1`-`48`
+- `sflow` (Number) Inband SSX traffic.
+  - Range: `0`-`8000000`
+- `span` (Number) SPAN traffic.
+  - Range: `0`-`8000000`
+- `span_egress` (Number) rate value in kbit per sec.
+  - Range: `0`-`100000000`
+- `ssx` (Number) Inband SSX traffic.
+  - Range: `0`-`8000000`
+- `ucs_mgmt` (Number) Ucs Mgmt traffic.
+  - Range: `0`-`8000000`
+- `vxlan_oam` (Number) VxLAN-OAM traffic.
+  - Range: `0`-`8000000`
 
 
 <a id="nestedatt--nve_interfaces"></a>

@@ -2093,6 +2093,493 @@ child_classes:
               - dense
             example: strict
             exclude_test: true
+      - class_name: coppClass
+        doc_path: Security%20and%20Policing/copp:Class/
+        rn: classp-%s
+        type: list
+        tf_name: copp_class_maps
+        description: 'List of control plane class maps.'
+        attributes:
+          - nxos_name: cName
+            tf_name: name
+            type: String
+            id: true
+            description: 'Class-map name.'
+            example: CP-CLASS1
+          - nxos_name: matchOption
+            tf_name: match_type
+            type: String
+            description: 'Match Option.'
+            enum_values:
+              - Unknown
+              - MatchAny
+              - MatchAll
+            example: MatchAll
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description of the specified attribute.'
+            example: My class map
+            exclude_test: true
+        child_classes:
+          - class_name: coppAcl
+            doc_path: Security%20and%20Policing/copp:Acl/
+            rn: acl-%s
+            type: list
+            tf_name: access_groups
+            description: 'List of ACLs to match.'
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'Acl name.'
+                example: CP-ACL1
+          - class_name: coppExeOptions
+            doc_path: Security%20and%20Policing/copp:ExeOptions/
+            rn: excep-%s
+            type: list
+            tf_name: exceptions
+            description: 'List of exceptions to match.'
+            attributes:
+              - nxos_name: option
+                tf_name: option
+                type: String
+                id: true
+                description: 'Match options.'
+                enum_values:
+                  - Undefined
+                  - glean
+                  - mtu-failure
+                  - ttl-failure
+                  - nat-flow
+                  - sflow
+                  - mvpn
+                  - span
+                  - vxlan-stp
+                example: glean
+          - class_name: coppIp
+            doc_path: Security%20and%20Policing/copp:Ip/
+            rn: ip
+            type: single
+            attributes:
+              - nxos_name: options
+                tf_name: exception_ip_option
+                type: Bool
+                description: 'Ip Option.'
+                example: "true"
+          - class_name: coppIpv6
+            doc_path: Security%20and%20Policing/copp:Ipv6/
+            rn: ipv6
+            type: single
+            attributes:
+              - nxos_name: options
+                tf_name: exception_ipv6_option
+                type: Bool
+                description: 'Ip Option.'
+                example: "true"
+          - class_name: coppRdirect
+            doc_path: Security%20and%20Policing/copp:Rdirect/
+            rn: rdirect
+            type: single
+            exclude_test: true
+            attributes:
+              - nxos_name: rdrct
+                tf_name: redirect
+                type: String
+                description: 'Match redirect options.'
+                enum_values:
+                  - Undefined
+                  - arp-inspect
+                  - dhcp-snoop
+                example: arp-inspect
+          - class_name: coppFcoe
+            doc_path: Security%20and%20Policing/copp:Fcoe/
+            rn: fcoe
+            type: single
+            exclude_test: true
+            attributes:
+              - nxos_name: option
+                tf_name: exception_fcoe_fib_miss
+                type: Bool
+                description: 'fcoe-fib-miss.'
+                example: "true"
+          - class_name: coppIpIcmp
+            doc_path: Security%20and%20Policing/copp:IpIcmp/
+            rn: icmp-%s
+            type: list
+            tf_name: exception_ip_icmp
+            description: 'List of IPv4 ICMP exceptions to match.'
+            attributes:
+              - nxos_name: option
+                tf_name: option
+                type: String
+                id: true
+                description: 'icmp options.'
+                enum_values:
+                  - Undefined
+                  - redirect
+                  - unreachable
+                example: redirect
+          - class_name: coppIpv6Icmp
+            doc_path: Security%20and%20Policing/copp:Ipv6Icmp/
+            rn: icmpv6-%s
+            type: list
+            tf_name: exception_ipv6_icmp
+            description: 'List of IPv6 ICMP exceptions to match.'
+            attributes:
+              - nxos_name: option
+                tf_name: option
+                type: String
+                id: true
+                description: 'icmp options.'
+                enum_values:
+                  - Undefined
+                  - redirect
+                  - unreachable
+                example: unreachable
+          - class_name: coppMulticast
+            doc_path: Security%20and%20Policing/copp:Multicast/
+            rn: mcast-%s
+            type: list
+            tf_name: exception_multicast
+            description: 'List of multicast exceptions to match.'
+            attributes:
+              - nxos_name: mcastOption
+                tf_name: option
+                type: String
+                id: true
+                description: 'Multicast options.'
+                enum_values:
+                  - Undefined
+                  - dest-miss
+                  - rpf-failure
+                  - sg-rpf-failure
+                  - ipv6-dest-miss
+                  - ipv6-rpf-failure
+                  - ipv6-sg-rpf-failure
+                example: dest-miss
+          - class_name: coppProtocol
+            doc_path: Security%20and%20Policing/copp:Protocol/
+            rn: prot-%s
+            type: list
+            tf_name: protocols
+            description: 'List of protocols to match.'
+            attributes:
+              - nxos_name: type
+                tf_name: protocol
+                type: String
+                id: true
+                description: 'Protocol List.'
+                enum_values:
+                  - bgp
+                  - ospf
+                  - cdp
+                  - traceroute
+                  - lldp
+                  - lacp
+                  - isis
+                  - arp
+                  - dhcp
+                  - igmp
+                  - icmp
+                  - zmq
+                  - mgmt
+                  - snmp
+                  - stp
+                  - bfd
+                  - pim
+                  - static
+                  - ifc
+                  - mpls
+                  - mplsexp6
+                  - mplsralert
+                example: arp
+            child_classes:
+              - class_name: coppMPLSoption
+                doc_path: Security%20and%20Policing/copp:MPLSoption/
+                rn: mpls
+                type: single
+                exclude_test: true
+                attributes:
+                  - nxos_name: exp
+                    tf_name: mpls_exp
+                    type: Int64
+                    description: 'Experimental value.'
+                    min_int: 0
+                    max_int: 7
+                    example: 3
+                  - nxos_name: routerAlert
+                    tf_name: mpls_router_alert
+                    type: Bool
+                    description: 'router-alert.'
+                    example: "true"
+      - class_name: coppPolicy
+        doc_path: Security%20and%20Policing/copp:Policy/
+        rn: policy-%s
+        type: list
+        tf_name: copp_policy_maps
+        description: 'List of control plane policy maps.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Policy-map name.'
+            example: CP-POLICY1
+        child_classes:
+          - class_name: coppClassp
+            doc_path: Security%20and%20Policing/copp:Classp/
+            rn: classp-%s
+            type: list
+            tf_name: classes
+            description: 'List of policy map classes.'
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'Class name.'
+                example: CP-CLASS1
+              - nxos_name: insertBeforeName
+                tf_name: insert_before
+                type: String
+                description: 'Insert before Class name.'
+                example: CP-CLASS2
+                exclude_test: true
+            child_classes:
+              - class_name: coppPolicerAction
+                doc_path: Security%20and%20Policing/copp:PolicerAction/
+                rn: cir-%v-Unit-%s-burst-%v-bcUnit-%s
+                type: list
+                tf_name: police
+                description: 'List of policers. Only a single policer can be configured per class.'
+                attributes:
+                  - nxos_name: cirVal
+                    tf_name: cir_rate
+                    type: Int64
+                    id: true
+                    description: 'Cir value.'
+                    min_int: 0
+                    max_int: 9223372036854775807
+                    example: 1000
+                  - nxos_name: cirUnit
+                    tf_name: cir_unit
+                    type: String
+                    id: true
+                    description: 'Cir rate.'
+                    enum_values:
+                      - Unknown
+                      - bps
+                      - pps
+                      - kbps
+                      - mbps
+                      - gbps
+                    example: pps
+                  - nxos_name: burstC
+                    tf_name: bc_rate
+                    type: Int64
+                    id: true
+                    description: 'Burst count.'
+                    min_int: 0
+                    max_int: 4294967295
+                    example: 64
+                  - nxos_name: burstUnit
+                    tf_name: bc_unit
+                    type: String
+                    id: true
+                    description: 'BC unit.'
+                    enum_values:
+                      - Unknown
+                      - bytes
+                      - kbytes
+                      - mbytes
+                      - packets
+                      - us
+                      - ms
+                    example: packets
+                  - nxos_name: conformAction
+                    tf_name: conform_action
+                    type: String
+                    description: 'Conform Action.'
+                    enum_values:
+                      - Undefined
+                      - transmit
+                      - drop
+                    example: transmit
+                  - nxos_name: violateAction
+                    tf_name: violate_action
+                    type: String
+                    description: 'Violate action.'
+                    enum_values:
+                      - Undefined
+                      - transmit
+                      - drop
+                    example: drop
+              - class_name: coppSetCos
+                doc_path: Security%20and%20Policing/copp:SetCos/
+                rn: setCos-%v
+                type: list
+                tf_name: set_cos
+                description: 'List of CoS values to set. Only a single CoS value can be configured per class.'
+                attributes:
+                  - nxos_name: cosVal
+                    tf_name: cos
+                    type: Int64
+                    id: true
+                    description: 'Cos Value.'
+                    min_int: 0
+                    max_int: 7
+                    example: 5
+                  - nxos_name: inner
+                    tf_name: inner
+                    type: Bool
+                    description: 'Set cos inner.'
+                    example: "true"
+                    exclude_test: true
+              - class_name: coppSetDscp
+                doc_path: Security%20and%20Policing/copp:SetDscp/
+                rn: setDscp
+                type: single
+                exclude_test: true
+                attributes:
+                  - nxos_name: dscpVal
+                    tf_name: set_dscp
+                    type: Int64
+                    description: 'Dscp Value.'
+                    min_int: 0
+                    max_int: 63
+                    example: 10
+                  - nxos_name: tunnel
+                    tf_name: set_dscp_tunnel
+                    type: Bool
+                    description: 'set dscp tunnel.'
+                    example: "true"
+              - class_name: coppPolicerActionExc
+                doc_path: Security%20and%20Policing/copp:PolicerActionExc/
+                rn: policeActionE
+                type: single
+                exclude_test: true
+                attributes:
+                  - nxos_name: cirVal
+                    tf_name: two_rate_police_cir_rate
+                    type: Int64
+                    description: 'Cir value.'
+                    min_int: 0
+                    max_int: 9223372036854775807
+                    example: 100
+                  - nxos_name: burstC
+                    tf_name: two_rate_police_bc_rate
+                    type: Int64
+                    description: 'Burst count.'
+                    min_int: 0
+                    max_int: 4294967295
+                    example: 32
+                  - nxos_name: burstUnit
+                    tf_name: two_rate_police_bc_unit
+                    type: String
+                    description: 'BC unit.'
+                    enum_values:
+                      - Unknown
+                      - bytes
+                      - kbytes
+                      - mbytes
+                      - packets
+                      - us
+                      - ms
+                    example: packets
+                  - nxos_name: pirVal
+                    tf_name: two_rate_police_pir_rate
+                    type: Int64
+                    description: 'Pir value.'
+                    min_int: 0
+                    max_int: 9223372036854775807
+                    example: 200
+                  - nxos_name: burstE
+                    tf_name: two_rate_police_be_rate
+                    type: Int64
+                    description: 'Burst exceed.'
+                    min_int: 0
+                    max_int: 4294967295
+                    example: 64
+                  - nxos_name: burstEUnit
+                    tf_name: two_rate_police_be_unit
+                    type: String
+                    description: 'BE unit.'
+                    enum_values:
+                      - Unknown
+                      - bytes
+                      - kbytes
+                      - mbytes
+                      - packets
+                      - us
+                      - ms
+                    example: packets
+                  - nxos_name: conformAction
+                    tf_name: two_rate_police_conform_action
+                    type: String
+                    description: 'Conform Action.'
+                    enum_values:
+                      - Undefined
+                      - transmit
+                      - drop
+                    example: transmit
+                  - nxos_name: exceedAction
+                    tf_name: two_rate_police_exceed_action
+                    type: String
+                    description: 'Exceed Action.'
+                    enum_values:
+                      - Undefined
+                      - transmit
+                      - drop
+                    example: transmit
+                  - nxos_name: violateAction
+                    tf_name: two_rate_police_violate_action
+                    type: String
+                    description: 'Violate action.'
+                    enum_values:
+                      - Undefined
+                      - transmit
+                      - drop
+                    example: drop
+              - class_name: coppLogging
+                doc_path: Security%20and%20Policing/copp:Logging/
+                rn: logging-%v-level-%v
+                type: list
+                tf_name: logging_drop
+                description: 'List of drop logging thresholds. Only a single threshold can be configured per class.'
+                attributes:
+                  - nxos_name: threshold
+                    tf_name: threshold
+                    type: Int64
+                    id: true
+                    description: 'Logging Threshold.'
+                    min_int: 0
+                    max_int: 9223372036854775807
+                    example: 1000
+                  - nxos_name: levelRange
+                    tf_name: level
+                    type: Int64
+                    id: true
+                    description: 'logging range.'
+                    min_int: 1
+                    max_int: 7
+                    example: 5
+      - class_name: coppService
+        doc_path: Security%20and%20Policing/copp:Service/
+        rn: service-%s
+        type: list
+        tf_name: copp_service_policies
+        no_delete: true
+        exclude_test: true
+        description: 'Control plane input service policy. Only a single service policy can be configured, which replaces the CoPP profile. The service policy cannot be removed, configure `copp_profile_type` instead to revert to a predefined profile.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Policy-map name.'
+            example: CP-POLICY1
   - class_name: ipqosEntity
     doc_path: Qos/ipqos%3AEntity/
     rn: ipqos
@@ -3378,3 +3865,8 @@ test_prerequisites:
   - dn: sys/inst-VRF1
     class_name: l3Inst
     no_delete: true
+  - dn: sys/acl/ipv4/name-[CP-ACL1]
+    class_name: ipv4aclACL
+    attributes:
+      - name: name
+        value: CP-ACL1

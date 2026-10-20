@@ -1,0 +1,2 @@
+- Add custom CoPP configuration (`copp_class_maps`, `copp_policy_maps` and `copp_service_policies`), including ACL, exception and protocol matches, policers, set CoS and drop logging, to `nxos_system` resource and data source
+- Add hardware rate-limiter configuration (`hardware_rate_limiters`) to `nxos_platform` resource and data source

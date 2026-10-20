@@ -183,6 +183,9 @@ type System struct {
 	CoppAdminState                                types.String                                  `tfsdk:"copp_admin_state"`
 	CoppRateLimiter                               types.Bool                                    `tfsdk:"copp_rate_limiter"`
 	CoppProfileType                               types.String                                  `tfsdk:"copp_profile_type"`
+	CoppClassMaps                                 map[string]SystemCoppClassMaps                `tfsdk:"copp_class_maps"`
+	CoppPolicyMaps                                map[string]SystemCoppPolicyMaps               `tfsdk:"copp_policy_maps"`
+	CoppServicePolicies                           map[string]SystemCoppServicePolicies          `tfsdk:"copp_service_policies"`
 	QosDynamicBufferSharing                       types.Bool                                    `tfsdk:"qos_dynamic_buffer_sharing"`
 	QosMode                                       types.Bool                                    `tfsdk:"qos_mode"`
 	QosPoliciesStatistics                         types.String                                  `tfsdk:"qos_policies_statistics"`
@@ -414,6 +417,78 @@ type SystemCdpInterfaces struct {
 	PortDescription types.String `tfsdk:"port_description"`
 }
 
+type SystemCoppClassMaps struct {
+	MatchType            types.String                                     `tfsdk:"match_type"`
+	Description          types.String                                     `tfsdk:"description"`
+	AccessGroups         map[string]SystemCoppClassMapsAccessGroups       `tfsdk:"access_groups"`
+	Exceptions           map[string]SystemCoppClassMapsExceptions         `tfsdk:"exceptions"`
+	ExceptionIpOption    types.Bool                                       `tfsdk:"exception_ip_option"`
+	ExceptionIpv6Option  types.Bool                                       `tfsdk:"exception_ipv6_option"`
+	Redirect             types.String                                     `tfsdk:"redirect"`
+	ExceptionFcoeFibMiss types.Bool                                       `tfsdk:"exception_fcoe_fib_miss"`
+	ExceptionIpIcmp      map[string]SystemCoppClassMapsExceptionIpIcmp    `tfsdk:"exception_ip_icmp"`
+	ExceptionIpv6Icmp    map[string]SystemCoppClassMapsExceptionIpv6Icmp  `tfsdk:"exception_ipv6_icmp"`
+	ExceptionMulticast   map[string]SystemCoppClassMapsExceptionMulticast `tfsdk:"exception_multicast"`
+	Protocols            map[string]SystemCoppClassMapsProtocols          `tfsdk:"protocols"`
+}
+
+type SystemCoppClassMapsAccessGroups struct {
+}
+
+type SystemCoppClassMapsExceptions struct {
+}
+
+type SystemCoppClassMapsExceptionIpIcmp struct {
+}
+
+type SystemCoppClassMapsExceptionIpv6Icmp struct {
+}
+
+type SystemCoppClassMapsExceptionMulticast struct {
+}
+
+type SystemCoppClassMapsProtocols struct {
+	MplsExp         types.Int64 `tfsdk:"mpls_exp"`
+	MplsRouterAlert types.Bool  `tfsdk:"mpls_router_alert"`
+}
+
+type SystemCoppPolicyMaps struct {
+	Classes map[string]SystemCoppPolicyMapsClasses `tfsdk:"classes"`
+}
+
+type SystemCoppPolicyMapsClasses struct {
+	InsertBefore               types.String                                      `tfsdk:"insert_before"`
+	Police                     map[string]SystemCoppPolicyMapsClassesPolice      `tfsdk:"police"`
+	SetCos                     map[string]SystemCoppPolicyMapsClassesSetCos      `tfsdk:"set_cos"`
+	SetDscp                    types.Int64                                       `tfsdk:"set_dscp"`
+	SetDscpTunnel              types.Bool                                        `tfsdk:"set_dscp_tunnel"`
+	TwoRatePoliceCirRate       types.Int64                                       `tfsdk:"two_rate_police_cir_rate"`
+	TwoRatePoliceBcRate        types.Int64                                       `tfsdk:"two_rate_police_bc_rate"`
+	TwoRatePoliceBcUnit        types.String                                      `tfsdk:"two_rate_police_bc_unit"`
+	TwoRatePolicePirRate       types.Int64                                       `tfsdk:"two_rate_police_pir_rate"`
+	TwoRatePoliceBeRate        types.Int64                                       `tfsdk:"two_rate_police_be_rate"`
+	TwoRatePoliceBeUnit        types.String                                      `tfsdk:"two_rate_police_be_unit"`
+	TwoRatePoliceConformAction types.String                                      `tfsdk:"two_rate_police_conform_action"`
+	TwoRatePoliceExceedAction  types.String                                      `tfsdk:"two_rate_police_exceed_action"`
+	TwoRatePoliceViolateAction types.String                                      `tfsdk:"two_rate_police_violate_action"`
+	LoggingDrop                map[string]SystemCoppPolicyMapsClassesLoggingDrop `tfsdk:"logging_drop"`
+}
+
+type SystemCoppPolicyMapsClassesPolice struct {
+	ConformAction types.String `tfsdk:"conform_action"`
+	ViolateAction types.String `tfsdk:"violate_action"`
+}
+
+type SystemCoppPolicyMapsClassesSetCos struct {
+	Inner types.Bool `tfsdk:"inner"`
+}
+
+type SystemCoppPolicyMapsClassesLoggingDrop struct {
+}
+
+type SystemCoppServicePolicies struct {
+}
+
 type SystemBreakoutModules struct {
 	FrontPanelPorts map[string]SystemBreakoutModulesFrontPanelPorts `tfsdk:"front_panel_ports"`
 }
@@ -516,11 +591,11 @@ var SystemSubtreeClassMinVersions = map[string]string{}
 var SystemMinVersions = map[string]helpers.MinVersion{}
 
 // SystemListClasses holds the list child classes of the resource.
-var SystemListClasses = map[string]bool{"ethpmEvent": true, "arpVpcDom": true, "ndDom": true, "ndIf": true, "ndVpcDom": true, "dnsProf": true, "dnsProvider": true, "dnsDomExt": true, "dnsHost": true, "dnsVrf": true, "nwVdc": true, "vshdCliAlias": true, "udldPhysIf": true, "lacpIf": true, "l2StaticEntry": true, "lldpIf": true, "cdpIf": true, "imMod": true, "imFpP": true, "sasSvcInstance": true, "sasDom": true, "commSshKey": true, "srcintfSsh": true, "srcintfFtp": true, "ttagTtagIf": true, "pvlanVlan": true, "pvlanIf": true, "pvlanTrunkPromiscuousEntry": true, "pvlanTrunkSecondaryEntry": true, "pvlanSvi": true, "ngmvpnDom": true}
+var SystemListClasses = map[string]bool{"ethpmEvent": true, "arpVpcDom": true, "ndDom": true, "ndIf": true, "ndVpcDom": true, "dnsProf": true, "dnsProvider": true, "dnsDomExt": true, "dnsHost": true, "dnsVrf": true, "nwVdc": true, "vshdCliAlias": true, "udldPhysIf": true, "lacpIf": true, "l2StaticEntry": true, "lldpIf": true, "cdpIf": true, "coppClass": true, "coppAcl": true, "coppExeOptions": true, "coppIpIcmp": true, "coppIpv6Icmp": true, "coppMulticast": true, "coppProtocol": true, "coppPolicy": true, "coppClassp": true, "coppPolicerAction": true, "coppSetCos": true, "coppLogging": true, "coppService": true, "imMod": true, "imFpP": true, "sasSvcInstance": true, "sasDom": true, "commSshKey": true, "srcintfSsh": true, "srcintfFtp": true, "ttagTtagIf": true, "pvlanVlan": true, "pvlanIf": true, "pvlanTrunkPromiscuousEntry": true, "pvlanTrunkSecondaryEntry": true, "pvlanSvi": true, "ngmvpnDom": true}
 
 // getSystemTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getSystemTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"ethpmEntity", "ethpmInst", "ethpmErrDisRecover", "ethpmEvent", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "dnsProvider", "dnsDomExt", "dnsHost", "dnsIpv4Host", "dnsIpv6Host", "dnsVrf", "dnsDom", "dnsProvider", "dnsDomExt", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "lacpEntity", "lacpInst", "lacpIf", "l2Macs", "l2Static", "l2StaticEntry", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "ipqosEntity", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "grpcInst", "grpcGnmi", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi", "ngmvpnEntity", "ngmvpnInst", "ngmvpnDom", "l2ribEntity", "l2ribInst", "l2ribEvpnMACmob", "ngoamEntity", "ngoamInstallAcl", "ngoamLoopDetection"}, SystemSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"ethpmEntity", "ethpmInst", "ethpmErrDisRecover", "ethpmEvent", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "dnsProvider", "dnsDomExt", "dnsHost", "dnsIpv4Host", "dnsIpv6Host", "dnsVrf", "dnsDom", "dnsProvider", "dnsDomExt", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "lacpEntity", "lacpInst", "lacpIf", "l2Macs", "l2Static", "l2StaticEntry", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "coppClass", "coppAcl", "coppExeOptions", "coppIp", "coppIpv6", "coppRdirect", "coppFcoe", "coppIpIcmp", "coppIpv6Icmp", "coppMulticast", "coppProtocol", "coppMPLSoption", "coppPolicy", "coppClassp", "coppPolicerAction", "coppSetCos", "coppSetDscp", "coppPolicerActionExc", "coppLogging", "coppService", "ipqosEntity", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "grpcInst", "grpcGnmi", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi", "ngmvpnEntity", "ngmvpnInst", "ngmvpnDom", "l2ribEntity", "l2ribInst", "l2ribEvpnMACmob", "ngoamEntity", "ngoamInstallAcl", "ngoamLoopDetection"}, SystemSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -606,6 +681,60 @@ func (data SystemLldpInterfaces) getRn(key string) string {
 
 func (data SystemCdpInterfaces) getRn(key string) string {
 	return fmt.Sprintf("if-[%s]", key)
+}
+
+func (data SystemCoppClassMaps) getRn(key string) string {
+	return fmt.Sprintf("classp-%s", key)
+}
+
+func (data SystemCoppClassMapsAccessGroups) getRn(key string) string {
+	return fmt.Sprintf("acl-%s", key)
+}
+
+func (data SystemCoppClassMapsExceptions) getRn(key string) string {
+	return fmt.Sprintf("excep-%s", key)
+}
+
+func (data SystemCoppClassMapsExceptionIpIcmp) getRn(key string) string {
+	return fmt.Sprintf("icmp-%s", key)
+}
+
+func (data SystemCoppClassMapsExceptionIpv6Icmp) getRn(key string) string {
+	return fmt.Sprintf("icmpv6-%s", key)
+}
+
+func (data SystemCoppClassMapsExceptionMulticast) getRn(key string) string {
+	return fmt.Sprintf("mcast-%s", key)
+}
+
+func (data SystemCoppClassMapsProtocols) getRn(key string) string {
+	return fmt.Sprintf("prot-%s", key)
+}
+
+func (data SystemCoppPolicyMaps) getRn(key string) string {
+	return fmt.Sprintf("policy-%s", key)
+}
+
+func (data SystemCoppPolicyMapsClasses) getRn(key string) string {
+	return fmt.Sprintf("classp-%s", key)
+}
+
+func (data SystemCoppPolicyMapsClassesPolice) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 4)
+	return fmt.Sprintf("cir-%v-Unit-%s-burst-%v-bcUnit-%s", helpers.Must(strconv.ParseInt(keyParts[0], 10, 64)), keyParts[1], helpers.Must(strconv.ParseInt(keyParts[2], 10, 64)), keyParts[3])
+}
+
+func (data SystemCoppPolicyMapsClassesSetCos) getRn(key string) string {
+	return fmt.Sprintf("setCos-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data SystemCoppPolicyMapsClassesLoggingDrop) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 2)
+	return fmt.Sprintf("logging-%v-level-%v", helpers.Must(strconv.ParseInt(keyParts[0], 10, 64)), helpers.Must(strconv.ParseInt(keyParts[1], 10, 64)))
+}
+
+func (data SystemCoppServicePolicies) getRn(key string) string {
+	return fmt.Sprintf("service-%s", key)
 }
 
 func (data SystemBreakoutModules) getRn(key string) string {
@@ -1946,6 +2075,233 @@ func (data System) toBody(config System) nxos.Body {
 		}
 		if attrs != "{}" {
 			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppProfile.attributes", attrs)
+		}
+		for key, child := range data.CoppClassMaps {
+			configChild, configChildOk := config.CoppClassMaps[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "cName", key)
+			if configChildOk && !child.MatchType.IsUnknown() && !child.MatchType.IsNull() && !configChild.MatchType.IsNull() {
+				attrs, _ = sjson.Set(attrs, "matchOption", child.MatchType.ValueString())
+			}
+			if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
+				attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppClass.attributes", attrs)
+			{
+				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".coppClass.children"
+				_ = nestedChildrenPath
+				for key := range child.AccessGroups {
+					configChild, configChildOk := configChild.AccessGroups[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "name", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppAcl.attributes", attrs)
+				}
+				for key := range child.Exceptions {
+					configChild, configChildOk := configChild.Exceptions[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "option", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppExeOptions.attributes", attrs)
+				}
+				attrs = "{}"
+				if !child.ExceptionIpOption.IsUnknown() && !child.ExceptionIpOption.IsNull() && !configChild.ExceptionIpOption.IsNull() {
+					attrs, _ = sjson.Set(attrs, "options", strconv.FormatBool(child.ExceptionIpOption.ValueBool()))
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppIp.attributes", attrs)
+				}
+				attrs = "{}"
+				if !child.ExceptionIpv6Option.IsUnknown() && !child.ExceptionIpv6Option.IsNull() && !configChild.ExceptionIpv6Option.IsNull() {
+					attrs, _ = sjson.Set(attrs, "options", strconv.FormatBool(child.ExceptionIpv6Option.ValueBool()))
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppIpv6.attributes", attrs)
+				}
+				attrs = "{}"
+				if !child.Redirect.IsUnknown() && !child.Redirect.IsNull() && !configChild.Redirect.IsNull() {
+					attrs, _ = sjson.Set(attrs, "rdrct", child.Redirect.ValueString())
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppRdirect.attributes", attrs)
+				}
+				attrs = "{}"
+				if !child.ExceptionFcoeFibMiss.IsUnknown() && !child.ExceptionFcoeFibMiss.IsNull() && !configChild.ExceptionFcoeFibMiss.IsNull() {
+					attrs, _ = sjson.Set(attrs, "option", strconv.FormatBool(child.ExceptionFcoeFibMiss.ValueBool()))
+				}
+				if attrs != "{}" {
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppFcoe.attributes", attrs)
+				}
+				for key := range child.ExceptionIpIcmp {
+					configChild, configChildOk := configChild.ExceptionIpIcmp[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "option", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppIpIcmp.attributes", attrs)
+				}
+				for key := range child.ExceptionIpv6Icmp {
+					configChild, configChildOk := configChild.ExceptionIpv6Icmp[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "option", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppIpv6Icmp.attributes", attrs)
+				}
+				for key := range child.ExceptionMulticast {
+					configChild, configChildOk := configChild.ExceptionMulticast[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "mcastOption", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppMulticast.attributes", attrs)
+				}
+				for key, child := range child.Protocols {
+					configChild, configChildOk := configChild.Protocols[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "type", key)
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppProtocol.attributes", attrs)
+					{
+						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".coppProtocol.children"
+						_ = nestedChildrenPath
+						attrs = "{}"
+						if !child.MplsExp.IsUnknown() && !child.MplsExp.IsNull() && !configChild.MplsExp.IsNull() {
+							attrs, _ = sjson.Set(attrs, "exp", strconv.FormatInt(child.MplsExp.ValueInt64(), 10))
+						}
+						if !child.MplsRouterAlert.IsUnknown() && !child.MplsRouterAlert.IsNull() && !configChild.MplsRouterAlert.IsNull() {
+							attrs, _ = sjson.Set(attrs, "routerAlert", strconv.FormatBool(child.MplsRouterAlert.ValueBool()))
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppMPLSoption.attributes", attrs)
+						}
+					}
+				}
+			}
+		}
+		for key, child := range data.CoppPolicyMaps {
+			configChild, configChildOk := config.CoppPolicyMaps[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "name", key)
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppPolicy.attributes", attrs)
+			{
+				nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+				nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".coppPolicy.children"
+				_ = nestedChildrenPath
+				for key, child := range child.Classes {
+					configChild, configChildOk := configChild.Classes[key]
+					_ = configChild
+					_ = configChildOk
+					attrs = "{}"
+					attrs, _ = sjson.Set(attrs, "name", key)
+					if configChildOk && !child.InsertBefore.IsUnknown() && !child.InsertBefore.IsNull() && !configChild.InsertBefore.IsNull() {
+						attrs, _ = sjson.Set(attrs, "insertBeforeName", child.InsertBefore.ValueString())
+					}
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppClassp.attributes", attrs)
+					{
+						nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+						nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".coppClassp.children"
+						_ = nestedChildrenPath
+						for key, child := range child.Police {
+							configChild, configChildOk := configChild.Police[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							keyParts := strings.SplitN(key, ";", 4)
+							attrs, _ = sjson.Set(attrs, "cirVal", keyParts[0])
+							attrs, _ = sjson.Set(attrs, "cirUnit", keyParts[1])
+							attrs, _ = sjson.Set(attrs, "burstC", keyParts[2])
+							attrs, _ = sjson.Set(attrs, "burstUnit", keyParts[3])
+							if configChildOk && !child.ConformAction.IsUnknown() && !child.ConformAction.IsNull() && !configChild.ConformAction.IsNull() {
+								attrs, _ = sjson.Set(attrs, "conformAction", child.ConformAction.ValueString())
+							}
+							if configChildOk && !child.ViolateAction.IsUnknown() && !child.ViolateAction.IsNull() && !configChild.ViolateAction.IsNull() {
+								attrs, _ = sjson.Set(attrs, "violateAction", child.ViolateAction.ValueString())
+							}
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppPolicerAction.attributes", attrs)
+						}
+						for key, child := range child.SetCos {
+							configChild, configChildOk := configChild.SetCos[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							attrs, _ = sjson.Set(attrs, "cosVal", key)
+							if configChildOk && !child.Inner.IsUnknown() && !child.Inner.IsNull() && !configChild.Inner.IsNull() {
+								attrs, _ = sjson.Set(attrs, "inner", strconv.FormatBool(child.Inner.ValueBool()))
+							}
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppSetCos.attributes", attrs)
+						}
+						attrs = "{}"
+						if !child.SetDscp.IsUnknown() && !child.SetDscp.IsNull() && !configChild.SetDscp.IsNull() {
+							attrs, _ = sjson.Set(attrs, "dscpVal", strconv.FormatInt(child.SetDscp.ValueInt64(), 10))
+						}
+						if !child.SetDscpTunnel.IsUnknown() && !child.SetDscpTunnel.IsNull() && !configChild.SetDscpTunnel.IsNull() {
+							attrs, _ = sjson.Set(attrs, "tunnel", strconv.FormatBool(child.SetDscpTunnel.ValueBool()))
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppSetDscp.attributes", attrs)
+						}
+						attrs = "{}"
+						if !child.TwoRatePoliceCirRate.IsUnknown() && !child.TwoRatePoliceCirRate.IsNull() && !configChild.TwoRatePoliceCirRate.IsNull() {
+							attrs, _ = sjson.Set(attrs, "cirVal", strconv.FormatInt(child.TwoRatePoliceCirRate.ValueInt64(), 10))
+						}
+						if !child.TwoRatePoliceBcRate.IsUnknown() && !child.TwoRatePoliceBcRate.IsNull() && !configChild.TwoRatePoliceBcRate.IsNull() {
+							attrs, _ = sjson.Set(attrs, "burstC", strconv.FormatInt(child.TwoRatePoliceBcRate.ValueInt64(), 10))
+						}
+						if !child.TwoRatePoliceBcUnit.IsUnknown() && !child.TwoRatePoliceBcUnit.IsNull() && !configChild.TwoRatePoliceBcUnit.IsNull() {
+							attrs, _ = sjson.Set(attrs, "burstUnit", child.TwoRatePoliceBcUnit.ValueString())
+						}
+						if !child.TwoRatePolicePirRate.IsUnknown() && !child.TwoRatePolicePirRate.IsNull() && !configChild.TwoRatePolicePirRate.IsNull() {
+							attrs, _ = sjson.Set(attrs, "pirVal", strconv.FormatInt(child.TwoRatePolicePirRate.ValueInt64(), 10))
+						}
+						if !child.TwoRatePoliceBeRate.IsUnknown() && !child.TwoRatePoliceBeRate.IsNull() && !configChild.TwoRatePoliceBeRate.IsNull() {
+							attrs, _ = sjson.Set(attrs, "burstE", strconv.FormatInt(child.TwoRatePoliceBeRate.ValueInt64(), 10))
+						}
+						if !child.TwoRatePoliceBeUnit.IsUnknown() && !child.TwoRatePoliceBeUnit.IsNull() && !configChild.TwoRatePoliceBeUnit.IsNull() {
+							attrs, _ = sjson.Set(attrs, "burstEUnit", child.TwoRatePoliceBeUnit.ValueString())
+						}
+						if !child.TwoRatePoliceConformAction.IsUnknown() && !child.TwoRatePoliceConformAction.IsNull() && !configChild.TwoRatePoliceConformAction.IsNull() {
+							attrs, _ = sjson.Set(attrs, "conformAction", child.TwoRatePoliceConformAction.ValueString())
+						}
+						if !child.TwoRatePoliceExceedAction.IsUnknown() && !child.TwoRatePoliceExceedAction.IsNull() && !configChild.TwoRatePoliceExceedAction.IsNull() {
+							attrs, _ = sjson.Set(attrs, "exceedAction", child.TwoRatePoliceExceedAction.ValueString())
+						}
+						if !child.TwoRatePoliceViolateAction.IsUnknown() && !child.TwoRatePoliceViolateAction.IsNull() && !configChild.TwoRatePoliceViolateAction.IsNull() {
+							attrs, _ = sjson.Set(attrs, "violateAction", child.TwoRatePoliceViolateAction.ValueString())
+						}
+						if attrs != "{}" {
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppPolicerActionExc.attributes", attrs)
+						}
+						for key := range child.LoggingDrop {
+							configChild, configChildOk := configChild.LoggingDrop[key]
+							_ = configChild
+							_ = configChildOk
+							attrs = "{}"
+							keyParts := strings.SplitN(key, ";", 2)
+							attrs, _ = sjson.Set(attrs, "threshold", keyParts[0])
+							attrs, _ = sjson.Set(attrs, "levelRange", keyParts[1])
+							body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppLogging.attributes", attrs)
+						}
+					}
+				}
+			}
+		}
+		for key := range data.CoppServicePolicies {
+			configChild, configChildOk := config.CoppServicePolicies[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "name", key)
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppService.attributes", attrs)
 		}
 		childBody = body
 		body = prevBody
@@ -3957,6 +4313,354 @@ func (data *System) fromBody(res gjson.Result) {
 			)
 			data.CoppProfileType = types.StringValue(rcoppProfile.Get("coppProfile.attributes.prof").String())
 		}
+		rcoppEntity.Get("coppEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "coppClass" {
+							var child SystemCoppClassMaps
+							child.MatchType = types.StringValue(value.Get("attributes.matchOption").String())
+							child.Description = types.StringValue(value.Get("attributes.descr").String())
+							mapKey := value.Get("attributes.cName").String()
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "coppAcl" {
+												var nestedChildcoppAcl SystemCoppClassMapsAccessGroups
+												nestedMapKey := nestedValue.Get("attributes.name").String()
+												if child.AccessGroups == nil {
+													child.AccessGroups = make(map[string]SystemCoppClassMapsAccessGroups)
+												}
+												child.AccessGroups[nestedMapKey] = nestedChildcoppAcl
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "coppExeOptions" {
+												var nestedChildcoppExeOptions SystemCoppClassMapsExceptions
+												nestedMapKey := nestedValue.Get("attributes.option").String()
+												if child.Exceptions == nil {
+													child.Exceptions = make(map[string]SystemCoppClassMapsExceptions)
+												}
+												child.Exceptions[nestedMapKey] = nestedChildcoppExeOptions
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							{
+								var rcoppIp gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("coppIp.attributes.rn").String()
+										if rnValue == "ip" {
+											rcoppIp = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.ExceptionIpOption = types.BoolValue(helpers.ParseNxosBoolean(rcoppIp.Get("coppIp.attributes.options").String()))
+							}
+							{
+								var rcoppIpv6 gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("coppIpv6.attributes.rn").String()
+										if rnValue == "ipv6" {
+											rcoppIpv6 = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.ExceptionIpv6Option = types.BoolValue(helpers.ParseNxosBoolean(rcoppIpv6.Get("coppIpv6.attributes.options").String()))
+							}
+							{
+								var rcoppRdirect gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("coppRdirect.attributes.rn").String()
+										if rnValue == "rdirect" {
+											rcoppRdirect = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.Redirect = types.StringValue(rcoppRdirect.Get("coppRdirect.attributes.rdrct").String())
+							}
+							{
+								var rcoppFcoe gjson.Result
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										rnValue := nestedV.Get("coppFcoe.attributes.rn").String()
+										if rnValue == "fcoe" {
+											rcoppFcoe = nestedV
+											return false
+										}
+										return true
+									},
+								)
+								child.ExceptionFcoeFibMiss = types.BoolValue(helpers.ParseNxosBoolean(rcoppFcoe.Get("coppFcoe.attributes.option").String()))
+							}
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "coppIpIcmp" {
+												var nestedChildcoppIpIcmp SystemCoppClassMapsExceptionIpIcmp
+												nestedMapKey := nestedValue.Get("attributes.option").String()
+												if child.ExceptionIpIcmp == nil {
+													child.ExceptionIpIcmp = make(map[string]SystemCoppClassMapsExceptionIpIcmp)
+												}
+												child.ExceptionIpIcmp[nestedMapKey] = nestedChildcoppIpIcmp
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "coppIpv6Icmp" {
+												var nestedChildcoppIpv6Icmp SystemCoppClassMapsExceptionIpv6Icmp
+												nestedMapKey := nestedValue.Get("attributes.option").String()
+												if child.ExceptionIpv6Icmp == nil {
+													child.ExceptionIpv6Icmp = make(map[string]SystemCoppClassMapsExceptionIpv6Icmp)
+												}
+												child.ExceptionIpv6Icmp[nestedMapKey] = nestedChildcoppIpv6Icmp
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "coppMulticast" {
+												var nestedChildcoppMulticast SystemCoppClassMapsExceptionMulticast
+												nestedMapKey := nestedValue.Get("attributes.mcastOption").String()
+												if child.ExceptionMulticast == nil {
+													child.ExceptionMulticast = make(map[string]SystemCoppClassMapsExceptionMulticast)
+												}
+												child.ExceptionMulticast[nestedMapKey] = nestedChildcoppMulticast
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "coppProtocol" {
+												var nestedChildcoppProtocol SystemCoppClassMapsProtocols
+												nestedMapKey := nestedValue.Get("attributes.type").String()
+												{
+													var rcoppMPLSoption gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("coppMPLSoption.attributes.rn").String()
+															if rnValue == "mpls" {
+																rcoppMPLSoption = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChildcoppProtocol.MplsExp = types.Int64Value(rcoppMPLSoption.Get("coppMPLSoption.attributes.exp").Int())
+													nestedChildcoppProtocol.MplsRouterAlert = types.BoolValue(helpers.ParseNxosBoolean(rcoppMPLSoption.Get("coppMPLSoption.attributes.routerAlert").String()))
+												}
+												if child.Protocols == nil {
+													child.Protocols = make(map[string]SystemCoppClassMapsProtocols)
+												}
+												child.Protocols[nestedMapKey] = nestedChildcoppProtocol
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							if data.CoppClassMaps == nil {
+								data.CoppClassMaps = make(map[string]SystemCoppClassMaps)
+							}
+							data.CoppClassMaps[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rcoppEntity.Get("coppEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "coppPolicy" {
+							var child SystemCoppPolicyMaps
+							mapKey := value.Get("attributes.name").String()
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									nestedV.ForEach(
+										func(nestedClassname, nestedValue gjson.Result) bool {
+											if nestedClassname.String() == "coppClassp" {
+												var nestedChildcoppClassp SystemCoppPolicyMapsClasses
+												nestedChildcoppClassp.InsertBefore = types.StringValue(nestedValue.Get("attributes.insertBeforeName").String())
+												nestedMapKey := nestedValue.Get("attributes.name").String()
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "coppPolicerAction" {
+																	var nestedChildcoppPolicerAction SystemCoppPolicyMapsClassesPolice
+																	nestedChildcoppPolicerAction.ConformAction = types.StringValue(nestedValue.Get("attributes.conformAction").String())
+																	nestedChildcoppPolicerAction.ViolateAction = types.StringValue(nestedValue.Get("attributes.violateAction").String())
+																	nestedMapKey := nestedValue.Get("attributes.cirVal").String() + ";" + nestedValue.Get("attributes.cirUnit").String() + ";" + nestedValue.Get("attributes.burstC").String() + ";" + nestedValue.Get("attributes.burstUnit").String()
+																	if nestedChildcoppClassp.Police == nil {
+																		nestedChildcoppClassp.Police = make(map[string]SystemCoppPolicyMapsClassesPolice)
+																	}
+																	nestedChildcoppClassp.Police[nestedMapKey] = nestedChildcoppPolicerAction
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "coppSetCos" {
+																	var nestedChildcoppSetCos SystemCoppPolicyMapsClassesSetCos
+																	nestedChildcoppSetCos.Inner = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.inner").String()))
+																	nestedMapKey := nestedValue.Get("attributes.cosVal").String()
+																	if nestedChildcoppClassp.SetCos == nil {
+																		nestedChildcoppClassp.SetCos = make(map[string]SystemCoppPolicyMapsClassesSetCos)
+																	}
+																	nestedChildcoppClassp.SetCos[nestedMapKey] = nestedChildcoppSetCos
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+												{
+													var rcoppSetDscp gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("coppSetDscp.attributes.rn").String()
+															if rnValue == "setDscp" {
+																rcoppSetDscp = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChildcoppClassp.SetDscp = types.Int64Value(rcoppSetDscp.Get("coppSetDscp.attributes.dscpVal").Int())
+													nestedChildcoppClassp.SetDscpTunnel = types.BoolValue(helpers.ParseNxosBoolean(rcoppSetDscp.Get("coppSetDscp.attributes.tunnel").String()))
+												}
+												{
+													var rcoppPolicerActionExc gjson.Result
+													nestedValue.Get("children").ForEach(
+														func(_, nestedV gjson.Result) bool {
+															rnValue := nestedV.Get("coppPolicerActionExc.attributes.rn").String()
+															if rnValue == "policeActionE" {
+																rcoppPolicerActionExc = nestedV
+																return false
+															}
+															return true
+														},
+													)
+													nestedChildcoppClassp.TwoRatePoliceCirRate = types.Int64Value(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.cirVal").Int())
+													nestedChildcoppClassp.TwoRatePoliceBcRate = types.Int64Value(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.burstC").Int())
+													nestedChildcoppClassp.TwoRatePoliceBcUnit = types.StringValue(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.burstUnit").String())
+													nestedChildcoppClassp.TwoRatePolicePirRate = types.Int64Value(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.pirVal").Int())
+													nestedChildcoppClassp.TwoRatePoliceBeRate = types.Int64Value(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.burstE").Int())
+													nestedChildcoppClassp.TwoRatePoliceBeUnit = types.StringValue(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.burstEUnit").String())
+													nestedChildcoppClassp.TwoRatePoliceConformAction = types.StringValue(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.conformAction").String())
+													nestedChildcoppClassp.TwoRatePoliceExceedAction = types.StringValue(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.exceedAction").String())
+													nestedChildcoppClassp.TwoRatePoliceViolateAction = types.StringValue(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.violateAction").String())
+												}
+												nestedValue.Get("children").ForEach(
+													func(_, nestedV gjson.Result) bool {
+														nestedV.ForEach(
+															func(nestedClassname, nestedValue gjson.Result) bool {
+																if nestedClassname.String() == "coppLogging" {
+																	var nestedChildcoppLogging SystemCoppPolicyMapsClassesLoggingDrop
+																	nestedMapKey := nestedValue.Get("attributes.threshold").String() + ";" + nestedValue.Get("attributes.levelRange").String()
+																	if nestedChildcoppClassp.LoggingDrop == nil {
+																		nestedChildcoppClassp.LoggingDrop = make(map[string]SystemCoppPolicyMapsClassesLoggingDrop)
+																	}
+																	nestedChildcoppClassp.LoggingDrop[nestedMapKey] = nestedChildcoppLogging
+																}
+																return true
+															},
+														)
+														return true
+													},
+												)
+												if child.Classes == nil {
+													child.Classes = make(map[string]SystemCoppPolicyMapsClasses)
+												}
+												child.Classes[nestedMapKey] = nestedChildcoppClassp
+											}
+											return true
+										},
+									)
+									return true
+								},
+							)
+							if data.CoppPolicyMaps == nil {
+								data.CoppPolicyMaps = make(map[string]SystemCoppPolicyMaps)
+							}
+							data.CoppPolicyMaps[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rcoppEntity.Get("coppEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "coppService" {
+							var child SystemCoppServicePolicies
+							mapKey := value.Get("attributes.name").String()
+							if data.CoppServicePolicies == nil {
+								data.CoppServicePolicies = make(map[string]SystemCoppServicePolicies)
+							}
+							data.CoppServicePolicies[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
 	}
 	{
 		var ripqosEntity gjson.Result
@@ -6711,6 +7415,449 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.CoppProfileType = types.StringNull()
 		}
 	}
+	for key, item := range data.CoppClassMaps {
+		var rcoppClass gjson.Result
+		rcoppEntity.Get("coppEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("coppClass.attributes.cName").String() == key {
+					rcoppClass = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rcoppClass.Exists() {
+			delete(data.CoppClassMaps, key)
+			continue
+		}
+		if !item.MatchType.IsNull() {
+			item.MatchType = types.StringValue(rcoppClass.Get("coppClass.attributes.matchOption").String())
+		} else {
+			item.MatchType = types.StringNull()
+		}
+		if !item.Description.IsNull() {
+			item.Description = types.StringValue(rcoppClass.Get("coppClass.attributes.descr").String())
+		} else {
+			item.Description = types.StringNull()
+		}
+		for nc := range item.AccessGroups {
+			ncItem := item.AccessGroups[nc]
+			var rcoppAcl gjson.Result
+			rcoppClass.Get("coppClass.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("coppAcl.attributes.name").String() == nc {
+						rcoppAcl = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rcoppAcl.Exists() {
+				delete(item.AccessGroups, nc)
+				continue
+			}
+			item.AccessGroups[nc] = ncItem
+		}
+		for nc := range item.Exceptions {
+			ncItem := item.Exceptions[nc]
+			var rcoppExeOptions gjson.Result
+			rcoppClass.Get("coppClass.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("coppExeOptions.attributes.option").String() == nc {
+						rcoppExeOptions = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rcoppExeOptions.Exists() {
+				delete(item.Exceptions, nc)
+				continue
+			}
+			item.Exceptions[nc] = ncItem
+		}
+		{
+			var rcoppIp gjson.Result
+			rcoppClass.Get("coppClass.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("coppIp.attributes.rn").String()
+					if rnValue == "ip" {
+						rcoppIp = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.ExceptionIpOption.IsNull() {
+				item.ExceptionIpOption = types.BoolValue(helpers.ParseNxosBoolean(rcoppIp.Get("coppIp.attributes.options").String()))
+			} else {
+				item.ExceptionIpOption = types.BoolNull()
+			}
+		}
+		{
+			var rcoppIpv6 gjson.Result
+			rcoppClass.Get("coppClass.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("coppIpv6.attributes.rn").String()
+					if rnValue == "ipv6" {
+						rcoppIpv6 = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.ExceptionIpv6Option.IsNull() {
+				item.ExceptionIpv6Option = types.BoolValue(helpers.ParseNxosBoolean(rcoppIpv6.Get("coppIpv6.attributes.options").String()))
+			} else {
+				item.ExceptionIpv6Option = types.BoolNull()
+			}
+		}
+		{
+			var rcoppRdirect gjson.Result
+			rcoppClass.Get("coppClass.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("coppRdirect.attributes.rn").String()
+					if rnValue == "rdirect" {
+						rcoppRdirect = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.Redirect.IsNull() {
+				item.Redirect = types.StringValue(rcoppRdirect.Get("coppRdirect.attributes.rdrct").String())
+			} else {
+				item.Redirect = types.StringNull()
+			}
+		}
+		{
+			var rcoppFcoe gjson.Result
+			rcoppClass.Get("coppClass.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("coppFcoe.attributes.rn").String()
+					if rnValue == "fcoe" {
+						rcoppFcoe = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.ExceptionFcoeFibMiss.IsNull() {
+				item.ExceptionFcoeFibMiss = types.BoolValue(helpers.ParseNxosBoolean(rcoppFcoe.Get("coppFcoe.attributes.option").String()))
+			} else {
+				item.ExceptionFcoeFibMiss = types.BoolNull()
+			}
+		}
+		for nc := range item.ExceptionIpIcmp {
+			ncItem := item.ExceptionIpIcmp[nc]
+			var rcoppIpIcmp gjson.Result
+			rcoppClass.Get("coppClass.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("coppIpIcmp.attributes.option").String() == nc {
+						rcoppIpIcmp = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rcoppIpIcmp.Exists() {
+				delete(item.ExceptionIpIcmp, nc)
+				continue
+			}
+			item.ExceptionIpIcmp[nc] = ncItem
+		}
+		for nc := range item.ExceptionIpv6Icmp {
+			ncItem := item.ExceptionIpv6Icmp[nc]
+			var rcoppIpv6Icmp gjson.Result
+			rcoppClass.Get("coppClass.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("coppIpv6Icmp.attributes.option").String() == nc {
+						rcoppIpv6Icmp = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rcoppIpv6Icmp.Exists() {
+				delete(item.ExceptionIpv6Icmp, nc)
+				continue
+			}
+			item.ExceptionIpv6Icmp[nc] = ncItem
+		}
+		for nc := range item.ExceptionMulticast {
+			ncItem := item.ExceptionMulticast[nc]
+			var rcoppMulticast gjson.Result
+			rcoppClass.Get("coppClass.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("coppMulticast.attributes.mcastOption").String() == nc {
+						rcoppMulticast = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rcoppMulticast.Exists() {
+				delete(item.ExceptionMulticast, nc)
+				continue
+			}
+			item.ExceptionMulticast[nc] = ncItem
+		}
+		for nc := range item.Protocols {
+			ncItem := item.Protocols[nc]
+			var rcoppProtocol gjson.Result
+			rcoppClass.Get("coppClass.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("coppProtocol.attributes.type").String() == nc {
+						rcoppProtocol = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rcoppProtocol.Exists() {
+				delete(item.Protocols, nc)
+				continue
+			}
+			{
+				var rcoppMPLSoption gjson.Result
+				rcoppProtocol.Get("coppProtocol.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("coppMPLSoption.attributes.rn").String()
+						if rnValue == "mpls" {
+							rcoppMPLSoption = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.MplsExp.IsNull() {
+					ncItem.MplsExp = types.Int64Value(rcoppMPLSoption.Get("coppMPLSoption.attributes.exp").Int())
+				} else {
+					ncItem.MplsExp = types.Int64Null()
+				}
+				if !ncItem.MplsRouterAlert.IsNull() {
+					ncItem.MplsRouterAlert = types.BoolValue(helpers.ParseNxosBoolean(rcoppMPLSoption.Get("coppMPLSoption.attributes.routerAlert").String()))
+				} else {
+					ncItem.MplsRouterAlert = types.BoolNull()
+				}
+			}
+			item.Protocols[nc] = ncItem
+		}
+		data.CoppClassMaps[key] = item
+	}
+	for key, item := range data.CoppPolicyMaps {
+		var rcoppPolicy gjson.Result
+		rcoppEntity.Get("coppEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("coppPolicy.attributes.name").String() == key {
+					rcoppPolicy = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rcoppPolicy.Exists() {
+			delete(data.CoppPolicyMaps, key)
+			continue
+		}
+		for nc := range item.Classes {
+			ncItem := item.Classes[nc]
+			var rcoppClassp gjson.Result
+			rcoppPolicy.Get("coppPolicy.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("coppClassp.attributes.name").String() == nc {
+						rcoppClassp = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rcoppClassp.Exists() {
+				delete(item.Classes, nc)
+				continue
+			}
+			if !ncItem.InsertBefore.IsNull() {
+				ncItem.InsertBefore = types.StringValue(rcoppClassp.Get("coppClassp.attributes.insertBeforeName").String())
+			} else {
+				ncItem.InsertBefore = types.StringNull()
+			}
+			for nc_ := range ncItem.Police {
+				nc_Item := ncItem.Police[nc_]
+				keyParts := strings.SplitN(nc_, ";", 4)
+				var rcoppPolicerAction gjson.Result
+				rcoppClassp.Get("coppClassp.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("coppPolicerAction.attributes.cirVal").String() == keyParts[0] &&
+							v.Get("coppPolicerAction.attributes.cirUnit").String() == keyParts[1] &&
+							v.Get("coppPolicerAction.attributes.burstC").String() == keyParts[2] &&
+							v.Get("coppPolicerAction.attributes.burstUnit").String() == keyParts[3] {
+							rcoppPolicerAction = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rcoppPolicerAction.Exists() {
+					delete(ncItem.Police, nc_)
+					continue
+				}
+				if !nc_Item.ConformAction.IsNull() {
+					nc_Item.ConformAction = types.StringValue(rcoppPolicerAction.Get("coppPolicerAction.attributes.conformAction").String())
+				} else {
+					nc_Item.ConformAction = types.StringNull()
+				}
+				if !nc_Item.ViolateAction.IsNull() {
+					nc_Item.ViolateAction = types.StringValue(rcoppPolicerAction.Get("coppPolicerAction.attributes.violateAction").String())
+				} else {
+					nc_Item.ViolateAction = types.StringNull()
+				}
+				ncItem.Police[nc_] = nc_Item
+			}
+			for nc_ := range ncItem.SetCos {
+				nc_Item := ncItem.SetCos[nc_]
+				var rcoppSetCos gjson.Result
+				rcoppClassp.Get("coppClassp.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("coppSetCos.attributes.cosVal").String() == nc_ {
+							rcoppSetCos = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rcoppSetCos.Exists() {
+					delete(ncItem.SetCos, nc_)
+					continue
+				}
+				if !nc_Item.Inner.IsNull() {
+					nc_Item.Inner = types.BoolValue(helpers.ParseNxosBoolean(rcoppSetCos.Get("coppSetCos.attributes.inner").String()))
+				} else {
+					nc_Item.Inner = types.BoolNull()
+				}
+				ncItem.SetCos[nc_] = nc_Item
+			}
+			{
+				var rcoppSetDscp gjson.Result
+				rcoppClassp.Get("coppClassp.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("coppSetDscp.attributes.rn").String()
+						if rnValue == "setDscp" {
+							rcoppSetDscp = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.SetDscp.IsNull() {
+					ncItem.SetDscp = types.Int64Value(rcoppSetDscp.Get("coppSetDscp.attributes.dscpVal").Int())
+				} else {
+					ncItem.SetDscp = types.Int64Null()
+				}
+				if !ncItem.SetDscpTunnel.IsNull() {
+					ncItem.SetDscpTunnel = types.BoolValue(helpers.ParseNxosBoolean(rcoppSetDscp.Get("coppSetDscp.attributes.tunnel").String()))
+				} else {
+					ncItem.SetDscpTunnel = types.BoolNull()
+				}
+			}
+			{
+				var rcoppPolicerActionExc gjson.Result
+				rcoppClassp.Get("coppClassp.children").ForEach(
+					func(_, v gjson.Result) bool {
+						rnValue := v.Get("coppPolicerActionExc.attributes.rn").String()
+						if rnValue == "policeActionE" {
+							rcoppPolicerActionExc = v
+							return false
+						}
+						return true
+					},
+				)
+				if !ncItem.TwoRatePoliceCirRate.IsNull() {
+					ncItem.TwoRatePoliceCirRate = types.Int64Value(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.cirVal").Int())
+				} else {
+					ncItem.TwoRatePoliceCirRate = types.Int64Null()
+				}
+				if !ncItem.TwoRatePoliceBcRate.IsNull() {
+					ncItem.TwoRatePoliceBcRate = types.Int64Value(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.burstC").Int())
+				} else {
+					ncItem.TwoRatePoliceBcRate = types.Int64Null()
+				}
+				if !ncItem.TwoRatePoliceBcUnit.IsNull() {
+					ncItem.TwoRatePoliceBcUnit = types.StringValue(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.burstUnit").String())
+				} else {
+					ncItem.TwoRatePoliceBcUnit = types.StringNull()
+				}
+				if !ncItem.TwoRatePolicePirRate.IsNull() {
+					ncItem.TwoRatePolicePirRate = types.Int64Value(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.pirVal").Int())
+				} else {
+					ncItem.TwoRatePolicePirRate = types.Int64Null()
+				}
+				if !ncItem.TwoRatePoliceBeRate.IsNull() {
+					ncItem.TwoRatePoliceBeRate = types.Int64Value(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.burstE").Int())
+				} else {
+					ncItem.TwoRatePoliceBeRate = types.Int64Null()
+				}
+				if !ncItem.TwoRatePoliceBeUnit.IsNull() {
+					ncItem.TwoRatePoliceBeUnit = types.StringValue(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.burstEUnit").String())
+				} else {
+					ncItem.TwoRatePoliceBeUnit = types.StringNull()
+				}
+				if !ncItem.TwoRatePoliceConformAction.IsNull() {
+					ncItem.TwoRatePoliceConformAction = types.StringValue(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.conformAction").String())
+				} else {
+					ncItem.TwoRatePoliceConformAction = types.StringNull()
+				}
+				if !ncItem.TwoRatePoliceExceedAction.IsNull() {
+					ncItem.TwoRatePoliceExceedAction = types.StringValue(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.exceedAction").String())
+				} else {
+					ncItem.TwoRatePoliceExceedAction = types.StringNull()
+				}
+				if !ncItem.TwoRatePoliceViolateAction.IsNull() {
+					ncItem.TwoRatePoliceViolateAction = types.StringValue(rcoppPolicerActionExc.Get("coppPolicerActionExc.attributes.violateAction").String())
+				} else {
+					ncItem.TwoRatePoliceViolateAction = types.StringNull()
+				}
+			}
+			for nc_ := range ncItem.LoggingDrop {
+				nc_Item := ncItem.LoggingDrop[nc_]
+				keyParts := strings.SplitN(nc_, ";", 2)
+				var rcoppLogging gjson.Result
+				rcoppClassp.Get("coppClassp.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("coppLogging.attributes.threshold").String() == keyParts[0] &&
+							v.Get("coppLogging.attributes.levelRange").String() == keyParts[1] {
+							rcoppLogging = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rcoppLogging.Exists() {
+					delete(ncItem.LoggingDrop, nc_)
+					continue
+				}
+				ncItem.LoggingDrop[nc_] = nc_Item
+			}
+			item.Classes[nc] = ncItem
+		}
+		data.CoppPolicyMaps[key] = item
+	}
+	for key, item := range data.CoppServicePolicies {
+		var rcoppService gjson.Result
+		rcoppEntity.Get("coppEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("coppService.attributes.name").String() == key {
+					rcoppService = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rcoppService.Exists() {
+			delete(data.CoppServicePolicies, key)
+			continue
+		}
+		data.CoppServicePolicies[key] = item
+	}
 	var ripqosEntity gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -8976,6 +10123,23 @@ func (data System) toDeleteBody() nxos.Body {
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			}
 		}
+		for key, child := range data.CoppClassMaps {
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "coppClass.attributes.rn", child.getRn(key))
+			deleteBody, _ = sjson.Set(deleteBody, "coppClass.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
+		for key, child := range data.CoppPolicyMaps {
+			deleteBody := ""
+			deleteBody, _ = sjson.Set(deleteBody, "coppPolicy.attributes.rn", child.getRn(key))
+			deleteBody, _ = sjson.Set(deleteBody, "coppPolicy.attributes.status", "deleted")
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+		}
+		for key, child := range data.CoppServicePolicies {
+			childBody := ""
+			childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.coppService.attributes", childBody)
+		}
 		if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
 			body, _ = sjson.Delete(body, entryPath)
 			if len(gjson.Get(body, siblingsPath).Array()) == 0 {
@@ -9856,12 +11020,96 @@ func (data System) managedDns() map[string]bool {
 			}
 		}
 	}
-	if !(data.CoppAdminState.IsNull() && data.CoppRateLimiter.IsNull() && (data.CoppProfileType.IsNull())) {
+	if !(data.CoppAdminState.IsNull() && data.CoppRateLimiter.IsNull() && (data.CoppProfileType.IsNull()) && len(data.CoppClassMaps) == 0 && len(data.CoppPolicyMaps) == 0 && len(data.CoppServicePolicies) == 0) {
 		coppEntityDn := dn + "/" + "copp"
 		dns[coppEntityDn] = true
 		if !(data.CoppProfileType.IsNull()) {
 			coppProfileDn := coppEntityDn + "/" + "profile"
 			dns[coppProfileDn] = true
+		}
+		for key, child := range data.CoppClassMaps {
+			coppClassDn := coppEntityDn + "/" + child.getRn(key)
+			dns[coppClassDn] = true
+			for key_, child_ := range child.AccessGroups {
+				coppAclDn_ := coppClassDn + "/" + child_.getRn(key_)
+				dns[coppAclDn_] = true
+			}
+			for key_, child_ := range child.Exceptions {
+				coppExeOptionsDn_ := coppClassDn + "/" + child_.getRn(key_)
+				dns[coppExeOptionsDn_] = true
+			}
+			if !(child.ExceptionIpOption.IsNull()) {
+				coppIpDn_ := coppClassDn + "/" + "ip"
+				dns[coppIpDn_] = true
+			}
+			if !(child.ExceptionIpv6Option.IsNull()) {
+				coppIpv6Dn_ := coppClassDn + "/" + "ipv6"
+				dns[coppIpv6Dn_] = true
+			}
+			if !(child.Redirect.IsNull()) {
+				coppRdirectDn_ := coppClassDn + "/" + "rdirect"
+				dns[coppRdirectDn_] = true
+			}
+			if !(child.ExceptionFcoeFibMiss.IsNull()) {
+				coppFcoeDn_ := coppClassDn + "/" + "fcoe"
+				dns[coppFcoeDn_] = true
+			}
+			for key_, child_ := range child.ExceptionIpIcmp {
+				coppIpIcmpDn_ := coppClassDn + "/" + child_.getRn(key_)
+				dns[coppIpIcmpDn_] = true
+			}
+			for key_, child_ := range child.ExceptionIpv6Icmp {
+				coppIpv6IcmpDn_ := coppClassDn + "/" + child_.getRn(key_)
+				dns[coppIpv6IcmpDn_] = true
+			}
+			for key_, child_ := range child.ExceptionMulticast {
+				coppMulticastDn_ := coppClassDn + "/" + child_.getRn(key_)
+				dns[coppMulticastDn_] = true
+			}
+			for key_, child_ := range child.Protocols {
+				coppProtocolDn_ := coppClassDn + "/" + child_.getRn(key_)
+				dns[coppProtocolDn_] = true
+				if !(child_.MplsExp.IsNull() && child_.MplsRouterAlert.IsNull()) {
+					coppMPLSoptionDn__ := coppProtocolDn_ + "/" + "mpls"
+					dns[coppMPLSoptionDn__] = true
+				}
+			}
+		}
+		for key, child := range data.CoppPolicyMaps {
+			coppPolicyDn := coppEntityDn + "/" + child.getRn(key)
+			dns[coppPolicyDn] = true
+			for key_, child_ := range child.Classes {
+				coppClasspDn_ := coppPolicyDn + "/" + child_.getRn(key_)
+				dns[coppClasspDn_] = true
+				for key__, child__ := range child_.Police {
+					keyParts := strings.SplitN(key__, ";", 4)
+					_ = keyParts
+					coppPolicerActionDn__ := coppClasspDn_ + "/" + child__.getRn(key__)
+					dns[coppPolicerActionDn__] = true
+				}
+				for key__, child__ := range child_.SetCos {
+					coppSetCosDn__ := coppClasspDn_ + "/" + child__.getRn(key__)
+					dns[coppSetCosDn__] = true
+				}
+				if !(child_.SetDscp.IsNull() && child_.SetDscpTunnel.IsNull()) {
+					coppSetDscpDn__ := coppClasspDn_ + "/" + "setDscp"
+					dns[coppSetDscpDn__] = true
+				}
+				if !(child_.TwoRatePoliceCirRate.IsNull() && child_.TwoRatePoliceBcRate.IsNull() && child_.TwoRatePoliceBcUnit.IsNull() && child_.TwoRatePolicePirRate.IsNull() && child_.TwoRatePoliceBeRate.IsNull() && child_.TwoRatePoliceBeUnit.IsNull() && child_.TwoRatePoliceConformAction.IsNull() && child_.TwoRatePoliceExceedAction.IsNull() && child_.TwoRatePoliceViolateAction.IsNull()) {
+					coppPolicerActionExcDn__ := coppClasspDn_ + "/" + "policeActionE"
+					dns[coppPolicerActionExcDn__] = true
+				}
+				for key__, child__ := range child_.LoggingDrop {
+					keyParts := strings.SplitN(key__, ";", 2)
+					_ = keyParts
+					coppLoggingDn__ := coppClasspDn_ + "/" + child__.getRn(key__)
+					dns[coppLoggingDn__] = true
+				}
+			}
+		}
+		for key, child := range data.CoppServicePolicies {
+			coppServiceDn := coppEntityDn + "/" + child.getRn(key)
+			dns[coppServiceDn] = true
 		}
 	}
 	if !(data.QosDynamicBufferSharing.IsNull() && data.QosMode.IsNull() && data.QosPoliciesStatistics.IsNull() && data.QosResetDei.IsNull() && data.QosStatistics.IsNull()) {
@@ -11413,7 +12661,7 @@ func (data System) toResetBody(preexisting map[string]bool) nxos.Body {
 			}
 		}
 	}
-	if !(data.CoppAdminState.IsNull() && data.CoppRateLimiter.IsNull() && (data.CoppProfileType.IsNull())) {
+	if !(data.CoppAdminState.IsNull() && data.CoppRateLimiter.IsNull() && (data.CoppProfileType.IsNull()) && len(data.CoppClassMaps) == 0 && len(data.CoppPolicyMaps) == 0 && len(data.CoppServicePolicies) == 0) {
 		coppEntityRn := "copp"
 		coppEntityDn := dn + "/" + coppEntityRn
 		_ = coppEntityDn
@@ -11439,6 +12687,342 @@ func (data System) toResetBody(preexisting map[string]bool) nxos.Body {
 						coppEntityBody, _ = sjson.SetRaw(coppEntityBody, "coppEntity.children.-1", coppProfileBody)
 					}
 				}
+			}
+			for key, child := range data.CoppClassMaps {
+				_ = child
+				coppClassRn := child.getRn(key)
+				coppClassDn := coppEntityDn + "/" + coppClassRn
+				_ = coppClassDn
+				if !existed(coppClassDn) {
+					coppEntityBody, _ = sjson.Set(coppEntityBody, "coppEntity.children.-1.coppClass.attributes", map[string]interface{}{"rn": coppClassRn, "status": "deleted"})
+					continue
+				}
+				coppClassBody := ""
+				coppClassBody, _ = sjson.Set(coppClassBody, "coppClass.attributes.rn", coppClassRn)
+				if !child.MatchType.IsNull() {
+					coppClassBody, _ = sjson.Set(coppClassBody, "coppClass.attributes.matchOption", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Description.IsNull() {
+					coppClassBody, _ = sjson.Set(coppClassBody, "coppClass.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				for key_, child_ := range child.AccessGroups {
+					_ = child_
+					coppAclRn_ := child_.getRn(key_)
+					coppAclDn_ := coppClassDn + "/" + coppAclRn_
+					_ = coppAclDn_
+					if !existed(coppAclDn_) {
+						coppClassBody, _ = sjson.Set(coppClassBody, "coppClass.children.-1.coppAcl.attributes", map[string]interface{}{"rn": coppAclRn_, "status": "deleted"})
+						continue
+					}
+					coppAclBody_ := ""
+					coppAclBody_, _ = sjson.Set(coppAclBody_, "coppAcl.attributes.rn", coppAclRn_)
+					coppClassBody, _ = sjson.SetRaw(coppClassBody, "coppClass.children.-1", coppAclBody_)
+				}
+				for key_, child_ := range child.Exceptions {
+					_ = child_
+					coppExeOptionsRn_ := child_.getRn(key_)
+					coppExeOptionsDn_ := coppClassDn + "/" + coppExeOptionsRn_
+					_ = coppExeOptionsDn_
+					if !existed(coppExeOptionsDn_) {
+						coppClassBody, _ = sjson.Set(coppClassBody, "coppClass.children.-1.coppExeOptions.attributes", map[string]interface{}{"rn": coppExeOptionsRn_, "status": "deleted"})
+						continue
+					}
+					coppExeOptionsBody_ := ""
+					coppExeOptionsBody_, _ = sjson.Set(coppExeOptionsBody_, "coppExeOptions.attributes.rn", coppExeOptionsRn_)
+					coppClassBody, _ = sjson.SetRaw(coppClassBody, "coppClass.children.-1", coppExeOptionsBody_)
+				}
+				if !(child.ExceptionIpOption.IsNull()) {
+					coppIpRn_ := "ip"
+					coppIpDn_ := coppClassDn + "/" + coppIpRn_
+					_ = coppIpDn_
+					if !existed(coppIpDn_) {
+						coppClassBody, _ = sjson.Set(coppClassBody, "coppClass.children.-1.coppIp.attributes", map[string]interface{}{"rn": coppIpRn_, "status": "deleted"})
+					} else {
+						coppIpBody_ := ""
+						if !child.ExceptionIpOption.IsNull() {
+							coppIpBody_, _ = sjson.Set(coppIpBody_, "coppIp.attributes.options", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if coppIpBody_ != "" {
+							coppIpBody_, _ = sjson.Set(coppIpBody_, "coppIp.attributes.rn", coppIpRn_)
+							coppClassBody, _ = sjson.SetRaw(coppClassBody, "coppClass.children.-1", coppIpBody_)
+						}
+					}
+				}
+				if !(child.ExceptionIpv6Option.IsNull()) {
+					coppIpv6Rn_ := "ipv6"
+					coppIpv6Dn_ := coppClassDn + "/" + coppIpv6Rn_
+					_ = coppIpv6Dn_
+					if !existed(coppIpv6Dn_) {
+						coppClassBody, _ = sjson.Set(coppClassBody, "coppClass.children.-1.coppIpv6.attributes", map[string]interface{}{"rn": coppIpv6Rn_, "status": "deleted"})
+					} else {
+						coppIpv6Body_ := ""
+						if !child.ExceptionIpv6Option.IsNull() {
+							coppIpv6Body_, _ = sjson.Set(coppIpv6Body_, "coppIpv6.attributes.options", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if coppIpv6Body_ != "" {
+							coppIpv6Body_, _ = sjson.Set(coppIpv6Body_, "coppIpv6.attributes.rn", coppIpv6Rn_)
+							coppClassBody, _ = sjson.SetRaw(coppClassBody, "coppClass.children.-1", coppIpv6Body_)
+						}
+					}
+				}
+				if !(child.Redirect.IsNull()) {
+					coppRdirectRn_ := "rdirect"
+					coppRdirectDn_ := coppClassDn + "/" + coppRdirectRn_
+					_ = coppRdirectDn_
+					if !existed(coppRdirectDn_) {
+						coppClassBody, _ = sjson.Set(coppClassBody, "coppClass.children.-1.coppRdirect.attributes", map[string]interface{}{"rn": coppRdirectRn_, "status": "deleted"})
+					} else {
+						coppRdirectBody_ := ""
+						if !child.Redirect.IsNull() {
+							coppRdirectBody_, _ = sjson.Set(coppRdirectBody_, "coppRdirect.attributes.rdrct", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if coppRdirectBody_ != "" {
+							coppRdirectBody_, _ = sjson.Set(coppRdirectBody_, "coppRdirect.attributes.rn", coppRdirectRn_)
+							coppClassBody, _ = sjson.SetRaw(coppClassBody, "coppClass.children.-1", coppRdirectBody_)
+						}
+					}
+				}
+				if !(child.ExceptionFcoeFibMiss.IsNull()) {
+					coppFcoeRn_ := "fcoe"
+					coppFcoeDn_ := coppClassDn + "/" + coppFcoeRn_
+					_ = coppFcoeDn_
+					if !existed(coppFcoeDn_) {
+						coppClassBody, _ = sjson.Set(coppClassBody, "coppClass.children.-1.coppFcoe.attributes", map[string]interface{}{"rn": coppFcoeRn_, "status": "deleted"})
+					} else {
+						coppFcoeBody_ := ""
+						if !child.ExceptionFcoeFibMiss.IsNull() {
+							coppFcoeBody_, _ = sjson.Set(coppFcoeBody_, "coppFcoe.attributes.option", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if coppFcoeBody_ != "" {
+							coppFcoeBody_, _ = sjson.Set(coppFcoeBody_, "coppFcoe.attributes.rn", coppFcoeRn_)
+							coppClassBody, _ = sjson.SetRaw(coppClassBody, "coppClass.children.-1", coppFcoeBody_)
+						}
+					}
+				}
+				for key_, child_ := range child.ExceptionIpIcmp {
+					_ = child_
+					coppIpIcmpRn_ := child_.getRn(key_)
+					coppIpIcmpDn_ := coppClassDn + "/" + coppIpIcmpRn_
+					_ = coppIpIcmpDn_
+					if !existed(coppIpIcmpDn_) {
+						coppClassBody, _ = sjson.Set(coppClassBody, "coppClass.children.-1.coppIpIcmp.attributes", map[string]interface{}{"rn": coppIpIcmpRn_, "status": "deleted"})
+						continue
+					}
+					coppIpIcmpBody_ := ""
+					coppIpIcmpBody_, _ = sjson.Set(coppIpIcmpBody_, "coppIpIcmp.attributes.rn", coppIpIcmpRn_)
+					coppClassBody, _ = sjson.SetRaw(coppClassBody, "coppClass.children.-1", coppIpIcmpBody_)
+				}
+				for key_, child_ := range child.ExceptionIpv6Icmp {
+					_ = child_
+					coppIpv6IcmpRn_ := child_.getRn(key_)
+					coppIpv6IcmpDn_ := coppClassDn + "/" + coppIpv6IcmpRn_
+					_ = coppIpv6IcmpDn_
+					if !existed(coppIpv6IcmpDn_) {
+						coppClassBody, _ = sjson.Set(coppClassBody, "coppClass.children.-1.coppIpv6Icmp.attributes", map[string]interface{}{"rn": coppIpv6IcmpRn_, "status": "deleted"})
+						continue
+					}
+					coppIpv6IcmpBody_ := ""
+					coppIpv6IcmpBody_, _ = sjson.Set(coppIpv6IcmpBody_, "coppIpv6Icmp.attributes.rn", coppIpv6IcmpRn_)
+					coppClassBody, _ = sjson.SetRaw(coppClassBody, "coppClass.children.-1", coppIpv6IcmpBody_)
+				}
+				for key_, child_ := range child.ExceptionMulticast {
+					_ = child_
+					coppMulticastRn_ := child_.getRn(key_)
+					coppMulticastDn_ := coppClassDn + "/" + coppMulticastRn_
+					_ = coppMulticastDn_
+					if !existed(coppMulticastDn_) {
+						coppClassBody, _ = sjson.Set(coppClassBody, "coppClass.children.-1.coppMulticast.attributes", map[string]interface{}{"rn": coppMulticastRn_, "status": "deleted"})
+						continue
+					}
+					coppMulticastBody_ := ""
+					coppMulticastBody_, _ = sjson.Set(coppMulticastBody_, "coppMulticast.attributes.rn", coppMulticastRn_)
+					coppClassBody, _ = sjson.SetRaw(coppClassBody, "coppClass.children.-1", coppMulticastBody_)
+				}
+				for key_, child_ := range child.Protocols {
+					_ = child_
+					coppProtocolRn_ := child_.getRn(key_)
+					coppProtocolDn_ := coppClassDn + "/" + coppProtocolRn_
+					_ = coppProtocolDn_
+					if !existed(coppProtocolDn_) {
+						coppClassBody, _ = sjson.Set(coppClassBody, "coppClass.children.-1.coppProtocol.attributes", map[string]interface{}{"rn": coppProtocolRn_, "status": "deleted"})
+						continue
+					}
+					coppProtocolBody_ := ""
+					coppProtocolBody_, _ = sjson.Set(coppProtocolBody_, "coppProtocol.attributes.rn", coppProtocolRn_)
+					if !(child_.MplsExp.IsNull() && child_.MplsRouterAlert.IsNull()) {
+						coppMPLSoptionRn__ := "mpls"
+						coppMPLSoptionDn__ := coppProtocolDn_ + "/" + coppMPLSoptionRn__
+						_ = coppMPLSoptionDn__
+						if !existed(coppMPLSoptionDn__) {
+							coppProtocolBody_, _ = sjson.Set(coppProtocolBody_, "coppProtocol.children.-1.coppMPLSoption.attributes", map[string]interface{}{"rn": coppMPLSoptionRn__, "status": "deleted"})
+						} else {
+							coppMPLSoptionBody__ := ""
+							if !child_.MplsExp.IsNull() {
+								coppMPLSoptionBody__, _ = sjson.Set(coppMPLSoptionBody__, "coppMPLSoption.attributes.exp", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.MplsRouterAlert.IsNull() {
+								coppMPLSoptionBody__, _ = sjson.Set(coppMPLSoptionBody__, "coppMPLSoption.attributes.routerAlert", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if coppMPLSoptionBody__ != "" {
+								coppMPLSoptionBody__, _ = sjson.Set(coppMPLSoptionBody__, "coppMPLSoption.attributes.rn", coppMPLSoptionRn__)
+								coppProtocolBody_, _ = sjson.SetRaw(coppProtocolBody_, "coppProtocol.children.-1", coppMPLSoptionBody__)
+							}
+						}
+					}
+					coppClassBody, _ = sjson.SetRaw(coppClassBody, "coppClass.children.-1", coppProtocolBody_)
+				}
+				coppEntityBody, _ = sjson.SetRaw(coppEntityBody, "coppEntity.children.-1", coppClassBody)
+			}
+			for key, child := range data.CoppPolicyMaps {
+				_ = child
+				coppPolicyRn := child.getRn(key)
+				coppPolicyDn := coppEntityDn + "/" + coppPolicyRn
+				_ = coppPolicyDn
+				if !existed(coppPolicyDn) {
+					coppEntityBody, _ = sjson.Set(coppEntityBody, "coppEntity.children.-1.coppPolicy.attributes", map[string]interface{}{"rn": coppPolicyRn, "status": "deleted"})
+					continue
+				}
+				coppPolicyBody := ""
+				coppPolicyBody, _ = sjson.Set(coppPolicyBody, "coppPolicy.attributes.rn", coppPolicyRn)
+				for key_, child_ := range child.Classes {
+					_ = child_
+					coppClasspRn_ := child_.getRn(key_)
+					coppClasspDn_ := coppPolicyDn + "/" + coppClasspRn_
+					_ = coppClasspDn_
+					if !existed(coppClasspDn_) {
+						coppPolicyBody, _ = sjson.Set(coppPolicyBody, "coppPolicy.children.-1.coppClassp.attributes", map[string]interface{}{"rn": coppClasspRn_, "status": "deleted"})
+						continue
+					}
+					coppClasspBody_ := ""
+					coppClasspBody_, _ = sjson.Set(coppClasspBody_, "coppClassp.attributes.rn", coppClasspRn_)
+					if !child_.InsertBefore.IsNull() {
+						coppClasspBody_, _ = sjson.Set(coppClasspBody_, "coppClassp.attributes.insertBeforeName", "DME_UNSET_PROPERTY_MARKER")
+					}
+					for key__, child__ := range child_.Police {
+						_ = child__
+						keyParts := strings.SplitN(key__, ";", 4)
+						_ = keyParts
+						coppPolicerActionRn__ := child__.getRn(key__)
+						coppPolicerActionDn__ := coppClasspDn_ + "/" + coppPolicerActionRn__
+						_ = coppPolicerActionDn__
+						if !existed(coppPolicerActionDn__) {
+							coppClasspBody_, _ = sjson.Set(coppClasspBody_, "coppClassp.children.-1.coppPolicerAction.attributes", map[string]interface{}{"rn": coppPolicerActionRn__, "status": "deleted"})
+							continue
+						}
+						coppPolicerActionBody__ := ""
+						coppPolicerActionBody__, _ = sjson.Set(coppPolicerActionBody__, "coppPolicerAction.attributes.rn", coppPolicerActionRn__)
+						if !child__.ConformAction.IsNull() {
+							coppPolicerActionBody__, _ = sjson.Set(coppPolicerActionBody__, "coppPolicerAction.attributes.conformAction", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !child__.ViolateAction.IsNull() {
+							coppPolicerActionBody__, _ = sjson.Set(coppPolicerActionBody__, "coppPolicerAction.attributes.violateAction", "DME_UNSET_PROPERTY_MARKER")
+						}
+						coppClasspBody_, _ = sjson.SetRaw(coppClasspBody_, "coppClassp.children.-1", coppPolicerActionBody__)
+					}
+					for key__, child__ := range child_.SetCos {
+						_ = child__
+						coppSetCosRn__ := child__.getRn(key__)
+						coppSetCosDn__ := coppClasspDn_ + "/" + coppSetCosRn__
+						_ = coppSetCosDn__
+						if !existed(coppSetCosDn__) {
+							coppClasspBody_, _ = sjson.Set(coppClasspBody_, "coppClassp.children.-1.coppSetCos.attributes", map[string]interface{}{"rn": coppSetCosRn__, "status": "deleted"})
+							continue
+						}
+						coppSetCosBody__ := ""
+						coppSetCosBody__, _ = sjson.Set(coppSetCosBody__, "coppSetCos.attributes.rn", coppSetCosRn__)
+						if !child__.Inner.IsNull() {
+							coppSetCosBody__, _ = sjson.Set(coppSetCosBody__, "coppSetCos.attributes.inner", "DME_UNSET_PROPERTY_MARKER")
+						}
+						coppClasspBody_, _ = sjson.SetRaw(coppClasspBody_, "coppClassp.children.-1", coppSetCosBody__)
+					}
+					if !(child_.SetDscp.IsNull() && child_.SetDscpTunnel.IsNull()) {
+						coppSetDscpRn__ := "setDscp"
+						coppSetDscpDn__ := coppClasspDn_ + "/" + coppSetDscpRn__
+						_ = coppSetDscpDn__
+						if !existed(coppSetDscpDn__) {
+							coppClasspBody_, _ = sjson.Set(coppClasspBody_, "coppClassp.children.-1.coppSetDscp.attributes", map[string]interface{}{"rn": coppSetDscpRn__, "status": "deleted"})
+						} else {
+							coppSetDscpBody__ := ""
+							if !child_.SetDscp.IsNull() {
+								coppSetDscpBody__, _ = sjson.Set(coppSetDscpBody__, "coppSetDscp.attributes.dscpVal", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.SetDscpTunnel.IsNull() {
+								coppSetDscpBody__, _ = sjson.Set(coppSetDscpBody__, "coppSetDscp.attributes.tunnel", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if coppSetDscpBody__ != "" {
+								coppSetDscpBody__, _ = sjson.Set(coppSetDscpBody__, "coppSetDscp.attributes.rn", coppSetDscpRn__)
+								coppClasspBody_, _ = sjson.SetRaw(coppClasspBody_, "coppClassp.children.-1", coppSetDscpBody__)
+							}
+						}
+					}
+					if !(child_.TwoRatePoliceCirRate.IsNull() && child_.TwoRatePoliceBcRate.IsNull() && child_.TwoRatePoliceBcUnit.IsNull() && child_.TwoRatePolicePirRate.IsNull() && child_.TwoRatePoliceBeRate.IsNull() && child_.TwoRatePoliceBeUnit.IsNull() && child_.TwoRatePoliceConformAction.IsNull() && child_.TwoRatePoliceExceedAction.IsNull() && child_.TwoRatePoliceViolateAction.IsNull()) {
+						coppPolicerActionExcRn__ := "policeActionE"
+						coppPolicerActionExcDn__ := coppClasspDn_ + "/" + coppPolicerActionExcRn__
+						_ = coppPolicerActionExcDn__
+						if !existed(coppPolicerActionExcDn__) {
+							coppClasspBody_, _ = sjson.Set(coppClasspBody_, "coppClassp.children.-1.coppPolicerActionExc.attributes", map[string]interface{}{"rn": coppPolicerActionExcRn__, "status": "deleted"})
+						} else {
+							coppPolicerActionExcBody__ := ""
+							if !child_.TwoRatePoliceCirRate.IsNull() {
+								coppPolicerActionExcBody__, _ = sjson.Set(coppPolicerActionExcBody__, "coppPolicerActionExc.attributes.cirVal", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.TwoRatePoliceBcRate.IsNull() {
+								coppPolicerActionExcBody__, _ = sjson.Set(coppPolicerActionExcBody__, "coppPolicerActionExc.attributes.burstC", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.TwoRatePoliceBcUnit.IsNull() {
+								coppPolicerActionExcBody__, _ = sjson.Set(coppPolicerActionExcBody__, "coppPolicerActionExc.attributes.burstUnit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.TwoRatePolicePirRate.IsNull() {
+								coppPolicerActionExcBody__, _ = sjson.Set(coppPolicerActionExcBody__, "coppPolicerActionExc.attributes.pirVal", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.TwoRatePoliceBeRate.IsNull() {
+								coppPolicerActionExcBody__, _ = sjson.Set(coppPolicerActionExcBody__, "coppPolicerActionExc.attributes.burstE", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.TwoRatePoliceBeUnit.IsNull() {
+								coppPolicerActionExcBody__, _ = sjson.Set(coppPolicerActionExcBody__, "coppPolicerActionExc.attributes.burstEUnit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.TwoRatePoliceConformAction.IsNull() {
+								coppPolicerActionExcBody__, _ = sjson.Set(coppPolicerActionExcBody__, "coppPolicerActionExc.attributes.conformAction", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.TwoRatePoliceExceedAction.IsNull() {
+								coppPolicerActionExcBody__, _ = sjson.Set(coppPolicerActionExcBody__, "coppPolicerActionExc.attributes.exceedAction", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.TwoRatePoliceViolateAction.IsNull() {
+								coppPolicerActionExcBody__, _ = sjson.Set(coppPolicerActionExcBody__, "coppPolicerActionExc.attributes.violateAction", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if coppPolicerActionExcBody__ != "" {
+								coppPolicerActionExcBody__, _ = sjson.Set(coppPolicerActionExcBody__, "coppPolicerActionExc.attributes.rn", coppPolicerActionExcRn__)
+								coppClasspBody_, _ = sjson.SetRaw(coppClasspBody_, "coppClassp.children.-1", coppPolicerActionExcBody__)
+							}
+						}
+					}
+					for key__, child__ := range child_.LoggingDrop {
+						_ = child__
+						keyParts := strings.SplitN(key__, ";", 2)
+						_ = keyParts
+						coppLoggingRn__ := child__.getRn(key__)
+						coppLoggingDn__ := coppClasspDn_ + "/" + coppLoggingRn__
+						_ = coppLoggingDn__
+						if !existed(coppLoggingDn__) {
+							coppClasspBody_, _ = sjson.Set(coppClasspBody_, "coppClassp.children.-1.coppLogging.attributes", map[string]interface{}{"rn": coppLoggingRn__, "status": "deleted"})
+							continue
+						}
+						coppLoggingBody__ := ""
+						coppLoggingBody__, _ = sjson.Set(coppLoggingBody__, "coppLogging.attributes.rn", coppLoggingRn__)
+						coppClasspBody_, _ = sjson.SetRaw(coppClasspBody_, "coppClassp.children.-1", coppLoggingBody__)
+					}
+					coppPolicyBody, _ = sjson.SetRaw(coppPolicyBody, "coppPolicy.children.-1", coppClasspBody_)
+				}
+				coppEntityBody, _ = sjson.SetRaw(coppEntityBody, "coppEntity.children.-1", coppPolicyBody)
+			}
+			for key, child := range data.CoppServicePolicies {
+				_ = child
+				coppServiceRn := child.getRn(key)
+				coppServiceDn := coppEntityDn + "/" + coppServiceRn
+				_ = coppServiceDn
+				coppServiceBody := ""
+				coppServiceBody, _ = sjson.Set(coppServiceBody, "coppService.attributes.rn", coppServiceRn)
+				coppEntityBody, _ = sjson.SetRaw(coppEntityBody, "coppEntity.children.-1", coppServiceBody)
 			}
 			if coppEntityBody != "" {
 				coppEntityBody, _ = sjson.Set(coppEntityBody, "coppEntity.attributes.rn", coppEntityRn)
@@ -12654,6 +14238,191 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 				deleteBody, _ = sjson.Set(deleteBody, "cdpIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
 				deleteBody, _ = sjson.Set(deleteBody, "cdpIf.attributes.portDesc", "DME_UNSET_PROPERTY_MARKER")
 				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "cdpEntity")+".children", "cdpInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.CoppClassMaps {
+			if _, found := data.CoppClassMaps[stateKey]; !found {
+				stateChild := state.CoppClassMaps[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "coppClass.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "coppClass.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "coppEntity") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for di := range state.CoppClassMaps {
+			if _, found := data.CoppClassMaps[di]; !found {
+				continue
+			}
+			stateItemdi := state.CoppClassMaps[di]
+			planItemdi := data.CoppClassMaps[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "coppEntity")+".children").Array() {
+				if mv.Get("coppClass.attributes.cName").String() == di {
+					matchBodyPathdi = helpers.FindChildPath(body.Str, bodyPath, "coppEntity") + ".children" + "." + strconv.Itoa(mi) + ".coppClass.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.AccessGroups {
+				if _, found := planItemdi.AccessGroups[stateChildKey]; !found {
+					stateChild := stateItemdi.AccessGroups[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "coppAcl.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "coppAcl.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.Exceptions {
+				if _, found := planItemdi.Exceptions[stateChildKey]; !found {
+					stateChild := stateItemdi.Exceptions[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "coppExeOptions.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "coppExeOptions.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.ExceptionIpIcmp {
+				if _, found := planItemdi.ExceptionIpIcmp[stateChildKey]; !found {
+					stateChild := stateItemdi.ExceptionIpIcmp[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "coppIpIcmp.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "coppIpIcmp.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.ExceptionIpv6Icmp {
+				if _, found := planItemdi.ExceptionIpv6Icmp[stateChildKey]; !found {
+					stateChild := stateItemdi.ExceptionIpv6Icmp[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "coppIpv6Icmp.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "coppIpv6Icmp.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.ExceptionMulticast {
+				if _, found := planItemdi.ExceptionMulticast[stateChildKey]; !found {
+					stateChild := stateItemdi.ExceptionMulticast[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "coppMulticast.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "coppMulticast.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.Protocols {
+				if _, found := planItemdi.Protocols[stateChildKey]; !found {
+					stateChild := stateItemdi.Protocols[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "coppProtocol.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "coppProtocol.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for di_ := range stateItemdi.Protocols {
+				if _, found := planItemdi.Protocols[di_]; !found {
+					continue
+				}
+				matchBodyPathdi_ := ""
+				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+					if mv.Get("coppProtocol.attributes.type").String() == di_ {
+						matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".coppProtocol.children"
+						break
+					}
+				}
+				if matchBodyPathdi_ == "" {
+					continue
+				}
+			}
+		}
+		for stateKey := range state.CoppPolicyMaps {
+			if _, found := data.CoppPolicyMaps[stateKey]; !found {
+				stateChild := state.CoppPolicyMaps[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "coppPolicy.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "coppPolicy.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "coppEntity") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for di := range state.CoppPolicyMaps {
+			if _, found := data.CoppPolicyMaps[di]; !found {
+				continue
+			}
+			stateItemdi := state.CoppPolicyMaps[di]
+			planItemdi := data.CoppPolicyMaps[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "coppEntity")+".children").Array() {
+				if mv.Get("coppPolicy.attributes.name").String() == di {
+					matchBodyPathdi = helpers.FindChildPath(body.Str, bodyPath, "coppEntity") + ".children" + "." + strconv.Itoa(mi) + ".coppPolicy.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.Classes {
+				if _, found := planItemdi.Classes[stateChildKey]; !found {
+					stateChild := stateItemdi.Classes[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "coppClassp.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "coppClassp.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for di_ := range stateItemdi.Classes {
+				if _, found := planItemdi.Classes[di_]; !found {
+					continue
+				}
+				stateItemdi_ := stateItemdi.Classes[di_]
+				planItemdi_ := planItemdi.Classes[di_]
+				matchBodyPathdi_ := ""
+				for mi, mv := range gjson.Get(body.Str, matchBodyPathdi).Array() {
+					if mv.Get("coppClassp.attributes.name").String() == di_ {
+						matchBodyPathdi_ = matchBodyPathdi + "." + strconv.Itoa(mi) + ".coppClassp.children"
+						break
+					}
+				}
+				if matchBodyPathdi_ == "" {
+					continue
+				}
+				for stateChildKey := range stateItemdi_.Police {
+					if _, found := planItemdi_.Police[stateChildKey]; !found {
+						stateChild := stateItemdi_.Police[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "coppPolicerAction.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "coppPolicerAction.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
+				for stateChildKey := range stateItemdi_.SetCos {
+					if _, found := planItemdi_.SetCos[stateChildKey]; !found {
+						stateChild := stateItemdi_.SetCos[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "coppSetCos.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "coppSetCos.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
+				for stateChildKey := range stateItemdi_.LoggingDrop {
+					if _, found := planItemdi_.LoggingDrop[stateChildKey]; !found {
+						stateChild := stateItemdi_.LoggingDrop[stateChildKey]
+						deleteBody := ""
+						deleteBody, _ = sjson.Set(deleteBody, "coppLogging.attributes.rn", stateChild.getRn(stateChildKey))
+						deleteBody, _ = sjson.Set(deleteBody, "coppLogging.attributes.status", "deleted")
+						body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi_+".-1", deleteBody)
+					}
+				}
+			}
+		}
+		for stateKey := range state.CoppServicePolicies {
+			if _, found := data.CoppServicePolicies[stateKey]; !found {
+				stateChild := state.CoppServicePolicies[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "coppService.attributes.rn", stateChild.getRn(stateKey))
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "coppEntity") + ".children"
 				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
@@ -13940,6 +15709,301 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 		if !state.CoppProfileType.IsNull() && config.CoppProfileType.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "coppEntity")+".children", "coppProfile")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"prof", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.CoppClassMaps {
+			if configChild, ok := config.CoppClassMaps[key]; ok {
+				stateChild := state.CoppClassMaps[key]
+				_ = stateChild
+				_ = configChild
+				listChildDn := data.getDn() + "/copp" + "/" + stateChild.getRn(key)
+				_ = listChildDn
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "coppEntity")+".children").Array() {
+					if mv.Get("coppClass.attributes.cName").String() == key {
+						if !stateChild.MatchType.IsNull() && configChild.MatchType.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "coppEntity")+".children"+"."+strconv.Itoa(mi)+".coppClass.attributes."+"matchOption", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "coppEntity")+".children"+"."+strconv.Itoa(mi)+".coppClass.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "coppEntity")+".children").Array() {
+						if mv.Get("coppClass.attributes.cName").String() == key {
+							listChildPath = helpers.FindChildPath(body.Str, bodyPath, "coppEntity") + ".children" + "." + strconv.Itoa(mi) + ".coppClass.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						for key := range stateChild.AccessGroups {
+							if configChild, ok := configChild.AccessGroups[key]; ok {
+								stateChild := stateChild.AccessGroups[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.Exceptions {
+							if configChild, ok := configChild.Exceptions[key]; ok {
+								stateChild := stateChild.Exceptions[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						if deleteEmptied != nil && !(stateChild.ExceptionIpOption.IsNull()) && (configChild.ExceptionIpOption.IsNull()) && deleteEmptied(listChildDn+"/ip") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "coppIp")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.ExceptionIpOption.IsNull() && configChild.ExceptionIpOption.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "coppIp")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"options", "DME_UNSET_PROPERTY_MARKER")
+							}
+						}
+						if deleteEmptied != nil && !(stateChild.ExceptionIpv6Option.IsNull()) && (configChild.ExceptionIpv6Option.IsNull()) && deleteEmptied(listChildDn+"/ipv6") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "coppIpv6")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.ExceptionIpv6Option.IsNull() && configChild.ExceptionIpv6Option.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "coppIpv6")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"options", "DME_UNSET_PROPERTY_MARKER")
+							}
+						}
+						if deleteEmptied != nil && !(stateChild.Redirect.IsNull()) && (configChild.Redirect.IsNull()) && deleteEmptied(listChildDn+"/rdirect") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "coppRdirect")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.Redirect.IsNull() && configChild.Redirect.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "coppRdirect")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"rdrct", "DME_UNSET_PROPERTY_MARKER")
+							}
+						}
+						if deleteEmptied != nil && !(stateChild.ExceptionFcoeFibMiss.IsNull()) && (configChild.ExceptionFcoeFibMiss.IsNull()) && deleteEmptied(listChildDn+"/fcoe") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "coppFcoe")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.ExceptionFcoeFibMiss.IsNull() && configChild.ExceptionFcoeFibMiss.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "coppFcoe")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"option", "DME_UNSET_PROPERTY_MARKER")
+							}
+						}
+						for key := range stateChild.ExceptionIpIcmp {
+							if configChild, ok := configChild.ExceptionIpIcmp[key]; ok {
+								stateChild := stateChild.ExceptionIpIcmp[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.ExceptionIpv6Icmp {
+							if configChild, ok := configChild.ExceptionIpv6Icmp[key]; ok {
+								stateChild := stateChild.ExceptionIpv6Icmp[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.ExceptionMulticast {
+							if configChild, ok := configChild.ExceptionMulticast[key]; ok {
+								stateChild := stateChild.ExceptionMulticast[key]
+								_ = stateChild
+								_ = configChild
+							}
+						}
+						for key := range stateChild.Protocols {
+							if configChild, ok := configChild.Protocols[key]; ok {
+								stateChild := stateChild.Protocols[key]
+								_ = stateChild
+								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
+								{
+									listChildPath_ := ""
+									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+										if mv.Get("coppProtocol.attributes.type").String() == key {
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".coppProtocol.children"
+											break
+										}
+									}
+									if listChildPath_ != "" {
+										if deleteEmptied != nil && !(stateChild.MplsExp.IsNull() && stateChild.MplsRouterAlert.IsNull()) && (configChild.MplsExp.IsNull() && configChild.MplsRouterAlert.IsNull()) && deleteEmptied(listChildDn_+"/mpls") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppMPLSoption")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.MplsExp.IsNull() && configChild.MplsExp.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppMPLSoption")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"exp", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.MplsRouterAlert.IsNull() && configChild.MplsRouterAlert.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppMPLSoption")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"routerAlert", "DME_UNSET_PROPERTY_MARKER")
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		for key := range state.CoppPolicyMaps {
+			if configChild, ok := config.CoppPolicyMaps[key]; ok {
+				stateChild := state.CoppPolicyMaps[key]
+				_ = stateChild
+				_ = configChild
+				listChildDn := data.getDn() + "/copp" + "/" + stateChild.getRn(key)
+				_ = listChildDn
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "coppEntity")+".children").Array() {
+						if mv.Get("coppPolicy.attributes.name").String() == key {
+							listChildPath = helpers.FindChildPath(body.Str, bodyPath, "coppEntity") + ".children" + "." + strconv.Itoa(mi) + ".coppPolicy.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						for key := range stateChild.Classes {
+							if configChild, ok := configChild.Classes[key]; ok {
+								stateChild := stateChild.Classes[key]
+								_ = stateChild
+								_ = configChild
+								listChildDn_ := listChildDn + "/" + stateChild.getRn(key)
+								_ = listChildDn_
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("coppClassp.attributes.name").String() == key {
+										if !stateChild.InsertBefore.IsNull() && configChild.InsertBefore.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".coppClassp.attributes."+"insertBeforeName", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+								{
+									listChildPath_ := ""
+									for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+										if mv.Get("coppClassp.attributes.name").String() == key {
+											listChildPath_ = listChildPath + "." + strconv.Itoa(mi) + ".coppClassp.children"
+											break
+										}
+									}
+									if listChildPath_ != "" {
+										for key := range stateChild.Police {
+											if configChild, ok := configChild.Police[key]; ok {
+												stateChild := stateChild.Police[key]
+												_ = stateChild
+												_ = configChild
+												keyParts := strings.SplitN(key, ";", 4)
+												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
+													if mv.Get("coppPolicerAction.attributes.cirVal").String() == keyParts[0] &&
+														mv.Get("coppPolicerAction.attributes.cirUnit").String() == keyParts[1] &&
+														mv.Get("coppPolicerAction.attributes.burstC").String() == keyParts[2] &&
+														mv.Get("coppPolicerAction.attributes.burstUnit").String() == keyParts[3] {
+														if !stateChild.ConformAction.IsNull() && configChild.ConformAction.IsNull() {
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".coppPolicerAction.attributes."+"conformAction", "DME_UNSET_PROPERTY_MARKER")
+														}
+														if !stateChild.ViolateAction.IsNull() && configChild.ViolateAction.IsNull() {
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".coppPolicerAction.attributes."+"violateAction", "DME_UNSET_PROPERTY_MARKER")
+														}
+														break
+													}
+												}
+											}
+										}
+										for key := range stateChild.SetCos {
+											if configChild, ok := configChild.SetCos[key]; ok {
+												stateChild := stateChild.SetCos[key]
+												_ = stateChild
+												_ = configChild
+												for mi, mv := range gjson.Get(body.Str, listChildPath_).Array() {
+													if mv.Get("coppSetCos.attributes.cosVal").String() == key {
+														if !stateChild.Inner.IsNull() && configChild.Inner.IsNull() {
+															body.Str, _ = sjson.Set(body.Str, listChildPath_+"."+strconv.Itoa(mi)+".coppSetCos.attributes."+"inner", "DME_UNSET_PROPERTY_MARKER")
+														}
+														break
+													}
+												}
+											}
+										}
+										if deleteEmptied != nil && !(stateChild.SetDscp.IsNull() && stateChild.SetDscpTunnel.IsNull()) && (configChild.SetDscp.IsNull() && configChild.SetDscpTunnel.IsNull()) && deleteEmptied(listChildDn_+"/setDscp") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppSetDscp")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.SetDscp.IsNull() && configChild.SetDscp.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppSetDscp")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dscpVal", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.SetDscpTunnel.IsNull() && configChild.SetDscpTunnel.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppSetDscp")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tunnel", "DME_UNSET_PROPERTY_MARKER")
+											}
+										}
+										if deleteEmptied != nil && !(stateChild.TwoRatePoliceCirRate.IsNull() && stateChild.TwoRatePoliceBcRate.IsNull() && stateChild.TwoRatePoliceBcUnit.IsNull() && stateChild.TwoRatePolicePirRate.IsNull() && stateChild.TwoRatePoliceBeRate.IsNull() && stateChild.TwoRatePoliceBeUnit.IsNull() && stateChild.TwoRatePoliceConformAction.IsNull() && stateChild.TwoRatePoliceExceedAction.IsNull() && stateChild.TwoRatePoliceViolateAction.IsNull()) && (configChild.TwoRatePoliceCirRate.IsNull() && configChild.TwoRatePoliceBcRate.IsNull() && configChild.TwoRatePoliceBcUnit.IsNull() && configChild.TwoRatePolicePirRate.IsNull() && configChild.TwoRatePoliceBeRate.IsNull() && configChild.TwoRatePoliceBeUnit.IsNull() && configChild.TwoRatePoliceConformAction.IsNull() && configChild.TwoRatePoliceExceedAction.IsNull() && configChild.TwoRatePoliceViolateAction.IsNull()) && deleteEmptied(listChildDn_+"/policeActionE") {
+											deletePath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppPolicerActionExc")
+											body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+											body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+										} else {
+											if !stateChild.TwoRatePoliceCirRate.IsNull() && configChild.TwoRatePoliceCirRate.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppPolicerActionExc")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"cirVal", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.TwoRatePoliceBcRate.IsNull() && configChild.TwoRatePoliceBcRate.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppPolicerActionExc")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstC", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.TwoRatePoliceBcUnit.IsNull() && configChild.TwoRatePoliceBcUnit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppPolicerActionExc")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstUnit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.TwoRatePolicePirRate.IsNull() && configChild.TwoRatePolicePirRate.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppPolicerActionExc")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pirVal", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.TwoRatePoliceBeRate.IsNull() && configChild.TwoRatePoliceBeRate.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppPolicerActionExc")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstE", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.TwoRatePoliceBeUnit.IsNull() && configChild.TwoRatePoliceBeUnit.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppPolicerActionExc")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"burstEUnit", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.TwoRatePoliceConformAction.IsNull() && configChild.TwoRatePoliceConformAction.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppPolicerActionExc")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"conformAction", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.TwoRatePoliceExceedAction.IsNull() && configChild.TwoRatePoliceExceedAction.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppPolicerActionExc")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"exceedAction", "DME_UNSET_PROPERTY_MARKER")
+											}
+											if !stateChild.TwoRatePoliceViolateAction.IsNull() && configChild.TwoRatePoliceViolateAction.IsNull() {
+												unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath_, "coppPolicerActionExc")
+												body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"violateAction", "DME_UNSET_PROPERTY_MARKER")
+											}
+										}
+										for key := range stateChild.LoggingDrop {
+											if configChild, ok := configChild.LoggingDrop[key]; ok {
+												stateChild := stateChild.LoggingDrop[key]
+												_ = stateChild
+												_ = configChild
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		for key := range state.CoppServicePolicies {
+			if configChild, ok := config.CoppServicePolicies[key]; ok {
+				stateChild := state.CoppServicePolicies[key]
+				_ = stateChild
+				_ = configChild
+			}
 		}
 		if !state.QosDynamicBufferSharing.IsNull() && config.QosDynamicBufferSharing.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "ipqosEntity")

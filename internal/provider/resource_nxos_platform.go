@@ -70,7 +70,7 @@ func (r *PlatformResource) Metadata(ctx context.Context, req resource.MetadataRe
 func (r *PlatformResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformDlbEntity", "platformDlbStaticPinning", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform:DlbEntity/", "System/platform:DlbStaticPinning/", "System/platform%3APriorFlowCtrlWd/", "System/platform%3AQos/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformDlbEntity", "platformDlbStaticPinning", "platformPriorFlowCtrlWd", "platformQos", "platformRateLimiterMod", "platformHwRateLimiter", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform:DlbEntity/", "System/platform:DlbStaticPinning/", "System/platform%3APriorFlowCtrlWd/", "System/platform%3AQos/", "System/platform%3ARateLimiterMod/", "System/platform%3AHwRateLimiter/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -2092,6 +2092,266 @@ func (r *PlatformResource) Schema(ctx context.Context, req resource.SchemaReques
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 10000),
+				},
+			},
+			"hardware_rate_limiters": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of hardware rate-limiter configurations. Module `0` configures the global rate-limiters.\n  - Map key: `module` - module number for which rate is being configured.\n  - Key range: `0`-`4294967295`").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"span_egress": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("rate value in kbit per sec.").AddIntegerRangeDescription(0, 100000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 100000000),
+							},
+						},
+						"access_list_log": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Packets copied to supervisor for access-list logging.").AddIntegerRangeDescription(0, 40000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 40000),
+							},
+						},
+						"bfd": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("BFD protocol traffic.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"layer_3_glean": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Glean traffic.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"layer_3_multicast_local_groups": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Multicast data packets punted for initiating SPT join.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"sflow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Inband SSX traffic.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"span": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SPAN traffic.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"fex": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("FEX traffic.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"dot1x": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("DOT1X control traffic.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"mdns": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MDNS traffic.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"mpls_oam": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("MPLS-OAM traffic.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"netflow": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Inband Netflow traffic.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"ngoam_sld": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("NGOAM SLD traffic.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"ssx": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Inband SSX traffic.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"ucs_mgmt": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Ucs Mgmt traffic.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"vxlan_oam": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("VxLAN-OAM traffic.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"ethports_100m": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("100M-Ethports.").AddIntegerRangeDescription(0, 8000000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 8000000),
+							},
+						},
+						"burst": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("value of burst size.").AddIntegerRangeDescription(0, 10000).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 10000),
+							},
+						},
+						"port_start": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Port start index.").AddIntegerRangeDescription(1, 48).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 48),
+							},
+						},
+						"port_end": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Port end index.").AddIntegerRangeDescription(1, 48).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 48),
+							},
+						},
+					},
+				},
+			},
+			"hardware_rate_limiter_arp_burst": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("burst value in packets per sec.").AddIntegerRangeDescription(-1, 1023).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 1023),
+				},
+			},
+			"hardware_rate_limiter_arp_rate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("rate value in packets per sec.").AddIntegerRangeDescription(-1, 40000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 40000),
+				},
+			},
+			"hardware_rate_limiter_bpdu_burst": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("burst value in packets per sec.").AddIntegerRangeDescription(-1, 1023).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 1023),
+				},
+			},
+			"hardware_rate_limiter_bpdu_rate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("rate value in packets per sec.").AddIntegerRangeDescription(-1, 40000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 40000),
+				},
+			},
+			"hardware_rate_limiter_errors_burst": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("burst value in packets per sec.").AddIntegerRangeDescription(-1, 1023).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 1023),
+				},
+			},
+			"hardware_rate_limiter_errors_rate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("rate value in packets per sec.").AddIntegerRangeDescription(-1, 40000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 40000),
+				},
+			},
+			"hardware_rate_limiter_forward_miss_burst": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("burst value in packets per sec.").AddIntegerRangeDescription(-1, 1023).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 1023),
+				},
+			},
+			"hardware_rate_limiter_forward_miss_rate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("rate value in packets per sec.").AddIntegerRangeDescription(-1, 40000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 40000),
+				},
+			},
+			"hardware_rate_limiter_ip_local_burst": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("burst value in packets per sec.").AddIntegerRangeDescription(-1, 1023).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 1023),
+				},
+			},
+			"hardware_rate_limiter_ip_local_rate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("rate value in packets per sec.").AddIntegerRangeDescription(-1, 40000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 40000),
+				},
+			},
+			"hardware_rate_limiter_mac_learn_burst": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("burst value in packets per sec.").AddIntegerRangeDescription(-1, 1023).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 1023),
+				},
+			},
+			"hardware_rate_limiter_mac_learn_rate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("rate value in packets per sec.").AddIntegerRangeDescription(-1, 40000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 40000),
+				},
+			},
+			"hardware_rate_limiter_mac_local_burst": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("burst value in packets per sec.").AddIntegerRangeDescription(-1, 1023).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 1023),
+				},
+			},
+			"hardware_rate_limiter_mac_local_rate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("rate value in packets per sec.").AddIntegerRangeDescription(-1, 40000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 40000),
+				},
+			},
+			"hardware_rate_limiter_software_forward_burst": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("burst value in packets per sec.").AddIntegerRangeDescription(-1, 1023).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 1023),
+				},
+			},
+			"hardware_rate_limiter_software_forward_rate": schema.Int64Attribute{
+				MarkdownDescription: helpers.NewAttributeDescription("rate value in packets per sec.").AddIntegerRangeDescription(-1, 40000).String,
+				Optional:            true,
+				Validators: []validator.Int64{
+					int64validator.Between(-1, 40000),
 				},
 			},
 			"tcam_templates": schema.MapNestedAttribute{

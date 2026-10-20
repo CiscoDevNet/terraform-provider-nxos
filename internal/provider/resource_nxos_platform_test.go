@@ -88,6 +88,13 @@ func TestAccPlatformResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "qos_pg_min_value", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "qos_pg_no_min", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "qos_pg_share", "Disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "hardware_rate_limiters.0.span_egress", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "hardware_rate_limiters.0.access_list_log", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "hardware_rate_limiters.0.bfd", "9000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "hardware_rate_limiters.0.layer_3_glean", "150"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "hardware_rate_limiters.0.layer_3_multicast_local_groups", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "hardware_rate_limiters.0.sflow", "30000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "hardware_rate_limiters.0.span", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "tcam_templates.TPL1.reference_template", "l3"))
 	if os.Getenv("PLATFORM_FRETTA") != "" {
 	}
@@ -147,6 +154,13 @@ func TestAccPlatformResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_pg_min_value", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_pg_no_min", "false"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "qos_pg_share", "Disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "hardware_rate_limiters.0.span_egress", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "hardware_rate_limiters.0.access_list_log", "200"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "hardware_rate_limiters.0.bfd", "9000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "hardware_rate_limiters.0.layer_3_glean", "150"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "hardware_rate_limiters.0.layer_3_multicast_local_groups", "2000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "hardware_rate_limiters.0.sflow", "30000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "hardware_rate_limiters.0.span", "100"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "tcam_templates.TPL1.reference_template", "l3"))
 	if os.Getenv("PLATFORM_FRETTA") != "" {
 	}
@@ -330,6 +344,17 @@ func testAccPlatformResourceConfig_all() string {
 	config += `	qos_pg_min_value = 5` + "\n"
 	config += `	qos_pg_no_min = false` + "\n"
 	config += `	qos_pg_share = "Disabled"` + "\n"
+	config += `	hardware_rate_limiters = {` + "\n"
+	config += `		"0" = {` + "\n"
+	config += `			span_egress = 1000` + "\n"
+	config += `			access_list_log = 200` + "\n"
+	config += `			bfd = 9000` + "\n"
+	config += `			layer_3_glean = 150` + "\n"
+	config += `			layer_3_multicast_local_groups = 2000` + "\n"
+	config += `			sflow = 30000` + "\n"
+	config += `			span = 100` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	tcam_templates = {` + "\n"
 	config += `		"TPL1" = {` + "\n"
 	config += `			reference_template = "l3"` + "\n"

@@ -56,7 +56,7 @@ func (d *PlatformDataSource) Metadata(_ context.Context, req datasource.Metadata
 func (d *PlatformDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformDlbEntity", "platformDlbStaticPinning", "platformPriorFlowCtrlWd", "platformQos", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform:DlbEntity/", "System/platform:DlbStaticPinning/", "System/platform%3APriorFlowCtrlWd/", "System/platform%3AQos/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the platform configuration on NX-OS devices, including hardware profiles, TCAM regions, NVE platform settings, and extended platform entity configuration.").AddApiDocumentation("platformEntity", "System/platform%3AEntity/", []string{"platformTcamRegion", "platformTcamRegionExtended", "platformNVE", "platformInfraVlan", "platformEntityExtended", "platformLoadBalance", "platformDlbEntity", "platformDlbStaticPinning", "platformPriorFlowCtrlWd", "platformQos", "platformRateLimiterMod", "platformHwRateLimiter", "platformTcamTemplate", "platformUdfTcamTemplate", "platformUdfEntity", "platformUdf"}, []string{"System/platform%3ATcamRegion/", "System/platform%3ATcamRegionExtended/", "System/platform%3ANVE/", "System/platform%3AInfraVlan/", "System/platform%3AEntityExtended/", "System/platform:LoadBalance/", "System/platform:DlbEntity/", "System/platform:DlbStaticPinning/", "System/platform%3APriorFlowCtrlWd/", "System/platform%3AQos/", "System/platform%3ARateLimiterMod/", "System/platform%3AHwRateLimiter/", "System/platform%3ATcamTemplate/", "System/platform%3AUdfTcamTemplate/", "System/platform%3AUdfEntity/", "System/platform%3AUdf/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -1273,6 +1273,158 @@ func (d *PlatformDataSource) Schema(ctx context.Context, req datasource.SchemaRe
 			},
 			"qos_span_size": schema.Int64Attribute{
 				MarkdownDescription: "Span Pool Group size.",
+				Computed:            true,
+			},
+			"hardware_rate_limiters": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of hardware rate-limiter configurations. Module `0` configures the global rate-limiters.\n  - Map key: `module` - module number for which rate is being configured.\n  - Key range: `0`-`4294967295`").String,
+				Computed:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"span_egress": schema.Int64Attribute{
+							MarkdownDescription: "rate value in kbit per sec.",
+							Computed:            true,
+						},
+						"access_list_log": schema.Int64Attribute{
+							MarkdownDescription: "Packets copied to supervisor for access-list logging.",
+							Computed:            true,
+						},
+						"bfd": schema.Int64Attribute{
+							MarkdownDescription: "BFD protocol traffic.",
+							Computed:            true,
+						},
+						"layer_3_glean": schema.Int64Attribute{
+							MarkdownDescription: "Glean traffic.",
+							Computed:            true,
+						},
+						"layer_3_multicast_local_groups": schema.Int64Attribute{
+							MarkdownDescription: "Multicast data packets punted for initiating SPT join.",
+							Computed:            true,
+						},
+						"sflow": schema.Int64Attribute{
+							MarkdownDescription: "Inband SSX traffic.",
+							Computed:            true,
+						},
+						"span": schema.Int64Attribute{
+							MarkdownDescription: "SPAN traffic.",
+							Computed:            true,
+						},
+						"fex": schema.Int64Attribute{
+							MarkdownDescription: "FEX traffic.",
+							Computed:            true,
+						},
+						"dot1x": schema.Int64Attribute{
+							MarkdownDescription: "DOT1X control traffic.",
+							Computed:            true,
+						},
+						"mdns": schema.Int64Attribute{
+							MarkdownDescription: "MDNS traffic.",
+							Computed:            true,
+						},
+						"mpls_oam": schema.Int64Attribute{
+							MarkdownDescription: "MPLS-OAM traffic.",
+							Computed:            true,
+						},
+						"netflow": schema.Int64Attribute{
+							MarkdownDescription: "Inband Netflow traffic.",
+							Computed:            true,
+						},
+						"ngoam_sld": schema.Int64Attribute{
+							MarkdownDescription: "NGOAM SLD traffic.",
+							Computed:            true,
+						},
+						"ssx": schema.Int64Attribute{
+							MarkdownDescription: "Inband SSX traffic.",
+							Computed:            true,
+						},
+						"ucs_mgmt": schema.Int64Attribute{
+							MarkdownDescription: "Ucs Mgmt traffic.",
+							Computed:            true,
+						},
+						"vxlan_oam": schema.Int64Attribute{
+							MarkdownDescription: "VxLAN-OAM traffic.",
+							Computed:            true,
+						},
+						"ethports_100m": schema.Int64Attribute{
+							MarkdownDescription: "100M-Ethports.",
+							Computed:            true,
+						},
+						"burst": schema.Int64Attribute{
+							MarkdownDescription: "value of burst size.",
+							Computed:            true,
+						},
+						"port_start": schema.Int64Attribute{
+							MarkdownDescription: "Port start index.",
+							Computed:            true,
+						},
+						"port_end": schema.Int64Attribute{
+							MarkdownDescription: "Port end index.",
+							Computed:            true,
+						},
+					},
+				},
+			},
+			"hardware_rate_limiter_arp_burst": schema.Int64Attribute{
+				MarkdownDescription: "burst value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_arp_rate": schema.Int64Attribute{
+				MarkdownDescription: "rate value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_bpdu_burst": schema.Int64Attribute{
+				MarkdownDescription: "burst value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_bpdu_rate": schema.Int64Attribute{
+				MarkdownDescription: "rate value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_errors_burst": schema.Int64Attribute{
+				MarkdownDescription: "burst value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_errors_rate": schema.Int64Attribute{
+				MarkdownDescription: "rate value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_forward_miss_burst": schema.Int64Attribute{
+				MarkdownDescription: "burst value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_forward_miss_rate": schema.Int64Attribute{
+				MarkdownDescription: "rate value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_ip_local_burst": schema.Int64Attribute{
+				MarkdownDescription: "burst value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_ip_local_rate": schema.Int64Attribute{
+				MarkdownDescription: "rate value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_mac_learn_burst": schema.Int64Attribute{
+				MarkdownDescription: "burst value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_mac_learn_rate": schema.Int64Attribute{
+				MarkdownDescription: "rate value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_mac_local_burst": schema.Int64Attribute{
+				MarkdownDescription: "burst value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_mac_local_rate": schema.Int64Attribute{
+				MarkdownDescription: "rate value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_software_forward_burst": schema.Int64Attribute{
+				MarkdownDescription: "burst value in packets per sec.",
+				Computed:            true,
+			},
+			"hardware_rate_limiter_software_forward_rate": schema.Int64Attribute{
+				MarkdownDescription: "rate value in packets per sec.",
 				Computed:            true,
 			},
 			"tcam_templates": schema.MapNestedAttribute{

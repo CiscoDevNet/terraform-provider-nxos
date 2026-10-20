@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, gRPC agent and gNMI settings, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, L2RIB duplicate MAC detection settings, and NGOAM (VXLAN OAM) install ACL and loop detection settings.
   API Documentation
-  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/ethpm:Inst/ethpmErrDisRecover https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/ethpm:ErrDisRecover/ethpmEvent https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/ethpm:Event/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AIf/ndVpc https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AVpc/ndVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AVpcDom/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Dom/dnsProvider https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Provider/dnsDomExt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:DomExt/dnsHost https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Host/dnsIpv4Host https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Ipv4Host/dnsIpv6Host https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Ipv6Host/dnsVrf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Vrf/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Dom/dnsProvider https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Provider/dnsDomExt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:DomExt/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/resmgr%3ALimRes/vshdCliAlias https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vshd:CliAlias/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/boot:Image/cfsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Fabric/cfs:Entity/cfsInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Fabric/cfs:Inst/udldEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/udld:Entity/udldInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/udld:Inst/udldPhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/udld:PhysIf/lacpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Link%20Aggregation/lacp:Entity/lacpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Link%20Aggregation/lacp:Inst/lacpIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Link%20Aggregation/lacp:If/l2Macs https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/l2:Macs/l2Static https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/l2:Static/l2StaticEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/l2:StaticEntry/lldpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/lldp%3AEntity/lldpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/lldp%3AInst/lldpIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/lldp%3AIf/cdpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/cdp%3AEntity/cdpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/cdp%3AInst/cdpIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/cdp%3AIf/coppEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Entity/coppProfile https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Profile/ipqosEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos%3AEntity/terminalTerminal https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:Terminal/terminalLine https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:Line/terminalConsole https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:Console/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:ExecTimeout/terminalVty https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:Vty/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:ExecTimeout/terminalSesLmt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:SesLmt/icamEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/icam:Entity/icamInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/icam:Inst/icamScale https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/icam:Scale/nxapiInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/nxapi:Inst/grpcInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Management/grpc:Inst/grpcGnmi https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Management/grpc:Gnmi/imBreakout https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/im:Breakout/imMod https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/im:Mod/imFpP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/im:FpP/sasSas https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Service%20Accelerated%20Switch/sas:Sas/sasSvc https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Service%20Accelerated%20Switch/sas:Svc/sasSvcInstance https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Service%20Accelerated%20Switch/sas:SvcInstance/sasSController https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Service%20Accelerated%20Switch/sas:SController/sasFwSvcPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Service%20Accelerated%20Switch/sas:FwSvcPolicy/sasIpVrf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Service%20Accelerated%20Switch/sas:IpVrf/sasDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Service%20Accelerated%20Switch/sas:Dom/commEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Communication/comm:Entity/commSsh https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Communication/comm:Ssh/commSshKey https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Communication/comm:SshKey/srcintfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/srcintf:Entity/srcintfSsh https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/srcintf:Ssh/srcintfFtp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/srcintf:Ftp/smartcardPasswdEncrypt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/smartcard:PasswdEncrypt/acllogEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/acllog:Entity/acllogInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/acllog:Inst/acllogLogCache https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/acllog:LogCache/spanErspanOriginIp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/span:ErspanOriginIp/ttagTtagEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/ttag:TtagEntity/ttagTtagIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/ttag:TtagIf/pvlanPrivateVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:PrivateVlan/pvlanVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:Vlan/pvlanIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:If/pvlanAccess https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:Access/pvlanAccessPromiscuous https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:AccessPromiscuous/pvlanAccessSecondary https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:AccessSecondary/pvlanTrunk https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:Trunk/pvlanTrunkPromiscuousTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:TrunkPromiscuousTable/pvlanTrunkPromiscuousEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:TrunkPromiscuousEntry/pvlanTrunkSecondaryTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:TrunkSecondaryTable/pvlanTrunkSecondaryEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:TrunkSecondaryEntry/pvlanSvi https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:Svi/ngmvpnEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ngmvpn:Entity/ngmvpnInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ngmvpn:Inst/ngmvpnDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ngmvpn:Dom/l2ribEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/l2rib:Entity/l2ribInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/l2rib:Inst/l2ribEvpnMACmob https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/l2rib:EvpnMACmob/ngoamEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/ngoam:Entity/ngoamInstallAcl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/ngoam:InstallAcl/ngoamLoopDetection https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/ngoam:LoopDetection/
+  topSystem https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/top:System/ethpmEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/ethpm:Entity/ethpmInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/ethpm:Inst/ethpmErrDisRecover https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/ethpm:ErrDisRecover/ethpmEvent https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/ethpm:Event/arpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AEntity/arpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AInst/arpVpc https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AVpc/arpVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AVpcDom/ndEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AEntity/ndInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AInst/ndDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3ADom/ndIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AIf/ndVpc https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AVpc/ndVpcDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AVpcDom/datetimeClock https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:Clock/datetimeTimezone https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:Timezone/datetimeSummerT https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:SummerT/dnsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Entity/dnsProf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Prof/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Dom/dnsProvider https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Provider/dnsDomExt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:DomExt/dnsHost https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Host/dnsIpv4Host https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Ipv4Host/dnsIpv6Host https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Ipv6Host/dnsVrf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Vrf/dnsDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Dom/dnsProvider https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:Provider/dnsDomExt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DNS/dns:DomExt/nwVdc https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/nw%3AVdc/resmgrLimRes https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/resmgr%3ALimRes/vshdCliAlias https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/vshd:CliAlias/licensemanagerLicenseManager https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/licensemanager:LicenseManager/licensemanagerInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/licensemanager:Inst/licensemanagerSmartLicensing https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/licensemanager:SmartLicensing/licensemanagerTransportCsluUrl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/licensemanager:TransportCsluUrl/bootBoot https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/boot:Boot/bootImage https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/boot:Image/cfsEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Fabric/cfs:Entity/cfsInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Fabric/cfs:Inst/udldEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/udld:Entity/udldInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/udld:Inst/udldPhysIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/udld:PhysIf/lacpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Link%20Aggregation/lacp:Entity/lacpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Link%20Aggregation/lacp:Inst/lacpIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Link%20Aggregation/lacp:If/l2Macs https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/l2:Macs/l2Static https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/l2:Static/l2StaticEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/l2:StaticEntry/lldpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/lldp%3AEntity/lldpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/lldp%3AInst/lldpIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/lldp%3AIf/cdpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/cdp%3AEntity/cdpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/cdp%3AInst/cdpIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/cdp%3AIf/coppEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Entity/coppProfile https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Profile/coppClass https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Class/coppAcl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Acl/coppExeOptions https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:ExeOptions/coppIp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Ip/coppIpv6 https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Ipv6/coppRdirect https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Rdirect/coppFcoe https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Fcoe/coppIpIcmp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:IpIcmp/coppIpv6Icmp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Ipv6Icmp/coppMulticast https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Multicast/coppProtocol https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Protocol/coppMPLSoption https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:MPLSoption/coppPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Policy/coppClassp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Classp/coppPolicerAction https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:PolicerAction/coppSetCos https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:SetCos/coppSetDscp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:SetDscp/coppPolicerActionExc https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:PolicerActionExc/coppLogging https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Logging/coppService https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Service/ipqosEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos%3AEntity/terminalTerminal https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:Terminal/terminalLine https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:Line/terminalConsole https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:Console/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:ExecTimeout/terminalVty https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:Vty/terminalExecTimeout https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:ExecTimeout/terminalSesLmt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:SesLmt/icamEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/icam:Entity/icamInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/icam:Inst/icamScale https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/icam:Scale/nxapiInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/nxapi:Inst/grpcInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Management/grpc:Inst/grpcGnmi https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Management/grpc:Gnmi/imBreakout https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/im:Breakout/imMod https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/im:Mod/imFpP https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/im:FpP/sasSas https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Service%20Accelerated%20Switch/sas:Sas/sasSvc https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Service%20Accelerated%20Switch/sas:Svc/sasSvcInstance https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Service%20Accelerated%20Switch/sas:SvcInstance/sasSController https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Service%20Accelerated%20Switch/sas:SController/sasFwSvcPolicy https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Service%20Accelerated%20Switch/sas:FwSvcPolicy/sasIpVrf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Service%20Accelerated%20Switch/sas:IpVrf/sasDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Service%20Accelerated%20Switch/sas:Dom/commEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Communication/comm:Entity/commSsh https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Communication/comm:Ssh/commSshKey https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Communication/comm:SshKey/srcintfEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/srcintf:Entity/srcintfSsh https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/srcintf:Ssh/srcintfFtp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/srcintf:Ftp/smartcardPasswdEncrypt https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/smartcard:PasswdEncrypt/acllogEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/acllog:Entity/acllogInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/acllog:Inst/acllogLogCache https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/acllog:LogCache/spanErspanOriginIp https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Flow/span:ErspanOriginIp/ttagTtagEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/ttag:TtagEntity/ttagTtagIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/ttag:TtagIf/pvlanPrivateVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:PrivateVlan/pvlanVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:Vlan/pvlanIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:If/pvlanAccess https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:Access/pvlanAccessPromiscuous https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:AccessPromiscuous/pvlanAccessSecondary https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:AccessSecondary/pvlanTrunk https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:Trunk/pvlanTrunkPromiscuousTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:TrunkPromiscuousTable/pvlanTrunkPromiscuousEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:TrunkPromiscuousEntry/pvlanTrunkSecondaryTable https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:TrunkSecondaryTable/pvlanTrunkSecondaryEntry https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:TrunkSecondaryEntry/pvlanSvi https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%202/pvlan:Svi/ngmvpnEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ngmvpn:Entity/ngmvpnInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ngmvpn:Inst/ngmvpnDom https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ngmvpn:Dom/l2ribEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/l2rib:Entity/l2ribInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/l2rib:Inst/l2ribEvpnMACmob https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/l2rib:EvpnMACmob/ngoamEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/ngoam:Entity/ngoamInstallAcl https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/ngoam:InstallAcl/ngoamLoopDetection https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Network%20Virtualization/ngoam:LoopDetection/
 ---
 
 # nxos_system (Resource)
@@ -72,6 +72,26 @@ This resource can manage the system configuration on NX-OS devices, including th
 - [cdpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/cdp%3AIf/)
 - [coppEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Entity/)
 - [coppProfile](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Profile/)
+- [coppClass](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Class/)
+- [coppAcl](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Acl/)
+- [coppExeOptions](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:ExeOptions/)
+- [coppIp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Ip/)
+- [coppIpv6](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Ipv6/)
+- [coppRdirect](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Rdirect/)
+- [coppFcoe](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Fcoe/)
+- [coppIpIcmp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:IpIcmp/)
+- [coppIpv6Icmp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Ipv6Icmp/)
+- [coppMulticast](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Multicast/)
+- [coppProtocol](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Protocol/)
+- [coppMPLSoption](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:MPLSoption/)
+- [coppPolicy](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Policy/)
+- [coppClassp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Classp/)
+- [coppPolicerAction](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:PolicerAction/)
+- [coppSetCos](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:SetCos/)
+- [coppSetDscp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:SetDscp/)
+- [coppPolicerActionExc](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:PolicerActionExc/)
+- [coppLogging](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Logging/)
+- [coppService](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Security%20and%20Policing/copp:Service/)
 - [ipqosEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Qos/ipqos%3AEntity/)
 - [terminalTerminal](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:Terminal/)
 - [terminalLine](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/terminal:Line/)
@@ -371,8 +391,55 @@ resource "nxos_system" "example" {
       port_description = "My Port"
     }
   }
-  copp_admin_state                       = "enabled"
-  copp_rate_limiter                      = true
+  copp_admin_state  = "enabled"
+  copp_rate_limiter = true
+  copp_class_maps = {
+    "CP-CLASS1" = {
+      match_type = "MatchAll"
+      access_groups = {
+        "CP-ACL1" = {}
+      }
+      exceptions = {
+        "glean" = {}
+      }
+      exception_ip_option   = true
+      exception_ipv6_option = true
+      exception_ip_icmp = {
+        "redirect" = {}
+      }
+      exception_ipv6_icmp = {
+        "unreachable" = {}
+      }
+      exception_multicast = {
+        "dest-miss" = {}
+      }
+      protocols = {
+        "arp" = {
+        }
+      }
+    }
+  }
+  copp_policy_maps = {
+    "CP-POLICY1" = {
+      classes = {
+        "CP-CLASS1" = {
+          police = {
+            "1000;pps;64;packets" = {
+              conform_action = "transmit"
+              violate_action = "drop"
+            }
+          }
+          set_cos = {
+            "5" = {
+            }
+          }
+          logging_drop = {
+            "1000;5" = {}
+          }
+        }
+      }
+    }
+  }
   qos_mode                               = true
   qos_statistics                         = "disabled"
   console_exec_timeout                   = 30
@@ -649,9 +716,15 @@ resource "nxos_system" "example" {
   - Range: `0`-`525600`
 - `copp_admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
+- `copp_class_maps` (Attributes Map) List of control plane class maps.
+  - Map key: `name` - Class-map name. (see [below for nested schema](#nestedatt--copp_class_maps))
+- `copp_policy_maps` (Attributes Map) List of control plane policy maps.
+  - Map key: `name` - Policy-map name. (see [below for nested schema](#nestedatt--copp_policy_maps))
 - `copp_profile_type` (String) Profile type.
   - Choices: `unknown`, `strict`, `moderate`, `lenient`, `dense`
 - `copp_rate_limiter` (Boolean) Property Flag to enable or disable rate limiter for various CoPP classes.
+- `copp_service_policies` (Attributes Map) Control plane input service policy. Only a single service policy can be configured, which replaces the CoPP profile. The service policy cannot be removed, configure `copp_profile_type` instead to revert to a predefined profile.
+  - Map key: `name` - Policy-map name. (see [below for nested schema](#nestedatt--copp_service_policies))
 - `deletion_policy` (String) What happens on the device when objects managed by the resource are removed. `delete` deletes the object on destroy, including any configuration not managed by Terraform, and deletes single child objects once none of their attributes are configured anymore, unless the device holds other entries below them. `reset` deletes the objects created by the resource on destroy, resets the managed attributes of the objects that already existed and leaves configuration not managed by Terraform in place. `retain` leaves the device unchanged on destroy and only removes the resource from the state. Overrides the `deletion_policy` of the provider, which defaults to `delete`. See the [Deletion Policy](../guides/deletion_policy) guide for details.
   - Choices: `delete`, `reset`, `retain`
 - `device` (String) A device name from the provider configuration.
@@ -977,6 +1050,146 @@ Optional:
 Optional:
 
 - `command` (String) Alias command definition.
+
+
+<a id="nestedatt--copp_class_maps"></a>
+### Nested Schema for `copp_class_maps`
+
+Optional:
+
+- `access_groups` (Attributes Map) List of ACLs to match.
+  - Map key: `name` - Acl name. (see [below for nested schema](#nestedatt--copp_class_maps--access_groups))
+- `description` (String) Description of the specified attribute.
+- `exception_fcoe_fib_miss` (Boolean) fcoe-fib-miss.
+- `exception_ip_icmp` (Attributes Map) List of IPv4 ICMP exceptions to match.
+  - Map key: `option` - icmp options.
+  - Key choices: `Undefined`, `redirect`, `unreachable` (see [below for nested schema](#nestedatt--copp_class_maps--exception_ip_icmp))
+- `exception_ip_option` (Boolean) Ip Option.
+- `exception_ipv6_icmp` (Attributes Map) List of IPv6 ICMP exceptions to match.
+  - Map key: `option` - icmp options.
+  - Key choices: `Undefined`, `redirect`, `unreachable` (see [below for nested schema](#nestedatt--copp_class_maps--exception_ipv6_icmp))
+- `exception_ipv6_option` (Boolean) Ip Option.
+- `exception_multicast` (Attributes Map) List of multicast exceptions to match.
+  - Map key: `option` - Multicast options.
+  - Key choices: `Undefined`, `dest-miss`, `rpf-failure`, `sg-rpf-failure`, `ipv6-dest-miss`, `ipv6-rpf-failure`, `ipv6-sg-rpf-failure` (see [below for nested schema](#nestedatt--copp_class_maps--exception_multicast))
+- `exceptions` (Attributes Map) List of exceptions to match.
+  - Map key: `option` - Match options.
+  - Key choices: `Undefined`, `glean`, `mtu-failure`, `ttl-failure`, `nat-flow`, `sflow`, `mvpn`, `span`, `vxlan-stp` (see [below for nested schema](#nestedatt--copp_class_maps--exceptions))
+- `match_type` (String) Match Option.
+  - Choices: `Unknown`, `MatchAny`, `MatchAll`
+- `protocols` (Attributes Map) List of protocols to match.
+  - Map key: `protocol` - Protocol List.
+  - Key choices: `bgp`, `ospf`, `cdp`, `traceroute`, `lldp`, `lacp`, `isis`, `arp`, `dhcp`, `igmp`, `icmp`, `zmq`, `mgmt`, `snmp`, `stp`, `bfd`, `pim`, `static`, `ifc`, `mpls`, `mplsexp6`, `mplsralert` (see [below for nested schema](#nestedatt--copp_class_maps--protocols))
+- `redirect` (String) Match redirect options.
+  - Choices: `Undefined`, `arp-inspect`, `dhcp-snoop`
+
+<a id="nestedatt--copp_class_maps--access_groups"></a>
+### Nested Schema for `copp_class_maps.access_groups`
+
+
+<a id="nestedatt--copp_class_maps--exception_ip_icmp"></a>
+### Nested Schema for `copp_class_maps.exception_ip_icmp`
+
+
+<a id="nestedatt--copp_class_maps--exception_ipv6_icmp"></a>
+### Nested Schema for `copp_class_maps.exception_ipv6_icmp`
+
+
+<a id="nestedatt--copp_class_maps--exception_multicast"></a>
+### Nested Schema for `copp_class_maps.exception_multicast`
+
+
+<a id="nestedatt--copp_class_maps--exceptions"></a>
+### Nested Schema for `copp_class_maps.exceptions`
+
+
+<a id="nestedatt--copp_class_maps--protocols"></a>
+### Nested Schema for `copp_class_maps.protocols`
+
+Optional:
+
+- `mpls_exp` (Number) Experimental value.
+  - Range: `0`-`7`
+- `mpls_router_alert` (Boolean) router-alert.
+
+
+
+<a id="nestedatt--copp_policy_maps"></a>
+### Nested Schema for `copp_policy_maps`
+
+Optional:
+
+- `classes` (Attributes Map) List of policy map classes.
+  - Map key: `name` - Class name. (see [below for nested schema](#nestedatt--copp_policy_maps--classes))
+
+<a id="nestedatt--copp_policy_maps--classes"></a>
+### Nested Schema for `copp_policy_maps.classes`
+
+Optional:
+
+- `insert_before` (String) Insert before Class name.
+- `logging_drop` (Attributes Map) List of drop logging thresholds. Only a single threshold can be configured per class.
+  - Map key format: `<threshold>;<level>`
+  - Key component `threshold`: Logging Threshold. Range: `0`-`9223372036854775807`.
+  - Key component `level`: logging range. Range: `1`-`7`. (see [below for nested schema](#nestedatt--copp_policy_maps--classes--logging_drop))
+- `police` (Attributes Map) List of policers. Only a single policer can be configured per class.
+  - Map key format: `<cir_rate>;<cir_unit>;<bc_rate>;<bc_unit>`
+  - Key component `cir_rate`: Cir value. Range: `0`-`9223372036854775807`.
+  - Key component `cir_unit`: Cir rate. Choices: `Unknown`, `bps`, `pps`, `kbps`, `mbps`, `gbps`.
+  - Key component `bc_rate`: Burst count. Range: `0`-`4294967295`.
+  - Key component `bc_unit`: BC unit. Choices: `Unknown`, `bytes`, `kbytes`, `mbytes`, `packets`, `us`, `ms`. (see [below for nested schema](#nestedatt--copp_policy_maps--classes--police))
+- `set_cos` (Attributes Map) List of CoS values to set. Only a single CoS value can be configured per class.
+  - Map key: `cos` - Cos Value.
+  - Key range: `0`-`7` (see [below for nested schema](#nestedatt--copp_policy_maps--classes--set_cos))
+- `set_dscp` (Number) Dscp Value.
+  - Range: `0`-`63`
+- `set_dscp_tunnel` (Boolean) set dscp tunnel.
+- `two_rate_police_bc_rate` (Number) Burst count.
+  - Range: `0`-`4294967295`
+- `two_rate_police_bc_unit` (String) BC unit.
+  - Choices: `Unknown`, `bytes`, `kbytes`, `mbytes`, `packets`, `us`, `ms`
+- `two_rate_police_be_rate` (Number) Burst exceed.
+  - Range: `0`-`4294967295`
+- `two_rate_police_be_unit` (String) BE unit.
+  - Choices: `Unknown`, `bytes`, `kbytes`, `mbytes`, `packets`, `us`, `ms`
+- `two_rate_police_cir_rate` (Number) Cir value.
+  - Range: `0`-`9223372036854775807`
+- `two_rate_police_conform_action` (String) Conform Action.
+  - Choices: `Undefined`, `transmit`, `drop`
+- `two_rate_police_exceed_action` (String) Exceed Action.
+  - Choices: `Undefined`, `transmit`, `drop`
+- `two_rate_police_pir_rate` (Number) Pir value.
+  - Range: `0`-`9223372036854775807`
+- `two_rate_police_violate_action` (String) Violate action.
+  - Choices: `Undefined`, `transmit`, `drop`
+
+<a id="nestedatt--copp_policy_maps--classes--logging_drop"></a>
+### Nested Schema for `copp_policy_maps.classes.logging_drop`
+
+
+<a id="nestedatt--copp_policy_maps--classes--police"></a>
+### Nested Schema for `copp_policy_maps.classes.police`
+
+Optional:
+
+- `conform_action` (String) Conform Action.
+  - Choices: `Undefined`, `transmit`, `drop`
+- `violate_action` (String) Violate action.
+  - Choices: `Undefined`, `transmit`, `drop`
+
+
+<a id="nestedatt--copp_policy_maps--classes--set_cos"></a>
+### Nested Schema for `copp_policy_maps.classes.set_cos`
+
+Optional:
+
+- `inner` (Boolean) Set cos inner.
+
+
+
+
+<a id="nestedatt--copp_service_policies"></a>
+### Nested Schema for `copp_service_policies`
 
 
 <a id="nestedatt--dns_profiles"></a>

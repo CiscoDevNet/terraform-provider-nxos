@@ -202,20 +202,6 @@ resource "nxos_system" "example" {
       drop         = false
     }
   }
-  management_interfaces = {
-    "mgmt0" = {
-      admin_state      = "up"
-      auto_negotiation = "on"
-      description      = "My Description"
-      duplex           = "auto"
-      itu_channel      = 50
-      media_type       = "auto"
-      mtu              = 1500
-      name             = "mgmt0"
-      snmp_trap_state  = "enable"
-      speed            = "auto"
-    }
-  }
   lldp_advertise_system_chassis_id = "enabled"
   lldp_hold_time                   = 180
   lldp_init_delay_time             = 5

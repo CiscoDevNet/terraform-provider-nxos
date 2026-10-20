@@ -1,0 +1,1 @@
+- BREAKING CHANGE: Remove `management_interfaces` attribute from `nxos_system` resource and data source, use the `nxos_management_interface` resource instead, which manages the same objects and also supports VRF membership

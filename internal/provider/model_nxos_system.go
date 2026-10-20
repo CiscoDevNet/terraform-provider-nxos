@@ -158,7 +158,6 @@ type System struct {
 	MacAddressTableThresholdLimit                 types.Int64                                   `tfsdk:"mac_address_table_threshold_limit"`
 	MacAddressTableUserDefinedLimit               types.Int64                                   `tfsdk:"mac_address_table_user_defined_limit"`
 	MacAddressTableStaticEntries                  map[string]SystemMacAddressTableStaticEntries `tfsdk:"mac_address_table_static_entries"`
-	ManagementInterfaces                          map[string]SystemManagementInterfaces         `tfsdk:"management_interfaces"`
 	LldpAdminState                                types.String                                  `tfsdk:"lldp_admin_state"`
 	LldpInstanceAdminState                        types.String                                  `tfsdk:"lldp_instance_admin_state"`
 	LldpAdvertiseSystemChassisId                  types.String                                  `tfsdk:"lldp_advertise_system_chassis_id"`
@@ -397,19 +396,6 @@ type SystemMacAddressTableStaticEntries struct {
 	Drop        types.Bool   `tfsdk:"drop"`
 }
 
-type SystemManagementInterfaces struct {
-	AdminState      types.String `tfsdk:"admin_state"`
-	AutoNegotiation types.String `tfsdk:"auto_negotiation"`
-	Description     types.String `tfsdk:"description"`
-	Duplex          types.String `tfsdk:"duplex"`
-	ItuChannel      types.Int64  `tfsdk:"itu_channel"`
-	MediaType       types.String `tfsdk:"media_type"`
-	Mtu             types.Int64  `tfsdk:"mtu"`
-	Name            types.String `tfsdk:"name"`
-	SnmpTrapState   types.String `tfsdk:"snmp_trap_state"`
-	Speed           types.String `tfsdk:"speed"`
-}
-
 type SystemLldpInterfaces struct {
 	AdminReceiveState  types.String `tfsdk:"admin_receive_state"`
 	AdminTransmitState types.String `tfsdk:"admin_transmit_state"`
@@ -530,11 +516,11 @@ var SystemSubtreeClassMinVersions = map[string]string{}
 var SystemMinVersions = map[string]helpers.MinVersion{}
 
 // SystemListClasses holds the list child classes of the resource.
-var SystemListClasses = map[string]bool{"ethpmEvent": true, "arpVpcDom": true, "ndDom": true, "ndIf": true, "ndVpcDom": true, "dnsProf": true, "dnsProvider": true, "dnsDomExt": true, "dnsHost": true, "dnsVrf": true, "nwVdc": true, "vshdCliAlias": true, "udldPhysIf": true, "lacpIf": true, "l2StaticEntry": true, "mgmtMgmtIf": true, "lldpIf": true, "cdpIf": true, "imMod": true, "imFpP": true, "sasSvcInstance": true, "sasDom": true, "commSshKey": true, "srcintfSsh": true, "srcintfFtp": true, "ttagTtagIf": true, "pvlanVlan": true, "pvlanIf": true, "pvlanTrunkPromiscuousEntry": true, "pvlanTrunkSecondaryEntry": true, "pvlanSvi": true, "ngmvpnDom": true}
+var SystemListClasses = map[string]bool{"ethpmEvent": true, "arpVpcDom": true, "ndDom": true, "ndIf": true, "ndVpcDom": true, "dnsProf": true, "dnsProvider": true, "dnsDomExt": true, "dnsHost": true, "dnsVrf": true, "nwVdc": true, "vshdCliAlias": true, "udldPhysIf": true, "lacpIf": true, "l2StaticEntry": true, "lldpIf": true, "cdpIf": true, "imMod": true, "imFpP": true, "sasSvcInstance": true, "sasDom": true, "commSshKey": true, "srcintfSsh": true, "srcintfFtp": true, "ttagTtagIf": true, "pvlanVlan": true, "pvlanIf": true, "pvlanTrunkPromiscuousEntry": true, "pvlanTrunkSecondaryEntry": true, "pvlanSvi": true, "ngmvpnDom": true}
 
 // getSystemTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getSystemTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"ethpmEntity", "ethpmInst", "ethpmErrDisRecover", "ethpmEvent", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "dnsProvider", "dnsDomExt", "dnsHost", "dnsIpv4Host", "dnsIpv6Host", "dnsVrf", "dnsDom", "dnsProvider", "dnsDomExt", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "lacpEntity", "lacpInst", "lacpIf", "l2Macs", "l2Static", "l2StaticEntry", "mgmtMgmtIf", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "ipqosEntity", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "grpcInst", "grpcGnmi", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi", "ngmvpnEntity", "ngmvpnInst", "ngmvpnDom", "l2ribEntity", "l2ribInst", "l2ribEvpnMACmob", "ngoamEntity", "ngoamInstallAcl", "ngoamLoopDetection"}, SystemSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"ethpmEntity", "ethpmInst", "ethpmErrDisRecover", "ethpmEvent", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "dnsProvider", "dnsDomExt", "dnsHost", "dnsIpv4Host", "dnsIpv6Host", "dnsVrf", "dnsDom", "dnsProvider", "dnsDomExt", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "lacpEntity", "lacpInst", "lacpIf", "l2Macs", "l2Static", "l2StaticEntry", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "ipqosEntity", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "grpcInst", "grpcGnmi", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi", "ngmvpnEntity", "ngmvpnInst", "ngmvpnDom", "l2ribEntity", "l2ribInst", "l2ribEvpnMACmob", "ngoamEntity", "ngoamInstallAcl", "ngoamLoopDetection"}, SystemSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -612,10 +598,6 @@ func (data SystemLacpInterfaces) getRn(key string) string {
 func (data SystemMacAddressTableStaticEntries) getRn(key string) string {
 	keyParts := strings.SplitN(key, ";", 2)
 	return fmt.Sprintf("vlan-[%s]-mac-%s", keyParts[0], keyParts[1])
-}
-
-func (data SystemManagementInterfaces) getRn(key string) string {
-	return fmt.Sprintf("mgmt-[%s]", key)
 }
 
 func (data SystemLldpInterfaces) getRn(key string) string {
@@ -1765,44 +1747,6 @@ func (data System) toBody(config System) nxos.Body {
 		if parentAttrs != "{}" || gjson.Get(childBody, "l2Macs.children").Exists() {
 			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
-	}
-	for key, child := range data.ManagementInterfaces {
-		configChild, configChildOk := config.ManagementInterfaces[key]
-		_ = configChild
-		_ = configChildOk
-		attrs = "{}"
-		attrs, _ = sjson.Set(attrs, "id", key)
-		if configChildOk && !child.AdminState.IsUnknown() && !child.AdminState.IsNull() && !configChild.AdminState.IsNull() {
-			attrs, _ = sjson.Set(attrs, "adminSt", child.AdminState.ValueString())
-		}
-		if configChildOk && !child.AutoNegotiation.IsUnknown() && !child.AutoNegotiation.IsNull() && !configChild.AutoNegotiation.IsNull() {
-			attrs, _ = sjson.Set(attrs, "autoNeg", child.AutoNegotiation.ValueString())
-		}
-		if configChildOk && !child.Description.IsUnknown() && !child.Description.IsNull() && !configChild.Description.IsNull() {
-			attrs, _ = sjson.Set(attrs, "descr", child.Description.ValueString())
-		}
-		if configChildOk && !child.Duplex.IsUnknown() && !child.Duplex.IsNull() && !configChild.Duplex.IsNull() {
-			attrs, _ = sjson.Set(attrs, "duplex", child.Duplex.ValueString())
-		}
-		if configChildOk && !child.ItuChannel.IsUnknown() && !child.ItuChannel.IsNull() && !configChild.ItuChannel.IsNull() {
-			attrs, _ = sjson.Set(attrs, "ituChannel", strconv.FormatInt(child.ItuChannel.ValueInt64(), 10))
-		}
-		if configChildOk && !child.MediaType.IsUnknown() && !child.MediaType.IsNull() && !configChild.MediaType.IsNull() {
-			attrs, _ = sjson.Set(attrs, "mediaType", child.MediaType.ValueString())
-		}
-		if configChildOk && !child.Mtu.IsUnknown() && !child.Mtu.IsNull() && !configChild.Mtu.IsNull() {
-			attrs, _ = sjson.Set(attrs, "mtu", strconv.FormatInt(child.Mtu.ValueInt64(), 10))
-		}
-		if configChildOk && !child.Name.IsUnknown() && !child.Name.IsNull() && !configChild.Name.IsNull() {
-			attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
-		}
-		if configChildOk && !child.SnmpTrapState.IsUnknown() && !child.SnmpTrapState.IsNull() && !configChild.SnmpTrapState.IsNull() {
-			attrs, _ = sjson.Set(attrs, "snmpTrapSt", child.SnmpTrapState.ValueString())
-		}
-		if configChildOk && !child.Speed.IsUnknown() && !child.Speed.IsNull() && !configChild.Speed.IsNull() {
-			attrs, _ = sjson.Set(attrs, "speed", child.Speed.ValueString())
-		}
-		body, _ = sjson.SetRaw(body, childrenPath+".-1.mgmtMgmtIf.attributes", attrs)
 	}
 	{
 		attrs = "{}"
@@ -3865,34 +3809,6 @@ func (data *System) fromBody(res gjson.Result) {
 			)
 		}
 	}
-	res.Get(data.getClassName() + ".children").ForEach(
-		func(_, v gjson.Result) bool {
-			v.ForEach(
-				func(classname, value gjson.Result) bool {
-					if classname.String() == "mgmtMgmtIf" {
-						var child SystemManagementInterfaces
-						child.AdminState = types.StringValue(value.Get("attributes.adminSt").String())
-						child.AutoNegotiation = types.StringValue(value.Get("attributes.autoNeg").String())
-						child.Description = types.StringValue(value.Get("attributes.descr").String())
-						child.Duplex = types.StringValue(value.Get("attributes.duplex").String())
-						child.ItuChannel = types.Int64Value(value.Get("attributes.ituChannel").Int())
-						child.MediaType = types.StringValue(value.Get("attributes.mediaType").String())
-						child.Mtu = types.Int64Value(value.Get("attributes.mtu").Int())
-						child.Name = types.StringValue(value.Get("attributes.name").String())
-						child.SnmpTrapState = types.StringValue(value.Get("attributes.snmpTrapSt").String())
-						child.Speed = types.StringValue(value.Get("attributes.speed").String())
-						mapKey := value.Get("attributes.id").String()
-						if data.ManagementInterfaces == nil {
-							data.ManagementInterfaces = make(map[string]SystemManagementInterfaces)
-						}
-						data.ManagementInterfaces[mapKey] = child
-					}
-					return true
-				},
-			)
-			return true
-		},
-	)
 	{
 		var rlldpEntity gjson.Result
 		res.Get(data.getClassName() + ".children").ForEach(
@@ -6514,73 +6430,6 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.MacAddressTableStaticEntries[key] = item
 		}
 	}
-	for key, item := range data.ManagementInterfaces {
-		var rmgmtMgmtIf gjson.Result
-		res.Get(data.getClassName() + ".children").ForEach(
-			func(_, v gjson.Result) bool {
-				if v.Get("mgmtMgmtIf.attributes.id").String() == key {
-					rmgmtMgmtIf = v
-					return false
-				}
-				return true
-			},
-		)
-		if !rmgmtMgmtIf.Exists() {
-			delete(data.ManagementInterfaces, key)
-			continue
-		}
-		if !item.AdminState.IsNull() {
-			item.AdminState = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.adminSt").String())
-		} else {
-			item.AdminState = types.StringNull()
-		}
-		if !item.AutoNegotiation.IsNull() {
-			item.AutoNegotiation = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.autoNeg").String())
-		} else {
-			item.AutoNegotiation = types.StringNull()
-		}
-		if !item.Description.IsNull() {
-			item.Description = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.descr").String())
-		} else {
-			item.Description = types.StringNull()
-		}
-		if !item.Duplex.IsNull() {
-			item.Duplex = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.duplex").String())
-		} else {
-			item.Duplex = types.StringNull()
-		}
-		if !item.ItuChannel.IsNull() {
-			item.ItuChannel = types.Int64Value(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.ituChannel").Int())
-		} else {
-			item.ItuChannel = types.Int64Null()
-		}
-		if !item.MediaType.IsNull() {
-			item.MediaType = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.mediaType").String())
-		} else {
-			item.MediaType = types.StringNull()
-		}
-		if !item.Mtu.IsNull() {
-			item.Mtu = types.Int64Value(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.mtu").Int())
-		} else {
-			item.Mtu = types.Int64Null()
-		}
-		if !item.Name.IsNull() {
-			item.Name = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.name").String())
-		} else {
-			item.Name = types.StringNull()
-		}
-		if !item.SnmpTrapState.IsNull() {
-			item.SnmpTrapState = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.snmpTrapSt").String())
-		} else {
-			item.SnmpTrapState = types.StringNull()
-		}
-		if !item.Speed.IsNull() {
-			item.Speed = types.StringValue(rmgmtMgmtIf.Get("mgmtMgmtIf.attributes.speed").String())
-		} else {
-			item.Speed = types.StringNull()
-		}
-		data.ManagementInterfaces[key] = item
-	}
 	var rlldpEntity gjson.Result
 	res.Get(data.getClassName() + ".children").ForEach(
 		func(_, v gjson.Result) bool {
@@ -8941,21 +8790,6 @@ func (data System) toDeleteBody() nxos.Body {
 			}
 		}
 	}
-	for key, child := range data.ManagementInterfaces {
-		childBody := ""
-		childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
-		childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "autoNeg", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "descr", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "duplex", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "ituChannel", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "mediaType", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "mtu", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "name", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "speed", "DME_UNSET_PROPERTY_MARKER")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1.mgmtMgmtIf.attributes", childBody)
-	}
 	{
 		childBody := ""
 		if !data.LldpAdminState.IsNull() {
@@ -9997,10 +9831,6 @@ func (data System) managedDns() map[string]bool {
 				dns[l2StaticEntryDn] = true
 			}
 		}
-	}
-	for key, child := range data.ManagementInterfaces {
-		mgmtMgmtIfDn := dn + "/" + child.getRn(key)
-		dns[mgmtMgmtIfDn] = true
 	}
 	if !(data.LldpAdminState.IsNull() && (data.LldpInstanceAdminState.IsNull() && data.LldpAdvertiseSystemChassisId.IsNull() && data.LldpControl.IsNull() && data.LldpHoldTime.IsNull() && data.LldpInfraVlan.IsNull() && data.LldpInitDelayTime.IsNull() && data.LldpMultiPeer.IsNull() && data.LldpOptionalTlvSelect.IsNull() && data.LldpOptionalTlvSelectHidden.IsNull() && data.LldpPortChannel.IsNull() && data.LldpPortIdSubType.IsNull() && data.LldpSystemDescription.IsNull() && data.LldpTransmitFrequency.IsNull() && len(data.LldpInterfaces) == 0)) {
 		lldpEntityDn := dn + "/" + "lldp"
@@ -11421,45 +11251,6 @@ func (data System) toResetBody(preexisting map[string]bool) nxos.Body {
 			}
 		}
 	}
-	for key, child := range data.ManagementInterfaces {
-		_ = child
-		mgmtMgmtIfRn := child.getRn(key)
-		mgmtMgmtIfDn := dn + "/" + mgmtMgmtIfRn
-		_ = mgmtMgmtIfDn
-		mgmtMgmtIfBody := ""
-		mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.rn", mgmtMgmtIfRn)
-		if !child.AdminState.IsNull() {
-			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !child.AutoNegotiation.IsNull() {
-			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.autoNeg", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !child.Description.IsNull() {
-			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !child.Duplex.IsNull() {
-			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.duplex", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !child.ItuChannel.IsNull() {
-			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.ituChannel", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !child.MediaType.IsNull() {
-			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.mediaType", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !child.Mtu.IsNull() {
-			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !child.Name.IsNull() {
-			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.name", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !child.SnmpTrapState.IsNull() {
-			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
-		}
-		if !child.Speed.IsNull() {
-			mgmtMgmtIfBody, _ = sjson.Set(mgmtMgmtIfBody, "mgmtMgmtIf.attributes.speed", "DME_UNSET_PROPERTY_MARKER")
-		}
-		body, _ = sjson.SetRaw(body, "topSystem.children.-1", mgmtMgmtIfBody)
-	}
 	if !(data.LldpAdminState.IsNull() && (data.LldpInstanceAdminState.IsNull() && data.LldpAdvertiseSystemChassisId.IsNull() && data.LldpControl.IsNull() && data.LldpHoldTime.IsNull() && data.LldpInfraVlan.IsNull() && data.LldpInitDelayTime.IsNull() && data.LldpMultiPeer.IsNull() && data.LldpOptionalTlvSelect.IsNull() && data.LldpOptionalTlvSelectHidden.IsNull() && data.LldpPortChannel.IsNull() && data.LldpPortIdSubType.IsNull() && data.LldpSystemDescription.IsNull() && data.LldpTransmitFrequency.IsNull() && len(data.LldpInterfaces) == 0)) {
 		lldpEntityRn := "lldp"
 		lldpEntityDn := dn + "/" + lldpEntityRn
@@ -12836,25 +12627,6 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
-		for stateKey := range state.ManagementInterfaces {
-			if _, found := data.ManagementInterfaces[stateKey]; !found {
-				stateChild := state.ManagementInterfaces[stateKey]
-				deleteBody := ""
-				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.rn", stateChild.getRn(stateKey))
-				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.autoNeg", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.duplex", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.ituChannel", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.mediaType", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.mtu", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.name", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "mgmtMgmtIf.attributes.speed", "DME_UNSET_PROPERTY_MARKER")
-				deletePath := bodyPath
-				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
-			}
-		}
 		for stateKey := range state.LldpInterfaces {
 			if _, found := data.LldpInterfaces[stateKey]; !found {
 				stateChild := state.LldpInterfaces[stateKey]
@@ -14011,48 +13783,6 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 						}
 						if !stateChild.Drop.IsNull() && configChild.Drop.IsNull() {
 							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "l2Macs")+".children", "l2Static")+".children"+"."+strconv.Itoa(mi)+".l2StaticEntry.attributes."+"dropAction", "DME_UNSET_PROPERTY_MARKER")
-						}
-						break
-					}
-				}
-			}
-		}
-		for key := range state.ManagementInterfaces {
-			if configChild, ok := config.ManagementInterfaces[key]; ok {
-				stateChild := state.ManagementInterfaces[key]
-				_ = stateChild
-				_ = configChild
-				for mi, mv := range gjson.Get(body.Str, bodyPath).Array() {
-					if mv.Get("mgmtMgmtIf.attributes.id").String() == key {
-						if !stateChild.AdminState.IsNull() && configChild.AdminState.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.AutoNegotiation.IsNull() && configChild.AutoNegotiation.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"autoNeg", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.Description.IsNull() && configChild.Description.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.Duplex.IsNull() && configChild.Duplex.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"duplex", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.ItuChannel.IsNull() && configChild.ItuChannel.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"ituChannel", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.MediaType.IsNull() && configChild.MediaType.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"mediaType", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.Mtu.IsNull() && configChild.Mtu.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"mtu", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.SnmpTrapState.IsNull() && configChild.SnmpTrapState.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"snmpTrapSt", "DME_UNSET_PROPERTY_MARKER")
-						}
-						if !stateChild.Speed.IsNull() && configChild.Speed.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".mgmtMgmtIf.attributes."+"speed", "DME_UNSET_PROPERTY_MARKER")
 						}
 						break
 					}

@@ -175,16 +175,6 @@ func TestAccSystemResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mac_address_table_user_defined_limit", "32"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mac_address_table_static_entries.vlan-100;00:00:11:11:22:22.interface_id", "eth1/9"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mac_address_table_static_entries.vlan-100;00:00:11:11:22:22.drop", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.admin_state", "up"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.auto_negotiation", "on"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.duplex", "auto"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.itu_channel", "50"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.media_type", "auto"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.mtu", "1500"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.name", "mgmt0"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.snmp_trap_state", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "management_interfaces.mgmt0.speed", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_advertise_system_chassis_id", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_hold_time", "180"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "lldp_init_delay_time", "5"))
@@ -449,16 +439,6 @@ func TestAccSystemResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mac_address_table_user_defined_limit", "32"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mac_address_table_static_entries.vlan-100;00:00:11:11:22:22.interface_id", "eth1/9"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mac_address_table_static_entries.vlan-100;00:00:11:11:22:22.drop", "false"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.admin_state", "up"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.auto_negotiation", "on"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.description", "My Description"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.duplex", "auto"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.itu_channel", "50"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.media_type", "auto"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.mtu", "1500"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.name", "mgmt0"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.snmp_trap_state", "enable"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "management_interfaces.mgmt0.speed", "auto"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_advertise_system_chassis_id", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_hold_time", "180"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "lldp_init_delay_time", "5"))
@@ -963,20 +943,6 @@ func testAccSystemResourceConfig_all(includeWriteOnly bool) string {
 	config += `		"vlan-100;00:00:11:11:22:22" = {` + "\n"
 	config += `			interface_id = "eth1/9"` + "\n"
 	config += `			drop = false` + "\n"
-	config += `		}` + "\n"
-	config += `	}` + "\n"
-	config += `	management_interfaces = {` + "\n"
-	config += `		"mgmt0" = {` + "\n"
-	config += `			admin_state = "up"` + "\n"
-	config += `			auto_negotiation = "on"` + "\n"
-	config += `			description = "My Description"` + "\n"
-	config += `			duplex = "auto"` + "\n"
-	config += `			itu_channel = 50` + "\n"
-	config += `			media_type = "auto"` + "\n"
-	config += `			mtu = 1500` + "\n"
-	config += `			name = "mgmt0"` + "\n"
-	config += `			snmp_trap_state = "enable"` + "\n"
-	config += `			speed = "auto"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	lldp_advertise_system_chassis_id = "enabled"` + "\n"

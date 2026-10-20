@@ -1,0 +1,1 @@
+- Add DHCP snooping VLANs and interfaces (`snooping_vlans`, `snooping_interfaces`), Dynamic ARP Inspection VLANs and interfaces (`dai_vlans`, `dai_interfaces`), IP Source Guard interfaces and excluded VLANs (`ip_source_guard_interfaces`, `ip_source_guard_excluded_vlans`) and static IP source bindings (`ip_source_bindings`) to `nxos_dhcp` resource and data source

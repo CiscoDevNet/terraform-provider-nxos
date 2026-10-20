@@ -39,42 +39,49 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type DHCP struct {
-	Device                                 types.String                   `tfsdk:"device"`
-	Dn                                     types.String                   `tfsdk:"id"`
-	AdminState                             types.String                   `tfsdk:"admin_state"`
-	Ipv6RelayInformationOptionVpn          types.Bool                     `tfsdk:"ipv6_relay_information_option_vpn"`
-	Ipv6RelayOptionTypeCisco               types.Bool                     `tfsdk:"ipv6_relay_option_type_cisco"`
-	RelayInformationOption                 types.Bool                     `tfsdk:"relay_information_option"`
-	RelayInformationOptionTrust            types.Bool                     `tfsdk:"relay_information_option_trust"`
-	RelayInformationOptionVpn              types.Bool                     `tfsdk:"relay_information_option_vpn"`
-	RelayInformationTrustAll               types.Bool                     `tfsdk:"relay_information_trust_all"`
-	RelaySubOptionCircuitIdCustomized      types.Bool                     `tfsdk:"relay_sub_option_circuit_id_customized"`
-	RelaySubOptionCircuitIdFormatString    types.String                   `tfsdk:"relay_sub_option_circuit_id_format_string"`
-	RelaySubOptionTypeCisco                types.Bool                     `tfsdk:"relay_sub_option_type_cisco"`
-	SmartRelayGlobal                       types.Bool                     `tfsdk:"smart_relay_global"`
-	Snooping                               types.Bool                     `tfsdk:"snooping"`
-	SnoopingInformationOption              types.Bool                     `tfsdk:"snooping_information_option"`
-	SnoopingVerifyMacAddress               types.Bool                     `tfsdk:"snooping_verify_mac_address"`
-	DaiLogBufferEntries                    types.Int64                    `tfsdk:"dai_log_buffer_entries"`
-	DaiValidateDestination                 types.Bool                     `tfsdk:"dai_validate_destination"`
-	DaiValidateIp                          types.Bool                     `tfsdk:"dai_validate_ip"`
-	DaiValidateSource                      types.Bool                     `tfsdk:"dai_validate_source"`
-	Ipv6RelayOption79                      types.Bool                     `tfsdk:"ipv6_relay_option79"`
-	PacketStrictValidation                 types.Bool                     `tfsdk:"packet_strict_validation"`
-	RelayDai                               types.Bool                     `tfsdk:"relay_dai"`
-	RelayInformationOptionServerIdOverride types.Int64                    `tfsdk:"relay_information_option_server_id_override"`
-	RelaySubOptionFormatNonTlv             types.Bool                     `tfsdk:"relay_sub_option_format_non_tlv"`
-	RelayV4OverV6                          types.Bool                     `tfsdk:"relay_v4_over_v6"`
-	RelayV6IapdRouteAdd                    types.Bool                     `tfsdk:"relay_v6_iapd_route_add"`
-	SnoopSubOptionCircuitIdFormatString    types.String                   `tfsdk:"snoop_sub_option_circuit_id_format_string"`
-	SnoopingSubOptionFormatNonTlv          types.Bool                     `tfsdk:"snooping_sub_option_format_non_tlv"`
-	V4Relay                                types.Bool                     `tfsdk:"v4_relay"`
-	V6Relay                                types.Bool                     `tfsdk:"v6_relay"`
-	V6SmartRelayGlobal                     types.Bool                     `tfsdk:"v6_smart_relay_global"`
-	SourceInterface                        types.String                   `tfsdk:"source_interface"`
-	Ipv6SourceInterfaceAdminState          types.String                   `tfsdk:"ipv6_source_interface_admin_state"`
-	Ipv6SourceInterface                    types.String                   `tfsdk:"ipv6_source_interface"`
-	RelayInterfaces                        map[string]DHCPRelayInterfaces `tfsdk:"relay_interfaces"`
+	Device                                 types.String                              `tfsdk:"device"`
+	Dn                                     types.String                              `tfsdk:"id"`
+	AdminState                             types.String                              `tfsdk:"admin_state"`
+	Ipv6RelayInformationOptionVpn          types.Bool                                `tfsdk:"ipv6_relay_information_option_vpn"`
+	Ipv6RelayOptionTypeCisco               types.Bool                                `tfsdk:"ipv6_relay_option_type_cisco"`
+	RelayInformationOption                 types.Bool                                `tfsdk:"relay_information_option"`
+	RelayInformationOptionTrust            types.Bool                                `tfsdk:"relay_information_option_trust"`
+	RelayInformationOptionVpn              types.Bool                                `tfsdk:"relay_information_option_vpn"`
+	RelayInformationTrustAll               types.Bool                                `tfsdk:"relay_information_trust_all"`
+	RelaySubOptionCircuitIdCustomized      types.Bool                                `tfsdk:"relay_sub_option_circuit_id_customized"`
+	RelaySubOptionCircuitIdFormatString    types.String                              `tfsdk:"relay_sub_option_circuit_id_format_string"`
+	RelaySubOptionTypeCisco                types.Bool                                `tfsdk:"relay_sub_option_type_cisco"`
+	SmartRelayGlobal                       types.Bool                                `tfsdk:"smart_relay_global"`
+	Snooping                               types.Bool                                `tfsdk:"snooping"`
+	SnoopingInformationOption              types.Bool                                `tfsdk:"snooping_information_option"`
+	SnoopingVerifyMacAddress               types.Bool                                `tfsdk:"snooping_verify_mac_address"`
+	DaiLogBufferEntries                    types.Int64                               `tfsdk:"dai_log_buffer_entries"`
+	DaiValidateDestination                 types.Bool                                `tfsdk:"dai_validate_destination"`
+	DaiValidateIp                          types.Bool                                `tfsdk:"dai_validate_ip"`
+	DaiValidateSource                      types.Bool                                `tfsdk:"dai_validate_source"`
+	Ipv6RelayOption79                      types.Bool                                `tfsdk:"ipv6_relay_option79"`
+	PacketStrictValidation                 types.Bool                                `tfsdk:"packet_strict_validation"`
+	RelayDai                               types.Bool                                `tfsdk:"relay_dai"`
+	RelayInformationOptionServerIdOverride types.Int64                               `tfsdk:"relay_information_option_server_id_override"`
+	RelaySubOptionFormatNonTlv             types.Bool                                `tfsdk:"relay_sub_option_format_non_tlv"`
+	RelayV4OverV6                          types.Bool                                `tfsdk:"relay_v4_over_v6"`
+	RelayV6IapdRouteAdd                    types.Bool                                `tfsdk:"relay_v6_iapd_route_add"`
+	SnoopSubOptionCircuitIdFormatString    types.String                              `tfsdk:"snoop_sub_option_circuit_id_format_string"`
+	SnoopingSubOptionFormatNonTlv          types.Bool                                `tfsdk:"snooping_sub_option_format_non_tlv"`
+	V4Relay                                types.Bool                                `tfsdk:"v4_relay"`
+	V6Relay                                types.Bool                                `tfsdk:"v6_relay"`
+	V6SmartRelayGlobal                     types.Bool                                `tfsdk:"v6_smart_relay_global"`
+	SourceInterface                        types.String                              `tfsdk:"source_interface"`
+	Ipv6SourceInterfaceAdminState          types.String                              `tfsdk:"ipv6_source_interface_admin_state"`
+	Ipv6SourceInterface                    types.String                              `tfsdk:"ipv6_source_interface"`
+	RelayInterfaces                        map[string]DHCPRelayInterfaces            `tfsdk:"relay_interfaces"`
+	SnoopingVlans                          map[string]DHCPSnoopingVlans              `tfsdk:"snooping_vlans"`
+	SnoopingInterfaces                     map[string]DHCPSnoopingInterfaces         `tfsdk:"snooping_interfaces"`
+	DaiVlans                               map[string]DHCPDaiVlans                   `tfsdk:"dai_vlans"`
+	DaiInterfaces                          map[string]DHCPDaiInterfaces              `tfsdk:"dai_interfaces"`
+	IpSourceGuardInterfaces                map[string]DHCPIpSourceGuardInterfaces    `tfsdk:"ip_source_guard_interfaces"`
+	IpSourceGuardExcludedVlans             map[string]DHCPIpSourceGuardExcludedVlans `tfsdk:"ip_source_guard_excluded_vlans"`
+	IpSourceBindings                       map[string]DHCPIpSourceBindings           `tfsdk:"ip_source_bindings"`
 }
 
 type DHCPRelayInterfaces struct {
@@ -96,6 +103,34 @@ type DHCPRelayInterfacesAddresses struct {
 
 type DHCPRelayInterfacesIpv6Addresses struct {
 	Counter types.Int64 `tfsdk:"counter"`
+}
+
+type DHCPSnoopingVlans struct {
+	Evpn types.Bool `tfsdk:"evpn"`
+}
+
+type DHCPSnoopingInterfaces struct {
+	Trust types.Bool `tfsdk:"trust"`
+}
+
+type DHCPDaiVlans struct {
+	LogType types.String `tfsdk:"log_type"`
+}
+
+type DHCPDaiInterfaces struct {
+	Trust types.Bool   `tfsdk:"trust"`
+	Name  types.String `tfsdk:"name"`
+}
+
+type DHCPIpSourceGuardInterfaces struct {
+	IpSourceGuard types.Bool   `tfsdk:"ip_source_guard"`
+	Name          types.String `tfsdk:"name"`
+}
+
+type DHCPIpSourceGuardExcludedVlans struct {
+}
+
+type DHCPIpSourceBindings struct {
 }
 
 type DHCPIdentity struct {
@@ -125,11 +160,11 @@ var DHCPSubtreeClassMinVersions = map[string]string{}
 var DHCPMinVersions = map[string]helpers.MinVersion{}
 
 // DHCPListClasses holds the list child classes of the resource.
-var DHCPListClasses = map[string]bool{"dhcpRelayIf": true, "dhcpRelayAddr": true, "dhcpV6RelayAddr": true}
+var DHCPListClasses = map[string]bool{"dhcpRelayIf": true, "dhcpRelayAddr": true, "dhcpV6RelayAddr": true, "dhcpSnoopVlan": true, "dhcpSnoopIf": true, "dhcpDAIVlan": true, "dhcpDAIIf": true, "dhcpIpsgIf": true, "dhcpIpsgExVlan": true, "dhcpIpSrcBind": true}
 
 // getDHCPTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getDHCPTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"dhcpInst", "dhcpSourceIf", "dhcpV6SourceIf", "dhcpRelayIf", "dhcpRelayAddr", "dhcpV6RelayAddr", "dhcpSrcIf", "dhcpV6SrcIf"}, DHCPSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"dhcpInst", "dhcpSourceIf", "dhcpV6SourceIf", "dhcpRelayIf", "dhcpRelayAddr", "dhcpV6RelayAddr", "dhcpSrcIf", "dhcpV6SrcIf", "dhcpSnoopVlan", "dhcpSnoopIf", "dhcpDAIVlan", "dhcpDAIIf", "dhcpIpsgIf", "dhcpIpsgExVlan", "dhcpIpSrcBind"}, DHCPSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -152,6 +187,35 @@ func (data DHCPRelayInterfacesAddresses) getRn(key string) string {
 func (data DHCPRelayInterfacesIpv6Addresses) getRn(key string) string {
 	keyParts := strings.SplitN(key, ";", 3)
 	return fmt.Sprintf("addrv6-[%s]-[%s]-[%s]", keyParts[0], keyParts[1], keyParts[2])
+}
+
+func (data DHCPSnoopingVlans) getRn(key string) string {
+	return fmt.Sprintf("snoopvlan-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data DHCPSnoopingInterfaces) getRn(key string) string {
+	return fmt.Sprintf("snoopif-[%s]", key)
+}
+
+func (data DHCPDaiVlans) getRn(key string) string {
+	return fmt.Sprintf("daivlan-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data DHCPDaiInterfaces) getRn(key string) string {
+	return fmt.Sprintf("daiif-[%s]", key)
+}
+
+func (data DHCPIpSourceGuardInterfaces) getRn(key string) string {
+	return fmt.Sprintf("ipsgif-[%s]", key)
+}
+
+func (data DHCPIpSourceGuardExcludedVlans) getRn(key string) string {
+	return fmt.Sprintf("ipsgexvlan-%v", helpers.Must(strconv.ParseInt(key, 10, 64)))
+}
+
+func (data DHCPIpSourceBindings) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 4)
+	return fmt.Sprintf("ipsrcbindip-[%s]-vlan-%v-mac-%s-intf-[%s]", keyParts[0], helpers.Must(strconv.ParseInt(keyParts[1], 10, 64)), keyParts[2], keyParts[3])
 }
 
 func (data DHCP) getClassName() string {
@@ -356,6 +420,87 @@ func (data DHCP) toBody(config DHCP) nxos.Body {
 				}
 			}
 		}
+		for key, child := range data.SnoopingVlans {
+			configChild, configChildOk := config.SnoopingVlans[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "snoopVlanNum", key)
+			if configChildOk && !child.Evpn.IsUnknown() && !child.Evpn.IsNull() && !configChild.Evpn.IsNull() {
+				attrs, _ = sjson.Set(attrs, "evpnEnabled", strconv.FormatBool(child.Evpn.ValueBool()))
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpSnoopVlan.attributes", attrs)
+		}
+		for key, child := range data.SnoopingInterfaces {
+			configChild, configChildOk := config.SnoopingInterfaces[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "id", key)
+			if configChildOk && !child.Trust.IsUnknown() && !child.Trust.IsNull() && !configChild.Trust.IsNull() {
+				attrs, _ = sjson.Set(attrs, "trustEnabled", strconv.FormatBool(child.Trust.ValueBool()))
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpSnoopIf.attributes", attrs)
+		}
+		for key, child := range data.DaiVlans {
+			configChild, configChildOk := config.DaiVlans[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "daiVlanNum", key)
+			if configChildOk && !child.LogType.IsUnknown() && !child.LogType.IsNull() && !configChild.LogType.IsNull() {
+				attrs, _ = sjson.Set(attrs, "daiLogTypeOnVlan", child.LogType.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpDAIVlan.attributes", attrs)
+		}
+		for key, child := range data.DaiInterfaces {
+			configChild, configChildOk := config.DaiInterfaces[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "id", key)
+			if configChildOk && !child.Trust.IsUnknown() && !child.Trust.IsNull() && !configChild.Trust.IsNull() {
+				attrs, _ = sjson.Set(attrs, "daiEnabled", strconv.FormatBool(child.Trust.ValueBool()))
+			}
+			if configChildOk && !child.Name.IsUnknown() && !child.Name.IsNull() && !configChild.Name.IsNull() {
+				attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpDAIIf.attributes", attrs)
+		}
+		for key, child := range data.IpSourceGuardInterfaces {
+			configChild, configChildOk := config.IpSourceGuardInterfaces[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "id", key)
+			if configChildOk && !child.IpSourceGuard.IsUnknown() && !child.IpSourceGuard.IsNull() && !configChild.IpSourceGuard.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ipsgEnabled", strconv.FormatBool(child.IpSourceGuard.ValueBool()))
+			}
+			if configChildOk && !child.Name.IsUnknown() && !child.Name.IsNull() && !configChild.Name.IsNull() {
+				attrs, _ = sjson.Set(attrs, "name", child.Name.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpIpsgIf.attributes", attrs)
+		}
+		for key := range data.IpSourceGuardExcludedVlans {
+			configChild, configChildOk := config.IpSourceGuardExcludedVlans[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "ipsgExVlanNum", key)
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpIpsgExVlan.attributes", attrs)
+		}
+		for key := range data.IpSourceBindings {
+			configChild, configChildOk := config.IpSourceBindings[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			keyParts := strings.SplitN(key, ";", 4)
+			attrs, _ = sjson.Set(attrs, "bindIp", keyParts[0])
+			attrs, _ = sjson.Set(attrs, "bindVlan", keyParts[1])
+			attrs, _ = sjson.Set(attrs, "bindMac", keyParts[2])
+			attrs, _ = sjson.Set(attrs, "bindIntf", keyParts[3])
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.dhcpIpSrcBind.attributes", attrs)
+		}
 		childBody = body
 		body = prevBody
 		if parentAttrs != "{}" || gjson.Get(childBody, "dhcpInst.children").Exists() {
@@ -525,6 +670,139 @@ func (data *DHCP) fromBody(res gjson.Result) {
 								data.RelayInterfaces = make(map[string]DHCPRelayInterfaces)
 							}
 							data.RelayInterfaces[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "dhcpSnoopVlan" {
+							var child DHCPSnoopingVlans
+							child.Evpn = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.evpnEnabled").String()))
+							mapKey := value.Get("attributes.snoopVlanNum").String()
+							if data.SnoopingVlans == nil {
+								data.SnoopingVlans = make(map[string]DHCPSnoopingVlans)
+							}
+							data.SnoopingVlans[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "dhcpSnoopIf" {
+							var child DHCPSnoopingInterfaces
+							child.Trust = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.trustEnabled").String()))
+							mapKey := value.Get("attributes.id").String()
+							if data.SnoopingInterfaces == nil {
+								data.SnoopingInterfaces = make(map[string]DHCPSnoopingInterfaces)
+							}
+							data.SnoopingInterfaces[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "dhcpDAIVlan" {
+							var child DHCPDaiVlans
+							child.LogType = types.StringValue(value.Get("attributes.daiLogTypeOnVlan").String())
+							mapKey := value.Get("attributes.daiVlanNum").String()
+							if data.DaiVlans == nil {
+								data.DaiVlans = make(map[string]DHCPDaiVlans)
+							}
+							data.DaiVlans[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "dhcpDAIIf" {
+							var child DHCPDaiInterfaces
+							child.Trust = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.daiEnabled").String()))
+							child.Name = types.StringValue(value.Get("attributes.name").String())
+							mapKey := value.Get("attributes.id").String()
+							if data.DaiInterfaces == nil {
+								data.DaiInterfaces = make(map[string]DHCPDaiInterfaces)
+							}
+							data.DaiInterfaces[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "dhcpIpsgIf" {
+							var child DHCPIpSourceGuardInterfaces
+							child.IpSourceGuard = types.BoolValue(helpers.ParseNxosBoolean(value.Get("attributes.ipsgEnabled").String()))
+							child.Name = types.StringValue(value.Get("attributes.name").String())
+							mapKey := value.Get("attributes.id").String()
+							if data.IpSourceGuardInterfaces == nil {
+								data.IpSourceGuardInterfaces = make(map[string]DHCPIpSourceGuardInterfaces)
+							}
+							data.IpSourceGuardInterfaces[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "dhcpIpsgExVlan" {
+							var child DHCPIpSourceGuardExcludedVlans
+							mapKey := value.Get("attributes.ipsgExVlanNum").String()
+							if data.IpSourceGuardExcludedVlans == nil {
+								data.IpSourceGuardExcludedVlans = make(map[string]DHCPIpSourceGuardExcludedVlans)
+							}
+							data.IpSourceGuardExcludedVlans[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "dhcpIpSrcBind" {
+							var child DHCPIpSourceBindings
+							mapKey := value.Get("attributes.bindIp").String() + ";" + value.Get("attributes.bindVlan").String() + ";" + value.Get("attributes.bindMac").String() + ";" + value.Get("attributes.bindIntf").String()
+							if data.IpSourceBindings == nil {
+								data.IpSourceBindings = make(map[string]DHCPIpSourceBindings)
+							}
+							data.IpSourceBindings[mapKey] = child
 						}
 						return true
 					},
@@ -876,6 +1154,164 @@ func (data *DHCP) updateFromBody(res gjson.Result) {
 		}
 		data.RelayInterfaces[key] = item
 	}
+	for key, item := range data.SnoopingVlans {
+		var rdhcpSnoopVlan gjson.Result
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("dhcpSnoopVlan.attributes.snoopVlanNum").String() == key {
+					rdhcpSnoopVlan = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rdhcpSnoopVlan.Exists() {
+			delete(data.SnoopingVlans, key)
+			continue
+		}
+		if !item.Evpn.IsNull() {
+			item.Evpn = types.BoolValue(helpers.ParseNxosBoolean(rdhcpSnoopVlan.Get("dhcpSnoopVlan.attributes.evpnEnabled").String()))
+		} else {
+			item.Evpn = types.BoolNull()
+		}
+		data.SnoopingVlans[key] = item
+	}
+	for key, item := range data.SnoopingInterfaces {
+		var rdhcpSnoopIf gjson.Result
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("dhcpSnoopIf.attributes.id").String() == key {
+					rdhcpSnoopIf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rdhcpSnoopIf.Exists() {
+			delete(data.SnoopingInterfaces, key)
+			continue
+		}
+		if !item.Trust.IsNull() {
+			item.Trust = types.BoolValue(helpers.ParseNxosBoolean(rdhcpSnoopIf.Get("dhcpSnoopIf.attributes.trustEnabled").String()))
+		} else {
+			item.Trust = types.BoolNull()
+		}
+		data.SnoopingInterfaces[key] = item
+	}
+	for key, item := range data.DaiVlans {
+		var rdhcpDAIVlan gjson.Result
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("dhcpDAIVlan.attributes.daiVlanNum").String() == key {
+					rdhcpDAIVlan = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rdhcpDAIVlan.Exists() {
+			delete(data.DaiVlans, key)
+			continue
+		}
+		if !item.LogType.IsNull() {
+			item.LogType = types.StringValue(rdhcpDAIVlan.Get("dhcpDAIVlan.attributes.daiLogTypeOnVlan").String())
+		} else {
+			item.LogType = types.StringNull()
+		}
+		data.DaiVlans[key] = item
+	}
+	for key, item := range data.DaiInterfaces {
+		var rdhcpDAIIf gjson.Result
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("dhcpDAIIf.attributes.id").String() == key {
+					rdhcpDAIIf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rdhcpDAIIf.Exists() {
+			delete(data.DaiInterfaces, key)
+			continue
+		}
+		if !item.Trust.IsNull() {
+			item.Trust = types.BoolValue(helpers.ParseNxosBoolean(rdhcpDAIIf.Get("dhcpDAIIf.attributes.daiEnabled").String()))
+		} else {
+			item.Trust = types.BoolNull()
+		}
+		if !item.Name.IsNull() {
+			item.Name = types.StringValue(rdhcpDAIIf.Get("dhcpDAIIf.attributes.name").String())
+		} else {
+			item.Name = types.StringNull()
+		}
+		data.DaiInterfaces[key] = item
+	}
+	for key, item := range data.IpSourceGuardInterfaces {
+		var rdhcpIpsgIf gjson.Result
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("dhcpIpsgIf.attributes.id").String() == key {
+					rdhcpIpsgIf = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rdhcpIpsgIf.Exists() {
+			delete(data.IpSourceGuardInterfaces, key)
+			continue
+		}
+		if !item.IpSourceGuard.IsNull() {
+			item.IpSourceGuard = types.BoolValue(helpers.ParseNxosBoolean(rdhcpIpsgIf.Get("dhcpIpsgIf.attributes.ipsgEnabled").String()))
+		} else {
+			item.IpSourceGuard = types.BoolNull()
+		}
+		if !item.Name.IsNull() {
+			item.Name = types.StringValue(rdhcpIpsgIf.Get("dhcpIpsgIf.attributes.name").String())
+		} else {
+			item.Name = types.StringNull()
+		}
+		data.IpSourceGuardInterfaces[key] = item
+	}
+	for key, item := range data.IpSourceGuardExcludedVlans {
+		var rdhcpIpsgExVlan gjson.Result
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("dhcpIpsgExVlan.attributes.ipsgExVlanNum").String() == key {
+					rdhcpIpsgExVlan = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rdhcpIpsgExVlan.Exists() {
+			delete(data.IpSourceGuardExcludedVlans, key)
+			continue
+		}
+		data.IpSourceGuardExcludedVlans[key] = item
+	}
+	for key, item := range data.IpSourceBindings {
+		keyParts := strings.SplitN(key, ";", 4)
+		var rdhcpIpSrcBind gjson.Result
+		rdhcpInst.Get("dhcpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("dhcpIpSrcBind.attributes.bindIp").String() == keyParts[0] &&
+					v.Get("dhcpIpSrcBind.attributes.bindVlan").String() == keyParts[1] &&
+					v.Get("dhcpIpSrcBind.attributes.bindMac").String() == keyParts[2] &&
+					v.Get("dhcpIpSrcBind.attributes.bindIntf").String() == keyParts[3] {
+					rdhcpIpSrcBind = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rdhcpIpSrcBind.Exists() {
+			delete(data.IpSourceBindings, key)
+			continue
+		}
+		data.IpSourceBindings[key] = item
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -986,6 +1422,27 @@ func (data DHCP) toDeleteBody() nxos.Body {
 		if len(data.RelayInterfaces) > 0 {
 			hasNestedChildren = true
 		}
+		if len(data.SnoopingVlans) > 0 {
+			hasNestedChildren = true
+		}
+		if len(data.SnoopingInterfaces) > 0 {
+			hasNestedChildren = true
+		}
+		if len(data.DaiVlans) > 0 {
+			hasNestedChildren = true
+		}
+		if len(data.DaiInterfaces) > 0 {
+			hasNestedChildren = true
+		}
+		if len(data.IpSourceGuardInterfaces) > 0 {
+			hasNestedChildren = true
+		}
+		if len(data.IpSourceGuardExcludedVlans) > 0 {
+			hasNestedChildren = true
+		}
+		if len(data.IpSourceBindings) > 0 {
+			hasNestedChildren = true
+		}
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".dhcpInst"
@@ -1013,6 +1470,48 @@ func (data DHCP) toDeleteBody() nxos.Body {
 				deleteBody, _ = sjson.Set(deleteBody, "dhcpRelayIf.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
+			for key, child := range data.SnoopingVlans {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpSnoopVlan.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpSnoopVlan.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			for key, child := range data.SnoopingInterfaces {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpSnoopIf.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpSnoopIf.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			for key, child := range data.DaiVlans {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpDAIVlan.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpDAIVlan.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			for key, child := range data.DaiInterfaces {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpDAIIf.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpDAIIf.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			for key, child := range data.IpSourceGuardInterfaces {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpIpsgIf.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpIpsgIf.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			for key, child := range data.IpSourceGuardExcludedVlans {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpIpsgExVlan.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpIpsgExVlan.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
+			for key, child := range data.IpSourceBindings {
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpIpSrcBind.attributes.rn", child.getRn(key))
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpIpSrcBind.attributes.status", "deleted")
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+			}
 		}
 	}
 
@@ -1025,7 +1524,7 @@ func (data DHCP) managedDns() map[string]bool {
 	dns := map[string]bool{}
 	dn := data.getDn()
 	dns[dn] = true
-	if !(data.Ipv6RelayInformationOptionVpn.IsNull() && data.Ipv6RelayOptionTypeCisco.IsNull() && data.RelayInformationOption.IsNull() && data.RelayInformationOptionTrust.IsNull() && data.RelayInformationOptionVpn.IsNull() && data.RelayInformationTrustAll.IsNull() && data.RelaySubOptionCircuitIdCustomized.IsNull() && data.RelaySubOptionCircuitIdFormatString.IsNull() && data.RelaySubOptionTypeCisco.IsNull() && data.SmartRelayGlobal.IsNull() && data.Snooping.IsNull() && data.SnoopingInformationOption.IsNull() && data.SnoopingVerifyMacAddress.IsNull() && data.DaiLogBufferEntries.IsNull() && data.DaiValidateDestination.IsNull() && data.DaiValidateIp.IsNull() && data.DaiValidateSource.IsNull() && data.Ipv6RelayOption79.IsNull() && data.PacketStrictValidation.IsNull() && data.RelayDai.IsNull() && data.RelayInformationOptionServerIdOverride.IsNull() && data.RelaySubOptionFormatNonTlv.IsNull() && data.RelayV4OverV6.IsNull() && data.RelayV6IapdRouteAdd.IsNull() && data.SnoopSubOptionCircuitIdFormatString.IsNull() && data.SnoopingSubOptionFormatNonTlv.IsNull() && data.V4Relay.IsNull() && data.V6Relay.IsNull() && data.V6SmartRelayGlobal.IsNull() && (data.SourceInterface.IsNull()) && (data.Ipv6SourceInterfaceAdminState.IsNull() && data.Ipv6SourceInterface.IsNull()) && len(data.RelayInterfaces) == 0) {
+	if !(data.Ipv6RelayInformationOptionVpn.IsNull() && data.Ipv6RelayOptionTypeCisco.IsNull() && data.RelayInformationOption.IsNull() && data.RelayInformationOptionTrust.IsNull() && data.RelayInformationOptionVpn.IsNull() && data.RelayInformationTrustAll.IsNull() && data.RelaySubOptionCircuitIdCustomized.IsNull() && data.RelaySubOptionCircuitIdFormatString.IsNull() && data.RelaySubOptionTypeCisco.IsNull() && data.SmartRelayGlobal.IsNull() && data.Snooping.IsNull() && data.SnoopingInformationOption.IsNull() && data.SnoopingVerifyMacAddress.IsNull() && data.DaiLogBufferEntries.IsNull() && data.DaiValidateDestination.IsNull() && data.DaiValidateIp.IsNull() && data.DaiValidateSource.IsNull() && data.Ipv6RelayOption79.IsNull() && data.PacketStrictValidation.IsNull() && data.RelayDai.IsNull() && data.RelayInformationOptionServerIdOverride.IsNull() && data.RelaySubOptionFormatNonTlv.IsNull() && data.RelayV4OverV6.IsNull() && data.RelayV6IapdRouteAdd.IsNull() && data.SnoopSubOptionCircuitIdFormatString.IsNull() && data.SnoopingSubOptionFormatNonTlv.IsNull() && data.V4Relay.IsNull() && data.V6Relay.IsNull() && data.V6SmartRelayGlobal.IsNull() && (data.SourceInterface.IsNull()) && (data.Ipv6SourceInterfaceAdminState.IsNull() && data.Ipv6SourceInterface.IsNull()) && len(data.RelayInterfaces) == 0 && len(data.SnoopingVlans) == 0 && len(data.SnoopingInterfaces) == 0 && len(data.DaiVlans) == 0 && len(data.DaiInterfaces) == 0 && len(data.IpSourceGuardInterfaces) == 0 && len(data.IpSourceGuardExcludedVlans) == 0 && len(data.IpSourceBindings) == 0) {
 		dhcpInstDn := dn + "/" + "inst"
 		dns[dhcpInstDn] = true
 		if !(data.SourceInterface.IsNull()) {
@@ -1060,6 +1559,36 @@ func (data DHCP) managedDns() map[string]bool {
 				dns[dhcpV6SrcIfDn_] = true
 			}
 		}
+		for key, child := range data.SnoopingVlans {
+			dhcpSnoopVlanDn := dhcpInstDn + "/" + child.getRn(key)
+			dns[dhcpSnoopVlanDn] = true
+		}
+		for key, child := range data.SnoopingInterfaces {
+			dhcpSnoopIfDn := dhcpInstDn + "/" + child.getRn(key)
+			dns[dhcpSnoopIfDn] = true
+		}
+		for key, child := range data.DaiVlans {
+			dhcpDAIVlanDn := dhcpInstDn + "/" + child.getRn(key)
+			dns[dhcpDAIVlanDn] = true
+		}
+		for key, child := range data.DaiInterfaces {
+			dhcpDAIIfDn := dhcpInstDn + "/" + child.getRn(key)
+			dns[dhcpDAIIfDn] = true
+		}
+		for key, child := range data.IpSourceGuardInterfaces {
+			dhcpIpsgIfDn := dhcpInstDn + "/" + child.getRn(key)
+			dns[dhcpIpsgIfDn] = true
+		}
+		for key, child := range data.IpSourceGuardExcludedVlans {
+			dhcpIpsgExVlanDn := dhcpInstDn + "/" + child.getRn(key)
+			dns[dhcpIpsgExVlanDn] = true
+		}
+		for key, child := range data.IpSourceBindings {
+			keyParts := strings.SplitN(key, ";", 4)
+			_ = keyParts
+			dhcpIpSrcBindDn := dhcpInstDn + "/" + child.getRn(key)
+			dns[dhcpIpSrcBindDn] = true
+		}
 	}
 	return dns
 }
@@ -1080,7 +1609,7 @@ func (data DHCP) toResetBody(preexisting map[string]bool) nxos.Body {
 	if body == "" {
 		body, _ = sjson.Set(body, "dhcpEntity.attributes", map[string]interface{}{})
 	}
-	if !(data.Ipv6RelayInformationOptionVpn.IsNull() && data.Ipv6RelayOptionTypeCisco.IsNull() && data.RelayInformationOption.IsNull() && data.RelayInformationOptionTrust.IsNull() && data.RelayInformationOptionVpn.IsNull() && data.RelayInformationTrustAll.IsNull() && data.RelaySubOptionCircuitIdCustomized.IsNull() && data.RelaySubOptionCircuitIdFormatString.IsNull() && data.RelaySubOptionTypeCisco.IsNull() && data.SmartRelayGlobal.IsNull() && data.Snooping.IsNull() && data.SnoopingInformationOption.IsNull() && data.SnoopingVerifyMacAddress.IsNull() && data.DaiLogBufferEntries.IsNull() && data.DaiValidateDestination.IsNull() && data.DaiValidateIp.IsNull() && data.DaiValidateSource.IsNull() && data.Ipv6RelayOption79.IsNull() && data.PacketStrictValidation.IsNull() && data.RelayDai.IsNull() && data.RelayInformationOptionServerIdOverride.IsNull() && data.RelaySubOptionFormatNonTlv.IsNull() && data.RelayV4OverV6.IsNull() && data.RelayV6IapdRouteAdd.IsNull() && data.SnoopSubOptionCircuitIdFormatString.IsNull() && data.SnoopingSubOptionFormatNonTlv.IsNull() && data.V4Relay.IsNull() && data.V6Relay.IsNull() && data.V6SmartRelayGlobal.IsNull() && (data.SourceInterface.IsNull()) && (data.Ipv6SourceInterfaceAdminState.IsNull() && data.Ipv6SourceInterface.IsNull()) && len(data.RelayInterfaces) == 0) {
+	if !(data.Ipv6RelayInformationOptionVpn.IsNull() && data.Ipv6RelayOptionTypeCisco.IsNull() && data.RelayInformationOption.IsNull() && data.RelayInformationOptionTrust.IsNull() && data.RelayInformationOptionVpn.IsNull() && data.RelayInformationTrustAll.IsNull() && data.RelaySubOptionCircuitIdCustomized.IsNull() && data.RelaySubOptionCircuitIdFormatString.IsNull() && data.RelaySubOptionTypeCisco.IsNull() && data.SmartRelayGlobal.IsNull() && data.Snooping.IsNull() && data.SnoopingInformationOption.IsNull() && data.SnoopingVerifyMacAddress.IsNull() && data.DaiLogBufferEntries.IsNull() && data.DaiValidateDestination.IsNull() && data.DaiValidateIp.IsNull() && data.DaiValidateSource.IsNull() && data.Ipv6RelayOption79.IsNull() && data.PacketStrictValidation.IsNull() && data.RelayDai.IsNull() && data.RelayInformationOptionServerIdOverride.IsNull() && data.RelaySubOptionFormatNonTlv.IsNull() && data.RelayV4OverV6.IsNull() && data.RelayV6IapdRouteAdd.IsNull() && data.SnoopSubOptionCircuitIdFormatString.IsNull() && data.SnoopingSubOptionFormatNonTlv.IsNull() && data.V4Relay.IsNull() && data.V6Relay.IsNull() && data.V6SmartRelayGlobal.IsNull() && (data.SourceInterface.IsNull()) && (data.Ipv6SourceInterfaceAdminState.IsNull() && data.Ipv6SourceInterface.IsNull()) && len(data.RelayInterfaces) == 0 && len(data.SnoopingVlans) == 0 && len(data.SnoopingInterfaces) == 0 && len(data.DaiVlans) == 0 && len(data.DaiInterfaces) == 0 && len(data.IpSourceGuardInterfaces) == 0 && len(data.IpSourceGuardExcludedVlans) == 0 && len(data.IpSourceBindings) == 0) {
 		dhcpInstRn := "inst"
 		dhcpInstDn := dn + "/" + dhcpInstRn
 		_ = dhcpInstDn
@@ -1311,6 +1840,120 @@ func (data DHCP) toResetBody(preexisting map[string]bool) nxos.Body {
 				}
 				dhcpInstBody, _ = sjson.SetRaw(dhcpInstBody, "dhcpInst.children.-1", dhcpRelayIfBody)
 			}
+			for key, child := range data.SnoopingVlans {
+				_ = child
+				dhcpSnoopVlanRn := child.getRn(key)
+				dhcpSnoopVlanDn := dhcpInstDn + "/" + dhcpSnoopVlanRn
+				_ = dhcpSnoopVlanDn
+				if !existed(dhcpSnoopVlanDn) {
+					dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.children.-1.dhcpSnoopVlan.attributes", map[string]interface{}{"rn": dhcpSnoopVlanRn, "status": "deleted"})
+					continue
+				}
+				dhcpSnoopVlanBody := ""
+				dhcpSnoopVlanBody, _ = sjson.Set(dhcpSnoopVlanBody, "dhcpSnoopVlan.attributes.rn", dhcpSnoopVlanRn)
+				if !child.Evpn.IsNull() {
+					dhcpSnoopVlanBody, _ = sjson.Set(dhcpSnoopVlanBody, "dhcpSnoopVlan.attributes.evpnEnabled", "DME_UNSET_PROPERTY_MARKER")
+				}
+				dhcpInstBody, _ = sjson.SetRaw(dhcpInstBody, "dhcpInst.children.-1", dhcpSnoopVlanBody)
+			}
+			for key, child := range data.SnoopingInterfaces {
+				_ = child
+				dhcpSnoopIfRn := child.getRn(key)
+				dhcpSnoopIfDn := dhcpInstDn + "/" + dhcpSnoopIfRn
+				_ = dhcpSnoopIfDn
+				if !existed(dhcpSnoopIfDn) {
+					dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.children.-1.dhcpSnoopIf.attributes", map[string]interface{}{"rn": dhcpSnoopIfRn, "status": "deleted"})
+					continue
+				}
+				dhcpSnoopIfBody := ""
+				dhcpSnoopIfBody, _ = sjson.Set(dhcpSnoopIfBody, "dhcpSnoopIf.attributes.rn", dhcpSnoopIfRn)
+				if !child.Trust.IsNull() {
+					dhcpSnoopIfBody, _ = sjson.Set(dhcpSnoopIfBody, "dhcpSnoopIf.attributes.trustEnabled", "DME_UNSET_PROPERTY_MARKER")
+				}
+				dhcpInstBody, _ = sjson.SetRaw(dhcpInstBody, "dhcpInst.children.-1", dhcpSnoopIfBody)
+			}
+			for key, child := range data.DaiVlans {
+				_ = child
+				dhcpDAIVlanRn := child.getRn(key)
+				dhcpDAIVlanDn := dhcpInstDn + "/" + dhcpDAIVlanRn
+				_ = dhcpDAIVlanDn
+				if !existed(dhcpDAIVlanDn) {
+					dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.children.-1.dhcpDAIVlan.attributes", map[string]interface{}{"rn": dhcpDAIVlanRn, "status": "deleted"})
+					continue
+				}
+				dhcpDAIVlanBody := ""
+				dhcpDAIVlanBody, _ = sjson.Set(dhcpDAIVlanBody, "dhcpDAIVlan.attributes.rn", dhcpDAIVlanRn)
+				if !child.LogType.IsNull() {
+					dhcpDAIVlanBody, _ = sjson.Set(dhcpDAIVlanBody, "dhcpDAIVlan.attributes.daiLogTypeOnVlan", "DME_UNSET_PROPERTY_MARKER")
+				}
+				dhcpInstBody, _ = sjson.SetRaw(dhcpInstBody, "dhcpInst.children.-1", dhcpDAIVlanBody)
+			}
+			for key, child := range data.DaiInterfaces {
+				_ = child
+				dhcpDAIIfRn := child.getRn(key)
+				dhcpDAIIfDn := dhcpInstDn + "/" + dhcpDAIIfRn
+				_ = dhcpDAIIfDn
+				if !existed(dhcpDAIIfDn) {
+					dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.children.-1.dhcpDAIIf.attributes", map[string]interface{}{"rn": dhcpDAIIfRn, "status": "deleted"})
+					continue
+				}
+				dhcpDAIIfBody := ""
+				dhcpDAIIfBody, _ = sjson.Set(dhcpDAIIfBody, "dhcpDAIIf.attributes.rn", dhcpDAIIfRn)
+				if !child.Trust.IsNull() {
+					dhcpDAIIfBody, _ = sjson.Set(dhcpDAIIfBody, "dhcpDAIIf.attributes.daiEnabled", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Name.IsNull() {
+					dhcpDAIIfBody, _ = sjson.Set(dhcpDAIIfBody, "dhcpDAIIf.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+				}
+				dhcpInstBody, _ = sjson.SetRaw(dhcpInstBody, "dhcpInst.children.-1", dhcpDAIIfBody)
+			}
+			for key, child := range data.IpSourceGuardInterfaces {
+				_ = child
+				dhcpIpsgIfRn := child.getRn(key)
+				dhcpIpsgIfDn := dhcpInstDn + "/" + dhcpIpsgIfRn
+				_ = dhcpIpsgIfDn
+				if !existed(dhcpIpsgIfDn) {
+					dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.children.-1.dhcpIpsgIf.attributes", map[string]interface{}{"rn": dhcpIpsgIfRn, "status": "deleted"})
+					continue
+				}
+				dhcpIpsgIfBody := ""
+				dhcpIpsgIfBody, _ = sjson.Set(dhcpIpsgIfBody, "dhcpIpsgIf.attributes.rn", dhcpIpsgIfRn)
+				if !child.IpSourceGuard.IsNull() {
+					dhcpIpsgIfBody, _ = sjson.Set(dhcpIpsgIfBody, "dhcpIpsgIf.attributes.ipsgEnabled", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.Name.IsNull() {
+					dhcpIpsgIfBody, _ = sjson.Set(dhcpIpsgIfBody, "dhcpIpsgIf.attributes.name", "DME_UNSET_PROPERTY_MARKER")
+				}
+				dhcpInstBody, _ = sjson.SetRaw(dhcpInstBody, "dhcpInst.children.-1", dhcpIpsgIfBody)
+			}
+			for key, child := range data.IpSourceGuardExcludedVlans {
+				_ = child
+				dhcpIpsgExVlanRn := child.getRn(key)
+				dhcpIpsgExVlanDn := dhcpInstDn + "/" + dhcpIpsgExVlanRn
+				_ = dhcpIpsgExVlanDn
+				if !existed(dhcpIpsgExVlanDn) {
+					dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.children.-1.dhcpIpsgExVlan.attributes", map[string]interface{}{"rn": dhcpIpsgExVlanRn, "status": "deleted"})
+					continue
+				}
+				dhcpIpsgExVlanBody := ""
+				dhcpIpsgExVlanBody, _ = sjson.Set(dhcpIpsgExVlanBody, "dhcpIpsgExVlan.attributes.rn", dhcpIpsgExVlanRn)
+				dhcpInstBody, _ = sjson.SetRaw(dhcpInstBody, "dhcpInst.children.-1", dhcpIpsgExVlanBody)
+			}
+			for key, child := range data.IpSourceBindings {
+				_ = child
+				keyParts := strings.SplitN(key, ";", 4)
+				_ = keyParts
+				dhcpIpSrcBindRn := child.getRn(key)
+				dhcpIpSrcBindDn := dhcpInstDn + "/" + dhcpIpSrcBindRn
+				_ = dhcpIpSrcBindDn
+				if !existed(dhcpIpSrcBindDn) {
+					dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.children.-1.dhcpIpSrcBind.attributes", map[string]interface{}{"rn": dhcpIpSrcBindRn, "status": "deleted"})
+					continue
+				}
+				dhcpIpSrcBindBody := ""
+				dhcpIpSrcBindBody, _ = sjson.Set(dhcpIpSrcBindBody, "dhcpIpSrcBind.attributes.rn", dhcpIpSrcBindRn)
+				dhcpInstBody, _ = sjson.SetRaw(dhcpInstBody, "dhcpInst.children.-1", dhcpIpSrcBindBody)
+			}
 			if dhcpInstBody != "" {
 				dhcpInstBody, _ = sjson.Set(dhcpInstBody, "dhcpInst.attributes.rn", dhcpInstRn)
 				body, _ = sjson.SetRaw(body, "dhcpEntity.children.-1", dhcpInstBody)
@@ -1369,6 +2012,76 @@ func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP,
 					deleteBody, _ = sjson.Set(deleteBody, "dhcpV6RelayAddr.attributes.status", "deleted")
 					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 				}
+			}
+		}
+		for stateKey := range state.SnoopingVlans {
+			if _, found := data.SnoopingVlans[stateKey]; !found {
+				stateChild := state.SnoopingVlans[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpSnoopVlan.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpSnoopVlan.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.SnoopingInterfaces {
+			if _, found := data.SnoopingInterfaces[stateKey]; !found {
+				stateChild := state.SnoopingInterfaces[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpSnoopIf.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpSnoopIf.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.DaiVlans {
+			if _, found := data.DaiVlans[stateKey]; !found {
+				stateChild := state.DaiVlans[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpDAIVlan.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpDAIVlan.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.DaiInterfaces {
+			if _, found := data.DaiInterfaces[stateKey]; !found {
+				stateChild := state.DaiInterfaces[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpDAIIf.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpDAIIf.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.IpSourceGuardInterfaces {
+			if _, found := data.IpSourceGuardInterfaces[stateKey]; !found {
+				stateChild := state.IpSourceGuardInterfaces[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpIpsgIf.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpIpsgIf.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.IpSourceGuardExcludedVlans {
+			if _, found := data.IpSourceGuardExcludedVlans[stateKey]; !found {
+				stateChild := state.IpSourceGuardExcludedVlans[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpIpsgExVlan.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpIpsgExVlan.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for stateKey := range state.IpSourceBindings {
+			if _, found := data.IpSourceBindings[stateKey]; !found {
+				stateChild := state.IpSourceBindings[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpIpSrcBind.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "dhcpIpSrcBind.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "dhcpInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
 	}
@@ -1615,6 +2328,101 @@ func (data DHCP) toBodyWithDeletes(ctx context.Context, state DHCP, config DHCP,
 						}
 					}
 				}
+			}
+		}
+		for key := range state.SnoopingVlans {
+			if configChild, ok := config.SnoopingVlans[key]; ok {
+				stateChild := state.SnoopingVlans[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children").Array() {
+					if mv.Get("dhcpSnoopVlan.attributes.snoopVlanNum").String() == key {
+						if !stateChild.Evpn.IsNull() && configChild.Evpn.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children"+"."+strconv.Itoa(mi)+".dhcpSnoopVlan.attributes."+"evpnEnabled", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
+		}
+		for key := range state.SnoopingInterfaces {
+			if configChild, ok := config.SnoopingInterfaces[key]; ok {
+				stateChild := state.SnoopingInterfaces[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children").Array() {
+					if mv.Get("dhcpSnoopIf.attributes.id").String() == key {
+						if !stateChild.Trust.IsNull() && configChild.Trust.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children"+"."+strconv.Itoa(mi)+".dhcpSnoopIf.attributes."+"trustEnabled", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
+		}
+		for key := range state.DaiVlans {
+			if configChild, ok := config.DaiVlans[key]; ok {
+				stateChild := state.DaiVlans[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children").Array() {
+					if mv.Get("dhcpDAIVlan.attributes.daiVlanNum").String() == key {
+						if !stateChild.LogType.IsNull() && configChild.LogType.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children"+"."+strconv.Itoa(mi)+".dhcpDAIVlan.attributes."+"daiLogTypeOnVlan", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
+		}
+		for key := range state.DaiInterfaces {
+			if configChild, ok := config.DaiInterfaces[key]; ok {
+				stateChild := state.DaiInterfaces[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children").Array() {
+					if mv.Get("dhcpDAIIf.attributes.id").String() == key {
+						if !stateChild.Trust.IsNull() && configChild.Trust.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children"+"."+strconv.Itoa(mi)+".dhcpDAIIf.attributes."+"daiEnabled", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children"+"."+strconv.Itoa(mi)+".dhcpDAIIf.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
+		}
+		for key := range state.IpSourceGuardInterfaces {
+			if configChild, ok := config.IpSourceGuardInterfaces[key]; ok {
+				stateChild := state.IpSourceGuardInterfaces[key]
+				_ = stateChild
+				_ = configChild
+				for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children").Array() {
+					if mv.Get("dhcpIpsgIf.attributes.id").String() == key {
+						if !stateChild.IpSourceGuard.IsNull() && configChild.IpSourceGuard.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children"+"."+strconv.Itoa(mi)+".dhcpIpsgIf.attributes."+"ipsgEnabled", "DME_UNSET_PROPERTY_MARKER")
+						}
+						if !stateChild.Name.IsNull() && configChild.Name.IsNull() {
+							body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "dhcpInst")+".children"+"."+strconv.Itoa(mi)+".dhcpIpsgIf.attributes."+"name", "DME_UNSET_PROPERTY_MARKER")
+						}
+						break
+					}
+				}
+			}
+		}
+		for key := range state.IpSourceGuardExcludedVlans {
+			if configChild, ok := config.IpSourceGuardExcludedVlans[key]; ok {
+				stateChild := state.IpSourceGuardExcludedVlans[key]
+				_ = stateChild
+				_ = configChild
+			}
+		}
+		for key := range state.IpSourceBindings {
+			if configChild, ok := config.IpSourceBindings[key]; ok {
+				stateChild := state.IpSourceBindings[key]
+				_ = stateChild
+				_ = configChild
 			}
 		}
 	}

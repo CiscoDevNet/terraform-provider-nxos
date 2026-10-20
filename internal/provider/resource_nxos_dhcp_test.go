@@ -81,6 +81,12 @@ func TestAccDHCPResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.ipv6_addresses.VRF1;ff02::1:2;eth1/11.counter", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.source_interface", "lo1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "relay_interfaces.eth1/10.ipv6_source_interface", "lo1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "snooping_interfaces.eth1/12.trust", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "dai_vlans.101.log_type", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "dai_interfaces.eth1/12.trust", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "dai_interfaces.eth1/12.name", "DAI1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "ip_source_guard_interfaces.eth1/12.ip_source_guard", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_dhcp.test", "ip_source_guard_interfaces.eth1/12.name", "IPSG1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "ipv6_relay_information_option_vpn", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "ipv6_relay_option_type_cisco", "true"))
@@ -123,6 +129,12 @@ func TestAccDHCPResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.ipv6_addresses.VRF1;ff02::1:2;eth1/11.counter", "1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.source_interface", "lo1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "relay_interfaces.eth1/10.ipv6_source_interface", "lo1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "snooping_interfaces.eth1/12.trust", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "dai_vlans.101.log_type", "permit"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "dai_interfaces.eth1/12.trust", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "dai_interfaces.eth1/12.name", "DAI1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "ip_source_guard_interfaces.eth1/12.ip_source_guard", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_dhcp.test", "ip_source_guard_interfaces.eth1/12.name", "IPSG1"))
 	var tfVersion *goversion.Version
 	steps := []resource.TestStep{
 		{
@@ -207,6 +219,14 @@ resource "nxos_dme" "PreReq1" {
 }
 
 resource "nxos_dme" "PreReq2" {
+  dn = "sys/intf/phys-[eth1/12]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer2"
+  }
+}
+
+resource "nxos_dme" "PreReq3" {
   dn = "sys/intf/lb-[lo1]"
   class_name = "l3LbRtdIf"
   content = {
@@ -221,7 +241,7 @@ resource "nxos_dme" "PreReq2" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccDHCPResourceConfig_minimum() string {
 	config := `resource "nxos_dhcp" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -285,7 +305,41 @@ func testAccDHCPResourceConfig_all() string {
 	config += `			ipv6_source_interface = "lo1"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
+	config += `	snooping_vlans = {` + "\n"
+	config += `		"101" = {` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	snooping_interfaces = {` + "\n"
+	config += `		"eth1/12" = {` + "\n"
+	config += `			trust = true` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	dai_vlans = {` + "\n"
+	config += `		"101" = {` + "\n"
+	config += `			log_type = "permit"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	dai_interfaces = {` + "\n"
+	config += `		"eth1/12" = {` + "\n"
+	config += `			trust = true` + "\n"
+	config += `			name = "DAI1"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	ip_source_guard_interfaces = {` + "\n"
+	config += `		"eth1/12" = {` + "\n"
+	config += `			ip_source_guard = true` + "\n"
+	config += `			name = "IPSG1"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	ip_source_guard_excluded_vlans = {` + "\n"
+	config += `		"102" = {` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	ip_source_bindings = {` + "\n"
+	config += `		"10.1.1.1;101;00:00:11:11:22:22;eth1/12" = {` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

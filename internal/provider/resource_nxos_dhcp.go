@@ -70,7 +70,7 @@ func (r *DHCPResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.").AddApiDocumentation("dhcpEntity", "DHCP/dhcp:Entity/", []string{"dhcpInst", "dhcpSourceIf", "dhcpV6SourceIf", "dhcpRelayIf", "dhcpRelayAddr", "dhcpV6RelayAddr", "dhcpSrcIf", "dhcpV6SrcIf"}, []string{"DHCP/dhcp:Inst/", "DHCP/dhcp:SourceIf/", "DHCP/dhcp:V6SourceIf/", "DHCP/dhcp:RelayIf/", "DHCP/dhcp:RelayAddr/", "DHCP/dhcp:V6RelayAddr/", "DHCP/dhcp:SrcIf/", "DHCP/dhcp:V6SrcIf/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.").AddApiDocumentation("dhcpEntity", "DHCP/dhcp:Entity/", []string{"dhcpInst", "dhcpSourceIf", "dhcpV6SourceIf", "dhcpRelayIf", "dhcpRelayAddr", "dhcpV6RelayAddr", "dhcpSrcIf", "dhcpV6SrcIf", "dhcpSnoopVlan", "dhcpSnoopIf", "dhcpDAIVlan", "dhcpDAIIf", "dhcpIpsgIf", "dhcpIpsgExVlan", "dhcpIpSrcBind"}, []string{"DHCP/dhcp:Inst/", "DHCP/dhcp:SourceIf/", "DHCP/dhcp:V6SourceIf/", "DHCP/dhcp:RelayIf/", "DHCP/dhcp:RelayAddr/", "DHCP/dhcp:V6RelayAddr/", "DHCP/dhcp:SrcIf/", "DHCP/dhcp:V6SrcIf/", "DHCP/dhcp:SnoopVlan/", "DHCP/dhcp:SnoopIf/", "DHCP/dhcp:DAIVlan/", "DHCP/dhcp:DAIIf/", "DHCP/dhcp:IpsgIf/", "DHCP/dhcp:IpsgExVlan/", "DHCP/dhcp:IpSrcBind/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -306,6 +306,91 @@ func (r *DHCPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 							Optional:            true,
 						},
 					},
+				},
+			},
+			"snooping_vlans": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of VLANs with DHCP snooping enabled (`ip dhcp snooping vlan`).\n  - Map key: `vlan_id` - Snoop Vlan Number.\n  - Key range: `0`-`65535`").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"evpn": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("FHS extended to evpn. evpn enabled status.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"snooping_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of DHCP snooping interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"trust": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Snoop Trust Enabled.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"dai_vlans": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of VLANs with Dynamic ARP Inspection enabled (`ip arp inspection vlan`). Requires the `arp-ether` TCAM region.\n  - Map key: `vlan_id` - DAI Vlan Number.\n  - Key range: `0`-`65535`").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"log_type": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Log All/Permit/None DAI on Vlan matching DHCP Bindings.").AddStringEnumDescription("deny", "permit", "all", "inone").String,
+							Optional:            true,
+							Validators: []validator.String{
+								stringvalidator.OneOf("deny", "permit", "all", "inone"),
+							},
+						},
+					},
+				},
+			},
+			"dai_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of Dynamic ARP Inspection interfaces.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"trust": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("DAI Enabled.").String,
+							Optional:            true,
+						},
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"ip_source_guard_interfaces": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of IP Source Guard interfaces (`ip verify source dhcp-snooping-vlan`). Requires the `ipsg` TCAM region.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"ip_source_guard": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("IPSG in Interface Enabled.").String,
+							Optional:            true,
+						},
+						"name": schema.StringAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("The name of the object.").String,
+							Optional:            true,
+						},
+					},
+				},
+			},
+			"ip_source_guard_excluded_vlans": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of VLANs excluded from IP Source Guard (`ip dhcp snooping ipsg-excluded vlan`).\n  - Map key: `vlan_id` - Vlan Number to be ecluded from IPSG.\n  - Key range: `0`-`65535`").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{},
+				},
+			},
+			"ip_source_bindings": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of static IP source bindings (`ip source binding`).\n  - Map key format: `<ip>;<vlan_id>;<mac>;<interface_id>`\n  - Key component `ip`: IP Source Biinding Vlan Number.\n  - Key component `vlan_id`: IP Source Biinding Vlan Number. Range: `0`-`65535`.\n  - Key component `mac`: IP Source Client Hardware Address.\n  - Key component `interface_id`: Interface ID Must match first field in the output of `show intf brief`. Example: `eth1/1`.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{},
 				},
 			},
 		},

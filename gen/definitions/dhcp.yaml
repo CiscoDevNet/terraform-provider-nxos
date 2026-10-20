@@ -337,6 +337,164 @@ child_classes:
                 type: String
                 description: 'Source Interface.'
                 example: lo1
+      - class_name: dhcpSnoopVlan
+        rn: snoopvlan-%v
+        type: list
+        tf_name: snooping_vlans
+        description: 'List of VLANs with DHCP snooping enabled (`ip dhcp snooping vlan`).'
+        doc_path: DHCP/dhcp:SnoopVlan/
+        attributes:
+          - nxos_name: snoopVlanNum
+            tf_name: vlan_id
+            type: Int64
+            id: true
+            min_int: 0
+            max_int: 65535
+            description: 'Snoop Vlan Number.'
+            example: 101
+          - nxos_name: evpnEnabled
+            tf_name: evpn
+            type: Bool
+            description: 'FHS extended to evpn. evpn enabled status.'
+            example: true
+            exclude_test: true
+      - class_name: dhcpSnoopIf
+        rn: snoopif-[%s]
+        type: list
+        tf_name: snooping_interfaces
+        description: 'List of DHCP snooping interfaces.'
+        doc_path: DHCP/dhcp:SnoopIf/
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+            example: eth1/12
+          - nxos_name: trustEnabled
+            tf_name: trust
+            type: Bool
+            description: 'Snoop Trust Enabled.'
+            example: true
+      - class_name: dhcpDAIVlan
+        rn: daivlan-%v
+        type: list
+        tf_name: dai_vlans
+        description: 'List of VLANs with Dynamic ARP Inspection enabled (`ip arp inspection vlan`). Requires the `arp-ether` TCAM region.'
+        doc_path: DHCP/dhcp:DAIVlan/
+        attributes:
+          - nxos_name: daiVlanNum
+            tf_name: vlan_id
+            type: Int64
+            id: true
+            min_int: 0
+            max_int: 65535
+            description: 'DAI Vlan Number.'
+            example: 101
+          - nxos_name: daiLogTypeOnVlan
+            tf_name: log_type
+            type: String
+            enum_values:
+              - deny
+              - permit
+              - all
+              - inone
+            description: 'Log All/Permit/None DAI on Vlan matching DHCP Bindings.'
+            example: permit
+      - class_name: dhcpDAIIf
+        rn: daiif-[%s]
+        type: list
+        tf_name: dai_interfaces
+        description: 'List of Dynamic ARP Inspection interfaces.'
+        doc_path: DHCP/dhcp:DAIIf/
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+            example: eth1/12
+          - nxos_name: daiEnabled
+            tf_name: trust
+            type: Bool
+            description: 'DAI Enabled.'
+            example: true
+          - nxos_name: name
+            tf_name: name
+            type: String
+            description: 'The name of the object.'
+            example: DAI1
+      - class_name: dhcpIpsgIf
+        rn: ipsgif-[%s]
+        type: list
+        tf_name: ip_source_guard_interfaces
+        description: 'List of IP Source Guard interfaces (`ip verify source dhcp-snooping-vlan`). Requires the `ipsg` TCAM region.'
+        doc_path: DHCP/dhcp:IpsgIf/
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+            example: eth1/12
+          - nxos_name: ipsgEnabled
+            tf_name: ip_source_guard
+            type: Bool
+            description: 'IPSG in Interface Enabled.'
+            example: true
+          - nxos_name: name
+            tf_name: name
+            type: String
+            description: 'The name of the object.'
+            example: IPSG1
+      - class_name: dhcpIpsgExVlan
+        rn: ipsgexvlan-%v
+        type: list
+        tf_name: ip_source_guard_excluded_vlans
+        description: 'List of VLANs excluded from IP Source Guard (`ip dhcp snooping ipsg-excluded vlan`).'
+        doc_path: DHCP/dhcp:IpsgExVlan/
+        attributes:
+          - nxos_name: ipsgExVlanNum
+            tf_name: vlan_id
+            type: Int64
+            id: true
+            min_int: 0
+            max_int: 65535
+            description: 'Vlan Number to be ecluded from IPSG.'
+            example: 102
+      - class_name: dhcpIpSrcBind
+        rn: ipsrcbindip-[%s]-vlan-%v-mac-%s-intf-[%s]
+        type: list
+        tf_name: ip_source_bindings
+        description: 'List of static IP source bindings (`ip source binding`).'
+        doc_path: DHCP/dhcp:IpSrcBind/
+        attributes:
+          - nxos_name: bindIp
+            tf_name: ip
+            type: String
+            id: true
+            description: 'IP Source Biinding Vlan Number.'
+            example: 10.1.1.1
+          - nxos_name: bindVlan
+            tf_name: vlan_id
+            type: Int64
+            id: true
+            min_int: 0
+            max_int: 65535
+            description: 'IP Source Biinding Vlan Number.'
+            example: 101
+          - nxos_name: bindMac
+            tf_name: mac
+            type: String
+            id: true
+            description: 'IP Source Client Hardware Address.'
+            example: '00:00:11:11:22:22'
+          - nxos_name: bindIntf
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Interface ID Must match first field in the output of `show intf brief`. Example: `eth1/1`.'
+            example: eth1/12
 test_prerequisites:
   - dn: sys/fm/dhcp
     class_name: fmDhcp
@@ -349,6 +507,11 @@ test_prerequisites:
     attributes:
       - name: layer
         value: Layer3
+  - dn: sys/intf/phys-[eth1/12]
+    class_name: l1PhysIf
+    attributes:
+      - name: layer
+        value: Layer2
   - dn: sys/intf/lb-[lo1]
     class_name: l3LbRtdIf
     attributes:

@@ -5,7 +5,7 @@ subcategory: "System"
 description: |-
   This resource can manage the DHCP relay configuration on NX-OS devices, including relay interfaces and their associated relay server addresses.
   API Documentation
-  dhcpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:Entity/dhcpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:Inst/dhcpSourceIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SourceIf/dhcpV6SourceIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SourceIf/dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayIf/dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayAddr/dhcpV6RelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6RelayAddr/dhcpSrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SrcIf/dhcpV6SrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SrcIf/
+  dhcpEntity https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:Entity/dhcpInst https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:Inst/dhcpSourceIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SourceIf/dhcpV6SourceIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SourceIf/dhcpRelayIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayIf/dhcpRelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:RelayAddr/dhcpV6RelayAddr https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6RelayAddr/dhcpSrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SrcIf/dhcpV6SrcIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SrcIf/dhcpSnoopVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SnoopVlan/dhcpSnoopIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SnoopIf/dhcpDAIVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:DAIVlan/dhcpDAIIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:DAIIf/dhcpIpsgIf https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:IpsgIf/dhcpIpsgExVlan https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:IpsgExVlan/dhcpIpSrcBind https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:IpSrcBind/
 ---
 
 # nxos_dhcp (Resource)
@@ -23,6 +23,13 @@ This resource can manage the DHCP relay configuration on NX-OS devices, includin
 - [dhcpV6RelayAddr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6RelayAddr/)
 - [dhcpSrcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SrcIf/)
 - [dhcpV6SrcIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:V6SrcIf/)
+- [dhcpSnoopVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SnoopVlan/)
+- [dhcpSnoopIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:SnoopIf/)
+- [dhcpDAIVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:DAIVlan/)
+- [dhcpDAIIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:DAIIf/)
+- [dhcpIpsgIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:IpsgIf/)
+- [dhcpIpsgExVlan](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:IpsgExVlan/)
+- [dhcpIpSrcBind](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/DHCP/dhcp:IpSrcBind/)
 
 ## Example Usage
 
@@ -82,6 +89,38 @@ resource "nxos_dhcp" "example" {
       ipv6_source_interface = "lo1"
     }
   }
+  snooping_vlans = {
+    "101" = {
+    }
+  }
+  snooping_interfaces = {
+    "eth1/12" = {
+      trust = true
+    }
+  }
+  dai_vlans = {
+    "101" = {
+      log_type = "permit"
+    }
+  }
+  dai_interfaces = {
+    "eth1/12" = {
+      trust = true
+      name  = "DAI1"
+    }
+  }
+  ip_source_guard_interfaces = {
+    "eth1/12" = {
+      ip_source_guard = true
+      name            = "IPSG1"
+    }
+  }
+  ip_source_guard_excluded_vlans = {
+    "102" = {}
+  }
+  ip_source_bindings = {
+    "10.1.1.1;101;00:00:11:11:22:22;eth1/12" = {}
+  }
 }
 ```
 
@@ -92,14 +131,30 @@ resource "nxos_dhcp" "example" {
 
 - `admin_state` (String) The administrative state of the object or policy.
   - Choices: `enabled`, `disabled`
+- `dai_interfaces` (Attributes Map) List of Dynamic ARP Inspection interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--dai_interfaces))
 - `dai_log_buffer_entries` (Number) DAI Log Buffer Entries.
   - Range: `1`-`1024`
 - `dai_validate_destination` (Boolean) DAI Validate Type: dst-mac.
 - `dai_validate_ip` (Boolean) DAI Validate Type: ip.
 - `dai_validate_source` (Boolean) DAI Validate Type: src-mac.
+- `dai_vlans` (Attributes Map) List of VLANs with Dynamic ARP Inspection enabled (`ip arp inspection vlan`). Requires the `arp-ether` TCAM region.
+  - Map key: `vlan_id` - DAI Vlan Number.
+  - Key range: `0`-`65535` (see [below for nested schema](#nestedatt--dai_vlans))
 - `deletion_policy` (String) What happens on the device when objects managed by the resource are removed. `delete` deletes the object on destroy, including any configuration not managed by Terraform, and deletes single child objects once none of their attributes are configured anymore, unless the device holds other entries below them. `reset` deletes the objects created by the resource on destroy, resets the managed attributes of the objects that already existed and leaves configuration not managed by Terraform in place. `retain` leaves the device unchanged on destroy and only removes the resource from the state. Overrides the `deletion_policy` of the provider, which defaults to `delete`. See the [Deletion Policy](../guides/deletion_policy) guide for details.
   - Choices: `delete`, `reset`, `retain`
 - `device` (String) A device name from the provider configuration.
+- `ip_source_bindings` (Attributes Map) List of static IP source bindings (`ip source binding`).
+  - Map key format: `<ip>;<vlan_id>;<mac>;<interface_id>`
+  - Key component `ip`: IP Source Biinding Vlan Number.
+  - Key component `vlan_id`: IP Source Biinding Vlan Number. Range: `0`-`65535`.
+  - Key component `mac`: IP Source Client Hardware Address.
+  - Key component `interface_id`: Interface ID Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--ip_source_bindings))
+- `ip_source_guard_excluded_vlans` (Attributes Map) List of VLANs excluded from IP Source Guard (`ip dhcp snooping ipsg-excluded vlan`).
+  - Map key: `vlan_id` - Vlan Number to be ecluded from IPSG.
+  - Key range: `0`-`65535` (see [below for nested schema](#nestedatt--ip_source_guard_excluded_vlans))
+- `ip_source_guard_interfaces` (Attributes Map) List of IP Source Guard interfaces (`ip verify source dhcp-snooping-vlan`). Requires the `ipsg` TCAM region.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--ip_source_guard_interfaces))
 - `ipv6_relay_information_option_vpn` (Boolean) IPv6 Relay Information Option Vpn Enabled.
 - `ipv6_relay_option79` (Boolean) IPv6 Relay Option79 Enabled.
 - `ipv6_relay_option_type_cisco` (Boolean) IPv6 Relay Sub-Option Type Cisco Enabled.
@@ -126,8 +181,13 @@ resource "nxos_dhcp" "example" {
 - `snoop_sub_option_circuit_id_format_string` (String) Snoop Sub-Option Circuit-id Format String.
 - `snooping` (Boolean) Snooping Enabled.
 - `snooping_information_option` (Boolean) Snooping Information Option Enabled.
+- `snooping_interfaces` (Attributes Map) List of DHCP snooping interfaces.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1`. (see [below for nested schema](#nestedatt--snooping_interfaces))
 - `snooping_sub_option_format_non_tlv` (Boolean) Snooping Option82 Sub-Option Format Non-TLV Enabled.
 - `snooping_verify_mac_address` (Boolean) Snooping Verify Mac Address Enabled.
+- `snooping_vlans` (Attributes Map) List of VLANs with DHCP snooping enabled (`ip dhcp snooping vlan`).
+  - Map key: `vlan_id` - Snoop Vlan Number.
+  - Key range: `0`-`65535` (see [below for nested schema](#nestedatt--snooping_vlans))
 - `source_interface` (String) Global Source Interface.
 - `v4_relay` (Boolean) DHCPv4 Enabled.
 - `v6_relay` (Boolean) DHCPv6 Enabled.
@@ -136,6 +196,41 @@ resource "nxos_dhcp" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--dai_interfaces"></a>
+### Nested Schema for `dai_interfaces`
+
+Optional:
+
+- `name` (String) The name of the object.
+- `trust` (Boolean) DAI Enabled.
+
+
+<a id="nestedatt--dai_vlans"></a>
+### Nested Schema for `dai_vlans`
+
+Optional:
+
+- `log_type` (String) Log All/Permit/None DAI on Vlan matching DHCP Bindings.
+  - Choices: `deny`, `permit`, `all`, `inone`
+
+
+<a id="nestedatt--ip_source_bindings"></a>
+### Nested Schema for `ip_source_bindings`
+
+
+<a id="nestedatt--ip_source_guard_excluded_vlans"></a>
+### Nested Schema for `ip_source_guard_excluded_vlans`
+
+
+<a id="nestedatt--ip_source_guard_interfaces"></a>
+### Nested Schema for `ip_source_guard_interfaces`
+
+Optional:
+
+- `ip_source_guard` (Boolean) IPSG in Interface Enabled.
+- `name` (String) The name of the object.
+
 
 <a id="nestedatt--relay_interfaces"></a>
 ### Nested Schema for `relay_interfaces`
@@ -177,6 +272,23 @@ Optional:
 
 - `counter` (Number) Counter.
   - Range: `0`-`65535`
+
+
+
+<a id="nestedatt--snooping_interfaces"></a>
+### Nested Schema for `snooping_interfaces`
+
+Optional:
+
+- `trust` (Boolean) Snoop Trust Enabled.
+
+
+<a id="nestedatt--snooping_vlans"></a>
+### Nested Schema for `snooping_vlans`
+
+Optional:
+
+- `evpn` (Boolean) FHS extended to evpn. evpn enabled status.
 
 ## Import
 

@@ -53,4 +53,36 @@ resource "nxos_dhcp" "example" {
       ipv6_source_interface = "lo1"
     }
   }
+  snooping_vlans = {
+    "101" = {
+    }
+  }
+  snooping_interfaces = {
+    "eth1/12" = {
+      trust = true
+    }
+  }
+  dai_vlans = {
+    "101" = {
+      log_type = "permit"
+    }
+  }
+  dai_interfaces = {
+    "eth1/12" = {
+      trust = true
+      name  = "DAI1"
+    }
+  }
+  ip_source_guard_interfaces = {
+    "eth1/12" = {
+      ip_source_guard = true
+      name            = "IPSG1"
+    }
+  }
+  ip_source_guard_excluded_vlans = {
+    "102" = {}
+  }
+  ip_source_bindings = {
+    "10.1.1.1;101;00:00:11:11:22:22;eth1/12" = {}
+  }
 }

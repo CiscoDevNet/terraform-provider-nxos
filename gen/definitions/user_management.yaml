@@ -334,6 +334,33 @@ child_classes:
                   - "writePriv"
                 description: "The privilege type for a user role."
                 example: "readPriv"
+      - class_name: aaaSshAuth
+        doc_path: Security%20and%20Policing/aaa:SshAuth/
+        rn: sshauth
+        type: single
+        tf_name: ssh_key
+        description: "A user's public key used for certificate-based login."
+        attributes:
+          - nxos_name: data
+            tf_name: ssh_key
+            type: String
+            description: "A user's public key in PEM format."
+            example: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7r1TEul1XD1s6fNl5XuyzbTj507k2Q8gUlVoK43qUiIr/vDXCeZTdpINlYYU1lvCGgO/EsxijDOpGgs0stQ21BqBcc11p2RauN8Mnpx/7OHYgrLaMMTMfQeKVBfrpooB0Oz07UayRsFA8BNy2CnNuFdRNUiYLU0rmAnox9NZwEX213C6uEg3XnLJcdzX7I4VS0B7Joj30WDTAOilkPZ3C35WfyBS7N/d4/u7ZejHvLyGbdB70uhCyz4oHQuDCxF3MEchc5nDImi2+b1OFyWrY2W+soMhkTh7vfsmxNcLHWNae7JLl/kJ2ztSzUZH8avOuuMEid0IhHbvSLYvEy/gf"
+          - nxos_name: descr
+            tf_name: ssh_key_description
+            type: String
+            description: "Description of the specified attribute."
+            example: "Automation key"
+          - nxos_name: ownerKey
+            tf_name: ssh_key_owner_key
+            type: String
+            description: "The key for enabling clients to own their data for entity correlation."
+            example: "owner1"
+          - nxos_name: ownerTag
+            tf_name: ssh_key_owner_tag
+            type: String
+            description: "A tag for enabling clients to add their own data. For example, to indicate who created this object."
+            example: "tag1"
   - class_name: aaaRoleFeatureGroup
     doc_path: Security%20and%20Policing/aaa:RoleFeatureGroup/
     rn: rolefeaturegroup-%s

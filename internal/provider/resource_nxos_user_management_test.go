@@ -74,6 +74,10 @@ func TestAccUserManagementResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.user1.shell_type", "shellvsh"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.user1.roles.network-operator.description", "Operator role"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.user1.roles.network-operator.privilege_type", "readPriv"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.user1.ssh_key", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7r1TEul1XD1s6fNl5XuyzbTj507k2Q8gUlVoK43qUiIr/vDXCeZTdpINlYYU1lvCGgO/EsxijDOpGgs0stQ21BqBcc11p2RauN8Mnpx/7OHYgrLaMMTMfQeKVBfrpooB0Oz07UayRsFA8BNy2CnNuFdRNUiYLU0rmAnox9NZwEX213C6uEg3XnLJcdzX7I4VS0B7Joj30WDTAOilkPZ3C35WfyBS7N/d4/u7ZejHvLyGbdB70uhCyz4oHQuDCxF3MEchc5nDImi2+b1OFyWrY2W+soMhkTh7vfsmxNcLHWNae7JLl/kJ2ztSzUZH8avOuuMEid0IhHbvSLYvEy/gf"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.user1.ssh_key_description", "Automation key"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.user1.ssh_key_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "users.user1.ssh_key_owner_tag", "tag1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "roles.tf-role.description", "Terraform role"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "roles.tf-role.deny_interface", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_user_management.test", "roles.tf-role.deny_vlan", "yes"))
@@ -242,6 +246,10 @@ func TestAccUserManagementResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.shell_type", "shellvsh"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.roles.network-operator.description", "Operator role"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.roles.network-operator.privilege_type", "readPriv"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.ssh_key", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7r1TEul1XD1s6fNl5XuyzbTj507k2Q8gUlVoK43qUiIr/vDXCeZTdpINlYYU1lvCGgO/EsxijDOpGgs0stQ21BqBcc11p2RauN8Mnpx/7OHYgrLaMMTMfQeKVBfrpooB0Oz07UayRsFA8BNy2CnNuFdRNUiYLU0rmAnox9NZwEX213C6uEg3XnLJcdzX7I4VS0B7Joj30WDTAOilkPZ3C35WfyBS7N/d4/u7ZejHvLyGbdB70uhCyz4oHQuDCxF3MEchc5nDImi2+b1OFyWrY2W+soMhkTh7vfsmxNcLHWNae7JLl/kJ2ztSzUZH8avOuuMEid0IhHbvSLYvEy/gf"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.ssh_key_description", "Automation key"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.ssh_key_owner_key", "owner1"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "users.user1.ssh_key_owner_tag", "tag1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "roles.tf-role.description", "Terraform role"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "roles.tf-role.deny_interface", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_user_management.test", "roles.tf-role.deny_vlan", "yes"))
@@ -501,6 +509,10 @@ func testAccUserManagementResourceConfig_all(includeWriteOnly bool) string {
 	config += `					privilege_type = "readPriv"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
+	config += `			ssh_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7r1TEul1XD1s6fNl5XuyzbTj507k2Q8gUlVoK43qUiIr/vDXCeZTdpINlYYU1lvCGgO/EsxijDOpGgs0stQ21BqBcc11p2RauN8Mnpx/7OHYgrLaMMTMfQeKVBfrpooB0Oz07UayRsFA8BNy2CnNuFdRNUiYLU0rmAnox9NZwEX213C6uEg3XnLJcdzX7I4VS0B7Joj30WDTAOilkPZ3C35WfyBS7N/d4/u7ZejHvLyGbdB70uhCyz4oHQuDCxF3MEchc5nDImi2+b1OFyWrY2W+soMhkTh7vfsmxNcLHWNae7JLl/kJ2ztSzUZH8avOuuMEid0IhHbvSLYvEy/gf"` + "\n"
+	config += `			ssh_key_description = "Automation key"` + "\n"
+	config += `			ssh_key_owner_key = "owner1"` + "\n"
+	config += `			ssh_key_owner_tag = "tag1"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	role_feature_groups = {` + "\n"

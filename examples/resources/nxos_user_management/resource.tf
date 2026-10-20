@@ -40,6 +40,10 @@ resource "nxos_user_management" "example" {
           privilege_type = "readPriv"
         }
       }
+      ssh_key             = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7r1TEul1XD1s6fNl5XuyzbTj507k2Q8gUlVoK43qUiIr/vDXCeZTdpINlYYU1lvCGgO/EsxijDOpGgs0stQ21BqBcc11p2RauN8Mnpx/7OHYgrLaMMTMfQeKVBfrpooB0Oz07UayRsFA8BNy2CnNuFdRNUiYLU0rmAnox9NZwEX213C6uEg3XnLJcdzX7I4VS0B7Joj30WDTAOilkPZ3C35WfyBS7N/d4/u7ZejHvLyGbdB70uhCyz4oHQuDCxF3MEchc5nDImi2+b1OFyWrY2W+soMhkTh7vfsmxNcLHWNae7JLl/kJ2ztSzUZH8avOuuMEid0IhHbvSLYvEy/gf"
+      ssh_key_description = "Automation key"
+      ssh_key_owner_key   = "owner1"
+      ssh_key_owner_tag   = "tag1"
     }
   }
   role_feature_groups = {

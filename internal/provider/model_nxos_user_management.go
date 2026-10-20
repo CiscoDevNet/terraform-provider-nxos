@@ -188,6 +188,10 @@ type UserManagementUsers struct {
 	ShellType              types.String                        `tfsdk:"shell_type"`
 	UnixUserId             types.Int64                         `tfsdk:"unix_user_id"`
 	Roles                  map[string]UserManagementUsersRoles `tfsdk:"roles"`
+	SshKey                 types.String                        `tfsdk:"ssh_key"`
+	SshKeyDescription      types.String                        `tfsdk:"ssh_key_description"`
+	SshKeyOwnerKey         types.String                        `tfsdk:"ssh_key_owner_key"`
+	SshKeyOwnerTag         types.String                        `tfsdk:"ssh_key_owner_tag"`
 }
 
 type UserManagementUsersRoles struct {
@@ -375,7 +379,7 @@ var UserManagementListClasses = map[string]bool{"aaaUser": true, "aaaUserRole": 
 
 // getUserManagementTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getUserManagementTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaRoleFeatureGroup", "aaaFeatureName", "aaaRole", "aaaRoleRule", "aaaPermitVlan", "aaaPermitIntf", "aaaPermitVrf", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc", "pkiEp", "pkiKeyRing", "pkiTP"}, UserManagementSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"aaaPreLoginBanner", "aaaPostLoginBanner", "aaaUser", "aaaUserDomain", "aaaUserRole", "aaaSshAuth", "aaaRoleFeatureGroup", "aaaFeatureName", "aaaRole", "aaaRoleRule", "aaaPermitVlan", "aaaPermitIntf", "aaaPermitVrf", "aaaTacacsPlusEp", "aaaTacacsPlusProvider", "aaaTacacsPlusProviderGroup", "aaaProviderRef", "aaaRadiusEp", "aaaRadiusServerMonitor", "aaaRadiusProvider", "aaaRadiusProviderGroup", "aaaProviderRef", "aaaAuthRealm", "aaaDefaultAuth", "aaaConsoleAuth", "aaaDefaultAuthor", "aaaDefaultAcc", "pkiEp", "pkiKeyRing", "pkiTP"}, UserManagementSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -639,6 +643,22 @@ func (data UserManagement) toBody(config UserManagement) nxos.Body {
 				if parentAttrs != "{}" || gjson.Get(childBody, "aaaUserDomain.children").Exists() {
 					body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 				}
+			}
+			attrs = "{}"
+			if !child.SshKey.IsUnknown() && !child.SshKey.IsNull() && !configChild.SshKey.IsNull() {
+				attrs, _ = sjson.Set(attrs, "data", child.SshKey.ValueString())
+			}
+			if !child.SshKeyDescription.IsUnknown() && !child.SshKeyDescription.IsNull() && !configChild.SshKeyDescription.IsNull() {
+				attrs, _ = sjson.Set(attrs, "descr", child.SshKeyDescription.ValueString())
+			}
+			if !child.SshKeyOwnerKey.IsUnknown() && !child.SshKeyOwnerKey.IsNull() && !configChild.SshKeyOwnerKey.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ownerKey", child.SshKeyOwnerKey.ValueString())
+			}
+			if !child.SshKeyOwnerTag.IsUnknown() && !child.SshKeyOwnerTag.IsNull() && !configChild.SshKeyOwnerTag.IsNull() {
+				attrs, _ = sjson.Set(attrs, "ownerTag", child.SshKeyOwnerTag.ValueString())
+			}
+			if attrs != "{}" {
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.aaaSshAuth.attributes", attrs)
 			}
 		}
 	}
@@ -1515,6 +1535,23 @@ func (data *UserManagement) fromBody(res gjson.Result) {
 								},
 							)
 						}
+						{
+							var raaaSshAuth gjson.Result
+							value.Get("children").ForEach(
+								func(_, nestedV gjson.Result) bool {
+									rnValue := nestedV.Get("aaaSshAuth.attributes.rn").String()
+									if rnValue == "sshauth" {
+										raaaSshAuth = nestedV
+										return false
+									}
+									return true
+								},
+							)
+							child.SshKey = types.StringValue(raaaSshAuth.Get("aaaSshAuth.attributes.data").String())
+							child.SshKeyDescription = types.StringValue(raaaSshAuth.Get("aaaSshAuth.attributes.descr").String())
+							child.SshKeyOwnerKey = types.StringValue(raaaSshAuth.Get("aaaSshAuth.attributes.ownerKey").String())
+							child.SshKeyOwnerTag = types.StringValue(raaaSshAuth.Get("aaaSshAuth.attributes.ownerTag").String())
+						}
 						if data.Users == nil {
 							data.Users = make(map[string]UserManagementUsers)
 						}
@@ -2345,6 +2382,39 @@ func (data *UserManagement) updateFromBody(res gjson.Result) {
 					ncItem.PrivilegeType = types.StringNull()
 				}
 				item.Roles[nc] = ncItem
+			}
+		}
+		{
+			var raaaSshAuth gjson.Result
+			raaaUser.Get("aaaUser.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("aaaSshAuth.attributes.rn").String()
+					if rnValue == "sshauth" {
+						raaaSshAuth = v
+						return false
+					}
+					return true
+				},
+			)
+			if !item.SshKey.IsNull() {
+				item.SshKey = types.StringValue(raaaSshAuth.Get("aaaSshAuth.attributes.data").String())
+			} else {
+				item.SshKey = types.StringNull()
+			}
+			if !item.SshKeyDescription.IsNull() {
+				item.SshKeyDescription = types.StringValue(raaaSshAuth.Get("aaaSshAuth.attributes.descr").String())
+			} else {
+				item.SshKeyDescription = types.StringNull()
+			}
+			if !item.SshKeyOwnerKey.IsNull() {
+				item.SshKeyOwnerKey = types.StringValue(raaaSshAuth.Get("aaaSshAuth.attributes.ownerKey").String())
+			} else {
+				item.SshKeyOwnerKey = types.StringNull()
+			}
+			if !item.SshKeyOwnerTag.IsNull() {
+				item.SshKeyOwnerTag = types.StringValue(raaaSshAuth.Get("aaaSshAuth.attributes.ownerTag").String())
+			} else {
+				item.SshKeyOwnerTag = types.StringNull()
 			}
 		}
 		data.Users[key] = item
@@ -4090,6 +4160,10 @@ func (data UserManagement) managedDns() map[string]bool {
 				dns[aaaUserRoleDn_] = true
 			}
 		}
+		if !(child.SshKey.IsNull() && child.SshKeyDescription.IsNull() && child.SshKeyOwnerKey.IsNull() && child.SshKeyOwnerTag.IsNull()) {
+			aaaSshAuthDn_ := aaaUserDn + "/" + "sshauth"
+			dns[aaaSshAuthDn_] = true
+		}
 	}
 	for key, child := range data.RoleFeatureGroups {
 		aaaRoleFeatureGroupDn := dn + "/" + child.getRn(key)
@@ -4385,6 +4459,32 @@ func (data UserManagement) toResetBody(preexisting map[string]bool) nxos.Body {
 				if aaaUserDomainBody_ != "" {
 					aaaUserDomainBody_, _ = sjson.Set(aaaUserDomainBody_, "aaaUserDomain.attributes.rn", aaaUserDomainRn_)
 					aaaUserBody, _ = sjson.SetRaw(aaaUserBody, "aaaUser.children.-1", aaaUserDomainBody_)
+				}
+			}
+		}
+		if !(child.SshKey.IsNull() && child.SshKeyDescription.IsNull() && child.SshKeyOwnerKey.IsNull() && child.SshKeyOwnerTag.IsNull()) {
+			aaaSshAuthRn_ := "sshauth"
+			aaaSshAuthDn_ := aaaUserDn + "/" + aaaSshAuthRn_
+			_ = aaaSshAuthDn_
+			if !existed(aaaSshAuthDn_) {
+				aaaUserBody, _ = sjson.Set(aaaUserBody, "aaaUser.children.-1.aaaSshAuth.attributes", map[string]interface{}{"rn": aaaSshAuthRn_, "status": "deleted"})
+			} else {
+				aaaSshAuthBody_ := ""
+				if !child.SshKey.IsNull() {
+					aaaSshAuthBody_, _ = sjson.Set(aaaSshAuthBody_, "aaaSshAuth.attributes.data", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SshKeyDescription.IsNull() {
+					aaaSshAuthBody_, _ = sjson.Set(aaaSshAuthBody_, "aaaSshAuth.attributes.descr", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SshKeyOwnerKey.IsNull() {
+					aaaSshAuthBody_, _ = sjson.Set(aaaSshAuthBody_, "aaaSshAuth.attributes.ownerKey", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if !child.SshKeyOwnerTag.IsNull() {
+					aaaSshAuthBody_, _ = sjson.Set(aaaSshAuthBody_, "aaaSshAuth.attributes.ownerTag", "DME_UNSET_PROPERTY_MARKER")
+				}
+				if aaaSshAuthBody_ != "" {
+					aaaSshAuthBody_, _ = sjson.Set(aaaSshAuthBody_, "aaaSshAuth.attributes.rn", aaaSshAuthRn_)
+					aaaUserBody, _ = sjson.SetRaw(aaaUserBody, "aaaUser.children.-1", aaaSshAuthBody_)
 				}
 			}
 		}
@@ -5651,6 +5751,28 @@ func (data UserManagement) toBodyWithDeletes(ctx context.Context, state UserMana
 										break
 									}
 								}
+							}
+						}
+						if deleteEmptied != nil && !(stateChild.SshKey.IsNull() && stateChild.SshKeyDescription.IsNull() && stateChild.SshKeyOwnerKey.IsNull() && stateChild.SshKeyOwnerTag.IsNull()) && (configChild.SshKey.IsNull() && configChild.SshKeyDescription.IsNull() && configChild.SshKeyOwnerKey.IsNull() && configChild.SshKeyOwnerTag.IsNull()) && deleteEmptied(listChildDn+"/sshauth") {
+							deletePath := helpers.EnsureChildPath(&body.Str, listChildPath, "aaaSshAuth")
+							body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
+							body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
+						} else {
+							if !stateChild.SshKey.IsNull() && configChild.SshKey.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "aaaSshAuth")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"data", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.SshKeyDescription.IsNull() && configChild.SshKeyDescription.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "aaaSshAuth")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"descr", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.SshKeyOwnerKey.IsNull() && configChild.SshKeyOwnerKey.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "aaaSshAuth")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ownerKey", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !stateChild.SshKeyOwnerTag.IsNull() && configChild.SshKeyOwnerTag.IsNull() {
+								unsetPath := helpers.EnsureChildPath(&body.Str, listChildPath, "aaaSshAuth")
+								body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"ownerTag", "DME_UNSET_PROPERTY_MARKER")
 							}
 						}
 					}

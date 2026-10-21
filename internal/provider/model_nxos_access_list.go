@@ -3003,7 +3003,9 @@ func (data AccessList) toDeleteBody() nxos.Body {
 		if len(data.Ipv4AddressObjectGroups) > 0 {
 			hasNestedChildren = true
 		}
-		hasNestedChildren = true
+		if !((len(data.IngressInterfaces) == 0 && (data.IngressVtyAccessListName.IsNull())) && (len(data.EgressInterfaces) == 0 && (data.EgressVtyAccessListName.IsNull()))) {
+			hasNestedChildren = true
+		}
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv4aclAF"
@@ -3025,7 +3027,7 @@ func (data AccessList) toDeleteBody() nxos.Body {
 				deleteBody, _ = sjson.Set(deleteBody, "ipv4aclAddrGroup.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
-			{
+			if !((len(data.IngressInterfaces) == 0 && (data.IngressVtyAccessListName.IsNull())) && (len(data.EgressInterfaces) == 0 && (data.EgressVtyAccessListName.IsNull()))) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "aclPolicy.attributes.rn", "policy")
 				deleteBody, _ = sjson.Set(deleteBody, "aclPolicy.attributes.status", "deleted")
@@ -3042,7 +3044,9 @@ func (data AccessList) toDeleteBody() nxos.Body {
 		if len(data.Ipv6AddressObjectGroups) > 0 {
 			hasNestedChildren = true
 		}
-		hasNestedChildren = true
+		if !((len(data.Ipv6IngressInterfaces) == 0 && (data.Ipv6IngressVtyAccessListName.IsNull())) && (len(data.Ipv6EgressInterfaces) == 0 && (data.Ipv6EgressVtyAccessListName.IsNull()))) {
+			hasNestedChildren = true
+		}
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ipv6aclAF"
@@ -3064,7 +3068,7 @@ func (data AccessList) toDeleteBody() nxos.Body {
 				deleteBody, _ = sjson.Set(deleteBody, "ipv6aclAddrGroup.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
-			{
+			if !((len(data.Ipv6IngressInterfaces) == 0 && (data.Ipv6IngressVtyAccessListName.IsNull())) && (len(data.Ipv6EgressInterfaces) == 0 && (data.Ipv6EgressVtyAccessListName.IsNull()))) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "aclPolicy.attributes.rn", "policy")
 				deleteBody, _ = sjson.Set(deleteBody, "aclPolicy.attributes.status", "deleted")

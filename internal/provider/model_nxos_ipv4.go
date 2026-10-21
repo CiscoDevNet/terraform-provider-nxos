@@ -1030,7 +1030,9 @@ func (data IPv4) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "sourceRoute", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
-		hasNestedChildren = true
+		if !(data.LoadSharingConcatenation.IsNull() && data.LoadSharingEcmp.IsNull() && data.LoadSharingExcludeL3Protocol.IsNull() && data.LoadSharingGreOuterHash.IsNull() && data.LoadSharingSecondHierarchyKeyshift.IsNull() && data.LoadSharingKeyshift.IsNull() && data.LoadSharingMode.IsNull() && data.LoadSharingRotate.IsNull() && data.LoadSharingUdfLength.IsNull() && data.LoadSharingUdfOffset.IsNull() && data.LoadSharingUniversalId.IsNull()) {
+			hasNestedChildren = true
+		}
 		if len(data.Vrfs) > 0 {
 			hasNestedChildren = true
 		}
@@ -1043,7 +1045,7 @@ func (data IPv4) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
-			{
+			if !(data.LoadSharingConcatenation.IsNull() && data.LoadSharingEcmp.IsNull() && data.LoadSharingExcludeL3Protocol.IsNull() && data.LoadSharingGreOuterHash.IsNull() && data.LoadSharingSecondHierarchyKeyshift.IsNull() && data.LoadSharingKeyshift.IsNull() && data.LoadSharingMode.IsNull() && data.LoadSharingRotate.IsNull() && data.LoadSharingUdfLength.IsNull() && data.LoadSharingUdfOffset.IsNull() && data.LoadSharingUniversalId.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "ipv4IPLoadSharing.attributes.rn", "iploadsharing")
 				deleteBody, _ = sjson.Set(deleteBody, "ipv4IPLoadSharing.attributes.status", "deleted")

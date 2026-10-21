@@ -1271,7 +1271,9 @@ func (data IGMPSnooping) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "ctrl", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
-		hasNestedChildren = true
+		if !(data.DomainControl.IsNull() && data.DomainName.IsNull() && (data.GlobalVlanVxlan.IsNull() && data.GlobalVlanDisableNveStaticRouterPort.IsNull() && data.GlobalVlanVxlanUmcDropVlan.IsNull()) && len(data.Vlans) == 0) {
+			hasNestedChildren = true
+		}
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".igmpsnoopInst"
@@ -1281,7 +1283,7 @@ func (data IGMPSnooping) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
-			{
+			if !(data.DomainControl.IsNull() && data.DomainName.IsNull() && (data.GlobalVlanVxlan.IsNull() && data.GlobalVlanDisableNveStaticRouterPort.IsNull() && data.GlobalVlanVxlanUmcDropVlan.IsNull()) && len(data.Vlans) == 0) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopDom.attributes.rn", "dom")
 				deleteBody, _ = sjson.Set(deleteBody, "igmpsnoopDom.attributes.status", "deleted")

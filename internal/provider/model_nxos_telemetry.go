@@ -1234,13 +1234,13 @@ func (data Telemetry) toDeleteBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
 	childrenPath := data.getClassName() + ".children"
-	{
+	if !(data.CertificateFilename.IsNull() && data.CertificateHostname.IsNull() && data.CertificateTrustpoint.IsNull()) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "telemetryCertificate.attributes.rn", "certificate")
 		deleteBody, _ = sjson.Set(deleteBody, "telemetryCertificate.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
-	{
+	if !(data.DestinationProfileAdminState.IsNull() && (data.DestinationProfileVrf.IsNull()) && (data.DestinationProfileCompression.IsNull()) && (data.DestinationProfileGrpcDeadline.IsNull()) && (data.DestinationProfileNodeId.IsNull()) && (data.DestinationProfileRetrySize.IsNull()) && (data.DestinationProfileSourceInterface.IsNull())) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "telemetryDestProfile.attributes.rn", "destprof")
 		deleteBody, _ = sjson.Set(deleteBody, "telemetryDestProfile.attributes.status", "deleted")

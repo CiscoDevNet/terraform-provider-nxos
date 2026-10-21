@@ -591,13 +591,13 @@ func (data NTP) toDeleteBody() nxos.Body {
 		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpAuth.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
-	{
+	if !(data.SourceInterface.IsNull()) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpSrcIf.attributes.rn", "srcIf")
 		deleteBody, _ = sjson.Set(deleteBody, "datetimeNtpSrcIf.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
-	{
+	if !(data.AccessGroupMatchAll.IsNull() && data.AccessGroupPeer.IsNull() && data.AccessGroupQueryOnly.IsNull() && data.AccessGroupServe.IsNull() && data.AccessGroupServeOnly.IsNull()) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "datetimeAccessGroup.attributes.rn", "accessgroup")
 		deleteBody, _ = sjson.Set(deleteBody, "datetimeAccessGroup.attributes.status", "deleted")

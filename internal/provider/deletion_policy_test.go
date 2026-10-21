@@ -72,6 +72,34 @@ func TestNxos_DeletionPolicyResetBody(t *testing.T) {
 	}
 }
 
+// Single child objects are only deleted when the resource configures them. Deleting unconfigured ones removes
+// config the resource does not manage and fails for feature-gated classes (e.g. ngoamEntity without feature ngoam).
+func TestNxos_DeletionPolicyDeleteBody(t *testing.T) {
+	cases := []struct {
+		name     string
+		data     System
+		expected string
+	}{
+		{
+			name:     "unconfigured children",
+			data:     System{Name: types.StringValue("LEAF1")},
+			expected: `{"topSystem":{"attributes":{"name":"DME_UNSET_PROPERTY_MARKER"}}}`,
+		},
+		{
+			name:     "configured child",
+			data:     System{NgoamInstallAcl: types.BoolValue(true)},
+			expected: `{"topSystem":{"attributes":{},"children":[{"ngoamEntity":{"attributes":{},"children":[{"ngoamInstallAcl":{"attributes":{"rn":"installacl","status":"deleted"}}}]}}]}}`,
+		},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			if out := c.data.toDeleteBody().Str; out != c.expected {
+				t.Fatalf("Error matching output and expected:\n%s\nvs\n%s", out, c.expected)
+			}
+		})
+	}
+}
+
 func TestNxos_DeletionPolicyUpdateBody(t *testing.T) {
 	vrf := func(v BGPVrfs) BGP {
 		return BGP{Asn: types.StringValue("65001"), Vrfs: map[string]BGPVrfs{"default": v}}

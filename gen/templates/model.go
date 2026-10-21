@@ -980,7 +980,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
          - KeepOnDestroy children: skipped, they stay on the device unchanged
          - NoDelete children with sub-children: create entry, set delete value (default DME_UNSET_PROPERTY_MARKER) for attrs, recurse
          - NoDelete leaf children: create entry, set delete value (default DME_UNSET_PROPERTY_MARKER) for attrs
-         - Deletable single children: append delete entry
+         - Deletable single children: append delete entry if any of their attributes or children are configured
          - Deletable list children: append delete entries per item
        Context: map with:
          "Children" ([]YamlConfigChildClass)
@@ -1042,7 +1042,9 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 		hasNestedChildren = true
 	}
 	{{- else if and (not .NoDelete) (eq .Type "single")}}
-	hasNestedChildren = true
+	if !{{singleEmptyExpr "data" .}} {
+		hasNestedChildren = true
+	}
 	{{- end}}
 	{{- end}}
 	if childBody != "" || hasNestedChildren {
@@ -1096,7 +1098,7 @@ func (data *{{camelCase .Name}}) updateFromBody(res gjson.Result) {
 {{- end}}
 {{- else}}
 {{- if eq .Type "single"}}
-	{
+	if !{{singleEmptyExpr "data" .}} {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.rn", "{{.Rn}}")
 		deleteBody, _ = sjson.Set(deleteBody, "{{.ClassName}}.attributes.status", "deleted")

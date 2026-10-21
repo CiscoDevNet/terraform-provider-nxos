@@ -879,16 +879,30 @@ func (data Logging) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		hasNestedChildren := false
-		hasNestedChildren = true
+		if !(data.FileAdminState.IsNull() && data.FileDescription.IsNull() && data.FileName.IsNull() && data.FilePersistentThreshold.IsNull() && data.FileSeverity.IsNull() && data.FileSize.IsNull()) {
+			hasNestedChildren = true
+		}
 		if len(data.RemoteDestinations) > 0 {
 			hasNestedChildren = true
 		}
-		hasNestedChildren = true
-		hasNestedChildren = true
-		hasNestedChildren = true
-		hasNestedChildren = true
-		hasNestedChildren = true
-		hasNestedChildren = true
+		if !(data.SourceInterfaceAdminState.IsNull() && data.SourceInterfaceName.IsNull()) {
+			hasNestedChildren = true
+		}
+		if !(data.TimestampFormat.IsNull()) {
+			hasNestedChildren = true
+		}
+		if !(data.MonitorAdminState.IsNull() && data.MonitorSeverity.IsNull()) {
+			hasNestedChildren = true
+		}
+		if !(data.ConsoleAdminState.IsNull() && data.ConsoleSeverity.IsNull()) {
+			hasNestedChildren = true
+		}
+		if !(data.OriginIdType.IsNull() && data.OriginIdValue.IsNull()) {
+			hasNestedChildren = true
+		}
+		if !(data.RateLimit.IsNull()) {
+			hasNestedChildren = true
+		}
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".syslogSyslog"
@@ -898,7 +912,7 @@ func (data Logging) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
-			{
+			if !(data.FileAdminState.IsNull() && data.FileDescription.IsNull() && data.FileName.IsNull() && data.FilePersistentThreshold.IsNull() && data.FileSeverity.IsNull() && data.FileSize.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "syslogFile.attributes.rn", "file")
 				deleteBody, _ = sjson.Set(deleteBody, "syslogFile.attributes.status", "deleted")
@@ -910,37 +924,37 @@ func (data Logging) toDeleteBody() nxos.Body {
 				deleteBody, _ = sjson.Set(deleteBody, "syslogRemoteDest.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
-			{
+			if !(data.SourceInterfaceAdminState.IsNull() && data.SourceInterfaceName.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "syslogSourceInterface.attributes.rn", "source")
 				deleteBody, _ = sjson.Set(deleteBody, "syslogSourceInterface.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
-			{
+			if !(data.TimestampFormat.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "syslogTimeStamp.attributes.rn", "timestamp")
 				deleteBody, _ = sjson.Set(deleteBody, "syslogTimeStamp.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
-			{
+			if !(data.MonitorAdminState.IsNull() && data.MonitorSeverity.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "syslogTermMonitor.attributes.rn", "monitor")
 				deleteBody, _ = sjson.Set(deleteBody, "syslogTermMonitor.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
-			{
+			if !(data.ConsoleAdminState.IsNull() && data.ConsoleSeverity.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "syslogConsole.attributes.rn", "console")
 				deleteBody, _ = sjson.Set(deleteBody, "syslogConsole.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
-			{
+			if !(data.OriginIdType.IsNull() && data.OriginIdValue.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "syslogOriginid.attributes.rn", "originid")
 				deleteBody, _ = sjson.Set(deleteBody, "syslogOriginid.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
-			{
+			if !(data.RateLimit.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "syslogLoggingRateLimit.attributes.rn", "loggingratelimit")
 				deleteBody, _ = sjson.Set(deleteBody, "syslogLoggingRateLimit.attributes.status", "deleted")

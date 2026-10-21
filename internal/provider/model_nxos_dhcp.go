@@ -1417,8 +1417,12 @@ func (data DHCP) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "v6SmartRelayGlobalEnabled", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
-		hasNestedChildren = true
-		hasNestedChildren = true
+		if !(data.SourceInterface.IsNull()) {
+			hasNestedChildren = true
+		}
+		if !(data.Ipv6SourceInterfaceAdminState.IsNull() && data.Ipv6SourceInterface.IsNull()) {
+			hasNestedChildren = true
+		}
 		if len(data.RelayInterfaces) > 0 {
 			hasNestedChildren = true
 		}
@@ -1452,13 +1456,13 @@ func (data DHCP) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
-			{
+			if !(data.SourceInterface.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "dhcpSourceIf.attributes.rn", "srcif")
 				deleteBody, _ = sjson.Set(deleteBody, "dhcpSourceIf.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
-			{
+			if !(data.Ipv6SourceInterfaceAdminState.IsNull() && data.Ipv6SourceInterface.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "dhcpV6SourceIf.attributes.rn", "v6srcif")
 				deleteBody, _ = sjson.Set(deleteBody, "dhcpV6SourceIf.attributes.status", "deleted")

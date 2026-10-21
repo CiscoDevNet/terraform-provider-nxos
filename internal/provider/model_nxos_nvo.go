@@ -925,19 +925,19 @@ func (data NVO) toDeleteBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
 	childrenPath := data.getClassName() + ".children"
-	{
+	if !(data.EvpnMultisiteBorderGatewayDciAdvertisePip.IsNull() && data.EvpnMultisiteBorderGatewayDelayRestoreTime.IsNull() && data.EvpnMultisiteBorderGatewayDfElectionTime.IsNull() && data.EvpnMultisiteBorderGatewayFabricAdvertisePip.IsNull() && data.EvpnMultisiteBorderGatewaySiteId.IsNull() && data.EvpnMultisiteBorderGatewaySplitHorizonPerSite.IsNull() && data.EvpnMultisiteBorderGatewayState.IsNull()) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnMultisiteBordergw.attributes.rn", "multisite")
 		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnMultisiteBordergw.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
-	{
+	if !(data.AdvertiseEvpnMulticastState.IsNull()) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnMulticast.attributes.rn", "evpnmulticast")
 		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnMulticast.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
-	{
+	if !(data.EvpnMultihomingDelayRestoreTime.IsNull() && data.EvpnMultihomingDfElectionMode.IsNull() && data.EvpnMultihomingDfElectionTime.IsNull() && data.EvpnMultihomingEadEviRoute.IsNull() && data.EvpnMultihomingSystemMac.IsNull() && data.EvpnMultihomingFrrAnycastSourceIp.IsNull() && data.EvpnMultihomingState.IsNull()) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnEsiMultiHoming.attributes.rn", "multihoming")
 		deleteBody, _ = sjson.Set(deleteBody, "nvoEvpnEsiMultiHoming.attributes.status", "deleted")

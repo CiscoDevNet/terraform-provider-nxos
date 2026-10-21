@@ -1167,7 +1167,9 @@ func (data QueuingQoS) toDeleteBody() nxos.Body {
 		{
 			childBody := ""
 			hasNestedChildren := false
-			hasNestedChildren = true
+			if !(data.SystemOutPolicyMapName.IsNull() && data.PolicyMapStatistics.IsNull()) {
+				hasNestedChildren = true
+			}
 			if len(data.PolicyInterfaceOut) > 0 {
 				hasNestedChildren = true
 			}
@@ -1180,7 +1182,7 @@ func (data QueuingQoS) toDeleteBody() nxos.Body {
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 				nestedChildrenPath := childBodyPath + ".children"
 				_ = nestedChildrenPath
-				{
+				if !(data.SystemOutPolicyMapName.IsNull() && data.PolicyMapStatistics.IsNull()) {
 					deleteBody := ""
 					deleteBody, _ = sjson.Set(deleteBody, "ipqosSystem.attributes.rn", "sys")
 					deleteBody, _ = sjson.Set(deleteBody, "ipqosSystem.attributes.status", "deleted")

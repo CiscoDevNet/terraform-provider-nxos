@@ -312,13 +312,13 @@ func (data PoE) toDeleteBody() nxos.Body {
 		body, _ = sjson.Set(body, data.getClassName()+".attributes", map[string]interface{}{})
 	}
 	childrenPath := data.getClassName() + ".children"
-	{
+	if !(data.InstanceAdminState.IsNull() && data.InstanceControl.IsNull()) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "poeInst.attributes.rn", "inst")
 		deleteBody, _ = sjson.Set(deleteBody, "poeInst.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
-	{
+	if !(data.LoggingLevel.IsNull()) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "poeModLogLevel.attributes.rn", "modloglevel")
 		deleteBody, _ = sjson.Set(deleteBody, "poeModLogLevel.attributes.status", "deleted")

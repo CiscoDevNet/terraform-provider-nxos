@@ -1230,13 +1230,13 @@ func (data PTP) toDeleteBody() nxos.Body {
 		deleteBody, _ = sjson.Set(deleteBody, "ptpPtpDomain.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
-	{
+	if !(data.NotifyHighCorrectionInterval.IsNull() && data.NotifyHighCorrection.IsNull() && data.NotifyHighCorrectionPeriodic.IsNull()) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "ptpPtpNotifyHighCorr.attributes.rn", "notifyhighcorr")
 		deleteBody, _ = sjson.Set(deleteBody, "ptpPtpNotifyHighCorr.attributes.status", "deleted")
 		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
-	{
+	if !(data.NotifyPortStateChangeCategory.IsNull() && data.NotifyPortStateChangeInterval.IsNull() && data.NotifyPortStateChange.IsNull() && data.NotifyPortStateChangePeriodic.IsNull()) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "ptpPtpNotifyPortStateChg.attributes.rn", "notifyportstatechg")
 		deleteBody, _ = sjson.Set(deleteBody, "ptpPtpNotifyPortStateChg.attributes.status", "deleted")

@@ -2945,7 +2945,9 @@ func (data PIM) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "regStop", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
-		hasNestedChildren = true
+		if !(data.Isolate.IsNull() && data.LogLevel.IsNull() && data.SyslogLevel.IsNull()) {
+			hasNestedChildren = true
+		}
 		if len(data.Vrfs) > 0 {
 			hasNestedChildren = true
 		}
@@ -2958,7 +2960,7 @@ func (data PIM) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
-			{
+			if !(data.Isolate.IsNull() && data.LogLevel.IsNull() && data.SyslogLevel.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "pimGl.attributes.rn", "gl")
 				deleteBody, _ = sjson.Set(deleteBody, "pimGl.attributes.status", "deleted")

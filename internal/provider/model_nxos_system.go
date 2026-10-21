@@ -9372,7 +9372,9 @@ func (data System) toDeleteBody() nxos.Body {
 				childBody, _ = sjson.Set(childBody, "timeout", "DME_UNSET_PROPERTY_MARKER")
 			}
 			hasNestedChildren := false
-			hasNestedChildren = true
+			if !(len(data.ArpVpcDomains) == 0) {
+				hasNestedChildren = true
+			}
 			if childBody != "" || hasNestedChildren {
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".arpInst"
@@ -9382,7 +9384,7 @@ func (data System) toDeleteBody() nxos.Body {
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 				nestedChildrenPath := childBodyPath + ".children"
 				_ = nestedChildrenPath
-				{
+				if !(len(data.ArpVpcDomains) == 0) {
 					deleteBody := ""
 					deleteBody, _ = sjson.Set(deleteBody, "arpVpc.attributes.rn", "vpc")
 					deleteBody, _ = sjson.Set(deleteBody, "arpVpc.attributes.status", "deleted")
@@ -9449,7 +9451,9 @@ func (data System) toDeleteBody() nxos.Body {
 			if len(data.NdVrfs) > 0 {
 				hasNestedChildren = true
 			}
-			hasNestedChildren = true
+			if !(len(data.NdVpcDomains) == 0) {
+				hasNestedChildren = true
+			}
 			if childBody != "" || hasNestedChildren {
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".ndInst"
@@ -9465,7 +9469,7 @@ func (data System) toDeleteBody() nxos.Body {
 					deleteBody, _ = sjson.Set(deleteBody, "ndDom.attributes.status", "deleted")
 					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 				}
-				{
+				if !(len(data.NdVpcDomains) == 0) {
 					deleteBody := ""
 					deleteBody, _ = sjson.Set(deleteBody, "ndVpc.attributes.rn", "vpc")
 					deleteBody, _ = sjson.Set(deleteBody, "ndVpc.attributes.status", "deleted")
@@ -9501,8 +9505,12 @@ func (data System) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "protocol", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
-		hasNestedChildren = true
-		hasNestedChildren = true
+		if !(data.ClockTimezoneName.IsNull() && data.ClockTimezoneHours.IsNull() && data.ClockTimezoneMinutes.IsNull()) {
+			hasNestedChildren = true
+		}
+		if !(data.ClockSummerTimeName.IsNull() && data.ClockSummerTimeOffsetMinutes.IsNull() && data.ClockSummerTimeStartWeek.IsNull() && data.ClockSummerTimeStartDay.IsNull() && data.ClockSummerTimeStartMonth.IsNull() && data.ClockSummerTimeStartTime.IsNull() && data.ClockSummerTimeEndWeek.IsNull() && data.ClockSummerTimeEndDay.IsNull() && data.ClockSummerTimeEndMonth.IsNull() && data.ClockSummerTimeEndTime.IsNull()) {
+			hasNestedChildren = true
+		}
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".datetimeClock"
@@ -9512,13 +9520,13 @@ func (data System) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
-			{
+			if !(data.ClockTimezoneName.IsNull() && data.ClockTimezoneHours.IsNull() && data.ClockTimezoneMinutes.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "datetimeTimezone.attributes.rn", "timezone")
 				deleteBody, _ = sjson.Set(deleteBody, "datetimeTimezone.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
-			{
+			if !(data.ClockSummerTimeName.IsNull() && data.ClockSummerTimeOffsetMinutes.IsNull() && data.ClockSummerTimeStartWeek.IsNull() && data.ClockSummerTimeStartDay.IsNull() && data.ClockSummerTimeStartMonth.IsNull() && data.ClockSummerTimeStartTime.IsNull() && data.ClockSummerTimeEndWeek.IsNull() && data.ClockSummerTimeEndDay.IsNull() && data.ClockSummerTimeEndMonth.IsNull() && data.ClockSummerTimeEndTime.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "datetimeSummerT.attributes.rn", "summertime")
 				deleteBody, _ = sjson.Set(deleteBody, "datetimeSummerT.attributes.status", "deleted")
@@ -9526,7 +9534,7 @@ func (data System) toDeleteBody() nxos.Body {
 			}
 		}
 	}
-	{
+	if !(data.DnsAdminState.IsNull() && len(data.DnsProfiles) == 0) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "dnsEntity.attributes.rn", "dns")
 		deleteBody, _ = sjson.Set(deleteBody, "dnsEntity.attributes.status", "deleted")
@@ -9696,7 +9704,9 @@ func (data System) toDeleteBody() nxos.Body {
 			childBody, _ = sjson.Set(childBody, "poap", "DME_UNSET_PROPERTY_MARKER")
 		}
 		hasNestedChildren := false
-		hasNestedChildren = true
+		if !(data.BootImageVerification.IsNull() && data.BootImageSupervisor1.IsNull() && data.BootImageSupervisor2.IsNull()) {
+			hasNestedChildren = true
+		}
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".bootBoot"
@@ -9706,7 +9716,7 @@ func (data System) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
-			{
+			if !(data.BootImageVerification.IsNull() && data.BootImageSupervisor1.IsNull() && data.BootImageSupervisor2.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "bootImage.attributes.rn", "image")
 				deleteBody, _ = sjson.Set(deleteBody, "bootImage.attributes.status", "deleted")
@@ -10283,7 +10293,7 @@ func (data System) toDeleteBody() nxos.Body {
 			}
 		}
 	}
-	{
+	if !(data.IcamMonitorInterval.IsNull() && data.IcamNumberOfIntervals.IsNull() && (data.IcamScaleCriticalThreshold.IsNull() && data.IcamScaleInfoThreshold.IsNull() && data.IcamScaleConfiguration.IsNull() && data.IcamScaleWarningThreshold.IsNull())) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "icamEntity.attributes.rn", "icam")
 		deleteBody, _ = sjson.Set(deleteBody, "icamEntity.attributes.status", "deleted")
@@ -10423,7 +10433,9 @@ func (data System) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		hasNestedChildren := false
-		hasNestedChildren = true
+		if !(len(data.ServiceInstances) == 0) {
+			hasNestedChildren = true
+		}
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".sasSas"
@@ -10433,7 +10445,7 @@ func (data System) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
-			{
+			if !(len(data.ServiceInstances) == 0) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "sasSvc.attributes.rn", "svc")
 				deleteBody, _ = sjson.Set(deleteBody, "sasSvc.attributes.status", "deleted")
@@ -10546,7 +10558,7 @@ func (data System) toDeleteBody() nxos.Body {
 			}
 		}
 	}
-	{
+	if !(data.PasswordEncryptionAdminState.IsNull() && data.PasswordEncryptionUseTam.IsNull()) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "smartcardPasswdEncrypt.attributes.rn", "passwdenc")
 		deleteBody, _ = sjson.Set(deleteBody, "smartcardPasswdEncrypt.attributes.status", "deleted")
@@ -10568,7 +10580,9 @@ func (data System) toDeleteBody() nxos.Body {
 		{
 			childBody := ""
 			hasNestedChildren := false
-			hasNestedChildren = true
+			if !(data.AclLogDetailed.IsNull() && data.AclLogEntries.IsNull() && data.AclLogIncludeMac.IsNull() && data.AclLogIncludeSgt.IsNull() && data.AclLogInterval.IsNull() && data.AclLogMatchLogLevel.IsNull() && data.AclLogThreshold.IsNull()) {
+				hasNestedChildren = true
+			}
 			if childBody != "" || hasNestedChildren {
 				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
 				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".acllogInst"
@@ -10578,7 +10592,7 @@ func (data System) toDeleteBody() nxos.Body {
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 				nestedChildrenPath := childBodyPath + ".children"
 				_ = nestedChildrenPath
-				{
+				if !(data.AclLogDetailed.IsNull() && data.AclLogEntries.IsNull() && data.AclLogIncludeMac.IsNull() && data.AclLogIncludeSgt.IsNull() && data.AclLogInterval.IsNull() && data.AclLogMatchLogLevel.IsNull() && data.AclLogThreshold.IsNull()) {
 					deleteBody := ""
 					deleteBody, _ = sjson.Set(deleteBody, "acllogLogCache.attributes.rn", "log")
 					deleteBody, _ = sjson.Set(deleteBody, "acllogLogCache.attributes.status", "deleted")
@@ -10593,7 +10607,7 @@ func (data System) toDeleteBody() nxos.Body {
 			}
 		}
 	}
-	{
+	if !(data.ErspanOriginIpIsGlobal.IsNull() && data.ErspanOriginIpIsGlobalIpv6.IsNull() && data.ErspanOriginIpAddress.IsNull() && data.ErspanOriginIpv6Address.IsNull()) {
 		deleteBody := ""
 		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.rn", "originip")
 		deleteBody, _ = sjson.Set(deleteBody, "spanErspanOriginIp.attributes.status", "deleted")
@@ -10763,8 +10777,12 @@ func (data System) toDeleteBody() nxos.Body {
 	{
 		childBody := ""
 		hasNestedChildren := false
-		hasNestedChildren = true
-		hasNestedChildren = true
+		if !(data.NgoamInstallAcl.IsNull()) {
+			hasNestedChildren = true
+		}
+		if !(data.NgoamLoopDetection.IsNull() && data.NgoamLoopDetectionPeriodicProbeInterval.IsNull() && data.NgoamLoopDetectionPortRecoveryInterval.IsNull()) {
+			hasNestedChildren = true
+		}
 		if childBody != "" || hasNestedChildren {
 			childIndex := len(gjson.Get(body, childrenPath).Array())
 			childBodyPath := childrenPath + "." + strconv.Itoa(childIndex) + ".ngoamEntity"
@@ -10774,13 +10792,13 @@ func (data System) toDeleteBody() nxos.Body {
 			body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 			nestedChildrenPath := childBodyPath + ".children"
 			_ = nestedChildrenPath
-			{
+			if !(data.NgoamInstallAcl.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "ngoamInstallAcl.attributes.rn", "installacl")
 				deleteBody, _ = sjson.Set(deleteBody, "ngoamInstallAcl.attributes.status", "deleted")
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
 			}
-			{
+			if !(data.NgoamLoopDetection.IsNull() && data.NgoamLoopDetectionPeriodicProbeInterval.IsNull() && data.NgoamLoopDetectionPortRecoveryInterval.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "ngoamLoopDetection.attributes.rn", "loopdetection")
 				deleteBody, _ = sjson.Set(deleteBody, "ngoamLoopDetection.attributes.status", "deleted")

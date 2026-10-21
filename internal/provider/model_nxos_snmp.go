@@ -5798,7 +5798,7 @@ func (data SNMP) toDeleteBody() nxos.Body {
 					body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 				}
 			}
-			{
+			if !(data.SourceInterfaceInforms.IsNull()) {
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "snmpSourceInterfaceInforms.attributes.rn", "srcInterfaceInforms")
 				deleteBody, _ = sjson.Set(deleteBody, "snmpSourceInterfaceInforms.attributes.status", "deleted")

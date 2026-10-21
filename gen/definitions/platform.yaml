@@ -2585,7 +2585,6 @@ child_classes:
     rn: ratelimitermod-%v
     type: list
     tf_name: hardware_rate_limiters
-    no_delete: true
     description: 'List of hardware rate-limiter configurations. Module `0` configures the global rate-limiters.'
     attributes:
       - nxos_name: module
@@ -2599,6 +2598,7 @@ child_classes:
       - nxos_name: rate
         tf_name: span_egress
         type: Int64
+        separate_request: true
         description: 'rate value in kbit per sec.'
         min_int: 0
         max_int: 100000000
@@ -2606,6 +2606,7 @@ child_classes:
       - nxos_name: rateacllog
         tf_name: access_list_log
         type: Int64
+        separate_request: true
         description: 'Packets copied to supervisor for access-list logging.'
         min_int: 0
         max_int: 40000
@@ -2613,6 +2614,7 @@ child_classes:
       - nxos_name: ratebfd
         tf_name: bfd
         type: Int64
+        separate_request: true
         description: 'BFD protocol traffic.'
         min_int: 0
         max_int: 8000000
@@ -2620,6 +2622,7 @@ child_classes:
       - nxos_name: ratel3glean
         tf_name: layer_3_glean
         type: Int64
+        separate_request: true
         description: 'Glean traffic.'
         min_int: 0
         max_int: 8000000
@@ -2627,6 +2630,7 @@ child_classes:
       - nxos_name: ratel3mcastlgrp
         tf_name: layer_3_multicast_local_groups
         type: Int64
+        separate_request: true
         description: 'Multicast data packets punted for initiating SPT join.'
         min_int: 0
         max_int: 8000000
@@ -2634,6 +2638,7 @@ child_classes:
       - nxos_name: ratesflow
         tf_name: sflow
         type: Int64
+        separate_request: true
         description: 'Inband SSX traffic.'
         min_int: 0
         max_int: 8000000
@@ -2641,6 +2646,7 @@ child_classes:
       - nxos_name: ratespan
         tf_name: span
         type: Int64
+        separate_request: true
         description: 'SPAN traffic.'
         min_int: 0
         max_int: 8000000
@@ -2648,14 +2654,17 @@ child_classes:
       - nxos_name: ratefex
         tf_name: fex
         type: Int64
+        separate_request: true
         description: 'FEX traffic.'
         min_int: 0
         max_int: 8000000
         example: 4000
+        delete_value: '3000'
         exclude_test: true
       - nxos_name: ratedot1x
         tf_name: dot1x
         type: Int64
+        separate_request: true
         description: 'DOT1X control traffic.'
         min_int: 0
         max_int: 8000000
@@ -2664,6 +2673,7 @@ child_classes:
       - nxos_name: ratemdns
         tf_name: mdns
         type: Int64
+        separate_request: true
         description: 'MDNS traffic.'
         min_int: 0
         max_int: 8000000
@@ -2672,6 +2682,7 @@ child_classes:
       - nxos_name: ratemplsoam
         tf_name: mpls_oam
         type: Int64
+        separate_request: true
         description: 'MPLS-OAM traffic.'
         min_int: 0
         max_int: 8000000
@@ -2680,6 +2691,7 @@ child_classes:
       - nxos_name: ratenetflow
         tf_name: netflow
         type: Int64
+        separate_request: true
         description: 'Inband Netflow traffic.'
         min_int: 0
         max_int: 8000000
@@ -2688,6 +2700,7 @@ child_classes:
       - nxos_name: ratengoamsld
         tf_name: ngoam_sld
         type: Int64
+        separate_request: true
         description: 'NGOAM SLD traffic.'
         min_int: 0
         max_int: 8000000
@@ -2696,6 +2709,7 @@ child_classes:
       - nxos_name: ratessx
         tf_name: ssx
         type: Int64
+        separate_request: true
         description: 'Inband SSX traffic.'
         min_int: 0
         max_int: 8000000
@@ -2704,6 +2718,7 @@ child_classes:
       - nxos_name: rateucsmgmt
         tf_name: ucs_mgmt
         type: Int64
+        separate_request: true
         description: 'Ucs Mgmt traffic.'
         min_int: 0
         max_int: 8000000
@@ -2712,6 +2727,7 @@ child_classes:
       - nxos_name: ratevxlanoam
         tf_name: vxlan_oam
         type: Int64
+        separate_request: true
         description: 'VxLAN-OAM traffic.'
         min_int: 0
         max_int: 8000000
@@ -2720,6 +2736,7 @@ child_classes:
       - nxos_name: rate100methports
         tf_name: ethports_100m
         type: Int64
+        separate_request: true
         description: '100M-Ethports.'
         min_int: 0
         max_int: 8000000
@@ -2728,6 +2745,7 @@ child_classes:
       - nxos_name: rateburst
         tf_name: burst
         type: Int64
+        separate_request: true
         description: 'value of burst size.'
         min_int: 0
         max_int: 10000
@@ -2736,6 +2754,7 @@ child_classes:
       - nxos_name: rateportstart
         tf_name: port_start
         type: Int64
+        separate_request: true
         description: 'Port start index.'
         min_int: 1
         max_int: 48
@@ -2744,6 +2763,7 @@ child_classes:
       - nxos_name: rateportend
         tf_name: port_end
         type: Int64
+        separate_request: true
         description: 'Port end index.'
         min_int: 1
         max_int: 48

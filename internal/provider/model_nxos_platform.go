@@ -451,6 +451,28 @@ var PlatformMinVersions = map[string]helpers.MinVersion{}
 // attributes identifying the objects of each class.
 var PlatformSeparateRequest = helpers.SeparateRequest{
 	Attributes: map[string]map[string]string{
+		"platformRateLimiterMod": {
+			"rate":             "DME_UNSET_PROPERTY_MARKER",
+			"rateacllog":       "DME_UNSET_PROPERTY_MARKER",
+			"ratebfd":          "DME_UNSET_PROPERTY_MARKER",
+			"ratel3glean":      "DME_UNSET_PROPERTY_MARKER",
+			"ratel3mcastlgrp":  "DME_UNSET_PROPERTY_MARKER",
+			"ratesflow":        "DME_UNSET_PROPERTY_MARKER",
+			"ratespan":         "DME_UNSET_PROPERTY_MARKER",
+			"ratefex":          "3000",
+			"ratedot1x":        "DME_UNSET_PROPERTY_MARKER",
+			"ratemdns":         "DME_UNSET_PROPERTY_MARKER",
+			"ratemplsoam":      "DME_UNSET_PROPERTY_MARKER",
+			"ratenetflow":      "DME_UNSET_PROPERTY_MARKER",
+			"ratengoamsld":     "DME_UNSET_PROPERTY_MARKER",
+			"ratessx":          "DME_UNSET_PROPERTY_MARKER",
+			"rateucsmgmt":      "DME_UNSET_PROPERTY_MARKER",
+			"ratevxlanoam":     "DME_UNSET_PROPERTY_MARKER",
+			"rate100methports": "DME_UNSET_PROPERTY_MARKER",
+			"rateburst":        "DME_UNSET_PROPERTY_MARKER",
+			"rateportstart":    "DME_UNSET_PROPERTY_MARKER",
+			"rateportend":      "DME_UNSET_PROPERTY_MARKER",
+		},
 		"platformUdf": {
 			"qualifyIfacl":    "DME_UNSET_PROPERTY_MARKER",
 			"qualifyIpv6Racl": "DME_UNSET_PROPERTY_MARKER",
@@ -5280,29 +5302,10 @@ func (data Platform) toDeleteBody() nxos.Body {
 		}
 	}
 	for key, child := range data.HardwareRateLimiters {
-		childBody := ""
-		childBody, _ = sjson.Set(childBody, "rn", child.getRn(key))
-		childBody, _ = sjson.Set(childBody, "rate", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "rateacllog", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "ratebfd", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "ratel3glean", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "ratel3mcastlgrp", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "ratesflow", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "ratespan", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "ratefex", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "ratedot1x", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "ratemdns", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "ratemplsoam", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "ratenetflow", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "ratengoamsld", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "ratessx", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "rateucsmgmt", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "ratevxlanoam", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "rate100methports", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "rateburst", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "rateportstart", "DME_UNSET_PROPERTY_MARKER")
-		childBody, _ = sjson.Set(childBody, "rateportend", "DME_UNSET_PROPERTY_MARKER")
-		body, _ = sjson.SetRaw(body, childrenPath+".-1.platformRateLimiterMod.attributes", childBody)
+		deleteBody := ""
+		deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.rn", child.getRn(key))
+		deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.status", "deleted")
+		body, _ = sjson.SetRaw(body, childrenPath+".-1", deleteBody)
 	}
 	{
 		childBody := ""
@@ -6496,6 +6499,10 @@ func (data Platform) toResetBody(preexisting map[string]bool) nxos.Body {
 		platformRateLimiterModRn := child.getRn(key)
 		platformRateLimiterModDn := dn + "/" + platformRateLimiterModRn
 		_ = platformRateLimiterModDn
+		if !existed(platformRateLimiterModDn) {
+			body, _ = sjson.Set(body, "platformEntity.children.-1.platformRateLimiterMod.attributes", map[string]interface{}{"rn": platformRateLimiterModRn, "status": "deleted"})
+			continue
+		}
 		platformRateLimiterModBody := ""
 		platformRateLimiterModBody, _ = sjson.Set(platformRateLimiterModBody, "platformRateLimiterMod.attributes.rn", platformRateLimiterModRn)
 		if !child.SpanEgress.IsNull() {
@@ -6520,7 +6527,7 @@ func (data Platform) toResetBody(preexisting map[string]bool) nxos.Body {
 			platformRateLimiterModBody, _ = sjson.Set(platformRateLimiterModBody, "platformRateLimiterMod.attributes.ratespan", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !child.Fex.IsNull() {
-			platformRateLimiterModBody, _ = sjson.Set(platformRateLimiterModBody, "platformRateLimiterMod.attributes.ratefex", "DME_UNSET_PROPERTY_MARKER")
+			platformRateLimiterModBody, _ = sjson.Set(platformRateLimiterModBody, "platformRateLimiterMod.attributes.ratefex", "3000")
 		}
 		if !child.Dot1x.IsNull() {
 			platformRateLimiterModBody, _ = sjson.Set(platformRateLimiterModBody, "platformRateLimiterMod.attributes.ratedot1x", "DME_UNSET_PROPERTY_MARKER")
@@ -6788,26 +6795,7 @@ func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, conf
 				stateChild := state.HardwareRateLimiters[stateKey]
 				deleteBody := ""
 				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.rn", stateChild.getRn(stateKey))
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.rate", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.rateacllog", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.ratebfd", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.ratel3glean", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.ratel3mcastlgrp", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.ratesflow", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.ratespan", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.ratefex", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.ratedot1x", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.ratemdns", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.ratemplsoam", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.ratenetflow", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.ratengoamsld", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.ratessx", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.rateucsmgmt", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.ratevxlanoam", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.rate100methports", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.rateburst", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.rateportstart", "DME_UNSET_PROPERTY_MARKER")
-				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.rateportend", "DME_UNSET_PROPERTY_MARKER")
+				deleteBody, _ = sjson.Set(deleteBody, "platformRateLimiterMod.attributes.status", "deleted")
 				deletePath := bodyPath
 				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
@@ -8062,7 +8050,7 @@ func (data Platform) toBodyWithDeletes(ctx context.Context, state Platform, conf
 							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".platformRateLimiterMod.attributes."+"ratespan", "DME_UNSET_PROPERTY_MARKER")
 						}
 						if !stateChild.Fex.IsNull() && configChild.Fex.IsNull() {
-							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".platformRateLimiterMod.attributes."+"ratefex", "DME_UNSET_PROPERTY_MARKER")
+							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".platformRateLimiterMod.attributes."+"ratefex", "3000")
 						}
 						if !stateChild.Dot1x.IsNull() && configChild.Dot1x.IsNull() {
 							body.Str, _ = sjson.Set(body.Str, bodyPath+"."+strconv.Itoa(mi)+".platformRateLimiterMod.attributes."+"ratedot1x", "DME_UNSET_PROPERTY_MARKER")

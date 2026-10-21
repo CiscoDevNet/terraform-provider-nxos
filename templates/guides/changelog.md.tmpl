@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.21.1
+
+- Fix destroy deleting nested objects that are not configured in the resource, e.g. `nxos_system` removing the boot image, DNS and NGOAM configuration (failing with "NGOAM feature is not enabled" when the `ngoam` feature is disabled), also affecting `nxos_access_list`, `nxos_dhcp`, `nxos_igmp_snooping`, `nxos_ipv4`, `nxos_logging`, `nxos_network_qos`, `nxos_ntp`, `nxos_nvo`, `nxos_pim`, `nxos_poe`, `nxos_ptp`, `nxos_queuing_qos`, `nxos_snmp` and `nxos_telemetry`
+
 ## 0.21.0
 
 - Add global multihop session parameters to `nxos_bfd` resource and data source

@@ -1,1 +1,0 @@
-- Fix `nxos_platform` leaving `hardware_rate_limiters` configuration on the device on destroy or when an entry is removed: entries are now reset and then deleted, and `fex` is reset to the CLI default `3000` instead of the DME default `12000`

@@ -1,3 +1,7 @@
+## 0.21.2
+
+- Fix `nxos_platform` leaving `hardware_rate_limiters` configuration on the device on destroy or when an entry is removed: entries are now reset and then deleted, and `fex` is reset to the CLI default `3000` instead of the DME default `12000`
+
 ## 0.21.1
 
 - Fix destroy deleting nested objects that are not configured in the resource, e.g. `nxos_system` removing the boot image, DNS and NGOAM configuration (failing with "NGOAM feature is not enabled" when the `ngoam` feature is disabled), also affecting `nxos_access_list`, `nxos_dhcp`, `nxos_igmp_snooping`, `nxos_ipv4`, `nxos_logging`, `nxos_network_qos`, `nxos_ntp`, `nxos_nvo`, `nxos_pim`, `nxos_poe`, `nxos_ptp`, `nxos_queuing_qos`, `nxos_snmp` and `nxos_telemetry`

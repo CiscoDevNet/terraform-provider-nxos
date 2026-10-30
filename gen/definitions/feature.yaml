@@ -304,6 +304,37 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+      - class_name: fmSRTE
+        rn: srte
+        type: single
+        no_delete: true
+        description: 'MPLS Segment Routing Traffic Engineering feature configuration.'
+        doc_path: Feature%20Management/fm:SRTE/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: mpls_segment_routing_traffic_engineering
+            type: String
+            description: 'Admin status.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+      - class_name: fmSRv6
+        rn: srv6
+        type: single
+        no_delete: true
+        description: 'SRv6 feature configuration.'
+        doc_path: Feature%20Management/fm:SRv6/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: srv6
+            type: String
+            description: 'Admin status.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+            exclude_test: true
       - class_name: fmMsdp
         rn: msdp
         type: single

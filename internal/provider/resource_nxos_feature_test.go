@@ -68,6 +68,7 @@ func TestAccFeatureResource(t *testing.T) {
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "mpls_l3vpn", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "mpls_segment_routing", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "mpls_segment_routing_traffic_engineering", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "msdp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "nat", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "netconf", "enabled"))
@@ -135,6 +136,7 @@ func TestAccFeatureResource(t *testing.T) {
 	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "mpls_l3vpn", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "mpls_segment_routing", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "mpls_segment_routing_traffic_engineering", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "msdp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "nat", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "netconf", "enabled"))
@@ -282,6 +284,7 @@ func testAccFeatureResourceConfig_all() string {
 	}
 	config += `	mpls_l3vpn = "enabled"` + "\n"
 	config += `	mpls_segment_routing = "enabled"` + "\n"
+	config += `	mpls_segment_routing_traffic_engineering = "enabled"` + "\n"
 	config += `	msdp = "enabled"` + "\n"
 	config += `	nat = "enabled"` + "\n"
 	config += `	netconf = "enabled"` + "\n"

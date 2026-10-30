@@ -1,0 +1,2 @@
+- Add `nxos_segment_routing` resource and data source, including SRGB label blocks, MPLS connected prefix SID mappings, SRv6 locators and SR-TE policies, on-demand colors, segment lists, affinities, interfaces and PCC settings
+- Add `mpls_segment_routing_traffic_engineering` and `srv6` attributes to `nxos_feature` resource and data source

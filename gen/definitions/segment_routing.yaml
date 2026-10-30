@@ -1,0 +1,1182 @@
+---
+name: Segment Routing
+class_name: segrtEntity
+dn: sys/segrt
+ds_description: This data source can read the Segment Routing configuration on NX-OS devices, including SRGB label blocks, MPLS connected prefix SID mappings, SRv6 locators and Segment Routing Traffic Engineering (SR-TE) policies, on-demand colors, segment lists, affinities and PCC settings.
+res_description: This resource can manage the Segment Routing configuration on NX-OS devices, including SRGB label blocks, MPLS connected prefix SID mappings, SRv6 locators and Segment Routing Traffic Engineering (SR-TE) policies, on-demand colors, segment lists, affinities and PCC settings.
+doc_path: Routing%20and%20Forwarding/segrt:Entity/
+doc_category: Routing
+attributes:
+  - nxos_name: adminSt
+    tf_name: admin_state
+    type: String
+    description: 'The administrative state of the object or policy.'
+    enum_values:
+      - enabled
+      - disabled
+    example: enabled
+child_classes:
+  - class_name: segrtInst
+    doc_path: Routing%20and%20Forwarding/segrt:Inst/
+    rn: inst
+    type: single
+    description: 'Segment Routing instance.'
+    attributes:
+      - nxos_name: adminSt
+        tf_name: instance_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+      - nxos_name: ctrl
+        tf_name: instance_control
+        type: String
+        description: 'The control state.'
+        enum_values:
+          - stateful-ha
+        example: stateful-ha
+      - nxos_name: srgbAllocRetryIntvl
+        tf_name: srgb_allocation_retry_interval
+        type: Int64
+        min_int: 1
+        max_int: 65535
+        description: 'SRGB allocation retry interval.'
+        example: 120
+      - nxos_name: srgbCleanupIntvl
+        tf_name: srgb_cleanup_interval
+        type: Int64
+        min_int: 1
+        max_int: 65535
+        description: 'SRGB cleanup interval.'
+        example: 90
+    child_classes:
+      - class_name: segrtSrgb
+        doc_path: Routing%20and%20Forwarding/segrt:Srgb/
+        rn: srgb
+        type: single
+        description: 'Segment Routing Global Block.'
+        child_classes:
+          - class_name: segrtConfigSrgb
+            doc_path: Routing%20and%20Forwarding/segrt:ConfigSrgb/
+            rn: cfgsrgb-[%s]
+            type: list
+            tf_name: global_blocks
+            description: 'List of Segment Routing Global Block configurations.'
+            attributes:
+              - nxos_name: type
+                tf_name: type
+                type: String
+                id: true
+                description: 'SRGB type.'
+                enum_values:
+                  - mpls
+                  - ipv6
+                example: mpls
+            child_classes:
+              - class_name: segrtLblBlock
+                doc_path: Routing%20and%20Forwarding/segrt:LblBlock/
+                rn: lblblock-[%s]
+                type: list
+                tf_name: label_blocks
+                description: 'List of Segment Routing Global Range Label Blocks.'
+                attributes:
+                  - nxos_name: localId
+                    tf_name: id
+                    type: String
+                    id: true
+                    description: 'SRGB identifier.'
+                    example: srgb-1
+                  - nxos_name: srLblMin
+                    tf_name: minimum_label
+                    type: Int64
+                    min_int: 16000
+                    max_int: 471804
+                    description: 'SRGB minimum label.'
+                    example: 17000
+                  - nxos_name: srLblMax
+                    tf_name: maximum_label
+                    type: Int64
+                    min_int: 16000
+                    max_int: 471804
+                    description: 'SRGB maximum label.'
+                    example: 25999
+      - class_name: segrtDom
+        doc_path: Routing%20and%20Forwarding/segrt:Dom/
+        rn: dom-[%s]
+        type: list
+        tf_name: domains
+        description: 'List of Segment Routing domains.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'The name of the object.'
+            example: default
+        child_classes:
+          - class_name: segrtDomAf
+            doc_path: Routing%20and%20Forwarding/segrt:DomAf/
+            rn: af-[%s]
+            type: list
+            tf_name: address_families
+            description: 'List of Segment Routing address families.'
+            attributes:
+              - nxos_name: afType
+                tf_name: address_family
+                type: String
+                id: true
+                description: 'Address family type.'
+                enum_values:
+                  - ipv4
+                  - ipv6
+                example: ipv4
+              - nxos_name: name
+                tf_name: name
+                type: String
+                description: 'The name of the object.'
+                example: AF1
+            child_classes:
+              - class_name: segrtPrefixSid
+                doc_path: Routing%20and%20Forwarding/segrt:PrefixSid/
+                rn: pfxsid-[%s]
+                type: list
+                tf_name: connected_prefix_sid_maps
+                description: 'List of connected prefix SID mappings.'
+                attributes:
+                  - nxos_name: type
+                    tf_name: type
+                    type: String
+                    id: true
+                    description: 'Type of Segment Identifier.'
+                    enum_values:
+                      - mpls
+                      - ipv6
+                    example: mpls
+                child_classes:
+                  - class_name: segrtMplsPrefixSid
+                    doc_path: Routing%20and%20Forwarding/segrt:MplsPrefixSid/
+                    rn: mplspfxsid-[%s]
+                    type: list
+                    tf_name: prefix_sids
+                    description: 'List of MPLS prefix SIDs.'
+                    attributes:
+                      - nxos_name: pfx
+                        tf_name: prefix
+                        type: String
+                        id: true
+                        description: 'Prefix.'
+                        example: 1.1.1.1/32
+                      - nxos_name: sidValue
+                        tf_name: sid_value
+                        type: Int64
+                        min_int: 0
+                        max_int: 471804
+                        description: 'Value of SID.'
+                        example: 17001
+                      - nxos_name: sidValueType
+                        tf_name: sid_value_type
+                        type: String
+                        description: 'Type of Segment Identifier Value.'
+                        enum_values:
+                          - index
+                          - absolute
+                        example: absolute
+  - class_name: srv6Entity
+    doc_path: Routing%20and%20Forwarding/srv6:Entity/
+    rn: srv6
+    type: single
+    description: 'SRv6 configuration.'
+    exclude_test: true
+    attributes:
+      - nxos_name: adminSt
+        tf_name: srv6_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+        exclude_test: true
+    child_classes:
+      - class_name: srv6Encapsulation
+        doc_path: Routing%20and%20Forwarding/srv6:Encapsulation/
+        rn: encapsulation
+        type: single
+        description: 'SRv6 encapsulation source. Either address or interface is used, not both.'
+        attributes:
+          - nxos_name: srcAddress
+            tf_name: srv6_encapsulation_source_address
+            type: String
+            description: 'IPv6 address.'
+            example: 2001:db8::1
+          - nxos_name: srcInterface
+            tf_name: srv6_encapsulation_source_interface
+            type: String
+            description: 'Interface, most likely a loopback.'
+            example: loopback1
+            exclude_test: true
+      - class_name: srv6Locators
+        doc_path: Routing%20and%20Forwarding/srv6:Locators/
+        rn: locators
+        type: single
+        description: 'SRv6 locators.'
+        child_classes:
+          - class_name: srv6Locator
+            doc_path: Routing%20and%20Forwarding/srv6:Locator/
+            rn: locator-[%s]
+            type: list
+            tf_name: srv6_locators
+            description: 'List of SRv6 locators.'
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'Locator name.'
+                example: LOC1
+              - nxos_name: prefix
+                tf_name: prefix
+                type: String
+                description: 'Locator address.'
+                example: 2001:db8:1::/48
+  - class_name: srteTE
+    doc_path: Traffic%20Engineering/srte:TE/
+    rn: te
+    type: single
+    description: 'Segment Routing Traffic Engineering.'
+    attributes:
+      - nxos_name: adminSt
+        tf_name: traffic_engineering_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+    child_classes:
+      - class_name: srteEncapsulation
+        doc_path: Traffic%20Engineering/srte:Encapsulation/
+        rn: encap-[%s]
+        type: list
+        tf_name: traffic_engineering_encapsulations
+        description: 'List of SR-TE encapsulations.'
+        attributes:
+          - nxos_name: encapType
+            tf_name: type
+            type: String
+            id: true
+            description: 'SRTE Encapsulation Type.'
+            enum_values:
+              - mpls
+            example: mpls
+          - nxos_name: srcAddress
+            tf_name: source_address
+            type: String
+            description: 'SRTE Encapsulation Source IP Address.'
+            example: 1.2.3.4
+      - class_name: srtePcc
+        doc_path: Traffic%20Engineering/srte:Pcc/
+        rn: pcc
+        type: single
+        description: 'SR-TE PCC (Path Computation Client).'
+        attributes:
+          - nxos_name: srcAddress
+            tf_name: pcc_source_address
+            type: String
+            description: 'Local IP address to use as the source address for PCEP connections.'
+            example: 1.1.1.1
+        child_classes:
+          - class_name: srtePce
+            doc_path: Traffic%20Engineering/srte:Pce/
+            rn: pce-[%s]
+            type: list
+            tf_name: pces
+            description: 'List of PCEs to which a PCEP connection may be created.'
+            attributes:
+              - nxos_name: pceAddress
+                tf_name: address
+                type: String
+                id: true
+                description: 'SRTE PCE IP Address Value.'
+                example: 2.2.2.2
+              - nxos_name: precedence
+                tf_name: precedence
+                type: Int64
+                min_int: 0
+                max_int: 255
+                description: 'SRTE PCE Precedence Value (0 is most preferred, 255 is least).'
+                example: 10
+      - class_name: srteAffMap
+        doc_path: Traffic%20Engineering/srte:AffMap/
+        rn: affmap
+        type: single
+        description: 'Affinity mappings of user-defined names to a bit position in the affinity bitmap.'
+        child_classes:
+          - class_name: srteAffColor
+            doc_path: Traffic%20Engineering/srte:AffColor/
+            rn: affcol-[%s]
+            type: list
+            tf_name: affinity_colors
+            description: 'List of affinity colors and their bit position in the affinity bit map.'
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: 'User defined named of the affinity Color Affinity Name.'
+                example: RED
+              - nxos_name: bitpos
+                tf_name: bit_position
+                type: Int64
+                min_int: 0
+                max_int: 31
+                description: 'Bit position in the affinity map.'
+                example: 1
+      - class_name: srteLiveDetctn
+        doc_path: Traffic%20Engineering/srte:LiveDetctn/
+        rn: livedetctn
+        type: single
+        description: 'Liveness detection configuration under Traffic Engineering.'
+        attributes:
+          - nxos_name: interval
+            tf_name: liveness_detection_interval
+            type: Int64
+            min_int: 50
+            max_int: 30000
+            description: 'Interval for liveness detection.'
+            example: 1000
+          - nxos_name: multiplier
+            tf_name: liveness_detection_multiplier
+            type: Int64
+            min_int: 1
+            max_int: 10
+            description: 'Multiplier for liveness detection.'
+            example: 5
+        child_classes:
+          - class_name: srteMpls
+            doc_path: Traffic%20Engineering/srte:Mpls/
+            rn: mpls
+            type: single
+            description: 'MPLS liveness detection configuration under Traffic Engineering.'
+            child_classes:
+              - class_name: srteBfd
+                doc_path: Traffic%20Engineering/srte:Bfd/
+                rn: bfd
+                type: single
+                description: 'MPLS BFD liveness detection configuration under Traffic Engineering.'
+                attributes:
+                  - nxos_name: adminSt
+                    tf_name: liveness_detection_bfd_admin_state
+                    type: String
+                    description: 'The administrative state of the object or policy.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                    exclude_test: true
+              - class_name: srteOam
+                doc_path: Traffic%20Engineering/srte:Oam/
+                rn: oam
+                type: single
+                description: 'MPLS OAM liveness detection configuration under Traffic Engineering.'
+                attributes:
+                  - nxos_name: adminSt
+                    tf_name: liveness_detection_oam_admin_state
+                    type: String
+                    description: 'The administrative state of the object or policy.'
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                    exclude_test: true
+      - class_name: srteIf
+        doc_path: Traffic%20Engineering/srte:If/
+        rn: if-[%s]
+        type: list
+        tf_name: traffic_engineering_interfaces
+        description: 'List of SR-TE interfaces.'
+        attributes:
+          - nxos_name: id
+            tf_name: interface_id
+            type: String
+            id: true
+            description: 'Interface ID.'
+            example: eth1/1
+          - nxos_name: adminSt
+            tf_name: admin_state
+            type: String
+            description: 'The administrative state of the object or policy.'
+            enum_values:
+              - enabled
+              - disabled
+            example: disabled
+          - nxos_name: descr
+            tf_name: description
+            type: String
+            description: 'Description.'
+            example: My Description
+          - nxos_name: name
+            tf_name: name
+            type: String
+            description: 'The name of the object.'
+            example: IF1
+        child_classes:
+          - class_name: srteIntfAff
+            doc_path: Traffic%20Engineering/srte:IntfAff/
+            rn: intfaff
+            type: single
+            description: 'Affinity color names for this interface.'
+            child_classes:
+              - class_name: srteIntfAffColor
+                doc_path: Traffic%20Engineering/srte:IntfAffColor/
+                rn: intfaffcol-[%s]
+                type: list
+                tf_name: affinity_colors
+                description: 'List of affinity colors for this interface.'
+                attributes:
+                  - nxos_name: name
+                    tf_name: name
+                    type: String
+                    id: true
+                    description: 'Name of the Affinity Color. Sets the bit that corresponds to this name in the affinity-map.'
+                    example: RED
+          - class_name: srteIntfMetric
+            doc_path: Traffic%20Engineering/srte:IntfMetric/
+            rn: metric
+            type: single
+            description: 'Traffic Engineering metric of this interface.'
+            attributes:
+              - nxos_name: val
+                tf_name: metric
+                type: Int64
+                min_int: 0
+                max_int: 4294967295
+                description: 'Traffic Engineering Metric value.'
+                example: 10
+      - class_name: srteSegList
+        doc_path: Traffic%20Engineering/srte:SegList/
+        rn: seglist-[%s]
+        type: list
+        tf_name: segment_lists
+        description: 'List of explicit segment lists.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'SRTE Explicit Segment List Name.'
+            example: SL1
+        child_classes:
+          - class_name: srteNxtLbl
+            doc_path: Traffic%20Engineering/srte:NxtLbl/
+            rn: nxtlbl-%v
+            type: list
+            tf_name: labels
+            description: 'List of MPLS label segments.'
+            attributes:
+              - nxos_name: idx
+                tf_name: index
+                type: Int64
+                id: true
+                min_int: 1
+                max_int: 65535
+                description: 'SRTE Segment List Next Label Index.'
+                example: 10
+              - nxos_name: lbl
+                tf_name: label
+                type: Int64
+                min_int: 16
+                max_int: 471804
+                description: 'SRTE Segment List Next Label Value.'
+                example: 16001
+          - class_name: srteNxtSid
+            doc_path: Traffic%20Engineering/srte:NxtSid/
+            rn: nxtsid-%v
+            type: list
+            tf_name: sids
+            description: 'List of SRv6 SID segments.'
+            exclude_test: true
+            attributes:
+              - nxos_name: idx
+                tf_name: index
+                type: Int64
+                id: true
+                min_int: 1
+                max_int: 65535
+                description: 'SRTE Segment List Next Label Index.'
+                example: 30
+              - nxos_name: sid
+                tf_name: sid
+                type: String
+                description: 'SRTE Segment List Next SID Value.'
+                example: 2001:db8:1::1
+          - class_name: srtePolEndpt
+            doc_path: Traffic%20Engineering/srte:PolEndpt/
+            rn: polendpt-%v
+            type: list
+            tf_name: policy_endpoints
+            description: 'List of policy endpoint segments.'
+            attributes:
+              - nxos_name: idx
+                tf_name: index
+                type: Int64
+                id: true
+                min_int: 1
+                max_int: 65535
+                description: 'SRTE Segment List Next Label Index.'
+                example: 20
+              - nxos_name: enable
+                tf_name: enable
+                type: Bool
+                description: 'This property enables resolvement of path in SRTE by using policy endpoint.'
+                example: true
+      - class_name: srteColor
+        doc_path: Traffic%20Engineering/srte:Color/
+        rn: color-%v
+        type: list
+        tf_name: on_demand_colors
+        description: 'List of on-demand colors.'
+        attributes:
+          - nxos_name: color
+            tf_name: color
+            type: Int64
+            id: true
+            min_int: 0
+            max_int: 4294967295
+            description: 'Segment Routing TE Color Value.'
+            example: 100
+          - nxos_name: lockdown
+            tf_name: lockdown
+            type: Bool
+            description: 'lockdown keyword is used to disable re-optimization of the path preferences for policies using this color template.'
+            example: true
+          - nxos_name: metric
+            tf_name: metric_type
+            type: String
+            description: 'Segment Routing TE Metric.'
+            enum_values:
+              - none
+              - te
+              - igp
+            example: igp
+          - nxos_name: shutdown
+            tf_name: shutdown
+            type: Bool
+            description: 'Shutdown the Segment Routing TE Policies using this color template.'
+            example: false
+        child_classes:
+          - class_name: srteCoLiveDetctn
+            doc_path: Traffic%20Engineering/srte:CoLiveDetctn/
+            rn: colivedetctn
+            type: single
+            description: 'Liveness detection configuration.'
+            attributes:
+              - nxos_name: shut
+                tf_name: liveness_detection_shutdown
+                type: Bool
+                description: 'Shut liveness detection.'
+                example: true
+              - nxos_name: sidLimit
+                tf_name: liveness_detection_index_limit
+                type: Int64
+                min_int: 0
+                max_int: 65535
+                description: 'Sid index limit for liveness detection.'
+                example: 10
+            child_classes:
+              - class_name: srteCoMpls
+                doc_path: Traffic%20Engineering/srte:CoMpls/
+                rn: compls
+                type: single
+                description: 'MPLS liveness detection configuration.'
+                child_classes:
+                  - class_name: srteCoBfd
+                    doc_path: Traffic%20Engineering/srte:CoBfd/
+                    rn: cobfd
+                    type: single
+                    description: 'MPLS BFD liveness detection configuration.'
+                    attributes:
+                      - nxos_name: adminSt
+                        tf_name: liveness_detection_bfd_admin_state
+                        type: String
+                        description: 'The administrative state of the object or policy.'
+                        enum_values:
+                          - enabled
+                          - disabled
+                        example: enabled
+                        exclude_test: true
+                  - class_name: srteCoOam
+                    doc_path: Traffic%20Engineering/srte:CoOam/
+                    rn: cooam
+                    type: single
+                    description: 'MPLS OAM liveness detection configuration.'
+                    attributes:
+                      - nxos_name: adminSt
+                        tf_name: liveness_detection_oam_admin_state
+                        type: String
+                        description: 'The administrative state of the object or policy.'
+                        enum_values:
+                          - enabled
+                          - disabled
+                        example: enabled
+                        exclude_test: true
+          - class_name: srteCndPaths
+            doc_path: Traffic%20Engineering/srte:CndPaths/
+            rn: cndpaths
+            type: single
+            description: 'Candidate paths for the on-demand color.'
+            child_classes:
+              - class_name: srtePref
+                doc_path: Traffic%20Engineering/srte:Pref/
+                rn: pref-%v
+                type: list
+                tf_name: candidate_paths
+                description: 'List of candidate path preferences.'
+                attributes:
+                  - nxos_name: prefVal
+                    tf_name: preference
+                    type: Int64
+                    id: true
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Preference Value of the Candidate path. Higher preference value is preferred.'
+                    example: 100
+                  - nxos_name: shutdown
+                    tf_name: shutdown
+                    type: Bool
+                    description: 'Shutdown the Candidate path preference.'
+                    example: true
+                child_classes:
+                  - class_name: srteConstraint
+                    doc_path: Traffic%20Engineering/srte:Constraint/
+                    rn: constraints
+                    type: single
+                    description: 'Specifies the required constraints for this Candidate Paths.'
+                    child_classes:
+                      - class_name: srteAffinity
+                        doc_path: Traffic%20Engineering/srte:Affinity/
+                        rn: affinity
+                        type: single
+                        description: 'Specifies the affinity constraints for the path.'
+                        child_classes:
+                          - class_name: srteIncludeall
+                            doc_path: Traffic%20Engineering/srte:Includeall/
+                            rn: inclall
+                            type: single
+                            description: 'Specifies that only links that have all of the specified affinity colors must be traversed by the path.'
+                            child_classes:
+                              - class_name: srteConstAffColor
+                                doc_path: Traffic%20Engineering/srte:ConstAffColor/
+                                rn: affcol-[%s]
+                                type: list
+                                tf_name: include_all_affinity_colors
+                                description: 'Affinity colors for the include all affinity constraint.'
+                                attributes:
+                                  - nxos_name: name
+                                    tf_name: name
+                                    type: String
+                                    id: true
+                                    description: 'Name of the affinity Color definition.'
+                                    example: RED
+                          - class_name: srteExcludeany
+                            doc_path: Traffic%20Engineering/srte:Excludeany/
+                            rn: exclany
+                            type: single
+                            description: 'Specifies that links that have any of the specified affinity colors must not be traversed by the path.'
+                            exclude_test: true
+                            child_classes:
+                              - class_name: srteConstAffColor
+                                doc_path: Traffic%20Engineering/srte:ConstAffColor/
+                                rn: affcol-[%s]
+                                type: list
+                                tf_name: exclude_any_affinity_colors
+                                description: 'Affinity colors for the exclude any affinity constraint.'
+                                attributes:
+                                  - nxos_name: name
+                                    tf_name: name
+                                    type: String
+                                    id: true
+                                    description: 'Name of the affinity Color definition.'
+                                    example: RED
+                          - class_name: srteIncludeany
+                            doc_path: Traffic%20Engineering/srte:Includeany/
+                            rn: inclany
+                            type: single
+                            description: 'Specifies that only links that have any of the specified affinity colors can be traversed by the path.'
+                            exclude_test: true
+                            child_classes:
+                              - class_name: srteConstAffColor
+                                doc_path: Traffic%20Engineering/srte:ConstAffColor/
+                                rn: affcol-[%s]
+                                type: list
+                                tf_name: include_any_affinity_colors
+                                description: 'Affinity colors for the include any affinity constraint.'
+                                attributes:
+                                  - nxos_name: name
+                                    tf_name: name
+                                    type: String
+                                    id: true
+                                    description: 'Name of the affinity Color definition.'
+                                    example: RED
+                      - class_name: srteAssoc
+                        doc_path: Traffic%20Engineering/srte:Assoc/
+                        rn: assoc
+                        type: single
+                        description: 'Specifies the association types this candidate path belongs to.'
+                        exclude_test: true
+                        child_classes:
+                          - class_name: srteDisjointness
+                            doc_path: Traffic%20Engineering/srte:Disjointness/
+                            rn: disj
+                            type: single
+                            description: 'Specifies that the path belongs to the disjointness association group.'
+                            attributes:
+                              - nxos_name: disjType
+                                tf_name: disjoint_type
+                                type: String
+                                description: 'Specifies the type of disjointness this path needs to be.'
+                                enum_values:
+                                  - none
+                                  - node
+                                  - link
+                                example: link
+                              - nxos_name: id
+                                tf_name: disjoint_id
+                                type: Int64
+                                min_int: 0
+                                max_int: 4294967295
+                                description: 'Association group Identifier.'
+                                example: 2
+                      - class_name: srteSegments
+                        doc_path: Traffic%20Engineering/srte:Segments/
+                        rn: segment
+                        type: single
+                        description: 'Specifies Segments constraints for this Candidate Path.'
+                        attributes:
+                          - nxos_name: datapln
+                            tf_name: dataplane
+                            type: String
+                            description: 'Specifies if this candidate paths is encoded with MPLS SIDs or SRv6 SIDs.'
+                            enum_values:
+                              - mpls
+                            example: mpls
+                          - nxos_name: protType
+                            tf_name: protection_type
+                            type: String
+                            description: 'Specifies if the candidate path must use protected or unprotected SIDs.'
+                            enum_values:
+                              - protected
+                              - unprotected
+                            example: unprotected
+                  - class_name: srteDynamic
+                    doc_path: Traffic%20Engineering/srte:Dynamic/
+                    rn: dyn
+                    type: single
+                    description: 'Enables the dynamic path configuration sub-section for this candidate path.'
+                    attributes:
+                      - nxos_name: adminSt
+                        tf_name: dynamic_admin_state
+                        type: String
+                        description: 'The administrative state of the object or policy.'
+                        enum_values:
+                          - enabled
+                          - disabled
+                        example: enabled
+                    child_classes:
+                      - class_name: srteMetric
+                        doc_path: Traffic%20Engineering/srte:Metric/
+                        rn: metric
+                        type: single
+                        description: 'Specifies the type of metric that the computation will optimize.'
+                        attributes:
+                          - nxos_name: metricType
+                            tf_name: dynamic_metric_type
+                            type: String
+                            description: 'Candidate Path Metric Type.'
+                            enum_values:
+                              - none
+                              - te
+                              - igp
+                            example: te
+                      - class_name: srteDynPce
+                        doc_path: Traffic%20Engineering/srte:DynPce/
+                        rn: pce
+                        type: single
+                        description: 'Defines the candidate paths need to be computed by Path Computation engine.'
+                        attributes:
+                          - nxos_name: adminSt
+                            tf_name: dynamic_pcep_admin_state
+                            type: String
+                            description: 'The administrative state of the object or policy.'
+                            enum_values:
+                              - enabled
+                              - disabled
+                            example: enabled
+                  - class_name: srteExplicit
+                    doc_path: Traffic%20Engineering/srte:Explicit/
+                    rn: exp-[%s]
+                    type: list
+                    tf_name: explicit_segment_lists
+                    description: 'List of explicit segment lists.'
+                    exclude_test: true
+                    attributes:
+                      - nxos_name: name
+                        tf_name: name
+                        type: String
+                        id: true
+                        description: 'Explicit path name. Must be the name of an existing segment list.'
+                        example: SL1
+      - class_name: srtePolicy
+        doc_path: Traffic%20Engineering/srte:Policy/
+        rn: policy-[%s]
+        type: list
+        tf_name: policies
+        description: 'List of SR-TE policies.'
+        attributes:
+          - nxos_name: name
+            tf_name: name
+            type: String
+            id: true
+            description: 'Segment Routing TE Policy Name.'
+            example: P1
+          - nxos_name: color
+            tf_name: color
+            type: Int64
+            min_int: 0
+            max_int: 4294967295
+            description: 'Segment Routing TE Policy Color.'
+            example: 200
+          - nxos_name: endpoint
+            tf_name: endpoint
+            type: String
+            description: 'Segment Routing TE Endpoint IPv4/v6 address.'
+            example: 2.2.2.2
+          - nxos_name: lockdown
+            tf_name: lockdown
+            type: Bool
+            description: 'lockdown keyword is used to disable re-optimization of the path preferences of the policy.'
+            example: true
+          - nxos_name: shutdown
+            tf_name: shutdown
+            type: Bool
+            description: 'Shutdown the Segment Routing TE Policy.'
+            example: true
+        child_classes:
+          - class_name: srtePoLiveDetctn
+            doc_path: Traffic%20Engineering/srte:PoLiveDetctn/
+            rn: polivedetctn
+            type: single
+            description: 'Liveness detection configuration.'
+            attributes:
+              - nxos_name: shut
+                tf_name: liveness_detection_shutdown
+                type: Bool
+                description: 'Shut liveness detection.'
+                example: true
+              - nxos_name: sidLimit
+                tf_name: liveness_detection_index_limit
+                type: Int64
+                min_int: 0
+                max_int: 65535
+                description: 'Sid index limit for liveness detection.'
+                example: 10
+            child_classes:
+              - class_name: srtePoMpls
+                doc_path: Traffic%20Engineering/srte:PoMpls/
+                rn: pompls
+                type: single
+                description: 'MPLS liveness detection configuration.'
+                child_classes:
+                  - class_name: srtePoBfd
+                    doc_path: Traffic%20Engineering/srte:PoBfd/
+                    rn: bfd
+                    type: single
+                    description: 'MPLS BFD liveness detection configuration.'
+                    attributes:
+                      - nxos_name: adminSt
+                        tf_name: liveness_detection_bfd_admin_state
+                        type: String
+                        description: 'The administrative state of the object or policy.'
+                        enum_values:
+                          - enabled
+                          - disabled
+                        example: enabled
+                        exclude_test: true
+                  - class_name: srtePoOam
+                    doc_path: Traffic%20Engineering/srte:PoOam/
+                    rn: oam
+                    type: single
+                    description: 'MPLS OAM liveness detection configuration.'
+                    attributes:
+                      - nxos_name: adminSt
+                        tf_name: liveness_detection_oam_admin_state
+                        type: String
+                        description: 'The administrative state of the object or policy.'
+                        enum_values:
+                          - enabled
+                          - disabled
+                        example: enabled
+                        exclude_test: true
+          - class_name: srteExpCndPaths
+            doc_path: Traffic%20Engineering/srte:ExpCndPaths/
+            rn: expcndpaths
+            type: single
+            description: 'Candidate paths for the policy.'
+            child_classes:
+              - class_name: srtePolPref
+                doc_path: Traffic%20Engineering/srte:PolPref/
+                rn: pref-%v
+                type: list
+                tf_name: candidate_paths
+                description: 'List of candidate path preferences.'
+                attributes:
+                  - nxos_name: pref
+                    tf_name: preference
+                    type: Int64
+                    id: true
+                    min_int: 1
+                    max_int: 65535
+                    description: 'The preference value for the group of explicit paths.'
+                    example: 100
+                  - nxos_name: shutdown
+                    tf_name: shutdown
+                    type: Bool
+                    description: 'Shutdown the Candidate path preference.'
+                    example: true
+                child_classes:
+                  - class_name: srtePolConstraint
+                    doc_path: Traffic%20Engineering/srte:PolConstraint/
+                    rn: constraints
+                    type: single
+                    description: 'Specifies the required constraints for this Candidate Paths.'
+                    exclude_test: true
+                    child_classes:
+                      - class_name: srtePolAffinity
+                        doc_path: Traffic%20Engineering/srte:PolAffinity/
+                        rn: affinity
+                        type: single
+                        description: 'Specifies the affinity constraints for the path.'
+                        child_classes:
+                          - class_name: srtePolIncludeall
+                            doc_path: Traffic%20Engineering/srte:PolIncludeall/
+                            rn: inclall
+                            type: single
+                            description: 'Specifies that only links that have all of the specified affinity colors must be traversed by the path.'
+                            child_classes:
+                              - class_name: srtePolConstAffColor
+                                doc_path: Traffic%20Engineering/srte:PolConstAffColor/
+                                rn: affcol-[%s]
+                                type: list
+                                tf_name: include_all_affinity_colors
+                                description: 'Affinity colors for the include all affinity constraint.'
+                                attributes:
+                                  - nxos_name: name
+                                    tf_name: name
+                                    type: String
+                                    id: true
+                                    description: 'Name of the affinity Color definition.'
+                                    example: RED
+                          - class_name: srtePolExcludeany
+                            doc_path: Traffic%20Engineering/srte:PolExcludeany/
+                            rn: exclany
+                            type: single
+                            description: 'Specifies that links that have any of the specified affinity colors must not be traversed by the path.'
+                            exclude_test: true
+                            child_classes:
+                              - class_name: srtePolConstAffColor
+                                doc_path: Traffic%20Engineering/srte:PolConstAffColor/
+                                rn: affcol-[%s]
+                                type: list
+                                tf_name: exclude_any_affinity_colors
+                                description: 'Affinity colors for the exclude any affinity constraint.'
+                                attributes:
+                                  - nxos_name: name
+                                    tf_name: name
+                                    type: String
+                                    id: true
+                                    description: 'Name of the affinity Color definition.'
+                                    example: RED
+                          - class_name: srtePolIncludeany
+                            doc_path: Traffic%20Engineering/srte:PolIncludeany/
+                            rn: inclany
+                            type: single
+                            description: 'Specifies that only links that have any of the specified affinity colors can be traversed by the path.'
+                            exclude_test: true
+                            child_classes:
+                              - class_name: srtePolConstAffColor
+                                doc_path: Traffic%20Engineering/srte:PolConstAffColor/
+                                rn: affcol-[%s]
+                                type: list
+                                tf_name: include_any_affinity_colors
+                                description: 'Affinity colors for the include any affinity constraint.'
+                                attributes:
+                                  - nxos_name: name
+                                    tf_name: name
+                                    type: String
+                                    id: true
+                                    description: 'Name of the affinity Color definition.'
+                                    example: RED
+                      - class_name: srtePolAssoc
+                        doc_path: Traffic%20Engineering/srte:PolAssoc/
+                        rn: assoc
+                        type: single
+                        description: 'Specifies the association types this candidate path belongs to.'
+                        child_classes:
+                          - class_name: srtePolDisjointness
+                            doc_path: Traffic%20Engineering/srte:PolDisjointness/
+                            rn: disj
+                            type: single
+                            description: 'Specifies that the path belongs to the disjointness association group.'
+                            attributes:
+                              - nxos_name: disjType
+                                tf_name: disjoint_type
+                                type: String
+                                description: 'Specifies the type of disjointness this path needs to be.'
+                                enum_values:
+                                  - none
+                                  - node
+                                  - link
+                                example: link
+                              - nxos_name: id
+                                tf_name: disjoint_id
+                                type: Int64
+                                min_int: 0
+                                max_int: 4294967295
+                                description: 'Association group Identifier.'
+                                example: 2
+                      - class_name: srtePolSegments
+                        doc_path: Traffic%20Engineering/srte:PolSegments/
+                        rn: segment
+                        type: single
+                        description: 'Specifies Segments constraints for this Candidate Path.'
+                        attributes:
+                          - nxos_name: datapln
+                            tf_name: dataplane
+                            type: String
+                            description: 'Specifies if this candidate paths is encoded with MPLS SIDs or SRv6 SIDs.'
+                            enum_values:
+                              - mpls
+                            example: mpls
+                          - nxos_name: protType
+                            tf_name: protection_type
+                            type: String
+                            description: 'Specifies if the candidate path must use protected or unprotected SIDs.'
+                            enum_values:
+                              - protected
+                              - unprotected
+                            example: unprotected
+                  - class_name: srtePolDynamic
+                    doc_path: Traffic%20Engineering/srte:PolDynamic/
+                    rn: dyn
+                    type: single
+                    description: 'Enables the dynamic path configuration sub-section for this candidate path.'
+                    exclude_test: true
+                    attributes:
+                      - nxos_name: adminSt
+                        tf_name: dynamic_admin_state
+                        type: String
+                        description: 'The administrative state of the object or policy.'
+                        enum_values:
+                          - enabled
+                          - disabled
+                        example: enabled
+                    child_classes:
+                      - class_name: srtePolMetric
+                        doc_path: Traffic%20Engineering/srte:PolMetric/
+                        rn: metric
+                        type: single
+                        description: 'Specifies the type of metric that the computation will optimize.'
+                        attributes:
+                          - nxos_name: metricType
+                            tf_name: dynamic_metric_type
+                            type: String
+                            description: 'Candidate Path Metric Type.'
+                            enum_values:
+                              - none
+                              - te
+                              - igp
+                            example: te
+                      - class_name: srtePolDynPce
+                        doc_path: Traffic%20Engineering/srte:PolDynPce/
+                        rn: pce
+                        type: single
+                        description: 'Defines the candidate paths need to be computed by Path Computation engine.'
+                        attributes:
+                          - nxos_name: adminSt
+                            tf_name: dynamic_pcep_admin_state
+                            type: String
+                            description: 'The administrative state of the object or policy.'
+                            enum_values:
+                              - enabled
+                              - disabled
+                            example: enabled
+                  - class_name: srtePolExp
+                    doc_path: Traffic%20Engineering/srte:PolExp/
+                    rn: exp-[%s]
+                    type: list
+                    tf_name: explicit_segment_lists
+                    description: 'List of explicit segment lists.'
+                    attributes:
+                      - nxos_name: name
+                        tf_name: name
+                        type: String
+                        id: true
+                        description: 'Explicit path name. Must be the name of an existing segment list.'
+                        example: SL1
+      - class_name: srteSR
+        doc_path: Traffic%20Engineering/srte:SR/
+        rn: sr
+        type: single
+        description: 'Segment Routing configuration under Traffic Engineering.'
+        exclude_test: true
+        child_classes:
+          - class_name: srteSRv6
+            doc_path: Traffic%20Engineering/srte:SRv6/
+            rn: srv6
+            type: single
+            description: 'SRv6 Traffic Engineering configuration.'
+            child_classes:
+              - class_name: srteLocators
+                doc_path: Traffic%20Engineering/srte:Locators/
+                rn: locs
+                type: single
+                description: 'SRv6 Traffic Engineering locators.'
+                child_classes:
+                  - class_name: srteLocator
+                    doc_path: Traffic%20Engineering/srte:Locator/
+                    rn: loc-[%s]
+                    type: list
+                    tf_name: traffic_engineering_srv6_locators
+                    description: 'List of SRv6 Traffic Engineering locators.'
+                    attributes:
+                      - nxos_name: name
+                        tf_name: name
+                        type: String
+                        id: true
+                        description: 'Locator name for SRv6 Traffic Engineering.'
+                        example: LOC1
+test_prerequisites:
+  - dn: sys/fset-mpls
+    class_name: fsetFeatureSet
+    no_delete: true
+    attributes:
+      - name: name
+        value: mpls
+      - name: adminSt
+        value: enabled
+  - dn: sys/fm/mplssgmntrtg
+    class_name: fmMplsSgmntRtg
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+    dependencies: [0]
+  - dn: sys/fm/srte
+    class_name: fmSRTE
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+    dependencies: [1]

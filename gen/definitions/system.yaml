@@ -3926,7 +3926,6 @@ test_prerequisites:
         value: enabled
   - dn: sys/fm/mplssgmntrtg
     class_name: fmMplsSgmntRtg
-    no_delete: true
     attributes:
       - name: adminSt
         value: enabled

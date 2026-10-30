@@ -200,7 +200,6 @@ resource "nxos_dme" "PreReq0" {
 resource "nxos_dme" "PreReq1" {
   dn = "sys/fm/mplssgmntrtg"
   class_name = "fmMplsSgmntRtg"
-  delete = false
   content = {
       adminSt = "enabled"
   }
@@ -210,7 +209,6 @@ resource "nxos_dme" "PreReq1" {
 resource "nxos_dme" "PreReq2" {
   dn = "sys/fm/srte"
   class_name = "fmSRTE"
-  delete = false
   content = {
       adminSt = "enabled"
   }

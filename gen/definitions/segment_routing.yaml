@@ -1168,14 +1168,12 @@ test_prerequisites:
         value: enabled
   - dn: sys/fm/mplssgmntrtg
     class_name: fmMplsSgmntRtg
-    no_delete: true
     attributes:
       - name: adminSt
         value: enabled
     dependencies: [0]
   - dn: sys/fm/srte
     class_name: fmSRTE
-    no_delete: true
     attributes:
       - name: adminSt
         value: enabled

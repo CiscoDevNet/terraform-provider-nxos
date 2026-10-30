@@ -780,7 +780,6 @@ resource "nxos_dme" "PreReq15" {
 resource "nxos_dme" "PreReq16" {
   dn = "sys/fm/mplssgmntrtg"
   class_name = "fmMplsSgmntRtg"
-  delete = false
   content = {
       adminSt = "enabled"
   }

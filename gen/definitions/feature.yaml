@@ -274,6 +274,36 @@ child_classes:
               - disabled
             example: enabled
             test_tags: [FEATURE_MACSEC]
+      - class_name: fmMplsL3vpn
+        rn: mplsl3vpn
+        type: single
+        no_delete: true
+        description: 'MPLS L3VPN feature configuration.'
+        doc_path: Feature%20Management/fm:MplsL3vpn/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: mpls_l3vpn
+            type: String
+            description: 'Admin status.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+      - class_name: fmMplsSgmntRtg
+        rn: mplssgmntrtg
+        type: single
+        no_delete: true
+        description: 'MPLS Segment Routing feature configuration.'
+        doc_path: Feature%20Management/fm:MplsSgmntRtg/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: mpls_segment_routing
+            type: String
+            description: 'Admin status.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmMsdp
         rn: msdp
         type: single
@@ -867,7 +897,7 @@ child_classes:
           - fex
           - mpls
           - virtualization
-        example: fex
+        example: mpls
       - nxos_name: adminSt
         tf_name: admin_state
         type: String

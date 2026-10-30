@@ -16,6 +16,8 @@ resource "nxos_feature" "example" {
   lacp                 = "enabled"
   lldp                 = "enabled"
   macsec               = "enabled"
+  mpls_l3vpn           = "enabled"
+  mpls_segment_routing = "enabled"
   msdp                 = "enabled"
   nat                  = "enabled"
   netconf              = "enabled"
@@ -52,7 +54,7 @@ resource "nxos_feature" "example" {
   vpc                  = "enabled"
   vtp                  = "enabled"
   feature_sets = {
-    "fex" = {
+    "mpls" = {
       admin_state = "enabled"
     }
   }

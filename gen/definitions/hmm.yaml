@@ -174,7 +174,6 @@ test_prerequisites:
     dependencies: [0]
   - dn: sys/fm/hmm
     class_name: fmHmm
-    no_delete: true
     attributes:
       - name: adminSt
         value: enabled

@@ -1,0 +1,1 @@
+- Add `mpls_l3vpn` and `mpls_segment_routing` attributes to `nxos_feature` resource and data source

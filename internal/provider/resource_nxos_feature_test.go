@@ -66,6 +66,8 @@ func TestAccFeatureResource(t *testing.T) {
 	if os.Getenv("FEATURE_MACSEC") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "macsec", "enabled"))
 	}
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "mpls_l3vpn", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "mpls_segment_routing", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "msdp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "nat", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "netconf", "enabled"))
@@ -107,7 +109,7 @@ func TestAccFeatureResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "vn_segment", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "vpc", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "vtp", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "feature_sets.fex.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_feature.test", "feature_sets.mpls.admin_state", "enabled"))
 	if os.Getenv("FEATURE_ANALYTICS") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "analytics", "enabled"))
 	}
@@ -131,6 +133,8 @@ func TestAccFeatureResource(t *testing.T) {
 	if os.Getenv("FEATURE_MACSEC") != "" {
 		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "macsec", "enabled"))
 	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "mpls_l3vpn", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "mpls_segment_routing", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "msdp", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "nat", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "netconf", "enabled"))
@@ -172,7 +176,7 @@ func TestAccFeatureResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "vn_segment", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "vpc", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "vtp", "enabled"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "feature_sets.fex.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_feature.test", "feature_sets.mpls.admin_state", "enabled"))
 	var tfVersion *goversion.Version
 	steps := []resource.TestStep{
 		{
@@ -276,6 +280,8 @@ func testAccFeatureResourceConfig_all() string {
 	if os.Getenv("FEATURE_MACSEC") != "" {
 		config += `	macsec = "enabled"` + "\n"
 	}
+	config += `	mpls_l3vpn = "enabled"` + "\n"
+	config += `	mpls_segment_routing = "enabled"` + "\n"
 	config += `	msdp = "enabled"` + "\n"
 	config += `	nat = "enabled"` + "\n"
 	config += `	netconf = "enabled"` + "\n"
@@ -318,7 +324,7 @@ func testAccFeatureResourceConfig_all() string {
 	config += `	vpc = "enabled"` + "\n"
 	config += `	vtp = "enabled"` + "\n"
 	config += `	feature_sets = {` + "\n"
-	config += `		"fex" = {` + "\n"
+	config += `		"mpls" = {` + "\n"
 	config += `			admin_state = "enabled"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"

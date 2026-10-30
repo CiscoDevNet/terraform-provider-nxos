@@ -1,1 +1,0 @@
-- Add `mpls_admin_state` and `mpls_interfaces` attributes to `nxos_system` resource and data source

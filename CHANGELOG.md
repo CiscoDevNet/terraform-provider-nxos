@@ -1,3 +1,10 @@
+## 0.22.0
+
+- Add `mpls_l3vpn` and `mpls_segment_routing` attributes to `nxos_feature` resource and data source
+- Add `nxos_segment_routing` resource and data source, including SRGB label blocks, MPLS connected prefix SID mappings, SRv6 locators and SR-TE policies, on-demand colors, segment lists, affinities, interfaces and PCC settings
+- Add `mpls_segment_routing_traffic_engineering` and `srv6` attributes to `nxos_feature` resource and data source
+- Add `mpls_admin_state` and `mpls_interfaces` attributes to `nxos_system` resource and data source
+
 ## 0.21.2
 
 - Fix `nxos_platform` leaving `hardware_rate_limiters` configuration on the device on destroy or when an entry is removed: entries are now reset and then deleted, and `fex` is reset to the CLI default `3000` instead of the DME default `12000`

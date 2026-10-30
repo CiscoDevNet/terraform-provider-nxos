@@ -421,4 +421,12 @@ resource "nxos_system" "example" {
   l2rib_duplicate_mac_recovery_retry_count = 5
   l2rib_duplicate_mac_recovery_timeout     = 60
   ngoam_install_acl                        = true
+  mpls_admin_state                         = "enabled"
+  mpls_interfaces = {
+    "eth1/10" = {
+      admin_state = "enabled"
+      description = "My MPLS Interface"
+      name        = "MPLS1"
+    }
+  }
 }

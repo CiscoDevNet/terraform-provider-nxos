@@ -312,6 +312,10 @@ func TestAccSystemResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "l2rib_duplicate_mac_recovery_retry_count", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "l2rib_duplicate_mac_recovery_timeout", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "ngoam_install_acl", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mpls_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mpls_interfaces.eth1/10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mpls_interfaces.eth1/10.description", "My MPLS Interface"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "mpls_interfaces.eth1/10.name", "MPLS1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "name", "LEAF1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_mtu", "9216"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ethernet_default_admin_state", "up"))
@@ -569,6 +573,10 @@ func TestAccSystemResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "l2rib_duplicate_mac_recovery_retry_count", "5"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "l2rib_duplicate_mac_recovery_timeout", "60"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "ngoam_install_acl", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mpls_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mpls_interfaces.eth1/10.admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mpls_interfaces.eth1/10.description", "My MPLS Interface"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "mpls_interfaces.eth1/10.name", "MPLS1"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	steps := []resource.TestStep{
@@ -759,6 +767,34 @@ resource "nxos_dme" "PreReq14" {
   }
 }
 
+resource "nxos_dme" "PreReq15" {
+  dn = "sys/fset-mpls"
+  class_name = "fsetFeatureSet"
+  delete = false
+  content = {
+      name = "mpls"
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq16" {
+  dn = "sys/fm/mplssgmntrtg"
+  class_name = "fmMplsSgmntRtg"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+  depends_on = [nxos_dme.PreReq15, ]
+}
+
+resource "nxos_dme" "PreReq17" {
+  dn = "sys/intf/phys-[eth1/10]"
+  class_name = "l1PhysIf"
+  content = {
+      layer = "Layer3"
+  }
+}
+
 `
 
 // End of section. //template:end testPrerequisites
@@ -766,7 +802,7 @@ resource "nxos_dme" "PreReq14" {
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccSystemResourceConfig_minimum() string {
 	config := `resource "nxos_system" "test" {` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, nxos_dme.PreReq13, nxos_dme.PreReq14, ]` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, nxos_dme.PreReq13, nxos_dme.PreReq14, nxos_dme.PreReq15, nxos_dme.PreReq16, nxos_dme.PreReq17, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -1212,7 +1248,15 @@ func testAccSystemResourceConfig_all(includeWriteOnly bool) string {
 	config += `	l2rib_duplicate_mac_recovery_retry_count = 5` + "\n"
 	config += `	l2rib_duplicate_mac_recovery_timeout = 60` + "\n"
 	config += `	ngoam_install_acl = true` + "\n"
-	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, nxos_dme.PreReq13, nxos_dme.PreReq14, ]` + "\n"
+	config += `	mpls_admin_state = "enabled"` + "\n"
+	config += `	mpls_interfaces = {` + "\n"
+	config += `		"eth1/10" = {` + "\n"
+	config += `			admin_state = "enabled"` + "\n"
+	config += `			description = "My MPLS Interface"` + "\n"
+	config += `			name = "MPLS1"` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, nxos_dme.PreReq4, nxos_dme.PreReq5, nxos_dme.PreReq6, nxos_dme.PreReq7, nxos_dme.PreReq8, nxos_dme.PreReq9, nxos_dme.PreReq10, nxos_dme.PreReq11, nxos_dme.PreReq12, nxos_dme.PreReq13, nxos_dme.PreReq14, nxos_dme.PreReq15, nxos_dme.PreReq16, nxos_dme.PreReq17, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

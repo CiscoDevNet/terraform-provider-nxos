@@ -1,3 +1,8 @@
+## 0.22.1
+
+- Fix documentation links to work on both the Terraform and OpenTofu registries
+- Improve documentation page titles and descriptions
+
 ## 0.22.0
 
 - Add `mpls_l3vpn` and `mpls_segment_routing` attributes to `nxos_feature` resource and data source

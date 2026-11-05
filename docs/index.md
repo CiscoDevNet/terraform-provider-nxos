@@ -6,7 +6,7 @@ description: |-
 
 # NXOS Provider
 
-The NXOS provider provides resources to interact with one or [more](/docs/providers/nxos/guides/manage_multiple_devices.html) Cisco NX-OS devices.
+The NXOS provider provides resources to interact with one or [more](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/guides/manage_multiple_devices) Cisco NX-OS devices.
 
 It communicates with NX-OS devices via the NX-API REST, which requires the following device configuration.
 
@@ -25,13 +25,13 @@ All resources and data sources have been tested with the following releases.
 
 The following guides are available to help you get started with the NXOS provider:
 
-- **[Getting Started](/docs/providers/nxos/guides/getting_started.html)** - A simple example demonstrating how to configure system settings, enable features, and create interfaces and VRFs
-- **[Manage Multiple Devices](/docs/providers/nxos/guides/manage_multiple_devices.html)** - Learn how to manage multiple NX-OS devices using provider aliases or the single-provider approach with device-level management control
-- **[Selective Deploy](/docs/providers/nxos/guides/selective_deploy.html)** - Deploy configurations to a subset of devices while keeping others in a "frozen" state for staged rollouts and maintenance scenarios
-- **[Importing Resources](/docs/providers/nxos/guides/importing_resources.html)** - Import existing device configurations into Terraform state management
-- **[Deletion Policy](/docs/providers/nxos/guides/deletion_policy.html)** - Control whether destroying a resource deletes, resets or retains the configuration on the device
-- **[Supported Objects](/docs/providers/nxos/guides/supported_objects.html)** - View the complete list of supported NX-OS DME objects
-- **[Changelog](/docs/providers/nxos/guides/changelog.html)** - Review version history and breaking changes
+- **[Getting Started](guides/getting_started)** - A simple example demonstrating how to configure system settings, enable features, and create interfaces and VRFs
+- **[Manage Multiple Devices](guides/manage_multiple_devices)** - Learn how to manage multiple NX-OS devices using provider aliases or the single-provider approach with device-level management control
+- **[Selective Deploy](guides/selective_deploy)** - Deploy configurations to a subset of devices while keeping others in a "frozen" state for staged rollouts and maintenance scenarios
+- **[Importing Resources](guides/importing_resources)** - Import existing device configurations into Terraform state management
+- **[Deletion Policy](guides/deletion_policy)** - Control whether destroying a resource deletes, resets or retains the configuration on the device
+- **[Supported Objects](guides/supported_objects)** - View the complete list of supported NX-OS DME objects
+- **[Changelog](guides/changelog)** - Review version history and breaking changes
 
 ## Example Usage
 
@@ -48,7 +48,7 @@ provider "nxos" {
 
 ### Optional
 
-- `deletion_policy` (String) The default deletion policy of all resources, which can be overwritten by the `deletion_policy` attribute of a resource. `delete` deletes the objects managed by a resource on destroy, including any configuration not managed by Terraform, and deletes single child objects once none of their attributes are configured anymore, unless the device holds other entries below them. `reset` deletes the objects created by a resource on destroy and resets the managed attributes of the objects that already existed. `retain` leaves the device unchanged on destroy. See the [Deletion Policy](/docs/providers/nxos/guides/deletion_policy.html) guide for details. This can also be set as the NXOS_DELETION_POLICY environment variable. Defaults to `delete`.
+- `deletion_policy` (String) The default deletion policy of all resources, which can be overwritten by the `deletion_policy` attribute of a resource. `delete` deletes the objects managed by a resource on destroy, including any configuration not managed by Terraform, and deletes single child objects once none of their attributes are configured anymore, unless the device holds other entries below them. `reset` deletes the objects created by a resource on destroy and resets the managed attributes of the objects that already existed. `retain` leaves the device unchanged on destroy. See the [Deletion Policy](guides/deletion_policy) guide for details. This can also be set as the NXOS_DELETION_POLICY environment variable. Defaults to `delete`.
 - `devices` (Attributes List) This can be used to manage a list of devices from a single provider. Each resource and data source has an optional attribute named `device`, which can then select a device by its name from this list. (see [below for nested schema](#nestedatt--devices))
 - `insecure` (Boolean) Allow insecure HTTPS client. This can also be set as the NXOS_INSECURE environment variable. Defaults to `true`.
 - `password` (String, Sensitive) Password for the NX-OS device account. This can also be set as the NXOS_PASSWORD environment variable.

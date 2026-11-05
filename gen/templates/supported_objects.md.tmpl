@@ -7,14 +7,14 @@ description: |-
 
 # Supported Objects
 
-For the following DME objects a corresponding Terraform resource and data source exists. All other objects can be managed with the `nxos_dme` [resource](/docs/providers/nxos/r/dme.html).
+For the following DME objects a corresponding Terraform resource and data source exists. All other objects can be managed with the `nxos_dme` [resource](../resources/dme).
 
 | DME object | Terraform Resource | Terraform Data Source |
 |------------|--------------------|-----------------------|
 {{- range .}}
 {{- $parent := .}}
-| [{{.ClassName}}](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/{{.DocPath}}) | [nxos_{{snakeCase .Name}}](/docs/providers/nxos/r/{{snakeCase .Name}}.html) | [nxos_{{snakeCase .Name}}](/docs/providers/nxos/d/{{snakeCase .Name}}.html) |
+| [{{.ClassName}}](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/{{.DocPath}}) | [nxos_{{snakeCase .Name}}](../resources/{{snakeCase .Name}}) | [nxos_{{snakeCase .Name}}](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/data-sources/{{snakeCase .Name}}) |
 {{- range $i, $v := childDocPaths $parent.ChildClasses}}
-| [{{index (childDocClassNames $parent.ChildClasses) $i}}](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/{{$v}}) | [nxos_{{snakeCase $parent.Name}}](/docs/providers/nxos/r/{{snakeCase $parent.Name}}.html) | [nxos_{{snakeCase $parent.Name}}](/docs/providers/nxos/d/{{snakeCase $parent.Name}}.html) |
+| [{{index (childDocClassNames $parent.ChildClasses) $i}}](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/{{$v}}) | [nxos_{{snakeCase $parent.Name}}](../resources/{{snakeCase $parent.Name}}) | [nxos_{{snakeCase $parent.Name}}](https://registry.terraform.io/providers/CiscoDevNet/nxos/latest/docs/data-sources/{{snakeCase $parent.Name}}) |
 {{- end}}
 {{- end}}

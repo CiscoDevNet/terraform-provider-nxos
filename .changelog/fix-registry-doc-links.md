@@ -1,1 +1,0 @@
-- Fix broken documentation links on the Terraform registry

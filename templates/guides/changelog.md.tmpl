@@ -7,6 +7,10 @@ description: |-
 
 # Changelog
 
+## 0.22.2
+
+- Fix broken documentation links on the Terraform registry
+
 ## 0.22.1
 
 - Fix documentation links to work on both the Terraform and OpenTofu registries

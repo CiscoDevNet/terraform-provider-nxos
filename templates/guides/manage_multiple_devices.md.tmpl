@@ -1,5 +1,5 @@
 ---
-subcategory: "Guides"
+subcategory: ""
 page_title: "Manage Multiple Devices"
 description: |-
     Howto manage multiple devices.

@@ -1,0 +1,2 @@
+- Fix documentation links to work on both the Terraform and OpenTofu registries
+- Improve documentation page titles and descriptions

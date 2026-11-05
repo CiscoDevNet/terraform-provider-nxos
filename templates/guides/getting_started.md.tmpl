@@ -1,5 +1,5 @@
 ---
-subcategory: "Guides"
+subcategory: ""
 page_title: "Getting Started"
 description: |-
     Getting Started

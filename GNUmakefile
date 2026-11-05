@@ -67,7 +67,7 @@ gen:
 	go run golang.org/x/tools/cmd/goimports -w internal/provider/
 	terraform fmt -recursive ./examples/
 	go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
-	go run gen/doc_category.go
+	go run gen/docs_postprocess.go
 
 # Preview unreleased changelog entries from .changelog/ fragments
 .PHONY: changelog-preview

@@ -1,5 +1,5 @@
 ---
-subcategory: "Guides"
+subcategory: ""
 page_title: "Selective Deploy"
 description: |-
     Howto selectively deploy to devices.

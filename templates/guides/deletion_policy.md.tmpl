@@ -1,5 +1,5 @@
 ---
-subcategory: "Guides"
+subcategory: ""
 page_title: "Deletion Policy"
 description: |-
     Control what happens on the device when a resource is destroyed.

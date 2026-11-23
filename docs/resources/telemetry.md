@@ -167,8 +167,7 @@ Optional:
 - `hosts` (Attributes Map) Destination host.
   - Map key format: `<host>;<port>`
   - Key component `host`: Destination Hostname.
-  - Key component `port`: Destination port number. Range: `0`-`65535`.
-  - Minimum NX-OS version: `10.6(3)` (see [below for nested schema](#nestedatt--destination_groups--hosts))
+  - Key component `port`: Destination port number. Range: `0`-`65535`. (see [below for nested schema](#nestedatt--destination_groups--hosts))
 - `max_message_size` (Number) Message size in kbytes.
   - Range: `12288`-`32768`
 - `source_interface` (String) Destination-group source interface.
@@ -194,11 +193,14 @@ Optional:
 - `certificate_hostname` (String) Hostname associated with the certificate.
 - `certificate_trustpoint` (String) Name of the certificate trustpoint.
 - `dial_in_stream` (Boolean) gRPC Dialin stream mode.
+  - Minimum NX-OS version: `10.6(2)`
 - `encoding` (String) Destination encoding type.
   - Choices: `GPB`, `JSON`, `GPB-compact`, `Form-data`
 - `endpoint` (String) The endpoint for HEC streaming.
+  - Minimum NX-OS version: `10.6(3)`
 - `grpc_async` (Boolean) gRPC Asynchronous mode.
 - `index` (String) The index for HEC streaming.
+  - Minimum NX-OS version: `10.6(3)`
 - `node_id` (String) Destination node Identifier.
 - `protocol` (String) Destination protocol type.
   - Choices: `UDP`, `gRPC`, `HTTP`, `HEC`
@@ -212,8 +214,10 @@ Optional:
 - `proxy_server` (String) Proxy server.
 - `proxy_username` (String) Proxy username.
 - `token` (String, Sensitive) HEC token for the switch data authentication.
+  - Minimum NX-OS version: `10.6(3)`
 - `token_encryption_type` (String) Encryption type of Token string of HEC receiver.
   - Choices: `0`, `7`
+  - Minimum NX-OS version: `10.6(3)`
 - `token_wo` (String, [Write-only](https://developer.hashicorp.com/terraform/language/resources/ephemeral#write-only-arguments)) The write-only value of the attribute.
 - `token_wo_version` (Number) The write-only version of the attribute.
 

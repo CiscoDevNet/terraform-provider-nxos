@@ -227,7 +227,7 @@ func (r *TelemetryResource) Schema(ctx context.Context, req resource.SchemaReque
 							},
 						},
 						"hosts": schema.MapNestedAttribute{
-							MarkdownDescription: helpers.NewAttributeDescription("Destination host.\n  - Map key format: `<host>;<port>`\n  - Key component `host`: Destination Hostname.\n  - Key component `port`: Destination port number. Range: `0`-`65535`.").AddMinimumVersionDescription("10.6(3)").String,
+							MarkdownDescription: helpers.NewAttributeDescription("Destination host.\n  - Map key format: `<host>;<port>`\n  - Key component `host`: Destination Hostname.\n  - Key component `port`: Destination port number. Range: `0`-`65535`.").String,
 							Optional:            true,
 							NestedObject: schema.NestedAttributeObject{
 								Attributes: map[string]schema.Attribute{
@@ -236,7 +236,7 @@ func (r *TelemetryResource) Schema(ctx context.Context, req resource.SchemaReque
 										Optional:            true,
 									},
 									"dial_in_stream": schema.BoolAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("gRPC Dialin stream mode.").String,
+										MarkdownDescription: helpers.NewAttributeDescription("gRPC Dialin stream mode.").AddMinimumVersionDescription("10.6(2)").String,
 										Optional:            true,
 									},
 									"encoding": schema.StringAttribute{
@@ -247,7 +247,7 @@ func (r *TelemetryResource) Schema(ctx context.Context, req resource.SchemaReque
 										},
 									},
 									"endpoint": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("The endpoint for HEC streaming.").String,
+										MarkdownDescription: helpers.NewAttributeDescription("The endpoint for HEC streaming.").AddMinimumVersionDescription("10.6(3)").String,
 										Optional:            true,
 									},
 									"grpc_async": schema.BoolAttribute{
@@ -255,7 +255,7 @@ func (r *TelemetryResource) Schema(ctx context.Context, req resource.SchemaReque
 										Optional:            true,
 									},
 									"index": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("The index for HEC streaming.").String,
+										MarkdownDescription: helpers.NewAttributeDescription("The index for HEC streaming.").AddMinimumVersionDescription("10.6(3)").String,
 										Optional:            true,
 									},
 									"node_id": schema.StringAttribute{
@@ -306,7 +306,7 @@ func (r *TelemetryResource) Schema(ctx context.Context, req resource.SchemaReque
 										Optional:            true,
 									},
 									"token": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("HEC token for the switch data authentication.").String,
+										MarkdownDescription: helpers.NewAttributeDescription("HEC token for the switch data authentication.").AddMinimumVersionDescription("10.6(3)").String,
 										Optional:            true,
 										Sensitive:           true,
 									},
@@ -320,7 +320,7 @@ func (r *TelemetryResource) Schema(ctx context.Context, req resource.SchemaReque
 										Optional:            true,
 									},
 									"token_encryption_type": schema.StringAttribute{
-										MarkdownDescription: helpers.NewAttributeDescription("Encryption type of Token string of HEC receiver.").AddStringEnumDescription("0", "7").String,
+										MarkdownDescription: helpers.NewAttributeDescription("Encryption type of Token string of HEC receiver.").AddStringEnumDescription("0", "7").AddMinimumVersionDescription("10.6(3)").String,
 										Optional:            true,
 										Validators: []validator.String{
 											stringvalidator.OneOf("0", "7"),

@@ -22,6 +22,7 @@ package provider
 // Section below is generated&owned by "gen/generator.go". //template:begin imports
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	goversion "github.com/hashicorp/go-version"
@@ -56,7 +57,7 @@ func TestAccTelemetryResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.encoding", "GPB"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.node_id", "host1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.protocol", "gRPC"))
-	if testAccDeviceVersionAtLeast("10.6(3)") {
+	if os.Getenv("NXOS_10_6") != "" {
 		if testAccDeviceVersionAtLeast("10.6(2)") {
 			checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.dial_in_stream", "false"))
 		}
@@ -105,7 +106,7 @@ func TestAccTelemetryResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.encoding", "GPB"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.node_id", "host1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.protocol", "gRPC"))
-	if testAccDeviceVersionAtLeast("10.6(3)") {
+	if os.Getenv("NXOS_10_6") != "" {
 		if testAccDeviceVersionAtLeast("10.6(2)") {
 			checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.dial_in_stream", "false"))
 		}
@@ -245,7 +246,7 @@ func testAccTelemetryResourceConfig_all(includeWriteOnly bool) string {
 	config += `					protocol = "gRPC"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
-	if testAccDeviceVersionAtLeast("10.6(3)") {
+	if os.Getenv("NXOS_10_6") != "" {
 		config += `			hosts = {` + "\n"
 		config += `				"192.168.1.2;8088" = {` + "\n"
 		if testAccDeviceVersionAtLeast("10.6(2)") {

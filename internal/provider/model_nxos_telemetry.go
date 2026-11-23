@@ -145,13 +145,10 @@ func (data *Telemetry) fromIdentity(ctx context.Context, identity *TelemetryIden
 }
 
 // TelemetrySubtreeClassMinVersions maps child classes to their minimum NX-OS version.
-var TelemetrySubtreeClassMinVersions = map[string]string{
-	"telemetryDestHost": "10.6(3)",
-}
+var TelemetrySubtreeClassMinVersions = map[string]string{}
 
 // TelemetryMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
 var TelemetryMinVersions = map[string]helpers.MinVersion{
-	"telemetryDestHost":                  {Version: "10.6(3)", Path: "destination_groups.hosts"},
 	"telemetryDestHost.dialinStream":     {Version: "10.6(2)", Path: "destination_groups.hosts.dial_in_stream"},
 	"telemetryDestHost.endpoint":         {Version: "10.6(3)", Path: "destination_groups.hosts.endpoint"},
 	"telemetryDestHost.index":            {Version: "10.6(3)", Path: "destination_groups.hosts.index"},

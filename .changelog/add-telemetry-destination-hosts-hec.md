@@ -1,1 +1,1 @@
-- Add telemetry host destinations (`hosts`, NX-OS 10.6(3) or later) to `destination_groups` of `nxos_telemetry` resource and data source, including Splunk HTTP Event Collector (HEC) support with the `HEC` protocol and `token`, `token_encryption_type`, `index` and `endpoint` attributes
+- Add telemetry host destinations (`hosts`) to `destination_groups` of `nxos_telemetry` resource and data source, including Splunk HTTP Event Collector (HEC) support with the `HEC` protocol and `token`, `token_encryption_type`, `index` and `endpoint` attributes (NX-OS 10.6(3) or later)

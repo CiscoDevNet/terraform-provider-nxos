@@ -294,9 +294,7 @@ child_classes:
         tf_name: hosts
         description: 'Destination host.'
         doc_path: Streaming%20Telemetry/telemetry:DestHost/
-        # telemetryDestHost exists before 10.6(3), but the list is gated at 10.6(3) so that the example
-        # and acceptance test can show a realistic HEC destination (enum values cannot be version-gated).
-        min_version: '10.6(3)'
+        test_tags: [NXOS_10_6]
         attributes:
           - nxos_name: certHostname
             tf_name: certificate_hostname

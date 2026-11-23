@@ -11,7 +11,7 @@ require (
 	github.com/hashicorp/terraform-plugin-log v0.11.0
 	github.com/hashicorp/terraform-plugin-testing v1.16.0
 	github.com/netascode/go-nxos v0.6.1
-	github.com/tidwall/gjson v1.20.4
+	github.com/tidwall/gjson v1.20.5
 	github.com/tidwall/sjson v1.2.9
 	golang.org/x/tools v0.53.0
 	gopkg.in/yaml.v3 v3.0.1

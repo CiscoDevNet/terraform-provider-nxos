@@ -22,6 +22,24 @@ resource "nxos_telemetry" "example" {
           protocol = "gRPC"
         }
       }
+      hosts = {
+        "192.168.1.2;8088" = {
+          dial_in_stream                 = false
+          encoding                       = "JSON"
+          endpoint                       = "services/collector/raw"
+          grpc_async                     = false
+          index                          = "network"
+          node_id                        = "host1"
+          protocol                       = "HEC"
+          proxy_password                 = "secret_password"
+          proxy_port                     = 3128
+          proxy_password_encryption_type = "0"
+          proxy_server                   = "proxy.example.com"
+          proxy_username                 = "proxyuser"
+          token                          = "secret_token"
+          token_encryption_type          = "0"
+        }
+      }
     }
   }
   sensor_groups = {

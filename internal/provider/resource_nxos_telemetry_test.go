@@ -56,6 +56,32 @@ func TestAccTelemetryResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.encoding", "GPB"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.node_id", "host1"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.protocol", "gRPC"))
+	if testAccDeviceVersionAtLeast("10.6(3)") {
+		if testAccDeviceVersionAtLeast("10.6(2)") {
+			checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.dial_in_stream", "false"))
+		}
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.encoding", "JSON"))
+		if testAccDeviceVersionAtLeast("10.6(3)") {
+			checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.endpoint", "services/collector/raw"))
+		}
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.grpc_async", "false"))
+		if testAccDeviceVersionAtLeast("10.6(3)") {
+			checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.index", "network"))
+		}
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.node_id", "host1"))
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.protocol", "HEC"))
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.proxy_password", "secret_password"))
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.proxy_port", "3128"))
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.proxy_password_encryption_type", "0"))
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.proxy_server", "proxy.example.com"))
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.proxy_username", "proxyuser"))
+		if testAccDeviceVersionAtLeast("10.6(3)") {
+			checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.token", "secret_token"))
+		}
+		if testAccDeviceVersionAtLeast("10.6(3)") {
+			checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.token_encryption_type", "0"))
+		}
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "sensor_groups.1.data_source", "DME"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "sensor_groups.1.sensor_paths.sys/intf.alias", "mypath"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_telemetry.test", "sensor_groups.1.sensor_paths.sys/intf.depth", "1"))
@@ -79,6 +105,24 @@ func TestAccTelemetryResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.encoding", "GPB"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.node_id", "host1"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.destinations.192.168.1.1;50001.protocol", "gRPC"))
+	if testAccDeviceVersionAtLeast("10.6(3)") {
+		if testAccDeviceVersionAtLeast("10.6(2)") {
+			checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.dial_in_stream", "false"))
+		}
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.encoding", "JSON"))
+		if testAccDeviceVersionAtLeast("10.6(3)") {
+			checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.endpoint", "services/collector/raw"))
+		}
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.grpc_async", "false"))
+		if testAccDeviceVersionAtLeast("10.6(3)") {
+			checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.index", "network"))
+		}
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.node_id", "host1"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.protocol", "HEC"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.proxy_port", "3128"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.proxy_server", "proxy.example.com"))
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "destination_groups.1.hosts.192.168.1.2;8088.proxy_username", "proxyuser"))
+	}
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "sensor_groups.1.data_source", "DME"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "sensor_groups.1.sensor_paths.sys/intf.alias", "mypath"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "sensor_groups.1.sensor_paths.sys/intf.depth", "1"))
@@ -86,12 +130,13 @@ func TestAccTelemetryResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "sensor_groups.1.sensor_paths.sys/intf.query_condition", "query-condition-example"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_telemetry.test", "subscriptions.1.sensor_group_relationships.sys/tm/sensor-1.sample_interval", "5000"))
 	var tfVersion *goversion.Version
+	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	steps := []resource.TestStep{
 		{
 			Config: testAccTelemetryResourcePrerequisitesConfig + testAccTelemetryResourceConfig_minimum(),
 		},
 		{
-			Config: testAccTelemetryResourcePrerequisitesConfig + testAccTelemetryResourceConfig_all() + testAccTelemetryResourceConfig_dataSource(),
+			Config: testAccTelemetryResourcePrerequisitesConfig + testAccTelemetryResourceConfig_all(includeWriteOnly) + testAccTelemetryResourceConfig_dataSource(),
 			Check:  resource.ComposeTestCheckFunc(checks...),
 		},
 		{
@@ -114,7 +159,7 @@ func TestAccTelemetryResource(t *testing.T) {
 	if testAccDeletionPolicyTests() {
 		steps = append(steps, []resource.TestStep{
 			{
-				Config: testAccTelemetryResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccTelemetryResourceConfig_all(), "reset"),
+				Config: testAccTelemetryResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccTelemetryResourceConfig_all(includeWriteOnly), "reset"),
 				Check:  resource.TestCheckResourceAttr("nxos_telemetry.test", "deletion_policy", "reset"),
 			},
 			{
@@ -175,7 +220,7 @@ func testAccTelemetryResourceConfig_minimum() string {
 // End of section. //template:end testAccConfigMinimal
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigAll
-func testAccTelemetryResourceConfig_all() string {
+func testAccTelemetryResourceConfig_all(includeWriteOnly bool) string {
 	config := `resource "nxos_telemetry" "test" {` + "\n"
 	config += `	admin_state = "enabled"` + "\n"
 	config += `	batch_dme_events = false` + "\n"
@@ -200,6 +245,46 @@ func testAccTelemetryResourceConfig_all() string {
 	config += `					protocol = "gRPC"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
+	if testAccDeviceVersionAtLeast("10.6(3)") {
+		config += `			hosts = {` + "\n"
+		config += `				"192.168.1.2;8088" = {` + "\n"
+		if testAccDeviceVersionAtLeast("10.6(2)") {
+			config += `					dial_in_stream = false` + "\n"
+		}
+		config += `					encoding = "JSON"` + "\n"
+		if testAccDeviceVersionAtLeast("10.6(3)") {
+			config += `					endpoint = "services/collector/raw"` + "\n"
+		}
+		config += `					grpc_async = false` + "\n"
+		if testAccDeviceVersionAtLeast("10.6(3)") {
+			config += `					index = "network"` + "\n"
+		}
+		config += `					node_id = "host1"` + "\n"
+		config += `					protocol = "HEC"` + "\n"
+		if includeWriteOnly {
+			config += `					proxy_password = "secret_password"` + "\n"
+			config += `					proxy_password_wo = "secret_password"` + "\n"
+			config += `					proxy_password_wo_version = 1` + "\n"
+		} else {
+			config += `					proxy_password = "secret_password"` + "\n"
+		}
+		config += `					proxy_port = 3128` + "\n"
+		config += `					proxy_password_encryption_type = "0"` + "\n"
+		config += `					proxy_server = "proxy.example.com"` + "\n"
+		config += `					proxy_username = "proxyuser"` + "\n"
+		if testAccDeviceVersionAtLeast("10.6(3)") {
+			config += `					token = "secret_token"` + "\n"
+			if includeWriteOnly {
+				config += `					token_wo = "secret_token"` + "\n"
+				config += `					token_wo_version = 1` + "\n"
+			}
+		}
+		if testAccDeviceVersionAtLeast("10.6(3)") {
+			config += `					token_encryption_type = "0"` + "\n"
+		}
+		config += `				}` + "\n"
+		config += `			}` + "\n"
+	}
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	sensor_groups = {` + "\n"

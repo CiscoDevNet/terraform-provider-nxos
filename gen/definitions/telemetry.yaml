@@ -288,6 +288,141 @@ child_classes:
               - gRPC
               - HTTP
             example: gRPC
+      - class_name: telemetryDestHost
+        rn: host-[%s]-port-[%d]
+        type: list
+        tf_name: hosts
+        description: 'Destination host.'
+        doc_path: Streaming%20Telemetry/telemetry:DestHost/
+        # telemetryDestHost exists before 10.6(3), but the list is gated at 10.6(3) so that the example
+        # and acceptance test can show a realistic HEC destination (enum values cannot be version-gated).
+        min_version: '10.6(3)'
+        attributes:
+          - nxos_name: certHostname
+            tf_name: certificate_hostname
+            type: String
+            description: 'Hostname associated with the certificate.'
+            example: 'collector.example.com'
+            exclude_test: true
+          - nxos_name: dialinStream
+            tf_name: dial_in_stream
+            type: Bool
+            min_version: '10.6(2)'
+            description: 'gRPC Dialin stream mode.'
+            example: false
+          - nxos_name: enc
+            tf_name: encoding
+            type: String
+            description: 'Destination encoding type.'
+            enum_values:
+              - GPB
+              - JSON
+              - GPB-compact
+              - Form-data
+            example: JSON
+          - nxos_name: endpoint
+            tf_name: endpoint
+            type: String
+            min_version: '10.6(3)'
+            description: 'The endpoint for HEC streaming.'
+            example: 'services/collector/raw'
+          - nxos_name: grpcAsync
+            tf_name: grpc_async
+            type: Bool
+            description: 'gRPC Asynchronous mode.'
+            example: false
+          - nxos_name: host
+            tf_name: host
+            type: String
+            id: true
+            description: 'Destination Hostname.'
+            example: '192.168.1.2'
+          - nxos_name: index
+            tf_name: index
+            type: String
+            min_version: '10.6(3)'
+            description: 'The index for HEC streaming.'
+            example: 'network'
+          - nxos_name: nodeid
+            tf_name: node_id
+            type: String
+            description: 'Destination node Identifier.'
+            example: 'host1'
+          - nxos_name: port
+            tf_name: port
+            type: Int64
+            id: true
+            min_int: 0
+            max_int: 65535
+            description: 'Destination port number.'
+            example: 8088
+          - nxos_name: proto
+            tf_name: protocol
+            type: String
+            description: 'Destination protocol type.'
+            enum_values:
+              - UDP
+              - gRPC
+              - HTTP
+              - HEC
+            example: HEC
+          - nxos_name: proxyPassword
+            tf_name: proxy_password
+            type: String
+            write_only: true
+            sensitive: true
+            description: 'Proxy password.'
+            example: 'secret_password'
+          - nxos_name: proxyPort
+            tf_name: proxy_port
+            type: Int64
+            min_int: 1
+            max_int: 65535
+            description: 'Proxy server port number.'
+            example: 3128
+          - nxos_name: proxyPwdEncryptType
+            tf_name: proxy_password_encryption_type
+            type: String
+            write_only: true
+            description: 'Proxy password Encryption Type.'
+            enum_values:
+              - '0'
+              - '7'
+            example: '0'
+          - nxos_name: proxyServer
+            tf_name: proxy_server
+            type: String
+            description: 'Proxy server.'
+            example: 'proxy.example.com'
+          - nxos_name: proxyUsername
+            tf_name: proxy_username
+            type: String
+            description: 'Proxy username.'
+            example: 'proxyuser'
+          - nxos_name: token
+            tf_name: token
+            type: String
+            write_only: true
+            sensitive: true
+            min_version: '10.6(3)'
+            description: 'HEC token for the switch data authentication.'
+            example: 'secret_token'
+          - nxos_name: tokenEncryptType
+            tf_name: token_encryption_type
+            type: String
+            write_only: true
+            min_version: '10.6(3)'
+            description: 'Encryption type of Token string of HEC receiver.'
+            enum_values:
+              - '0'
+              - '7'
+            example: '0'
+          - nxos_name: trustpoint
+            tf_name: certificate_trustpoint
+            type: String
+            description: 'Name of the certificate trustpoint.'
+            example: 'TP1'
+            exclude_test: true
   - class_name: telemetrySensorGroup
     rn: sensor-[%s]
     type: list

@@ -29,6 +29,7 @@ This data source can read the streaming telemetry configuration on NX-OS devices
 - [telemetryDestGrpOptSourceInterface](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGrpOptSourceInterface/)
 - [telemetryDestGrpOptVrf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestGrpOptVrf/)
 - [telemetryDest](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Dest/)
+- [telemetryDestHost](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:DestHost/)
 - [telemetrySensorGroup](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:SensorGroup/)
 - [telemetrySensorPath](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:SensorPath/)
 - [telemetrySubscription](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Streaming%20Telemetry/telemetry:Subscription/)
@@ -86,6 +87,11 @@ Read-Only:
   - Map key format: `<address>;<port>`
   - Key component `address`: Destination IP address.
   - Key component `port`: Destination port number. Range: `0`-`65535`. (see [below for nested schema](#nestedatt--destination_groups--destinations))
+- `hosts` (Attributes Map) Destination host.
+  - Map key format: `<host>;<port>`
+  - Key component `host`: Destination Hostname.
+  - Key component `port`: Destination port number. Range: `0`-`65535`.
+  - Minimum NX-OS version: `10.6(3)` (see [below for nested schema](#nestedatt--destination_groups--hosts))
 - `max_message_size` (Number) Message size in kbytes.
 - `source_interface` (String) Destination-group source interface.
 - `vrf` (String) Destination-group VRF name.
@@ -98,6 +104,33 @@ Read-Only:
 - `encoding` (String) Destination encoding type.
 - `node_id` (String) Destination node Identifier.
 - `protocol` (String) Destination protocol type.
+
+
+<a id="nestedatt--destination_groups--hosts"></a>
+### Nested Schema for `destination_groups.hosts`
+
+Read-Only:
+
+- `certificate_hostname` (String) Hostname associated with the certificate.
+- `certificate_trustpoint` (String) Name of the certificate trustpoint.
+- `dial_in_stream` (Boolean) gRPC Dialin stream mode.
+- `encoding` (String) Destination encoding type.
+- `endpoint` (String) The endpoint for HEC streaming.
+- `grpc_async` (Boolean) gRPC Asynchronous mode.
+- `index` (String) The index for HEC streaming.
+- `node_id` (String) Destination node Identifier.
+- `protocol` (String) Destination protocol type.
+- `proxy_password` (String, Sensitive) Proxy password.
+- `proxy_password_encryption_type` (String) Proxy password Encryption Type.
+- `proxy_password_wo` (String) The write-only value of the attribute.
+- `proxy_password_wo_version` (Number) The write-only version of the attribute.
+- `proxy_port` (Number) Proxy server port number.
+- `proxy_server` (String) Proxy server.
+- `proxy_username` (String) Proxy username.
+- `token` (String, Sensitive) HEC token for the switch data authentication.
+- `token_encryption_type` (String) Encryption type of Token string of HEC receiver.
+- `token_wo` (String) The write-only value of the attribute.
+- `token_wo_version` (Number) The write-only version of the attribute.
 
 
 

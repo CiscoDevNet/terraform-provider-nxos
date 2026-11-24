@@ -70,7 +70,7 @@ func (r *TelemetryResource) Metadata(ctx context.Context, req resource.MetadataR
 func (r *TelemetryResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.").AddApiDocumentation("telemetryEntity", "Streaming%20Telemetry/telemetry:Entity/", []string{"telemetryCertificate", "telemetryDestProfile", "telemetryDestOptVrf", "telemetryDestOptCompression", "telemetryDestOptGrpcDeadline", "telemetryDestOptNodeId", "telemetryDestOptRetry", "telemetryDestOptSourceInterface", "telemetryDestGroup", "telemetryDestGrpOptCertificate", "telemetryDestGrpOptChunking", "telemetryDestGrpOptCompression", "telemetryDestGrpOptMaxMessage", "telemetryDestGrpOptSourceInterface", "telemetryDestGrpOptVrf", "telemetryDest", "telemetrySensorGroup", "telemetrySensorPath", "telemetrySubscription", "telemetryRsSensorGroupRel", "telemetryRsDestGroupRel"}, []string{"Streaming%20Telemetry/telemetry:Certificate/", "Streaming%20Telemetry/telemetry:DestProfile/", "Streaming%20Telemetry/telemetry:DestOptVrf/", "Streaming%20Telemetry/telemetry:DestOptCompression/", "Streaming%20Telemetry/telemetry:DestOptGrpcDeadline/", "Streaming%20Telemetry/telemetry:DestOptNodeId/", "Streaming%20Telemetry/telemetry:DestOptRetry/", "Streaming%20Telemetry/telemetry:DestOptSourceInterface/", "Streaming%20Telemetry/telemetry:DestGroup/", "Streaming%20Telemetry/telemetry:DestGrpOptCertificate/", "Streaming%20Telemetry/telemetry:DestGrpOptChunking/", "Streaming%20Telemetry/telemetry:DestGrpOptCompression/", "Streaming%20Telemetry/telemetry:DestGrpOptMaxMessage/", "Streaming%20Telemetry/telemetry:DestGrpOptSourceInterface/", "Streaming%20Telemetry/telemetry:DestGrpOptVrf/", "Streaming%20Telemetry/telemetry:Dest/", "Streaming%20Telemetry/telemetry:SensorGroup/", "Streaming%20Telemetry/telemetry:SensorPath/", "Streaming%20Telemetry/telemetry:Subscription/", "Streaming%20Telemetry/telemetry:RsSensorGroupRel/", "Streaming%20Telemetry/telemetry:RsDestGroupRel/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.").AddApiDocumentation("telemetryEntity", "Streaming%20Telemetry/telemetry:Entity/", []string{"telemetryCertificate", "telemetryDestProfile", "telemetryDestOptVrf", "telemetryDestOptCompression", "telemetryDestOptGrpcDeadline", "telemetryDestOptNodeId", "telemetryDestOptRetry", "telemetryDestOptSourceInterface", "telemetryDestGroup", "telemetryDestGrpOptCertificate", "telemetryDestGrpOptChunking", "telemetryDestGrpOptCompression", "telemetryDestGrpOptMaxMessage", "telemetryDestGrpOptSourceInterface", "telemetryDestGrpOptVrf", "telemetryDest", "telemetryDestHost", "telemetrySensorGroup", "telemetrySensorPath", "telemetrySubscription", "telemetryRsSensorGroupRel", "telemetryRsDestGroupRel"}, []string{"Streaming%20Telemetry/telemetry:Certificate/", "Streaming%20Telemetry/telemetry:DestProfile/", "Streaming%20Telemetry/telemetry:DestOptVrf/", "Streaming%20Telemetry/telemetry:DestOptCompression/", "Streaming%20Telemetry/telemetry:DestOptGrpcDeadline/", "Streaming%20Telemetry/telemetry:DestOptNodeId/", "Streaming%20Telemetry/telemetry:DestOptRetry/", "Streaming%20Telemetry/telemetry:DestOptSourceInterface/", "Streaming%20Telemetry/telemetry:DestGroup/", "Streaming%20Telemetry/telemetry:DestGrpOptCertificate/", "Streaming%20Telemetry/telemetry:DestGrpOptChunking/", "Streaming%20Telemetry/telemetry:DestGrpOptCompression/", "Streaming%20Telemetry/telemetry:DestGrpOptMaxMessage/", "Streaming%20Telemetry/telemetry:DestGrpOptSourceInterface/", "Streaming%20Telemetry/telemetry:DestGrpOptVrf/", "Streaming%20Telemetry/telemetry:Dest/", "Streaming%20Telemetry/telemetry:DestHost/", "Streaming%20Telemetry/telemetry:SensorGroup/", "Streaming%20Telemetry/telemetry:SensorPath/", "Streaming%20Telemetry/telemetry:Subscription/", "Streaming%20Telemetry/telemetry:RsSensorGroupRel/", "Streaming%20Telemetry/telemetry:RsDestGroupRel/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -222,6 +222,113 @@ func (r *TelemetryResource) Schema(ctx context.Context, req resource.SchemaReque
 										Validators: []validator.String{
 											stringvalidator.OneOf("UDP", "gRPC", "HTTP"),
 										},
+									},
+								},
+							},
+						},
+						"hosts": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Destination host.\n  - Map key format: `<host>;<port>`\n  - Key component `host`: Destination Hostname.\n  - Key component `port`: Destination port number. Range: `0`-`65535`.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"certificate_hostname": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Hostname associated with the certificate.").String,
+										Optional:            true,
+									},
+									"dial_in_stream": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("gRPC Dialin stream mode.").AddMinimumVersionDescription("10.6(2)").String,
+										Optional:            true,
+									},
+									"encoding": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Destination encoding type.").AddStringEnumDescription("GPB", "JSON", "GPB-compact", "Form-data").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("GPB", "JSON", "GPB-compact", "Form-data"),
+										},
+									},
+									"endpoint": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The endpoint for HEC streaming.").AddMinimumVersionDescription("10.6(3)").String,
+										Optional:            true,
+									},
+									"grpc_async": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("gRPC Asynchronous mode.").String,
+										Optional:            true,
+									},
+									"index": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The index for HEC streaming.").AddMinimumVersionDescription("10.6(3)").String,
+										Optional:            true,
+									},
+									"node_id": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Destination node Identifier.").String,
+										Optional:            true,
+									},
+									"protocol": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Destination protocol type.").AddStringEnumDescription("UDP", "gRPC", "HTTP", "HEC").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("UDP", "gRPC", "HTTP", "HEC"),
+										},
+									},
+									"proxy_password": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Proxy password.").String,
+										Optional:            true,
+										Sensitive:           true,
+									},
+									"proxy_password_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										WriteOnly:           true,
+										Optional:            true,
+									},
+									"proxy_password_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
+										Optional:            true,
+									},
+									"proxy_port": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Proxy server port number.").AddIntegerRangeDescription(1, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(1, 65535),
+										},
+									},
+									"proxy_password_encryption_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Proxy password Encryption Type.").AddStringEnumDescription("0", "7").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("0", "7"),
+										},
+									},
+									"proxy_server": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Proxy server.").String,
+										Optional:            true,
+									},
+									"proxy_username": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Proxy username.").String,
+										Optional:            true,
+									},
+									"token": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("HEC token for the switch data authentication.").AddMinimumVersionDescription("10.6(3)").String,
+										Optional:            true,
+										Sensitive:           true,
+									},
+									"token_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										WriteOnly:           true,
+										Optional:            true,
+									},
+									"token_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
+										Optional:            true,
+									},
+									"token_encryption_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Encryption type of Token string of HEC receiver.").AddStringEnumDescription("0", "7").AddMinimumVersionDescription("10.6(3)").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("0", "7"),
+										},
+									},
+									"certificate_trustpoint": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Name of the certificate trustpoint.").String,
+										Optional:            true,
 									},
 								},
 							},

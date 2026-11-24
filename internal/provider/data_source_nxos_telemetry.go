@@ -56,7 +56,7 @@ func (d *TelemetryDataSource) Metadata(_ context.Context, req datasource.Metadat
 func (d *TelemetryDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This data source can read the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.").AddApiDocumentation("telemetryEntity", "Streaming%20Telemetry/telemetry:Entity/", []string{"telemetryCertificate", "telemetryDestProfile", "telemetryDestOptVrf", "telemetryDestOptCompression", "telemetryDestOptGrpcDeadline", "telemetryDestOptNodeId", "telemetryDestOptRetry", "telemetryDestOptSourceInterface", "telemetryDestGroup", "telemetryDestGrpOptCertificate", "telemetryDestGrpOptChunking", "telemetryDestGrpOptCompression", "telemetryDestGrpOptMaxMessage", "telemetryDestGrpOptSourceInterface", "telemetryDestGrpOptVrf", "telemetryDest", "telemetrySensorGroup", "telemetrySensorPath", "telemetrySubscription", "telemetryRsSensorGroupRel", "telemetryRsDestGroupRel"}, []string{"Streaming%20Telemetry/telemetry:Certificate/", "Streaming%20Telemetry/telemetry:DestProfile/", "Streaming%20Telemetry/telemetry:DestOptVrf/", "Streaming%20Telemetry/telemetry:DestOptCompression/", "Streaming%20Telemetry/telemetry:DestOptGrpcDeadline/", "Streaming%20Telemetry/telemetry:DestOptNodeId/", "Streaming%20Telemetry/telemetry:DestOptRetry/", "Streaming%20Telemetry/telemetry:DestOptSourceInterface/", "Streaming%20Telemetry/telemetry:DestGroup/", "Streaming%20Telemetry/telemetry:DestGrpOptCertificate/", "Streaming%20Telemetry/telemetry:DestGrpOptChunking/", "Streaming%20Telemetry/telemetry:DestGrpOptCompression/", "Streaming%20Telemetry/telemetry:DestGrpOptMaxMessage/", "Streaming%20Telemetry/telemetry:DestGrpOptSourceInterface/", "Streaming%20Telemetry/telemetry:DestGrpOptVrf/", "Streaming%20Telemetry/telemetry:Dest/", "Streaming%20Telemetry/telemetry:SensorGroup/", "Streaming%20Telemetry/telemetry:SensorPath/", "Streaming%20Telemetry/telemetry:Subscription/", "Streaming%20Telemetry/telemetry:RsSensorGroupRel/", "Streaming%20Telemetry/telemetry:RsDestGroupRel/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This data source can read the streaming telemetry configuration on NX-OS devices, including destination groups, sensor groups, subscriptions, and their relationships.").AddApiDocumentation("telemetryEntity", "Streaming%20Telemetry/telemetry:Entity/", []string{"telemetryCertificate", "telemetryDestProfile", "telemetryDestOptVrf", "telemetryDestOptCompression", "telemetryDestOptGrpcDeadline", "telemetryDestOptNodeId", "telemetryDestOptRetry", "telemetryDestOptSourceInterface", "telemetryDestGroup", "telemetryDestGrpOptCertificate", "telemetryDestGrpOptChunking", "telemetryDestGrpOptCompression", "telemetryDestGrpOptMaxMessage", "telemetryDestGrpOptSourceInterface", "telemetryDestGrpOptVrf", "telemetryDest", "telemetryDestHost", "telemetrySensorGroup", "telemetrySensorPath", "telemetrySubscription", "telemetryRsSensorGroupRel", "telemetryRsDestGroupRel"}, []string{"Streaming%20Telemetry/telemetry:Certificate/", "Streaming%20Telemetry/telemetry:DestProfile/", "Streaming%20Telemetry/telemetry:DestOptVrf/", "Streaming%20Telemetry/telemetry:DestOptCompression/", "Streaming%20Telemetry/telemetry:DestOptGrpcDeadline/", "Streaming%20Telemetry/telemetry:DestOptNodeId/", "Streaming%20Telemetry/telemetry:DestOptRetry/", "Streaming%20Telemetry/telemetry:DestOptSourceInterface/", "Streaming%20Telemetry/telemetry:DestGroup/", "Streaming%20Telemetry/telemetry:DestGrpOptCertificate/", "Streaming%20Telemetry/telemetry:DestGrpOptChunking/", "Streaming%20Telemetry/telemetry:DestGrpOptCompression/", "Streaming%20Telemetry/telemetry:DestGrpOptMaxMessage/", "Streaming%20Telemetry/telemetry:DestGrpOptSourceInterface/", "Streaming%20Telemetry/telemetry:DestGrpOptVrf/", "Streaming%20Telemetry/telemetry:Dest/", "Streaming%20Telemetry/telemetry:DestHost/", "Streaming%20Telemetry/telemetry:SensorGroup/", "Streaming%20Telemetry/telemetry:SensorPath/", "Streaming%20Telemetry/telemetry:Subscription/", "Streaming%20Telemetry/telemetry:RsSensorGroupRel/", "Streaming%20Telemetry/telemetry:RsDestGroupRel/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -167,6 +167,96 @@ func (d *TelemetryDataSource) Schema(ctx context.Context, req datasource.SchemaR
 									},
 									"protocol": schema.StringAttribute{
 										MarkdownDescription: "Destination protocol type.",
+										Computed:            true,
+									},
+								},
+							},
+						},
+						"hosts": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("Destination host.\n  - Map key format: `<host>;<port>`\n  - Key component `host`: Destination Hostname.\n  - Key component `port`: Destination port number. Range: `0`-`65535`.").String,
+							Computed:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"certificate_hostname": schema.StringAttribute{
+										MarkdownDescription: "Hostname associated with the certificate.",
+										Computed:            true,
+									},
+									"dial_in_stream": schema.BoolAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("gRPC Dialin stream mode.").AddMinimumVersionDescription("10.6(2)").String,
+										Computed:            true,
+									},
+									"encoding": schema.StringAttribute{
+										MarkdownDescription: "Destination encoding type.",
+										Computed:            true,
+									},
+									"endpoint": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The endpoint for HEC streaming.").AddMinimumVersionDescription("10.6(3)").String,
+										Computed:            true,
+									},
+									"grpc_async": schema.BoolAttribute{
+										MarkdownDescription: "gRPC Asynchronous mode.",
+										Computed:            true,
+									},
+									"index": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("The index for HEC streaming.").AddMinimumVersionDescription("10.6(3)").String,
+										Computed:            true,
+									},
+									"node_id": schema.StringAttribute{
+										MarkdownDescription: "Destination node Identifier.",
+										Computed:            true,
+									},
+									"protocol": schema.StringAttribute{
+										MarkdownDescription: "Destination protocol type.",
+										Computed:            true,
+									},
+									"proxy_password": schema.StringAttribute{
+										MarkdownDescription: "Proxy password.",
+										Computed:            true,
+										Sensitive:           true,
+									},
+									"proxy_password_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										Computed:            true,
+									},
+									"proxy_password_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
+										Computed:            true,
+									},
+									"proxy_port": schema.Int64Attribute{
+										MarkdownDescription: "Proxy server port number.",
+										Computed:            true,
+									},
+									"proxy_password_encryption_type": schema.StringAttribute{
+										MarkdownDescription: "Proxy password Encryption Type.",
+										Computed:            true,
+									},
+									"proxy_server": schema.StringAttribute{
+										MarkdownDescription: "Proxy server.",
+										Computed:            true,
+									},
+									"proxy_username": schema.StringAttribute{
+										MarkdownDescription: "Proxy username.",
+										Computed:            true,
+									},
+									"token": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("HEC token for the switch data authentication.").AddMinimumVersionDescription("10.6(3)").String,
+										Computed:            true,
+										Sensitive:           true,
+									},
+									"token_wo": schema.StringAttribute{
+										MarkdownDescription: "The write-only value of the attribute.",
+										Computed:            true,
+									},
+									"token_wo_version": schema.Int64Attribute{
+										MarkdownDescription: "The write-only version of the attribute.",
+										Computed:            true,
+									},
+									"token_encryption_type": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Encryption type of Token string of HEC receiver.").AddMinimumVersionDescription("10.6(3)").String,
+										Computed:            true,
+									},
+									"certificate_trustpoint": schema.StringAttribute{
+										MarkdownDescription: "Name of the certificate trustpoint.",
 										Computed:            true,
 									},
 								},

@@ -68,12 +68,36 @@ type TelemetryDestinationGroups struct {
 	SourceInterface     types.String                                      `tfsdk:"source_interface"`
 	Vrf                 types.String                                      `tfsdk:"vrf"`
 	Destinations        map[string]TelemetryDestinationGroupsDestinations `tfsdk:"destinations"`
+	Hosts               map[string]TelemetryDestinationGroupsHosts        `tfsdk:"hosts"`
 }
 
 type TelemetryDestinationGroupsDestinations struct {
 	Encoding types.String `tfsdk:"encoding"`
 	NodeId   types.String `tfsdk:"node_id"`
 	Protocol types.String `tfsdk:"protocol"`
+}
+
+type TelemetryDestinationGroupsHosts struct {
+	CertificateHostname         types.String `tfsdk:"certificate_hostname"`
+	DialInStream                types.Bool   `tfsdk:"dial_in_stream"`
+	Encoding                    types.String `tfsdk:"encoding"`
+	Endpoint                    types.String `tfsdk:"endpoint"`
+	GrpcAsync                   types.Bool   `tfsdk:"grpc_async"`
+	Index                       types.String `tfsdk:"index"`
+	NodeId                      types.String `tfsdk:"node_id"`
+	Protocol                    types.String `tfsdk:"protocol"`
+	ProxyPassword               types.String `tfsdk:"proxy_password"`
+	ProxyPasswordWo             types.String `tfsdk:"proxy_password_wo"`
+	ProxyPasswordWoVersion      types.Int64  `tfsdk:"proxy_password_wo_version"`
+	ProxyPort                   types.Int64  `tfsdk:"proxy_port"`
+	ProxyPasswordEncryptionType types.String `tfsdk:"proxy_password_encryption_type"`
+	ProxyServer                 types.String `tfsdk:"proxy_server"`
+	ProxyUsername               types.String `tfsdk:"proxy_username"`
+	Token                       types.String `tfsdk:"token"`
+	TokenWo                     types.String `tfsdk:"token_wo"`
+	TokenWoVersion              types.Int64  `tfsdk:"token_wo_version"`
+	TokenEncryptionType         types.String `tfsdk:"token_encryption_type"`
+	CertificateTrustpoint       types.String `tfsdk:"certificate_trustpoint"`
 }
 
 type TelemetrySensorGroups struct {
@@ -124,14 +148,20 @@ func (data *Telemetry) fromIdentity(ctx context.Context, identity *TelemetryIden
 var TelemetrySubtreeClassMinVersions = map[string]string{}
 
 // TelemetryMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
-var TelemetryMinVersions = map[string]helpers.MinVersion{}
+var TelemetryMinVersions = map[string]helpers.MinVersion{
+	"telemetryDestHost.dialinStream":     {Version: "10.6(2)", Path: "destination_groups.hosts.dial_in_stream"},
+	"telemetryDestHost.endpoint":         {Version: "10.6(3)", Path: "destination_groups.hosts.endpoint"},
+	"telemetryDestHost.index":            {Version: "10.6(3)", Path: "destination_groups.hosts.index"},
+	"telemetryDestHost.token":            {Version: "10.6(3)", Path: "destination_groups.hosts.token"},
+	"telemetryDestHost.tokenEncryptType": {Version: "10.6(3)", Path: "destination_groups.hosts.token_encryption_type"},
+}
 
 // TelemetryListClasses holds the list child classes of the resource.
-var TelemetryListClasses = map[string]bool{"telemetryDestGroup": true, "telemetryDest": true, "telemetrySensorGroup": true, "telemetrySensorPath": true, "telemetrySubscription": true, "telemetryRsSensorGroupRel": true, "telemetryRsDestGroupRel": true}
+var TelemetryListClasses = map[string]bool{"telemetryDestGroup": true, "telemetryDest": true, "telemetryDestHost": true, "telemetrySensorGroup": true, "telemetrySensorPath": true, "telemetrySubscription": true, "telemetryRsSensorGroupRel": true, "telemetryRsDestGroupRel": true}
 
 // getTelemetryTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getTelemetryTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"telemetryCertificate", "telemetryDestProfile", "telemetryDestOptVrf", "telemetryDestOptCompression", "telemetryDestOptGrpcDeadline", "telemetryDestOptNodeId", "telemetryDestOptRetry", "telemetryDestOptSourceInterface", "telemetryDestGroup", "telemetryDestGrpOptCertificate", "telemetryDestGrpOptChunking", "telemetryDestGrpOptCompression", "telemetryDestGrpOptMaxMessage", "telemetryDestGrpOptSourceInterface", "telemetryDestGrpOptVrf", "telemetryDest", "telemetrySensorGroup", "telemetrySensorPath", "telemetrySubscription", "telemetryRsSensorGroupRel", "telemetryRsDestGroupRel"}, TelemetrySubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"telemetryCertificate", "telemetryDestProfile", "telemetryDestOptVrf", "telemetryDestOptCompression", "telemetryDestOptGrpcDeadline", "telemetryDestOptNodeId", "telemetryDestOptRetry", "telemetryDestOptSourceInterface", "telemetryDestGroup", "telemetryDestGrpOptCertificate", "telemetryDestGrpOptChunking", "telemetryDestGrpOptCompression", "telemetryDestGrpOptMaxMessage", "telemetryDestGrpOptSourceInterface", "telemetryDestGrpOptVrf", "telemetryDest", "telemetryDestHost", "telemetrySensorGroup", "telemetrySensorPath", "telemetrySubscription", "telemetryRsSensorGroupRel", "telemetryRsDestGroupRel"}, TelemetrySubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -149,6 +179,11 @@ func (data TelemetryDestinationGroups) getRn(key string) string {
 func (data TelemetryDestinationGroupsDestinations) getRn(key string) string {
 	keyParts := strings.SplitN(key, ";", 2)
 	return fmt.Sprintf("addr-[%s]-port-[%d]", keyParts[0], helpers.Must(strconv.ParseInt(keyParts[1], 10, 64)))
+}
+
+func (data TelemetryDestinationGroupsHosts) getRn(key string) string {
+	keyParts := strings.SplitN(key, ";", 2)
+	return fmt.Sprintf("host-[%s]-port-[%d]", keyParts[0], helpers.Must(strconv.ParseInt(keyParts[1], 10, 64)))
 }
 
 func (data TelemetrySensorGroups) getRn(key string) string {
@@ -341,6 +376,68 @@ func (data Telemetry) toBody(config Telemetry) nxos.Body {
 					attrs, _ = sjson.Set(attrs, "proto", child.Protocol.ValueString())
 				}
 				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDest.attributes", attrs)
+			}
+			for key, child := range child.Hosts {
+				configChild, configChildOk := configChild.Hosts[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				keyParts := strings.SplitN(key, ";", 2)
+				attrs, _ = sjson.Set(attrs, "host", keyParts[0])
+				attrs, _ = sjson.Set(attrs, "port", keyParts[1])
+				if configChildOk && !child.CertificateHostname.IsUnknown() && !child.CertificateHostname.IsNull() && !configChild.CertificateHostname.IsNull() {
+					attrs, _ = sjson.Set(attrs, "certHostname", child.CertificateHostname.ValueString())
+				}
+				if configChildOk && !child.DialInStream.IsUnknown() && !child.DialInStream.IsNull() && !configChild.DialInStream.IsNull() {
+					attrs, _ = sjson.Set(attrs, "dialinStream", strconv.FormatBool(child.DialInStream.ValueBool()))
+				}
+				if configChildOk && !child.Encoding.IsUnknown() && !child.Encoding.IsNull() && !configChild.Encoding.IsNull() {
+					attrs, _ = sjson.Set(attrs, "enc", child.Encoding.ValueString())
+				}
+				if configChildOk && !child.Endpoint.IsUnknown() && !child.Endpoint.IsNull() && !configChild.Endpoint.IsNull() {
+					attrs, _ = sjson.Set(attrs, "endpoint", child.Endpoint.ValueString())
+				}
+				if configChildOk && !child.GrpcAsync.IsUnknown() && !child.GrpcAsync.IsNull() && !configChild.GrpcAsync.IsNull() {
+					attrs, _ = sjson.Set(attrs, "grpcAsync", strconv.FormatBool(child.GrpcAsync.ValueBool()))
+				}
+				if configChildOk && !child.Index.IsUnknown() && !child.Index.IsNull() && !configChild.Index.IsNull() {
+					attrs, _ = sjson.Set(attrs, "index", child.Index.ValueString())
+				}
+				if configChildOk && !child.NodeId.IsUnknown() && !child.NodeId.IsNull() && !configChild.NodeId.IsNull() {
+					attrs, _ = sjson.Set(attrs, "nodeid", child.NodeId.ValueString())
+				}
+				if configChildOk && !child.Protocol.IsUnknown() && !child.Protocol.IsNull() && !configChild.Protocol.IsNull() {
+					attrs, _ = sjson.Set(attrs, "proto", child.Protocol.ValueString())
+				}
+				if configChildOk && !configChild.ProxyPasswordWo.IsNull() {
+					attrs, _ = sjson.Set(attrs, "proxyPassword", configChild.ProxyPasswordWo.ValueString())
+				} else if !child.ProxyPassword.IsUnknown() && !child.ProxyPassword.IsNull() {
+					attrs, _ = sjson.Set(attrs, "proxyPassword", child.ProxyPassword.ValueString())
+				}
+				if configChildOk && !child.ProxyPort.IsUnknown() && !child.ProxyPort.IsNull() && !configChild.ProxyPort.IsNull() {
+					attrs, _ = sjson.Set(attrs, "proxyPort", strconv.FormatInt(child.ProxyPort.ValueInt64(), 10))
+				}
+				if configChildOk && !child.ProxyPasswordEncryptionType.IsUnknown() && !child.ProxyPasswordEncryptionType.IsNull() && !configChild.ProxyPasswordEncryptionType.IsNull() {
+					attrs, _ = sjson.Set(attrs, "proxyPwdEncryptType", child.ProxyPasswordEncryptionType.ValueString())
+				}
+				if configChildOk && !child.ProxyServer.IsUnknown() && !child.ProxyServer.IsNull() && !configChild.ProxyServer.IsNull() {
+					attrs, _ = sjson.Set(attrs, "proxyServer", child.ProxyServer.ValueString())
+				}
+				if configChildOk && !child.ProxyUsername.IsUnknown() && !child.ProxyUsername.IsNull() && !configChild.ProxyUsername.IsNull() {
+					attrs, _ = sjson.Set(attrs, "proxyUsername", child.ProxyUsername.ValueString())
+				}
+				if configChildOk && !configChild.TokenWo.IsNull() {
+					attrs, _ = sjson.Set(attrs, "token", configChild.TokenWo.ValueString())
+				} else if !child.Token.IsUnknown() && !child.Token.IsNull() {
+					attrs, _ = sjson.Set(attrs, "token", child.Token.ValueString())
+				}
+				if configChildOk && !child.TokenEncryptionType.IsUnknown() && !child.TokenEncryptionType.IsNull() && !configChild.TokenEncryptionType.IsNull() {
+					attrs, _ = sjson.Set(attrs, "tokenEncryptType", child.TokenEncryptionType.ValueString())
+				}
+				if configChildOk && !child.CertificateTrustpoint.IsUnknown() && !child.CertificateTrustpoint.IsNull() && !configChild.CertificateTrustpoint.IsNull() {
+					attrs, _ = sjson.Set(attrs, "trustpoint", child.CertificateTrustpoint.ValueString())
+				}
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.telemetryDestHost.attributes", attrs)
 			}
 		}
 	}
@@ -644,6 +741,36 @@ func (data *Telemetry) fromBody(res gjson.Result) {
 												child.Destinations = make(map[string]TelemetryDestinationGroupsDestinations)
 											}
 											child.Destinations[nestedMapKey] = nestedChildtelemetryDest
+										}
+										return true
+									},
+								)
+								return true
+							},
+						)
+						value.Get("children").ForEach(
+							func(_, nestedV gjson.Result) bool {
+								nestedV.ForEach(
+									func(nestedClassname, nestedValue gjson.Result) bool {
+										if nestedClassname.String() == "telemetryDestHost" {
+											var nestedChildtelemetryDestHost TelemetryDestinationGroupsHosts
+											nestedChildtelemetryDestHost.CertificateHostname = types.StringValue(nestedValue.Get("attributes.certHostname").String())
+											nestedChildtelemetryDestHost.DialInStream = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.dialinStream").String()))
+											nestedChildtelemetryDestHost.Encoding = types.StringValue(nestedValue.Get("attributes.enc").String())
+											nestedChildtelemetryDestHost.Endpoint = types.StringValue(nestedValue.Get("attributes.endpoint").String())
+											nestedChildtelemetryDestHost.GrpcAsync = types.BoolValue(helpers.ParseNxosBoolean(nestedValue.Get("attributes.grpcAsync").String()))
+											nestedChildtelemetryDestHost.Index = types.StringValue(nestedValue.Get("attributes.index").String())
+											nestedChildtelemetryDestHost.NodeId = types.StringValue(nestedValue.Get("attributes.nodeid").String())
+											nestedChildtelemetryDestHost.Protocol = types.StringValue(nestedValue.Get("attributes.proto").String())
+											nestedChildtelemetryDestHost.ProxyPort = types.Int64Value(nestedValue.Get("attributes.proxyPort").Int())
+											nestedChildtelemetryDestHost.ProxyServer = types.StringValue(nestedValue.Get("attributes.proxyServer").String())
+											nestedChildtelemetryDestHost.ProxyUsername = types.StringValue(nestedValue.Get("attributes.proxyUsername").String())
+											nestedChildtelemetryDestHost.CertificateTrustpoint = types.StringValue(nestedValue.Get("attributes.trustpoint").String())
+											nestedMapKey := nestedValue.Get("attributes.host").String() + ";" + nestedValue.Get("attributes.port").String()
+											if child.Hosts == nil {
+												child.Hosts = make(map[string]TelemetryDestinationGroupsHosts)
+											}
+											child.Hosts[nestedMapKey] = nestedChildtelemetryDestHost
 										}
 										return true
 									},
@@ -1093,6 +1220,86 @@ func (data *Telemetry) updateFromBody(res gjson.Result) {
 			}
 			item.Destinations[nc] = ncItem
 		}
+		for nc := range item.Hosts {
+			ncItem := item.Hosts[nc]
+			keyParts := strings.SplitN(nc, ";", 2)
+			var rtelemetryDestHost gjson.Result
+			rtelemetryDestGroup.Get("telemetryDestGroup.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("telemetryDestHost.attributes.host").String() == keyParts[0] &&
+						v.Get("telemetryDestHost.attributes.port").String() == keyParts[1] {
+						rtelemetryDestHost = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rtelemetryDestHost.Exists() {
+				delete(item.Hosts, nc)
+				continue
+			}
+			if !ncItem.CertificateHostname.IsNull() {
+				ncItem.CertificateHostname = types.StringValue(rtelemetryDestHost.Get("telemetryDestHost.attributes.certHostname").String())
+			} else {
+				ncItem.CertificateHostname = types.StringNull()
+			}
+			if !ncItem.DialInStream.IsNull() {
+				ncItem.DialInStream = types.BoolValue(helpers.ParseNxosBoolean(rtelemetryDestHost.Get("telemetryDestHost.attributes.dialinStream").String()))
+			} else {
+				ncItem.DialInStream = types.BoolNull()
+			}
+			if !ncItem.Encoding.IsNull() {
+				ncItem.Encoding = types.StringValue(rtelemetryDestHost.Get("telemetryDestHost.attributes.enc").String())
+			} else {
+				ncItem.Encoding = types.StringNull()
+			}
+			if !ncItem.Endpoint.IsNull() {
+				ncItem.Endpoint = types.StringValue(rtelemetryDestHost.Get("telemetryDestHost.attributes.endpoint").String())
+			} else {
+				ncItem.Endpoint = types.StringNull()
+			}
+			if !ncItem.GrpcAsync.IsNull() {
+				ncItem.GrpcAsync = types.BoolValue(helpers.ParseNxosBoolean(rtelemetryDestHost.Get("telemetryDestHost.attributes.grpcAsync").String()))
+			} else {
+				ncItem.GrpcAsync = types.BoolNull()
+			}
+			if !ncItem.Index.IsNull() {
+				ncItem.Index = types.StringValue(rtelemetryDestHost.Get("telemetryDestHost.attributes.index").String())
+			} else {
+				ncItem.Index = types.StringNull()
+			}
+			if !ncItem.NodeId.IsNull() {
+				ncItem.NodeId = types.StringValue(rtelemetryDestHost.Get("telemetryDestHost.attributes.nodeid").String())
+			} else {
+				ncItem.NodeId = types.StringNull()
+			}
+			if !ncItem.Protocol.IsNull() {
+				ncItem.Protocol = types.StringValue(rtelemetryDestHost.Get("telemetryDestHost.attributes.proto").String())
+			} else {
+				ncItem.Protocol = types.StringNull()
+			}
+			if !ncItem.ProxyPort.IsNull() {
+				ncItem.ProxyPort = types.Int64Value(rtelemetryDestHost.Get("telemetryDestHost.attributes.proxyPort").Int())
+			} else {
+				ncItem.ProxyPort = types.Int64Null()
+			}
+			if !ncItem.ProxyServer.IsNull() {
+				ncItem.ProxyServer = types.StringValue(rtelemetryDestHost.Get("telemetryDestHost.attributes.proxyServer").String())
+			} else {
+				ncItem.ProxyServer = types.StringNull()
+			}
+			if !ncItem.ProxyUsername.IsNull() {
+				ncItem.ProxyUsername = types.StringValue(rtelemetryDestHost.Get("telemetryDestHost.attributes.proxyUsername").String())
+			} else {
+				ncItem.ProxyUsername = types.StringNull()
+			}
+			if !ncItem.CertificateTrustpoint.IsNull() {
+				ncItem.CertificateTrustpoint = types.StringValue(rtelemetryDestHost.Get("telemetryDestHost.attributes.trustpoint").String())
+			} else {
+				ncItem.CertificateTrustpoint = types.StringNull()
+			}
+			item.Hosts[nc] = ncItem
+		}
 		data.DestinationGroups[key] = item
 	}
 	for key, item := range data.SensorGroups {
@@ -1338,6 +1545,12 @@ func (data Telemetry) managedDns() map[string]bool {
 			_ = keyParts
 			telemetryDestDn_ := telemetryDestGroupDn + "/" + child_.getRn(key_)
 			dns[telemetryDestDn_] = true
+		}
+		for key_, child_ := range child.Hosts {
+			keyParts := strings.SplitN(key_, ";", 2)
+			_ = keyParts
+			telemetryDestHostDn_ := telemetryDestGroupDn + "/" + child_.getRn(key_)
+			dns[telemetryDestHostDn_] = true
 		}
 	}
 	for key, child := range data.SensorGroups {
@@ -1667,6 +1880,69 @@ func (data Telemetry) toResetBody(preexisting map[string]bool) nxos.Body {
 			}
 			telemetryDestGroupBody, _ = sjson.SetRaw(telemetryDestGroupBody, "telemetryDestGroup.children.-1", telemetryDestBody_)
 		}
+		for key_, child_ := range child.Hosts {
+			_ = child_
+			keyParts := strings.SplitN(key_, ";", 2)
+			_ = keyParts
+			telemetryDestHostRn_ := child_.getRn(key_)
+			telemetryDestHostDn_ := telemetryDestGroupDn + "/" + telemetryDestHostRn_
+			_ = telemetryDestHostDn_
+			if !existed(telemetryDestHostDn_) {
+				telemetryDestGroupBody, _ = sjson.Set(telemetryDestGroupBody, "telemetryDestGroup.children.-1.telemetryDestHost.attributes", map[string]interface{}{"rn": telemetryDestHostRn_, "status": "deleted"})
+				continue
+			}
+			telemetryDestHostBody_ := ""
+			telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.rn", telemetryDestHostRn_)
+			if !child_.CertificateHostname.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.certHostname", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.DialInStream.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.dialinStream", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Encoding.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.enc", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Endpoint.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.endpoint", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.GrpcAsync.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.grpcAsync", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Index.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.index", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.NodeId.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.nodeid", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Protocol.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.proto", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.ProxyPassword.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.proxyPassword", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.ProxyPort.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.proxyPort", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.ProxyPasswordEncryptionType.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.proxyPwdEncryptType", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.ProxyServer.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.proxyServer", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.ProxyUsername.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.proxyUsername", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.Token.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.token", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.TokenEncryptionType.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.tokenEncryptType", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !child_.CertificateTrustpoint.IsNull() {
+				telemetryDestHostBody_, _ = sjson.Set(telemetryDestHostBody_, "telemetryDestHost.attributes.trustpoint", "DME_UNSET_PROPERTY_MARKER")
+			}
+			telemetryDestGroupBody, _ = sjson.SetRaw(telemetryDestGroupBody, "telemetryDestGroup.children.-1", telemetryDestHostBody_)
+		}
 		body, _ = sjson.SetRaw(body, "telemetryEntity.children.-1", telemetryDestGroupBody)
 	}
 	for key, child := range data.SensorGroups {
@@ -1793,6 +2069,15 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 					deleteBody := ""
 					deleteBody, _ = sjson.Set(deleteBody, "telemetryDest.attributes.rn", stateChild.getRn(stateChildKey))
 					deleteBody, _ = sjson.Set(deleteBody, "telemetryDest.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+			for stateChildKey := range stateItemdi.Hosts {
+				if _, found := planItemdi.Hosts[stateChildKey]; !found {
+					stateChild := stateItemdi.Hosts[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "telemetryDestHost.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "telemetryDestHost.attributes.status", "deleted")
 					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
 				}
 			}
@@ -2077,6 +2362,56 @@ func (data Telemetry) toBodyWithDeletes(ctx context.Context, state Telemetry, co
 										}
 										if !stateChild.Protocol.IsNull() && configChild.Protocol.IsNull() {
 											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDest.attributes."+"proto", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+							}
+						}
+						for key := range stateChild.Hosts {
+							if configChild, ok := configChild.Hosts[key]; ok {
+								stateChild := stateChild.Hosts[key]
+								_ = stateChild
+								_ = configChild
+								keyParts := strings.SplitN(key, ";", 2)
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("telemetryDestHost.attributes.host").String() == keyParts[0] &&
+										mv.Get("telemetryDestHost.attributes.port").String() == keyParts[1] {
+										if !stateChild.CertificateHostname.IsNull() && configChild.CertificateHostname.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDestHost.attributes."+"certHostname", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.DialInStream.IsNull() && configChild.DialInStream.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDestHost.attributes."+"dialinStream", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Encoding.IsNull() && configChild.Encoding.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDestHost.attributes."+"enc", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Endpoint.IsNull() && configChild.Endpoint.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDestHost.attributes."+"endpoint", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.GrpcAsync.IsNull() && configChild.GrpcAsync.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDestHost.attributes."+"grpcAsync", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Index.IsNull() && configChild.Index.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDestHost.attributes."+"index", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.NodeId.IsNull() && configChild.NodeId.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDestHost.attributes."+"nodeid", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Protocol.IsNull() && configChild.Protocol.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDestHost.attributes."+"proto", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.ProxyPort.IsNull() && configChild.ProxyPort.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDestHost.attributes."+"proxyPort", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.ProxyServer.IsNull() && configChild.ProxyServer.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDestHost.attributes."+"proxyServer", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.ProxyUsername.IsNull() && configChild.ProxyUsername.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDestHost.attributes."+"proxyUsername", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.CertificateTrustpoint.IsNull() && configChild.CertificateTrustpoint.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".telemetryDestHost.attributes."+"trustpoint", "DME_UNSET_PROPERTY_MARKER")
 										}
 										break
 									}

@@ -153,6 +153,7 @@ type YamlConfigChildClass struct {
 	NoDelete          bool                   `yaml:"no_delete"`
 	KeepOnDestroy     bool                   `yaml:"keep_on_destroy"`
 	Atomic            bool                   `yaml:"atomic"`
+	RecreateOnChange  bool                   `yaml:"recreate_on_change"`
 	StatusReplace     bool                   `yaml:"status_replace"`
 	AutoDeleteOnEmpty bool                   `yaml:"auto_delete_on_empty"`
 	SeparateRequest   bool                   `yaml:"separate_request"`
@@ -432,6 +433,8 @@ var functions = template.FuncMap{
 	"separateRequestClasses":    SeparateRequestClasses,
 	"separateRequestAttributes": SeparateRequestAttributes,
 	"hasSeparateRequest":        HasSeparateRequest,
+	"recreateOnChangeClasses":   RecreateOnChangeClasses,
+	"recreateChangedExpr":       RecreateChangedExpr,
 	"idCount":                   IdCount,
 	"mapKeyExpr":                MapKeyExpr,
 	"mapKeyExample":             MapKeyExample,
@@ -607,9 +610,46 @@ func KeyAttributes(config YamlConfig) []KeyAttributeClass {
 	return classes
 }
 
-// HasSeparateRequest returns true if any child class or attribute has separate_request set.
+// RecreateOnChangeClasses recursively collects the class names of all child classes with recreate_on_change set.
+func RecreateOnChangeClasses(children []YamlConfigChildClass) []string {
+	var names []string
+	for _, c := range children {
+		if c.RecreateOnChange {
+			names = append(names, c.ClassName)
+		}
+		names = append(names, RecreateOnChangeClasses(c.ChildClasses)...)
+	}
+	return names
+}
+
+// RecreateChangedExpr returns a Go expression that is true if any attribute of a recreate_on_change class, or of its
+// single child classes, differs between stateVar and configVar.
+func RecreateChangedExpr(stateVar, configVar string, c YamlConfigChildClass) string {
+	var conds []string
+	var collect func(attributes []YamlConfigAttribute, children []YamlConfigChildClass)
+	collect = func(attributes []YamlConfigAttribute, children []YamlConfigChildClass) {
+		for _, a := range attributes {
+			if a.Id || a.Value != "" {
+				continue
+			}
+			conds = append(conds, fmt.Sprintf("!%s.%s.Equal(%s.%s)", stateVar, ToGoName(a.TfName), configVar, ToGoName(a.TfName)))
+		}
+		for _, cc := range children {
+			if cc.Type == "single" {
+				collect(cc.Attributes, cc.TfChildClasses)
+			}
+		}
+	}
+	collect(c.Attributes, c.TfChildClasses)
+	if len(conds) == 0 {
+		return "false"
+	}
+	return strings.Join(conds, " || ")
+}
+
+// HasSeparateRequest returns true if any child class or attribute has separate_request or recreate_on_change set.
 func HasSeparateRequest(config YamlConfig) bool {
-	return len(SeparateRequestClasses(config.ChildClasses)) > 0 || len(SeparateRequestAttributes(config)) > 0
+	return len(SeparateRequestClasses(config.ChildClasses)) > 0 || len(SeparateRequestAttributes(config)) > 0 || len(RecreateOnChangeClasses(config.ChildClasses)) > 0
 }
 
 // IdCount returns the number of id: true attributes.
@@ -869,6 +909,38 @@ func validateAtomic(children []YamlConfigChildClass) {
 	}
 }
 
+// validateRecreateOnChange rejects recreate_on_change child classes that cannot be deleted and re-created on their
+// own: single objects with a static RN, attributes of their own and no child classes, and list objects with only
+// single child classes.
+func validateRecreateOnChange(children []YamlConfigChildClass) {
+	var onlySingles func(children []YamlConfigChildClass) bool
+	onlySingles = func(children []YamlConfigChildClass) bool {
+		for _, cc := range children {
+			if cc.Type != "single" || cc.NoDelete || cc.KeepOnDestroy || cc.SeparateRequest || cc.RecreateOnChange || !onlySingles(cc.ChildClasses) {
+				return false
+			}
+		}
+		return true
+	}
+	for _, c := range children {
+		if c.RecreateOnChange {
+			invalid := c.NoDelete || c.KeepOnDestroy || c.Atomic || c.SeparateRequest || c.StatusReplace || c.AutoDeleteOnEmpty
+			switch c.Type {
+			case "single":
+				invalid = invalid || len(c.ChildClasses) > 0 || RnHasDynamicSegment(c.Rn) || allAttributesHaveValue(c.Attributes)
+			case "list":
+				invalid = invalid || !onlySingles(c.ChildClasses)
+			default:
+				invalid = true
+			}
+			if invalid {
+				log.Fatalf("recreate_on_change class %s must be a single class with a static rn and attributes of its own and without child classes, or a list class with only single child classes, without no_delete, keep_on_destroy, atomic, separate_request, status_replace or auto_delete_on_empty", c.ClassName)
+			}
+		}
+		validateRecreateOnChange(c.ChildClasses)
+	}
+}
+
 // buildTfChildClasses builds the TfChildClasses list by promoting children
 // of auto-hidden classes (single-type classes where all attributes have a value).
 func buildTfChildClasses(children []YamlConfigChildClass) []YamlConfigChildClass {
@@ -1041,6 +1113,7 @@ func main() {
 	for i := range configs {
 		processMinVersions(&configs[i])
 		validateAtomic(configs[i].ChildClasses)
+		validateRecreateOnChange(configs[i].ChildClasses)
 		configs[i].TfChildClasses = buildTfChildClasses(configs[i].ChildClasses)
 		buildChildTfChildClasses(configs[i].ChildClasses)
 	}

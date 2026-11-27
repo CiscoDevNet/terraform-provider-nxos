@@ -22,6 +22,7 @@ This resource can manage the feature configuration on NX-OS devices, including t
 - [fmDot1x](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Feature%20Management/fm:Dot1x/)
 - [fmEigrp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Feature%20Management/fm:Eigrp/)
 - [fmEpbr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Feature%20Management/fm:Epbr/)
+- [fmEvmed](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Feature%20Management/fm:Evmed/)
 - [fmEvpn](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Feature%20Management/fm:Evpn/)
 - [fmGrpc](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Feature%20Management/fm:Grpc/)
 - [fmHmm](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Feature%20Management/fm:Hmm/)
@@ -87,6 +88,7 @@ resource "nxos_feature" "example" {
   dot1x                                    = "enabled"
   eigrp                                    = "enabled"
   epbr                                     = "enabled"
+  evmed                                    = "enabled"
   evpn                                     = "enabled"
   grpc                                     = "enabled"
   hmm                                      = "enabled"
@@ -165,6 +167,8 @@ resource "nxos_feature" "example" {
 - `eigrp` (String) Administrative state.
   - Choices: `enabled`, `disabled`
 - `epbr` (String) Admin status.
+  - Choices: `enabled`, `disabled`
+- `evmed` (String) Administrative state.
   - Choices: `enabled`, `disabled`
 - `evpn` (String) Administrative state.
   - Choices: `enabled`, `disabled`

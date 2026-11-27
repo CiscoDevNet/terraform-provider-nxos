@@ -166,11 +166,14 @@ var {{camelCase .Name}}MinVersions = map[string]helpers.MinVersion{
 {{- if hasSeparateRequest .}}
 
 // {{camelCase .Name}}SeparateRequest lists the classes and attributes that are sent in a second request after the rest of the body,
-// together with the values that reset the attributes when they are removed or before their object is deleted, and the
-// attributes identifying the objects of each class.
+// together with the values that reset the attributes when they are removed or before their object is deleted, the
+// attributes identifying the objects of each class, and the classes whose changed objects are deleted and re-created.
 var {{camelCase .Name}}SeparateRequest = helpers.SeparateRequest{
 	{{- if separateRequestClasses .ChildClasses}}
 	Classes: []string{ {{- range $i, $c := separateRequestClasses .ChildClasses}}{{if $i}}, {{end}}"{{$c}}"{{end -}} },
+	{{- end}}
+	{{- if recreateOnChangeClasses .ChildClasses}}
+	Recreate: []string{ {{- range $i, $c := recreateOnChangeClasses .ChildClasses}}{{if $i}}, {{end}}"{{$c}}"{{end -}} },
 	{{- end}}
 	{{- if separateRequestAttributes .}}
 	Attributes: map[string]map[string]string{
@@ -182,6 +185,8 @@ var {{camelCase .Name}}SeparateRequest = helpers.SeparateRequest{
 		},
 		{{- end}}
 	},
+	{{- end}}
+	{{- if or (separateRequestAttributes .) (recreateOnChangeClasses .ChildClasses)}}
 	Keys: map[string][]string{
 		{{- range keyAttributes .}}
 		"{{.ClassName}}": { {{- range $i, $n := .Names}}{{if $i}}, {{end}}"{{$n}}"{{end -}} },
@@ -1634,7 +1639,10 @@ func (data {{camelCase .Name}}) toResetBody(preexisting map[string]bool) nxos.Bo
        can be deleted and it does not hold objects that are kept on destroy. Containers without attributes
        of their own stay. ParentDn is empty below objects with a dynamic RN, which are never deleted. 
        With the reset and retain policies, an emptied object of an atomic class is deleted or left unchanged
-       as decided by atomicEmptied, as its attributes cannot be reset. */}}
+       as decided by atomicEmptied, as its attributes cannot be reset.
+       An object of a recreate_on_change class whose attributes change is marked with helpers.RecreateStatus,
+       so that PostSeparate deletes it in the main request and re-creates it in a second request. Its removed
+       attributes and emptied single child objects are not reset, as it is re-created as configured. */}}
 {{- $ownAttributes := false}}
 {{- range .Attributes}}{{if eq .Value ""}}{{$ownAttributes = true}}{{end}}{{end}}
 {{- $deletable := and $parentDn $ownAttributes (not .NoDelete) (not (rnHasDynamicSegment .Rn)) (not (hasKeepOnDestroy .ChildClasses))}}
@@ -1656,6 +1664,13 @@ func (data {{camelCase .Name}}) toResetBody(preexisting map[string]bool) nxos.Bo
 	{{- end}}
 	} else {
 {{- end}}
+{{- if .RecreateOnChange}}
+	if !{{singleEmptyExpr $stateVar .}} && !{{singleEmptyExpr $configVar .}} && ({{recreateChangedExpr $stateVar $configVar .}}) {
+		// The device does not allow modifying the object in place, so it is deleted and re-created as configured
+		recreatePath := helpers.EnsureChildPath(&body.Str, {{$ensurePathExpr}}, "{{$childClassName}}")
+		body.Str, _ = sjson.Set(body.Str, recreatePath+".attributes.status", helpers.RecreateStatus)
+	} else {
+{{- end}}
 {{- range .Attributes}}
 {{- if and (not .Id) (not .Mandatory) (eq .Value "") (not .WriteOnly) (not .Sensitive)}}
 	if !{{$stateVar}}.{{toGoName .TfName}}.IsNull() && {{$configVar}}.{{toGoName .TfName}}.IsNull() {
@@ -1663,6 +1678,9 @@ func (data {{camelCase .Name}}) toResetBody(preexisting map[string]bool) nxos.Bo
 		body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"{{.NxosName}}", {{deleteValue .}})
 	}
 {{- end}}
+{{- end}}
+{{- if .RecreateOnChange}}
+	}
 {{- end}}
 {{- if .ChildClasses}}
 {{- template "toBodyUnsetChildAttrsTemplate" (makeMap "Children" .ChildClasses "ParentDn" $childDn "StateVar" $stateVar "ConfigVar" $configVar "BodyPathExpr" (printf "helpers.FindChildPath(body.Str, %s, \"%s\")+\".children\"" $bodyPathExpr $childClassName) "EnsurePathExpr" (printf "helpers.EnsureChildPath(&body.Str, %s, \"%s\")+\".children\"" $ensurePathExpr $childClassName) "Level" $level)}}
@@ -1676,6 +1694,21 @@ func (data {{camelCase .Name}}) toResetBody(preexisting map[string]bool) nxos.Bo
 			stateChild := {{$stateVar}}.{{toGoName .TfName}}[key]
 			_ = stateChild
 			_ = configChild
+			{{- if .RecreateOnChange}}
+			if {{recreateChangedExpr "stateChild" "configChild" .}} {
+				// The device does not allow modifying the object in place, so it is deleted and re-created as configured
+				{{- if gt (idCount .Attributes) 1}}
+				{{mapKeyParse "key" .Attributes}}
+				{{- end}}
+				for mi, mv := range gjson.Get(body.Str, {{$bodyPathExpr}}).Array() {
+					if {{mapKeyMatchExprVar "mv" "key" $childClassName .Attributes}} {
+						body.Str, _ = sjson.Set(body.Str, {{$bodyPathExpr}}+"."+strconv.Itoa(mi)+".{{$childClassName}}.attributes.status", helpers.RecreateStatus)
+						break
+					}
+				}
+				continue
+			}
+			{{- end}}
 			{{- if and $parentDn .ChildClasses}}
 			listChildDn{{$level}} := {{$parentDn}} + "/" + stateChild.getRn(key)
 			_ = listChildDn{{$level}}

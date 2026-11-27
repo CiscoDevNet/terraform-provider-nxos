@@ -184,6 +184,48 @@ func TestNxos_SplitSeparateRequestBody(t *testing.T) {
 			expectedReset: `{"vpcEntity":{"attributes":{},"children":[{"vpcInst":{"attributes":{},"children":[` +
 				`{"vpcDom":{"attributes":{"id":"100","l3PeerRouter":"DME_UNSET_PROPERTY_MARKER","status":"modified"}}}]}}]}}`,
 		},
+		{
+			// A marked object is deleted with the other changes and re-created last, an unmarked one stays in the main body
+			name: "recreated objects",
+			body: `{"evmsInst":{"attributes":{},"children":[` +
+				`{"evmsApplet":{"attributes":{"appletName":"A1"},"children":[{"evmsEvents":{"attributes":{},"children":[` +
+				`{"evmsTag":{"attributes":{"eventTag1":"n1","eventTag2":"n2","status":"recreate"}}},` +
+				`{"evmsEventCli":{"attributes":{"eventTag":"n1","match":"show n1"}}},` +
+				`{"evmsEventCli":{"attributes":{"rn":"clitag-e1","status":"deleted"}}}]}}]}},` +
+				`{"evmsApplet":{"attributes":{"appletName":"A2"},"children":[{"evmsEvents":{"attributes":{},"children":[` +
+				`{"evmsTag":{"attributes":{"eventTag1":"e1","eventTag2":"e2"}}}]}}]}}]}}`,
+			separate: SeparateRequest{Recreate: []string{"evmsTag"}},
+			expectedMain: `{"evmsInst":{"attributes":{},"children":[` +
+				`{"evmsApplet":{"attributes":{"appletName":"A1"},"children":[{"evmsEvents":{"attributes":{},"children":[` +
+				`{"evmsTag":{"attributes":{"status":"deleted"}}},` +
+				`{"evmsEventCli":{"attributes":{"eventTag":"n1","match":"show n1"}}},` +
+				`{"evmsEventCli":{"attributes":{"rn":"clitag-e1","status":"deleted"}}}]}}]}},` +
+				`{"evmsApplet":{"attributes":{"appletName":"A2"},"children":[{"evmsEvents":{"attributes":{},"children":[` +
+				`{"evmsTag":{"attributes":{"eventTag1":"e1","eventTag2":"e2"}}}]}}]}}]}}`,
+			expectedSeparate: `{"evmsInst":{"attributes":{},"children":[` +
+				`{"evmsApplet":{"attributes":{"appletName":"A1"},"children":[{"evmsEvents":{"attributes":{},"children":[` +
+				`{"evmsTag":{"attributes":{"eventTag1":"n1","eventTag2":"n2"}}}]}}]}}]}}`,
+		},
+		{
+			// A marked list object is deleted with only its keys and re-created with its children
+			name: "recreated list objects",
+			body: `{"evmsApplet":{"attributes":{"appletName":"A1"},"children":[` +
+				`{"evmsAction":{"attributes":{"actionLabel":"1.0","status":"recreate"},"children":[{"evmsActionCollect":{"attributes":{"yamlFile":"bootflash:c.yaml"}}}]}},` +
+				`{"evmsAction":{"attributes":{"actionLabel":"2.0"},"children":[{"evmsActionSyslog":{"attributes":{"message":"x"}}}]}}]}}`,
+			separate: SeparateRequest{Recreate: []string{"evmsAction"}, Keys: map[string][]string{"evmsAction": {"actionLabel"}}},
+			expectedMain: `{"evmsApplet":{"attributes":{"appletName":"A1"},"children":[` +
+				`{"evmsAction":{"attributes":{"actionLabel":"1.0","status":"deleted"}}},` +
+				`{"evmsAction":{"attributes":{"actionLabel":"2.0"},"children":[{"evmsActionSyslog":{"attributes":{"message":"x"}}}]}}]}}`,
+			expectedSeparate: `{"evmsApplet":{"attributes":{"appletName":"A1"},"children":[` +
+				`{"evmsAction":{"attributes":{"actionLabel":"1.0"},"children":[{"evmsActionCollect":{"attributes":{"yamlFile":"bootflash:c.yaml"}}}]}}]}}`,
+		},
+		{
+			// The marker is only honored for recreate classes
+			name:         "recreate marker of other classes",
+			body:         `{"evmsEvents":{"attributes":{},"children":[{"evmsTag":{"attributes":{"eventTag1":"n1","status":"recreate"}}}]}}`,
+			separate:     SeparateRequest{Recreate: []string{"evmsOther"}},
+			expectedMain: `{"evmsEvents":{"attributes":{},"children":[{"evmsTag":{"attributes":{"eventTag1":"n1","status":"recreate"}}}]}}`,
+		},
 	}
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {

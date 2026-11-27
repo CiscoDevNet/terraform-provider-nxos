@@ -22,6 +22,7 @@ This data source can read the feature configuration on NX-OS devices, including 
 - [fmDot1x](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Feature%20Management/fm:Dot1x/)
 - [fmEigrp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Feature%20Management/fm:Eigrp/)
 - [fmEpbr](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Feature%20Management/fm:Epbr/)
+- [fmEvmed](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Feature%20Management/fm:Evmed/)
 - [fmEvpn](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Feature%20Management/fm:Evpn/)
 - [fmGrpc](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Feature%20Management/fm:Grpc/)
 - [fmHmm](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Feature%20Management/fm:Hmm/)
@@ -99,6 +100,7 @@ data "nxos_feature" "example" {
 - `dot1x` (String) Administrative state.
 - `eigrp` (String) Administrative state.
 - `epbr` (String) Admin status.
+- `evmed` (String) Administrative state.
 - `evpn` (String) Administrative state.
 - `feature_sets` (Attributes Map) List of feature-sets (e.g. `fex`, `mpls`, `virtualization`).
   - Map key: `name` - Feature-set name.

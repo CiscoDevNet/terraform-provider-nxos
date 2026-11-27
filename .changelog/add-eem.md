@@ -1,0 +1,2 @@
+- Add `nxos_eem` resource and data source, including Embedded Event Manager (EEM) environment variables and applets with untagged and tagged event specifications, event correlation and actions
+- Add `evmed` attribute to `nxos_feature` resource and data source

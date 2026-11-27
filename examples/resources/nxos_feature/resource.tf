@@ -7,6 +7,7 @@ resource "nxos_feature" "example" {
   dot1x                                    = "enabled"
   eigrp                                    = "enabled"
   epbr                                     = "enabled"
+  evmed                                    = "enabled"
   evpn                                     = "enabled"
   grpc                                     = "enabled"
   hmm                                      = "enabled"

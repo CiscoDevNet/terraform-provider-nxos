@@ -70,7 +70,17 @@ type SeparateRequest struct {
 	// Keys maps a class to the attributes identifying its objects, which are the
 	// only other attributes sent with the reset of separate attributes.
 	Keys map[string][]string
+	// Recreate lists classes whose objects the device does not allow to be
+	// modified while objects they reference change. An object of these classes
+	// marked with RecreateStatus is deleted in the main request, together with
+	// the other changes, and re-created in the separate request.
+	Recreate []string
 }
+
+// RecreateStatus marks an object of a SeparateRequest.Recreate class in a body
+// that is deleted and re-created. It is not a DME status and is replaced
+// before the body is sent.
+const RecreateStatus = "recreate"
 
 // SplitSeparateRequestBody splits body into up to three bodies that are sent
 // in this order:
@@ -78,8 +88,9 @@ type SeparateRequest struct {
 //     those of objects about to be deleted, marked with status "modified" so
 //     that the request fails instead of creating an object that does not exist
 //   - the main body without objects of the separate classes and without the
-//     separate attributes
-//   - a separate body with those objects and attributes
+//     separate attributes, deleting the objects marked to be re-created
+//   - a separate body with those objects and attributes, and the objects
+//     marked to be re-created
 //
 // The reset and separate bodies also hold the chain of parent objects leading
 // to them, and are empty if there is nothing to send. Subtrees of deleted
@@ -89,7 +100,11 @@ func SplitSeparateRequestBody(body string, separate SeparateRequest) (string, st
 	for _, c := range separate.Classes {
 		classes[c] = true
 	}
-	return splitSeparateRequestNode(gjson.Parse(body), classes, separate.Attributes, separate.Keys)
+	recreate := make(map[string]bool, len(separate.Recreate))
+	for _, c := range separate.Recreate {
+		recreate[c] = true
+	}
+	return splitSeparateRequestNode(gjson.Parse(body), classes, recreate, separate.Attributes, separate.Keys)
 }
 
 // keyAttributes returns the attributes of attrs that identify the object: its keys and its rn.
@@ -103,7 +118,7 @@ func keyAttributes(attrs string, keys []string) string {
 	return result
 }
 
-func splitSeparateRequestNode(node gjson.Result, classes map[string]bool, attributes map[string]map[string]string, keys map[string][]string) (string, string, string) {
+func splitSeparateRequestNode(node gjson.Result, classes, recreate map[string]bool, attributes map[string]map[string]string, keys map[string][]string) (string, string, string) {
 	var className string
 	var content gjson.Result
 	node.ForEach(func(key, value gjson.Result) bool {
@@ -116,6 +131,13 @@ func splitSeparateRequestNode(node gjson.Result, classes map[string]bool, attrib
 	attrs := content.Get("attributes").Raw
 	if attrs == "" {
 		attrs = "{}"
+	}
+	if recreate[className] && content.Get("attributes.status").String() == RecreateStatus {
+		// Deleted with the other changes, and re-created once they are applied
+		deleteAttrs, _ := sjson.Set(keyAttributes(attrs, keys[className]), "status", "deleted")
+		createAttrs, _ := sjson.Delete(attrs, "status")
+		createContent, _ := sjson.SetRaw(content.Raw, "attributes", createAttrs)
+		return `{"` + className + `":{"attributes":` + deleteAttrs + `}}`, `{"` + className + `":` + createContent + `}`, ""
 	}
 	separateAttrs := attributes[className]
 	if content.Get("attributes.status").String() == "deleted" {
@@ -159,7 +181,7 @@ func splitSeparateRequestNode(node gjson.Result, classes map[string]bool, attrib
 			separateChildren = append(separateChildren, child.Raw)
 			continue
 		}
-		mainChild, separateChild, resetChild := splitSeparateRequestNode(child, classes, attributes, keys)
+		mainChild, separateChild, resetChild := splitSeparateRequestNode(child, classes, recreate, attributes, keys)
 		mainChildren = append(mainChildren, mainChild)
 		if separateChild != "" {
 			separateChildren = append(separateChildren, separateChild)
@@ -239,6 +261,9 @@ var SeparateRequestDelay = 2 * time.Second
 // change, the device accepts them but does not apply them. Some attributes are
 // rejected when they are set on an object that is created in the same request,
 // and block deleting the object while they are set, for example UDF qualifiers.
+// Some objects block changing the objects they reference while they exist, for
+// example an EEM event correlation and the tagged events it correlates, so they
+// are deleted with the other changes and re-created afterwards.
 //
 // An error of the reset request is ignored: it fails if an object to be deleted
 // no longer exists, and the main request reports any other problem.

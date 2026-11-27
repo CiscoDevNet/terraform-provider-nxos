@@ -137,6 +137,21 @@ child_classes:
               - enabled
               - disabled
             example: enabled
+      - class_name: fmEvmed
+        rn: evmed
+        type: single
+        no_delete: true
+        description: 'Event manager event detector feature configuration.'
+        doc_path: Feature%20Management/fm:Evmed/
+        attributes:
+          - nxos_name: adminSt
+            tf_name: evmed
+            type: String
+            description: 'Administrative state.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
       - class_name: fmEvpn
         rn: evpn
         type: single

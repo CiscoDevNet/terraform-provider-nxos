@@ -125,8 +125,8 @@ var VPCSubtreeClassMinVersions = map[string]string{}
 var VPCMinVersions = map[string]helpers.MinVersion{}
 
 // VPCSeparateRequest lists the classes and attributes that are sent in a second request after the rest of the body,
-// together with the values that reset the attributes when they are removed or before their object is deleted, and the
-// attributes identifying the objects of each class.
+// together with the values that reset the attributes when they are removed or before their object is deleted, the
+// attributes identifying the objects of each class, and the classes whose changed objects are deleted and re-created.
 var VPCSeparateRequest = helpers.SeparateRequest{
 	Attributes: map[string]map[string]string{
 		"vpcDom": {

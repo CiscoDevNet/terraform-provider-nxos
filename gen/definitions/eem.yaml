@@ -1,0 +1,1990 @@
+---
+name: EEM
+class_name: evmsEvtMgr
+dn: sys/evtmgr
+no_delete: true
+ds_description: This data source can read the Embedded Event Manager (EEM) configuration on NX-OS devices, including environment variables and applets with their event specifications, event correlation and actions.
+res_description: This resource can manage the Embedded Event Manager (EEM) configuration on NX-OS devices, including environment variables and applets with their event specifications, event correlation and actions.
+doc_path: System/evms:EvtMgr/
+doc_category: System
+child_classes:
+  - class_name: evmsInst
+    doc_path: System/evms:Inst/
+    rn: inst
+    type: single
+    no_delete: true
+    description: 'Event manager instance.'
+    child_classes:
+      - class_name: evmsEnvironment
+        doc_path: System/evms:Environment/
+        rn: env-[%s]
+        type: list
+        tf_name: environment_variables
+        description: 'List of event manager environment variables.'
+        attributes:
+          - nxos_name: envName
+            tf_name: name
+            type: String
+            id: true
+            description: 'Name of the environment variable.'
+            example: TF_INTERFACE
+          - nxos_name: envValue
+            tf_name: value
+            type: String
+            description: 'Value of the environment variable.'
+            example: eth1/10
+      - class_name: evmsApplet
+        doc_path: System/evms:Applet/
+        rn: applet-[%s]
+        type: list
+        tf_name: applets
+        description: 'List of event manager applets.'
+        attributes:
+          - nxos_name: appletName
+            tf_name: name
+            type: String
+            id: true
+            description: 'Name of the policy.'
+            example: TF_APPLET
+          - nxos_name: appletDescription
+            tf_name: description
+            type: String
+            description: 'Description for the policy.'
+            example: Terraform applet
+          - nxos_name: appletOverride
+            tf_name: override
+            type: String
+            description: 'Name of the system policy to override.'
+            example: __pfm_fanbad_any_singlefan
+            exclude_test: true
+        example_entries:
+          - name: TF_APPLICATION
+            application_event_subsystem_id: 798
+            application_event_type: 1
+          - name: TF_CDP
+            cdp_event_interface: eth1/10
+            cdp_event_operation: add
+          - name: TF_CLI
+            cli_event_match: show terraform
+            cli_event_occurrences: 2
+            cli_event_time_interval: 10
+          - name: TF_COUNTER
+            counter_event_name: TF_COUNTER
+            counter_event_entry_operator: gt
+            counter_event_entry_value: 5
+            counter_event_exit_operator: lt
+            counter_event_exit_value: 2
+          - name: TF_ETHPM
+            ethpm_event_storm_control: true
+          - name: TF_FAN_ABSENT
+            fan_absent_event_fan: '1'
+            fan_absent_event_time: 20
+          - name: TF_FAN_BAD
+            fan_bad_event_fan: '1'
+            fan_bad_event_time: 20
+          - name: TF_GOLD
+            gold_event_module: 1
+            gold_event_test_name: TestUSBPorts
+            gold_event_testing_type: scheduled
+            gold_event_severity: major
+            gold_event_consecutive_failures: 2
+          - name: TF_LINK_FLAP
+            internal_link_flap_event_count: 2
+            internal_link_flap_event_time: 60
+          - name: TF_MEMORY
+            memory_event_level: critical
+          - name: TF_MODULE
+            module_event_module: '1'
+            module_event_status: online
+          - name: TF_MODULE_FAILURE
+            module_failure_event_module: '1'
+            module_failure_event_error_type: lc-failed
+            module_failure_event_count: 2
+            module_failure_event_time: 60
+          - name: TF_NONE
+            none_event: true
+          - name: TF_OIR
+            oir_event_device_type: fan
+            oir_event_type: remove
+            oir_event_device_number: 1
+          - name: TF_POLICY_DEFAULT
+            override: __pfm_fanbad_any_singlefan
+            policy_default_event_occurrences: 2
+            policy_default_event_time_interval: 60
+          - name: TF_POWER_OVER_BUDGET
+            power_over_budget_event: true
+          - name: TF_SNMP
+            snmp_event_oid: 1.3.6.1.2.1.1.3.0
+            snmp_event_get_type: exact
+            snmp_event_entry_operator: lt
+            snmp_event_entry_value: 1
+            snmp_event_exit_operator: gt
+            snmp_event_exit_value: 2
+            snmp_event_poll_interval_minimum: 30
+            snmp_event_poll_interval_maximum: 60
+          - name: TF_SYSLOG
+            syslog_event_pattern: terraform-test-pattern
+            syslog_event_priority: alerts
+            syslog_event_occurrences: 2
+            syslog_event_time_interval: 60
+          - name: TF_SYSMGR_MEMORY
+            override: __sysmgr_policy_mem_alert
+            sysmgr_memory_alert_event_minor: 70
+            sysmgr_memory_alert_event_major: 80
+            sysmgr_memory_alert_event_clear: 60
+          - name: TF_SYSMGR_SWITCHOVER
+            override: __sysmgr_swover_count_alert
+            sysmgr_switchover_event_count: 3
+            sysmgr_switchover_event_time: 120
+          - name: TF_TEMPERATURE
+            temperature_event_module: '1'
+            temperature_event_sensor: '1'
+            temperature_event_threshold: major
+          - name: TF_TIMER
+            timer_event_name: TF_TIMER
+            timer_event_cron_time: '0 * * * *'
+          - name: TF_TRACK
+            track_event_id: 10
+            track_event_state: down
+          - name: TF_UFDM
+            ufdm_event_fib: inconsistent
+        child_classes:
+          - class_name: evmsEvents
+            doc_path: System/evms:Events/
+            rn: events
+            type: single
+            description: 'Events of the applet.'
+            child_classes:
+              - class_name: evmsEventApplicationUnTagged
+                doc_path: System/evms:EventApplicationUnTagged/
+                rn: application
+                type: single
+                tf_name: application_event
+                description: 'Untagged application event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: subSystemId
+                    tf_name: application_event_subsystem_id
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Sub-system ID that will publish the application event.'
+                    example: 798
+                  - nxos_name: eventType
+                    tf_name: application_event_type
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Event type within the specified sub-system.'
+                    example: 1
+              - class_name: evmsEventCdpUnTagged
+                doc_path: System/evms:EventCdpUnTagged/
+                rn: cdp
+                type: single
+                tf_name: cdp_event
+                description: 'Untagged CDP event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: intf
+                    tf_name: cdp_event_interface
+                    type: String
+                    description: 'Interface for CDP event manager config.'
+                    example: eth1/10
+                  - nxos_name: cacheEntryOp
+                    tf_name: cdp_event_operation
+                    type: String
+                    enum_values:
+                      - all
+                      - add
+                      - update
+                      - delete
+                    description: 'cdp event specification.'
+                    example: add
+              - class_name: evmsEventCliUnTagged
+                doc_path: System/evms:EventCliUnTagged/
+                rn: cli
+                type: single
+                tf_name: cli_event
+                description: 'Untagged CLI event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: match
+                    tf_name: cli_event_match
+                    type: String
+                    description: 'CLI regular expression to be used for matching.'
+                    example: show terraform
+                  - nxos_name: occurrences
+                    tf_name: cli_event_occurrences
+                    type: Int64
+                    min_int: 1
+                    max_int: 65000
+                    description: 'Enter an integer to be used as count.'
+                    example: 2
+                  - nxos_name: timeInterval
+                    tf_name: cli_event_time_interval
+                    type: Int64
+                    min_int: 0
+                    max_int: 10000000
+                    description: 'Time interval in seconds.'
+                    example: 10
+              - class_name: evmsEventCounterUnTagged
+                doc_path: System/evms:EventCounterUnTagged/
+                rn: counter
+                type: single
+                tf_name: counter_event
+                description: 'Untagged counter event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: counterName
+                    tf_name: counter_event_name
+                    type: String
+                    description: 'Name of the counter.'
+                    example: TF_COUNTER
+                  - nxos_name: entryOp
+                    tf_name: counter_event_entry_operator
+                    type: String
+                    enum_values:
+                      - gt
+                      - ge
+                      - eq
+                      - ne
+                      - lt
+                      - le
+                    description: 'Specify the comparison operator.'
+                    example: gt
+                  - nxos_name: entryValue
+                    tf_name: counter_event_entry_value
+                    type: Int64
+                    min_int: 0
+                    max_int: 2147483647
+                    description: 'Specify the value for comparison with the counter Value.'
+                    example: 5
+                  - nxos_name: exitOp
+                    tf_name: counter_event_exit_operator
+                    type: String
+                    enum_values:
+                      - gt
+                      - ge
+                      - eq
+                      - ne
+                      - lt
+                      - le
+                    description: 'Specify the comparison operator.'
+                    example: lt
+                  - nxos_name: exitValue
+                    tf_name: counter_event_exit_value
+                    type: Int64
+                    min_int: 0
+                    max_int: 2147483647
+                    description: 'Specify the value for comparison with the counter Value.'
+                    example: 2
+              - class_name: evmsEventEthpm
+                doc_path: System/evms:EventEthpm/
+                rn: ethpm
+                type: single
+                tf_name: ethpm_event
+                description: 'Ethpm event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: eventStrmCtrl
+                    tf_name: ethpm_event_storm_control
+                    type: Bool
+                    description: 'Enable or Disable event storm-control config.'
+                    example: true
+              - class_name: evmsEventFanAbsentUnTagged
+                doc_path: System/evms:EventFanAbsentUnTagged/
+                rn: fanabsent
+                type: single
+                tf_name: fan_absent_event
+                description: 'Fan absent event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: fanNumber
+                    tf_name: fan_absent_event_fan
+                    type: String
+                    description: 'Specify fan number, 0|all for all fan or interger range.'
+                    example: '1'
+                  - nxos_name: time
+                    tf_name: fan_absent_event_time
+                    type: Int64
+                    min_int: 10
+                    max_int: 64000
+                    description: 'Time in seconds fan can stay absent.'
+                    example: 20
+              - class_name: evmsEventFanBadUnTagged
+                doc_path: System/evms:EventFanBadUnTagged/
+                rn: fanbad
+                type: single
+                tf_name: fan_bad_event
+                description: 'Fan bad event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: fanNumber
+                    tf_name: fan_bad_event_fan
+                    type: String
+                    description: 'Specify fan number, 0|all for all fan or interger range.'
+                    example: '1'
+                  - nxos_name: time
+                    tf_name: fan_bad_event_time
+                    type: Int64
+                    min_int: 10
+                    max_int: 64000
+                    description: 'Time in seconds fan can stay absent.'
+                    example: 20
+              - class_name: evmsEventGold
+                doc_path: System/evms:EventGold/
+                rn: gold
+                type: single
+                tf_name: gold_event
+                description: 'GOLD (Generic Online Diagnostics) event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: modId
+                    tf_name: gold_event_module
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Module id for which the event shall be triggered on diag test failure.'
+                    example: 1
+                  - nxos_name: moduleAll
+                    tf_name: gold_event_module_all
+                    type: String
+                    enum_values:
+                      - enabled
+                      - disabled
+                    description: 'All Module of sys for which the event shall be triggered on diag test failure.'
+                    example: enabled
+                  - nxos_name: diagTestName
+                    tf_name: gold_event_test_name
+                    type: String
+                    description: 'Name of the online Diagnostic test which is run.'
+                    example: TestUSBPorts
+                  - nxos_name: testingType
+                    tf_name: gold_event_testing_type
+                    type: String
+                    enum_values:
+                      - scheduled
+                      - monitoring
+                    description: 'Diagnostics Testing type.'
+                    example: scheduled
+                  - nxos_name: failureSeverity
+                    tf_name: gold_event_severity
+                    type: String
+                    enum_values:
+                      - minor
+                      - moderate
+                      - major
+                    description: 'Diag failure severity level.'
+                    example: major
+                  - nxos_name: consectiFailCnt
+                    tf_name: gold_event_consecutive_failures
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Diag consecutive Failure count.'
+                    example: 2
+              - class_name: evmsEventInternalLinkFlapUnTagged
+                doc_path: System/evms:EventInternalLinkFlapUnTagged/
+                rn: internallinkflap
+                type: single
+                tf_name: internal_link_flap_event
+                description: 'Internal link flap event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: count
+                    tf_name: internal_link_flap_event_count
+                    type: Int64
+                    min_int: 0
+                    max_int: 65000
+                    description: 'Integer number to be used as count.'
+                    example: 2
+                  - nxos_name: time
+                    tf_name: internal_link_flap_event_time
+                    type: Int64
+                    min_int: -1
+                    max_int: 10000000
+                    description: 'Time interval within which the events need to happen.'
+                    example: 60
+              - class_name: evmsEventMemoryUnTagged
+                doc_path: System/evms:EventMemoryUnTagged/
+                rn: memory
+                type: single
+                tf_name: memory_event
+                description: 'Memory level event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: memLevels
+                    tf_name: memory_event_level
+                    type: String
+                    enum_values:
+                      - minor
+                      - severe
+                      - critical
+                    description: 'Specify memory level: minor, major, critical.'
+                    example: critical
+              - class_name: evmsEventModuleUnTagged
+                doc_path: System/evms:EventModuleUnTagged/
+                rn: module
+                type: single
+                tf_name: module_event
+                description: 'Untagged module event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: moduleNumber
+                    tf_name: module_event_module
+                    type: String
+                    description: 'Module number for event module.'
+                    example: '1'
+                  - nxos_name: moduleStatus
+                    tf_name: module_event_status
+                    type: String
+                    enum_values:
+                      - online
+                      - offline
+                      - any
+                    description: 'Module status for event module.'
+                    example: online
+              - class_name: evmsEventModuleFailureUnTagged
+                doc_path: System/evms:EventModuleFailureUnTagged/
+                rn: modulefailure
+                type: single
+                tf_name: module_failure_event
+                description: 'Untagged module failure event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: moduleNumber
+                    tf_name: module_failure_event_module
+                    type: String
+                    description: 'Module number for event module-failure.'
+                    example: '1'
+                  - nxos_name: errType
+                    tf_name: module_failure_event_error_type
+                    type: String
+                    enum_values:
+                      - unexpected-registration
+                      - registration-failure
+                      - registration-timeout
+                      - runtime-diag-failure
+                      - runtime-diag-timeout
+                      - lc-ready-timeout
+                      - lc-failed
+                      - lc-not-responding
+                      - lc-sw-failure
+                      - image-upgrade-failed
+                      - sequence-timeout
+                      - hitless-upgrade-reg-failure
+                      - hitless-upgrade-diag-failure
+                      - hitless-upgrade-procmgr-notif
+                      - hitless-upgrade-seq-timeout
+                      - upgrade-srg-not-compatible
+                      - hitless-upgrade-failure
+                      - srg-info-resp-timeout
+                      - image-download-failed
+                      - insertion-seq-failure
+                      - addon-sequence-failure
+                      - any
+                    description: 'Error type for event module-failure.'
+                    example: lc-failed
+                  - nxos_name: count
+                    tf_name: module_failure_event_count
+                    type: Int64
+                    min_int: 0
+                    max_int: 65000
+                    description: 'Integer number to be used as count.'
+                    example: 2
+                  - nxos_name: time
+                    tf_name: module_failure_event_time
+                    type: Int64
+                    min_int: -1
+                    max_int: 10000000
+                    description: 'Time interval within which the events need to happen.'
+                    example: 60
+              - class_name: evmsEventNoneUnTagged
+                doc_path: System/evms:EventNoneUnTagged/
+                rn: none
+                type: single
+                tf_name: none_event
+                description: 'Untagged none event specification to run the policy manually. Requires the `evmed` feature.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: eventnonestatus
+                    tf_name: none_event
+                    type: Bool
+                    description: 'Manually run policy untagged event with none.'
+                    example: true
+              - class_name: evmsEventOirUnTagged
+                doc_path: System/evms:EventOirUnTagged/
+                rn: oir
+                type: single
+                tf_name: oir_event
+                description: 'Untagged OIR (Online Insertion and Removal) event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: deviceType
+                    tf_name: oir_event_device_type
+                    type: String
+                    enum_values:
+                      - fan
+                      - module
+                      - powersupply
+                    description: 'Device type for event oir.'
+                    example: fan
+                  - nxos_name: oirType
+                    tf_name: oir_event_type
+                    type: String
+                    enum_values:
+                      - insert
+                      - remove
+                      - anyoir
+                    description: 'Oir type for event oir.'
+                    example: remove
+                  - nxos_name: deviceNumber
+                    tf_name: oir_event_device_number
+                    type: Int64
+                    min_int: 0
+                    max_int: 32
+                    description: 'Device number matching with device type.'
+                    example: 1
+              - class_name: evmsEventPolicyDefault
+                doc_path: System/evms:EventPolicyDefault/
+                rn: policydefault
+                type: single
+                tf_name: policy_default_event
+                description: 'Use the event in the system policy being overridden. Only applicable to applets overriding a system policy.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: disable
+                    tf_name: policy_default_event_disable
+                    type: Bool
+                    description: 'Disable all events.'
+                    example: true
+                  - nxos_name: occurences
+                    tf_name: policy_default_event_occurrences
+                    type: Int64
+                    min_int: 1
+                    max_int: 65000
+                    description: 'Number of occurances.'
+                    example: 2
+                  - nxos_name: timeInterval
+                    tf_name: policy_default_event_time_interval
+                    type: Int64
+                    min_int: 0
+                    max_int: 32768
+                    description: 'Time interval in seconds.'
+                    example: 60
+              - class_name: evmsEventPowerOverBudgetUnTagged
+                doc_path: System/evms:EventPowerOverBudgetUnTagged/
+                rn: poweroverbudget
+                type: single
+                tf_name: power_over_budget_event
+                description: 'Power over budget event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: eventpoweroverbudgetstatus
+                    tf_name: power_over_budget_event
+                    type: Bool
+                    description: 'Event power over budget.'
+                    example: true
+              - class_name: evmsEventSnmpUnTagged
+                doc_path: System/evms:EventSnmpUnTagged/
+                rn: snmp
+                type: single
+                tf_name: snmp_event
+                description: 'Untagged SNMP event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: oid
+                    tf_name: snmp_event_oid
+                    type: String
+                    description: 'Oid of data element in dot notation.'
+                    example: 1.3.6.1.2.1.1.3.0
+                  - nxos_name: getType
+                    tf_name: snmp_event_get_type
+                    type: String
+                    enum_values:
+                      - none
+                      - exact
+                      - next
+                    description: 'The type of SNMP get operation.'
+                    example: exact
+                  - nxos_name: entryOp
+                    tf_name: snmp_event_entry_operator
+                    type: String
+                    enum_values:
+                      - none
+                      - gt
+                      - ge
+                      - eq
+                      - ne
+                      - lt
+                      - le
+                    description: 'Entry comparison operator.'
+                    example: lt
+                  - nxos_name: entryVal
+                    tf_name: snmp_event_entry_value
+                    type: Int64
+                    min_int: 0
+                    description: 'Value to compare with the current polled value.'
+                    example: 1
+                  - nxos_name: exitComb
+                    tf_name: snmp_event_exit_combination
+                    type: String
+                    enum_values:
+                      - none
+                      - or
+                      - and
+                    description: 'Exit criterion combination.'
+                    example: or
+                  - nxos_name: exitOp
+                    tf_name: snmp_event_exit_operator
+                    type: String
+                    enum_values:
+                      - none
+                      - gt
+                      - ge
+                      - eq
+                      - ne
+                      - lt
+                      - le
+                    description: 'Exit comparison operator.'
+                    example: gt
+                  - nxos_name: exitVal
+                    tf_name: snmp_event_exit_value
+                    type: Int64
+                    min_int: 0
+                    description: 'Value to compare with the current polled value.'
+                    example: 2
+                  - nxos_name: exitOp1
+                    tf_name: snmp_event_exit_operator_1
+                    type: String
+                    enum_values:
+                      - none
+                      - gt
+                      - ge
+                      - eq
+                      - ne
+                      - lt
+                      - le
+                    description: 'Exit comparison operator.'
+                    example: ge
+                  - nxos_name: exitVal1
+                    tf_name: snmp_event_exit_value_1
+                    type: Int64
+                    min_int: 0
+                    description: 'Value to compare with the current polled value.'
+                    example: 3
+                  - nxos_name: exitTimeMin
+                    tf_name: snmp_event_exit_time_minimum
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Min Exit time value required.'
+                    example: 10
+                  - nxos_name: exitTimeMax
+                    tf_name: snmp_event_exit_time_maximum
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Max Exit time value required.'
+                    example: 20
+                  - nxos_name: pollIntervalMin
+                    tf_name: snmp_event_poll_interval_minimum
+                    type: Int64
+                    min_int: 1
+                    max_int: 2147483647
+                    description: 'Min Polling time interval.'
+                    example: 30
+                  - nxos_name: pollIntervalMax
+                    tf_name: snmp_event_poll_interval_maximum
+                    type: Int64
+                    min_int: 1
+                    max_int: 2147483647
+                    description: 'Max Polling time interval.'
+                    example: 60
+              - class_name: evmsEventSyslogUnTagged
+                doc_path: System/evms:EventSyslogUnTagged/
+                rn: syslog
+                type: single
+                tf_name: syslog_event
+                description: 'Untagged syslog event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: pattern
+                    tf_name: syslog_event_pattern
+                    type: String
+                    description: 'Syslog pattern text of the syslog message.'
+                    example: terraform-test-pattern
+                  - nxos_name: priority
+                    tf_name: syslog_event_priority
+                    type: String
+                    enum_values:
+                      - '0'
+                      - '1'
+                      - '2'
+                      - '3'
+                      - '4'
+                      - '5'
+                      - '6'
+                      - '7'
+                      - alerts
+                      - critical
+                      - debugging
+                      - emergencies
+                      - errors
+                      - informational
+                      - notifications
+                      - warnings
+                      - none
+                    description: 'Priority of the syslog message.'
+                    example: alerts
+                  - nxos_name: occurences
+                    tf_name: syslog_event_occurrences
+                    type: Int64
+                    min_int: 1
+                    max_int: 65000
+                    description: 'Number of occurances.'
+                    example: 2
+                  - nxos_name: timeInterval
+                    tf_name: syslog_event_time_interval
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Time interval in seconds.'
+                    example: 60
+              - class_name: evmsEventSysmgrMemAlertUnTagged
+                doc_path: System/evms:EventSysmgrMemAlertUnTagged/
+                rn: sysmgrmemalert
+                type: single
+                tf_name: sysmgr_memory_alert_event
+                description: 'System manager memory alert event specification. Only applicable to applets overriding a system policy.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: module
+                    tf_name: sysmgr_memory_alert_event_module
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'module number optional.'
+                    example: 1
+                  - nxos_name: minor
+                    tf_name: sysmgr_memory_alert_event_minor
+                    type: Int64
+                    min_int: 0
+                    max_int: 99
+                    description: 'Minor memory threshold between 1 to 99.'
+                    example: 70
+                  - nxos_name: major
+                    tf_name: sysmgr_memory_alert_event_major
+                    type: Int64
+                    min_int: 0
+                    max_int: 99
+                    description: 'Major memory threshold between 1 to 99.'
+                    example: 80
+                  - nxos_name: clear
+                    tf_name: sysmgr_memory_alert_event_clear
+                    type: Int64
+                    min_int: 0
+                    max_int: 99
+                    description: 'clear memory threshold between 1 to 99.'
+                    example: 60
+              - class_name: evmsEventSysmgrSwitchoverUnTagged
+                doc_path: System/evms:EventSysmgrSwitchoverUnTagged/
+                rn: sysmgrswitchover
+                type: single
+                tf_name: sysmgr_switchover_event
+                description: 'System manager switchover event specification. Only applicable to applets overriding a system policy.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: count
+                    tf_name: sysmgr_switchover_event_count
+                    type: Int64
+                    min_int: 0
+                    max_int: 65000
+                    description: 'Expected Number of switch over to trigger event [1-65000].'
+                    example: 3
+                  - nxos_name: time
+                    tf_name: sysmgr_switchover_event_time
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Expected Time interval to trigger event, in seconds [1-4294967295].'
+                    example: 120
+              - class_name: evmsEventTemperatureUnTagged
+                doc_path: System/evms:EventTemperatureUnTagged/
+                rn: temperature
+                type: single
+                tf_name: temperature_event
+                description: 'Temperature event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: moduleNumber
+                    tf_name: temperature_event_module
+                    type: String
+                    description: 'Specify module number, 0|all for all module or interger range.'
+                    example: '1'
+                  - nxos_name: sensorNumber
+                    tf_name: temperature_event_sensor
+                    type: String
+                    description: 'Specify sensor number range.'
+                    example: '1'
+                  - nxos_name: thresholdLevel
+                    tf_name: temperature_event_threshold
+                    type: String
+                    enum_values:
+                      - major
+                      - minor
+                      - any
+                    description: 'Specify threshold level: major, minor or any.'
+                    example: major
+              - class_name: evmsEventTimerUnTagged
+                doc_path: System/evms:EventTimerUnTagged/
+                rn: timer
+                type: single
+                tf_name: timer_event
+                description: 'Untagged timer event specification. Requires the `evmed` feature.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: name
+                    tf_name: timer_event_name
+                    type: String
+                    description: 'Name of the timer(cron timer or absolute timer or watchdog time).'
+                    example: TF_TIMER
+                  - nxos_name: absoluteTime
+                    tf_name: timer_event_absolute_time
+                    type: String
+                    description: 'The value of Event absolute time in seconds.'
+                    example: '1800000000'
+                  - nxos_name: countdownTime
+                    tf_name: timer_event_countdown_time
+                    type: String
+                    description: 'The value of Event countdown time in seconds.'
+                    example: '3600'
+                  - nxos_name: cronTime
+                    tf_name: timer_event_cron_time
+                    type: String
+                    description: 'The value of Event cron time in [min hour dom month dow] format.'
+                    example: '0 * * * *'
+                  - nxos_name: watchdogTime
+                    tf_name: timer_event_watchdog_time
+                    type: String
+                    description: 'The value of Event watchdog time in seconds.'
+                    example: '3600'
+              - class_name: evmsEventTrackUnTagged
+                doc_path: System/evms:EventTrackUnTagged/
+                rn: track
+                type: single
+                tf_name: track_event
+                description: 'Untagged track event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: trackId
+                    tf_name: track_event_id
+                    type: Int64
+                    min_int: 0
+                    max_int: 512
+                    description: 'Track object ID Number.'
+                    example: 10
+                  - nxos_name: trackStateOp
+                    tf_name: track_event_state
+                    type: String
+                    enum_values:
+                      - down
+                      - up
+                      - any
+                    description: 'track event specification.'
+                    example: down
+              - class_name: evmsEventUfdm
+                doc_path: System/evms:EventUfdm/
+                rn: ufdm
+                type: single
+                tf_name: ufdm_event
+                description: 'UFDM (Unicast Forwarding Distribution Manager) FIB event specification.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: eventFib
+                    tf_name: ufdm_event_fib
+                    type: String
+                    enum_values:
+                      - undefined
+                      - inconsistent
+                      - missing
+                      - extra
+                      - adjacency
+                      - tcam-resource
+                    description: 'Event-manager Applet Event Fib type.'
+                    example: inconsistent
+              - class_name: evmsTag
+                doc_path: System/evms:Tag/
+                rn: tag
+                type: single
+                tf_name: correlation
+                description: 'Correlation of the tagged events.'
+                recreate_on_change: true
+                attributes:
+                  - nxos_name: eventTag1
+                    tf_name: correlation_tag_1
+                    type: String
+                    description: 'Tag-1 to correlate.'
+                    example: TF_CLI
+                  - nxos_name: correlateTag1
+                    tf_name: correlation_operator_1
+                    type: String
+                    enum_values:
+                      - none
+                      - and
+                      - andnot
+                      - or
+                    description: 'Correlate-1 operator.'
+                    example: and
+                  - nxos_name: eventTag2
+                    tf_name: correlation_tag_2
+                    type: String
+                    description: 'Tag-2 to correlate.'
+                    example: TF_SYSLOG
+                  - nxos_name: correlateTag2
+                    tf_name: correlation_operator_2
+                    type: String
+                    enum_values:
+                      - none
+                      - and
+                      - andnot
+                      - or
+                    description: 'Correlate-2 operator.'
+                    example: and
+                  - nxos_name: eventTag3
+                    tf_name: correlation_tag_3
+                    type: String
+                    description: 'Tag-3 to correlate.'
+                    example: TF_COUNTER
+                  - nxos_name: correlateTag3
+                    tf_name: correlation_operator_3
+                    type: String
+                    enum_values:
+                      - none
+                      - and
+                      - andnot
+                      - or
+                    description: 'Correlate-3 operator.'
+                    example: and
+                  - nxos_name: eventTag4
+                    tf_name: correlation_tag_4
+                    type: String
+                    description: 'Tag-4 to correlate.'
+                    example: TF_SNMP
+                  - nxos_name: occurences
+                    tf_name: correlation_occurrences
+                    type: Int64
+                    min_int: 1
+                    max_int: 4294967295
+                    description: 'Number of occurences.'
+                    example: 2
+                  - nxos_name: timeInterval
+                    tf_name: correlation_time_interval
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Time interval.'
+                    example: 60
+              - class_name: evmsEventApplication
+                doc_path: System/evms:EventApplication/
+                rn: applicationtag-[%s]
+                type: list
+                tf_name: application_events
+                description: 'List of tagged application event specifications. Requires the `evmed` feature.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: eventTag
+                    tf_name: tag
+                    type: String
+                    id: true
+                    description: 'Event tag specifier, uniquely defines an event.'
+                    example: TF_APPLICATION
+                  - nxos_name: subSystemId
+                    tf_name: subsystem_id
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Sub-system ID that will publish the application event.'
+                    example: 798
+                  - nxos_name: eventType
+                    tf_name: type
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Event type within the specified sub-system.'
+                    example: 1
+              - class_name: evmsEventCdp
+                doc_path: System/evms:EventCdp/
+                rn: cdptag-[%s]
+                type: list
+                tf_name: cdp_events
+                description: 'List of tagged CDP event specifications.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: eventTag
+                    tf_name: tag
+                    type: String
+                    id: true
+                    description: 'Event tag specifier, uniquely defines an event.'
+                    example: TF_CDP
+                  - nxos_name: intf
+                    tf_name: interface
+                    type: String
+                    description: 'Interface for CDP event manager config.'
+                    example: eth1/10
+                  - nxos_name: cacheEntryOp
+                    tf_name: operation
+                    type: String
+                    enum_values:
+                      - all
+                      - add
+                      - update
+                      - delete
+                    description: 'cdp event specification.'
+                    example: add
+              - class_name: evmsEventCli
+                doc_path: System/evms:EventCli/
+                rn: clitag-[%s]
+                type: list
+                tf_name: cli_events
+                description: 'List of tagged CLI event specifications.'
+                attributes:
+                  - nxos_name: eventTag
+                    tf_name: tag
+                    type: String
+                    id: true
+                    description: 'Event tag specifier, uniquely defines an event.'
+                    example: TF_CLI
+                  - nxos_name: match
+                    tf_name: match
+                    type: String
+                    description: 'CLI regular expression to be used for matching.'
+                    example: show terraform
+                  - nxos_name: occurrences
+                    tf_name: occurrences
+                    type: Int64
+                    min_int: 1
+                    max_int: 65000
+                    description: 'Enter an integer to be used as count.'
+                    example: 2
+                    exclude_test: true
+                  - nxos_name: timeInterval
+                    tf_name: time_interval
+                    type: Int64
+                    min_int: 0
+                    max_int: 10000000
+                    description: 'Time interval in seconds.'
+                    example: 10
+                    exclude_test: true
+              - class_name: evmsEventCounter
+                doc_path: System/evms:EventCounter/
+                rn: countertag-[%s]
+                type: list
+                tf_name: counter_events
+                description: 'List of tagged counter event specifications.'
+                attributes:
+                  - nxos_name: eventTag
+                    tf_name: tag
+                    type: String
+                    id: true
+                    description: 'Event tag specifier, uniquely defines an event.'
+                    example: TF_COUNTER
+                  - nxos_name: counterName
+                    tf_name: name
+                    type: String
+                    description: 'Name of the counter.'
+                    example: TF_COUNTER
+                  - nxos_name: entryOp
+                    tf_name: entry_operator
+                    type: String
+                    enum_values:
+                      - gt
+                      - ge
+                      - eq
+                      - ne
+                      - lt
+                      - le
+                    description: 'Specify the comparison operator.'
+                    example: gt
+                  - nxos_name: entryValue
+                    tf_name: entry_value
+                    type: Int64
+                    min_int: 0
+                    max_int: 2147483647
+                    description: 'Specify the value for comparison with the counter Value.'
+                    example: 5
+                  - nxos_name: exitOp
+                    tf_name: exit_operator
+                    type: String
+                    enum_values:
+                      - gt
+                      - ge
+                      - eq
+                      - ne
+                      - lt
+                      - le
+                    description: 'Specify the comparison operator.'
+                    example: lt
+                  - nxos_name: exitValue
+                    tf_name: exit_value
+                    type: Int64
+                    min_int: 0
+                    max_int: 2147483647
+                    description: 'Specify the value for comparison with the counter Value.'
+                    example: 2
+              - class_name: evmsEventModule
+                doc_path: System/evms:EventModule/
+                rn: moduletag-[%s]
+                type: list
+                tf_name: module_events
+                description: 'List of tagged module event specifications.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: eventTag
+                    tf_name: tag
+                    type: String
+                    id: true
+                    description: 'Event tag specifier, uniquely defines an event.'
+                    example: TF_MODULE
+                  - nxos_name: moduleNumber
+                    tf_name: module
+                    type: String
+                    description: 'Module number for event module.'
+                    example: '1'
+                  - nxos_name: moduleStatus
+                    tf_name: status
+                    type: String
+                    enum_values:
+                      - online
+                      - offline
+                      - any
+                    description: 'Module status for event module.'
+                    example: online
+              - class_name: evmsEventModuleFailure
+                doc_path: System/evms:EventModuleFailure/
+                rn: modulefailuretag-[%s]
+                type: list
+                tf_name: module_failure_events
+                description: 'List of tagged module failure event specifications.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: eventTag
+                    tf_name: tag
+                    type: String
+                    id: true
+                    description: 'Event tag specifier, uniquely defines an event.'
+                    example: TF_MODULE_FAILURE
+                  - nxos_name: moduleNumber
+                    tf_name: module
+                    type: String
+                    description: 'Module number for event module-failure.'
+                    example: '1'
+                  - nxos_name: errType
+                    tf_name: error_type
+                    type: String
+                    enum_values:
+                      - unexpected-registration
+                      - registration-failure
+                      - registration-timeout
+                      - runtime-diag-failure
+                      - runtime-diag-timeout
+                      - lc-ready-timeout
+                      - lc-failed
+                      - lc-not-responding
+                      - lc-sw-failure
+                      - image-upgrade-failed
+                      - sequence-timeout
+                      - hitless-upgrade-reg-failure
+                      - hitless-upgrade-diag-failure
+                      - hitless-upgrade-procmgr-notif
+                      - hitless-upgrade-seq-timeout
+                      - upgrade-srg-not-compatible
+                      - hitless-upgrade-failure
+                      - srg-info-resp-timeout
+                      - image-download-failed
+                      - insertion-seq-failure
+                      - addon-sequence-failure
+                      - any
+                    description: 'Error type for event module-failure.'
+                    example: lc-failed
+                  - nxos_name: count
+                    tf_name: count
+                    type: Int64
+                    min_int: 0
+                    max_int: 65000
+                    description: 'Integer number to be used as count.'
+                    example: 2
+                  - nxos_name: time
+                    tf_name: time
+                    type: Int64
+                    min_int: -1
+                    max_int: 10000000
+                    description: 'Time interval within which the events need to happen.'
+                    example: 60
+              - class_name: evmsEventNone
+                doc_path: System/evms:EventNone/
+                rn: nonetag-[%s]
+                type: list
+                tf_name: none_events
+                description: 'List of tagged none event specifications to run the policy manually. Requires the `evmed` feature.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: eventTag
+                    tf_name: tag
+                    type: String
+                    id: true
+                    description: 'Event tag specifier, uniquely defines an event.'
+                    example: TF_NONE
+                  - nxos_name: eventnonestatus
+                    tf_name: enabled
+                    type: Bool
+                    description: 'Manually run policy tagged event with none.'
+                    example: true
+              - class_name: evmsEventOir
+                doc_path: System/evms:EventOir/
+                rn: oirtag-[%s]
+                type: list
+                tf_name: oir_events
+                description: 'List of tagged OIR (Online Insertion and Removal) event specifications.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: eventTag
+                    tf_name: tag
+                    type: String
+                    id: true
+                    description: 'Event tag specifier, uniquely defines an event.'
+                    example: TF_OIR
+                  - nxos_name: deviceType
+                    tf_name: device_type
+                    type: String
+                    enum_values:
+                      - fan
+                      - module
+                      - powersupply
+                    description: 'Device type for event oir.'
+                    example: fan
+                  - nxos_name: oirType
+                    tf_name: type
+                    type: String
+                    enum_values:
+                      - insert
+                      - remove
+                      - anyoir
+                    description: 'Oir type for event oir.'
+                    example: remove
+                  - nxos_name: deviceNumber
+                    tf_name: device_number
+                    type: Int64
+                    min_int: 0
+                    max_int: 32
+                    description: 'Device number matching with device type.'
+                    example: 1
+              - class_name: evmsEventSnmp
+                doc_path: System/evms:EventSnmp/
+                rn: snmptag-[%s]
+                type: list
+                tf_name: snmp_events
+                description: 'List of tagged SNMP event specifications.'
+                attributes:
+                  - nxos_name: eventTag
+                    tf_name: tag
+                    type: String
+                    id: true
+                    description: 'Event tag specifier, uniquely defines an event.'
+                    example: TF_SNMP
+                  - nxos_name: oid
+                    tf_name: oid
+                    type: String
+                    description: 'Oid of data element in dot notation.'
+                    example: 1.3.6.1.2.1.1.3.0
+                  - nxos_name: getType
+                    tf_name: get_type
+                    type: String
+                    enum_values:
+                      - none
+                      - exact
+                      - next
+                    description: 'The type of SNMP get operation.'
+                    example: exact
+                  - nxos_name: entryOp
+                    tf_name: entry_operator
+                    type: String
+                    enum_values:
+                      - none
+                      - gt
+                      - ge
+                      - eq
+                      - ne
+                      - lt
+                      - le
+                    description: 'Entry comparison operator.'
+                    example: lt
+                  - nxos_name: entryVal
+                    tf_name: entry_value
+                    type: Int64
+                    min_int: 0
+                    description: 'Value to compare with the current polled value.'
+                    example: 1
+                  - nxos_name: exitComb
+                    tf_name: exit_combination
+                    type: String
+                    enum_values:
+                      - none
+                      - or
+                      - and
+                    description: 'Exit criterion combination.'
+                    example: or
+                    exclude_test: true
+                  - nxos_name: exitOp
+                    tf_name: exit_operator
+                    type: String
+                    enum_values:
+                      - none
+                      - gt
+                      - ge
+                      - eq
+                      - ne
+                      - lt
+                      - le
+                    description: 'Exit comparison operator.'
+                    example: gt
+                  - nxos_name: exitVal
+                    tf_name: exit_value
+                    type: Int64
+                    min_int: 0
+                    description: 'Value to compare with the current polled value.'
+                    example: 2
+                  - nxos_name: exitOp1
+                    tf_name: exit_operator_1
+                    type: String
+                    enum_values:
+                      - none
+                      - gt
+                      - ge
+                      - eq
+                      - ne
+                      - lt
+                      - le
+                    description: 'Exit comparison operator.'
+                    example: ge
+                    exclude_test: true
+                  - nxos_name: exitVal1
+                    tf_name: exit_value_1
+                    type: Int64
+                    min_int: 0
+                    description: 'Value to compare with the current polled value.'
+                    example: 3
+                    exclude_test: true
+                  - nxos_name: exitTimeMin
+                    tf_name: exit_time_minimum
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Min Exit time value required.'
+                    example: 10
+                    exclude_test: true
+                  - nxos_name: exitTimeMax
+                    tf_name: exit_time_maximum
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Max Exit time value required.'
+                    example: 20
+                    exclude_test: true
+                  - nxos_name: pollIntervalMin
+                    tf_name: poll_interval_minimum
+                    type: Int64
+                    min_int: 1
+                    max_int: 2147483647
+                    description: 'Min Polling time interval.'
+                    example: 30
+                  - nxos_name: pollIntervalMax
+                    tf_name: poll_interval_maximum
+                    type: Int64
+                    min_int: 1
+                    max_int: 2147483647
+                    description: 'Max Polling time interval.'
+                    example: 60
+              - class_name: evmsEventSyslog
+                doc_path: System/evms:EventSyslog/
+                rn: syslogtag-[%s]
+                type: list
+                tf_name: syslog_events
+                description: 'List of tagged syslog event specifications.'
+                attributes:
+                  - nxos_name: eventTag
+                    tf_name: tag
+                    type: String
+                    id: true
+                    description: 'Event tag specifier, uniquely defines an event.'
+                    example: TF_SYSLOG
+                  - nxos_name: pattern
+                    tf_name: pattern
+                    type: String
+                    description: 'Syslog pattern text of the syslog message.'
+                    example: terraform-test-pattern
+                  - nxos_name: priority
+                    tf_name: priority
+                    type: String
+                    enum_values:
+                      - '0'
+                      - '1'
+                      - '2'
+                      - '3'
+                      - '4'
+                      - '5'
+                      - '6'
+                      - '7'
+                      - alerts
+                      - critical
+                      - debugging
+                      - emergencies
+                      - errors
+                      - informational
+                      - notifications
+                      - warnings
+                      - none
+                    description: 'Priority of the syslog message.'
+                    example: alerts
+                  - nxos_name: occurences
+                    tf_name: occurrences
+                    type: Int64
+                    min_int: 1
+                    max_int: 65000
+                    description: 'Number of occurances.'
+                    example: 2
+                    exclude_test: true
+                  - nxos_name: timeInterval
+                    tf_name: time_interval
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Time interval in seconds.'
+                    example: 60
+                    exclude_test: true
+              - class_name: evmsEventTimer
+                doc_path: System/evms:EventTimer/
+                rn: timertag-[%s]
+                type: list
+                tf_name: timer_events
+                description: 'List of tagged timer event specifications. Requires the `evmed` feature.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: eventTag
+                    tf_name: tag
+                    type: String
+                    id: true
+                    description: 'Event tag specifier, uniquely defines an event.'
+                    example: TF_TIMER
+                  - nxos_name: name
+                    tf_name: name
+                    type: String
+                    description: 'Name of the timer(cron timer or absolute timer or watchdog time).'
+                    example: TF_TIMER
+                  - nxos_name: absoluteTime
+                    tf_name: absolute_time
+                    type: String
+                    description: 'The value of Event absolute time in seconds.'
+                    example: '1800000000'
+                  - nxos_name: countdownTime
+                    tf_name: countdown_time
+                    type: String
+                    description: 'The value of Event countdown time in seconds.'
+                    example: '3600'
+                  - nxos_name: cronTime
+                    tf_name: cron_time
+                    type: String
+                    description: 'The value of Event cron time in [min hour dom month dow] format.'
+                    example: '0 * * * *'
+                  - nxos_name: watchdogTime
+                    tf_name: watchdog_time
+                    type: String
+                    description: 'The value of Event watchdog time in seconds.'
+                    example: '3600'
+              - class_name: evmsEventTrack
+                doc_path: System/evms:EventTrack/
+                rn: tracktag-[%s]
+                type: list
+                tf_name: track_events
+                description: 'List of tagged track event specifications.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: eventTag
+                    tf_name: tag
+                    type: String
+                    id: true
+                    description: 'Event tag specifier, uniquely defines an event.'
+                    example: TF_TRACK
+                  - nxos_name: trackId
+                    tf_name: id
+                    type: Int64
+                    min_int: 0
+                    max_int: 512
+                    description: 'Track object ID Number.'
+                    example: 10
+                  - nxos_name: trackStateOp
+                    tf_name: state
+                    type: String
+                    enum_values:
+                      - down
+                      - up
+                      - any
+                    description: 'track event specification.'
+                    example: down
+          - class_name: evmsAction
+            doc_path: System/evms:Action/
+            rn: action-[%s]
+            type: list
+            tf_name: actions
+            description: 'List of applet actions.'
+            recreate_on_change: true
+            attributes:
+              - nxos_name: actionLabel
+                tf_name: label
+                type: String
+                id: true
+                description: 'Specify action label.'
+                example: '1.0'
+            example_entries:
+              - label: '2.0'
+                counter_name: TF_COUNTER
+                counter_operation: inc
+                counter_value: '1'
+              - label: '3.0'
+                event_default: true
+              - label: '4.0'
+                exception_log_module: '1'
+                exception_log_syserr: '0x1'
+                exception_log_device_id: '1'
+                exception_log_error_type: '1'
+                exception_log_error_code: '1'
+                exception_log_phy_layer: '1'
+                exception_log_ports: '1'
+                exception_log_hard_error: soft_error
+                exception_log_description: Terraform
+              - label: '5.0'
+                publish_event_subsystem_id: 798
+                publish_event_type: 1
+                publish_event_argument_1: a
+                publish_event_argument_2: b
+                publish_event_argument_3: c
+                publish_event_argument_4: d
+              - label: '6.0'
+                snmp_trap: true
+                snmp_trap_integer_data_1: '1'
+                snmp_trap_integer_data_2: '2'
+                snmp_trap_string_data: Terraform
+              - label: '7.0'
+                syslog_priority: alerts
+                syslog_message: Terraform
+            child_classes:
+              - class_name: evmsActionCLI
+                doc_path: System/evms:ActionCLI/
+                rn: cli
+                type: single
+                tf_name: cli
+                description: 'VSH CLI action.'
+                attributes:
+                  - nxos_name: cliCommand
+                    tf_name: cli_command
+                    type: String
+                    description: 'Enter the VSH command.'
+                    example: show clock
+                  - nxos_name: execModule
+                    tf_name: cli_local
+                    type: Bool
+                    description: 'Execute the action on the module where event happens.'
+                    example: true
+              - class_name: evmsActionCollect
+                doc_path: System/evms:ActionCollect/
+                rn: collect
+                type: single
+                tf_name: collect
+                description: 'Collect debugging information using a YAML file. Only allowed as the first action of an applet.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: yamlFile
+                    tf_name: collect_yaml_file
+                    type: String
+                    description: 'Enter the YAML input file.'
+                    example: bootflash:collect.yaml
+                  - nxos_name: componentName
+                    tf_name: collect_component
+                    type: String
+                    description: 'Enter the component for tech-support collection.'
+                    example: bgp
+                  - nxos_name: rateLimit
+                    tf_name: collect_rate_limit
+                    type: Int64
+                    min_int: 0
+                    max_int: 65000
+                    description: 'Limit trigger based collection for a period of time.'
+                    example: 60
+                  - nxos_name: maxTrigger
+                    tf_name: collect_max_triggers
+                    type: Int64
+                    min_int: 0
+                    max_int: 65000
+                    description: 'Limit the number of times the system policy is triggered.'
+                    example: 5
+                  - nxos_name: purgeTime
+                    tf_name: collect_purge_time
+                    type: Int64
+                    min_int: 2880
+                    max_int: 65000
+                    description: 'Change the time period for which older files are purged.'
+                    example: 3000
+                  - nxos_name: yamlStatus
+                    tf_name: collect_status
+                    type: String
+                    enum_values:
+                      - enabled
+                      - disabled
+                    description: 'Status of the collect action. `disabled` cannot be combined with other collect attributes.'
+                    example: disabled
+                    exclude_test: true
+              - class_name: evmsActionCounter
+                doc_path: System/evms:ActionCounter/
+                rn: counter
+                type: single
+                tf_name: counter
+                description: 'Modifies the counter based on configured value and operation.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: counterName
+                    tf_name: counter_name
+                    type: String
+                    description: 'Name of the action counter.'
+                    example: TF_COUNTER
+                  - nxos_name: counterOp
+                    tf_name: counter_operation
+                    type: String
+                    enum_values:
+                      - nop
+                      - set
+                      - inc
+                      - dec
+                    description: 'Specify the operator to be applied.'
+                    example: inc
+                  - nxos_name: counterValue
+                    tf_name: counter_value
+                    type: String
+                    description: 'Specify the value to be applied to the counter.'
+                    example: '1'
+              - class_name: evmsActionEventDefault
+                doc_path: System/evms:ActionEventDefault/
+                rn: eventdefault
+                type: single
+                tf_name: event_default
+                description: 'Do default action for the event.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: actioneventdefaultstatus
+                    tf_name: event_default
+                    type: Bool
+                    description: 'Do default action for the event.'
+                    example: true
+              - class_name: evmsActionExceptionLog
+                doc_path: System/evms:ActionExceptionLog/
+                rn: exceptionlog
+                type: single
+                tf_name: exception_log
+                description: 'Exception log action for modules.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: moduleNumber
+                    tf_name: exception_log_module
+                    type: String
+                    description: 'Specify module number: interger module number or a $predefine environment name.'
+                    example: '1'
+                  - nxos_name: sysErr
+                    tf_name: exception_log_syserr
+                    type: String
+                    description: 'Specify syserr code : hex value or a $predefine environment name.'
+                    example: '0x1'
+                  - nxos_name: devId
+                    tf_name: exception_log_device_id
+                    type: String
+                    description: 'Specify device ID : interger value or a $predefine environment name.'
+                    example: '1'
+                  - nxos_name: errType
+                    tf_name: exception_log_error_type
+                    type: String
+                    description: 'Specify error type : interger value or a $predefine environment name.'
+                    example: '1'
+                  - nxos_name: errCode
+                    tf_name: exception_log_error_code
+                    type: String
+                    description: 'Specify error code : interger value or a $predefine environment name.'
+                    example: '1'
+                  - nxos_name: phyLayer
+                    tf_name: exception_log_phy_layer
+                    type: String
+                    description: 'Specify phy layer : interger value or a $predefine environment name.'
+                    example: '1'
+                  - nxos_name: ports
+                    tf_name: exception_log_ports
+                    type: String
+                    description: 'Specify list of ports.'
+                    example: '1'
+                  - nxos_name: hardError
+                    tf_name: exception_log_hard_error
+                    type: String
+                    enum_values:
+                      - soft_error
+                      - hard_error
+                      - soft_error_resettable
+                      - soft_error_reset_replay_all_cfg
+                      - soft_error_diag_failure
+                    description: 'Specify hard error 0..4.'
+                    example: soft_error
+                  - nxos_name: desc
+                    tf_name: exception_log_description
+                    type: String
+                    description: 'Specify string data for error description.'
+                    example: Terraform
+              - class_name: evmsActionForceShut
+                doc_path: System/evms:ActionForceShut/
+                rn: forceshut
+                type: single
+                tf_name: force_shutdown
+                description: 'Force shutdown action. Excluded from the acceptance tests as it would shut down modules if triggered.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: moduleNumber
+                    tf_name: force_shutdown_module
+                    type: String
+                    description: 'Specify module number: all, interger module number or a $predefine environment name.'
+                    example: '1'
+                  - nxos_name: resetReason
+                    tf_name: force_shutdown_reset_reason
+                    type: String
+                    description: 'Reset reason for action forceshut. Must be enclosed in double quotes.'
+                    example: '"maintenance"'
+              - class_name: evmsActionOverBudgetShut
+                doc_path: System/evms:ActionOverBudgetShut/
+                rn: overbudgetshut
+                type: single
+                tf_name: overbudget_shutdown
+                description: 'Shut down the specified line cards due to power over budget. Excluded from the acceptance tests as it would shut down modules if triggered.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: moduleNumber
+                    tf_name: overbudget_shutdown_module
+                    type: String
+                    description: 'Specify module number: all, interger module number or a $predefine environment name.'
+                    example: '1'
+              - class_name: evmsActionPolicyDefault
+                doc_path: System/evms:ActionPolicyDefault/
+                rn: policydefault
+                type: single
+                tf_name: policy_default
+                description: 'Do default action(s) of the policy being overridden. Only applicable to applets overriding a system policy.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: actionpolicydefaultstatus
+                    tf_name: policy_default
+                    type: Bool
+                    description: 'Do default action(s) of the policy being overridden.'
+                    example: true
+              - class_name: evmsActionPublishEvent
+                doc_path: System/evms:ActionPublishEvent/
+                rn: publishevent
+                type: single
+                tf_name: publish_event
+                description: 'Publish an application specific event. Requires the `evmed` feature.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: subSystemId
+                    tf_name: publish_event_subsystem_id
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Sub-system ID that will publish the application event.'
+                    example: 798
+                  - nxos_name: eventType
+                    tf_name: publish_event_type
+                    type: Int64
+                    min_int: 0
+                    max_int: 4294967295
+                    description: 'Event type within the specified sub-system.'
+                    example: 1
+                  - nxos_name: arg1
+                    tf_name: publish_event_argument_1
+                    type: String
+                    description: 'User specified data to be passed when the event is published(arg1).'
+                    example: a
+                  - nxos_name: arg2
+                    tf_name: publish_event_argument_2
+                    type: String
+                    description: 'User specified data to be passed when the event is published(arg2).'
+                    example: b
+                  - nxos_name: arg3
+                    tf_name: publish_event_argument_3
+                    type: String
+                    description: 'User specified data to be passed when the event is published(arg3).'
+                    example: c
+                  - nxos_name: arg4
+                    tf_name: publish_event_argument_4
+                    type: String
+                    description: 'User specified data to be passed when the event is published(arg4).'
+                    example: d
+              - class_name: evmsActionReload
+                doc_path: System/evms:ActionReload/
+                rn: reload
+                type: single
+                tf_name: reload
+                description: 'Reload module action. Excluded from the acceptance tests as it would reload modules if triggered.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: moduleNumber
+                    tf_name: reload_module
+                    type: String
+                    description: 'Specify module number: all, interger module number or a $predefine environment name.'
+                    example: '1'
+              - class_name: evmsActionSnmpTrap
+                doc_path: System/evms:ActionSnmpTrap/
+                rn: snmptrap
+                type: single
+                tf_name: snmp_trap
+                description: 'Send out an SNMP trap.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: trapstatus
+                    tf_name: snmp_trap
+                    type: Bool
+                    description: 'Enable or Disable snmp trap.'
+                    example: true
+                  - nxos_name: integerData1
+                    tf_name: snmp_trap_integer_data_1
+                    type: String
+                    description: 'Integer data1 to be included in the payload.'
+                    example: '1'
+                  - nxos_name: integerData2
+                    tf_name: snmp_trap_integer_data_2
+                    type: String
+                    description: 'Integer data2 to be included in the payload.'
+                    example: '2'
+                  - nxos_name: stringData
+                    tf_name: snmp_trap_string_data
+                    type: String
+                    description: 'String data to BE included in the payload.'
+                    example: Terraform
+              - class_name: evmsActionSyslog
+                doc_path: System/evms:ActionSyslog/
+                rn: syslog
+                type: single
+                tf_name: syslog
+                description: 'Generate a syslog message.'
+                exclude_test: true
+                attributes:
+                  - nxos_name: priority
+                    tf_name: syslog_priority
+                    type: String
+                    description: 'Priority of the syslog message.'
+                    example: alerts
+                  - nxos_name: message
+                    tf_name: syslog_message
+                    type: String
+                    description: 'Syslog message text.'
+                    example: Terraform
+test_prerequisites:
+  - dn: sys/fm/evmed
+    class_name: fmEvmed
+    no_delete: true
+    attributes:
+      - name: adminSt
+        value: enabled
+additional_tests:
+  # replace the correlated tagged events of an applet, collect actions and the policy-default action of an overriding applet
+  - |-
+    resource "nxos_eem" "test" {
+      applets = {
+        "TF_APPLET" = {
+          correlation_tag_1      = "TF_APPLICATION"
+          correlation_operator_1 = "and"
+          correlation_tag_2      = "TF_CDP"
+          correlation_operator_2 = "and"
+          correlation_tag_3      = "TF_MODULE"
+          correlation_operator_3 = "and"
+          correlation_tag_4      = "TF_NONE"
+          application_events = {
+            "TF_APPLICATION" = {
+              subsystem_id = 798
+              type         = 1
+            }
+          }
+          cdp_events = {
+            "TF_CDP" = {
+              interface = "eth1/10"
+              operation = "add"
+            }
+          }
+          module_events = {
+            "TF_MODULE" = {
+              module = "1"
+              status = "online"
+            }
+          }
+          none_events = {
+            "TF_NONE" = {
+              enabled = true
+            }
+          }
+          actions = {
+            "1.0" = {
+              collect_yaml_file    = "bootflash:collect.yaml"
+              collect_component    = "bgp"
+              collect_rate_limit   = 60
+              collect_max_triggers = 5
+              collect_purge_time   = 3000
+            }
+            "2.0" = {
+              syslog_message = "Terraform"
+            }
+          }
+        }
+        "TF_APPLET2" = {
+          correlation_tag_1      = "TF_OIR"
+          correlation_operator_1 = "and"
+          correlation_tag_2      = "TF_TIMER"
+          correlation_operator_2 = "and"
+          correlation_tag_3      = "TF_TRACK"
+          oir_events = {
+            "TF_OIR" = {
+              device_type   = "fan"
+              type          = "remove"
+              device_number = 1
+            }
+          }
+          timer_events = {
+            "TF_TIMER" = {
+              name      = "TF_TIMER"
+              cron_time = "0 * * * *"
+            }
+          }
+          track_events = {
+            "TF_TRACK" = {
+              id    = 10
+              state = "down"
+            }
+          }
+          actions = {
+            "1.0" = {
+              collect_status = "disabled"
+            }
+          }
+        }
+        "TF_POLICY_DEFAULT" = {
+          override                           = "__pfm_fanbad_any_singlefan"
+          policy_default_event_occurrences   = 2
+          policy_default_event_time_interval = 60
+          actions = {
+            "1.0" = {
+              policy_default = true
+            }
+          }
+        }
+      }
+      depends_on = [nxos_dme.PreReq0]
+    }

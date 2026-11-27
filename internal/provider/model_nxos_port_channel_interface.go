@@ -201,8 +201,8 @@ var PortChannelInterfaceMinVersions = map[string]helpers.MinVersion{
 }
 
 // PortChannelInterfaceSeparateRequest lists the classes and attributes that are sent in a second request after the rest of the body,
-// together with the values that reset the attributes when they are removed or before their object is deleted, and the
-// attributes identifying the objects of each class.
+// together with the values that reset the attributes when they are removed or before their object is deleted, the
+// attributes identifying the objects of each class, and the classes whose changed objects are deleted and re-created.
 var PortChannelInterfaceSeparateRequest = helpers.SeparateRequest{
 	Classes: []string{"pcVlanMapping"},
 }

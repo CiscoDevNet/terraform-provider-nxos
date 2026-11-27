@@ -70,7 +70,7 @@ func (r *SNMPResource) Metadata(ctx context.Context, req resource.MetadataReques
 func (r *SNMPResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.").AddApiDocumentation("snmpEntity", "System/snmp:Entity/", []string{"snmpInst", "snmpSysInfo", "snmpGlobals", "snmpSourceInterfaceTraps", "snmpSourceInterfaceInforms", "snmpCtx", "snmpCommSecP", "snmpAcl", "snmpLocalUser", "snmpUserGroup", "snmpHost", "snmpUseVrf", "snmpHostSrcInterface", "snmpFilterVrf", "snmpTraps", "snmpTaaa", "snmpServerStateChange", "snmpTbfd", "snmpSessionDown", "snmpSessionUp", "snmpTbridge", "snmpNewRoot", "snmpTopologyChange", "snmpTcallhome", "snmpEventNotify", "snmpSmtpSendFail", "snmpTcfs", "snmpStateChangeNotif", "snmpMergeFailure", "snmpTconfig", "snmpCLIRunningConfigChange", "snmpTentity", "snmpEntityMIBChange", "snmpEntityMIBEnableStatusNotification", "snmpEntityFanStatusChange", "snmpEntityModuleInserted", "snmpEntityModuleRemoved", "snmpEntityModuleStatusChange", "snmpEntityPowerOutChange", "snmpEntityPowerStatusChange", "snmpEntitySensor", "snmpEntityUnrecognisedModule", "snmpTfcdomain", "snmpDmDomainIdNotAssignedNotify", "snmpDmFabricChangeNotify", "snmpDmNewPrincipalSwitchNotify", "snmpTfcns", "snmpTfcs", "snmpTfctrace", "snmpTfdmi", "snmpTfeaturecontrol", "snmpFeatureOpStatusChange", "snmpCiscoFeatOpStatusChange", "snmpTfspf", "snmpTgeneric", "snmpColdStart", "snmpWarmStart", "snmpThsrp", "snmpStateChange", "snmpTip", "snmpTlicense", "snmpNotifyLicenseExpiry", "snmpNotifyLicenseExpiryWarning", "snmpNotifyLicenseFileMissing", "snmpNotifyNoLicenceForFeature", "snmpTlink", "snmpCieLinkDown", "snmpCieLinkUp", "snmpCiscoXcvrMonStatusChange", "snmpCmnMacMoveNotification", "snmpDelayedLinkStateChange", "snmpExtendedLinkDown", "snmpExtendedLinkUp", "snmpLinkDown", "snmpLinkUp", "snmpCErrDisableInterfaceEventRev1", "snmpTlldp", "snmpLldpRemTablesChange", "snmpTmmode", "snmpCseMaintModeChangeNotify", "snmpCseNormalModeChangeNotify", "snmpTmpls", "snmpLdp", "snmpLdpSessiondown", "snmpLdpSessionup", "snmpVpn", "snmpVpnMaxThreshcleared", "snmpVpnMaxThreshexceeded", "snmpVpnMidThreshexceeded", "snmpVpnVrfdown", "snmpVpnVrfup", "snmpTmsdp", "snmpMsdpBackwardTransition", "snmpTpim", "snmpPimNeighborLoss", "snmpTpoe", "snmpTportsecurity", "snmpAccessSecureMacViolation", "snmpTrunkSecureMacViolation", "snmpTrf", "snmpRedundancyFramework", "snmpTrmon", "snmpRisingAlarm", "snmpFallingAlarm", "snmpHcRisingAlarm", "snmpHcFallingAlarm", "snmpTrscn", "snmpTscsi", "snmpTsnmp", "snmpAuthentication", "snmpTstormControl", "snmpCpscEventRev1", "snmpTstpx", "snmpInconsistency", "snmpLoopInconsistency", "snmpRootInconsistency", "snmpTsyslog", "snmpMessageGenerated", "snmpTsysmgr", "snmpCseFailSwCoreNotifyExtended", "snmpTsystem", "snmpClockChangeNotification", "snmpTupgrade", "snmpUpgradeJobStatusNotify", "snmpUpgradeOpNotifyOnCompletion", "snmpTvsan", "snmpTvtp", "snmpNotifs", "snmpVlancreate", "snmpVlandelete", "snmpTzone", "snmpRmon", "snmpEvent"}, []string{"System/snmp:Inst/", "System/snmp:SysInfo/", "System/snmp:Globals/", "System/snmp:SourceInterfaceTraps/", "System/snmp:SourceInterfaceInforms/", "System/snmp:Ctx/", "System/snmp:CommSecP/", "System/snmp:Acl/", "System/snmp:LocalUser/", "System/snmp:UserGroup/", "System/snmp:Host/", "System/snmp:UseVrf/", "System/snmp:HostSrcInterface/", "System/snmp:FilterVrf/", "System/snmp:Traps/", "System/snmp:Taaa/", "System/snmp:ServerStateChange/", "System/snmp:Tbfd/", "System/snmp:SessionDown/", "System/snmp:SessionUp/", "System/snmp:Tbridge/", "System/snmp:NewRoot/", "System/snmp:TopologyChange/", "System/snmp:Tcallhome/", "System/snmp:EventNotify/", "System/snmp:SmtpSendFail/", "System/snmp:Tcfs/", "System/snmp:StateChangeNotif/", "System/snmp:MergeFailure/", "System/snmp:Tconfig/", "System/snmp:CLIRunningConfigChange/", "System/snmp:Tentity/", "System/snmp:EntityMIBChange/", "System/snmp:EntityMIBEnableStatusNotification/", "System/snmp:EntityFanStatusChange/", "System/snmp:EntityModuleInserted/", "System/snmp:EntityModuleRemoved/", "System/snmp:EntityModuleStatusChange/", "System/snmp:EntityPowerOutChange/", "System/snmp:EntityPowerStatusChange/", "System/snmp:EntitySensor/", "System/snmp:EntityUnrecognisedModule/", "System/snmp:Tfcdomain/", "System/snmp:DmDomainIdNotAssignedNotify/", "System/snmp:DmFabricChangeNotify/", "System/snmp:DmNewPrincipalSwitchNotify/", "System/snmp:Tfcns/", "System/snmp:Tfcs/", "System/snmp:Tfctrace/", "System/snmp:Tfdmi/", "System/snmp:Tfeaturecontrol/", "System/snmp:FeatureOpStatusChange/", "System/snmp:CiscoFeatOpStatusChange/", "System/snmp:Tfspf/", "System/snmp:Tgeneric/", "System/snmp:ColdStart/", "System/snmp:WarmStart/", "System/snmp:Thsrp/", "System/snmp:StateChange/", "System/snmp:Tip/", "System/snmp:Tlicense/", "System/snmp:NotifyLicenseExpiry/", "System/snmp:NotifyLicenseExpiryWarning/", "System/snmp:NotifyLicenseFileMissing/", "System/snmp:NotifyNoLicenceForFeature/", "System/snmp:Tlink/", "System/snmp:CieLinkDown/", "System/snmp:CieLinkUp/", "System/snmp:CiscoXcvrMonStatusChange/", "System/snmp:CmnMacMoveNotification/", "System/snmp:DelayedLinkStateChange/", "System/snmp:ExtendedLinkDown/", "System/snmp:ExtendedLinkUp/", "System/snmp:LinkDown/", "System/snmp:LinkUp/", "System/snmp:CErrDisableInterfaceEventRev1/", "System/snmp:Tlldp/", "System/snmp:LldpRemTablesChange/", "System/snmp:Tmmode/", "System/snmp:CseMaintModeChangeNotify/", "System/snmp:CseNormalModeChangeNotify/", "System/snmp:Tmpls/", "System/snmp:Ldp/", "System/snmp:LdpSessiondown/", "System/snmp:LdpSessionup/", "System/snmp:Vpn/", "System/snmp:VpnMaxThreshcleared/", "System/snmp:VpnMaxThreshexceeded/", "System/snmp:VpnMidThreshexceeded/", "System/snmp:VpnVrfdown/", "System/snmp:VpnVrfup/", "System/snmp:Tmsdp/", "System/snmp:MsdpBackwardTransition/", "System/snmp:Tpim/", "System/snmp:PimNeighborLoss/", "System/snmp:Tpoe/", "System/snmp:Tportsecurity/", "System/snmp:AccessSecureMacViolation/", "System/snmp:TrunkSecureMacViolation/", "System/snmp:Trf/", "System/snmp:RedundancyFramework/", "System/snmp:Trmon/", "System/snmp:RisingAlarm/", "System/snmp:FallingAlarm/", "System/snmp:HcRisingAlarm/", "System/snmp:HcFallingAlarm/", "System/snmp:Trscn/", "System/snmp:Tscsi/", "System/snmp:Tsnmp/", "System/snmp:Authentication/", "System/snmp:TstormControl/", "System/snmp:CpscEventRev1/", "System/snmp:Tstpx/", "System/snmp:Inconsistency/", "System/snmp:LoopInconsistency/", "System/snmp:RootInconsistency/", "System/snmp:Tsyslog/", "System/snmp:MessageGenerated/", "System/snmp:Tsysmgr/", "System/snmp:CseFailSwCoreNotifyExtended/", "System/snmp:Tsystem/", "System/snmp:ClockChangeNotification/", "System/snmp:Tupgrade/", "System/snmp:UpgradeJobStatusNotify/", "System/snmp:UpgradeOpNotifyOnCompletion/", "System/snmp:Tvsan/", "System/snmp:Tvtp/", "System/snmp:Notifs/", "System/snmp:Vlancreate/", "System/snmp:Vlandelete/", "System/snmp:Tzone/", "System/snmp:Rmon/", "System/snmp:Event/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration (including BGP, OSPF and OSPFv3 traps).").AddApiDocumentation("topSystem", "System/top:System/", []string{"snmpEntity", "snmpInst", "snmpSysInfo", "snmpGlobals", "snmpSourceInterfaceTraps", "snmpSourceInterfaceInforms", "snmpCtx", "snmpCommSecP", "snmpAcl", "snmpLocalUser", "snmpUserGroup", "snmpHost", "snmpUseVrf", "snmpHostSrcInterface", "snmpFilterVrf", "snmpTraps", "snmpTaaa", "snmpServerStateChange", "snmpTbfd", "snmpSessionDown", "snmpSessionUp", "snmpTbridge", "snmpNewRoot", "snmpTopologyChange", "snmpTcallhome", "snmpEventNotify", "snmpSmtpSendFail", "snmpTcfs", "snmpStateChangeNotif", "snmpMergeFailure", "snmpTconfig", "snmpCLIRunningConfigChange", "snmpTentity", "snmpEntityMIBChange", "snmpEntityMIBEnableStatusNotification", "snmpEntityFanStatusChange", "snmpEntityModuleInserted", "snmpEntityModuleRemoved", "snmpEntityModuleStatusChange", "snmpEntityPowerOutChange", "snmpEntityPowerStatusChange", "snmpEntitySensor", "snmpEntityUnrecognisedModule", "snmpTfcdomain", "snmpDmDomainIdNotAssignedNotify", "snmpDmFabricChangeNotify", "snmpDmNewPrincipalSwitchNotify", "snmpTfcns", "snmpTfcs", "snmpTfctrace", "snmpTfdmi", "snmpTfeaturecontrol", "snmpFeatureOpStatusChange", "snmpCiscoFeatOpStatusChange", "snmpTfspf", "snmpTgeneric", "snmpColdStart", "snmpWarmStart", "snmpThsrp", "snmpStateChange", "snmpTip", "snmpTlicense", "snmpNotifyLicenseExpiry", "snmpNotifyLicenseExpiryWarning", "snmpNotifyLicenseFileMissing", "snmpNotifyNoLicenceForFeature", "snmpTlink", "snmpCieLinkDown", "snmpCieLinkUp", "snmpCiscoXcvrMonStatusChange", "snmpCmnMacMoveNotification", "snmpDelayedLinkStateChange", "snmpExtendedLinkDown", "snmpExtendedLinkUp", "snmpLinkDown", "snmpLinkUp", "snmpCErrDisableInterfaceEventRev1", "snmpTlldp", "snmpLldpRemTablesChange", "snmpTmmode", "snmpCseMaintModeChangeNotify", "snmpCseNormalModeChangeNotify", "snmpTmpls", "snmpLdp", "snmpLdpSessiondown", "snmpLdpSessionup", "snmpVpn", "snmpVpnMaxThreshcleared", "snmpVpnMaxThreshexceeded", "snmpVpnMidThreshexceeded", "snmpVpnVrfdown", "snmpVpnVrfup", "snmpTmsdp", "snmpMsdpBackwardTransition", "snmpTpim", "snmpPimNeighborLoss", "snmpTpoe", "snmpTportsecurity", "snmpAccessSecureMacViolation", "snmpTrunkSecureMacViolation", "snmpTrf", "snmpRedundancyFramework", "snmpTrmon", "snmpRisingAlarm", "snmpFallingAlarm", "snmpHcRisingAlarm", "snmpHcFallingAlarm", "snmpTrscn", "snmpTscsi", "snmpTsnmp", "snmpAuthentication", "snmpTstormControl", "snmpCpscEventRev1", "snmpTstpx", "snmpInconsistency", "snmpLoopInconsistency", "snmpRootInconsistency", "snmpTsyslog", "snmpMessageGenerated", "snmpTsysmgr", "snmpCseFailSwCoreNotifyExtended", "snmpTsystem", "snmpClockChangeNotification", "snmpTupgrade", "snmpUpgradeJobStatusNotify", "snmpUpgradeOpNotifyOnCompletion", "snmpTvsan", "snmpTvtp", "snmpNotifs", "snmpVlancreate", "snmpVlandelete", "snmpTzone", "snmpRmon", "snmpEvent", "bgpTbgp", "ospfSnmpTrapsEntity", "ospfTospf", "ospfv3SnmpTrapsEntity", "ospfv3Tospfv3"}, []string{"System/snmp:Entity/", "System/snmp:Inst/", "System/snmp:SysInfo/", "System/snmp:Globals/", "System/snmp:SourceInterfaceTraps/", "System/snmp:SourceInterfaceInforms/", "System/snmp:Ctx/", "System/snmp:CommSecP/", "System/snmp:Acl/", "System/snmp:LocalUser/", "System/snmp:UserGroup/", "System/snmp:Host/", "System/snmp:UseVrf/", "System/snmp:HostSrcInterface/", "System/snmp:FilterVrf/", "System/snmp:Traps/", "System/snmp:Taaa/", "System/snmp:ServerStateChange/", "System/snmp:Tbfd/", "System/snmp:SessionDown/", "System/snmp:SessionUp/", "System/snmp:Tbridge/", "System/snmp:NewRoot/", "System/snmp:TopologyChange/", "System/snmp:Tcallhome/", "System/snmp:EventNotify/", "System/snmp:SmtpSendFail/", "System/snmp:Tcfs/", "System/snmp:StateChangeNotif/", "System/snmp:MergeFailure/", "System/snmp:Tconfig/", "System/snmp:CLIRunningConfigChange/", "System/snmp:Tentity/", "System/snmp:EntityMIBChange/", "System/snmp:EntityMIBEnableStatusNotification/", "System/snmp:EntityFanStatusChange/", "System/snmp:EntityModuleInserted/", "System/snmp:EntityModuleRemoved/", "System/snmp:EntityModuleStatusChange/", "System/snmp:EntityPowerOutChange/", "System/snmp:EntityPowerStatusChange/", "System/snmp:EntitySensor/", "System/snmp:EntityUnrecognisedModule/", "System/snmp:Tfcdomain/", "System/snmp:DmDomainIdNotAssignedNotify/", "System/snmp:DmFabricChangeNotify/", "System/snmp:DmNewPrincipalSwitchNotify/", "System/snmp:Tfcns/", "System/snmp:Tfcs/", "System/snmp:Tfctrace/", "System/snmp:Tfdmi/", "System/snmp:Tfeaturecontrol/", "System/snmp:FeatureOpStatusChange/", "System/snmp:CiscoFeatOpStatusChange/", "System/snmp:Tfspf/", "System/snmp:Tgeneric/", "System/snmp:ColdStart/", "System/snmp:WarmStart/", "System/snmp:Thsrp/", "System/snmp:StateChange/", "System/snmp:Tip/", "System/snmp:Tlicense/", "System/snmp:NotifyLicenseExpiry/", "System/snmp:NotifyLicenseExpiryWarning/", "System/snmp:NotifyLicenseFileMissing/", "System/snmp:NotifyNoLicenceForFeature/", "System/snmp:Tlink/", "System/snmp:CieLinkDown/", "System/snmp:CieLinkUp/", "System/snmp:CiscoXcvrMonStatusChange/", "System/snmp:CmnMacMoveNotification/", "System/snmp:DelayedLinkStateChange/", "System/snmp:ExtendedLinkDown/", "System/snmp:ExtendedLinkUp/", "System/snmp:LinkDown/", "System/snmp:LinkUp/", "System/snmp:CErrDisableInterfaceEventRev1/", "System/snmp:Tlldp/", "System/snmp:LldpRemTablesChange/", "System/snmp:Tmmode/", "System/snmp:CseMaintModeChangeNotify/", "System/snmp:CseNormalModeChangeNotify/", "System/snmp:Tmpls/", "System/snmp:Ldp/", "System/snmp:LdpSessiondown/", "System/snmp:LdpSessionup/", "System/snmp:Vpn/", "System/snmp:VpnMaxThreshcleared/", "System/snmp:VpnMaxThreshexceeded/", "System/snmp:VpnMidThreshexceeded/", "System/snmp:VpnVrfdown/", "System/snmp:VpnVrfup/", "System/snmp:Tmsdp/", "System/snmp:MsdpBackwardTransition/", "System/snmp:Tpim/", "System/snmp:PimNeighborLoss/", "System/snmp:Tpoe/", "System/snmp:Tportsecurity/", "System/snmp:AccessSecureMacViolation/", "System/snmp:TrunkSecureMacViolation/", "System/snmp:Trf/", "System/snmp:RedundancyFramework/", "System/snmp:Trmon/", "System/snmp:RisingAlarm/", "System/snmp:FallingAlarm/", "System/snmp:HcRisingAlarm/", "System/snmp:HcFallingAlarm/", "System/snmp:Trscn/", "System/snmp:Tscsi/", "System/snmp:Tsnmp/", "System/snmp:Authentication/", "System/snmp:TstormControl/", "System/snmp:CpscEventRev1/", "System/snmp:Tstpx/", "System/snmp:Inconsistency/", "System/snmp:LoopInconsistency/", "System/snmp:RootInconsistency/", "System/snmp:Tsyslog/", "System/snmp:MessageGenerated/", "System/snmp:Tsysmgr/", "System/snmp:CseFailSwCoreNotifyExtended/", "System/snmp:Tsystem/", "System/snmp:ClockChangeNotification/", "System/snmp:Tupgrade/", "System/snmp:UpgradeJobStatusNotify/", "System/snmp:UpgradeOpNotifyOnCompletion/", "System/snmp:Tvsan/", "System/snmp:Tvtp/", "System/snmp:Notifs/", "System/snmp:Vlancreate/", "System/snmp:Vlandelete/", "System/snmp:Tzone/", "System/snmp:Rmon/", "System/snmp:Event/", "Routing%20and%20Forwarding/bgp:Tbgp/", "Routing%20and%20Forwarding/ospf:SnmpTrapsEntity/", "Routing%20and%20Forwarding/ospf:Tospf/", "Routing%20and%20Forwarding/ospfv3:SnmpTrapsEntity/", "Routing%20and%20Forwarding/ospfv3:Tospfv3/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -965,6 +965,110 @@ func (r *SNMPResource) Schema(ctx context.Context, req resource.SchemaRequest, r
 					},
 				},
 			},
+			"bgp_traps_all": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("All state-change and threshold prefix traps. Cannot be configured together with the individual state-change and threshold prefix traps.").AddStringEnumDescription("none", "disabled", "enabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("none", "disabled", "enabled"),
+				},
+			},
+			"bgp_traps_state_changes": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SNMP BGP trap for all bgp state change traps. Cannot be configured together with the individual state-change traps.").AddStringEnumDescription("none", "disabled", "enabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("none", "disabled", "enabled"),
+				},
+			},
+			"bgp_traps_state_changes_all_fsm": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SNMP BGP trap for all fsm state change.").String,
+				Optional:            true,
+			},
+			"bgp_traps_state_changes_backward_transition": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SNMP BGP trap for backward transition state change trap.").String,
+				Optional:            true,
+			},
+			"bgp_traps_state_changes_limited": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SNMP BGP trap for limited state change trap.").String,
+				Optional:            true,
+			},
+			"bgp_traps_threshold_prefix": schema.BoolAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("SNMP BGP trap for prefix threshold event.").String,
+				Optional:            true,
+			},
+			"ospf_traps_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"ospf_traps_instances": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of OSPF SNMP trap instances.\n  - Map key: `instance_name` - OSPF instance name or `all` which means for all the processes.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"all": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SNMP OSPF trap for all ospv3 instances.").String,
+							Optional:            true,
+						},
+						"lsa": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SNMP OSPF trap for ospf lsa.").String,
+							Optional:            true,
+						},
+						"rate_limit_rate": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SNMP OSPF trap for Rate.").AddIntegerRangeDescription(0, 256).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 256),
+							},
+						},
+						"rate_limit_window": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SNMP OSPF trap for window type from 1 to 60.").AddIntegerRangeDescription(1, 60).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 60),
+							},
+						},
+					},
+				},
+			},
+			"ospfv3_traps_admin_state": schema.StringAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("The administrative state of the object or policy.").AddStringEnumDescription("enabled", "disabled").String,
+				Optional:            true,
+				Validators: []validator.String{
+					stringvalidator.OneOf("enabled", "disabled"),
+				},
+			},
+			"ospfv3_traps_instances": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("List of OSPFv3 SNMP trap instances.\n  - Map key: `instance_name` - SNMP OSPFV3 trap for specific ospfv3 instance.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"all": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SNMP OSPFV3 trap for all ospv3 process.").String,
+							Optional:            true,
+						},
+						"lsa": schema.BoolAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SNMP OSPFV3 trap for ospfv3 lsa.").String,
+							Optional:            true,
+						},
+						"rate_limit_rate": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SNMP OSPFV3 trap for Rate.").AddIntegerRangeDescription(0, 256).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(0, 256),
+							},
+						},
+						"rate_limit_window": schema.Int64Attribute{
+							MarkdownDescription: helpers.NewAttributeDescription("SNMP OSPFV3 trap for window type from 1 to 60.").AddIntegerRangeDescription(1, 60).String,
+							Optional:            true,
+							Validators: []validator.Int64{
+								int64validator.Between(1, 60),
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -1125,6 +1229,10 @@ func (r *SNMPResource) Read(ctx context.Context, req resource.ReadRequest, resp 
 		}
 		state.fromIdentity(ctx, &identity)
 	}
+
+	// Derive the DN from the model rather than the stored id, so that state written by
+	// a provider version with a different root DN for this resource is read correctly
+	state.Dn = types.StringValue(state.getDn())
 
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 

@@ -127,4 +127,25 @@ resource "nxos_snmp" "example" {
       trap        = "public"
     }
   }
+  bgp_traps_state_changes_all_fsm             = true
+  bgp_traps_state_changes_backward_transition = true
+  bgp_traps_state_changes_limited             = true
+  bgp_traps_threshold_prefix                  = true
+  ospf_traps_admin_state                      = "enabled"
+  ospf_traps_instances = {
+    "OSPF2" = {
+      all             = true
+      lsa             = false
+      rate_limit_rate = 20
+    }
+  }
+  ospfv3_traps_admin_state = "enabled"
+  ospfv3_traps_instances = {
+    "OSPFv3" = {
+      all               = true
+      lsa               = true
+      rate_limit_rate   = 20
+      rate_limit_window = 10
+    }
+  }
 }

@@ -567,6 +567,10 @@ func (r *KeychainResource) Read(ctx context.Context, req resource.ReadRequest, r
 		state.fromIdentity(ctx, &identity)
 	}
 
+	// Derive the DN from the model rather than the stored id, so that state written by
+	// a provider version with a different root DN for this resource is read correctly
+	state.Dn = types.StringValue(state.getDn())
+
 	tflog.Debug(ctx, fmt.Sprintf("%s: Beginning Read", state.Dn.ValueString()))
 
 	device, ok := r.data.Devices[state.Device.ValueString()]

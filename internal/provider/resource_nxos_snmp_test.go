@@ -138,6 +138,19 @@ func TestAccSNMPResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "rmon_events.1.log", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "rmon_events.1.owner", "admin"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "rmon_events.1.trap", "public"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "bgp_traps_state_changes_all_fsm", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "bgp_traps_state_changes_backward_transition", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "bgp_traps_state_changes_limited", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "bgp_traps_threshold_prefix", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "ospf_traps_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "ospf_traps_instances.OSPF2.all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "ospf_traps_instances.OSPF2.lsa", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "ospf_traps_instances.OSPF2.rate_limit_rate", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "ospfv3_traps_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "ospfv3_traps_instances.OSPFv3.all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "ospfv3_traps_instances.OSPFv3.lsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "ospfv3_traps_instances.OSPFv3.rate_limit_rate", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_snmp.test", "ospfv3_traps_instances.OSPFv3.rate_limit_window", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "instance_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "description", "My SNMP instance"))
@@ -235,14 +248,27 @@ func TestAccSNMPResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_events.1.log", "yes"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_events.1.owner", "admin"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "rmon_events.1.trap", "public"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "bgp_traps_state_changes_all_fsm", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "bgp_traps_state_changes_backward_transition", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "bgp_traps_state_changes_limited", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "bgp_traps_threshold_prefix", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "ospf_traps_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "ospf_traps_instances.OSPF2.all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "ospf_traps_instances.OSPF2.lsa", "false"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "ospf_traps_instances.OSPF2.rate_limit_rate", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "ospfv3_traps_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "ospfv3_traps_instances.OSPFv3.all", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "ospfv3_traps_instances.OSPFv3.lsa", "true"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "ospfv3_traps_instances.OSPFv3.rate_limit_rate", "20"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_snmp.test", "ospfv3_traps_instances.OSPFv3.rate_limit_window", "10"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	steps := []resource.TestStep{
 		{
-			Config: testAccSNMPResourceConfig_minimum(),
+			Config: testAccSNMPResourcePrerequisitesConfig + testAccSNMPResourceConfig_minimum(),
 		},
 		{
-			Config: testAccSNMPResourceConfig_all(includeWriteOnly) + testAccSNMPResourceConfig_dataSource(),
+			Config: testAccSNMPResourcePrerequisitesConfig + testAccSNMPResourceConfig_all(includeWriteOnly) + testAccSNMPResourceConfig_dataSource(),
 			Check:  resource.ComposeTestCheckFunc(checks...),
 		},
 		{
@@ -259,22 +285,22 @@ func TestAccSNMPResource(t *testing.T) {
 		},
 		{
 			// Removing everything but the required attributes deletes the emptied single child objects
-			Config: testAccSNMPResourceConfig_minimum(),
+			Config: testAccSNMPResourcePrerequisitesConfig + testAccSNMPResourceConfig_minimum(),
 		},
 	}
 	if testAccDeletionPolicyTests() {
 		steps = append(steps, []resource.TestStep{
 			{
-				Config: testAccWithDeletionPolicy(testAccSNMPResourceConfig_all(includeWriteOnly), "reset"),
+				Config: testAccSNMPResourcePrerequisitesConfig + testAccWithDeletionPolicy(testAccSNMPResourceConfig_all(includeWriteOnly), "reset"),
 				Check:  resource.TestCheckResourceAttr("nxos_snmp.test", "deletion_policy", "reset"),
 			},
 			{
 				// Removing the resource destroys it with the reset deletion policy
-				Config: testAccNoResourcesConfig,
+				Config: testAccSNMPResourcePrerequisitesConfig,
 			},
 			{
 				// Create on top of what the reset left on the device
-				Config: testAccSNMPResourceConfig_minimum(),
+				Config: testAccSNMPResourcePrerequisitesConfig + testAccSNMPResourceConfig_minimum(),
 			},
 		}...)
 	}
@@ -301,12 +327,42 @@ func testAccSNMPResourceImportStateIdFunc(resourceName string) resource.ImportSt
 // End of section. //template:end importStateIdFunc
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testPrerequisites
+const testAccSNMPResourcePrerequisitesConfig = `
+resource "nxos_dme" "PreReq0" {
+  dn = "sys/fm/bgp"
+  class_name = "fmBgp"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq1" {
+  dn = "sys/fm/ospf"
+  class_name = "fmOspf"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+resource "nxos_dme" "PreReq2" {
+  dn = "sys/fm/ospfv3"
+  class_name = "fmOspfv3"
+  delete = false
+  content = {
+      adminSt = "enabled"
+  }
+}
+
+`
 
 // End of section. //template:end testPrerequisites
 
 // Section below is generated&owned by "gen/generator.go". //template:begin testAccConfigMinimal
 func testAccSNMPResourceConfig_minimum() string {
 	config := `resource "nxos_snmp" "test" {` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }
@@ -459,6 +515,28 @@ func testAccSNMPResourceConfig_all(includeWriteOnly bool) string {
 	config += `			trap = "public"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
+	config += `	bgp_traps_state_changes_all_fsm = true` + "\n"
+	config += `	bgp_traps_state_changes_backward_transition = true` + "\n"
+	config += `	bgp_traps_state_changes_limited = true` + "\n"
+	config += `	bgp_traps_threshold_prefix = true` + "\n"
+	config += `	ospf_traps_admin_state = "enabled"` + "\n"
+	config += `	ospf_traps_instances = {` + "\n"
+	config += `		"OSPF2" = {` + "\n"
+	config += `			all = true` + "\n"
+	config += `			lsa = false` + "\n"
+	config += `			rate_limit_rate = 20` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	ospfv3_traps_admin_state = "enabled"` + "\n"
+	config += `	ospfv3_traps_instances = {` + "\n"
+	config += `		"OSPFv3" = {` + "\n"
+	config += `			all = true` + "\n"
+	config += `			lsa = true` + "\n"
+	config += `			rate_limit_rate = 20` + "\n"
+	config += `			rate_limit_window = 10` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"
 	config += `}` + "\n"
 	return config
 }

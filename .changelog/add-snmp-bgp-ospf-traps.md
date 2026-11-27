@@ -1,0 +1,2 @@
+- Add BGP SNMP traps (`bgp_traps_all`, `bgp_traps_state_changes`, `bgp_traps_state_changes_all_fsm`, `bgp_traps_state_changes_backward_transition`, `bgp_traps_state_changes_limited`, `bgp_traps_threshold_prefix`), OSPF SNMP traps (`ospf_traps_admin_state`, `ospf_traps_instances`) and OSPFv3 SNMP traps (`ospfv3_traps_admin_state`, `ospfv3_traps_instances`) to `nxos_snmp` resource and data source
+- The `id` of the `nxos_snmp` resource and data source changes from `sys/snmp` to `sys`; existing state is read without changes and the stored `id` is updated on the next refresh

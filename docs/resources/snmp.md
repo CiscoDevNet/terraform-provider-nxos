@@ -3,15 +3,16 @@
 page_title: "nxos_snmp (Resource)"
 subcategory: "Monitoring"
 description: |-
-  This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.
+  This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration (including BGP, OSPF and OSPFv3 traps).
 ---
 
 # nxos_snmp (Resource)
 
-This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration.
+This resource can manage the SNMP configuration on NX-OS devices, including system information, global settings, local users, user groups, hosts, and trap configuration (including BGP, OSPF and OSPFv3 traps).
 
 ### API Documentation
 
+- [topSystem](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/top:System/)
 - [snmpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/snmp:Entity/)
 - [snmpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/snmp:Inst/)
 - [snmpSysInfo](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/snmp:SysInfo/)
@@ -146,6 +147,11 @@ This resource can manage the SNMP configuration on NX-OS devices, including syst
 - [snmpTzone](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/snmp:Tzone/)
 - [snmpRmon](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/snmp:Rmon/)
 - [snmpEvent](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/snmp:Event/)
+- [bgpTbgp](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bgp:Tbgp/)
+- [ospfSnmpTrapsEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:SnmpTrapsEntity/)
+- [ospfTospf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospf:Tospf/)
+- [ospfv3SnmpTrapsEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:SnmpTrapsEntity/)
+- [ospfv3Tospfv3](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/ospfv3:Tospfv3/)
 
 ## Example Usage
 
@@ -279,6 +285,27 @@ resource "nxos_snmp" "example" {
       trap        = "public"
     }
   }
+  bgp_traps_state_changes_all_fsm             = true
+  bgp_traps_state_changes_backward_transition = true
+  bgp_traps_state_changes_limited             = true
+  bgp_traps_threshold_prefix                  = true
+  ospf_traps_admin_state                      = "enabled"
+  ospf_traps_instances = {
+    "OSPF2" = {
+      all             = true
+      lsa             = false
+      rate_limit_rate = 20
+    }
+  }
+  ospfv3_traps_admin_state = "enabled"
+  ospfv3_traps_instances = {
+    "OSPFv3" = {
+      all               = true
+      lsa               = true
+      rate_limit_rate   = 20
+      rate_limit_window = 10
+    }
+  }
 }
 ```
 
@@ -295,6 +322,14 @@ resource "nxos_snmp" "example" {
   - Choices: `enable`, `disable`
 - `bfd_session_up_trap_status` (String) Status to show enabled/disable trap.
   - Choices: `enable`, `disable`
+- `bgp_traps_all` (String) All state-change and threshold prefix traps. Cannot be configured together with the individual state-change and threshold prefix traps.
+  - Choices: `none`, `disabled`, `enabled`
+- `bgp_traps_state_changes` (String) SNMP BGP trap for all bgp state change traps. Cannot be configured together with the individual state-change traps.
+  - Choices: `none`, `disabled`, `enabled`
+- `bgp_traps_state_changes_all_fsm` (Boolean) SNMP BGP trap for all fsm state change.
+- `bgp_traps_state_changes_backward_transition` (Boolean) SNMP BGP trap for backward transition state change trap.
+- `bgp_traps_state_changes_limited` (Boolean) SNMP BGP trap for limited state change trap.
+- `bgp_traps_threshold_prefix` (Boolean) SNMP BGP trap for prefix threshold event.
 - `bridge_new_root_trap_status` (String) Status to show enabled/disable trap.
   - Choices: `enable`, `disable`
 - `bridge_topology_change_trap_status` (String) Status to show enabled/disable trap.
@@ -426,6 +461,14 @@ resource "nxos_snmp" "example" {
   - Choices: `enable`, `disable`
 - `msdp_backward_transition_trap_status` (String) Status to show enabled/disable trap.
   - Choices: `enable`, `disable`
+- `ospf_traps_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `ospf_traps_instances` (Attributes Map) List of OSPF SNMP trap instances.
+  - Map key: `instance_name` - OSPF instance name or `all` which means for all the processes. (see [below for nested schema](#nestedatt--ospf_traps_instances))
+- `ospfv3_traps_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
+- `ospfv3_traps_instances` (Attributes Map) List of OSPFv3 SNMP trap instances.
+  - Map key: `instance_name` - SNMP OSPFV3 trap for specific ospfv3 instance. (see [below for nested schema](#nestedatt--ospfv3_traps_instances))
 - `owner_key` (String) The key for enabling clients to own their data for entity correlation.
 - `owner_tag` (String) A tag for enabling clients to add their own data. For example, to indicate who created this object.
 - `packet_size` (Number) Packet size config.
@@ -573,6 +616,32 @@ Optional:
 <a id="nestedatt--local_users--groups"></a>
 ### Nested Schema for `local_users.groups`
 
+
+
+<a id="nestedatt--ospf_traps_instances"></a>
+### Nested Schema for `ospf_traps_instances`
+
+Optional:
+
+- `all` (Boolean) SNMP OSPF trap for all ospv3 instances.
+- `lsa` (Boolean) SNMP OSPF trap for ospf lsa.
+- `rate_limit_rate` (Number) SNMP OSPF trap for Rate.
+  - Range: `0`-`256`
+- `rate_limit_window` (Number) SNMP OSPF trap for window type from 1 to 60.
+  - Range: `1`-`60`
+
+
+<a id="nestedatt--ospfv3_traps_instances"></a>
+### Nested Schema for `ospfv3_traps_instances`
+
+Optional:
+
+- `all` (Boolean) SNMP OSPFV3 trap for all ospv3 process.
+- `lsa` (Boolean) SNMP OSPFV3 trap for ospfv3 lsa.
+- `rate_limit_rate` (Number) SNMP OSPFV3 trap for Rate.
+  - Range: `0`-`256`
+- `rate_limit_window` (Number) SNMP OSPFV3 trap for window type from 1 to 60.
+  - Range: `1`-`60`
 
 
 <a id="nestedatt--rmon_events"></a>

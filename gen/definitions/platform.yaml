@@ -3022,6 +3022,7 @@ child_classes:
             description: 'Configure UDFs to be qualified for RACL region.'
             example: true
             separate_request: true
+            exclude_test: true
           - nxos_name: qualifyRaclAll
             tf_name: qualify_racl_all
             type: Bool

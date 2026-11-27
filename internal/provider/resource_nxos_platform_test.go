@@ -105,7 +105,6 @@ func TestAccPlatformResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "udfs.UDF1.offset_base", "outer-header-l3"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "udfs.UDF1.offset_length", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "udfs.UDF1.offset_position", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("nxos_platform.test", "udfs.UDF1.qualify_racl", "true"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "nve_interfaces.1.ipmc_index_size", "4000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "nve_interfaces.1.infra_vlans.100.force", "Enable"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "extended_dme_load_interval", "300"))
@@ -171,7 +170,6 @@ func TestAccPlatformResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.offset_base", "outer-header-l3"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.offset_length", "2"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.offset_position", "10"))
-	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_platform.test", "udfs.UDF1.qualify_racl", "true"))
 	var tfVersion *goversion.Version
 	steps := []resource.TestStep{
 		{
@@ -375,7 +373,6 @@ func testAccPlatformResourceConfig_all() string {
 	config += `			offset_base = "outer-header-l3"` + "\n"
 	config += `			offset_length = 2` + "\n"
 	config += `			offset_position = 10` + "\n"
-	config += `			qualify_racl = true` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, ]` + "\n"

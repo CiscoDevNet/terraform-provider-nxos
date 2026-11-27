@@ -2749,6 +2749,51 @@ child_classes:
                   - enabled
                   - disabled
                 example: disabled
+      - class_name: bgpEvtHist
+        doc_path: Routing%20and%20Forwarding/bgp:EvtHist/
+        rn: evthist-%s
+        type: list
+        tf_name: event_histories
+        description: 'BGP customized buffer detail for event-history.'
+        no_delete: true
+        attributes:
+          - nxos_name: type
+            tf_name: type
+            type: String
+            id: true
+            description: 'Configure event-history {cli | events | periodic | detail | errors | socket | nve | objstore | prefixes | peer | urib | l2rib | rpki | {rpm {config | eval | keychain}}}.'
+            enum_values:
+              - none
+              - cli
+              - events
+              - periodic
+              - detail
+              - errors
+              - objstore
+              - socket
+              - nve
+              - prefixes
+              - peer
+              - urib
+              - l2rib
+              - rpki
+              - rpm-config
+              - rpm-eval
+              - rpm-keychain
+            example: cli
+          - nxos_name: size
+            tf_name: size
+            type: String
+            description: 'Configure event-history with buffer size. Either `default`, `disable`, `small`, `medium`, `large` or a size in bytes (524288-8388608).'
+            enum_values:
+              - default
+              - disable
+              - small
+              - medium
+              - large
+            allow_non_enum_values: true
+            delete_value: default
+            example: medium
 test_prerequisites:
   - dn: sys/fm/bgp
     class_name: fmBgp

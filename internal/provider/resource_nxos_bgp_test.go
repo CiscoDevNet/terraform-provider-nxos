@@ -298,6 +298,7 @@ func TestAccBGPResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.private_as_control", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.session_template", "SESS_TEMPLATE"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.internal_vpn_client", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_bgp.test", "event_histories.cli.size", "medium"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "instance_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "asn", "65001"))
@@ -549,6 +550,7 @@ func TestAccBGPResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.private_as_control", "none"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.session_template", "SESS_TEMPLATE"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "vrfs.default.interface_peers.eth1/1.internal_vpn_client", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_bgp.test", "event_histories.cli.size", "medium"))
 	var tfVersion *goversion.Version
 	includeWriteOnly := terraformVersionMinimum(goversion.Must(goversion.NewVersion("1.11.0")))
 	steps := []resource.TestStep{
@@ -1040,6 +1042,11 @@ func testAccBGPResourceConfig_all(includeWriteOnly bool) string {
 	config += `					internal_vpn_client = "disabled"` + "\n"
 	config += `				}` + "\n"
 	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
+	config += `	event_histories = {` + "\n"
+	config += `		"cli" = {` + "\n"
+	config += `			size = "medium"` + "\n"
 	config += `		}` + "\n"
 	config += `	}` + "\n"
 	config += `	depends_on = [nxos_dme.PreReq0, nxos_dme.PreReq1, nxos_dme.PreReq2, nxos_dme.PreReq3, ]` + "\n"

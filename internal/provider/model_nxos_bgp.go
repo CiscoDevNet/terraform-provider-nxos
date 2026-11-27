@@ -39,27 +39,28 @@ import (
 // Section below is generated&owned by "gen/generator.go". //template:begin types
 
 type BGP struct {
-	Device                              types.String       `tfsdk:"device"`
-	Dn                                  types.String       `tfsdk:"id"`
-	AdminState                          types.String       `tfsdk:"admin_state"`
-	InstanceAdminState                  types.String       `tfsdk:"instance_admin_state"`
-	Asn                                 types.String       `tfsdk:"asn"`
-	Control                             types.String       `tfsdk:"control"`
-	DisablePolicyBatching               types.String       `tfsdk:"disable_policy_batching"`
-	DisablePolicyBatchingNexthop        types.String       `tfsdk:"disable_policy_batching_nexthop"`
-	DisablePolicyBatchingIpv4PrefixList types.String       `tfsdk:"disable_policy_batching_ipv4_prefix_list"`
-	DisablePolicyBatchingIpv6PrefixList types.String       `tfsdk:"disable_policy_batching_ipv6_prefix_list"`
-	EnhancedErrorHandling               types.Bool         `tfsdk:"enhanced_error_handling"`
-	FabricSoo                           types.String       `tfsdk:"fabric_soo"`
-	FlushRoutes                         types.String       `tfsdk:"flush_routes"`
-	Isolate                             types.String       `tfsdk:"isolate"`
-	IsolateRouteMap                     types.String       `tfsdk:"isolate_route_map"`
-	MedDampeningInterval                types.Int64        `tfsdk:"med_dampening_interval"`
-	MvpnVriId                           types.Int64        `tfsdk:"mvpn_vri_id"`
-	NexthopSuppressDefaultResolution    types.String       `tfsdk:"nexthop_suppress_default_resolution"`
-	RdDual                              types.String       `tfsdk:"rd_dual"`
-	RdDualId                            types.Int64        `tfsdk:"rd_dual_id"`
-	Vrfs                                map[string]BGPVrfs `tfsdk:"vrfs"`
+	Device                              types.String                 `tfsdk:"device"`
+	Dn                                  types.String                 `tfsdk:"id"`
+	AdminState                          types.String                 `tfsdk:"admin_state"`
+	InstanceAdminState                  types.String                 `tfsdk:"instance_admin_state"`
+	Asn                                 types.String                 `tfsdk:"asn"`
+	Control                             types.String                 `tfsdk:"control"`
+	DisablePolicyBatching               types.String                 `tfsdk:"disable_policy_batching"`
+	DisablePolicyBatchingNexthop        types.String                 `tfsdk:"disable_policy_batching_nexthop"`
+	DisablePolicyBatchingIpv4PrefixList types.String                 `tfsdk:"disable_policy_batching_ipv4_prefix_list"`
+	DisablePolicyBatchingIpv6PrefixList types.String                 `tfsdk:"disable_policy_batching_ipv6_prefix_list"`
+	EnhancedErrorHandling               types.Bool                   `tfsdk:"enhanced_error_handling"`
+	FabricSoo                           types.String                 `tfsdk:"fabric_soo"`
+	FlushRoutes                         types.String                 `tfsdk:"flush_routes"`
+	Isolate                             types.String                 `tfsdk:"isolate"`
+	IsolateRouteMap                     types.String                 `tfsdk:"isolate_route_map"`
+	MedDampeningInterval                types.Int64                  `tfsdk:"med_dampening_interval"`
+	MvpnVriId                           types.Int64                  `tfsdk:"mvpn_vri_id"`
+	NexthopSuppressDefaultResolution    types.String                 `tfsdk:"nexthop_suppress_default_resolution"`
+	RdDual                              types.String                 `tfsdk:"rd_dual"`
+	RdDualId                            types.Int64                  `tfsdk:"rd_dual_id"`
+	Vrfs                                map[string]BGPVrfs           `tfsdk:"vrfs"`
+	EventHistories                      map[string]BGPEventHistories `tfsdk:"event_histories"`
 }
 
 type BGPVrfs struct {
@@ -436,6 +437,10 @@ type BGPVrfsInterfacePeers struct {
 	InternalVpnClient            types.String `tfsdk:"internal_vpn_client"`
 }
 
+type BGPEventHistories struct {
+	Size types.String `tfsdk:"size"`
+}
+
 type BGPIdentity struct {
 	Device types.String `tfsdk:"device"`
 }
@@ -463,11 +468,11 @@ var BGPSubtreeClassMinVersions = map[string]string{}
 var BGPMinVersions = map[string]helpers.MinVersion{}
 
 // BGPListClasses holds the list child classes of the resource.
-var BGPListClasses = map[string]bool{"bgpDom": true, "bgpDomAf": true, "bgpAdvPrefix": true, "bgpInterLeakP": true, "bgpAggAddr": true, "bgpSessionCont": true, "bgpPolicyCont": true, "bgpRtCtrlP": true, "bgpPfxCtrlP": true, "bgpFltrCtrlP": true, "bgpPolicyInheritRule": true, "bgpPeerCont": true, "bgpPeerAf": true, "bgpPeer": true, "bgpPeerIf": true}
+var BGPListClasses = map[string]bool{"bgpDom": true, "bgpDomAf": true, "bgpAdvPrefix": true, "bgpInterLeakP": true, "bgpAggAddr": true, "bgpSessionCont": true, "bgpPolicyCont": true, "bgpRtCtrlP": true, "bgpPfxCtrlP": true, "bgpFltrCtrlP": true, "bgpPolicyInheritRule": true, "bgpPeerCont": true, "bgpPeerAf": true, "bgpPeer": true, "bgpPeerIf": true, "bgpEvtHist": true}
 
 // getBGPTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getBGPTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpPathCtrl", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpAddlPath", "bgpAggAddr", "bgpSessionCont", "bgpLocalAsn", "bgpPolicyCont", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP", "bgpFltrCtrlP", "bgpPolicyInheritRule", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP", "bgpPolicyInheritRule", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP", "bgpPolicyInheritRule", "bgpPeerIf"}, BGPSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"bgpInst", "bgpDom", "bgpRtCtrl", "bgpGr", "bgpPathCtrl", "bgpDomAf", "bgpAdvPrefix", "bgpInterLeakP", "bgpAddlPath", "bgpAggAddr", "bgpSessionCont", "bgpLocalAsn", "bgpPolicyCont", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP", "bgpFltrCtrlP", "bgpPolicyInheritRule", "bgpPeerCont", "bgpPeerAf", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP", "bgpPolicyInheritRule", "bgpPeer", "bgpLocalAsn", "bgpPeerAf", "bgpMaxPfxP", "bgpRtCtrlP", "bgpPfxCtrlP", "bgpPolicyInheritRule", "bgpPeerIf", "bgpEvtHist"}, BGPSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -565,6 +570,10 @@ func (data BGPVrfsPeersPeerAddressFamiliesInheritPeerPolicies) getRn(key string)
 
 func (data BGPVrfsInterfacePeers) getRn(key string) string {
 	return fmt.Sprintf("peerif-[%s]", key)
+}
+
+func (data BGPEventHistories) getRn(key string) string {
+	return fmt.Sprintf("evthist-%s", key)
 }
 
 func (data BGP) getClassName() string {
@@ -1743,6 +1752,17 @@ func (data BGP) toBody(config BGP) nxos.Body {
 				}
 			}
 		}
+		for key, child := range data.EventHistories {
+			configChild, configChildOk := config.EventHistories[key]
+			_ = configChild
+			_ = configChildOk
+			attrs = "{}"
+			attrs, _ = sjson.Set(attrs, "type", key)
+			if configChildOk && !child.Size.IsUnknown() && !child.Size.IsNull() && !configChild.Size.IsNull() {
+				attrs, _ = sjson.Set(attrs, "size", child.Size.ValueString())
+			}
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.bgpEvtHist.attributes", attrs)
+		}
 		childBody = body
 		body = prevBody
 		if parentAttrs != "{}" || gjson.Get(childBody, "bgpInst.children").Exists() {
@@ -2565,6 +2585,25 @@ func (data *BGP) fromBody(res gjson.Result) {
 								data.Vrfs = make(map[string]BGPVrfs)
 							}
 							data.Vrfs[mapKey] = child
+						}
+						return true
+					},
+				)
+				return true
+			},
+		)
+		rbgpInst.Get("bgpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				v.ForEach(
+					func(classname, value gjson.Result) bool {
+						if classname.String() == "bgpEvtHist" {
+							var child BGPEventHistories
+							child.Size = types.StringValue(value.Get("attributes.size").String())
+							mapKey := value.Get("attributes.type").String()
+							if data.EventHistories == nil {
+								data.EventHistories = make(map[string]BGPEventHistories)
+							}
+							data.EventHistories[mapKey] = child
 						}
 						return true
 					},
@@ -4550,6 +4589,28 @@ func (data *BGP) updateFromBody(res gjson.Result) {
 		}
 		data.Vrfs[key] = item
 	}
+	for key, item := range data.EventHistories {
+		var rbgpEvtHist gjson.Result
+		rbgpInst.Get("bgpInst.children").ForEach(
+			func(_, v gjson.Result) bool {
+				if v.Get("bgpEvtHist.attributes.type").String() == key {
+					rbgpEvtHist = v
+					return false
+				}
+				return true
+			},
+		)
+		if !rbgpEvtHist.Exists() {
+			delete(data.EventHistories, key)
+			continue
+		}
+		if !item.Size.IsNull() {
+			item.Size = types.StringValue(rbgpEvtHist.Get("bgpEvtHist.attributes.size").String())
+		} else {
+			item.Size = types.StringNull()
+		}
+		data.EventHistories[key] = item
+	}
 }
 
 // End of section. //template:end updateFromBody
@@ -4569,7 +4630,7 @@ func (data BGP) managedDns() map[string]bool {
 	dns := map[string]bool{}
 	dn := data.getDn()
 	dns[dn] = true
-	if !(data.InstanceAdminState.IsNull() && data.Asn.IsNull() && data.Control.IsNull() && data.DisablePolicyBatching.IsNull() && data.DisablePolicyBatchingNexthop.IsNull() && data.DisablePolicyBatchingIpv4PrefixList.IsNull() && data.DisablePolicyBatchingIpv6PrefixList.IsNull() && data.EnhancedErrorHandling.IsNull() && data.FabricSoo.IsNull() && data.FlushRoutes.IsNull() && data.Isolate.IsNull() && data.IsolateRouteMap.IsNull() && data.MedDampeningInterval.IsNull() && data.MvpnVriId.IsNull() && data.NexthopSuppressDefaultResolution.IsNull() && data.RdDual.IsNull() && data.RdDualId.IsNull() && len(data.Vrfs) == 0) {
+	if !(data.InstanceAdminState.IsNull() && data.Asn.IsNull() && data.Control.IsNull() && data.DisablePolicyBatching.IsNull() && data.DisablePolicyBatchingNexthop.IsNull() && data.DisablePolicyBatchingIpv4PrefixList.IsNull() && data.DisablePolicyBatchingIpv6PrefixList.IsNull() && data.EnhancedErrorHandling.IsNull() && data.FabricSoo.IsNull() && data.FlushRoutes.IsNull() && data.Isolate.IsNull() && data.IsolateRouteMap.IsNull() && data.MedDampeningInterval.IsNull() && data.MvpnVriId.IsNull() && data.NexthopSuppressDefaultResolution.IsNull() && data.RdDual.IsNull() && data.RdDualId.IsNull() && len(data.Vrfs) == 0 && len(data.EventHistories) == 0) {
 		bgpInstDn := dn + "/" + "inst"
 		dns[bgpInstDn] = true
 		for key, child := range data.Vrfs {
@@ -4698,6 +4759,10 @@ func (data BGP) managedDns() map[string]bool {
 				dns[bgpPeerIfDn_] = true
 			}
 		}
+		for key, child := range data.EventHistories {
+			bgpEvtHistDn := bgpInstDn + "/" + child.getRn(key)
+			dns[bgpEvtHistDn] = true
+		}
 	}
 	return dns
 }
@@ -4721,7 +4786,7 @@ func (data BGP) toResetBody(preexisting map[string]bool) nxos.Body {
 	if body == "" {
 		body, _ = sjson.Set(body, "bgpEntity.attributes", map[string]interface{}{})
 	}
-	if !(data.InstanceAdminState.IsNull() && data.Asn.IsNull() && data.Control.IsNull() && data.DisablePolicyBatching.IsNull() && data.DisablePolicyBatchingNexthop.IsNull() && data.DisablePolicyBatchingIpv4PrefixList.IsNull() && data.DisablePolicyBatchingIpv6PrefixList.IsNull() && data.EnhancedErrorHandling.IsNull() && data.FabricSoo.IsNull() && data.FlushRoutes.IsNull() && data.Isolate.IsNull() && data.IsolateRouteMap.IsNull() && data.MedDampeningInterval.IsNull() && data.MvpnVriId.IsNull() && data.NexthopSuppressDefaultResolution.IsNull() && data.RdDual.IsNull() && data.RdDualId.IsNull() && len(data.Vrfs) == 0) {
+	if !(data.InstanceAdminState.IsNull() && data.Asn.IsNull() && data.Control.IsNull() && data.DisablePolicyBatching.IsNull() && data.DisablePolicyBatchingNexthop.IsNull() && data.DisablePolicyBatchingIpv4PrefixList.IsNull() && data.DisablePolicyBatchingIpv6PrefixList.IsNull() && data.EnhancedErrorHandling.IsNull() && data.FabricSoo.IsNull() && data.FlushRoutes.IsNull() && data.Isolate.IsNull() && data.IsolateRouteMap.IsNull() && data.MedDampeningInterval.IsNull() && data.MvpnVriId.IsNull() && data.NexthopSuppressDefaultResolution.IsNull() && data.RdDual.IsNull() && data.RdDualId.IsNull() && len(data.Vrfs) == 0 && len(data.EventHistories) == 0) {
 		bgpInstRn := "inst"
 		bgpInstDn := dn + "/" + bgpInstRn
 		_ = bgpInstDn
@@ -6028,6 +6093,18 @@ func (data BGP) toResetBody(preexisting map[string]bool) nxos.Body {
 				}
 				bgpInstBody, _ = sjson.SetRaw(bgpInstBody, "bgpInst.children.-1", bgpDomBody)
 			}
+			for key, child := range data.EventHistories {
+				_ = child
+				bgpEvtHistRn := child.getRn(key)
+				bgpEvtHistDn := bgpInstDn + "/" + bgpEvtHistRn
+				_ = bgpEvtHistDn
+				bgpEvtHistBody := ""
+				bgpEvtHistBody, _ = sjson.Set(bgpEvtHistBody, "bgpEvtHist.attributes.rn", bgpEvtHistRn)
+				if !child.Size.IsNull() {
+					bgpEvtHistBody, _ = sjson.Set(bgpEvtHistBody, "bgpEvtHist.attributes.size", "default")
+				}
+				bgpInstBody, _ = sjson.SetRaw(bgpInstBody, "bgpInst.children.-1", bgpEvtHistBody)
+			}
 			if bgpInstBody != "" {
 				bgpInstBody, _ = sjson.Set(bgpInstBody, "bgpInst.attributes.rn", bgpInstRn)
 				body, _ = sjson.SetRaw(body, "bgpEntity.children.-1", bgpInstBody)
@@ -6376,6 +6453,16 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP, im
 				}
 			}
 		}
+		for stateKey := range state.EventHistories {
+			if _, found := data.EventHistories[stateKey]; !found {
+				stateChild := state.EventHistories[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "bgpEvtHist.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "bgpEvtHist.attributes.size", "default")
+				deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "bgpInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
 	}
 
 	if !importing {
@@ -6384,7 +6471,7 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP, im
 		}
 	}
 	if !importing {
-		if deleteEmptied != nil && !(state.InstanceAdminState.IsNull() && state.Asn.IsNull() && state.Control.IsNull() && state.DisablePolicyBatching.IsNull() && state.DisablePolicyBatchingNexthop.IsNull() && state.DisablePolicyBatchingIpv4PrefixList.IsNull() && state.DisablePolicyBatchingIpv6PrefixList.IsNull() && state.EnhancedErrorHandling.IsNull() && state.FabricSoo.IsNull() && state.FlushRoutes.IsNull() && state.Isolate.IsNull() && state.IsolateRouteMap.IsNull() && state.MedDampeningInterval.IsNull() && state.MvpnVriId.IsNull() && state.NexthopSuppressDefaultResolution.IsNull() && state.RdDual.IsNull() && state.RdDualId.IsNull() && len(state.Vrfs) == 0) && (config.InstanceAdminState.IsNull() && config.Asn.IsNull() && config.Control.IsNull() && config.DisablePolicyBatching.IsNull() && config.DisablePolicyBatchingNexthop.IsNull() && config.DisablePolicyBatchingIpv4PrefixList.IsNull() && config.DisablePolicyBatchingIpv6PrefixList.IsNull() && config.EnhancedErrorHandling.IsNull() && config.FabricSoo.IsNull() && config.FlushRoutes.IsNull() && config.Isolate.IsNull() && config.IsolateRouteMap.IsNull() && config.MedDampeningInterval.IsNull() && config.MvpnVriId.IsNull() && config.NexthopSuppressDefaultResolution.IsNull() && config.RdDual.IsNull() && config.RdDualId.IsNull() && len(config.Vrfs) == 0) && deleteEmptied(data.getDn()+"/inst") {
+		if deleteEmptied != nil && !(state.InstanceAdminState.IsNull() && state.Asn.IsNull() && state.Control.IsNull() && state.DisablePolicyBatching.IsNull() && state.DisablePolicyBatchingNexthop.IsNull() && state.DisablePolicyBatchingIpv4PrefixList.IsNull() && state.DisablePolicyBatchingIpv6PrefixList.IsNull() && state.EnhancedErrorHandling.IsNull() && state.FabricSoo.IsNull() && state.FlushRoutes.IsNull() && state.Isolate.IsNull() && state.IsolateRouteMap.IsNull() && state.MedDampeningInterval.IsNull() && state.MvpnVriId.IsNull() && state.NexthopSuppressDefaultResolution.IsNull() && state.RdDual.IsNull() && state.RdDualId.IsNull() && len(state.Vrfs) == 0 && len(state.EventHistories) == 0) && (config.InstanceAdminState.IsNull() && config.Asn.IsNull() && config.Control.IsNull() && config.DisablePolicyBatching.IsNull() && config.DisablePolicyBatchingNexthop.IsNull() && config.DisablePolicyBatchingIpv4PrefixList.IsNull() && config.DisablePolicyBatchingIpv6PrefixList.IsNull() && config.EnhancedErrorHandling.IsNull() && config.FabricSoo.IsNull() && config.FlushRoutes.IsNull() && config.Isolate.IsNull() && config.IsolateRouteMap.IsNull() && config.MedDampeningInterval.IsNull() && config.MvpnVriId.IsNull() && config.NexthopSuppressDefaultResolution.IsNull() && config.RdDual.IsNull() && config.RdDualId.IsNull() && len(config.Vrfs) == 0 && len(config.EventHistories) == 0) && deleteEmptied(data.getDn()+"/inst") {
 			deletePath := helpers.EnsureChildPath(&body.Str, bodyPath, "bgpInst")
 			body.Str, _ = sjson.Delete(body.Str, deletePath+".children")
 			body.Str, _ = sjson.SetRaw(body.Str, deletePath+".attributes", `{"status":"deleted"}`)
@@ -7726,6 +7813,21 @@ func (data BGP) toBodyWithDeletes(ctx context.Context, state BGP, config BGP, im
 									}
 								}
 							}
+						}
+					}
+				}
+			}
+			for key := range state.EventHistories {
+				if configChild, ok := config.EventHistories[key]; ok {
+					stateChild := state.EventHistories[key]
+					_ = stateChild
+					_ = configChild
+					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, bodyPath, "bgpInst")+".children").Array() {
+						if mv.Get("bgpEvtHist.attributes.type").String() == key {
+							if !stateChild.Size.IsNull() && configChild.Size.IsNull() {
+								body.Str, _ = sjson.Set(body.Str, helpers.FindChildPath(body.Str, bodyPath, "bgpInst")+".children"+"."+strconv.Itoa(mi)+".bgpEvtHist.attributes."+"size", "default")
+							}
+							break
 						}
 					}
 				}

@@ -346,4 +346,9 @@ resource "nxos_bgp" "example" {
       }
     }
   }
+  event_histories = {
+    "cli" = {
+      size = "medium"
+    }
+  }
 }

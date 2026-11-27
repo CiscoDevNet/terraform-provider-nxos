@@ -45,6 +45,7 @@ This resource can manage the BGP configuration on NX-OS devices, including the B
 - [bgpPfxCtrlP](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bgp:PfxCtrlP/)
 - [bgpPolicyInheritRule](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bgp:PolicyInheritRule/)
 - [bgpPeerIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bgp:PeerIf/)
+- [bgpEvtHist](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Routing%20and%20Forwarding/bgp:EvtHist/)
 
 ## Example Usage
 
@@ -397,6 +398,11 @@ resource "nxos_bgp" "example" {
       }
     }
   }
+  event_histories = {
+    "cli" = {
+      size = "medium"
+    }
+  }
 }
 ```
 
@@ -420,6 +426,9 @@ resource "nxos_bgp" "example" {
 - `disable_policy_batching_nexthop` (String) Disable Batching Evaluation To Nexthop.
   - Choices: `enabled`, `disabled`
 - `enhanced_error_handling` (Boolean) Enable BGP Enhanced Error Handling to prevent inadvertent session resets for minor errors. See RFC7606 for more details.
+- `event_histories` (Attributes Map) BGP customized buffer detail for event-history.
+  - Map key: `type` - Configure event-history {cli | events | periodic | detail | errors | socket | nve | objstore | prefixes | peer | urib | l2rib | rpki | {rpm {config | eval | keychain}}}.
+  - Key choices: `none`, `cli`, `events`, `periodic`, `detail`, `errors`, `objstore`, `socket`, `nve`, `prefixes`, `peer`, `urib`, `l2rib`, `rpki`, `rpm-config`, `rpm-eval`, `rpm-keychain` (see [below for nested schema](#nestedatt--event_histories))
 - `fabric_soo` (String) Fabric Site of Origin extcommunity.
 - `flush_routes` (String) Flush routes in RIB upon controlled restart.
   - Choices: `enabled`, `disabled`
@@ -444,6 +453,15 @@ resource "nxos_bgp" "example" {
 ### Read-Only
 
 - `id` (String) The distinguished name of the object.
+
+<a id="nestedatt--event_histories"></a>
+### Nested Schema for `event_histories`
+
+Optional:
+
+- `size` (String) Configure event-history with buffer size. Either `default`, `disable`, `small`, `medium`, `large` or a size in bytes (524288-8388608).
+  - Choices: `default`, `disable`, `small`, `medium`, `large`
+
 
 <a id="nestedatt--vrfs"></a>
 ### Nested Schema for `vrfs`

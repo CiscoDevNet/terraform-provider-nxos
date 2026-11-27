@@ -1,0 +1,1 @@
+- Add per-interface ARP configuration (`arp_vrfs`), including `timeout`, proxy ARP and gratuitous ARP settings, to `nxos_system` resource and data source

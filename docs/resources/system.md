@@ -19,6 +19,8 @@ This resource can manage the system configuration on NX-OS devices, including th
 - [ethpmEvent](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/ethpm:Event/)
 - [arpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AEntity/)
 - [arpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AInst/)
+- [arpDom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3ADom/)
+- [arpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AIf/)
 - [arpVpc](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AVpc/)
 - [arpVpcDom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AVpcDom/)
 - [ndEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AEntity/)
@@ -203,6 +205,24 @@ resource "nxos_system" "example" {
   arp_resolve_outside_subnet              = "enabled"
   arp_suppression_timeout                 = 300
   arp_timeout                             = 1800
+  arp_vrfs = {
+    "default" = {
+      interfaces = {
+        "vlan100" = {
+          delete_adjacency_on_mac_delete            = "enabled"
+          duplicate_ip_detection_for_unnumbered_svi = "enabled"
+          gratuitous_hsrp_duplicate                 = "disabled"
+          gratuitous_request                        = "disabled"
+          gratuitous_update                         = "disabled"
+          interface_cache_limit                     = 1000
+          local_proxy_arp                           = "enabled"
+          local_proxy_arp_reachable                 = "enabled"
+          proxy_arp                                 = "enabled"
+          timeout                                   = 1800
+        }
+      }
+    }
+  }
   arp_vpc_domains = {
     "100" = {
     }
@@ -643,6 +663,8 @@ resource "nxos_system" "example" {
 - `arp_vpc_domains` (Attributes Map) ARP VPC Domain.
   - Map key: `domain_id` - VPC domain id.
   - Key range: `1`-`1000` (see [below for nested schema](#nestedatt--arp_vpc_domains))
+- `arp_vrfs` (Attributes Map) ARP Domain (VRF).
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--arp_vrfs))
 - `boot_aci` (String) Boot aci.
 - `boot_auto_copy` (String) Boot Auto Copy.
   - Choices: `disable`, `enable`
@@ -1025,6 +1047,51 @@ Optional:
 
 - `arp_sync` (String) ARP Sync.
   - Choices: `disabled`, `enabled`
+
+
+<a id="nestedatt--arp_vrfs"></a>
+### Nested Schema for `arp_vrfs`
+
+Optional:
+
+- `interfaces` (Attributes Map) ARP Interface.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`. (see [below for nested schema](#nestedatt--arp_vrfs--interfaces))
+
+<a id="nestedatt--arp_vrfs--interfaces"></a>
+### Nested Schema for `arp_vrfs.interfaces`
+
+Optional:
+
+- `control` (String) Interface controls for ARP.
+  - Choices: `unspecified`, `garp-adj-enable`
+- `delete_adjacency_on_mac_delete` (String) Delete Adjacency On MAC Delete w/o Refresh.
+  - Choices: `enabled`, `disabled`
+- `duplicate_ip_detection_for_unnumbered_svi` (String) Enable Duplicate IP Detection Across VLANs for IP Unnumbered SVIs.
+  - Choices: `enabled`, `disabled`
+- `gratuitous_hsrp_duplicate` (String) Gratuitous ARP HSRP Duplicate.
+  - Choices: `enabled`, `disabled`
+- `gratuitous_request` (String) Gratuitous ARP Request.
+  - Choices: `enabled`, `disabled`
+- `gratuitous_update` (String) Gratuitous ARP Update.
+  - Choices: `enabled`, `disabled`
+- `interface_cache_limit` (Number) ARP Cache limit Per Interface.
+  - Range: `0`-`128000`
+- `local_proxy_arp` (String) Local Proxy ARP.
+  - Choices: `enabled`, `disabled`
+- `local_proxy_arp_no_hardware_flooding` (String) Local Proxy ARP w/o HW Flooding.
+  - Choices: `enabled`, `disabled`
+- `local_proxy_arp_reachable` (String) Local Proxy ARP with reachable.
+  - Choices: `enabled`, `disabled`
+  - Minimum NX-OS version: `10.6(1)`
+- `proxy_arp` (String) Proxy ARP.
+  - Choices: `enabled`, `disabled`
+- `refresh_timer_for_mac_delete` (Number) Set Refresh Timer For MAC Delete Adjacency.
+  - Range: `0`-`65535`
+- `resolve_outside_subnet` (String) Allow ARP Outside Subnet Response.
+  - Choices: `enabled`, `disabled`
+- `timeout` (Number) ARP Timeout.
+  - Range: `0`-`28800`
+
 
 
 <a id="nestedatt--breakout_modules"></a>

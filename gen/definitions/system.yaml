@@ -403,6 +403,147 @@ child_classes:
             description: "ARP Global Timeout."
             example: 1800
         child_classes:
+          - class_name: arpDom
+            doc_path: Address%20Resolution/arp%3ADom/
+            rn: dom-[%s]
+            type: list
+            tf_name: arp_vrfs
+            description: "ARP Domain (VRF)."
+            attributes:
+              - nxos_name: name
+                tf_name: name
+                type: String
+                id: true
+                description: "The name of the object."
+                example: default
+            child_classes:
+              - class_name: arpIf
+                doc_path: Address%20Resolution/arp%3AIf/
+                rn: if-[%s]
+                type: list
+                tf_name: interfaces
+                description: "ARP Interface."
+                attributes:
+                  - nxos_name: id
+                    tf_name: interface_id
+                    type: String
+                    id: true
+                    description: "Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`."
+                    example: vlan100
+                  - nxos_name: ctrl
+                    tf_name: control
+                    type: String
+                    description: "Interface controls for ARP."
+                    enum_values:
+                      - unspecified
+                      - garp-adj-enable
+                    example: garp-adj-enable
+                    exclude_test: true
+                  - nxos_name: deleteAdjOnMacDelete
+                    tf_name: delete_adjacency_on_mac_delete
+                    type: String
+                    description: "Delete Adjacency On MAC Delete w/o Refresh."
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                  - nxos_name: duplicateIpDetectionForUnnumberedSvi
+                    tf_name: duplicate_ip_detection_for_unnumbered_svi
+                    type: String
+                    description: "Enable Duplicate IP Detection Across VLANs for IP Unnumbered SVIs."
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                  - nxos_name: gratuitousHsrpDup
+                    tf_name: gratuitous_hsrp_duplicate
+                    type: String
+                    description: "Gratuitous ARP HSRP Duplicate."
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: gratuitousRequest
+                    tf_name: gratuitous_request
+                    type: String
+                    description: "Gratuitous ARP Request."
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: gratuitousUpdate
+                    tf_name: gratuitous_update
+                    type: String
+                    description: "Gratuitous ARP Update."
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: disabled
+                  - nxos_name: intfCacheLimit
+                    tf_name: interface_cache_limit
+                    type: Int64
+                    min_int: 0
+                    max_int: 128000
+                    description: "ARP Cache limit Per Interface."
+                    example: 1000
+                  - nxos_name: localProxyArp
+                    tf_name: local_proxy_arp
+                    type: String
+                    description: "Local Proxy ARP."
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                  - nxos_name: localProxyArpNoHwFlood
+                    tf_name: local_proxy_arp_no_hardware_flooding
+                    type: String
+                    description: "Local Proxy ARP w/o HW Flooding."
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                    exclude_test: true
+                  - nxos_name: localProxyArpReachable
+                    tf_name: local_proxy_arp_reachable
+                    type: String
+                    description: "Local Proxy ARP with reachable."
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                    min_version: '10.6(1)'
+                  - nxos_name: proxyArp
+                    tf_name: proxy_arp
+                    type: String
+                    description: "Proxy ARP."
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                  - nxos_name: refreshTimerForMacDelete
+                    tf_name: refresh_timer_for_mac_delete
+                    type: Int64
+                    min_int: 0
+                    max_int: 65535
+                    description: "Set Refresh Timer For MAC Delete Adjacency."
+                    example: 300
+                    exclude_test: true
+                  - nxos_name: resolveARPOutsideSubnet
+                    tf_name: resolve_outside_subnet
+                    type: String
+                    description: "Allow ARP Outside Subnet Response."
+                    enum_values:
+                      - enabled
+                      - disabled
+                    example: enabled
+                    exclude_test: true
+                  - nxos_name: timeout
+                    tf_name: timeout
+                    type: Int64
+                    min_int: 0
+                    max_int: 28800
+                    description: "ARP Timeout."
+                    example: 1800
           - class_name: arpVpc
             doc_path: Address%20Resolution/arp%3AVpc/
             rn: vpc

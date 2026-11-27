@@ -84,6 +84,18 @@ func TestAccSystemResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_resolve_outside_subnet", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_suppression_timeout", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_timeout", "1800"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_vrfs.default.interfaces.vlan100.delete_adjacency_on_mac_delete", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_vrfs.default.interfaces.vlan100.duplicate_ip_detection_for_unnumbered_svi", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_vrfs.default.interfaces.vlan100.gratuitous_hsrp_duplicate", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_vrfs.default.interfaces.vlan100.gratuitous_request", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_vrfs.default.interfaces.vlan100.gratuitous_update", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_vrfs.default.interfaces.vlan100.interface_cache_limit", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_vrfs.default.interfaces.vlan100.local_proxy_arp", "enabled"))
+	if testAccDeviceVersionAtLeast("10.6(1)") {
+		checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_vrfs.default.interfaces.vlan100.local_proxy_arp_reachable", "enabled"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_vrfs.default.interfaces.vlan100.proxy_arp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "arp_vrfs.default.interfaces.vlan100.timeout", "1800"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_accept_solicit_neighbor_entry", "accept"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_instance_admin_state", "enabled"))
@@ -360,6 +372,18 @@ func TestAccSystemResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_resolve_outside_subnet", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_suppression_timeout", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_timeout", "1800"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_vrfs.default.interfaces.vlan100.delete_adjacency_on_mac_delete", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_vrfs.default.interfaces.vlan100.duplicate_ip_detection_for_unnumbered_svi", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_vrfs.default.interfaces.vlan100.gratuitous_hsrp_duplicate", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_vrfs.default.interfaces.vlan100.gratuitous_request", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_vrfs.default.interfaces.vlan100.gratuitous_update", "disabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_vrfs.default.interfaces.vlan100.interface_cache_limit", "1000"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_vrfs.default.interfaces.vlan100.local_proxy_arp", "enabled"))
+	if testAccDeviceVersionAtLeast("10.6(1)") {
+		checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_vrfs.default.interfaces.vlan100.local_proxy_arp_reachable", "enabled"))
+	}
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_vrfs.default.interfaces.vlan100.proxy_arp", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "arp_vrfs.default.interfaces.vlan100.timeout", "1800"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_accept_solicit_neighbor_entry", "accept"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_instance_admin_state", "enabled"))
@@ -859,6 +883,26 @@ func testAccSystemResourceConfig_all(includeWriteOnly bool) string {
 	config += `	arp_resolve_outside_subnet = "enabled"` + "\n"
 	config += `	arp_suppression_timeout = 300` + "\n"
 	config += `	arp_timeout = 1800` + "\n"
+	config += `	arp_vrfs = {` + "\n"
+	config += `		"default" = {` + "\n"
+	config += `			interfaces = {` + "\n"
+	config += `				"vlan100" = {` + "\n"
+	config += `					delete_adjacency_on_mac_delete = "enabled"` + "\n"
+	config += `					duplicate_ip_detection_for_unnumbered_svi = "enabled"` + "\n"
+	config += `					gratuitous_hsrp_duplicate = "disabled"` + "\n"
+	config += `					gratuitous_request = "disabled"` + "\n"
+	config += `					gratuitous_update = "disabled"` + "\n"
+	config += `					interface_cache_limit = 1000` + "\n"
+	config += `					local_proxy_arp = "enabled"` + "\n"
+	if testAccDeviceVersionAtLeast("10.6(1)") {
+		config += `					local_proxy_arp_reachable = "enabled"` + "\n"
+	}
+	config += `					proxy_arp = "enabled"` + "\n"
+	config += `					timeout = 1800` + "\n"
+	config += `				}` + "\n"
+	config += `			}` + "\n"
+	config += `		}` + "\n"
+	config += `	}` + "\n"
 	config += `	nd_admin_state = "enabled"` + "\n"
 	config += `	nd_accept_solicit_neighbor_entry = "accept"` + "\n"
 	config += `	nd_instance_admin_state = "enabled"` + "\n"

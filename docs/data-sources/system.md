@@ -19,6 +19,8 @@ This data source can read the system configuration on NX-OS devices, including t
 - [ethpmEvent](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Interfaces/ethpm:Event/)
 - [arpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AEntity/)
 - [arpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AInst/)
+- [arpDom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3ADom/)
+- [arpIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AIf/)
 - [arpVpc](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AVpc/)
 - [arpVpcDom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Address%20Resolution/arp%3AVpcDom/)
 - [ndEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AEntity/)
@@ -194,6 +196,8 @@ data "nxos_system" "example" {
 - `arp_vpc_domains` (Attributes Map) ARP VPC Domain.
   - Map key: `domain_id` - VPC domain id.
   - Key range: `1`-`1000` (see [below for nested schema](#nestedatt--arp_vpc_domains))
+- `arp_vrfs` (Attributes Map) ARP Domain (VRF).
+  - Map key: `name` - The name of the object. (see [below for nested schema](#nestedatt--arp_vrfs))
 - `boot_aci` (String) Boot aci.
 - `boot_auto_copy` (String) Boot Auto Copy.
 - `boot_dhcp` (Number) Set the dhcp value.
@@ -444,6 +448,37 @@ data "nxos_system" "example" {
 Read-Only:
 
 - `arp_sync` (String) ARP Sync.
+
+
+<a id="nestedatt--arp_vrfs"></a>
+### Nested Schema for `arp_vrfs`
+
+Read-Only:
+
+- `interfaces` (Attributes Map) ARP Interface.
+  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`. (see [below for nested schema](#nestedatt--arp_vrfs--interfaces))
+
+<a id="nestedatt--arp_vrfs--interfaces"></a>
+### Nested Schema for `arp_vrfs.interfaces`
+
+Read-Only:
+
+- `control` (String) Interface controls for ARP.
+- `delete_adjacency_on_mac_delete` (String) Delete Adjacency On MAC Delete w/o Refresh.
+- `duplicate_ip_detection_for_unnumbered_svi` (String) Enable Duplicate IP Detection Across VLANs for IP Unnumbered SVIs.
+- `gratuitous_hsrp_duplicate` (String) Gratuitous ARP HSRP Duplicate.
+- `gratuitous_request` (String) Gratuitous ARP Request.
+- `gratuitous_update` (String) Gratuitous ARP Update.
+- `interface_cache_limit` (Number) ARP Cache limit Per Interface.
+- `local_proxy_arp` (String) Local Proxy ARP.
+- `local_proxy_arp_no_hardware_flooding` (String) Local Proxy ARP w/o HW Flooding.
+- `local_proxy_arp_reachable` (String) Local Proxy ARP with reachable.
+  - Minimum NX-OS version: `10.6(1)`
+- `proxy_arp` (String) Proxy ARP.
+- `refresh_timer_for_mac_delete` (Number) Set Refresh Timer For MAC Delete Adjacency.
+- `resolve_outside_subnet` (String) Allow ARP Outside Subnet Response.
+- `timeout` (Number) ARP Timeout.
+
 
 
 <a id="nestedatt--breakout_modules"></a>

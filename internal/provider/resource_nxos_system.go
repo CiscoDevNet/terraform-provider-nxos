@@ -70,7 +70,7 @@ func (r *SystemResource) Metadata(ctx context.Context, req resource.MetadataRequ
 func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		// This description is used by the documentation generator and the language server.
-		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, gRPC agent and gNMI settings, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, L2RIB duplicate MAC detection settings, NGOAM (VXLAN OAM) install ACL and loop detection settings, and MPLS interface forwarding settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "ethpmErrDisRecover", "ethpmEvent", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "dnsProvider", "dnsDomExt", "dnsHost", "dnsIpv4Host", "dnsIpv6Host", "dnsVrf", "dnsDom", "dnsProvider", "dnsDomExt", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "lacpEntity", "lacpInst", "lacpIf", "l2Macs", "l2Static", "l2StaticEntry", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "coppClass", "coppAcl", "coppExeOptions", "coppIp", "coppIpv6", "coppRdirect", "coppFcoe", "coppIpIcmp", "coppIpv6Icmp", "coppMulticast", "coppProtocol", "coppMPLSoption", "coppPolicy", "coppClassp", "coppPolicerAction", "coppSetCos", "coppSetDscp", "coppPolicerActionExc", "coppLogging", "coppService", "ipqosEntity", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "grpcInst", "grpcGnmi", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi", "ngmvpnEntity", "ngmvpnInst", "ngmvpnDom", "l2ribEntity", "l2ribInst", "l2ribEvpnMACmob", "ngoamEntity", "ngoamInstallAcl", "ngoamLoopDetection", "mplsEntity", "mplsIf"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Interfaces/ethpm:ErrDisRecover/", "Interfaces/ethpm:Event/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "Discovery%20Protocols/nd%3AVpc/", "Discovery%20Protocols/nd%3AVpcDom/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "DNS/dns:Provider/", "DNS/dns:DomExt/", "DNS/dns:Host/", "DNS/dns:Ipv4Host/", "DNS/dns:Ipv6Host/", "DNS/dns:Vrf/", "DNS/dns:Dom/", "DNS/dns:Provider/", "DNS/dns:DomExt/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Fabric/cfs:Entity/", "Fabric/cfs:Inst/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "Link%20Aggregation/lacp:Entity/", "Link%20Aggregation/lacp:Inst/", "Link%20Aggregation/lacp:If/", "Layer%202/l2:Macs/", "Layer%202/l2:Static/", "Layer%202/l2:StaticEntry/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Discovery%20Protocols/cdp%3AEntity/", "Discovery%20Protocols/cdp%3AInst/", "Discovery%20Protocols/cdp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "Security%20and%20Policing/copp:Class/", "Security%20and%20Policing/copp:Acl/", "Security%20and%20Policing/copp:ExeOptions/", "Security%20and%20Policing/copp:Ip/", "Security%20and%20Policing/copp:Ipv6/", "Security%20and%20Policing/copp:Rdirect/", "Security%20and%20Policing/copp:Fcoe/", "Security%20and%20Policing/copp:IpIcmp/", "Security%20and%20Policing/copp:Ipv6Icmp/", "Security%20and%20Policing/copp:Multicast/", "Security%20and%20Policing/copp:Protocol/", "Security%20and%20Policing/copp:MPLSoption/", "Security%20and%20Policing/copp:Policy/", "Security%20and%20Policing/copp:Classp/", "Security%20and%20Policing/copp:PolicerAction/", "Security%20and%20Policing/copp:SetCos/", "Security%20and%20Policing/copp:SetDscp/", "Security%20and%20Policing/copp:PolicerActionExc/", "Security%20and%20Policing/copp:Logging/", "Security%20and%20Policing/copp:Service/", "Qos/ipqos%3AEntity/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/", "System/icam:Entity/", "System/icam:Inst/", "System/icam:Scale/", "System/nxapi:Inst/", "Network%20Management/grpc:Inst/", "Network%20Management/grpc:Gnmi/", "Interfaces/im:Breakout/", "Interfaces/im:Mod/", "Interfaces/im:FpP/", "Service%20Accelerated%20Switch/sas:Sas/", "Service%20Accelerated%20Switch/sas:Svc/", "Service%20Accelerated%20Switch/sas:SvcInstance/", "Service%20Accelerated%20Switch/sas:SController/", "Service%20Accelerated%20Switch/sas:FwSvcPolicy/", "Service%20Accelerated%20Switch/sas:IpVrf/", "Service%20Accelerated%20Switch/sas:Dom/", "Communication/comm:Entity/", "Communication/comm:Ssh/", "Communication/comm:SshKey/", "System/srcintf:Entity/", "System/srcintf:Ssh/", "System/srcintf:Ftp/", "Security%20and%20Policing/smartcard:PasswdEncrypt/", "Security%20and%20Policing/acllog:Entity/", "Security%20and%20Policing/acllog:Inst/", "Security%20and%20Policing/acllog:LogCache/", "Flow/span:ErspanOriginIp/", "Interfaces/ttag:TtagEntity/", "Interfaces/ttag:TtagIf/", "Layer%202/pvlan:PrivateVlan/", "Layer%202/pvlan:Vlan/", "Layer%202/pvlan:If/", "Layer%202/pvlan:Access/", "Layer%202/pvlan:AccessPromiscuous/", "Layer%202/pvlan:AccessSecondary/", "Layer%202/pvlan:Trunk/", "Layer%202/pvlan:TrunkPromiscuousTable/", "Layer%202/pvlan:TrunkPromiscuousEntry/", "Layer%202/pvlan:TrunkSecondaryTable/", "Layer%202/pvlan:TrunkSecondaryEntry/", "Layer%202/pvlan:Svi/", "Routing%20and%20Forwarding/ngmvpn:Entity/", "Routing%20and%20Forwarding/ngmvpn:Inst/", "Routing%20and%20Forwarding/ngmvpn:Dom/", "Routing%20and%20Forwarding/l2rib:Entity/", "Routing%20and%20Forwarding/l2rib:Inst/", "Routing%20and%20Forwarding/l2rib:EvpnMACmob/", "Network%20Virtualization/ngoam:Entity/", "Network%20Virtualization/ngoam:InstallAcl/", "Network%20Virtualization/ngoam:LoopDetection/", "Routing%20and%20Forwarding/mpls:Entity/", "Routing%20and%20Forwarding/mpls:If/"}).String,
+		MarkdownDescription: helpers.NewResourceDescription("This resource can manage the system configuration on NX-OS devices, including the hostname, system MTU, default admin state settings, UDLD configuration, LACP configuration, MAC address table configuration, DNS configuration (name servers, domain lists, static hosts and per-VRF settings), interface breakout settings, Hypershield (Service Acceleration) settings, global QoS settings (dynamic buffer sharing, QoS statistics), SSH server configuration, gRPC agent and gNMI settings, IP source interface configuration (SSH, FTP), ERSPAN origin IP settings, PTP ttag settings, NGMVPN (Tenant Routed Multicast) settings, L2RIB duplicate MAC detection settings, NGOAM (VXLAN OAM) install ACL and loop detection settings, and MPLS interface forwarding settings.").AddApiDocumentation("topSystem", "System/top:System/", []string{"ethpmEntity", "ethpmInst", "ethpmErrDisRecover", "ethpmEvent", "arpEntity", "arpInst", "arpDom", "arpIf", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "dnsProvider", "dnsDomExt", "dnsHost", "dnsIpv4Host", "dnsIpv6Host", "dnsVrf", "dnsDom", "dnsProvider", "dnsDomExt", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "lacpEntity", "lacpInst", "lacpIf", "l2Macs", "l2Static", "l2StaticEntry", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "coppClass", "coppAcl", "coppExeOptions", "coppIp", "coppIpv6", "coppRdirect", "coppFcoe", "coppIpIcmp", "coppIpv6Icmp", "coppMulticast", "coppProtocol", "coppMPLSoption", "coppPolicy", "coppClassp", "coppPolicerAction", "coppSetCos", "coppSetDscp", "coppPolicerActionExc", "coppLogging", "coppService", "ipqosEntity", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "grpcInst", "grpcGnmi", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi", "ngmvpnEntity", "ngmvpnInst", "ngmvpnDom", "l2ribEntity", "l2ribInst", "l2ribEvpnMACmob", "ngoamEntity", "ngoamInstallAcl", "ngoamLoopDetection", "mplsEntity", "mplsIf"}, []string{"Interfaces/ethpm:Entity/", "Interfaces/ethpm:Inst/", "Interfaces/ethpm:ErrDisRecover/", "Interfaces/ethpm:Event/", "Address%20Resolution/arp%3AEntity/", "Address%20Resolution/arp%3AInst/", "Address%20Resolution/arp%3ADom/", "Address%20Resolution/arp%3AIf/", "Address%20Resolution/arp%3AVpc/", "Address%20Resolution/arp%3AVpcDom/", "Discovery%20Protocols/nd%3AEntity/", "Discovery%20Protocols/nd%3AInst/", "Discovery%20Protocols/nd%3ADom/", "Discovery%20Protocols/nd%3AIf/", "Discovery%20Protocols/nd%3AVpc/", "Discovery%20Protocols/nd%3AVpcDom/", "System/datetime:Clock/", "System/datetime:Timezone/", "System/datetime:SummerT/", "DNS/dns:Entity/", "DNS/dns:Prof/", "DNS/dns:Dom/", "DNS/dns:Provider/", "DNS/dns:DomExt/", "DNS/dns:Host/", "DNS/dns:Ipv4Host/", "DNS/dns:Ipv6Host/", "DNS/dns:Vrf/", "DNS/dns:Dom/", "DNS/dns:Provider/", "DNS/dns:DomExt/", "Routing%20and%20Forwarding/nw%3AVdc/", "System/resmgr%3ALimRes/", "System/vshd:CliAlias/", "System/licensemanager:LicenseManager/", "System/licensemanager:Inst/", "System/licensemanager:SmartLicensing/", "System/licensemanager:TransportCsluUrl/", "System/boot:Boot/", "System/boot:Image/", "Fabric/cfs:Entity/", "Fabric/cfs:Inst/", "Discovery%20Protocols/udld:Entity/", "Discovery%20Protocols/udld:Inst/", "Discovery%20Protocols/udld:PhysIf/", "Link%20Aggregation/lacp:Entity/", "Link%20Aggregation/lacp:Inst/", "Link%20Aggregation/lacp:If/", "Layer%202/l2:Macs/", "Layer%202/l2:Static/", "Layer%202/l2:StaticEntry/", "Discovery%20Protocols/lldp%3AEntity/", "Discovery%20Protocols/lldp%3AInst/", "Discovery%20Protocols/lldp%3AIf/", "Discovery%20Protocols/cdp%3AEntity/", "Discovery%20Protocols/cdp%3AInst/", "Discovery%20Protocols/cdp%3AIf/", "Security%20and%20Policing/copp:Entity/", "Security%20and%20Policing/copp:Profile/", "Security%20and%20Policing/copp:Class/", "Security%20and%20Policing/copp:Acl/", "Security%20and%20Policing/copp:ExeOptions/", "Security%20and%20Policing/copp:Ip/", "Security%20and%20Policing/copp:Ipv6/", "Security%20and%20Policing/copp:Rdirect/", "Security%20and%20Policing/copp:Fcoe/", "Security%20and%20Policing/copp:IpIcmp/", "Security%20and%20Policing/copp:Ipv6Icmp/", "Security%20and%20Policing/copp:Multicast/", "Security%20and%20Policing/copp:Protocol/", "Security%20and%20Policing/copp:MPLSoption/", "Security%20and%20Policing/copp:Policy/", "Security%20and%20Policing/copp:Classp/", "Security%20and%20Policing/copp:PolicerAction/", "Security%20and%20Policing/copp:SetCos/", "Security%20and%20Policing/copp:SetDscp/", "Security%20and%20Policing/copp:PolicerActionExc/", "Security%20and%20Policing/copp:Logging/", "Security%20and%20Policing/copp:Service/", "Qos/ipqos%3AEntity/", "System/terminal:Terminal/", "System/terminal:Line/", "System/terminal:Console/", "System/terminal:ExecTimeout/", "System/terminal:Vty/", "System/terminal:ExecTimeout/", "System/terminal:SesLmt/", "System/icam:Entity/", "System/icam:Inst/", "System/icam:Scale/", "System/nxapi:Inst/", "Network%20Management/grpc:Inst/", "Network%20Management/grpc:Gnmi/", "Interfaces/im:Breakout/", "Interfaces/im:Mod/", "Interfaces/im:FpP/", "Service%20Accelerated%20Switch/sas:Sas/", "Service%20Accelerated%20Switch/sas:Svc/", "Service%20Accelerated%20Switch/sas:SvcInstance/", "Service%20Accelerated%20Switch/sas:SController/", "Service%20Accelerated%20Switch/sas:FwSvcPolicy/", "Service%20Accelerated%20Switch/sas:IpVrf/", "Service%20Accelerated%20Switch/sas:Dom/", "Communication/comm:Entity/", "Communication/comm:Ssh/", "Communication/comm:SshKey/", "System/srcintf:Entity/", "System/srcintf:Ssh/", "System/srcintf:Ftp/", "Security%20and%20Policing/smartcard:PasswdEncrypt/", "Security%20and%20Policing/acllog:Entity/", "Security%20and%20Policing/acllog:Inst/", "Security%20and%20Policing/acllog:LogCache/", "Flow/span:ErspanOriginIp/", "Interfaces/ttag:TtagEntity/", "Interfaces/ttag:TtagIf/", "Layer%202/pvlan:PrivateVlan/", "Layer%202/pvlan:Vlan/", "Layer%202/pvlan:If/", "Layer%202/pvlan:Access/", "Layer%202/pvlan:AccessPromiscuous/", "Layer%202/pvlan:AccessSecondary/", "Layer%202/pvlan:Trunk/", "Layer%202/pvlan:TrunkPromiscuousTable/", "Layer%202/pvlan:TrunkPromiscuousEntry/", "Layer%202/pvlan:TrunkSecondaryTable/", "Layer%202/pvlan:TrunkSecondaryEntry/", "Layer%202/pvlan:Svi/", "Routing%20and%20Forwarding/ngmvpn:Entity/", "Routing%20and%20Forwarding/ngmvpn:Inst/", "Routing%20and%20Forwarding/ngmvpn:Dom/", "Routing%20and%20Forwarding/l2rib:Entity/", "Routing%20and%20Forwarding/l2rib:Inst/", "Routing%20and%20Forwarding/l2rib:EvpnMACmob/", "Network%20Virtualization/ngoam:Entity/", "Network%20Virtualization/ngoam:InstallAcl/", "Network%20Virtualization/ngoam:LoopDetection/", "Routing%20and%20Forwarding/mpls:Entity/", "Routing%20and%20Forwarding/mpls:If/"}).String,
 
 		Attributes: map[string]schema.Attribute{
 			"device": schema.StringAttribute{
@@ -385,6 +385,120 @@ func (r *SystemResource) Schema(ctx context.Context, req resource.SchemaRequest,
 				Optional:            true,
 				Validators: []validator.Int64{
 					int64validator.Between(0, 28800),
+				},
+			},
+			"arp_vrfs": schema.MapNestedAttribute{
+				MarkdownDescription: helpers.NewAttributeDescription("ARP Domain (VRF).\n  - Map key: `name` - The name of the object.").String,
+				Optional:            true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"interfaces": schema.MapNestedAttribute{
+							MarkdownDescription: helpers.NewAttributeDescription("ARP Interface.\n  - Map key: `interface_id` - Must match first field in the output of `show intf brief`. Example: `eth1/1` or `vlan100`.").String,
+							Optional:            true,
+							NestedObject: schema.NestedAttributeObject{
+								Attributes: map[string]schema.Attribute{
+									"control": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Interface controls for ARP.").AddStringEnumDescription("unspecified", "garp-adj-enable").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("unspecified", "garp-adj-enable"),
+										},
+									},
+									"delete_adjacency_on_mac_delete": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Delete Adjacency On MAC Delete w/o Refresh.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"duplicate_ip_detection_for_unnumbered_svi": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Enable Duplicate IP Detection Across VLANs for IP Unnumbered SVIs.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"gratuitous_hsrp_duplicate": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Gratuitous ARP HSRP Duplicate.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"gratuitous_request": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Gratuitous ARP Request.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"gratuitous_update": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Gratuitous ARP Update.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"interface_cache_limit": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("ARP Cache limit Per Interface.").AddIntegerRangeDescription(0, 128000).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 128000),
+										},
+									},
+									"local_proxy_arp": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Local Proxy ARP.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"local_proxy_arp_no_hardware_flooding": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Local Proxy ARP w/o HW Flooding.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"local_proxy_arp_reachable": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Local Proxy ARP with reachable.").AddStringEnumDescription("enabled", "disabled").AddMinimumVersionDescription("10.6(1)").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"proxy_arp": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Proxy ARP.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"refresh_timer_for_mac_delete": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Set Refresh Timer For MAC Delete Adjacency.").AddIntegerRangeDescription(0, 65535).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 65535),
+										},
+									},
+									"resolve_outside_subnet": schema.StringAttribute{
+										MarkdownDescription: helpers.NewAttributeDescription("Allow ARP Outside Subnet Response.").AddStringEnumDescription("enabled", "disabled").String,
+										Optional:            true,
+										Validators: []validator.String{
+											stringvalidator.OneOf("enabled", "disabled"),
+										},
+									},
+									"timeout": schema.Int64Attribute{
+										MarkdownDescription: helpers.NewAttributeDescription("ARP Timeout.").AddIntegerRangeDescription(0, 28800).String,
+										Optional:            true,
+										Validators: []validator.Int64{
+											int64validator.Between(0, 28800),
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			},
 			"arp_vpc_domains": schema.MapNestedAttribute{

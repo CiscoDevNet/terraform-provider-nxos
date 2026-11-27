@@ -47,6 +47,24 @@ resource "nxos_system" "example" {
   arp_resolve_outside_subnet              = "enabled"
   arp_suppression_timeout                 = 300
   arp_timeout                             = 1800
+  arp_vrfs = {
+    "default" = {
+      interfaces = {
+        "vlan100" = {
+          delete_adjacency_on_mac_delete            = "enabled"
+          duplicate_ip_detection_for_unnumbered_svi = "enabled"
+          gratuitous_hsrp_duplicate                 = "disabled"
+          gratuitous_request                        = "disabled"
+          gratuitous_update                         = "disabled"
+          interface_cache_limit                     = 1000
+          local_proxy_arp                           = "enabled"
+          local_proxy_arp_reachable                 = "enabled"
+          proxy_arp                                 = "enabled"
+          timeout                                   = 1800
+        }
+      }
+    }
+  }
   arp_vpc_domains = {
     "100" = {
     }

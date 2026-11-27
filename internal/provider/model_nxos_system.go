@@ -83,6 +83,7 @@ type System struct {
 	ArpResolveOutsideSubnet                       types.String                                  `tfsdk:"arp_resolve_outside_subnet"`
 	ArpSuppressionTimeout                         types.Int64                                   `tfsdk:"arp_suppression_timeout"`
 	ArpTimeout                                    types.Int64                                   `tfsdk:"arp_timeout"`
+	ArpVrfs                                       map[string]SystemArpVrfs                      `tfsdk:"arp_vrfs"`
 	ArpVpcDomains                                 map[string]SystemArpVpcDomains                `tfsdk:"arp_vpc_domains"`
 	NdAdminState                                  types.String                                  `tfsdk:"nd_admin_state"`
 	NdAcceptSolicitNeighborEntry                  types.String                                  `tfsdk:"nd_accept_solicit_neighbor_entry"`
@@ -283,6 +284,27 @@ type SystemErrdisableEvents struct {
 	Control    types.String `tfsdk:"control"`
 	Detect     types.Bool   `tfsdk:"detect"`
 	Recover    types.Bool   `tfsdk:"recover"`
+}
+
+type SystemArpVrfs struct {
+	Interfaces map[string]SystemArpVrfsInterfaces `tfsdk:"interfaces"`
+}
+
+type SystemArpVrfsInterfaces struct {
+	Control                              types.String `tfsdk:"control"`
+	DeleteAdjacencyOnMacDelete           types.String `tfsdk:"delete_adjacency_on_mac_delete"`
+	DuplicateIpDetectionForUnnumberedSvi types.String `tfsdk:"duplicate_ip_detection_for_unnumbered_svi"`
+	GratuitousHsrpDuplicate              types.String `tfsdk:"gratuitous_hsrp_duplicate"`
+	GratuitousRequest                    types.String `tfsdk:"gratuitous_request"`
+	GratuitousUpdate                     types.String `tfsdk:"gratuitous_update"`
+	InterfaceCacheLimit                  types.Int64  `tfsdk:"interface_cache_limit"`
+	LocalProxyArp                        types.String `tfsdk:"local_proxy_arp"`
+	LocalProxyArpNoHardwareFlooding      types.String `tfsdk:"local_proxy_arp_no_hardware_flooding"`
+	LocalProxyArpReachable               types.String `tfsdk:"local_proxy_arp_reachable"`
+	ProxyArp                             types.String `tfsdk:"proxy_arp"`
+	RefreshTimerForMacDelete             types.Int64  `tfsdk:"refresh_timer_for_mac_delete"`
+	ResolveOutsideSubnet                 types.String `tfsdk:"resolve_outside_subnet"`
+	Timeout                              types.Int64  `tfsdk:"timeout"`
 }
 
 type SystemArpVpcDomains struct {
@@ -596,14 +618,16 @@ func (data *System) fromIdentity(ctx context.Context, identity *SystemIdentity) 
 var SystemSubtreeClassMinVersions = map[string]string{}
 
 // SystemMinVersions maps classes and attributes ("<class>.<attribute>") to their minimum NX-OS version.
-var SystemMinVersions = map[string]helpers.MinVersion{}
+var SystemMinVersions = map[string]helpers.MinVersion{
+	"arpIf.localProxyArpReachable": {Version: "10.6(1)", Path: "arp_vrfs.interfaces.local_proxy_arp_reachable"},
+}
 
 // SystemListClasses holds the list child classes of the resource.
-var SystemListClasses = map[string]bool{"ethpmEvent": true, "arpVpcDom": true, "ndDom": true, "ndIf": true, "ndVpcDom": true, "dnsProf": true, "dnsProvider": true, "dnsDomExt": true, "dnsHost": true, "dnsVrf": true, "nwVdc": true, "vshdCliAlias": true, "udldPhysIf": true, "lacpIf": true, "l2StaticEntry": true, "lldpIf": true, "cdpIf": true, "coppClass": true, "coppAcl": true, "coppExeOptions": true, "coppIpIcmp": true, "coppIpv6Icmp": true, "coppMulticast": true, "coppProtocol": true, "coppPolicy": true, "coppClassp": true, "coppPolicerAction": true, "coppSetCos": true, "coppLogging": true, "coppService": true, "imMod": true, "imFpP": true, "sasSvcInstance": true, "sasDom": true, "commSshKey": true, "srcintfSsh": true, "srcintfFtp": true, "ttagTtagIf": true, "pvlanVlan": true, "pvlanIf": true, "pvlanTrunkPromiscuousEntry": true, "pvlanTrunkSecondaryEntry": true, "pvlanSvi": true, "ngmvpnDom": true, "mplsIf": true}
+var SystemListClasses = map[string]bool{"ethpmEvent": true, "arpDom": true, "arpIf": true, "arpVpcDom": true, "ndDom": true, "ndIf": true, "ndVpcDom": true, "dnsProf": true, "dnsProvider": true, "dnsDomExt": true, "dnsHost": true, "dnsVrf": true, "nwVdc": true, "vshdCliAlias": true, "udldPhysIf": true, "lacpIf": true, "l2StaticEntry": true, "lldpIf": true, "cdpIf": true, "coppClass": true, "coppAcl": true, "coppExeOptions": true, "coppIpIcmp": true, "coppIpv6Icmp": true, "coppMulticast": true, "coppProtocol": true, "coppPolicy": true, "coppClassp": true, "coppPolicerAction": true, "coppSetCos": true, "coppLogging": true, "coppService": true, "imMod": true, "imFpP": true, "sasSvcInstance": true, "sasDom": true, "commSshKey": true, "srcintfSsh": true, "srcintfFtp": true, "ttagTtagIf": true, "pvlanVlan": true, "pvlanIf": true, "pvlanTrunkPromiscuousEntry": true, "pvlanTrunkSecondaryEntry": true, "pvlanSvi": true, "ngmvpnDom": true, "mplsIf": true}
 
 // getSystemTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getSystemTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"ethpmEntity", "ethpmInst", "ethpmErrDisRecover", "ethpmEvent", "arpEntity", "arpInst", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "dnsProvider", "dnsDomExt", "dnsHost", "dnsIpv4Host", "dnsIpv6Host", "dnsVrf", "dnsDom", "dnsProvider", "dnsDomExt", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "lacpEntity", "lacpInst", "lacpIf", "l2Macs", "l2Static", "l2StaticEntry", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "coppClass", "coppAcl", "coppExeOptions", "coppIp", "coppIpv6", "coppRdirect", "coppFcoe", "coppIpIcmp", "coppIpv6Icmp", "coppMulticast", "coppProtocol", "coppMPLSoption", "coppPolicy", "coppClassp", "coppPolicerAction", "coppSetCos", "coppSetDscp", "coppPolicerActionExc", "coppLogging", "coppService", "ipqosEntity", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "grpcInst", "grpcGnmi", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi", "ngmvpnEntity", "ngmvpnInst", "ngmvpnDom", "l2ribEntity", "l2ribInst", "l2ribEvpnMACmob", "ngoamEntity", "ngoamInstallAcl", "ngoamLoopDetection", "mplsEntity", "mplsIf"}, SystemSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"ethpmEntity", "ethpmInst", "ethpmErrDisRecover", "ethpmEvent", "arpEntity", "arpInst", "arpDom", "arpIf", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "dnsProvider", "dnsDomExt", "dnsHost", "dnsIpv4Host", "dnsIpv6Host", "dnsVrf", "dnsDom", "dnsProvider", "dnsDomExt", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "lacpEntity", "lacpInst", "lacpIf", "l2Macs", "l2Static", "l2StaticEntry", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "coppClass", "coppAcl", "coppExeOptions", "coppIp", "coppIpv6", "coppRdirect", "coppFcoe", "coppIpIcmp", "coppIpv6Icmp", "coppMulticast", "coppProtocol", "coppMPLSoption", "coppPolicy", "coppClassp", "coppPolicerAction", "coppSetCos", "coppSetDscp", "coppPolicerActionExc", "coppLogging", "coppService", "ipqosEntity", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "grpcInst", "grpcGnmi", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi", "ngmvpnEntity", "ngmvpnInst", "ngmvpnDom", "l2ribEntity", "l2ribInst", "l2ribEvpnMACmob", "ngoamEntity", "ngoamInstallAcl", "ngoamLoopDetection", "mplsEntity", "mplsIf"}, SystemSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -616,6 +640,14 @@ func (data System) getDn() string {
 
 func (data SystemErrdisableEvents) getRn(key string) string {
 	return fmt.Sprintf("Event-%s", key)
+}
+
+func (data SystemArpVrfs) getRn(key string) string {
+	return fmt.Sprintf("dom-[%s]", key)
+}
+
+func (data SystemArpVrfsInterfaces) getRn(key string) string {
+	return fmt.Sprintf("if-[%s]", key)
 }
 
 func (data SystemArpVpcDomains) getRn(key string) string {
@@ -1029,6 +1061,69 @@ func (data System) toBody(config System) nxos.Body {
 			_ = nestedChildrenPath
 			prevBody := body
 			body = childBody
+			for key, child := range data.ArpVrfs {
+				configChild, configChildOk := config.ArpVrfs[key]
+				_ = configChild
+				_ = configChildOk
+				attrs = "{}"
+				attrs, _ = sjson.Set(attrs, "name", key)
+				body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.arpDom.attributes", attrs)
+				{
+					nestedIndex := len(gjson.Get(body, nestedChildrenPath).Array()) - 1
+					nestedChildrenPath := nestedChildrenPath + "." + strconv.Itoa(nestedIndex) + ".arpDom.children"
+					_ = nestedChildrenPath
+					for key, child := range child.Interfaces {
+						configChild, configChildOk := configChild.Interfaces[key]
+						_ = configChild
+						_ = configChildOk
+						attrs = "{}"
+						attrs, _ = sjson.Set(attrs, "id", key)
+						if configChildOk && !child.Control.IsUnknown() && !child.Control.IsNull() && !configChild.Control.IsNull() {
+							attrs, _ = sjson.Set(attrs, "ctrl", child.Control.ValueString())
+						}
+						if configChildOk && !child.DeleteAdjacencyOnMacDelete.IsUnknown() && !child.DeleteAdjacencyOnMacDelete.IsNull() && !configChild.DeleteAdjacencyOnMacDelete.IsNull() {
+							attrs, _ = sjson.Set(attrs, "deleteAdjOnMacDelete", child.DeleteAdjacencyOnMacDelete.ValueString())
+						}
+						if configChildOk && !child.DuplicateIpDetectionForUnnumberedSvi.IsUnknown() && !child.DuplicateIpDetectionForUnnumberedSvi.IsNull() && !configChild.DuplicateIpDetectionForUnnumberedSvi.IsNull() {
+							attrs, _ = sjson.Set(attrs, "duplicateIpDetectionForUnnumberedSvi", child.DuplicateIpDetectionForUnnumberedSvi.ValueString())
+						}
+						if configChildOk && !child.GratuitousHsrpDuplicate.IsUnknown() && !child.GratuitousHsrpDuplicate.IsNull() && !configChild.GratuitousHsrpDuplicate.IsNull() {
+							attrs, _ = sjson.Set(attrs, "gratuitousHsrpDup", child.GratuitousHsrpDuplicate.ValueString())
+						}
+						if configChildOk && !child.GratuitousRequest.IsUnknown() && !child.GratuitousRequest.IsNull() && !configChild.GratuitousRequest.IsNull() {
+							attrs, _ = sjson.Set(attrs, "gratuitousRequest", child.GratuitousRequest.ValueString())
+						}
+						if configChildOk && !child.GratuitousUpdate.IsUnknown() && !child.GratuitousUpdate.IsNull() && !configChild.GratuitousUpdate.IsNull() {
+							attrs, _ = sjson.Set(attrs, "gratuitousUpdate", child.GratuitousUpdate.ValueString())
+						}
+						if configChildOk && !child.InterfaceCacheLimit.IsUnknown() && !child.InterfaceCacheLimit.IsNull() && !configChild.InterfaceCacheLimit.IsNull() {
+							attrs, _ = sjson.Set(attrs, "intfCacheLimit", strconv.FormatInt(child.InterfaceCacheLimit.ValueInt64(), 10))
+						}
+						if configChildOk && !child.LocalProxyArp.IsUnknown() && !child.LocalProxyArp.IsNull() && !configChild.LocalProxyArp.IsNull() {
+							attrs, _ = sjson.Set(attrs, "localProxyArp", child.LocalProxyArp.ValueString())
+						}
+						if configChildOk && !child.LocalProxyArpNoHardwareFlooding.IsUnknown() && !child.LocalProxyArpNoHardwareFlooding.IsNull() && !configChild.LocalProxyArpNoHardwareFlooding.IsNull() {
+							attrs, _ = sjson.Set(attrs, "localProxyArpNoHwFlood", child.LocalProxyArpNoHardwareFlooding.ValueString())
+						}
+						if configChildOk && !child.LocalProxyArpReachable.IsUnknown() && !child.LocalProxyArpReachable.IsNull() && !configChild.LocalProxyArpReachable.IsNull() {
+							attrs, _ = sjson.Set(attrs, "localProxyArpReachable", child.LocalProxyArpReachable.ValueString())
+						}
+						if configChildOk && !child.ProxyArp.IsUnknown() && !child.ProxyArp.IsNull() && !configChild.ProxyArp.IsNull() {
+							attrs, _ = sjson.Set(attrs, "proxyArp", child.ProxyArp.ValueString())
+						}
+						if configChildOk && !child.RefreshTimerForMacDelete.IsUnknown() && !child.RefreshTimerForMacDelete.IsNull() && !configChild.RefreshTimerForMacDelete.IsNull() {
+							attrs, _ = sjson.Set(attrs, "refreshTimerForMacDelete", strconv.FormatInt(child.RefreshTimerForMacDelete.ValueInt64(), 10))
+						}
+						if configChildOk && !child.ResolveOutsideSubnet.IsUnknown() && !child.ResolveOutsideSubnet.IsNull() && !configChild.ResolveOutsideSubnet.IsNull() {
+							attrs, _ = sjson.Set(attrs, "resolveARPOutsideSubnet", child.ResolveOutsideSubnet.ValueString())
+						}
+						if configChildOk && !child.Timeout.IsUnknown() && !child.Timeout.IsNull() && !configChild.Timeout.IsNull() {
+							attrs, _ = sjson.Set(attrs, "timeout", strconv.FormatInt(child.Timeout.ValueInt64(), 10))
+						}
+						body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.arpIf.attributes", attrs)
+					}
+				}
+			}
 			{
 				attrs = "{}"
 				childBody := ""
@@ -3448,6 +3543,56 @@ func (data *System) fromBody(res gjson.Result) {
 			data.ArpResolveOutsideSubnet = types.StringValue(rarpInst.Get("arpInst.attributes.resolveARPOutsideSubnet").String())
 			data.ArpSuppressionTimeout = types.Int64Value(rarpInst.Get("arpInst.attributes.suppression_timeout").Int())
 			data.ArpTimeout = types.Int64Value(rarpInst.Get("arpInst.attributes.timeout").Int())
+			rarpInst.Get("arpInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					v.ForEach(
+						func(classname, value gjson.Result) bool {
+							if classname.String() == "arpDom" {
+								var child SystemArpVrfs
+								mapKey := value.Get("attributes.name").String()
+								value.Get("children").ForEach(
+									func(_, nestedV gjson.Result) bool {
+										nestedV.ForEach(
+											func(nestedClassname, nestedValue gjson.Result) bool {
+												if nestedClassname.String() == "arpIf" {
+													var nestedChildarpIf SystemArpVrfsInterfaces
+													nestedChildarpIf.Control = types.StringValue(nestedValue.Get("attributes.ctrl").String())
+													nestedChildarpIf.DeleteAdjacencyOnMacDelete = types.StringValue(nestedValue.Get("attributes.deleteAdjOnMacDelete").String())
+													nestedChildarpIf.DuplicateIpDetectionForUnnumberedSvi = types.StringValue(nestedValue.Get("attributes.duplicateIpDetectionForUnnumberedSvi").String())
+													nestedChildarpIf.GratuitousHsrpDuplicate = types.StringValue(nestedValue.Get("attributes.gratuitousHsrpDup").String())
+													nestedChildarpIf.GratuitousRequest = types.StringValue(nestedValue.Get("attributes.gratuitousRequest").String())
+													nestedChildarpIf.GratuitousUpdate = types.StringValue(nestedValue.Get("attributes.gratuitousUpdate").String())
+													nestedChildarpIf.InterfaceCacheLimit = types.Int64Value(nestedValue.Get("attributes.intfCacheLimit").Int())
+													nestedChildarpIf.LocalProxyArp = types.StringValue(nestedValue.Get("attributes.localProxyArp").String())
+													nestedChildarpIf.LocalProxyArpNoHardwareFlooding = types.StringValue(nestedValue.Get("attributes.localProxyArpNoHwFlood").String())
+													nestedChildarpIf.LocalProxyArpReachable = types.StringValue(nestedValue.Get("attributes.localProxyArpReachable").String())
+													nestedChildarpIf.ProxyArp = types.StringValue(nestedValue.Get("attributes.proxyArp").String())
+													nestedChildarpIf.RefreshTimerForMacDelete = types.Int64Value(nestedValue.Get("attributes.refreshTimerForMacDelete").Int())
+													nestedChildarpIf.ResolveOutsideSubnet = types.StringValue(nestedValue.Get("attributes.resolveARPOutsideSubnet").String())
+													nestedChildarpIf.Timeout = types.Int64Value(nestedValue.Get("attributes.timeout").Int())
+													nestedMapKey := nestedValue.Get("attributes.id").String()
+													if child.Interfaces == nil {
+														child.Interfaces = make(map[string]SystemArpVrfsInterfaces)
+													}
+													child.Interfaces[nestedMapKey] = nestedChildarpIf
+												}
+												return true
+											},
+										)
+										return true
+									},
+								)
+								if data.ArpVrfs == nil {
+									data.ArpVrfs = make(map[string]SystemArpVrfs)
+								}
+								data.ArpVrfs[mapKey] = child
+							}
+							return true
+						},
+					)
+					return true
+				},
+			)
 			{
 				var rarpVpc gjson.Result
 				rarpInst.Get("arpInst.children").ForEach(
@@ -5981,6 +6126,111 @@ func (data *System) updateFromBody(res gjson.Result) {
 			data.ArpTimeout = types.Int64Value(rarpInst.Get("arpInst.attributes.timeout").Int())
 		} else {
 			data.ArpTimeout = types.Int64Null()
+		}
+		for key, item := range data.ArpVrfs {
+			var rarpDom gjson.Result
+			rarpInst.Get("arpInst.children").ForEach(
+				func(_, v gjson.Result) bool {
+					if v.Get("arpDom.attributes.name").String() == key {
+						rarpDom = v
+						return false
+					}
+					return true
+				},
+			)
+			if !rarpDom.Exists() {
+				delete(data.ArpVrfs, key)
+				continue
+			}
+			for nc := range item.Interfaces {
+				ncItem := item.Interfaces[nc]
+				var rarpIf gjson.Result
+				rarpDom.Get("arpDom.children").ForEach(
+					func(_, v gjson.Result) bool {
+						if v.Get("arpIf.attributes.id").String() == nc {
+							rarpIf = v
+							return false
+						}
+						return true
+					},
+				)
+				if !rarpIf.Exists() {
+					delete(item.Interfaces, nc)
+					continue
+				}
+				if !ncItem.Control.IsNull() {
+					ncItem.Control = types.StringValue(rarpIf.Get("arpIf.attributes.ctrl").String())
+				} else {
+					ncItem.Control = types.StringNull()
+				}
+				if !ncItem.DeleteAdjacencyOnMacDelete.IsNull() {
+					ncItem.DeleteAdjacencyOnMacDelete = types.StringValue(rarpIf.Get("arpIf.attributes.deleteAdjOnMacDelete").String())
+				} else {
+					ncItem.DeleteAdjacencyOnMacDelete = types.StringNull()
+				}
+				if !ncItem.DuplicateIpDetectionForUnnumberedSvi.IsNull() {
+					ncItem.DuplicateIpDetectionForUnnumberedSvi = types.StringValue(rarpIf.Get("arpIf.attributes.duplicateIpDetectionForUnnumberedSvi").String())
+				} else {
+					ncItem.DuplicateIpDetectionForUnnumberedSvi = types.StringNull()
+				}
+				if !ncItem.GratuitousHsrpDuplicate.IsNull() {
+					ncItem.GratuitousHsrpDuplicate = types.StringValue(rarpIf.Get("arpIf.attributes.gratuitousHsrpDup").String())
+				} else {
+					ncItem.GratuitousHsrpDuplicate = types.StringNull()
+				}
+				if !ncItem.GratuitousRequest.IsNull() {
+					ncItem.GratuitousRequest = types.StringValue(rarpIf.Get("arpIf.attributes.gratuitousRequest").String())
+				} else {
+					ncItem.GratuitousRequest = types.StringNull()
+				}
+				if !ncItem.GratuitousUpdate.IsNull() {
+					ncItem.GratuitousUpdate = types.StringValue(rarpIf.Get("arpIf.attributes.gratuitousUpdate").String())
+				} else {
+					ncItem.GratuitousUpdate = types.StringNull()
+				}
+				if !ncItem.InterfaceCacheLimit.IsNull() {
+					ncItem.InterfaceCacheLimit = types.Int64Value(rarpIf.Get("arpIf.attributes.intfCacheLimit").Int())
+				} else {
+					ncItem.InterfaceCacheLimit = types.Int64Null()
+				}
+				if !ncItem.LocalProxyArp.IsNull() {
+					ncItem.LocalProxyArp = types.StringValue(rarpIf.Get("arpIf.attributes.localProxyArp").String())
+				} else {
+					ncItem.LocalProxyArp = types.StringNull()
+				}
+				if !ncItem.LocalProxyArpNoHardwareFlooding.IsNull() {
+					ncItem.LocalProxyArpNoHardwareFlooding = types.StringValue(rarpIf.Get("arpIf.attributes.localProxyArpNoHwFlood").String())
+				} else {
+					ncItem.LocalProxyArpNoHardwareFlooding = types.StringNull()
+				}
+				if !ncItem.LocalProxyArpReachable.IsNull() {
+					ncItem.LocalProxyArpReachable = types.StringValue(rarpIf.Get("arpIf.attributes.localProxyArpReachable").String())
+				} else {
+					ncItem.LocalProxyArpReachable = types.StringNull()
+				}
+				if !ncItem.ProxyArp.IsNull() {
+					ncItem.ProxyArp = types.StringValue(rarpIf.Get("arpIf.attributes.proxyArp").String())
+				} else {
+					ncItem.ProxyArp = types.StringNull()
+				}
+				if !ncItem.RefreshTimerForMacDelete.IsNull() {
+					ncItem.RefreshTimerForMacDelete = types.Int64Value(rarpIf.Get("arpIf.attributes.refreshTimerForMacDelete").Int())
+				} else {
+					ncItem.RefreshTimerForMacDelete = types.Int64Null()
+				}
+				if !ncItem.ResolveOutsideSubnet.IsNull() {
+					ncItem.ResolveOutsideSubnet = types.StringValue(rarpIf.Get("arpIf.attributes.resolveARPOutsideSubnet").String())
+				} else {
+					ncItem.ResolveOutsideSubnet = types.StringNull()
+				}
+				if !ncItem.Timeout.IsNull() {
+					ncItem.Timeout = types.Int64Value(rarpIf.Get("arpIf.attributes.timeout").Int())
+				} else {
+					ncItem.Timeout = types.Int64Null()
+				}
+				item.Interfaces[nc] = ncItem
+			}
+			data.ArpVrfs[key] = item
 		}
 		{
 			var rarpVpc gjson.Result
@@ -9503,6 +9753,9 @@ func (data System) toDeleteBody() nxos.Body {
 				childBody, _ = sjson.Set(childBody, "timeout", "DME_UNSET_PROPERTY_MARKER")
 			}
 			hasNestedChildren := false
+			if len(data.ArpVrfs) > 0 {
+				hasNestedChildren = true
+			}
 			if !(len(data.ArpVpcDomains) == 0) {
 				hasNestedChildren = true
 			}
@@ -9515,6 +9768,12 @@ func (data System) toDeleteBody() nxos.Body {
 				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
 				nestedChildrenPath := childBodyPath + ".children"
 				_ = nestedChildrenPath
+				for key, child := range data.ArpVrfs {
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "arpDom.attributes.rn", child.getRn(key))
+					deleteBody, _ = sjson.Set(deleteBody, "arpDom.attributes.status", "deleted")
+					body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1", deleteBody)
+				}
 				if !(len(data.ArpVpcDomains) == 0) {
 					deleteBody := ""
 					deleteBody, _ = sjson.Set(deleteBody, "arpVpc.attributes.rn", "vpc")
@@ -10969,12 +11228,20 @@ func (data System) managedDns() map[string]bool {
 			}
 		}
 	}
-	if !(data.ArpAdminState.IsNull() && (data.ArpInstanceAdminState.IsNull() && data.ArpAllowStaticArpOutsideSubnet.IsNull() && data.ArpUnnumberedSviSoftwareReplication.IsNull() && data.ArpCacheLimit.IsNull() && data.ArpCacheSyslogRate.IsNull() && data.ArpControl.IsNull() && data.ArpEvpnTimeout.IsNull() && data.ArpInterfaceCacheLimit.IsNull() && data.ArpIpAdjacencyRouteDistance.IsNull() && data.ArpIpArpCos.IsNull() && data.ArpOffListTimeout.IsNull() && data.ArpRarpFabricForwarding.IsNull() && data.ArpRarpFabricForwardingRate.IsNull() && data.ArpResolveOutsideSubnet.IsNull() && data.ArpSuppressionTimeout.IsNull() && data.ArpTimeout.IsNull() && (len(data.ArpVpcDomains) == 0))) {
+	if !(data.ArpAdminState.IsNull() && (data.ArpInstanceAdminState.IsNull() && data.ArpAllowStaticArpOutsideSubnet.IsNull() && data.ArpUnnumberedSviSoftwareReplication.IsNull() && data.ArpCacheLimit.IsNull() && data.ArpCacheSyslogRate.IsNull() && data.ArpControl.IsNull() && data.ArpEvpnTimeout.IsNull() && data.ArpInterfaceCacheLimit.IsNull() && data.ArpIpAdjacencyRouteDistance.IsNull() && data.ArpIpArpCos.IsNull() && data.ArpOffListTimeout.IsNull() && data.ArpRarpFabricForwarding.IsNull() && data.ArpRarpFabricForwardingRate.IsNull() && data.ArpResolveOutsideSubnet.IsNull() && data.ArpSuppressionTimeout.IsNull() && data.ArpTimeout.IsNull() && len(data.ArpVrfs) == 0 && (len(data.ArpVpcDomains) == 0))) {
 		arpEntityDn := dn + "/" + "arp"
 		dns[arpEntityDn] = true
-		if !(data.ArpInstanceAdminState.IsNull() && data.ArpAllowStaticArpOutsideSubnet.IsNull() && data.ArpUnnumberedSviSoftwareReplication.IsNull() && data.ArpCacheLimit.IsNull() && data.ArpCacheSyslogRate.IsNull() && data.ArpControl.IsNull() && data.ArpEvpnTimeout.IsNull() && data.ArpInterfaceCacheLimit.IsNull() && data.ArpIpAdjacencyRouteDistance.IsNull() && data.ArpIpArpCos.IsNull() && data.ArpOffListTimeout.IsNull() && data.ArpRarpFabricForwarding.IsNull() && data.ArpRarpFabricForwardingRate.IsNull() && data.ArpResolveOutsideSubnet.IsNull() && data.ArpSuppressionTimeout.IsNull() && data.ArpTimeout.IsNull() && (len(data.ArpVpcDomains) == 0)) {
+		if !(data.ArpInstanceAdminState.IsNull() && data.ArpAllowStaticArpOutsideSubnet.IsNull() && data.ArpUnnumberedSviSoftwareReplication.IsNull() && data.ArpCacheLimit.IsNull() && data.ArpCacheSyslogRate.IsNull() && data.ArpControl.IsNull() && data.ArpEvpnTimeout.IsNull() && data.ArpInterfaceCacheLimit.IsNull() && data.ArpIpAdjacencyRouteDistance.IsNull() && data.ArpIpArpCos.IsNull() && data.ArpOffListTimeout.IsNull() && data.ArpRarpFabricForwarding.IsNull() && data.ArpRarpFabricForwardingRate.IsNull() && data.ArpResolveOutsideSubnet.IsNull() && data.ArpSuppressionTimeout.IsNull() && data.ArpTimeout.IsNull() && len(data.ArpVrfs) == 0 && (len(data.ArpVpcDomains) == 0)) {
 			arpInstDn := arpEntityDn + "/" + "inst"
 			dns[arpInstDn] = true
+			for key, child := range data.ArpVrfs {
+				arpDomDn := arpInstDn + "/" + child.getRn(key)
+				dns[arpDomDn] = true
+				for key_, child_ := range child.Interfaces {
+					arpIfDn_ := arpDomDn + "/" + child_.getRn(key_)
+					dns[arpIfDn_] = true
+				}
+			}
 			if !(len(data.ArpVpcDomains) == 0) {
 				arpVpcDn := arpInstDn + "/" + "vpc"
 				dns[arpVpcDn] = true
@@ -11656,7 +11923,7 @@ func (data System) toResetBody(preexisting map[string]bool) nxos.Body {
 			}
 		}
 	}
-	if !(data.ArpAdminState.IsNull() && (data.ArpInstanceAdminState.IsNull() && data.ArpAllowStaticArpOutsideSubnet.IsNull() && data.ArpUnnumberedSviSoftwareReplication.IsNull() && data.ArpCacheLimit.IsNull() && data.ArpCacheSyslogRate.IsNull() && data.ArpControl.IsNull() && data.ArpEvpnTimeout.IsNull() && data.ArpInterfaceCacheLimit.IsNull() && data.ArpIpAdjacencyRouteDistance.IsNull() && data.ArpIpArpCos.IsNull() && data.ArpOffListTimeout.IsNull() && data.ArpRarpFabricForwarding.IsNull() && data.ArpRarpFabricForwardingRate.IsNull() && data.ArpResolveOutsideSubnet.IsNull() && data.ArpSuppressionTimeout.IsNull() && data.ArpTimeout.IsNull() && (len(data.ArpVpcDomains) == 0))) {
+	if !(data.ArpAdminState.IsNull() && (data.ArpInstanceAdminState.IsNull() && data.ArpAllowStaticArpOutsideSubnet.IsNull() && data.ArpUnnumberedSviSoftwareReplication.IsNull() && data.ArpCacheLimit.IsNull() && data.ArpCacheSyslogRate.IsNull() && data.ArpControl.IsNull() && data.ArpEvpnTimeout.IsNull() && data.ArpInterfaceCacheLimit.IsNull() && data.ArpIpAdjacencyRouteDistance.IsNull() && data.ArpIpArpCos.IsNull() && data.ArpOffListTimeout.IsNull() && data.ArpRarpFabricForwarding.IsNull() && data.ArpRarpFabricForwardingRate.IsNull() && data.ArpResolveOutsideSubnet.IsNull() && data.ArpSuppressionTimeout.IsNull() && data.ArpTimeout.IsNull() && len(data.ArpVrfs) == 0 && (len(data.ArpVpcDomains) == 0))) {
 		arpEntityRn := "arp"
 		arpEntityDn := dn + "/" + arpEntityRn
 		_ = arpEntityDn
@@ -11665,7 +11932,7 @@ func (data System) toResetBody(preexisting map[string]bool) nxos.Body {
 			if !data.ArpAdminState.IsNull() {
 				arpEntityBody, _ = sjson.Set(arpEntityBody, "arpEntity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
 			}
-			if !(data.ArpInstanceAdminState.IsNull() && data.ArpAllowStaticArpOutsideSubnet.IsNull() && data.ArpUnnumberedSviSoftwareReplication.IsNull() && data.ArpCacheLimit.IsNull() && data.ArpCacheSyslogRate.IsNull() && data.ArpControl.IsNull() && data.ArpEvpnTimeout.IsNull() && data.ArpInterfaceCacheLimit.IsNull() && data.ArpIpAdjacencyRouteDistance.IsNull() && data.ArpIpArpCos.IsNull() && data.ArpOffListTimeout.IsNull() && data.ArpRarpFabricForwarding.IsNull() && data.ArpRarpFabricForwardingRate.IsNull() && data.ArpResolveOutsideSubnet.IsNull() && data.ArpSuppressionTimeout.IsNull() && data.ArpTimeout.IsNull() && (len(data.ArpVpcDomains) == 0)) {
+			if !(data.ArpInstanceAdminState.IsNull() && data.ArpAllowStaticArpOutsideSubnet.IsNull() && data.ArpUnnumberedSviSoftwareReplication.IsNull() && data.ArpCacheLimit.IsNull() && data.ArpCacheSyslogRate.IsNull() && data.ArpControl.IsNull() && data.ArpEvpnTimeout.IsNull() && data.ArpInterfaceCacheLimit.IsNull() && data.ArpIpAdjacencyRouteDistance.IsNull() && data.ArpIpArpCos.IsNull() && data.ArpOffListTimeout.IsNull() && data.ArpRarpFabricForwarding.IsNull() && data.ArpRarpFabricForwardingRate.IsNull() && data.ArpResolveOutsideSubnet.IsNull() && data.ArpSuppressionTimeout.IsNull() && data.ArpTimeout.IsNull() && len(data.ArpVrfs) == 0 && (len(data.ArpVpcDomains) == 0)) {
 				arpInstRn := "inst"
 				arpInstDn := arpEntityDn + "/" + arpInstRn
 				_ = arpInstDn
@@ -11718,6 +11985,74 @@ func (data System) toResetBody(preexisting map[string]bool) nxos.Body {
 					}
 					if !data.ArpTimeout.IsNull() {
 						arpInstBody, _ = sjson.Set(arpInstBody, "arpInst.attributes.timeout", "DME_UNSET_PROPERTY_MARKER")
+					}
+					for key, child := range data.ArpVrfs {
+						_ = child
+						arpDomRn := child.getRn(key)
+						arpDomDn := arpInstDn + "/" + arpDomRn
+						_ = arpDomDn
+						if !existed(arpDomDn) {
+							arpInstBody, _ = sjson.Set(arpInstBody, "arpInst.children.-1.arpDom.attributes", map[string]interface{}{"rn": arpDomRn, "status": "deleted"})
+							continue
+						}
+						arpDomBody := ""
+						arpDomBody, _ = sjson.Set(arpDomBody, "arpDom.attributes.rn", arpDomRn)
+						for key_, child_ := range child.Interfaces {
+							_ = child_
+							arpIfRn_ := child_.getRn(key_)
+							arpIfDn_ := arpDomDn + "/" + arpIfRn_
+							_ = arpIfDn_
+							if !existed(arpIfDn_) {
+								arpDomBody, _ = sjson.Set(arpDomBody, "arpDom.children.-1.arpIf.attributes", map[string]interface{}{"rn": arpIfRn_, "status": "deleted"})
+								continue
+							}
+							arpIfBody_ := ""
+							arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.rn", arpIfRn_)
+							if !child_.Control.IsNull() {
+								arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.ctrl", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.DeleteAdjacencyOnMacDelete.IsNull() {
+								arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.deleteAdjOnMacDelete", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.DuplicateIpDetectionForUnnumberedSvi.IsNull() {
+								arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.duplicateIpDetectionForUnnumberedSvi", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.GratuitousHsrpDuplicate.IsNull() {
+								arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.gratuitousHsrpDup", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.GratuitousRequest.IsNull() {
+								arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.gratuitousRequest", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.GratuitousUpdate.IsNull() {
+								arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.gratuitousUpdate", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.InterfaceCacheLimit.IsNull() {
+								arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.intfCacheLimit", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.LocalProxyArp.IsNull() {
+								arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.localProxyArp", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.LocalProxyArpNoHardwareFlooding.IsNull() {
+								arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.localProxyArpNoHwFlood", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.LocalProxyArpReachable.IsNull() {
+								arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.localProxyArpReachable", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ProxyArp.IsNull() {
+								arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.proxyArp", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.RefreshTimerForMacDelete.IsNull() {
+								arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.refreshTimerForMacDelete", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.ResolveOutsideSubnet.IsNull() {
+								arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.resolveARPOutsideSubnet", "DME_UNSET_PROPERTY_MARKER")
+							}
+							if !child_.Timeout.IsNull() {
+								arpIfBody_, _ = sjson.Set(arpIfBody_, "arpIf.attributes.timeout", "DME_UNSET_PROPERTY_MARKER")
+							}
+							arpDomBody, _ = sjson.SetRaw(arpDomBody, "arpDom.children.-1", arpIfBody_)
+						}
+						arpInstBody, _ = sjson.SetRaw(arpInstBody, "arpInst.children.-1", arpDomBody)
 					}
 					if !(len(data.ArpVpcDomains) == 0) {
 						arpVpcRn := "vpc"
@@ -14130,6 +14465,42 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
 			}
 		}
+		for stateKey := range state.ArpVrfs {
+			if _, found := data.ArpVrfs[stateKey]; !found {
+				stateChild := state.ArpVrfs[stateKey]
+				deleteBody := ""
+				deleteBody, _ = sjson.Set(deleteBody, "arpDom.attributes.rn", stateChild.getRn(stateKey))
+				deleteBody, _ = sjson.Set(deleteBody, "arpDom.attributes.status", "deleted")
+				deletePath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "arpEntity")+".children", "arpInst") + ".children"
+				body.Str, _ = sjson.SetRaw(body.Str, deletePath+".-1", deleteBody)
+			}
+		}
+		for di := range state.ArpVrfs {
+			if _, found := data.ArpVrfs[di]; !found {
+				continue
+			}
+			stateItemdi := state.ArpVrfs[di]
+			planItemdi := data.ArpVrfs[di]
+			matchBodyPathdi := ""
+			for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "arpEntity")+".children", "arpInst")+".children").Array() {
+				if mv.Get("arpDom.attributes.name").String() == di {
+					matchBodyPathdi = helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "arpEntity")+".children", "arpInst") + ".children" + "." + strconv.Itoa(mi) + ".arpDom.children"
+					break
+				}
+			}
+			if matchBodyPathdi == "" {
+				continue
+			}
+			for stateChildKey := range stateItemdi.Interfaces {
+				if _, found := planItemdi.Interfaces[stateChildKey]; !found {
+					stateChild := stateItemdi.Interfaces[stateChildKey]
+					deleteBody := ""
+					deleteBody, _ = sjson.Set(deleteBody, "arpIf.attributes.rn", stateChild.getRn(stateChildKey))
+					deleteBody, _ = sjson.Set(deleteBody, "arpIf.attributes.status", "deleted")
+					body.Str, _ = sjson.SetRaw(body.Str, matchBodyPathdi+".-1", deleteBody)
+				}
+			}
+		}
 		for stateKey := range state.ArpVpcDomains {
 			if _, found := data.ArpVpcDomains[stateKey]; !found {
 				stateChild := state.ArpVpcDomains[stateKey]
@@ -15019,6 +15390,80 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 		if !state.ArpTimeout.IsNull() && config.ArpTimeout.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "arpEntity")+".children", "arpInst")
 			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
+		}
+		for key := range state.ArpVrfs {
+			if configChild, ok := config.ArpVrfs[key]; ok {
+				stateChild := state.ArpVrfs[key]
+				_ = stateChild
+				_ = configChild
+				listChildDn := data.getDn() + "/arp" + "/inst" + "/" + stateChild.getRn(key)
+				_ = listChildDn
+				{
+					listChildPath := ""
+					for mi, mv := range gjson.Get(body.Str, helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "arpEntity")+".children", "arpInst")+".children").Array() {
+						if mv.Get("arpDom.attributes.name").String() == key {
+							listChildPath = helpers.FindChildPath(body.Str, helpers.FindChildPath(body.Str, bodyPath, "arpEntity")+".children", "arpInst") + ".children" + "." + strconv.Itoa(mi) + ".arpDom.children"
+							break
+						}
+					}
+					if listChildPath != "" {
+						for key := range stateChild.Interfaces {
+							if configChild, ok := configChild.Interfaces[key]; ok {
+								stateChild := stateChild.Interfaces[key]
+								_ = stateChild
+								_ = configChild
+								for mi, mv := range gjson.Get(body.Str, listChildPath).Array() {
+									if mv.Get("arpIf.attributes.id").String() == key {
+										if !stateChild.Control.IsNull() && configChild.Control.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".arpIf.attributes."+"ctrl", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.DeleteAdjacencyOnMacDelete.IsNull() && configChild.DeleteAdjacencyOnMacDelete.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".arpIf.attributes."+"deleteAdjOnMacDelete", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.DuplicateIpDetectionForUnnumberedSvi.IsNull() && configChild.DuplicateIpDetectionForUnnumberedSvi.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".arpIf.attributes."+"duplicateIpDetectionForUnnumberedSvi", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.GratuitousHsrpDuplicate.IsNull() && configChild.GratuitousHsrpDuplicate.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".arpIf.attributes."+"gratuitousHsrpDup", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.GratuitousRequest.IsNull() && configChild.GratuitousRequest.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".arpIf.attributes."+"gratuitousRequest", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.GratuitousUpdate.IsNull() && configChild.GratuitousUpdate.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".arpIf.attributes."+"gratuitousUpdate", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.InterfaceCacheLimit.IsNull() && configChild.InterfaceCacheLimit.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".arpIf.attributes."+"intfCacheLimit", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.LocalProxyArp.IsNull() && configChild.LocalProxyArp.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".arpIf.attributes."+"localProxyArp", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.LocalProxyArpNoHardwareFlooding.IsNull() && configChild.LocalProxyArpNoHardwareFlooding.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".arpIf.attributes."+"localProxyArpNoHwFlood", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.LocalProxyArpReachable.IsNull() && configChild.LocalProxyArpReachable.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".arpIf.attributes."+"localProxyArpReachable", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.ProxyArp.IsNull() && configChild.ProxyArp.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".arpIf.attributes."+"proxyArp", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.RefreshTimerForMacDelete.IsNull() && configChild.RefreshTimerForMacDelete.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".arpIf.attributes."+"refreshTimerForMacDelete", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.ResolveOutsideSubnet.IsNull() && configChild.ResolveOutsideSubnet.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".arpIf.attributes."+"resolveARPOutsideSubnet", "DME_UNSET_PROPERTY_MARKER")
+										}
+										if !stateChild.Timeout.IsNull() && configChild.Timeout.IsNull() {
+											body.Str, _ = sjson.Set(body.Str, listChildPath+"."+strconv.Itoa(mi)+".arpIf.attributes."+"timeout", "DME_UNSET_PROPERTY_MARKER")
+										}
+										break
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 		for key := range state.ArpVpcDomains {
 			if configChild, ok := config.ArpVpcDomains[key]; ok {

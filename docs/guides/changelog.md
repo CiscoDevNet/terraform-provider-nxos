@@ -7,6 +7,16 @@ description: |-
 
 # Changelog
 
+## 0.23.0
+
+- Add per-interface ARP configuration (`arp_vrfs`), including `timeout`, proxy ARP and gratuitous ARP settings, to `nxos_system` resource and data source
+- Add `event_histories` attribute to `nxos_bgp` resource and data source
+- Add `nxos_eem` resource and data source, including Embedded Event Manager (EEM) environment variables and applets with untagged and tagged event specifications, event correlation and actions
+- Add `evmed` attribute to `nxos_feature` resource and data source
+- Add BGP SNMP traps (`bgp_traps_all`, `bgp_traps_state_changes`, `bgp_traps_state_changes_all_fsm`, `bgp_traps_state_changes_backward_transition`, `bgp_traps_state_changes_limited`, `bgp_traps_threshold_prefix`), OSPF SNMP traps (`ospf_traps_admin_state`, `ospf_traps_instances`) and OSPFv3 SNMP traps (`ospfv3_traps_admin_state`, `ospfv3_traps_instances`) to `nxos_snmp` resource and data source
+- The `id` of the `nxos_snmp` resource and data source changes from `sys/snmp` to `sys`; existing state is read without changes and the stored `id` is updated on the next refresh
+- Add TCP settings (`tcp_path_mtu_discovery`, `tcp_mss`, `tcp_syn_wait_time`, `tcp_dscp_locally_originated_packets`, `tcp_start_port_range`, `tcp_end_port_range`) and `tcp_udp_admin_state` to `nxos_system` resource and data source
+
 ## 0.22.3
 
 - Add telemetry host destinations (`hosts`) to `destination_groups` of `nxos_telemetry` resource and data source, including Splunk HTTP Event Collector (HEC) support with the `HEC` protocol and `token`, `token_encryption_type`, `index` and `endpoint` attributes (NX-OS 10.6(3) or later)

@@ -1,1 +1,0 @@
-- Add `event_histories` attribute to `nxos_bgp` resource and data source

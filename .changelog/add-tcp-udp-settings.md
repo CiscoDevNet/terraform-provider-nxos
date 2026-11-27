@@ -1,1 +1,0 @@
-- Add TCP settings (`tcp_path_mtu_discovery`, `tcp_mss`, `tcp_syn_wait_time`, `tcp_dscp_locally_originated_packets`, `tcp_start_port_range`, `tcp_end_port_range`) and `tcp_udp_admin_state` to `nxos_system` resource and data source

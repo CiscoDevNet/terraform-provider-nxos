@@ -29,6 +29,8 @@ This resource can manage the system configuration on NX-OS devices, including th
 - [ndIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AIf/)
 - [ndVpc](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AVpc/)
 - [ndVpcDom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AVpcDom/)
+- [tcpudpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/tcpudp%3AEntity/)
+- [tcpudpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/tcpudp%3AInst/)
 - [datetimeClock](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:Clock/)
 - [datetimeTimezone](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:Timezone/)
 - [datetimeSummerT](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:SummerT/)
@@ -249,25 +251,32 @@ resource "nxos_system" "example" {
     "100" = {
     }
   }
-  clock_admin_state                = "enabled"
-  clock_authentication_state       = "disabled"
-  clock_format                     = "24hours"
-  clock_format_debug               = false
-  clock_format_syslog              = false
-  clock_timezone_name              = "PST"
-  clock_timezone_hours             = -8
-  clock_timezone_minutes           = 0
-  clock_summer_time_name           = "PDT"
-  clock_summer_time_offset_minutes = 60
-  clock_summer_time_start_week     = 2
-  clock_summer_time_start_day      = "Sun"
-  clock_summer_time_start_month    = "Mar"
-  clock_summer_time_start_time     = "02:00"
-  clock_summer_time_end_week       = 1
-  clock_summer_time_end_day        = "Sun"
-  clock_summer_time_end_month      = "Nov"
-  clock_summer_time_end_time       = "02:00"
-  dns_admin_state                  = "enabled"
+  tcp_udp_admin_state                 = "enabled"
+  tcp_dscp_locally_originated_packets = 46
+  tcp_path_mtu_discovery              = "enabled"
+  tcp_syn_wait_time                   = 60
+  tcp_end_port_range                  = 65535
+  tcp_mss                             = 1460
+  tcp_start_port_range                = 25000
+  clock_admin_state                   = "enabled"
+  clock_authentication_state          = "disabled"
+  clock_format                        = "24hours"
+  clock_format_debug                  = false
+  clock_format_syslog                 = false
+  clock_timezone_name                 = "PST"
+  clock_timezone_hours                = -8
+  clock_timezone_minutes              = 0
+  clock_summer_time_name              = "PDT"
+  clock_summer_time_offset_minutes    = 60
+  clock_summer_time_start_week        = 2
+  clock_summer_time_start_day         = "Sun"
+  clock_summer_time_start_month       = "Mar"
+  clock_summer_time_start_time        = "02:00"
+  clock_summer_time_end_week          = 1
+  clock_summer_time_end_day           = "Sun"
+  clock_summer_time_end_month         = "Nov"
+  clock_summer_time_end_time          = "02:00"
+  dns_admin_state                     = "enabled"
   dns_profiles = {
     "default" = {
       description        = "My DNS Profile"
@@ -1016,6 +1025,20 @@ resource "nxos_system" "example" {
   - Range: `22`-`65535`
 - `ssh_source_interfaces` (Attributes Map) List of SSH source interfaces, per VRF.
   - Map key: `vrf` - VRF. (see [below for nested schema](#nestedatt--ssh_source_interfaces))
+- `tcp_dscp_locally_originated_packets` (Number) DSCP value for Locally Originated Packets.
+  - Range: `0`-`85`
+- `tcp_end_port_range` (Number) Sockets Local End Port Range.
+  - Range: `22001`-`65535`
+- `tcp_mss` (Number) Set the Tcp Mss Byte.
+  - Range: `88`-`10000`
+- `tcp_path_mtu_discovery` (String) Enable path-MTU discovery on TCP.
+  - Choices: `enabled`, `disabled`
+- `tcp_start_port_range` (Number) Sockets Local Start Port Range.
+  - Range: `15001`-`58000`
+- `tcp_syn_wait_time` (Number) Set time to wait on new TCP connections.
+  - Range: `5`-`300`
+- `tcp_udp_admin_state` (String) The administrative state of the object or policy.
+  - Choices: `enabled`, `disabled`
 - `ttag_interfaces` (Attributes Map) Per-interface PTP ttag configuration and management.
   - Map key: `interface_id` - Interface id of port with PTP configuration. (see [below for nested schema](#nestedatt--ttag_interfaces))
 - `ttag_marker_interval` (Number) PTP ttag marker interval in seconds.

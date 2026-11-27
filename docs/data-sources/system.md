@@ -29,6 +29,8 @@ This data source can read the system configuration on NX-OS devices, including t
 - [ndIf](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AIf/)
 - [ndVpc](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AVpc/)
 - [ndVpcDom](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Discovery%20Protocols/nd%3AVpcDom/)
+- [tcpudpEntity](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/tcpudp%3AEntity/)
+- [tcpudpInst](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/Layer%203/tcpudp%3AInst/)
 - [datetimeClock](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:Clock/)
 - [datetimeTimezone](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:Timezone/)
 - [datetimeSummerT](https://pubhub.devnetcloud.com/media/dme-docs-10-6-3/docs/System/datetime:SummerT/)
@@ -428,6 +430,13 @@ data "nxos_system" "example" {
 - `ssh_port` (Number) SSH port.
 - `ssh_source_interfaces` (Attributes Map) List of SSH source interfaces, per VRF.
   - Map key: `vrf` - VRF. (see [below for nested schema](#nestedatt--ssh_source_interfaces))
+- `tcp_dscp_locally_originated_packets` (Number) DSCP value for Locally Originated Packets.
+- `tcp_end_port_range` (Number) Sockets Local End Port Range.
+- `tcp_mss` (Number) Set the Tcp Mss Byte.
+- `tcp_path_mtu_discovery` (String) Enable path-MTU discovery on TCP.
+- `tcp_start_port_range` (Number) Sockets Local Start Port Range.
+- `tcp_syn_wait_time` (Number) Set time to wait on new TCP connections.
+- `tcp_udp_admin_state` (String) The administrative state of the object or policy.
 - `ttag_interfaces` (Attributes Map) Per-interface PTP ttag configuration and management.
   - Map key: `interface_id` - Interface id of port with PTP configuration. (see [below for nested schema](#nestedatt--ttag_interfaces))
 - `ttag_marker_interval` (Number) PTP ttag marker interval in seconds.

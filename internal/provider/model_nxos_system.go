@@ -98,6 +98,13 @@ type System struct {
 	NdSolicitNeighborAdvertisement                types.String                                  `tfsdk:"nd_solicit_neighbor_advertisement"`
 	NdVrfs                                        map[string]SystemNdVrfs                       `tfsdk:"nd_vrfs"`
 	NdVpcDomains                                  map[string]SystemNdVpcDomains                 `tfsdk:"nd_vpc_domains"`
+	TcpUdpAdminState                              types.String                                  `tfsdk:"tcp_udp_admin_state"`
+	TcpDscpLocallyOriginatedPackets               types.Int64                                   `tfsdk:"tcp_dscp_locally_originated_packets"`
+	TcpPathMtuDiscovery                           types.String                                  `tfsdk:"tcp_path_mtu_discovery"`
+	TcpSynWaitTime                                types.Int64                                   `tfsdk:"tcp_syn_wait_time"`
+	TcpEndPortRange                               types.Int64                                   `tfsdk:"tcp_end_port_range"`
+	TcpMss                                        types.Int64                                   `tfsdk:"tcp_mss"`
+	TcpStartPortRange                             types.Int64                                   `tfsdk:"tcp_start_port_range"`
 	ClockAdminState                               types.String                                  `tfsdk:"clock_admin_state"`
 	ClockAuthenticationState                      types.String                                  `tfsdk:"clock_authentication_state"`
 	ClockFormat                                   types.String                                  `tfsdk:"clock_format"`
@@ -627,7 +634,7 @@ var SystemListClasses = map[string]bool{"ethpmEvent": true, "arpDom": true, "arp
 
 // getSystemTree reads the object together with the subtree of all classes managed by the resource and the data source.
 func getSystemTree(ctx context.Context, device *NxosProviderDataDevice, dn string) (nxos.Res, error) {
-	return device.GetSubtree(ctx, dn, []string{"ethpmEntity", "ethpmInst", "ethpmErrDisRecover", "ethpmEvent", "arpEntity", "arpInst", "arpDom", "arpIf", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "dnsProvider", "dnsDomExt", "dnsHost", "dnsIpv4Host", "dnsIpv6Host", "dnsVrf", "dnsDom", "dnsProvider", "dnsDomExt", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "lacpEntity", "lacpInst", "lacpIf", "l2Macs", "l2Static", "l2StaticEntry", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "coppClass", "coppAcl", "coppExeOptions", "coppIp", "coppIpv6", "coppRdirect", "coppFcoe", "coppIpIcmp", "coppIpv6Icmp", "coppMulticast", "coppProtocol", "coppMPLSoption", "coppPolicy", "coppClassp", "coppPolicerAction", "coppSetCos", "coppSetDscp", "coppPolicerActionExc", "coppLogging", "coppService", "ipqosEntity", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "grpcInst", "grpcGnmi", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi", "ngmvpnEntity", "ngmvpnInst", "ngmvpnDom", "l2ribEntity", "l2ribInst", "l2ribEvpnMACmob", "ngoamEntity", "ngoamInstallAcl", "ngoamLoopDetection", "mplsEntity", "mplsIf"}, SystemSubtreeClassMinVersions)
+	return device.GetSubtree(ctx, dn, []string{"ethpmEntity", "ethpmInst", "ethpmErrDisRecover", "ethpmEvent", "arpEntity", "arpInst", "arpDom", "arpIf", "arpVpc", "arpVpcDom", "ndEntity", "ndInst", "ndDom", "ndIf", "ndVpc", "ndVpcDom", "tcpudpEntity", "tcpudpInst", "datetimeClock", "datetimeTimezone", "datetimeSummerT", "dnsEntity", "dnsProf", "dnsDom", "dnsProvider", "dnsDomExt", "dnsHost", "dnsIpv4Host", "dnsIpv6Host", "dnsVrf", "dnsDom", "dnsProvider", "dnsDomExt", "nwVdc", "resmgrLimRes", "vshdCliAlias", "licensemanagerLicenseManager", "licensemanagerInst", "licensemanagerSmartLicensing", "licensemanagerTransportCsluUrl", "bootBoot", "bootImage", "cfsEntity", "cfsInst", "udldEntity", "udldInst", "udldPhysIf", "lacpEntity", "lacpInst", "lacpIf", "l2Macs", "l2Static", "l2StaticEntry", "lldpEntity", "lldpInst", "lldpIf", "cdpEntity", "cdpInst", "cdpIf", "coppEntity", "coppProfile", "coppClass", "coppAcl", "coppExeOptions", "coppIp", "coppIpv6", "coppRdirect", "coppFcoe", "coppIpIcmp", "coppIpv6Icmp", "coppMulticast", "coppProtocol", "coppMPLSoption", "coppPolicy", "coppClassp", "coppPolicerAction", "coppSetCos", "coppSetDscp", "coppPolicerActionExc", "coppLogging", "coppService", "ipqosEntity", "terminalTerminal", "terminalLine", "terminalConsole", "terminalExecTimeout", "terminalVty", "terminalExecTimeout", "terminalSesLmt", "icamEntity", "icamInst", "icamScale", "nxapiInst", "grpcInst", "grpcGnmi", "imBreakout", "imMod", "imFpP", "sasSas", "sasSvc", "sasSvcInstance", "sasSController", "sasFwSvcPolicy", "sasIpVrf", "sasDom", "commEntity", "commSsh", "commSshKey", "srcintfEntity", "srcintfSsh", "srcintfFtp", "smartcardPasswdEncrypt", "acllogEntity", "acllogInst", "acllogLogCache", "spanErspanOriginIp", "ttagTtagEntity", "ttagTtagIf", "pvlanPrivateVlan", "pvlanVlan", "pvlanIf", "pvlanAccess", "pvlanAccessPromiscuous", "pvlanAccessSecondary", "pvlanTrunk", "pvlanTrunkPromiscuousTable", "pvlanTrunkPromiscuousEntry", "pvlanTrunkSecondaryTable", "pvlanTrunkSecondaryEntry", "pvlanSvi", "ngmvpnEntity", "ngmvpnInst", "ngmvpnDom", "l2ribEntity", "l2ribInst", "l2ribEvpnMACmob", "ngoamEntity", "ngoamInstallAcl", "ngoamLoopDetection", "mplsEntity", "mplsIf"}, SystemSubtreeClassMinVersions)
 }
 
 // End of section. //template:end types
@@ -1330,6 +1337,47 @@ func (data System) toBody(config System) nxos.Body {
 		childBody = body
 		body = prevBody
 		if parentAttrs != "{}" || gjson.Get(childBody, "ndEntity.children").Exists() {
+			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
+		}
+	}
+	{
+		attrs = "{}"
+		if !data.TcpUdpAdminState.IsUnknown() && !data.TcpUdpAdminState.IsNull() && !config.TcpUdpAdminState.IsNull() {
+			attrs, _ = sjson.Set(attrs, "adminSt", data.TcpUdpAdminState.ValueString())
+		}
+		childBody := ""
+		childBody, _ = sjson.SetRaw(childBody, "tcpudpEntity.attributes", attrs)
+		parentAttrs := attrs
+		parentPath := childrenPath
+		nestedChildrenPath := "tcpudpEntity.children"
+		_ = nestedChildrenPath
+		prevBody := body
+		body = childBody
+		attrs = "{}"
+		if !data.TcpDscpLocallyOriginatedPackets.IsUnknown() && !data.TcpDscpLocallyOriginatedPackets.IsNull() && !config.TcpDscpLocallyOriginatedPackets.IsNull() {
+			attrs, _ = sjson.Set(attrs, "dscpLop", strconv.FormatInt(data.TcpDscpLocallyOriginatedPackets.ValueInt64(), 10))
+		}
+		if !data.TcpPathMtuDiscovery.IsUnknown() && !data.TcpPathMtuDiscovery.IsNull() && !config.TcpPathMtuDiscovery.IsNull() {
+			attrs, _ = sjson.Set(attrs, "pathMtuDiscovery", data.TcpPathMtuDiscovery.ValueString())
+		}
+		if !data.TcpSynWaitTime.IsUnknown() && !data.TcpSynWaitTime.IsNull() && !config.TcpSynWaitTime.IsNull() {
+			attrs, _ = sjson.Set(attrs, "synWaitTime", strconv.FormatInt(data.TcpSynWaitTime.ValueInt64(), 10))
+		}
+		if !data.TcpEndPortRange.IsUnknown() && !data.TcpEndPortRange.IsNull() && !config.TcpEndPortRange.IsNull() {
+			attrs, _ = sjson.Set(attrs, "tcpEndPortRange", strconv.FormatInt(data.TcpEndPortRange.ValueInt64(), 10))
+		}
+		if !data.TcpMss.IsUnknown() && !data.TcpMss.IsNull() && !config.TcpMss.IsNull() {
+			attrs, _ = sjson.Set(attrs, "tcpMssBytes", strconv.FormatInt(data.TcpMss.ValueInt64(), 10))
+		}
+		if !data.TcpStartPortRange.IsUnknown() && !data.TcpStartPortRange.IsNull() && !config.TcpStartPortRange.IsNull() {
+			attrs, _ = sjson.Set(attrs, "tcpStartPortRange", strconv.FormatInt(data.TcpStartPortRange.ValueInt64(), 10))
+		}
+		if attrs != "{}" {
+			body, _ = sjson.SetRaw(body, nestedChildrenPath+".-1.tcpudpInst.attributes", attrs)
+		}
+		childBody = body
+		body = prevBody
+		if parentAttrs != "{}" || gjson.Get(childBody, "tcpudpEntity.children").Exists() {
 			body, _ = sjson.SetRaw(body, parentPath+".-1", childBody)
 		}
 	}
@@ -3749,6 +3797,39 @@ func (data *System) fromBody(res gjson.Result) {
 					},
 				)
 			}
+		}
+	}
+	{
+		var rtcpudpEntity gjson.Result
+		res.Get(data.getClassName() + ".children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("tcpudpEntity.attributes.rn").String()
+				if rnValue == "tcpudp" {
+					rtcpudpEntity = v
+					return false
+				}
+				return true
+			},
+		)
+		data.TcpUdpAdminState = types.StringValue(rtcpudpEntity.Get("tcpudpEntity.attributes.adminSt").String())
+		{
+			var rtcpudpInst gjson.Result
+			rtcpudpEntity.Get("tcpudpEntity.children").ForEach(
+				func(_, v gjson.Result) bool {
+					rnValue := v.Get("tcpudpInst.attributes.rn").String()
+					if rnValue == "inst" {
+						rtcpudpInst = v
+						return false
+					}
+					return true
+				},
+			)
+			data.TcpDscpLocallyOriginatedPackets = types.Int64Value(rtcpudpInst.Get("tcpudpInst.attributes.dscpLop").Int())
+			data.TcpPathMtuDiscovery = types.StringValue(rtcpudpInst.Get("tcpudpInst.attributes.pathMtuDiscovery").String())
+			data.TcpSynWaitTime = types.Int64Value(rtcpudpInst.Get("tcpudpInst.attributes.synWaitTime").Int())
+			data.TcpEndPortRange = types.Int64Value(rtcpudpInst.Get("tcpudpInst.attributes.tcpEndPortRange").Int())
+			data.TcpMss = types.Int64Value(rtcpudpInst.Get("tcpudpInst.attributes.tcpMssBytes").Int())
+			data.TcpStartPortRange = types.Int64Value(rtcpudpInst.Get("tcpudpInst.attributes.tcpStartPortRange").Int())
 		}
 	}
 	{
@@ -6510,6 +6591,65 @@ func (data *System) updateFromBody(res gjson.Result) {
 				}
 				data.NdVpcDomains[key] = item
 			}
+		}
+	}
+	var rtcpudpEntity gjson.Result
+	res.Get(data.getClassName() + ".children").ForEach(
+		func(_, v gjson.Result) bool {
+			rnValue := v.Get("tcpudpEntity.attributes.rn").String()
+			if rnValue == "tcpudp" {
+				rtcpudpEntity = v
+				return false
+			}
+			return true
+		},
+	)
+	if !data.TcpUdpAdminState.IsNull() {
+		data.TcpUdpAdminState = types.StringValue(rtcpudpEntity.Get("tcpudpEntity.attributes.adminSt").String())
+	} else {
+		data.TcpUdpAdminState = types.StringNull()
+	}
+	{
+		var rtcpudpInst gjson.Result
+		rtcpudpEntity.Get("tcpudpEntity.children").ForEach(
+			func(_, v gjson.Result) bool {
+				rnValue := v.Get("tcpudpInst.attributes.rn").String()
+				if rnValue == "inst" {
+					rtcpudpInst = v
+					return false
+				}
+				return true
+			},
+		)
+		if !data.TcpDscpLocallyOriginatedPackets.IsNull() {
+			data.TcpDscpLocallyOriginatedPackets = types.Int64Value(rtcpudpInst.Get("tcpudpInst.attributes.dscpLop").Int())
+		} else {
+			data.TcpDscpLocallyOriginatedPackets = types.Int64Null()
+		}
+		if !data.TcpPathMtuDiscovery.IsNull() {
+			data.TcpPathMtuDiscovery = types.StringValue(rtcpudpInst.Get("tcpudpInst.attributes.pathMtuDiscovery").String())
+		} else {
+			data.TcpPathMtuDiscovery = types.StringNull()
+		}
+		if !data.TcpSynWaitTime.IsNull() {
+			data.TcpSynWaitTime = types.Int64Value(rtcpudpInst.Get("tcpudpInst.attributes.synWaitTime").Int())
+		} else {
+			data.TcpSynWaitTime = types.Int64Null()
+		}
+		if !data.TcpEndPortRange.IsNull() {
+			data.TcpEndPortRange = types.Int64Value(rtcpudpInst.Get("tcpudpInst.attributes.tcpEndPortRange").Int())
+		} else {
+			data.TcpEndPortRange = types.Int64Null()
+		}
+		if !data.TcpMss.IsNull() {
+			data.TcpMss = types.Int64Value(rtcpudpInst.Get("tcpudpInst.attributes.tcpMssBytes").Int())
+		} else {
+			data.TcpMss = types.Int64Null()
+		}
+		if !data.TcpStartPortRange.IsNull() {
+			data.TcpStartPortRange = types.Int64Value(rtcpudpInst.Get("tcpudpInst.attributes.tcpStartPortRange").Int())
+		} else {
+			data.TcpStartPortRange = types.Int64Null()
 		}
 	}
 	var rdatetimeClock gjson.Result
@@ -9876,6 +10016,55 @@ func (data System) toDeleteBody() nxos.Body {
 	}
 	{
 		childBody := ""
+		if !data.TcpUdpAdminState.IsNull() {
+			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		hasAttributes := childBody != ""
+		siblingsPath := childrenPath
+		childIndex := len(gjson.Get(body, siblingsPath).Array())
+		entryPath := siblingsPath + "." + strconv.Itoa(childIndex)
+		childBodyPath := entryPath + ".tcpudpEntity"
+		if childBody == "" {
+			childBody = "{}"
+		}
+		body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+		nestedChildrenPath := childBodyPath + ".children"
+		_ = nestedChildrenPath
+		{
+			childBody := ""
+			if !data.TcpDscpLocallyOriginatedPackets.IsNull() {
+				childBody, _ = sjson.Set(childBody, "dscpLop", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcpPathMtuDiscovery.IsNull() {
+				childBody, _ = sjson.Set(childBody, "pathMtuDiscovery", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcpSynWaitTime.IsNull() {
+				childBody, _ = sjson.Set(childBody, "synWaitTime", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcpEndPortRange.IsNull() {
+				childBody, _ = sjson.Set(childBody, "tcpEndPortRange", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcpMss.IsNull() {
+				childBody, _ = sjson.Set(childBody, "tcpMssBytes", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !data.TcpStartPortRange.IsNull() {
+				childBody, _ = sjson.Set(childBody, "tcpStartPortRange", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if childBody != "" {
+				childIndex := len(gjson.Get(body, nestedChildrenPath).Array())
+				childBodyPath := nestedChildrenPath + "." + strconv.Itoa(childIndex) + ".tcpudpInst"
+				body, _ = sjson.SetRaw(body, childBodyPath+".attributes", childBody)
+			}
+		}
+		if !hasAttributes && len(gjson.Get(body, nestedChildrenPath).Array()) == 0 {
+			body, _ = sjson.Delete(body, entryPath)
+			if len(gjson.Get(body, siblingsPath).Array()) == 0 {
+				body, _ = sjson.Delete(body, siblingsPath)
+			}
+		}
+	}
+	{
+		childBody := ""
 		if !data.ClockAdminState.IsNull() {
 			childBody, _ = sjson.Set(childBody, "adminSt", "DME_UNSET_PROPERTY_MARKER")
 		}
@@ -11276,6 +11465,14 @@ func (data System) managedDns() map[string]bool {
 			}
 		}
 	}
+	if !(data.TcpUdpAdminState.IsNull() && (data.TcpDscpLocallyOriginatedPackets.IsNull() && data.TcpPathMtuDiscovery.IsNull() && data.TcpSynWaitTime.IsNull() && data.TcpEndPortRange.IsNull() && data.TcpMss.IsNull() && data.TcpStartPortRange.IsNull())) {
+		tcpudpEntityDn := dn + "/" + "tcpudp"
+		dns[tcpudpEntityDn] = true
+		if !(data.TcpDscpLocallyOriginatedPackets.IsNull() && data.TcpPathMtuDiscovery.IsNull() && data.TcpSynWaitTime.IsNull() && data.TcpEndPortRange.IsNull() && data.TcpMss.IsNull() && data.TcpStartPortRange.IsNull()) {
+			tcpudpInstDn := tcpudpEntityDn + "/" + "inst"
+			dns[tcpudpInstDn] = true
+		}
+	}
 	if !(data.ClockAdminState.IsNull() && data.ClockAuthenticationState.IsNull() && data.ClockFormat.IsNull() && data.ClockFormatDebug.IsNull() && data.ClockFormatSyslog.IsNull() && data.ClockProtocol.IsNull() && (data.ClockTimezoneName.IsNull() && data.ClockTimezoneHours.IsNull() && data.ClockTimezoneMinutes.IsNull()) && (data.ClockSummerTimeName.IsNull() && data.ClockSummerTimeOffsetMinutes.IsNull() && data.ClockSummerTimeStartWeek.IsNull() && data.ClockSummerTimeStartDay.IsNull() && data.ClockSummerTimeStartMonth.IsNull() && data.ClockSummerTimeStartTime.IsNull() && data.ClockSummerTimeEndWeek.IsNull() && data.ClockSummerTimeEndDay.IsNull() && data.ClockSummerTimeEndMonth.IsNull() && data.ClockSummerTimeEndTime.IsNull())) {
 		datetimeClockDn := dn + "/" + "clock"
 		dns[datetimeClockDn] = true
@@ -12263,6 +12460,51 @@ func (data System) toResetBody(preexisting map[string]bool) nxos.Body {
 			if ndEntityBody != "" {
 				ndEntityBody, _ = sjson.Set(ndEntityBody, "ndEntity.attributes.rn", ndEntityRn)
 				body, _ = sjson.SetRaw(body, "topSystem.children.-1", ndEntityBody)
+			}
+		}
+	}
+	if !(data.TcpUdpAdminState.IsNull() && (data.TcpDscpLocallyOriginatedPackets.IsNull() && data.TcpPathMtuDiscovery.IsNull() && data.TcpSynWaitTime.IsNull() && data.TcpEndPortRange.IsNull() && data.TcpMss.IsNull() && data.TcpStartPortRange.IsNull())) {
+		tcpudpEntityRn := "tcpudp"
+		tcpudpEntityDn := dn + "/" + tcpudpEntityRn
+		_ = tcpudpEntityDn
+		{
+			tcpudpEntityBody := ""
+			if !data.TcpUdpAdminState.IsNull() {
+				tcpudpEntityBody, _ = sjson.Set(tcpudpEntityBody, "tcpudpEntity.attributes.adminSt", "DME_UNSET_PROPERTY_MARKER")
+			}
+			if !(data.TcpDscpLocallyOriginatedPackets.IsNull() && data.TcpPathMtuDiscovery.IsNull() && data.TcpSynWaitTime.IsNull() && data.TcpEndPortRange.IsNull() && data.TcpMss.IsNull() && data.TcpStartPortRange.IsNull()) {
+				tcpudpInstRn := "inst"
+				tcpudpInstDn := tcpudpEntityDn + "/" + tcpudpInstRn
+				_ = tcpudpInstDn
+				{
+					tcpudpInstBody := ""
+					if !data.TcpDscpLocallyOriginatedPackets.IsNull() {
+						tcpudpInstBody, _ = sjson.Set(tcpudpInstBody, "tcpudpInst.attributes.dscpLop", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcpPathMtuDiscovery.IsNull() {
+						tcpudpInstBody, _ = sjson.Set(tcpudpInstBody, "tcpudpInst.attributes.pathMtuDiscovery", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcpSynWaitTime.IsNull() {
+						tcpudpInstBody, _ = sjson.Set(tcpudpInstBody, "tcpudpInst.attributes.synWaitTime", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcpEndPortRange.IsNull() {
+						tcpudpInstBody, _ = sjson.Set(tcpudpInstBody, "tcpudpInst.attributes.tcpEndPortRange", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcpMss.IsNull() {
+						tcpudpInstBody, _ = sjson.Set(tcpudpInstBody, "tcpudpInst.attributes.tcpMssBytes", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if !data.TcpStartPortRange.IsNull() {
+						tcpudpInstBody, _ = sjson.Set(tcpudpInstBody, "tcpudpInst.attributes.tcpStartPortRange", "DME_UNSET_PROPERTY_MARKER")
+					}
+					if tcpudpInstBody != "" {
+						tcpudpInstBody, _ = sjson.Set(tcpudpInstBody, "tcpudpInst.attributes.rn", tcpudpInstRn)
+						tcpudpEntityBody, _ = sjson.SetRaw(tcpudpEntityBody, "tcpudpEntity.children.-1", tcpudpInstBody)
+					}
+				}
+			}
+			if tcpudpEntityBody != "" {
+				tcpudpEntityBody, _ = sjson.Set(tcpudpEntityBody, "tcpudpEntity.attributes.rn", tcpudpEntityRn)
+				body, _ = sjson.SetRaw(body, "topSystem.children.-1", tcpudpEntityBody)
 			}
 		}
 	}
@@ -15627,6 +15869,34 @@ func (data System) toBodyWithDeletes(ctx context.Context, state System, config S
 					}
 				}
 			}
+		}
+		if !state.TcpUdpAdminState.IsNull() && config.TcpUdpAdminState.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "tcpudpEntity")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"adminSt", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.TcpDscpLocallyOriginatedPackets.IsNull() && config.TcpDscpLocallyOriginatedPackets.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "tcpudpEntity")+".children", "tcpudpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"dscpLop", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.TcpPathMtuDiscovery.IsNull() && config.TcpPathMtuDiscovery.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "tcpudpEntity")+".children", "tcpudpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"pathMtuDiscovery", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.TcpSynWaitTime.IsNull() && config.TcpSynWaitTime.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "tcpudpEntity")+".children", "tcpudpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"synWaitTime", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.TcpEndPortRange.IsNull() && config.TcpEndPortRange.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "tcpudpEntity")+".children", "tcpudpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tcpEndPortRange", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.TcpMss.IsNull() && config.TcpMss.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "tcpudpEntity")+".children", "tcpudpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tcpMssBytes", "DME_UNSET_PROPERTY_MARKER")
+		}
+		if !state.TcpStartPortRange.IsNull() && config.TcpStartPortRange.IsNull() {
+			unsetPath := helpers.EnsureChildPath(&body.Str, helpers.EnsureChildPath(&body.Str, bodyPath, "tcpudpEntity")+".children", "tcpudpInst")
+			body.Str, _ = sjson.Set(body.Str, unsetPath+".attributes."+"tcpStartPortRange", "DME_UNSET_PROPERTY_MARKER")
 		}
 		if !state.ClockAdminState.IsNull() && config.ClockAdminState.IsNull() {
 			unsetPath := helpers.EnsureChildPath(&body.Str, bodyPath, "datetimeClock")

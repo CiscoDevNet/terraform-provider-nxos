@@ -895,6 +895,70 @@ child_classes:
                       - disabled
                     example: enabled
                     exclude_test: true
+  - class_name: tcpudpEntity
+    doc_path: Layer%203/tcpudp%3AEntity/
+    rn: tcpudp
+    type: single
+    no_delete: true
+    attributes:
+      - nxos_name: adminSt
+        tf_name: tcp_udp_admin_state
+        type: String
+        description: 'The administrative state of the object or policy.'
+        enum_values:
+          - enabled
+          - disabled
+        example: enabled
+    child_classes:
+      - class_name: tcpudpInst
+        doc_path: Layer%203/tcpudp%3AInst/
+        rn: inst
+        type: single
+        no_delete: true
+        attributes:
+          - nxos_name: dscpLop
+            tf_name: tcp_dscp_locally_originated_packets
+            type: Int64
+            min_int: 0
+            max_int: 85
+            description: 'DSCP value for Locally Originated Packets.'
+            example: 46
+          - nxos_name: pathMtuDiscovery
+            tf_name: tcp_path_mtu_discovery
+            type: String
+            description: 'Enable path-MTU discovery on TCP.'
+            enum_values:
+              - enabled
+              - disabled
+            example: enabled
+          - nxos_name: synWaitTime
+            tf_name: tcp_syn_wait_time
+            type: Int64
+            min_int: 5
+            max_int: 300
+            description: 'Set time to wait on new TCP connections.'
+            example: 60
+          - nxos_name: tcpEndPortRange
+            tf_name: tcp_end_port_range
+            type: Int64
+            min_int: 22001
+            max_int: 65535
+            description: 'Sockets Local End Port Range.'
+            example: 65535
+          - nxos_name: tcpMssBytes
+            tf_name: tcp_mss
+            type: Int64
+            min_int: 88
+            max_int: 10000
+            description: 'Set the Tcp Mss Byte.'
+            example: 1460
+          - nxos_name: tcpStartPortRange
+            tf_name: tcp_start_port_range
+            type: Int64
+            min_int: 15001
+            max_int: 58000
+            description: 'Sockets Local Start Port Range.'
+            example: 25000
   - class_name: datetimeClock
     doc_path: System/datetime:Clock/
     rn: clock

@@ -106,6 +106,13 @@ func TestAccSystemResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_off_list_timeout", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_probe_interval_for_solicit_neighbor", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "nd_solicit_neighbor_advertisement", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "tcp_udp_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "tcp_dscp_locally_originated_packets", "46"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "tcp_path_mtu_discovery", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "tcp_syn_wait_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "tcp_end_port_range", "65535"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "tcp_mss", "1460"))
+	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "tcp_start_port_range", "25000"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_authentication_state", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("nxos_system.test", "clock_format", "24hours"))
@@ -394,6 +401,13 @@ func TestAccSystemResource(t *testing.T) {
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_off_list_timeout", "300"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_probe_interval_for_solicit_neighbor", "10"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "nd_solicit_neighbor_advertisement", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "tcp_udp_admin_state", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "tcp_dscp_locally_originated_packets", "46"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "tcp_path_mtu_discovery", "enabled"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "tcp_syn_wait_time", "60"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "tcp_end_port_range", "65535"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "tcp_mss", "1460"))
+	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "tcp_start_port_range", "25000"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_admin_state", "enabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_authentication_state", "disabled"))
 	checks = append(checks, resource.TestCheckResourceAttr("data.nxos_system.test", "clock_format", "24hours"))
@@ -913,6 +927,13 @@ func testAccSystemResourceConfig_all(includeWriteOnly bool) string {
 	config += `	nd_off_list_timeout = 300` + "\n"
 	config += `	nd_probe_interval_for_solicit_neighbor = 10` + "\n"
 	config += `	nd_solicit_neighbor_advertisement = "enabled"` + "\n"
+	config += `	tcp_udp_admin_state = "enabled"` + "\n"
+	config += `	tcp_dscp_locally_originated_packets = 46` + "\n"
+	config += `	tcp_path_mtu_discovery = "enabled"` + "\n"
+	config += `	tcp_syn_wait_time = 60` + "\n"
+	config += `	tcp_end_port_range = 65535` + "\n"
+	config += `	tcp_mss = 1460` + "\n"
+	config += `	tcp_start_port_range = 25000` + "\n"
 	config += `	clock_admin_state = "enabled"` + "\n"
 	config += `	clock_authentication_state = "disabled"` + "\n"
 	config += `	clock_format = "24hours"` + "\n"
